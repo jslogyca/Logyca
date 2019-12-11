@@ -1,0 +1,41 @@
+<odoo>
+    <data>
+    <!-- Actions -->
+        <record model="ir.actions.act_window" id="action_hierarchy">
+            <field name="name">CIIU</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">testlogyca.ciiu</field>
+            <field name="view_mode">tree,form</field>
+            <!-- <field name="domain">[('parent_id','=',False)]</field> -->
+        </record>
+    <!-- views CIIU-->
+        <!-- form view -->
+        <record id="view_form_CIIU" model="ir.ui.view">
+            <field name="name">CIIU Form</field>
+            <field name="model">testlogyca.ciiu</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="parent_id"/>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="child_ids"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <!-- tree ( tree ) view -->
+        <record id="view_tree_ciiu" model="ir.ui.view">
+            <field name="name">CIIU Tree</field>
+            <field name="model">testlogyca.ciiu</field>
+            <!-- <field name="field_parent">child_ids</field> -->
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="parent_path"/>
+                    <field name="code"/>
+                    <field name="name"/>                        
+                </tree>
+            </field>
+        </record>        
+    </data>
+</odoo>
