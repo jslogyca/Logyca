@@ -271,12 +271,12 @@ class ResPartner(models.Model):
     x_member_id_team = fields.Many2one('res.users', string='Propietario de la cuenta')
 
     #INFORMACION FACTURACION ELECTRÓNICA
-    x_email_contact_invoice_electronic = fields.Char(string='Correo electrónico')
-    x_name_contact_invoice_electronic = fields.Char(string='Nombre')
-    x_phone_contact_invoice_electronic = fields.Char(string='Telefono')
-    x_city_contact_invoice_electronic = fields.Char(string='Ciudad')
-    x_area_contact_invoice_electronic = fields.Char(string='Área')
-    x_position_contact_invoice_electronic = fields.Char(string='Cargo')
+    x_email_contact_invoice_electronic = fields.Char(string='Correo electrónico contacto')
+    x_name_contact_invoice_electronic = fields.Char(string='Nombre contacto')
+    x_phone_contact_invoice_electronic = fields.Char(string='Telefono contacto')
+    x_city_contact_invoice_electronic = fields.Char(string='Ciudad contacto')
+    x_area_contact_invoice_electronic = fields.Char(string='Área contacto')
+    x_position_contact_invoice_electronic = fields.Char(string='Cargo contacto')
     x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas')
     
     @api.depends('x_asset_range')
