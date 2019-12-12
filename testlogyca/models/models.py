@@ -62,9 +62,12 @@ class ciiu(models.Model):
     parent_id = fields.Many2one('testlogyca.ciiu','Parent Tag', ondelete='cascade')
     parent_path = fields.Char(index=True)
     child_ids = fields.One2many('testlogyca.ciiu', 'parent_id', 'Child Tags')    
-
-    def __str__(self):
-       return self.code+" - "+self.name
+    
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{} | {}".format(record.code, record.name)))
+        return result
 
 # SECTORES
 class x_sectors(models.Model):
@@ -74,8 +77,11 @@ class x_sectors(models.Model):
     code = fields.Char(string='Código', size=10,required=True)
     name = fields.Char(string='Nombre', required=True)
 
-    def __str__(self):
-       return self.name
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{} | {}".format(record.code, record.name)))
+        return result
 
 # SUBSECTORES
 class x_subsectors(models.Model):
@@ -85,6 +91,12 @@ class x_subsectors(models.Model):
     sector_id = fields.Many2one('testlogyca.sectors', string='Sector principal', required=True)
     code = fields.Char(string='Código', size=10, required=True)
     name = fields.Char(string='Nombre', required=True)
+
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{} | {}".format(record.code, record.name)))
+        return result
 
 # TIPOS DE VINCULACION
 class x_vinculation_types(models.Model):
@@ -96,6 +108,12 @@ class x_vinculation_types(models.Model):
     active = fields.Boolean(string='Activo')
     novelty = fields.Selection([('1', 'Vigente'), ('2', 'No esta vigente para nuevos - se mantiene para las empresas que lo adquirieron')], string='Novedad', required=True)
 
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{} | {}".format(record.code, record.name)))
+        return result
+
 # RESPONSABILIDADES RUT
 class x_responsibilities_rut(models.Model):
     _name = 'testlogyca.responsibilities_rut'
@@ -104,6 +122,12 @@ class x_responsibilities_rut(models.Model):
     code = fields.Char(string='Identificador', size=5, required=True)
     description = fields.Char(string='Descripción', size=100, required=True)
     valid_for_fe = fields.Boolean(string='Valido para facturación electrónica')
+    
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{} | {}".format(record.code, record.description)))
+        return result
 
 # TIPOS DE CONTACTO
 class x_contact_types(models.Model):
@@ -113,6 +137,12 @@ class x_contact_types(models.Model):
     code = fields.Char(string='Código', size=10, required=True)
     name = fields.Char(string='Nombre', required=True)
 
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{} | {}".format(record.code, record.name)))
+        return result
+
 # CARGOS
 class x_job_title(models.Model):
     _name = 'testlogyca.job_title'
@@ -120,7 +150,13 @@ class x_job_title(models.Model):
 
     code = fields.Char(string='Código', size=10, required=True)
     name = fields.Char(string='Nombre', required=True)
-    
+
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{} | {}".format(record.code, record.name)))
+        return result
+
 # ÁREAS
 class x_areas(models.Model):
     _name = 'testlogyca.areas'
@@ -129,12 +165,17 @@ class x_areas(models.Model):
     code = fields.Char(string='Código', size=10, required=True)
     name = fields.Char(string='Nombre', required=True)
 
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{} | {}".format(record.code, record.name)))
+        return result
+
 #---------------------------Modelos existentes de Odoo modificados por Logyca-------------------------------#
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     #INFORMACION BASICA CLIENTE
-    #Se cambia lista de campo existente, con valores establecidos por la DIAN
     x_document_type = fields.Selection([
                                         ('11', 'Registro civil de nacimiento'), 
                                         ('12', 'Tarjeta de identidad'), 
@@ -154,8 +195,7 @@ class ResPartner(models.Model):
     x_is_member_directive = fields.Boolean(string='¿Es miembro del Consejo Directivo?')
 
     #UBICACIÓN PRINCIPAL
-    #Se modifica campo existente de ciudad para que ahora se relacione a la tabla creada
-    #city = fields.Many2one('testlogyca.city', string='Ciudad')
+    x_city = fields.Many2one('testlogyca.city', string='Ciudad')
 
     #CLASIFICACION 
     x_organization_type = fields.Selection([('01', 'Empresa'), ('02', 'Universidad'), ('03', 'Centro de investigación'), ('04', 'Multilateral')], string='Tipo de organización')
@@ -231,12 +271,12 @@ class ResPartner(models.Model):
     x_member_id_team = fields.Many2one('res.users', string='Propietario de la cuenta')
 
     #INFORMACION FACTURACION ELECTRÓNICA
-    x_email_contact_invoice_electronic = fields.Char(string='Correo electrónico')
-    x_name_contact_invoice_electronic = fields.Char(string='Nombre')
-    x_phone_contact_invoice_electronic = fields.Char(string='Telefono')
-    x_city_contact_invoice_electronic = fields.Char(string='Ciudad')
-    x_area_contact_invoice_electronic = fields.Char(string='Área')
-    x_position_contact_invoice_electronic = fields.Char(string='Cargo')
+    x_email_contact_invoice_electronic = fields.Char(string='Correo electrónico contacto')
+    x_name_contact_invoice_electronic = fields.Char(string='Nombre contacto')
+    x_phone_contact_invoice_electronic = fields.Char(string='Telefono contacto')
+    x_city_contact_invoice_electronic = fields.Char(string='Ciudad contacto')
+    x_area_contact_invoice_electronic = fields.Char(string='Área contacto')
+    x_position_contact_invoice_electronic = fields.Char(string='Cargo contacto')
     x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas')
     
     @api.depends('x_asset_range')
