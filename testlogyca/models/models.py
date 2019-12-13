@@ -269,6 +269,11 @@ class ResPartner(models.Model):
                                         ('06', 'Otro')                                      
                                     ], string='Origen de la cuenta')
     x_member_id_team = fields.Many2one('res.users', string='Propietario de la cuenta')
+    
+    #INFORMACIÓN CONTACTO
+    x_contact_type = fields.Many2one('testlogyca.contact_types', string='Tipo de contacto')
+    x_contact_job_title = fields.Many2one('testlogyca.job_title', string='Cargo')
+    x_contact_area = fields.Many2one('testlogyca.areas', string='Área')
 
     #INFORMACION FACTURACION ELECTRÓNICA
     x_email_contact_invoice_electronic = fields.Char(string='Correo electrónico contacto')
