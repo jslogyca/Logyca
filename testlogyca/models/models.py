@@ -187,6 +187,7 @@ class ResPartner(models.Model):
                                         ('42', 'Tipo de documento extranjero'),
                                         ('43', 'Sin identificación del exterior o para uso definido por la DIAN')
                                     ], string='Tipo de documento')
+    x_digit_verification = fields.Integer(string='Digito de verificación')
     x_first_name = fields.Char(string='Primer nombre')
     x_second_name = fields.Char(string='Segundo nombre')
     x_first_lastname = fields.Char(string='Primer apellido')
@@ -200,7 +201,7 @@ class ResPartner(models.Model):
     #CLASIFICACION 
     x_organization_type = fields.Selection([('01', 'Empresa'), ('02', 'Universidad'), ('03', 'Centro de investigación'), ('04', 'Multilateral')], string='Tipo de organización')
     x_entity_type = fields.Selection([('01', 'Pública'), ('02', 'Privada')], string='Tipo de entidad')
-    x_economic_activity = fields.Selection([('01', 'Comercio'), ('02', 'Manufactura'), ('03', 'Servicio')], string='Actividad económica general')
+    #x_economic_activity = fields.Selection([('01', 'Comercio'), ('02', 'Manufactura'), ('03', 'Servicio')], string='Actividad económica general') - Se comenta el campo 
     x_sector_id = fields.Many2one('testlogyca.sectors', string='Sector')
     x_subsector_id = fields.Many2one('testlogyca.subsectors', string='Sub-sector')
     x_ciiu_activity = fields.Many2one('testlogyca.ciiu', string='Código CIIU actividad Principal')
@@ -210,10 +211,15 @@ class ResPartner(models.Model):
     x_is_business_group = fields.Boolean(string='¿Es un Grupo Empresarial?')
 
     #VINCULACION CON LOGYCA
-    x_active_vinculation = fields.Boolean(string='Vinculación Vigente')
+    #x_active_vinculation = fields.Boolean(string='Vinculación Vigente') - Se comenta el campo 
+    x_active_for_logyca = fields.Boolean(string='Activo')
     x_date_vinculation = fields.Date(string="Fecha de vinculación")
-    x_type_vinculation = fields.Many2one('testlogyca.vinculation_types', string='Tipo de vinculación vigente')
+    x_type_vinculation = fields.Many2many('testlogyca.vinculation_types', string='Tipo de vinculación vigente')
     x_sponsored = fields.Boolean(string='Patrocinado')
+    x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora')
+    x_acceptance_data_policy = fields.Boolean(string='Acepta política de tratamiento de datos')
+    x_acceptance_date = fields.Date(string='Fecha de aceptación')
+    x_not_contacted_again = fields.Boolean(string='No volver a ser contactado')
 
     #INFORMACION FINANCIERA
     x_asset_range = fields.Selection([
@@ -225,15 +231,15 @@ class ResPartner(models.Model):
                                         ('06', 'DE 250 A 499.9'),
                                         ('07', 'DE 500 A 749.9'),
                                         ('08', 'DE 750 A 999.9'),
-                                        ('09', 'DE 1000 A 2499.9'),
-                                        ('10', 'DE 2500 A 4999.9'),
-                                        ('11', 'DE 5000 A 9999.9'),
-                                        ('12', 'DE 10000 A 49999.9'),
-                                        ('13', 'DE 50000 A 99999.9'),
-                                        ('14', 'DE 100000 A 249999.9'),
-                                        ('15', 'DE 250000 A 499999.9'),
-                                        ('16', 'DE 500000 A 999999.9'),
-                                        ('17', 'MAS DE 1000000')                                        
+                                        ('09', 'DE 1,000 A 2,499.9'),
+                                        ('10', 'DE 2,500 A 4,999.9'),
+                                        ('11', 'DE 5,000 A 9,999.9'),
+                                        ('12', 'DE 10,000 A 49,999.9'),
+                                        ('13', 'DE 50,000 A 99,999.9'),
+                                        ('14', 'DE 100,000 A 249,999.9'),
+                                        ('15', 'DE 250,000 A 499,999.9'),
+                                        ('16', 'DE 500,000 A 999,999.9'),
+                                        ('17', 'MAS DE 1,000,000')                                        
                                     ], string='Rango de Activos')
     x_income_range = fields.Selection([
                                         ('01', 'DE 0 A 9.9'), 
@@ -244,18 +250,24 @@ class ResPartner(models.Model):
                                         ('06', 'DE 250 A 499.9'),
                                         ('07', 'DE 500 A 749.9'),
                                         ('08', 'DE 750 A 999.9'),
-                                        ('09', 'DE 1000 A 2499.9'),
-                                        ('10', 'DE 2500 A 4999.9'),
-                                        ('11', 'DE 5000 A 9999.9'),
-                                        ('12', 'DE 10000 A 49999.9'),
-                                        ('13', 'DE 50000 A 99999.9'),
-                                        ('14', 'DE 100000 A 249999.9'),
-                                        ('15', 'DE 250000 A 499999.9'),
-                                        ('16', 'DE 500000 A 999999.9'),
-                                        ('17', 'MAS DE 1000000')                                        
+                                        ('09', 'DE 1,000 A 2,499.9'),
+                                        ('10', 'DE 2,500 A 4,999.9'),
+                                        ('11', 'DE 5,000 A 9,999.9'),
+                                        ('12', 'DE 10,000 A 49,999.9'),
+                                        ('13', 'DE 50,000 A 99,999.9'),
+                                        ('14', 'DE 100,000 A 249,999.9'),
+                                        ('15', 'DE 250,000 A 499,999.9'),
+                                        ('16', 'DE 500,000 A 999,999.9'),
+                                        ('17', 'MAS DE 1,000,000')                                          
                                     ], string='Rango de Ingresos')
     x_date_update_asset = fields.Date(string='Fecha de última modificación', compute='_date_update_asset', store=True)
-    
+    x_company_size = fields.Selection([
+                                        ('01', 'Mipyme'), 
+                                        ('02', 'Pyme'), 
+                                        ('03', 'Mediana'),
+                                        ('04', 'Grande')                                        
+                                    ], string='Tamaño empresa')
+
     #INFORMACION TRIBUTARIA
     x_tax_responsibilities = fields.Many2many('testlogyca.responsibilities_rut', string='Responsabilidades Tributarias')
 
@@ -269,9 +281,11 @@ class ResPartner(models.Model):
                                         ('06', 'Otro')                                      
                                     ], string='Origen de la cuenta')
     x_member_id_team = fields.Many2one('res.users', string='Propietario de la cuenta')
+    x_additional_codes  = fields.Boolean(string='¿Maneja Códigos Adicionales?')    
+    x_codes_gtin = fields.Boolean(string='¿Maneja Códigos GTIN-8?')
     
     #INFORMACIÓN CONTACTO
-    x_contact_type = fields.Many2one('testlogyca.contact_types', string='Tipo de contacto')
+    x_contact_type = fields.Many2many('testlogyca.contact_types', string='Tipo de contacto')
     x_contact_job_title = fields.Many2one('testlogyca.job_title', string='Cargo')
     x_contact_area = fields.Many2one('testlogyca.areas', string='Área')
 
