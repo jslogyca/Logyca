@@ -59,6 +59,7 @@ class ciiu(models.Model):
 
     code = fields.Char('Codigo', required=True)
     name = fields.Char('Name', required=True)
+    porcent_ica = fields.Float(string='Porcentaje ICA')
     parent_id = fields.Many2one('testlogyca.ciiu','Parent Tag', ondelete='cascade')
     parent_path = fields.Char(index=True)
     child_ids = fields.One2many('testlogyca.ciiu', 'parent_id', 'Child Tags')    
@@ -205,9 +206,8 @@ class ResPartner(models.Model):
     #x_economic_activity = fields.Selection([('01', 'Comercio'), ('02', 'Manufactura'), ('03', 'Servicio')], string='Actividad económica general') - Se comenta el campo 
     x_sector_id = fields.Many2one('testlogyca.sectors', string='Sector')
     x_subsector_id = fields.Many2one('testlogyca.subsectors', string='Sub-sector')
-    x_ciiu_activity = fields.Many2one('testlogyca.ciiu', string='Código CIIU actividad Principal')
-    x_ciiu_activity_second = fields.Many2one('testlogyca.ciiu', string='Código CIIU actividad Secundaria')
-
+    x_ciiu_activity = fields.Many2many('testlogyca.ciiu', string='Códigos CIIU')
+    
     #GRUPO EMPRESARIAL
     x_is_business_group = fields.Boolean(string='¿Es un Grupo Empresarial?')
 
@@ -227,7 +227,9 @@ class ResPartner(models.Model):
                                         ('4', 'Desvinculado por Liquidación de la Empresa'),
                                         ('5', 'Desvinculado por mal uso del sistema')
                                     ], string='Desvinculado por')
-  
+    x_additional_codes  = fields.Boolean(string='¿Maneja Códigos Adicionales?')    
+    x_codes_gtin = fields.Boolean(string='¿Maneja Códigos GTIN-8?')
+
     #INFORMACION FINANCIERA
     x_asset_range = fields.Selection([
                                         ('01', 'DE 0 A 9.9'), 
@@ -287,10 +289,8 @@ class ResPartner(models.Model):
                                         ('05', 'Web'),
                                         ('06', 'Otro')                                      
                                     ], string='Origen de la cuenta')
-    x_member_id_team = fields.Many2one('res.users', string='Propietario de la cuenta')
-    x_additional_codes  = fields.Boolean(string='¿Maneja Códigos Adicionales?')    
-    x_codes_gtin = fields.Boolean(string='¿Maneja Códigos GTIN-8?')
-    
+    #x_member_id_team = fields.Many2one('res.users', string='Propietario de la cuenta')
+        
     #INFORMACIÓN CONTACTO
     x_contact_type = fields.Many2many('testlogyca.contact_types', string='Tipo de contacto')
     x_contact_job_title = fields.Many2one('testlogyca.job_title', string='Cargo')
