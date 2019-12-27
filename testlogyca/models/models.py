@@ -59,6 +59,7 @@ class ciiu(models.Model):
 
     code = fields.Char('Codigo', required=True)
     name = fields.Char('Name', required=True)
+    porcent_ica = fields.Float(string='Porcentaje ICA')
     parent_id = fields.Many2one('testlogyca.ciiu','Parent Tag', ondelete='cascade')
     parent_path = fields.Char(index=True)
     child_ids = fields.One2many('testlogyca.ciiu', 'parent_id', 'Child Tags')    
@@ -176,6 +177,7 @@ class x_areas(models.Model):
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     #INFORMACION BASICA CLIENTE
+    x_active_for_logyca = fields.Boolean(string='Activo')
     x_document_type = fields.Selection([
                                         ('11', 'Registro civil de nacimiento'), 
                                         ('12', 'Tarjeta de identidad'), 
@@ -204,22 +206,29 @@ class ResPartner(models.Model):
     #x_economic_activity = fields.Selection([('01', 'Comercio'), ('02', 'Manufactura'), ('03', 'Servicio')], string='Actividad económica general') - Se comenta el campo 
     x_sector_id = fields.Many2one('testlogyca.sectors', string='Sector')
     x_subsector_id = fields.Many2one('testlogyca.subsectors', string='Sub-sector')
-    x_ciiu_activity = fields.Many2one('testlogyca.ciiu', string='Código CIIU actividad Principal')
-    x_ciiu_activity_second = fields.Many2one('testlogyca.ciiu', string='Código CIIU actividad Secundaria')
-
+    x_ciiu_activity = fields.Many2many('testlogyca.ciiu', string='Códigos CIIU')
+    
     #GRUPO EMPRESARIAL
     x_is_business_group = fields.Boolean(string='¿Es un Grupo Empresarial?')
 
     #VINCULACION CON LOGYCA
-    #x_active_vinculation = fields.Boolean(string='Vinculación Vigente') - Se comenta el campo 
-    x_active_for_logyca = fields.Boolean(string='Activo')
+    x_active_vinculation = fields.Boolean(string='Estado de la vinculación') 
     x_date_vinculation = fields.Date(string="Fecha de vinculación")
-    x_type_vinculation = fields.Many2many('testlogyca.vinculation_types', string='Tipo de vinculación vigente')
+    x_type_vinculation = fields.Many2many('testlogyca.vinculation_types', string='Tipo de vinculación')
     x_sponsored = fields.Boolean(string='Patrocinado')
     x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora')
     x_acceptance_data_policy = fields.Boolean(string='Acepta política de tratamiento de datos')
     x_acceptance_date = fields.Date(string='Fecha de aceptación')
     x_not_contacted_again = fields.Boolean(string='No volver a ser contactado')
+    x_reason_desvinculation = fields.Selection([
+                                        ('1', 'Desvinculado por no pago'), 
+                                        ('2', 'Desvinculado Voluntariamente'), 
+                                        ('3', 'Desvinculado por Cesión y/o Fusión'),
+                                        ('4', 'Desvinculado por Liquidación de la Empresa'),
+                                        ('5', 'Desvinculado por mal uso del sistema')
+                                    ], string='Desvinculado por')
+    x_additional_codes  = fields.Boolean(string='¿Maneja Códigos Adicionales?')    
+    x_codes_gtin = fields.Boolean(string='¿Maneja Códigos GTIN-8?')
 
     #INFORMACION FINANCIERA
     x_asset_range = fields.Selection([
@@ -280,10 +289,8 @@ class ResPartner(models.Model):
                                         ('05', 'Web'),
                                         ('06', 'Otro')                                      
                                     ], string='Origen de la cuenta')
-    x_member_id_team = fields.Many2one('res.users', string='Propietario de la cuenta')
-    x_additional_codes  = fields.Boolean(string='¿Maneja Códigos Adicionales?')    
-    x_codes_gtin = fields.Boolean(string='¿Maneja Códigos GTIN-8?')
-    
+    #x_member_id_team = fields.Many2one('res.users', string='Propietario de la cuenta')
+        
     #INFORMACIÓN CONTACTO
     x_contact_type = fields.Many2many('testlogyca.contact_types', string='Tipo de contacto')
     x_contact_job_title = fields.Many2one('testlogyca.job_title', string='Cargo')

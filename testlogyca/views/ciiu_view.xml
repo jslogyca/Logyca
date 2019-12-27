@@ -19,6 +19,7 @@
                         <field name="parent_id"/>
                         <field name="code"/>
                         <field name="name"/>
+                        <field name="porcent_ica"/>
                         <field name="child_ids"/>
                     </group>
                 </form>
