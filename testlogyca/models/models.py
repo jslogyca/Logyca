@@ -176,6 +176,7 @@ class x_areas(models.Model):
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     #INFORMACION BASICA CLIENTE
+    x_active_for_logyca = fields.Boolean(string='Activo')
     x_document_type = fields.Selection([
                                         ('11', 'Registro civil de nacimiento'), 
                                         ('12', 'Tarjeta de identidad'), 
@@ -211,16 +212,22 @@ class ResPartner(models.Model):
     x_is_business_group = fields.Boolean(string='¿Es un Grupo Empresarial?')
 
     #VINCULACION CON LOGYCA
-    #x_active_vinculation = fields.Boolean(string='Vinculación Vigente') - Se comenta el campo 
-    x_active_for_logyca = fields.Boolean(string='Activo')
+    x_active_vinculation = fields.Boolean(string='Estado de la vinculación') 
     x_date_vinculation = fields.Date(string="Fecha de vinculación")
-    x_type_vinculation = fields.Many2many('testlogyca.vinculation_types', string='Tipo de vinculación vigente')
+    x_type_vinculation = fields.Many2many('testlogyca.vinculation_types', string='Tipo de vinculación')
     x_sponsored = fields.Boolean(string='Patrocinado')
     x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora')
     x_acceptance_data_policy = fields.Boolean(string='Acepta política de tratamiento de datos')
     x_acceptance_date = fields.Date(string='Fecha de aceptación')
     x_not_contacted_again = fields.Boolean(string='No volver a ser contactado')
-
+    x_reason_desvinculation = fields.Selection([
+                                        ('1', 'Desvinculado por no pago'), 
+                                        ('2', 'Desvinculado Voluntariamente'), 
+                                        ('3', 'Desvinculado por Cesión y/o Fusión'),
+                                        ('4', 'Desvinculado por Liquidación de la Empresa'),
+                                        ('5', 'Desvinculado por mal uso del sistema')
+                                    ], string='Desvinculado por')
+  
     #INFORMACION FINANCIERA
     x_asset_range = fields.Selection([
                                         ('01', 'DE 0 A 9.9'), 
