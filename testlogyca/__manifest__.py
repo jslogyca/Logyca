@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "testlogyca",
+    'name': "logyca",
 
     'summary': """
         App LOGYCA""",
