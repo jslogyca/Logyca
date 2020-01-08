@@ -178,8 +178,10 @@ class x_job_title(models.Model):
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
-    #INFORMACION BASICA CLIENTE
-    x_active_for_logyca = fields.Boolean(string='Activo')
+    #INFORMACION BASICA 
+    name = fields.Char(track_visibility='onchange')
+    #vat = fields.Char(track_visibility='onchange')
+    x_active_for_logyca = fields.Boolean(string='Activo', track_visibility='onchange')
     x_document_type = fields.Selection([
                                         ('11', 'Registro civil de nacimiento'), 
                                         ('12', 'Tarjeta de identidad'), 
@@ -190,47 +192,47 @@ class ResPartner(models.Model):
                                         ('41', 'Pasaporte'),
                                         ('42', 'Tipo de documento extranjero'),
                                         ('43', 'Sin identificación del exterior o para uso definido por la DIAN')
-                                    ], string='Tipo de documento',store = True)
-    x_digit_verification = fields.Integer(string='Digito de verificación')
-    x_first_name = fields.Char(string='Primer nombre')
-    x_second_name = fields.Char(string='Segundo nombre')
-    x_first_lastname = fields.Char(string='Primer apellido')
-    x_second_lastname = fields.Char(string='Segundo apellido')
-    x_is_main_contact = fields.Boolean(string='¿Es contacto principal?')
-    x_is_member_directive = fields.Boolean(string='¿Es miembro del Consejo Directivo?')
+                                    ], string='Tipo de documento', track_visibility='onchange')
+    x_digit_verification = fields.Integer(string='Digito de verificación', track_visibility='onchange')
+    x_first_name = fields.Char(string='Primer nombre', track_visibility='onchange')
+    x_second_name = fields.Char(string='Segundo nombre', track_visibility='onchange')
+    x_first_lastname = fields.Char(string='Primer apellido', track_visibility='onchange')
+    x_second_lastname = fields.Char(string='Segundo apellido', track_visibility='onchange')
+    x_is_main_contact = fields.Boolean(string='¿Es contacto principal?', track_visibility='onchange')
+    x_is_member_directive = fields.Boolean(string='¿Es miembro del Consejo Directivo?', track_visibility='onchange')
 
     #UBICACIÓN PRINCIPAL
-    x_city = fields.Many2one('testlogyca.city', string='Ciudad')
+    x_city = fields.Many2one('testlogyca.city', string='Ciudad', track_visibility='onchange')
 
     #CLASIFICACION 
-    x_organization_type = fields.Selection([('1', 'Empresa'), ('2', 'Universidad'), ('3', 'Centro de investigación'), ('4', 'Multilateral')], string='Tipo de organización')
-    x_entity_type = fields.Selection([('1', 'Pública'), ('2', 'Privada')], string='Tipo de entidad')
+    x_organization_type = fields.Selection([('1', 'Empresa'), ('2', 'Universidad'), ('3', 'Centro de investigación'), ('4', 'Multilateral')], string='Tipo de organización', track_visibility='onchange')
+    x_entity_type = fields.Selection([('1', 'Pública'), ('2', 'Privada')], string='Tipo de entidad', track_visibility='onchange')
     #x_economic_activity = fields.Selection([('01', 'Comercio'), ('02', 'Manufactura'), ('03', 'Servicio')], string='Actividad económica general') - Se comenta el campo 
-    x_sector_id = fields.Many2one('testlogyca.sectors', string='Sector')
-    x_subsector_id = fields.Many2one('testlogyca.subsectors', string='Sub-sector')
-    x_ciiu_activity = fields.Many2many('testlogyca.ciiu', string='Códigos CIIU')
+    x_sector_id = fields.Many2one('testlogyca.sectors', string='Sector', track_visibility='onchange')
+    x_subsector_id = fields.Many2one('testlogyca.subsectors', string='Sub-sector', track_visibility='onchange')
+    x_ciiu_activity = fields.Many2many('testlogyca.ciiu', string='Códigos CIIU', track_visibility='onchange')
     
     #GRUPO EMPRESARIAL
-    x_is_business_group = fields.Boolean(string='¿Es un Grupo Empresarial?')
+    x_is_business_group = fields.Boolean(string='¿Es un Grupo Empresarial?', track_visibility='onchange')
 
     #VINCULACION CON testlogyca
-    x_active_vinculation = fields.Boolean(string='Estado de la vinculación') 
-    x_date_vinculation = fields.Date(string="Fecha de vinculación")
-    x_type_vinculation = fields.Many2many('testlogyca.vinculation_types', string='Tipo de vinculación')
-    x_sponsored = fields.Boolean(string='Patrocinado')
-    x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora')
-    x_acceptance_data_policy = fields.Boolean(string='Acepta política de tratamiento de datos')
-    x_acceptance_date = fields.Date(string='Fecha de aceptación')
-    x_not_contacted_again = fields.Boolean(string='No volver a ser contactado')
+    x_active_vinculation = fields.Boolean(string='Estado de la vinculación', track_visibility='onchange') 
+    x_date_vinculation = fields.Date(string="Fecha de vinculación", track_visibility='onchange')
+    x_type_vinculation = fields.Many2many('testlogyca.vinculation_types', string='Tipo de vinculación', track_visibility='onchange')
+    x_sponsored = fields.Boolean(string='Patrocinado', track_visibility='onchange')
+    x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora', track_visibility='onchange')
+    x_acceptance_data_policy = fields.Boolean(string='Acepta política de tratamiento de datos', track_visibility='onchange')
+    x_acceptance_date = fields.Date(string='Fecha de aceptación', track_visibility='onchange')
+    x_not_contacted_again = fields.Boolean(string='No volver a ser contactado', track_visibility='onchange')
     x_reason_desvinculation = fields.Selection([
                                         ('1', 'Desvinculado por no pago'), 
                                         ('2', 'Desvinculado Voluntariamente'), 
                                         ('3', 'Desvinculado por Cesión y/o Fusión'),
                                         ('4', 'Desvinculado por Liquidación de la Empresa'),
                                         ('5', 'Desvinculado por mal uso del sistema')
-                                    ], string='Desvinculado por')
-    x_additional_codes  = fields.Boolean(string='¿Maneja Códigos Adicionales?')    
-    x_codes_gtin = fields.Boolean(string='¿Maneja Códigos GTIN-8?')
+                                    ], string='Desvinculado por', track_visibility='onchange')
+    x_additional_codes  = fields.Boolean(string='¿Maneja Códigos Adicionales?', track_visibility='onchange')    
+    x_codes_gtin = fields.Boolean(string='¿Maneja Códigos GTIN-8?', track_visibility='onchange')
 
     #INFORMACION FINANCIERA
     x_asset_range = fields.Selection([
@@ -251,7 +253,7 @@ class ResPartner(models.Model):
                                         ('15', 'DE 250,000 A 499,999.9'),
                                         ('16', 'DE 500,000 A 999,999.9'),
                                         ('17', 'MAS DE 1,000,000')                                        
-                                    ], string='Rango de Activos')
+                                    ], string='Rango de Activos', track_visibility='onchange')
     x_income_range = fields.Selection([
                                         ('1', 'DE 0 A 9.9'), 
                                         ('2', 'DE 10 A 24.9'), 
@@ -270,17 +272,17 @@ class ResPartner(models.Model):
                                         ('15', 'DE 250,000 A 499,999.9'),
                                         ('16', 'DE 500,000 A 999,999.9'),
                                         ('17', 'MAS DE 1,000,000')                                          
-                                    ], string='Rango de Ingresos')
-    x_date_update_asset = fields.Date(string='Fecha de última modificación', compute='_date_update_asset', store=True)
+                                    ], string='Rango de Ingresos', track_visibility='onchange')
+    x_date_update_asset = fields.Date(string='Fecha de última modificación', compute='_date_update_asset', store=True, track_visibility='onchange')
     x_company_size = fields.Selection([
                                         ('1', 'Mipyme'), 
                                         ('2', 'Pyme'), 
                                         ('3', 'Mediana'),
                                         ('4', 'Grande')                                        
-                                    ], string='Tamaño empresa')
+                                    ], string='Tamaño empresa', track_visibility='onchange')
 
     #INFORMACION TRIBUTARIA
-    x_tax_responsibilities = fields.Many2many('testlogyca.responsibilities_rut', string='Responsabilidades Tributarias')
+    x_tax_responsibilities = fields.Many2many('testlogyca.responsibilities_rut', string='Responsabilidades Tributarias', track_visibility='onchange')
 
     #INFORMACION COMERCIAL
     x_account_origin = fields.Selection([
@@ -290,23 +292,33 @@ class ResPartner(models.Model):
                                         ('4', 'Telemercadeo'),
                                         ('5', 'Web'),
                                         ('6', 'Otro')                                      
-                                    ], string='Origen de la cuenta')
+                                    ], string='Origen de la cuenta', track_visibility='onchange')
     #x_member_id_team = fields.Many2one('res.users', string='Propietario de la cuenta')
         
     #INFORMACIÓN CONTACTO
-    x_contact_type = fields.Many2many('testlogyca.contact_types', string='Tipo de contacto')
-    x_contact_job_title = fields.Many2one('testlogyca.job_title', string='Cargo')
-    x_contact_area = fields.Many2one('testlogyca.areas', string='Área')
+    x_contact_type = fields.Many2many('testlogyca.contact_types', string='Tipo de contacto', track_visibility='onchange')
+    x_contact_job_title = fields.Many2one('testlogyca.job_title', string='Cargo', track_visibility='onchange')
+    x_contact_area = fields.Many2one('testlogyca.areas', string='Área', track_visibility='onchange')
 
     #INFORMACION FACTURACION ELECTRÓNICA
-    x_email_contact_invoice_electronic = fields.Char(string='Correo electrónico contacto')
-    x_name_contact_invoice_electronic = fields.Char(string='Nombre contacto')
-    x_phone_contact_invoice_electronic = fields.Char(string='Telefono contacto')
-    x_city_contact_invoice_electronic = fields.Char(string='Ciudad contacto')
-    x_area_contact_invoice_electronic = fields.Char(string='Área contacto')
-    x_position_contact_invoice_electronic = fields.Char(string='Cargo contacto')
-    x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas')
+    x_email_contact_invoice_electronic = fields.Char(string='Correo electrónico contacto', track_visibility='onchange')
+    x_name_contact_invoice_electronic = fields.Char(string='Nombre contacto', track_visibility='onchange')
+    x_phone_contact_invoice_electronic = fields.Char(string='Telefono contacto', track_visibility='onchange')
+    x_city_contact_invoice_electronic = fields.Char(string='Ciudad contacto', track_visibility='onchange')
+    x_area_contact_invoice_electronic = fields.Char(string='Área contacto', track_visibility='onchange')
+    x_position_contact_invoice_electronic = fields.Char(string='Cargo contacto', track_visibility='onchange')
+    x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas', track_visibility='onchange')
     
+    # @api.depends('vat')
+    # def _compute_same_vat_partner_id(self):
+    #     for partner in self:
+    #         # use _origin to deal with onchange()
+    #         partner_id = partner._origin.id
+    #         domain = [('vat', '=', partner.vat)]
+    #         if partner_id:
+    #             domain += [('id', '!=', partner_id), '!', ('id', 'child_of', partner_id)]
+    #         partner.same_vat_partner_id = bool(partner.vat) and not partner.parent_id and self.env['res.partner'].search(domain, limit=1)
+
     # _sql_constraints = [
     #     ('vat', 'unique(vat)', 'El número de documento ya existe, por favor verficar.'),
     # ]
