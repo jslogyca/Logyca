@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import http
 
-# class Testlogyca(http.Controller):
+# class testlogyca(http.Controller):
 #     @http.route('/testlogyca/testlogyca/', auth='public')
 #     def index(self, **kw):
 #         return "Hello, world"
