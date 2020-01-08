@@ -164,7 +164,7 @@ class x_job_title(models.Model):
     _name = 'testlogyca.job_title'
     _description = 'Cargos'
 
-    sector_id = fields.Many2one('testlogyca.areas', string='Área', required=True)
+    area_id = fields.Many2one('testlogyca.areas', string='Área')
     code = fields.Char(string='Código', size=10, required=True)
     name = fields.Char(string='Nombre', required=True)
 
@@ -179,7 +179,7 @@ class x_job_title(models.Model):
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     #INFORMACION BASICA CLIENTE
-    x_active_for_testlogyca = fields.Boolean(string='Activo')
+    x_active_for_logyca = fields.Boolean(string='Activo')
     x_document_type = fields.Selection([
                                         ('11', 'Registro civil de nacimiento'), 
                                         ('12', 'Tarjeta de identidad'), 
@@ -190,7 +190,7 @@ class ResPartner(models.Model):
                                         ('41', 'Pasaporte'),
                                         ('42', 'Tipo de documento extranjero'),
                                         ('43', 'Sin identificación del exterior o para uso definido por la DIAN')
-                                    ], string='Tipo de documento')
+                                    ], string='Tipo de documento',store = True)
     x_digit_verification = fields.Integer(string='Digito de verificación')
     x_first_name = fields.Char(string='Primer nombre')
     x_second_name = fields.Char(string='Segundo nombre')
@@ -203,8 +203,8 @@ class ResPartner(models.Model):
     x_city = fields.Many2one('testlogyca.city', string='Ciudad')
 
     #CLASIFICACION 
-    x_organization_type = fields.Selection([('01', 'Empresa'), ('02', 'Universidad'), ('03', 'Centro de investigación'), ('04', 'Multilateral')], string='Tipo de organización')
-    x_entity_type = fields.Selection([('01', 'Pública'), ('02', 'Privada')], string='Tipo de entidad')
+    x_organization_type = fields.Selection([('1', 'Empresa'), ('2', 'Universidad'), ('3', 'Centro de investigación'), ('4', 'Multilateral')], string='Tipo de organización')
+    x_entity_type = fields.Selection([('1', 'Pública'), ('2', 'Privada')], string='Tipo de entidad')
     #x_economic_activity = fields.Selection([('01', 'Comercio'), ('02', 'Manufactura'), ('03', 'Servicio')], string='Actividad económica general') - Se comenta el campo 
     x_sector_id = fields.Many2one('testlogyca.sectors', string='Sector')
     x_subsector_id = fields.Many2one('testlogyca.subsectors', string='Sub-sector')
