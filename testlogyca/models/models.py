@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 #--------------------------------Test Models------------------------------------#
 
@@ -39,7 +40,7 @@ class testlogyca(models.Model):
     def _date_today(self):
         self.date_register = fields.Date.today()
 
-#--------------------------------Modelos propios de Logyca------------------------------------#
+#--------------------------------Modelos propios de testlogyca------------------------------------#
 
 # CIUDAD
 class x_city(models.Model):
@@ -144,20 +145,6 @@ class x_contact_types(models.Model):
             result.append((record.id, "{} | {}".format(record.code, record.name)))
         return result
 
-# CARGOS
-class x_job_title(models.Model):
-    _name = 'testlogyca.job_title'
-    _description = 'Cargos'
-
-    code = fields.Char(string='Código', size=10, required=True)
-    name = fields.Char(string='Nombre', required=True)
-
-    def name_get(self):
-        result = []
-        for record in self:
-            result.append((record.id, "{} | {}".format(record.code, record.name)))
-        return result
-
 # ÁREAS
 class x_areas(models.Model):
     _name = 'testlogyca.areas'
@@ -172,12 +159,27 @@ class x_areas(models.Model):
             result.append((record.id, "{} | {}".format(record.code, record.name)))
         return result
 
-#---------------------------Modelos existentes de Odoo modificados por Logyca-------------------------------#
+# CARGOS
+class x_job_title(models.Model):
+    _name = 'testlogyca.job_title'
+    _description = 'Cargos'
+
+    sector_id = fields.Many2one('testlogyca.areas', string='Área', required=True)
+    code = fields.Char(string='Código', size=10, required=True)
+    name = fields.Char(string='Nombre', required=True)
+
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{} | {}".format(record.code, record.name)))
+        return result
+
+#---------------------------Modelos existentes de Odoo modificados por testlogyca-------------------------------#
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     #INFORMACION BASICA CLIENTE
-    x_active_for_logyca = fields.Boolean(string='Activo')
+    x_active_for_testlogyca = fields.Boolean(string='Activo')
     x_document_type = fields.Selection([
                                         ('11', 'Registro civil de nacimiento'), 
                                         ('12', 'Tarjeta de identidad'), 
@@ -211,7 +213,7 @@ class ResPartner(models.Model):
     #GRUPO EMPRESARIAL
     x_is_business_group = fields.Boolean(string='¿Es un Grupo Empresarial?')
 
-    #VINCULACION CON LOGYCA
+    #VINCULACION CON testlogyca
     x_active_vinculation = fields.Boolean(string='Estado de la vinculación') 
     x_date_vinculation = fields.Date(string="Fecha de vinculación")
     x_type_vinculation = fields.Many2many('testlogyca.vinculation_types', string='Tipo de vinculación')
@@ -232,15 +234,15 @@ class ResPartner(models.Model):
 
     #INFORMACION FINANCIERA
     x_asset_range = fields.Selection([
-                                        ('01', 'DE 0 A 9.9'), 
-                                        ('02', 'DE 10 A 24.9'), 
-                                        ('03', 'DE 25 A 49.9'),
-                                        ('04', 'DE 50 A 99.9'),
-                                        ('05', 'DE 100 A 249.9'),
-                                        ('06', 'DE 250 A 499.9'),
-                                        ('07', 'DE 500 A 749.9'),
-                                        ('08', 'DE 750 A 999.9'),
-                                        ('09', 'DE 1,000 A 2,499.9'),
+                                        ('1', 'DE 0 A 9.9'), 
+                                        ('2', 'DE 10 A 24.9'), 
+                                        ('3', 'DE 25 A 49.9'),
+                                        ('4', 'DE 50 A 99.9'),
+                                        ('5', 'DE 100 A 249.9'),
+                                        ('6', 'DE 250 A 499.9'),
+                                        ('7', 'DE 500 A 749.9'),
+                                        ('8', 'DE 750 A 999.9'),
+                                        ('9', 'DE 1,000 A 2,499.9'),
                                         ('10', 'DE 2,500 A 4,999.9'),
                                         ('11', 'DE 5,000 A 9,999.9'),
                                         ('12', 'DE 10,000 A 49,999.9'),
@@ -251,15 +253,15 @@ class ResPartner(models.Model):
                                         ('17', 'MAS DE 1,000,000')                                        
                                     ], string='Rango de Activos')
     x_income_range = fields.Selection([
-                                        ('01', 'DE 0 A 9.9'), 
-                                        ('02', 'DE 10 A 24.9'), 
-                                        ('03', 'DE 25 A 49.9'),
-                                        ('04', 'DE 50 A 99.9'),
-                                        ('05', 'DE 100 A 249.9'),
-                                        ('06', 'DE 250 A 499.9'),
-                                        ('07', 'DE 500 A 749.9'),
-                                        ('08', 'DE 750 A 999.9'),
-                                        ('09', 'DE 1,000 A 2,499.9'),
+                                        ('1', 'DE 0 A 9.9'), 
+                                        ('2', 'DE 10 A 24.9'), 
+                                        ('3', 'DE 25 A 49.9'),
+                                        ('4', 'DE 50 A 99.9'),
+                                        ('5', 'DE 100 A 249.9'),
+                                        ('6', 'DE 250 A 499.9'),
+                                        ('7', 'DE 500 A 749.9'),
+                                        ('8', 'DE 750 A 999.9'),
+                                        ('9', 'DE 1,000 A 2,499.9'),
                                         ('10', 'DE 2,500 A 4,999.9'),
                                         ('11', 'DE 5,000 A 9,999.9'),
                                         ('12', 'DE 10,000 A 49,999.9'),
@@ -271,10 +273,10 @@ class ResPartner(models.Model):
                                     ], string='Rango de Ingresos')
     x_date_update_asset = fields.Date(string='Fecha de última modificación', compute='_date_update_asset', store=True)
     x_company_size = fields.Selection([
-                                        ('01', 'Mipyme'), 
-                                        ('02', 'Pyme'), 
-                                        ('03', 'Mediana'),
-                                        ('04', 'Grande')                                        
+                                        ('1', 'Mipyme'), 
+                                        ('2', 'Pyme'), 
+                                        ('3', 'Mediana'),
+                                        ('4', 'Grande')                                        
                                     ], string='Tamaño empresa')
 
     #INFORMACION TRIBUTARIA
@@ -282,12 +284,12 @@ class ResPartner(models.Model):
 
     #INFORMACION COMERCIAL
     x_account_origin = fields.Selection([
-                                        ('01', 'Campañas'), 
-                                        ('02', 'Eventos'), 
-                                        ('03', 'Referenciado'),
-                                        ('04', 'Telemercadeo'),
-                                        ('05', 'Web'),
-                                        ('06', 'Otro')                                      
+                                        ('1', 'Campañas'), 
+                                        ('2', 'Eventos'), 
+                                        ('3', 'Referenciado'),
+                                        ('4', 'Telemercadeo'),
+                                        ('5', 'Web'),
+                                        ('6', 'Otro')                                      
                                     ], string='Origen de la cuenta')
     #x_member_id_team = fields.Many2one('res.users', string='Propietario de la cuenta')
         
@@ -305,6 +307,17 @@ class ResPartner(models.Model):
     x_position_contact_invoice_electronic = fields.Char(string='Cargo contacto')
     x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas')
     
+    # _sql_constraints = [
+    #     ('vat', 'unique(vat)', 'El número de documento ya existe, por favor verficar.'),
+    # ]
+    
+    # @api.constrains('vat')
+    # def _validation_vat(self):
+    #     self.env.cr.execute("Select vat FROM res_partner Where vat=%s",(self.vat))
+    #     for record in self:
+    #         if record.vat = 20:
+    #             raise ValidationError("Your record is too old: %s" % record.age)
+
     @api.depends('x_asset_range')
     def _date_update_asset(self):
         self.x_date_update_asset = fields.Date.today()
