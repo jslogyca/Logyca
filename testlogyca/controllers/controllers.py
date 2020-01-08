@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 from odoo import http
 
-# class logyca(http.Controller):
-#     @http.route('/logyca/logyca/', auth='public')
+# class testlogyca(http.Controller):
+#     @http.route('/testlogyca/testlogyca/', auth='public')
 #     def index(self, **kw):
 #         return "Hello, world"
 
-#     @http.route('/logyca/logyca/objects/', auth='public')
+#     @http.route('/testlogyca/testlogyca/objects/', auth='public')
 #     def list(self, **kw):
-#         return http.request.render('logyca.listing', {
-#             'root': '/logyca/logyca',
-#             'objects': http.request.env['logyca.logyca'].search([]),
+#         return http.request.render('testlogyca.listing', {
+#             'root': '/testlogyca/testlogyca',
+#             'objects': http.request.env['testlogyca.testlogyca'].search([]),
 #         })
 
-#     @http.route('/logyca/logyca/objects/<model("logyca.logyca"):obj>/', auth='public')
+#     @http.route('/testlogyca/testlogyca/objects/<model("testlogyca.testlogyca"):obj>/', auth='public')
 #     def object(self, obj, **kw):
-#         return http.request.render('logyca.object', {
+#         return http.request.render('testlogyca.object', {
 #             'object': obj
 #         })

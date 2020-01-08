@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 #--------------------------------Test Models------------------------------------#
 
 class persontocargo(models.Model):
-    _name = 'logyca.persontocargo'
+    _name = 'testlogyca.persontocargo'
     _description = 'Prueba de relación padre hijo (Empleados)'
 
     name = fields.Char(string='Nombre', required=True)
@@ -13,8 +13,8 @@ class persontocargo(models.Model):
     date = fields.Date(string="Fecha de nacimiento", required=True)
     gender = fields.Selection([('1', 'Masculino'), ('2', 'Femenino'), ('3', 'Otro')], string='Genero', required=True)
 
-class logyca(models.Model):
-    _name = 'logyca.logyca'
+class testlogyca(models.Model):
+    _name = 'testlogyca.testlogyca'
     _description = 'Prueba de relación padre hijo (Lideres)'
 
     name = fields.Char(string='Nombre', required=True)
@@ -28,7 +28,7 @@ class logyca(models.Model):
     salary = fields.Float(string='Salario mensual')
     salary_for_day = fields.Float(compute="_salary_day", string='Salario por dia')
     date_register = fields.Date(string='Fecha de registro', compute='_date_today')
-    persontocargo = fields.Many2many('logyca.persontocargo', string='Personas a cargo')
+    persontocargo = fields.Many2many('testlogyca.persontocargo', string='Personas a cargo')
     description = fields.Text(string='Observaciones')
 
     @api.depends('salary')
@@ -40,11 +40,11 @@ class logyca(models.Model):
     def _date_today(self):
         self.date_register = fields.Date.today()
 
-#--------------------------------Modelos propios de Logyca------------------------------------#
+#--------------------------------Modelos propios de testlogyca------------------------------------#
 
 # CIUDAD
 class x_city(models.Model):
-    _name = 'logyca.city'
+    _name = 'testlogyca.city'
     _description = 'Ciudades por departamento'
 
     state_id = fields.Many2one('res.country.state', string='Departamento', required=True)
@@ -53,7 +53,7 @@ class x_city(models.Model):
 
 # CIIU
 class ciiu(models.Model):
-    _name = 'logyca.ciiu'
+    _name = 'testlogyca.ciiu'
     _parent_store = True
     _parent_name  = 'parent_id'
     _description = 'CIIU - Actividades economicas'
@@ -61,9 +61,9 @@ class ciiu(models.Model):
     code = fields.Char('Codigo', required=True)
     name = fields.Char('Name', required=True)
     porcent_ica = fields.Float(string='Porcentaje ICA')
-    parent_id = fields.Many2one('logyca.ciiu','Parent Tag', ondelete='cascade')
+    parent_id = fields.Many2one('testlogyca.ciiu','Parent Tag', ondelete='cascade')
     parent_path = fields.Char(index=True)
-    child_ids = fields.One2many('logyca.ciiu', 'parent_id', 'Child Tags')    
+    child_ids = fields.One2many('testlogyca.ciiu', 'parent_id', 'Child Tags')    
     
     def name_get(self):
         result = []
@@ -73,7 +73,7 @@ class ciiu(models.Model):
 
 # SECTORES
 class x_sectors(models.Model):
-    _name = 'logyca.sectors'
+    _name = 'testlogyca.sectors'
     _description = 'Sectores'
 
     code = fields.Char(string='Código', size=10,required=True)
@@ -87,10 +87,10 @@ class x_sectors(models.Model):
 
 # SUBSECTORES
 class x_subsectors(models.Model):
-    _name = 'logyca.subsectors'
+    _name = 'testlogyca.subsectors'
     _description = 'Sub-Sectores'
 
-    sector_id = fields.Many2one('logyca.sectors', string='Sector principal', required=True)
+    sector_id = fields.Many2one('testlogyca.sectors', string='Sector principal', required=True)
     code = fields.Char(string='Código', size=10, required=True)
     name = fields.Char(string='Nombre', required=True)
 
@@ -102,7 +102,7 @@ class x_subsectors(models.Model):
 
 # TIPOS DE VINCULACION
 class x_vinculation_types(models.Model):
-    _name = 'logyca.vinculation_types'
+    _name = 'testlogyca.vinculation_types'
     _description = 'Tipos de vinculación'
 
     code = fields.Char(string='Código', size=10, required=True)
@@ -118,7 +118,7 @@ class x_vinculation_types(models.Model):
 
 # RESPONSABILIDADES RUT
 class x_responsibilities_rut(models.Model):
-    _name = 'logyca.responsibilities_rut'
+    _name = 'testlogyca.responsibilities_rut'
     _description = 'Responsabilidades RUT'
 
     code = fields.Char(string='Identificador', size=5, required=True)
@@ -133,7 +133,7 @@ class x_responsibilities_rut(models.Model):
 
 # TIPOS DE CONTACTO
 class x_contact_types(models.Model):
-    _name = 'logyca.contact_types'
+    _name = 'testlogyca.contact_types'
     _description = 'Tipos de contacto'
     
     code = fields.Char(string='Código', size=10, required=True)
@@ -145,23 +145,9 @@ class x_contact_types(models.Model):
             result.append((record.id, "{} | {}".format(record.code, record.name)))
         return result
 
-# CARGOS
-class x_job_title(models.Model):
-    _name = 'logyca.job_title'
-    _description = 'Cargos'
-
-    code = fields.Char(string='Código', size=10, required=True)
-    name = fields.Char(string='Nombre', required=True)
-
-    def name_get(self):
-        result = []
-        for record in self:
-            result.append((record.id, "{} | {}".format(record.code, record.name)))
-        return result
-
 # ÁREAS
 class x_areas(models.Model):
-    _name = 'logyca.areas'
+    _name = 'testlogyca.areas'
     _description = 'Áreas'
 
     code = fields.Char(string='Código', size=10, required=True)
@@ -173,12 +159,27 @@ class x_areas(models.Model):
             result.append((record.id, "{} | {}".format(record.code, record.name)))
         return result
 
-#---------------------------Modelos existentes de Odoo modificados por Logyca-------------------------------#
+# CARGOS
+class x_job_title(models.Model):
+    _name = 'testlogyca.job_title'
+    _description = 'Cargos'
+
+    sector_id = fields.Many2one('testlogyca.areas', string='Área', required=True)
+    code = fields.Char(string='Código', size=10, required=True)
+    name = fields.Char(string='Nombre', required=True)
+
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{} | {}".format(record.code, record.name)))
+        return result
+
+#---------------------------Modelos existentes de Odoo modificados por testlogyca-------------------------------#
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     #INFORMACION BASICA CLIENTE
-    x_active_for_logyca = fields.Boolean(string='Activo')
+    x_active_for_testlogyca = fields.Boolean(string='Activo')
     x_document_type = fields.Selection([
                                         ('11', 'Registro civil de nacimiento'), 
                                         ('12', 'Tarjeta de identidad'), 
@@ -199,23 +200,23 @@ class ResPartner(models.Model):
     x_is_member_directive = fields.Boolean(string='¿Es miembro del Consejo Directivo?')
 
     #UBICACIÓN PRINCIPAL
-    x_city = fields.Many2one('logyca.city', string='Ciudad')
+    x_city = fields.Many2one('testlogyca.city', string='Ciudad')
 
     #CLASIFICACION 
     x_organization_type = fields.Selection([('01', 'Empresa'), ('02', 'Universidad'), ('03', 'Centro de investigación'), ('04', 'Multilateral')], string='Tipo de organización')
     x_entity_type = fields.Selection([('01', 'Pública'), ('02', 'Privada')], string='Tipo de entidad')
     #x_economic_activity = fields.Selection([('01', 'Comercio'), ('02', 'Manufactura'), ('03', 'Servicio')], string='Actividad económica general') - Se comenta el campo 
-    x_sector_id = fields.Many2one('logyca.sectors', string='Sector')
-    x_subsector_id = fields.Many2one('logyca.subsectors', string='Sub-sector')
-    x_ciiu_activity = fields.Many2many('logyca.ciiu', string='Códigos CIIU')
+    x_sector_id = fields.Many2one('testlogyca.sectors', string='Sector')
+    x_subsector_id = fields.Many2one('testlogyca.subsectors', string='Sub-sector')
+    x_ciiu_activity = fields.Many2many('testlogyca.ciiu', string='Códigos CIIU')
     
     #GRUPO EMPRESARIAL
     x_is_business_group = fields.Boolean(string='¿Es un Grupo Empresarial?')
 
-    #VINCULACION CON LOGYCA
+    #VINCULACION CON testlogyca
     x_active_vinculation = fields.Boolean(string='Estado de la vinculación') 
     x_date_vinculation = fields.Date(string="Fecha de vinculación")
-    x_type_vinculation = fields.Many2many('logyca.vinculation_types', string='Tipo de vinculación')
+    x_type_vinculation = fields.Many2many('testlogyca.vinculation_types', string='Tipo de vinculación')
     x_sponsored = fields.Boolean(string='Patrocinado')
     x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora')
     x_acceptance_data_policy = fields.Boolean(string='Acepta política de tratamiento de datos')
@@ -279,7 +280,7 @@ class ResPartner(models.Model):
                                     ], string='Tamaño empresa')
 
     #INFORMACION TRIBUTARIA
-    x_tax_responsibilities = fields.Many2many('logyca.responsibilities_rut', string='Responsabilidades Tributarias')
+    x_tax_responsibilities = fields.Many2many('testlogyca.responsibilities_rut', string='Responsabilidades Tributarias')
 
     #INFORMACION COMERCIAL
     x_account_origin = fields.Selection([
@@ -293,9 +294,9 @@ class ResPartner(models.Model):
     #x_member_id_team = fields.Many2one('res.users', string='Propietario de la cuenta')
         
     #INFORMACIÓN CONTACTO
-    x_contact_type = fields.Many2many('logyca.contact_types', string='Tipo de contacto')
-    x_contact_job_title = fields.Many2one('logyca.job_title', string='Cargo')
-    x_contact_area = fields.Many2one('logyca.areas', string='Área')
+    x_contact_type = fields.Many2many('testlogyca.contact_types', string='Tipo de contacto')
+    x_contact_job_title = fields.Many2one('testlogyca.job_title', string='Cargo')
+    x_contact_area = fields.Many2one('testlogyca.areas', string='Área')
 
     #INFORMACION FACTURACION ELECTRÓNICA
     x_email_contact_invoice_electronic = fields.Char(string='Correo electrónico contacto')

@@ -1,22 +1,22 @@
 <odoo>
     <data>
         <!-- Top menu item -->    
-        <menuitem name="Logyca" id="logyca.menu_root"/>
+        <menuitem name="Logyca" id="testlogyca.menu_root"/>
         
         <!-- menu categories --> 
-        <menuitem name="TestsMenus" id="logyca.menus_tests" sequence="1" parent="logyca.menu_root"/>
-            <menuitem name="Lideres" id="logyca.menu_1" parent="logyca.menus_tests" action="logyca_menu_action"/>
-            <menuitem name="Empleados" id="logyca.menu_2" parent="logyca.menus_tests" action="logyca_menu_action_parent"/>
+        <menuitem name="TestsMenus" id="testlogyca.menus_tests" sequence="1" parent="testlogyca.menu_root"/>
+            <menuitem name="Lideres" id="testlogyca.menu_1" parent="testlogyca.menus_tests" action="testlogyca_menu_action"/>
+            <menuitem name="Empleados" id="testlogyca.menu_2" parent="testlogyca.menus_tests" action="testlogyca_menu_action_parent"/>
         
-        <menuitem name="Parametrización" id="logyca.menus_parameterization" sequence="2" parent="logyca.menu_root"/>
-            <menuitem name="Ciudades" id="logyca.menu_city" parent="logyca.menus_parameterization"  sequence="1" action="logyca_menu_action_city"/>    
-            <menuitem name="CIIU" id="logyca.menu_ciiu" parent="logyca.menus_parameterization"  sequence="2" action="action_hierarchy"/>    
-            <menuitem name="Sectores" id="logyca.menu_sectors" parent="logyca.menus_parameterization"  sequence="3" action="logyca_menu_action_sectors"/>    
-            <menuitem name="Sub-Sectores" id="logyca.menu_subsectors" parent="logyca.menus_parameterization"  sequence="4" action="logyca_menu_action_subsectors"/>    
-            <menuitem name="Tipos de vinculación" id="logyca.menu_vinculation_types" parent="logyca.menus_parameterization"  sequence="5" action="logyca_menu_action_vinculation_types"/>    
-            <menuitem name="Responsabilidades RUT" id="logyca.menu_responsibilities_rut" parent="logyca.menus_parameterization"  sequence="6" action="logyca_menu_action_responsibilities_rut"/>    
-            <menuitem name="Tipos de contacto" id="logyca.menu_contact_types" parent="logyca.menus_parameterization"  sequence="7" action="logyca_menu_action_contact_types"/>    
-            <menuitem name="Cargos" id="logyca.menu_job_title" parent="logyca.menus_parameterization"  sequence="8" action="logyca_menu_action_job_title"/>    
-            <menuitem name="Áreas" id="logyca.menu_areas" parent="logyca.menus_parameterization"  sequence="9" action="logyca_menu_action_areas"/>    
+        <menuitem name="Parametrización" id="testlogyca.menus_parameterization" sequence="2" parent="testlogyca.menu_root"/>
+            <menuitem name="Ciudades" id="testlogyca.menu_city" parent="testlogyca.menus_parameterization"  sequence="1" action="testlogyca_menu_action_city"/>    
+            <menuitem name="CIIU" id="testlogyca.menu_ciiu" parent="testlogyca.menus_parameterization"  sequence="2" action="action_hierarchy"/>    
+            <menuitem name="Sectores" id="testlogyca.menu_sectors" parent="testlogyca.menus_parameterization"  sequence="3" action="testlogyca_menu_action_sectors"/>    
+            <menuitem name="Sub-Sectores" id="testlogyca.menu_subsectors" parent="testlogyca.menus_parameterization"  sequence="4" action="testlogyca_menu_action_subsectors"/>    
+            <menuitem name="Tipos de vinculación" id="testlogyca.menu_vinculation_types" parent="testlogyca.menus_parameterization"  sequence="5" action="testlogyca_menu_action_vinculation_types"/>    
+            <menuitem name="Responsabilidades RUT" id="testlogyca.menu_responsibilities_rut" parent="testlogyca.menus_parameterization"  sequence="6" action="testlogyca_menu_action_responsibilities_rut"/>    
+            <menuitem name="Tipos de contacto" id="testlogyca.menu_contact_types" parent="testlogyca.menus_parameterization"  sequence="7" action="testlogyca_menu_action_contact_types"/>    
+            <menuitem name="Cargos" id="testlogyca.menu_job_title" parent="testlogyca.menus_parameterization"  sequence="8" action="testlogyca_menu_action_job_title"/>    
+            <menuitem name="Áreas" id="testlogyca.menu_areas" parent="testlogyca.menus_parameterization"  sequence="9" action="testlogyca_menu_action_areas"/>    
     </data>
 </odoo>
