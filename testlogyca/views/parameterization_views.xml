@@ -190,5 +190,27 @@
       </field>
     </record>
 
+    <!-- Grupos de Trabajo VIEWS -->    
+    <record id="testlogyca_menu_action_work_groups" model="ir.actions.act_window">
+        <field name="name">Grupos de trabajo</field>
+          <field name="res_model">testlogyca.work_groups</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear Grupo de trabajo
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="testlogyca.list_work_groups">
+      <field name="name">testlogyca list work groups</field>
+      <field name="model">testlogyca.work_groups</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>                                              
+        </tree>
+      </field>
+    </record>
   </data>
 </odoo>
