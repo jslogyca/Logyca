@@ -174,6 +174,20 @@ class x_job_title(models.Model):
             result.append((record.id, "{} | {}".format(record.code, record.name)))
         return result
 
+# GRUPOS DE TRABAJO
+class x_work_groups(models.Model):
+    _name = 'testlogyca.work_groups'
+    _description = 'Grupos de Trabajo'
+
+    code = fields.Char(string='Código', size=10, required=True)
+    name = fields.Char(string='Nombre', required=True)
+
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{} | {}".format(record.code, record.name)))
+        return result
+
 #---------------------------Modelos existentes de Odoo modificados por testlogyca-------------------------------#
 
 class ResPartner(models.Model):
@@ -205,7 +219,13 @@ class ResPartner(models.Model):
     x_city = fields.Many2one('testlogyca.city', string='Ciudad', track_visibility='onchange')
 
     #CLASIFICACION 
-    x_organization_type = fields.Selection([('1', 'Empresa'), ('2', 'Universidad'), ('3', 'Centro de investigación'), ('4', 'Multilateral')], string='Tipo de organización', track_visibility='onchange')
+    x_organization_type = fields.Selection([('1', 'Empresa'), 
+                                            ('2', 'Universidad'), 
+                                            ('3', 'Centro de investigación'), 
+                                            ('4', 'Multilateral'),
+                                            ('5', 'Gobierno'),
+                                            ('6', 'ONG: Organización no Gubernamental')], string='Tipo de organización', track_visibility='onchange')
+    x_work_groups = fields.Many2many('testlogyca.work_groups', string='Grupos de trabajo', track_visibility='onchange')
     x_entity_type = fields.Selection([('1', 'Pública'), ('2', 'Privada')], string='Tipo de entidad', track_visibility='onchange')
     #x_economic_activity = fields.Selection([('01', 'Comercio'), ('02', 'Manufactura'), ('03', 'Servicio')], string='Actividad económica general') - Se comenta el campo 
     x_sector_id = fields.Many2one('testlogyca.sectors', string='Sector', track_visibility='onchange')
@@ -308,6 +328,12 @@ class ResPartner(models.Model):
     x_area_contact_invoice_electronic = fields.Char(string='Área contacto', track_visibility='onchange')
     x_position_contact_invoice_electronic = fields.Char(string='Cargo contacto', track_visibility='onchange')
     x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas', track_visibility='onchange')
+    
+    #INFORMACIÓN EDUCACIÓN - CLIENTES
+    X_is_a_student = fields.Boolean(string='¿Es estudiante?', track_visibility='onchange') 
+    x_educational_institution = fields.Char(string='Institución', track_visibility='onchange')
+    x_educational_faculty = fields.Char(string='Falcultad', track_visibility='onchange')   
+    x_taken_courses_logyca = fields.Boolean(string='¿Ha tomado cursos en LOGYCA?', track_visibility='onchange')    
     
     # @api.depends('vat')
     # def _compute_same_vat_partner_id(self):

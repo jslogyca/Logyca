@@ -18,5 +18,6 @@
             <menuitem name="Tipos de contacto" id="testlogyca.menu_contact_types" parent="testlogyca.menus_parameterization"  sequence="7" action="testlogyca_menu_action_contact_types"/>    
             <menuitem name="Cargos" id="testlogyca.menu_job_title" parent="testlogyca.menus_parameterization"  sequence="8" action="testlogyca_menu_action_job_title"/>    
             <menuitem name="Áreas" id="testlogyca.menu_areas" parent="testlogyca.menus_parameterization"  sequence="9" action="testlogyca_menu_action_areas"/>    
+            <menuitem name="Grupos de trabajo" id="testlogyca.menu_work_groups" parent="testlogyca.menus_parameterization"  sequence="10" action="testlogyca_menu_action_work_groups"/>                
     </data>
 </odoo>

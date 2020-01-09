@@ -10,3 +10,4 @@ access_testlogyca_responsibilities_rut,testlogyca.responsibilities_rut,model_tes
 access_testlogyca_contact_types,testlogyca.contact_types,model_testlogyca_contact_types,,1,1,1,1
 access_testlogyca_job_title,testlogyca.job_title,model_testlogyca_job_title,,1,1,1,1
 access_testlogyca_areas,testlogyca.areas,model_testlogyca_areas,,1,1,1,1
+access_testlogyca_work_groups,testlogyca.work_groups,model_testlogyca_work_groups,,1,1,1,1
