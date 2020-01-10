@@ -332,7 +332,7 @@ class ResPartner(models.Model):
     #INFORMACIÓN EDUCACIÓN - CLIENTES
     X_is_a_student = fields.Boolean(string='¿Es estudiante?', track_visibility='onchange') 
     x_educational_institution = fields.Char(string='Institución', track_visibility='onchange')
-    x_educational_faculty = fields.Char(string='Falcultad', track_visibility='onchange')   
+    x_educational_faculty = fields.Char(string='Facultad', track_visibility='onchange')   
     x_taken_courses_logyca = fields.Boolean(string='¿Ha tomado cursos en LOGYCA?', track_visibility='onchange')    
     
     # @api.depends('vat')
