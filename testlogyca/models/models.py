@@ -334,27 +334,12 @@ class ResPartner(models.Model):
     x_educational_institution = fields.Char(string='Institución', track_visibility='onchange')
     x_educational_faculty = fields.Char(string='Facultad', track_visibility='onchange')   
     x_taken_courses_logyca = fields.Boolean(string='¿Ha tomado cursos en LOGYCA?', track_visibility='onchange')    
-    
-    # @api.depends('vat')
-    # def _compute_same_vat_partner_id(self):
-    #     for partner in self:
-    #         # use _origin to deal with onchange()
-    #         partner_id = partner._origin.id
-    #         domain = [('vat', '=', partner.vat)]
-    #         if partner_id:
-    #             domain += [('id', '!=', partner_id), '!', ('id', 'child_of', partner_id)]
-    #         partner.same_vat_partner_id = bool(partner.vat) and not partner.parent_id and self.env['res.partner'].search(domain, limit=1)
 
-    # _sql_constraints = [
-    #     ('vat', 'unique(vat)', 'El número de documento ya existe, por favor verficar.'),
-    # ]
     
-    # @api.constrains('vat')
-    # def _validation_vat(self):
-    #     self.env.cr.execute("Select vat FROM res_partner Where vat=%s",(self.vat))
-    #     for record in self:
-    #         if record.vat = 20:
-    #             raise ValidationError("Your record is too old: %s" % record.age)
+    def init(self):
+        self._cr.execute("Select name From res_partner as a Inner Join res_partner_testlogyca_contact_types_rel as b on a.id = b.res_partner_id and b.testlogyca_contact_types_id = 3 Where a.id=24")
+        result = self.env.cr.fetchone()
+        self.x_name_contact_invoice_electronic = result
 
     @api.depends('x_asset_range')
     def _date_update_asset(self):
