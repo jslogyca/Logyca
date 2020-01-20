@@ -212,7 +212,7 @@ class ResPartner(models.Model):
     x_second_name = fields.Char(string='Segundo nombre', track_visibility='onchange')
     x_first_lastname = fields.Char(string='Primer apellido', track_visibility='onchange')
     x_second_lastname = fields.Char(string='Segundo apellido', track_visibility='onchange')
-    x_is_main_contact = fields.Boolean(string='¿Es contacto principal?', track_visibility='onchange')
+    #x_is_main_contact = fields.Boolean(string='¿Es contacto principal?', track_visibility='onchange')
     x_is_member_directive = fields.Boolean(string='¿Es miembro del Consejo Directivo?', track_visibility='onchange')
 
     #UBICACIÓN PRINCIPAL
@@ -334,28 +334,15 @@ class ResPartner(models.Model):
     x_educational_institution = fields.Char(string='Institución', track_visibility='onchange')
     x_educational_faculty = fields.Char(string='Facultad', track_visibility='onchange')   
     x_taken_courses_logyca = fields.Boolean(string='¿Ha tomado cursos en LOGYCA?', track_visibility='onchange')    
-    
-    # @api.depends('vat')
-    # def _compute_same_vat_partner_id(self):
-    #     for partner in self:
-    #         # use _origin to deal with onchange()
-    #         partner_id = partner._origin.id
-    #         domain = [('vat', '=', partner.vat)]
-    #         if partner_id:
-    #             domain += [('id', '!=', partner_id), '!', ('id', 'child_of', partner_id)]
-    #         partner.same_vat_partner_id = bool(partner.vat) and not partner.parent_id and self.env['res.partner'].search(domain, limit=1)
 
-    # _sql_constraints = [
-    #     ('vat', 'unique(vat)', 'El número de documento ya existe, por favor verficar.'),
-    # ]
-    
-    # @api.constrains('vat')
-    # def _validation_vat(self):
-    #     self.env.cr.execute("Select vat FROM res_partner Where vat=%s",(self.vat))
-    #     for record in self:
-    #         if record.vat = 20:
-    #             raise ValidationError("Your record is too old: %s" % record.age)
+    #CAMPOS HISTORICOS 
+    x_info_creation_history = fields.Char(string='Información de creación y modificación historica', track_visibility='onchange')
 
+    # def init(self):
+    #     self._cr.execute("Select name From res_partner as a Inner Join res_partner_testlogyca_contact_types_rel as b on a.id = b.res_partner_id and b.testlogyca_contact_types_id = 3 Where a.vat='"+str(self.vat)+"'")
+    #     result = self._cr.fetchone()
+    #     self.x_name_contact_invoice_electronic = result
+    
     @api.depends('x_asset_range')
     def _date_update_asset(self):
         self.x_date_update_asset = fields.Date.today()
