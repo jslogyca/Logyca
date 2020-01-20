@@ -212,7 +212,7 @@ class ResPartner(models.Model):
     x_second_name = fields.Char(string='Segundo nombre', track_visibility='onchange')
     x_first_lastname = fields.Char(string='Primer apellido', track_visibility='onchange')
     x_second_lastname = fields.Char(string='Segundo apellido', track_visibility='onchange')
-    x_is_main_contact = fields.Boolean(string='¿Es contacto principal?', track_visibility='onchange')
+    #x_is_main_contact = fields.Boolean(string='¿Es contacto principal?', track_visibility='onchange')
     x_is_member_directive = fields.Boolean(string='¿Es miembro del Consejo Directivo?', track_visibility='onchange')
 
     #UBICACIÓN PRINCIPAL
@@ -335,12 +335,14 @@ class ResPartner(models.Model):
     x_educational_faculty = fields.Char(string='Facultad', track_visibility='onchange')   
     x_taken_courses_logyca = fields.Boolean(string='¿Ha tomado cursos en LOGYCA?', track_visibility='onchange')    
 
-    
-    def init(self):
-        self._cr.execute("Select name From res_partner as a Inner Join res_partner_testlogyca_contact_types_rel as b on a.id = b.res_partner_id and b.testlogyca_contact_types_id = 3 Where a.id=24")
-        result = self.env.cr.fetchone()
-        self.x_name_contact_invoice_electronic = result
+    #CAMPOS HISTORICOS 
+    x_info_creation_history = fields.Char(string='Información de creación y modificación historica', track_visibility='onchange')
 
+    # def init(self):
+    #     self._cr.execute("Select name From res_partner as a Inner Join res_partner_testlogyca_contact_types_rel as b on a.id = b.res_partner_id and b.testlogyca_contact_types_id = 3 Where a.vat='"+str(self.vat)+"'")
+    #     result = self._cr.fetchone()
+    #     self.x_name_contact_invoice_electronic = result
+    
     @api.depends('x_asset_range')
     def _date_update_asset(self):
         self.x_date_update_asset = fields.Date.today()
