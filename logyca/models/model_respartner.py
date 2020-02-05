@@ -18,7 +18,8 @@ class ResPartner(models.Model):
                                         ('31', 'NIT'),
                                         ('41', 'Pasaporte'),
                                         ('42', 'Tipo de documento extranjero'),
-                                        ('43', 'Sin identificación del exterior o para uso definido por la DIAN')
+                                        ('43', 'Sin identificación del exterior o para uso definido por la DIAN'),
+                                        ('44', 'Documento de identificación extranjero persona jurídica')
                                     ], string='Tipo de documento', track_visibility='onchange')
     x_digit_verification = fields.Integer(string='Digito de verificación', track_visibility='onchange')
     x_first_name = fields.Char(string='Primer nombre', track_visibility='onchange')
