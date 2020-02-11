@@ -143,7 +143,7 @@ class ResPartner(models.Model):
     x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas', track_visibility='onchange')
 
     #INFORMACIÓN EDUCACIÓN - CLIENTES
-    X_is_a_student = fields.Boolean(string='¿Es estudiante?', track_visibility='onchange')
+    x_is_a_student = fields.Boolean(string='¿Es estudiante?', track_visibility='onchange')
     x_educational_institution = fields.Char(string='Institución', track_visibility='onchange')
     x_educational_faculty = fields.Char(string='Facultad', track_visibility='onchange')
     x_taken_courses_logyca = fields.Boolean(string='¿Ha tomado cursos en LOGYCA?', track_visibility='onchange')
@@ -153,7 +153,10 @@ class ResPartner(models.Model):
 
     @api.depends('name')
     def _update_fe_name(self):
-        self.env.cr.execute("Select a.email,a.name,a.phone From res_partner as a Inner Join logyca_contact_types_res_partner_rel as b on a.id = b.res_partner_id and b.logyca_contact_types_id = 3 Inner Join res_partner as c on a.parent_id = c.id Where c.name='"+str(self.name)+"'")
+        self.env.cr.execute("""Select a.email,a.name,a.phone From res_partner as a 
+                                Inner Join logyca_contact_types_res_partner_rel as b on a.id = b.res_partner_id 
+                                Inner join logyca_contact_types as fe on b.logyca_contact_types_id = fe.id and fe.code = 'FE' 
+                                Inner Join res_partner as c on a.parent_id = c.id Where c.name='%s'""" % self.name)
         result = tuple()
         result = self.env.cr.dictfetchall()
         email = ""
