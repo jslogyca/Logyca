@@ -134,9 +134,9 @@ class ResPartner(models.Model):
     x_contact_area = fields.Many2one('logyca.areas', string='Área', track_visibility='onchange')
 
     #INFORMACION FACTURACION ELECTRÓNICA
-    x_email_contact_invoice_electronic = fields.Char(string='Email contacto', track_visibility='onchange', compute ='_update_fe_name',store=True)
-    x_name_contact_invoice_electronic = fields.Char(string='Nombre contacto', track_visibility='onchange', compute ='_update_fe_name',store=True)
-    x_phone_contact_invoice_electronic = fields.Char(string='Telefono contacto', track_visibility='onchange', compute ='_update_fe_name',store=True)
+    x_email_contact_invoice_electronic = fields.Char(string='Email contacto', track_visibility='onchange', compute ='_update_fe_info_contact',store=True)
+    x_name_contact_invoice_electronic = fields.Char(string='Nombre contacto', track_visibility='onchange', compute ='_update_fe_info_contact',store=True)
+    x_phone_contact_invoice_electronic = fields.Char(string='Telefono contacto', track_visibility='onchange', compute ='_update_fe_info_contact',store=True)
     # x_city_contact_invoice_electronic = fields.Char(string='Ciudad contacto', track_visibility='onchange')
     # x_area_contact_invoice_electronic = fields.Char(string='Área contacto', track_visibility='onchange')
     # x_position_contact_invoice_electronic = fields.Char(string='Cargo contacto', track_visibility='onchange')
@@ -152,21 +152,21 @@ class ResPartner(models.Model):
     x_info_creation_history = fields.Char(string='Información de creación y modificación historica', track_visibility='onchange')
 
     @api.depends('name')
-    def _update_fe_name(self):
-        self.env.cr.execute("""Select a.email,a.name,a.phone From res_partner as a 
-                                Inner Join logyca_contact_types_res_partner_rel as b on a.id = b.res_partner_id 
-                                Inner join logyca_contact_types as fe on b.logyca_contact_types_id = fe.id and fe.code = 'FE' 
-                                Inner Join res_partner as c on a.parent_id = c.id Where c.name='%s'""" % self.name)
-        result = tuple()
-        result = self.env.cr.dictfetchall()
+    def _update_fe_info_contact(self):
+        # self.env.cr.execute("""Select a.email,a.name,a.phone From res_partner as a 
+                                # Inner Join logyca_contact_types_res_partner_rel as b on a.id = b.res_partner_id 
+                                # Inner join logyca_contact_types as fe on b.logyca_contact_types_id = fe.id and fe.code = 'FE' 
+                                # Inner Join res_partner as c on a.parent_id = c.id Where c.name='%s'""" % self.name)
+        # result = tuple()
+        # result = self.env.cr.dictfetchall()
         email = ""
         name = ""
         phone = ""
 
-        for ids in result:
-            email = ids.get('email')
-            name = ids.get('name')
-            phone = ids.get('phone')
+        # for ids in result:
+            # email = ids.get('email')
+            # name = ids.get('name')
+            # phone = ids.get('phone')
 
         self.x_email_contact_invoice_electronic = email
         self.x_name_contact_invoice_electronic = name
