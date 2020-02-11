@@ -30,7 +30,7 @@ class ciiu(models.Model):
     def name_get(self):
         result = []
         for record in self:
-            result.append((record.id, "{} | {}".format(record.code, record.name)))
+            result.append((record.id, "{}".format(record.name)))
         return result
 
 # SECTORES
@@ -150,7 +150,7 @@ class x_type_thirdparty(models.Model):
     def name_get(self):
         result = []
         for record in self:
-            result.append((record.id, "{} | {}".format(record.code, record.name)))
+            result.append((record.id, "{}".format(record.name)))
         return result
 
 #--------------------------------Modelos heredados de Odoo------------------------------------#
