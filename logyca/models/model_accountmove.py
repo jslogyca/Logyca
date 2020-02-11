@@ -7,4 +7,4 @@ from odoo.exceptions import ValidationError
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
     #PAÍS 
-    x_country_account_id = fields.Many2one('res.country', string='País')
+    x_country_account_id = fields.Many2one('res.country', string='País', store=True)
