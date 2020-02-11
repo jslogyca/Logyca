@@ -135,6 +135,24 @@ class x_work_groups(models.Model):
             result.append((record.id, "{} | {}".format(record.code, record.name)))
         return result
 
+# TIPOS DE TERCERO
+class x_type_thirdparty(models.Model):
+    _name = 'logyca.type_thirdparty'
+    _description = 'Tipos de tercero'
+    
+    code = fields.Char(string='Código', size=10, required=True)
+    name = fields.Char(string='Nombre', required=True)
+    types = fields.Selection([('1', 'Cliente / Cuenta'),
+                              ('2', 'Contacto'),
+                              ('3', 'Proveedor'),
+                              ('4', 'Funcionario / Contratista')], string='Tipo', required=True)
+
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{} | {}".format(record.code, record.name)))
+        return result
+
 #--------------------------------Modelos heredados de Odoo------------------------------------#
 
 class ResCountry(models.Model):
