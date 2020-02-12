@@ -1,0 +1,216 @@
+<!-- //////////////////////////////// Parameterization VIEWS //////////////////////////////// -->    
+<odoo>
+  <data>
+    <!-- CITY VIEWS -->    
+    <record id="testlogyca_menu_action_city" model="ir.actions.act_window">
+        <field name="name">Ciudad</field>
+          <field name="res_model">testlogyca.city</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear ciudad
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="testlogyca.list_city">
+      <field name="name">testlogyca list city</field>
+      <field name="model">testlogyca.city</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="state_id"/>
+          <field name="code"/>
+          <field name="name"/>          
+        </tree>
+      </field>
+    </record>
+
+    <!-- SECTORS VIEWS -->    
+    <record id="testlogyca_menu_action_sectors" model="ir.actions.act_window">
+        <field name="name">Sectores</field>
+          <field name="res_model">testlogyca.sectors</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear sector
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="testlogyca.list_sectors">
+      <field name="name">testlogyca list sector</field>
+      <field name="model">testlogyca.sectors</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="code"/>                 
+          <field name="name"/>                 
+        </tree>
+      </field>
+    </record>
+
+    <!-- SUB-SECTORS VIEWS -->    
+    <record id="testlogyca_menu_action_subsectors" model="ir.actions.act_window">
+        <field name="name">Sub-sectores</field>
+          <field name="res_model">testlogyca.subsectors</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear sub-sector
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="testlogyca.list_subsectors">
+      <field name="name">testlogyca list subsector</field>
+      <field name="model">testlogyca.subsectors</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="sector_id"/>                 
+          <field name="code"/>                 
+          <field name="name"/>                 
+        </tree>
+      </field>
+    </record>
+
+    <!-- vinculation_types VIEWS -->    
+    <record id="testlogyca_menu_action_vinculation_types" model="ir.actions.act_window">
+        <field name="name">Tipos de vinculación</field>
+          <field name="res_model">testlogyca.vinculation_types</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear tipos de vinculación
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="testlogyca.list_vinculation_types">
+      <field name="name">testlogyca list vinculation_types</field>
+      <field name="model">testlogyca.vinculation_types</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>   
+          <field name="active"/>   
+          <field name="novelty"/>                           
+        </tree>
+      </field>
+    </record>
+
+    <!-- responsibilities_rut VIEWS -->    
+    <record id="testlogyca_menu_action_responsibilities_rut" model="ir.actions.act_window">
+        <field name="name">Responsabilidades RUT</field>
+          <field name="res_model">testlogyca.responsibilities_rut</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear responsabilidad RUT
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="testlogyca.list_responsibilities_rut">
+      <field name="name">testlogyca list responsibilities_rut</field>
+      <field name="model">testlogyca.responsibilities_rut</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="description"/>   
+          <field name="valid_for_fe"/>                                   
+        </tree>
+      </field>
+    </record>
+
+    <!-- contact_types VIEWS -->    
+    <record id="testlogyca_menu_action_contact_types" model="ir.actions.act_window">
+        <field name="name">Tipos de contacto</field>
+          <field name="res_model">testlogyca.contact_types</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear tipo de contacto
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="testlogyca.list_contact_types">
+      <field name="name">testlogyca list contact_types</field>
+      <field name="model">testlogyca.contact_types</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>                                             
+        </tree>
+      </field>
+    </record>
+
+    <!-- job_title VIEWS -->    
+    <record id="testlogyca_menu_action_job_title" model="ir.actions.act_window">
+        <field name="name">Cargos</field>
+          <field name="res_model">testlogyca.job_title</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear cargo
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="testlogyca.list_job_title">
+      <field name="name">testlogyca list job_title</field>
+      <field name="model">testlogyca.job_title</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>                                              
+        </tree>
+      </field>
+    </record>
+    
+    <!-- areas VIEWS -->    
+    <record id="testlogyca_menu_action_areas" model="ir.actions.act_window">
+        <field name="name">Áreas</field>
+          <field name="res_model">testlogyca.areas</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear área
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="testlogyca.list_areas">
+      <field name="name">testlogyca list areas</field>
+      <field name="model">testlogyca.areas</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>                                              
+        </tree>
+      </field>
+    </record>
+
+    <!-- Grupos de Trabajo VIEWS -->    
+    <record id="testlogyca_menu_action_work_groups" model="ir.actions.act_window">
+        <field name="name">Grupos de trabajo</field>
+          <field name="res_model">testlogyca.work_groups</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear Grupo de trabajo
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="testlogyca.list_work_groups">
+      <field name="name">testlogyca list work groups</field>
+      <field name="model">testlogyca.work_groups</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>                                              
+        </tree>
+      </field>
+    </record>
+  </data>
+</odoo>

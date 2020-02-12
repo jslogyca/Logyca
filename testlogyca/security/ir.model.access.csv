@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_testlogyca_testlogyca,testlogyca.testlogyca,model_testlogyca_testlogyca,,1,1,1,1
+access_testlogyca_persontocargo,testlogyca.persontocargo,model_testlogyca_persontocargo,,1,1,1,1
+access_testlogyca_city,testlogyca.city,model_testlogyca_city,,1,1,1,1
+access_testlogyca_ciiu,testlogyca.ciiu,model_testlogyca_ciiu,,1,1,1,1
+access_testlogyca_sectors,testlogyca.sectors,model_testlogyca_sectors,,1,1,1,1
+access_testlogyca_subsectors,testlogyca.subsectors,model_testlogyca_subsectors,,1,1,1,1
+access_testlogyca_vinculation_types,testlogyca.vinculation_types,model_testlogyca_vinculation_types,,1,1,1,1
+access_testlogyca_responsibilities_rut,testlogyca.responsibilities_rut,model_testlogyca_responsibilities_rut,,1,1,1,1
+access_testlogyca_contact_types,testlogyca.contact_types,model_testlogyca_contact_types,,1,1,1,1
+access_testlogyca_job_title,testlogyca.job_title,model_testlogyca_job_title,,1,1,1,1
+access_testlogyca_areas,testlogyca.areas,model_testlogyca_areas,,1,1,1,1
+access_testlogyca_work_groups,testlogyca.work_groups,model_testlogyca_work_groups,,1,1,1,1
