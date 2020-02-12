@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_logyca_city,logyca.city,model_logyca_city,,1,1,1,1
+access_logyca_ciiu,logyca.ciiu,model_logyca_ciiu,,1,1,1,1
+access_logyca_sectors,logyca.sectors,model_logyca_sectors,,1,1,1,1
+access_logyca_vinculation_types,logyca.vinculation_types,model_logyca_vinculation_types,,1,1,1,1
+access_logyca_responsibilities_rut,logyca.responsibilities_rut,model_logyca_responsibilities_rut,,1,1,1,1
+access_logyca_contact_types,logyca.contact_types,model_logyca_contact_types,,1,1,1,1
+access_logyca_job_title,logyca.job_title,model_logyca_job_title,,1,1,1,1
+access_logyca_areas,logyca.areas,model_logyca_areas,,1,1,1,1
+access_logyca_work_groups,logyca.work_groups,model_logyca_work_groups,,1,1,1,1
+access_logyca_type_thirdparty,logyca.type_thirdparty,model_logyca_type_thirdparty,,1,1,1,1

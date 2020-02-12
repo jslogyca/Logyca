@@ -196,6 +196,12 @@ class ResPartner(models.Model):
     name = fields.Char(track_visibility='onchange')
     #vat = fields.Char(track_visibility='onchange')
     x_active_for_logyca = fields.Boolean(string='Activo', track_visibility='onchange')
+    x_type_thirdparty = fields.Selection([
+        ('1','Cliente'),
+        ('2','Proveedor'),
+        ('3','Empleado'),
+        ('4','Usuario')
+    ], string='Tipo de Tercero', track_visibility= 'onchange')
     x_document_type = fields.Selection([
                                         ('11', 'Registro civil de nacimiento'), 
                                         ('12', 'Tarjeta de identidad'), 
@@ -205,7 +211,8 @@ class ResPartner(models.Model):
                                         ('31', 'NIT'),
                                         ('41', 'Pasaporte'),
                                         ('42', 'Tipo de documento extranjero'),
-                                        ('43', 'Sin identificación del exterior o para uso definido por la DIAN')
+                                        ('43', 'Sin identificación del exterior o para uso definido por la DIAN'),
+                                        ('44', 'Documento de identificación extranjero persona jurídica')
                                     ], string='Tipo de documento', track_visibility='onchange')
     x_digit_verification = fields.Integer(string='Digito de verificación', track_visibility='onchange')
     x_first_name = fields.Char(string='Primer nombre', track_visibility='onchange')
@@ -293,7 +300,8 @@ class ResPartner(models.Model):
                                         ('16', 'DE 500,000 A 999,999.9'),
                                         ('17', 'MAS DE 1,000,000')                                          
                                     ], string='Rango de Ingresos', track_visibility='onchange')
-    x_date_update_asset = fields.Date(string='Fecha de última modificación', compute='_date_update_asset', store=True, track_visibility='onchange')
+    # x_date_update_asset = fields.Date(string='Fecha de última modificación', compute='_date_update_asset', store=True, track_visibility='onchange')
+    x_date_update_asset = fields.Date(string='Fecha de última modificación', track_visibility='onchange')
     x_company_size = fields.Selection([
                                         ('1', 'Mipyme'), 
                                         ('2', 'Pyme'), 
