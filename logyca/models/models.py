@@ -164,3 +164,8 @@ class ResCountryState(models.Model):
     _inherit = 'res.country.state'
 	
     x_code_dian = fields.Char(string='Código de provincia/departamento para la DIAN')
+
+class CRMTeam(models.Model):
+    _inherit = 'crm.team'
+	
+    invoiced_target = fields.Integer(size=20)
