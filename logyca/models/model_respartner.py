@@ -152,7 +152,7 @@ class ResPartner(models.Model):
     x_info_creation_history = fields.Char(string='Información de creación y modificación historica', track_visibility='onchange')
 
     @api.depends('name')
-    def _update_fe_info_contact(self):
+    def _update_fe_info_contact(self):    
         for record in self:
             self.env.cr.execute("""Select a.email,a.name,a.phone From res_partner as a 
                                     Inner Join logyca_contact_types_res_partner_rel as b on a.id = b.res_partner_id 
