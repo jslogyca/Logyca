@@ -132,6 +132,8 @@ class ResPartner(models.Model):
     x_contact_type = fields.Many2many('logyca.contact_types', string='Tipo de contacto', track_visibility='onchange')
     x_contact_job_title = fields.Many2one('logyca.job_title', string='Cargo', track_visibility='onchange')
     x_contact_area = fields.Many2one('logyca.areas', string='Área', track_visibility='onchange')
+    x_contact_job_title_historic = fields.Char(string='Cargo histórico', track_visibility='onchange')
+    x_contact_area_historic = fields.Char(string='Área histórica', track_visibility='onchange')
 
     #INFORMACION FACTURACION ELECTRÓNICA
     x_email_contact_invoice_electronic = fields.Char(string='Email contacto', track_visibility='onchange', compute ='_update_fe_info_contact',store=True)
