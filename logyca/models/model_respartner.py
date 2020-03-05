@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 #---------------------------Modelo RES-PARTNER / TERCEROS-------------------------------#
 
@@ -22,7 +22,7 @@ class ResPartner(models.Model):
                                         ('43', 'Sin identificación del exterior o para uso definido por la DIAN'),
                                         ('44', 'Documento de identificación extranjero persona jurídica')
                                     ], string='Tipo de documento', track_visibility='onchange')
-    x_digit_verification = fields.Integer(string='Digito de verificación', track_visibility='onchange')
+    x_digit_verification = fields.Integer(string='Digito de verificación', track_visibility='onchange',compute='_compute_verification_digit', store=True)
     x_first_name = fields.Char(string='Primer nombre', track_visibility='onchange')
     x_second_name = fields.Char(string='Segundo nombre', track_visibility='onchange')
     x_first_lastname = fields.Char(string='Primer apellido', track_visibility='onchange')
@@ -132,11 +132,14 @@ class ResPartner(models.Model):
     x_contact_type = fields.Many2many('logyca.contact_types', string='Tipo de contacto', track_visibility='onchange')
     x_contact_job_title = fields.Many2one('logyca.job_title', string='Cargo', track_visibility='onchange')
     x_contact_area = fields.Many2one('logyca.areas', string='Área', track_visibility='onchange')
+    x_contact_job_title_historic = fields.Char(string='Cargo histórico', track_visibility='onchange')
+    x_contact_area_historic = fields.Char(string='Área histórica', track_visibility='onchange')
 
     #INFORMACION FACTURACION ELECTRÓNICA
-    x_email_contact_invoice_electronic = fields.Char(string='Email contacto', track_visibility='onchange', compute ='_update_fe_info_contact',store=True)
-    x_name_contact_invoice_electronic = fields.Char(string='Nombre contacto', track_visibility='onchange', compute ='_update_fe_info_contact',store=True)
-    x_phone_contact_invoice_electronic = fields.Char(string='Telefono contacto', track_visibility='onchange', compute ='_update_fe_info_contact',store=True)
+    child_id_fe = fields.One2many('res.partner', 'parent_id', string='Contact FE', domain=[('active', '=', True)])  # force "active_test" domain to bypass _search() override
+    x_email_contact_invoice_electronic = fields.Char(string='Email contacto', track_visibility='onchange')
+    x_name_contact_invoice_electronic = fields.Char(string='Nombre contacto', track_visibility='onchange')
+    x_phone_contact_invoice_electronic = fields.Char(string='Telefono contacto', track_visibility='onchange')
     # x_city_contact_invoice_electronic = fields.Char(string='Ciudad contacto', track_visibility='onchange')
     # x_area_contact_invoice_electronic = fields.Char(string='Área contacto', track_visibility='onchange')
     # x_position_contact_invoice_electronic = fields.Char(string='Cargo contacto', track_visibility='onchange')
@@ -150,30 +153,67 @@ class ResPartner(models.Model):
 
     #CAMPOS HISTORICOS
     x_info_creation_history = fields.Char(string='Información de creación y modificación historica', track_visibility='onchange')
-
-    @api.depends('name')
-    def _update_fe_info_contact(self):    
-        for record in self:
-            self.env.cr.execute("""Select a.email,a.name,a.phone From res_partner as a 
-                                    Inner Join logyca_contact_types_res_partner_rel as b on a.id = b.res_partner_id 
-                                    Inner join logyca_contact_types as fe on b.logyca_contact_types_id = fe.id and fe.code = 'FE' 
-                                    Inner Join res_partner as c on a.parent_id = c.id Where c.name='%s'""" % record.name)
-        result = tuple()
-        result = self.env.cr.dictfetchall()
-        email = ""
-        name = ""
-        phone = ""
-
-        for ids in result:
-            email = ids.get('email')
-            name = ids.get('name')
-            phone = ids.get('phone')
-
-        self.x_email_contact_invoice_electronic = email
-        self.x_name_contact_invoice_electronic = name
-        self.x_phone_contact_invoice_electronic = phone
-
+    
     @api.depends('x_asset_range')
     def _date_update_asset(self):
         self.x_date_update_asset = fields.Date.today()
 
+    @api.depends('vat')
+    def _compute_verification_digit(self):
+        #Logica para calcular digito de verificación
+        multiplication_factors = [71, 67, 59, 53, 47, 43, 41, 37, 29, 23, 19, 17, 13, 7, 3]
+
+        for partner in self:
+            if partner.vat and partner.x_document_type == '31' and len(partner.vat) <= len(multiplication_factors):
+                number = 0
+                padded_vat = partner.vat
+
+                while len(padded_vat) < len(multiplication_factors):
+                    padded_vat = '0' + padded_vat
+
+                # if there is a single non-integer in vat the verification code should be False
+                try:
+                    for index, vat_number in enumerate(padded_vat):
+                        number += int(vat_number) * multiplication_factors[index]
+
+                    number %= 11
+
+                    if number < 2:
+                        self.x_digit_verification = number
+                    else:
+                        self.x_digit_verification = 11 - number
+                except ValueError:
+                    self.x_digit_verification = False
+            else:
+                self.x_digit_verification = False
+
+    # @api.depends('name')
+    # def _update_fe_info_contact(self):    
+    #     for record in self:
+    #         self.env.cr.execute("""Select a.email,a.name,a.phone From res_partner as a 
+    #                                 Inner Join logyca_contact_types_res_partner_rel as b on a.id = b.res_partner_id 
+    #                                 Inner join logyca_contact_types as fe on b.logyca_contact_types_id = fe.id and fe.code = 'FE' 
+    #                                 Inner Join res_partner as c on a.parent_id = c.id Where c.name='%s'""" % record.name)
+    #     result = tuple()
+    #     result = self.env.cr.dictfetchall()
+    #     email = ""
+    #     name = ""
+    #     phone = ""
+
+    #     for ids in result:
+    #         email = ids.get('email')
+    #         name = ids.get('name')
+    #         phone = ids.get('phone')
+
+    #     self.x_email_contact_invoice_electronic = email
+    #     self.x_name_contact_invoice_electronic = name
+    #     self.x_phone_contact_invoice_electronic = phone
+    
+    
+
+        
+
+    
+
+    
+        

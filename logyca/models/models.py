@@ -168,4 +168,4 @@ class ResCountryState(models.Model):
 class CRMTeam(models.Model):
     _inherit = 'crm.team'
 	
-    invoiced_target = fields.Integer(size=20)
+    invoiced_target = fields.Float('Meta de Facturación',(12,0))
