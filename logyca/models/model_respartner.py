@@ -136,14 +136,14 @@ class ResPartner(models.Model):
     x_contact_area_historic = fields.Char(string='Área histórica', track_visibility='onchange')
 
     #INFORMACION FACTURACION ELECTRÓNICA
-    child_id_fe = fields.One2many('res.partner', 'parent_id', string='Contact FE', domain=[('active', '=', True)])  # force "active_test" domain to bypass _search() override
-    x_email_contact_invoice_electronic = fields.Char(string='Email contacto', track_visibility='onchange')
-    x_name_contact_invoice_electronic = fields.Char(string='Nombre contacto', track_visibility='onchange')
-    x_phone_contact_invoice_electronic = fields.Char(string='Telefono contacto', track_visibility='onchange')
+    x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas', track_visibility='onchange')
+    # child_id_fe = fields.One2many('res.partner', 'parent_id', string='Contact FE', domain=[('active', '=', True)])  # force "active_test" domain to bypass _search() override
+    # x_email_contact_invoice_electronic = fields.Char(string='Email contacto', track_visibility='onchange')
+    # x_name_contact_invoice_electronic = fields.Char(string='Nombre contacto', track_visibility='onchange')
+    # x_phone_contact_invoice_electronic = fields.Char(string='Telefono contacto', track_visibility='onchange')
     # x_city_contact_invoice_electronic = fields.Char(string='Ciudad contacto', track_visibility='onchange')
     # x_area_contact_invoice_electronic = fields.Char(string='Área contacto', track_visibility='onchange')
-    # x_position_contact_invoice_electronic = fields.Char(string='Cargo contacto', track_visibility='onchange')
-    x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas', track_visibility='onchange')
+    # x_position_contact_invoice_electronic = fields.Char(string='Cargo contacto', track_visibility='onchange')    
 
     #INFORMACIÓN EDUCACIÓN - CLIENTES
     X_is_a_student = fields.Boolean(string='¿Es estudiante?', track_visibility='onchange')
