@@ -2,7 +2,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-#---------------------------Modelo ACCOUNT-MOVE/ MOVIMIENTO DETALEE-------------------------------#
+#---------------------------Modelo ACCOUNT-MOVE/ MOVIMIENTO DETALLE-------------------------------#
 
 class AccountMove(models.Model):
     _inherit = 'account.move'
