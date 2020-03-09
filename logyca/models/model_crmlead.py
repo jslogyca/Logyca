@@ -7,7 +7,12 @@ from odoo.exceptions import ValidationError
 class CrmLead(models.Model):
     _inherit = 'crm.lead'
     #AREA Y CARGO
-    x_contact_job_title = fields.Many2one('logyca.job_title', string='Cargo', track_visibility='onchange')
-    x_contact_area = fields.Many2one('logyca.areas', string='Área', track_visibility='onchange')
+    # x_contact_job_title = fields.Many2one('logyca.job_title', string='Cargo', track_visibility='onchange')
+    # x_contact_area = fields.Many2one('logyca.areas', string='Área', track_visibility='onchange')
+    x_contact_job_title = fields.Many2one(comodel_name='res.partner', related='partner_id.x_contact_job_title', string='Cargo', store=True)
+    x_contact_area = fields.Many2one(comodel_name='res.partner', related='partner_id.x_contact_area', string='Área', store=True)
+
+    
+
     
     
