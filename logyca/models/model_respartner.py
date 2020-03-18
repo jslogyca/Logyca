@@ -6,6 +6,7 @@ from odoo.exceptions import UserError, ValidationError
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
+    _order = 'x_type_thirdparty, x_contact_type, name'
     #INFORMACION BASICA
     name = fields.Char(track_visibility='onchange')
     x_type_thirdparty = fields.Many2many('logyca.type_thirdparty',string='Tipo de tercero',track_visibility='onchange')
