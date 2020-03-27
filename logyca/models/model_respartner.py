@@ -9,6 +9,7 @@ class ResPartner(models.Model):
     _order = 'x_type_thirdparty, x_contact_type, name'
     #INFORMACION BASICA
     name = fields.Char(track_visibility='onchange')
+    same_vat_partner_id = fields.Many2one('res.partner', string='Partner with same Tax ID', compute='_compute_no_same_vat_partner_id', store=False)
     x_type_thirdparty = fields.Many2many('logyca.type_thirdparty',string='Tipo de tercero',track_visibility='onchange')
     x_active_for_logyca = fields.Boolean(string='Activo', track_visibility='onchange')
     x_document_type = fields.Selection([
@@ -138,13 +139,6 @@ class ResPartner(models.Model):
 
     #INFORMACION FACTURACION ELECTRÓNICA
     x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas', track_visibility='onchange')
-    # child_id_fe = fields.One2many('res.partner', 'parent_id', string='Contact FE', domain=[('active', '=', True)])  # force "active_test" domain to bypass _search() override
-    # x_email_contact_invoice_electronic = fields.Char(string='Email contacto', track_visibility='onchange')
-    # x_name_contact_invoice_electronic = fields.Char(string='Nombre contacto', track_visibility='onchange')
-    # x_phone_contact_invoice_electronic = fields.Char(string='Telefono contacto', track_visibility='onchange')
-    # x_city_contact_invoice_electronic = fields.Char(string='Ciudad contacto', track_visibility='onchange')
-    # x_area_contact_invoice_electronic = fields.Char(string='Área contacto', track_visibility='onchange')
-    # x_position_contact_invoice_electronic = fields.Char(string='Cargo contacto', track_visibility='onchange')    
 
     #INFORMACIÓN EDUCACIÓN - CLIENTES
     X_is_a_student = fields.Boolean(string='¿Es estudiante?', track_visibility='onchange')
@@ -158,6 +152,11 @@ class ResPartner(models.Model):
     @api.depends('x_asset_range')
     def _date_update_asset(self):
         self.x_date_update_asset = fields.Date.today()
+
+    @api.depends('vat')
+    def _compute_no_same_vat_partner_id(self):
+        for partner in self:
+            partner.same_vat_partner_id = ""
 
     @api.depends('vat')
     def _compute_verification_digit(self):
@@ -188,33 +187,3 @@ class ResPartner(models.Model):
             else:
                 self.x_digit_verification = False
 
-    # @api.depends('name')
-    # def _update_fe_info_contact(self):    
-    #     for record in self:
-    #         self.env.cr.execute("""Select a.email,a.name,a.phone From res_partner as a 
-    #                                 Inner Join logyca_contact_types_res_partner_rel as b on a.id = b.res_partner_id 
-    #                                 Inner join logyca_contact_types as fe on b.logyca_contact_types_id = fe.id and fe.code = 'FE' 
-    #                                 Inner Join res_partner as c on a.parent_id = c.id Where c.name='%s'""" % record.name)
-    #     result = tuple()
-    #     result = self.env.cr.dictfetchall()
-    #     email = ""
-    #     name = ""
-    #     phone = ""
-
-    #     for ids in result:
-    #         email = ids.get('email')
-    #         name = ids.get('name')
-    #         phone = ids.get('phone')
-
-    #     self.x_email_contact_invoice_electronic = email
-    #     self.x_name_contact_invoice_electronic = name
-    #     self.x_phone_contact_invoice_electronic = phone
-    
-    
-
-        
-
-    
-
-    
-        
