@@ -20,3 +20,24 @@ class AccountMove(models.Model):
                 'x_country_account_id': partner.country_id ,                
             }
         self.update(values)
+
+    @api.onchange('invoice_origin')
+    def _inherit_fiscal_position(self):
+        
+        #sale_order = self.env['sale_order'].browse(self.invoice_origin.id)
+        
+        self._cr.execute(
+                '''
+                    Select B.fiscal_position_id
+                    From account_move a
+                    JOIN sale_order b on a.invoice_origin = b.name
+                    WHERE a.id = %s
+                ''', str(self.id)
+            )
+
+        fiscal_position_id = set(res[0] for res in self._cr.fetchall())
+
+        values = {
+                'x_studio_field_qkAel': fiscal_position_id ,                
+            }
+        self.update(values)
