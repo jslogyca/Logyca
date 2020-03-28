@@ -30,9 +30,8 @@ class AccountMove(models.Model):
                         Select B.fiscal_position_id
                         From account_move a
                         JOIN sale_order b on a.invoice_origin = b.name
-                        WHERE a.id = %s
-                    ''', [tuple(str(move.id))] 
-                )
+                        WHERE a.id = '''+move.id)
+                
 
             fiscal_position_id = set(res[0] for res in self._cr.fetchall())
 
