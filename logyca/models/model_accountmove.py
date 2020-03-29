@@ -10,6 +10,7 @@ class AccountMove(models.Model):
     x_country_account_id = fields.Many2one('res.country', string='País', track_visibility='onchange')
     #NUMERO DE ORDEN DE COMPRA
     x_num_order_purchase = fields.Char(string='Número orden de compra', track_visibility='onchange')
+    x_fiscal_position_id = fields.Many2one('account.fiscal.position', string='Posición fiscal', track_visibility='onchange')
 
     @api.onchange('partner_id')
     def _onchange_partner_id_country(self):
@@ -30,7 +31,7 @@ class AccountMove(models.Model):
             fiscal_position_id = set(res[0] for res in self.env.cr.fetchall())
 
             values = {
-                    'x_studio_field_qkAel': fiscal_position_id ,                
+                    'x_fiscal_position_id': fiscal_position_id ,                
                 }
 
             self.update(values)
