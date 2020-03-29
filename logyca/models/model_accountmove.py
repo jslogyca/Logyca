@@ -28,7 +28,7 @@ class AccountMove(models.Model):
             self.env.cr.execute('''Select B.fiscal_position_id
                                      From account_move a
                                      Inner join sale_order b on a.invoice_origin = b.name 
-                                     WHERE a.id = '''+move.id)
+                                     WHERE a.id = '''+str(move.id))
                 
             fiscal_position_id = set(res[0] for res in self.env.cr.fetchall())
 
