@@ -25,10 +25,7 @@ class AccountMove(models.Model):
     def _inherit_fiscal_position(self):        
         #sale_order = self.env['sale_order'].browse(self.invoice_origin.id)
         for move in self:
-            self.env.cr.execute('''Select B.fiscal_position_id
-                                     From account_move a
-                                     Inner join sale_order b on a.invoice_origin = b.name 
-                                     WHERE a.id = '''+str(move.id))
+            self.env.cr.execute("Select B.fiscal_position_id From account_move a Inner join sale_order b on a.invoice_origin = b.name WHERE a.invoice_origin = '"+str(move.invoice_origin)+"'")
                 
             fiscal_position_id = set(res[0] for res in self.env.cr.fetchall())
 
