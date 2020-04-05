@@ -8,7 +8,14 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
     #PAÍS 
     x_country_account_id = fields.Many2one('res.country', string='País', track_visibility='onchange')
+    #NUMERO DE ORDEN DE COMPRA
+    x_num_order_purchase = fields.Char(string='Número orden de compra', track_visibility='onchange')
+    #FACTURACIÓN ELECTRONICA
+    x_date_send_dian = fields.Datetime(string='Fecha de envío a la DIAN')
+    x_send_dian = fields.Boolean(string='Enviado a la DIAN')
+    x_cufe_dian = fields.Char(string='CUFE - Código único de facturación electrónica')
     
+
     @api.onchange('partner_id')
     def _onchange_partner_id_country(self):
         
@@ -18,3 +25,17 @@ class AccountMove(models.Model):
                 'x_country_account_id': partner.country_id ,                
             }
         self.update(values)
+
+    # @api.onchange('invoice_origin')
+    # def _inherit_fiscal_position(self):        
+    #     #sale_order = self.env['sale_order'].browse(self.invoice_origin.id)
+    #     for move in self:
+    #         self.env.cr.execute("Select B.fiscal_position_id From account_move a Inner join sale_order b on a.invoice_origin = b.name WHERE a.invoice_origin = '"+str(move.invoice_origin)+"'")
+                
+    #         fiscal_position_id = set(res[0] for res in self.env.cr.fetchall())
+
+    #         values = {
+    #                 'fiscal_position_id': fiscal_position_id ,                
+    #             }
+
+    #         self.update(values)
