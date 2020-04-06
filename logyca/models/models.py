@@ -183,7 +183,7 @@ class x_history_partner_opportunity(models.Model):
     activity_date = fields.Datetime(string='Fecha creación', required=True)
     name = fields.Char(string='Nombre', size=50, required=True)
     description = fields.Text(string='Descripción') 
-    state = fields.Char(string='Nombre', size=50, required=True)   
+    state = fields.Char(string='Estado', size=50, required=True)   
     amount = fields.Float(string='Monto')
     probability = fields.Float(string='Probabilidad')
     expected_revenue = fields.Float(string='Ingresos esperados')
