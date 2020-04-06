@@ -157,6 +157,7 @@ class x_history_partner_notes(models.Model):
     _name = 'logyca.history_partner_notes'
     _description = 'Información historia de salesforce NOTAS'
 
+    partner_id = fields.Many2one('res.partner',string='Cliente',index=True, required=True, readonly=True, auto_join=True, ondelete='cascade')
     title = fields.Text(string='Titulo', required=True)
     activity_date = fields.Datetime(string='Fecha', required=True)
     body = fields.Text(string='Contenido', required=True)    
@@ -165,6 +166,7 @@ class x_history_partner_emails(models.Model):
     _name = 'logyca.history_partner_emails'
     _description = 'Información historia de salesforce EMAILS'
 
+    partner_id = fields.Many2one('res.partner',string='Cliente',index=True, required=True, readonly=True, auto_join=True, ondelete='cascade')
     title = fields.Text(string='Titulo', required=True)
     activity_date = fields.Datetime(string='Fecha', required=True)
     body = fields.Text(string='Contenido', required=True)    
