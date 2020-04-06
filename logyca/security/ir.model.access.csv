@@ -9,4 +9,4 @@ access_logyca_job_title,logyca.job_title,model_logyca_job_title,,1,1,1,1
 access_logyca_areas,logyca.areas,model_logyca_areas,,1,1,1,1
 access_logyca_work_groups,logyca.work_groups,model_logyca_work_groups,,1,1,1,1
 access_logyca_type_thirdparty,logyca.type_thirdparty,model_logyca_type_thirdparty,,1,1,1,1
-access_logyca_history_partner,logyca.history_partner,model_logyca_history_partner,,1,0,1,0
+access_logyca_history_partner,logyca.history_partner,model_logyca_history_partner,,1,1,1,1
