@@ -11,3 +11,4 @@ access_logyca_work_groups,logyca.work_groups,model_logyca_work_groups,,1,1,1,1
 access_logyca_type_thirdparty,logyca.type_thirdparty,model_logyca_type_thirdparty,,1,1,1,1
 access_logyca_history_partner_notes,logyca.history_partner_notes,model_logyca_history_partner_notes,,1,0,1,1
 access_logyca_history_partner_emails,logyca.history_partner_emails,model_logyca_history_partner_emails,,1,0,1,1
+access_logyca_history_partner_opportunity,logyca.history_partner_opportunity,model_logyca_history_partner_opportunity,,1,0,1,1
