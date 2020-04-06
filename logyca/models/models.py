@@ -153,6 +153,22 @@ class x_type_thirdparty(models.Model):
             result.append((record.id, "{}".format(record.name)))
         return result
 
+class x_history_partner(models.Model):
+    _name = 'logyca.history_partner'
+    _description = 'Información historia de salesforce'
+
+    title = fields.Text(string='Titulo', required=True)
+    type_history = fields.Char(string='Tipo', size=50, required=True)
+    activity_date = fields.Datetime(string='Fecha', required=True)
+    body = fields.Text(string='Contenido', required=True)    
+    status = fields.Char(string='Estado', size=50)
+    priority = fields.Char(string='Prioridad', size=50)    
+    from_address = fields.Text(string='Desde')    
+    to_address = fields.Text(string='Para')    
+    cc_Address = fields.Text(string='Cc')    
+    bcc_Address = fields.Text(string='Cco')    
+
+
 #--------------------------------Modelos heredados de Odoo------------------------------------#
 
 class ResCountry(models.Model):
