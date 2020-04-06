@@ -148,7 +148,8 @@ class ResPartner(models.Model):
 
     #CAMPOS HISTORICOS
     x_info_creation_history = fields.Char(string='Información de creación y modificación historica', track_visibility='onchange')
-    
+    x_history_partner = fields.Many2many('logyca.history_partner', string='Historial SalesForce')
+
     @api.depends('x_asset_range')
     def _date_update_asset(self):
         self.x_date_update_asset = fields.Date.today()
