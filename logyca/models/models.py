@@ -175,6 +175,23 @@ class x_history_partner_emails(models.Model):
     cc_Address = fields.Text(string='Cc')    
     bcc_Address = fields.Text(string='Cco')    
 
+class x_history_partner_opportunity(models.Model):
+    _name = 'logyca.history_partner_opportunity'
+    _description = 'Información historia de salesforce OPORTUNIDADES'
+
+    partner_id = fields.Many2one('res.partner',string='Cliente', required=True, ondelete='cascade')
+    activity_date = fields.Datetime(string='Fecha creación', required=True)
+    name = fields.Char(string='Nombre', size=50, required=True)
+    description = fields.Text(string='Descripción') 
+    state = fields.Char(string='Nombre', size=50, required=True)   
+    amount = fields.Float(string='Monto')
+    probability = fields.Float(string='Probabilidad')
+    expected_revenue = fields.Float(string='Ingresos esperados')
+    opportunity_quantity = fields.Integer(string='Cantidad')
+    close_date = fields.Datetime(string='Fecha finalización')
+    lead_source = fields.Char(string='Origen', size=50, required=True)
+
+
 #--------------------------------Modelos heredados de Odoo------------------------------------#
 
 class ResCountry(models.Model):
