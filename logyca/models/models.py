@@ -153,6 +153,20 @@ class x_type_thirdparty(models.Model):
             result.append((record.id, "{}".format(record.name)))
         return result
 
+# Grupo Presupuestal
+class x_budget_group(models.Model):
+    _name = 'logyca.budget_group'
+    _description = 'Grupos presupuestal'
+
+    code = fields.Char(string='Código', size=10, required=True)
+    name = fields.Char(string='Nombre', required=True)
+
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{}".format(record.name)))
+        return result
+
 #--------------------------------Modelos heredados de Odoo------------------------------------#
 
 class ResCountry(models.Model):
