@@ -61,7 +61,7 @@ class x_history_partner_invoices(models.Model):
     _description = 'Información historia de salesforce FACTURAS x OPORTUNIDAD'
 
     opportunity_id = fields.Many2one('logyca.history_partner_opportunity',string='Oportunidad', required=True, ondelete='cascade')
-    name = fields.Char(string='Nombre', size=50)
+    name = fields.Char(string='Número de solicitud', size=50)
     create_date = fields.Datetime(string='Fecha creación')
     description = fields.Text(string='Concepto')
     condition = fields.Text(string='Condiciones de facturación')
