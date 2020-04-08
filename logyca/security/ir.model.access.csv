@@ -9,3 +9,9 @@ access_logyca_job_title,logyca.job_title,model_logyca_job_title,,1,1,1,1
 access_logyca_areas,logyca.areas,model_logyca_areas,,1,1,1,1
 access_logyca_work_groups,logyca.work_groups,model_logyca_work_groups,,1,1,1,1
 access_logyca_type_thirdparty,logyca.type_thirdparty,model_logyca_type_thirdparty,,1,1,1,1
+access_logyca_history_partner_notes,logyca.history_partner_notes,model_logyca_history_partner_notes,,1,0,1,1
+access_logyca_history_partner_emails,logyca.history_partner_emails,model_logyca_history_partner_emails,,1,0,1,1
+access_logyca_history_partner_opportunity,logyca.history_partner_opportunity,model_logyca_history_partner_opportunity,,1,0,1,1
+access_logyca_history_partner_services,logyca.history_partner_services,model_logyca_history_partner_services,,1,0,1,1
+access_logyca_history_partner_invoices,logyca.history_partner_invoices,model_logyca_history_partner_invoices,,1,0,1,1
+access_logyca_budget_group,logyca.budget_group,model_logyca_budget_group,,1,1,1,1
