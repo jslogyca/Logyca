@@ -15,6 +15,6 @@
                 <menuitem name="Cargos" id="logyca.menu_job_title" parent="logyca.menus_parameterization"  sequence="5" action="logyca_menu_action_job_title"/>    
                 <menuitem name="Grupos de trabajo" id="logyca.menu_work_groups" parent="logyca.menus_parameterization"  sequence="6" action="logyca_menu_action_work_groups"/>                
                 <menuitem name="Responsabilidades RUT" id="logyca.menu_responsibilities_rut" parent="logyca.menus_parameterization"  sequence="7" action="logyca_menu_action_responsibilities_rut"/>    
-                <menuitem name="Grupos presupuestales" id="logyca.menu_budget_group" parent="logyca.menus_parameterization"  sequence="8" action="logyca_menu_action_menu_budget_group"/>    
+                <menuitem name="Grupos presupuestales" id="logyca.menu_budget_group" parent="logyca.menus_parameterization"  sequence="8" action="logyca_menu_action_budget_group"/>    
     </data>
 </odoo>

@@ -190,7 +190,7 @@
     </record>
 
     <!-- Grupos Presupuestales VIEWS -->    
-    <record id="logyca_menu_budget_group" model="ir.actions.act_window">
+    <record id="logyca_menu_action_budget_group" model="ir.actions.act_window">
         <field name="name">Grupos presupuestales</field>
           <field name="res_model">logyca.budget_group</field>
         <field name="view_mode">tree,form</field>
