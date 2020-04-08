@@ -35,7 +35,7 @@ class AccountMove(models.Model):
         url = "https://odoo.logyca.com/query/typeThird/"
         response = requests.get(url)
         if response.url != '':
-            raise UserError(response.url)
+            raise UserError(response.json())
         return self.post()
 
 # Detalle Movimiento
