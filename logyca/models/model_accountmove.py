@@ -28,12 +28,15 @@ class AccountMove(models.Model):
             }
         self.update(values)
 
-    # def post(self):
-    #     super(self).post(self)
-    #     url = "https://odoo.logyca.com/query/typeThird/"
-    #     response = requests.get(url)
-    #     raise UserError(response.url)
 
+    def action_post(self):
+        if self.mapped('line_ids.payment_id') and any(post_at == 'bank_rec' for post_at in self.mapped('journal_id.post_at')):
+            raise UserError("A payment journal entry generated in a journal configured to post entries only when payments are reconciled with a bank statement cannot be manually posted. Those will be posted automatically after performing the bank reconciliation.")
+        url = "https://odoo.logyca.com/query/typeThird/"
+        response = requests.get(url)
+        if response.url != '':
+            raise UserError(response.url)
+        return self.post()
 
 # Detalle Movimiento
 class AccountMoveLine(models.Model):
