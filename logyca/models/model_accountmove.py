@@ -28,11 +28,11 @@ class AccountMove(models.Model):
             }
         self.update(values)
 
-    def post(self):
-        super.post(self)
-        url = "https://odoo.logyca.com/query/typeThird/"
-        response = requests.get(url)
-        raise UserError(response.url)
+    # def post(self):
+    #     super(self).post(self)
+    #     url = "https://odoo.logyca.com/query/typeThird/"
+    #     response = requests.get(url)
+    #     raise UserError(response.url)
 
 
 # Detalle Movimiento
