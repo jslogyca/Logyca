@@ -4,6 +4,21 @@ from odoo.exceptions import ValidationError
 
 #---------------------------Modelo ACCOUNT-MOVE/ MOVIMIENTO DETALLE-------------------------------#
 
+# Grupo Presupuestal
+class x_budget_group(models.Model):
+    _name = 'logyca.budget_group'
+    _description = 'Grupos presupuestal'
+
+    code = fields.Char(string='Código', size=10, required=True)
+    name = fields.Char(string='Nombre', required=True)
+
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{}".format(record.name)))
+        return result
+
+# Encabezado Movimiento
 class AccountMove(models.Model):
     _inherit = 'account.move'
     #PAÍS 
@@ -25,6 +40,12 @@ class AccountMove(models.Model):
                 'x_country_account_id': partner.country_id ,                
             }
         self.update(values)
+
+# Encabezado Movimiento
+class AccountMoveLine(models.Model):
+    _inherit = 'account.move.line'
+    #Grupo de trabajo 
+    x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal')
 
     # @api.onchange('invoice_origin')
     # def _inherit_fiscal_position(self):        

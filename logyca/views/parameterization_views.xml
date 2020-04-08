@@ -188,5 +188,28 @@
         </tree>
       </field>
     </record>
+
+    <!-- Grupos Presupuestales VIEWS -->    
+    <record id="logyca_menu_action_budget_group" model="ir.actions.act_window">
+        <field name="name">Grupos presupuestales</field>
+          <field name="res_model">logyca.budget_group</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear Grupo presupuestal
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_budget_group">
+      <field name="name">logyca list budget group</field>
+      <field name="model">logyca.budget_group</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>                                              
+        </tree>
+      </field>
+    </record>
   </data>
 </odoo>
