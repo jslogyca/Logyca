@@ -69,44 +69,8 @@ class ResPartner(models.Model):
     x_codes_gtin = fields.Boolean(string='¿Maneja Códigos GTIN-8?', track_visibility='onchange')
 
     #INFORMACION FINANCIERA
-    x_asset_range = fields.Selection([
-                                        ('1', 'DE 0 A 9.9'),
-                                        ('2', 'DE 10 A 24.9'),
-                                        ('3', 'DE 25 A 49.9'),
-                                        ('4', 'DE 50 A 99.9'),
-                                        ('5', 'DE 100 A 249.9'),
-                                        ('6', 'DE 250 A 499.9'),
-                                        ('7', 'DE 500 A 749.9'),
-                                        ('8', 'DE 750 A 999.9'),
-                                        ('9', 'DE 1,000 A 2,499.9'),
-                                        ('10', 'DE 2,500 A 4,999.9'),
-                                        ('11', 'DE 5,000 A 9,999.9'),
-                                        ('12', 'DE 10,000 A 49,999.9'),
-                                        ('13', 'DE 50,000 A 99,999.9'),
-                                        ('14', 'DE 100,000 A 249,999.9'),
-                                        ('15', 'DE 250,000 A 499,999.9'),
-                                        ('16', 'DE 500,000 A 999,999.9'),
-                                        ('17', 'MAS DE 1,000,000')
-                                    ], string='Rango de Activos', track_visibility='onchange')
-    x_income_range = fields.Selection([
-                                        ('1', 'DE 0 A 9.9'),
-                                        ('2', 'DE 10 A 24.9'),
-                                        ('3', 'DE 25 A 49.9'),
-                                        ('4', 'DE 50 A 99.9'),
-                                        ('5', 'DE 100 A 249.9'),
-                                        ('6', 'DE 250 A 499.9'),
-                                        ('7', 'DE 500 A 749.9'),
-                                        ('8', 'DE 750 A 999.9'),
-                                        ('9', 'DE 1,000 A 2,499.9'),
-                                        ('10', 'DE 2,500 A 4,999.9'),
-                                        ('11', 'DE 5,000 A 9,999.9'),
-                                        ('12', 'DE 10,000 A 49,999.9'),
-                                        ('13', 'DE 50,000 A 99,999.9'),
-                                        ('14', 'DE 100,000 A 249,999.9'),
-                                        ('15', 'DE 250,000 A 499,999.9'),
-                                        ('16', 'DE 500,000 A 999,999.9'),
-                                        ('17', 'MAS DE 1,000,000')
-                                    ], string='Rango de Ingresos', track_visibility='onchange')
+    x_asset_range = fields.Many2one('logyca.asset_range', string='Rango de activos', track_visibility='onchange')
+    x_income_range = fields.Many2one('logyca.asset_range', string='Rango de ingresos', track_visibility='onchange')
     #x_date_update_asset = fields.Date(string='Fecha de última modificación', compute='_date_update_asset', store=True, track_visibility='onchange')
     x_date_update_asset = fields.Date(string='Fecha de última modificación', track_visibility='onchange')
     x_company_size = fields.Selection([
