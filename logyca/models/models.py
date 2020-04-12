@@ -205,8 +205,7 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 	
     x_automatic_activation = fields.Boolean(string='Activación automática')
-    x_code_type = fields.Integer(string='')
-    x_company_id = fields.Many2one('res.company', string='Empresa')
+    x_code_type = fields.Integer(string='Tipo de codigo')
     x_mandatory_prefix = fields.Integer(string='Prefijo obligatorio') 
     x_scheme = fields.Integer(string='Esquema')
     x_type_document = fields.Integer(string='Tipo documento')
