@@ -112,9 +112,9 @@ class ResPartner(models.Model):
 
     #CAMPOS HISTORICOS
     x_info_creation_history = fields.Char(string='Información de creación y modificación historica', track_visibility='onchange')
-    x_history_partner_notes = fields.One2many('logyca.history_partner_notes', 'partner_id', string = 'Notas')
-    x_history_partner_emails = fields.One2many('logyca.history_partner_emails', 'partner_id', string = 'Emails')
-    x_history_partner_opportunity = fields.One2many('logyca.history_partner_opportunity', 'partner_id', string = 'Oportunidades')
+    x_history_partner_notes = fields.One2many('logyca.history_partner_notes', 'partner_id', string = 'Notas', limit=10)
+    x_history_partner_emails = fields.One2many('logyca.history_partner_emails', 'partner_id', string = 'Emails', limit=10)
+    x_history_partner_opportunity = fields.One2many('logyca.history_partner_opportunity', 'partner_id', string = 'Oportunidades', limit=10)
 
     @api.depends('x_asset_range')
     def _date_update_asset(self):
