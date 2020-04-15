@@ -55,6 +55,8 @@ class ResPartner(models.Model):
     x_type_vinculation = fields.Many2many('logyca.vinculation_types', string='Tipo de vinculación', track_visibility='onchange')
     x_sponsored = fields.Boolean(string='Patrocinado', track_visibility='onchange')
     x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora', track_visibility='onchange')
+    x_belongs_academic_allies_cli = fields.Boolean(string='Pertenece a aliados Académicos del CLI', track_visibility='onchange')
+    x_belongs_strategic_allies_cli = fields.Boolean(string='Pertenece a aliados Estratégicos del CLI', track_visibility='onchange')
     x_acceptance_data_policy = fields.Boolean(string='Acepta política de tratamiento de datos', track_visibility='onchange')
     x_acceptance_date = fields.Date(string='Fecha de aceptación', track_visibility='onchange')
     x_not_contacted_again = fields.Boolean(string='No volver a ser contactado', track_visibility='onchange')
@@ -111,6 +113,7 @@ class ResPartner(models.Model):
     x_taken_courses_logyca = fields.Boolean(string='¿Ha tomado cursos en LOGYCA?', track_visibility='onchange')
 
     #CAMPOS HISTORICOS
+    x_owner_history = fields.Char(string='Propietario historico', track_visibility='onchange')
     x_info_creation_history = fields.Char(string='Información de creación y modificación historica', track_visibility='onchange')
     x_history_partner_notes = fields.One2many('logyca.history_partner_notes', 'partner_id', string = 'Notas')
     x_history_partner_emails = fields.One2many('logyca.history_partner_emails', 'partner_id', string = 'Emails')

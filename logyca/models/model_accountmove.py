@@ -16,6 +16,7 @@ class AccountMove(models.Model):
     x_date_send_dian = fields.Datetime(string='Fecha de envío a la DIAN')
     x_send_dian = fields.Boolean(string='Enviado a la DIAN')
     x_cufe_dian = fields.Char(string='CUFE - Código único de facturación electrónica')
+    x_motive_error = fields.Text(string='Motivo de error')
     
 
     @api.onchange('partner_id')

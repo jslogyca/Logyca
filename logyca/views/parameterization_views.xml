@@ -238,20 +238,5 @@
         </tree>
       </field>
     </record>
-
-    <!-- Emails VIEW lIST -->    
-    <record model="ir.ui.view" id="logyca.history_emails">
-      <field name="name">logyca list history emails</field>
-      <field name="model">logyca.history_partner_emails</field>
-      <field name="arch" type="xml">
-        <tree limit="10">      
-          <field name="title"/>                   
-          <field name="activity_date"/>   
-          <field name="from_address"/>                 
-          <field name="to_address"/>           
-        </tree>
-      </field>
-    </record>
-
   </data>
 </odoo>
