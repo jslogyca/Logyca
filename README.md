@@ -1,1 +1,1 @@
-# TestLogyca
+# Aplicación personalizada de Odoo para la empresa LOGYCA

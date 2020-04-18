@@ -1,22 +1,9 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
+import requests
 
 #---------------------------Modelo ACCOUNT-MOVE/ MOVIMIENTO DETALLE-------------------------------#
-
-# Grupo Presupuestal
-class x_budget_group(models.Model):
-    _name = 'logyca.budget_group'
-    _description = 'Grupos presupuestal'
-
-    code = fields.Char(string='Código', size=10, required=True)
-    name = fields.Char(string='Nombre', required=True)
-
-    def name_get(self):
-        result = []
-        for record in self:
-            result.append((record.id, "{}".format(record.name)))
-        return result
 
 # Encabezado Movimiento
 class AccountMove(models.Model):
@@ -29,6 +16,7 @@ class AccountMove(models.Model):
     x_date_send_dian = fields.Datetime(string='Fecha de envío a la DIAN')
     x_send_dian = fields.Boolean(string='Enviado a la DIAN')
     x_cufe_dian = fields.Char(string='CUFE - Código único de facturación electrónica')
+    x_motive_error = fields.Text(string='Motivo de error')
     
 
     @api.onchange('partner_id')
@@ -41,22 +29,20 @@ class AccountMove(models.Model):
             }
         self.update(values)
 
-# Encabezado Movimiento
+
+    # def action_post(self):
+    #     if self.mapped('line_ids.payment_id') and any(post_at == 'bank_rec' for post_at in self.mapped('journal_id.post_at')):
+    #         raise UserError("A payment journal entry generated in a journal configured to post entries only when payments are reconciled with a bank statement cannot be manually posted. Those will be posted automatically after performing the bank reconciliation.")
+    #     url = "https://odoo.logyca.com/query/typeThird/"
+    #     response = requests.get(url)
+    #     if response.url != '':
+    #         raise UserError(response.json())
+    #     return self.post()
+
+# Detalle Movimiento
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
     #Grupo de trabajo 
     x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal')
 
-    # @api.onchange('invoice_origin')
-    # def _inherit_fiscal_position(self):        
-    #     #sale_order = self.env['sale_order'].browse(self.invoice_origin.id)
-    #     for move in self:
-    #         self.env.cr.execute("Select B.fiscal_position_id From account_move a Inner join sale_order b on a.invoice_origin = b.name WHERE a.invoice_origin = '"+str(move.invoice_origin)+"'")
-                
-    #         fiscal_position_id = set(res[0] for res in self.env.cr.fetchall())
 
-    #         values = {
-    #                 'fiscal_position_id': fiscal_position_id ,                
-    #             }
-
-    #         self.update(values)
