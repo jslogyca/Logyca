@@ -126,11 +126,10 @@ class ResPartner(models.Model):
 
     @api.depends('x_active_vinculation')
     def _textactive_update(self):
-        for record in self:
-            if record.x_active_vinculation:
-                self.x_text_active_inculation = 'Activo'
-            else:
-                self.x_text_active_inculation = 'Inactivo'    
+        if self.x_active_vinculation:
+            self.x_text_active_inculation = 'Activo'
+        else:
+            self.x_text_active_inculation = 'Inactivo'    
 
     @api.depends('vat')
     def _compute_no_same_vat_partner_id(self):
@@ -170,6 +169,6 @@ class ResPartner(models.Model):
     @api.constrains('vat')
     def check_vatnumber(self):
         for record in self:
-            obj = self.search([('x_type_thirdparty','in',[1,3,4]),('vat','=',record.vat),('id','!=',record.id)])
+            obj = self.search([('is_company','=',True),('vat','=',record.vat),('id','!=',record.id)])
             if obj:
-                raise Warning("Advertencia", "Ya existe un Cliente con este número de NIT")
+                raise ValidationError("Advertencia", "Ya existe un Cliente con este número de NIT")
