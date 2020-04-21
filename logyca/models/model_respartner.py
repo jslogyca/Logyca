@@ -171,4 +171,4 @@ class ResPartner(models.Model):
         for record in self:
             obj = self.search([('is_company','=',True),('vat','=',record.vat),('id','!=',record.id)])
             if obj:
-                raise ValidationError("Ya existe un Cliente con este número de NIT")
+                raise UserError("Ya existe un Cliente con este número de NIT")
