@@ -127,7 +127,7 @@ class ResPartner(models.Model):
     @api.depends('x_active_vinculation')
     def _textactive_update(self):
         for record in self:
-            if record.x_active_vinculation != False
+            if record.x_active_vinculation:
                 self.x_text_active_inculation = 'Activo'
             else:
                 self.x_text_active_inculation = 'Inactivo'    
