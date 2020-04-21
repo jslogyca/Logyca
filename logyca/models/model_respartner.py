@@ -51,7 +51,6 @@ class ResPartner(models.Model):
 
     #VINCULACION CON logyca
     x_active_vinculation = fields.Boolean(string='Estado de la vinculación', track_visibility='onchange')
-    x_text_active_vinculation = fields.Char(string='Vinculación:',compute='_textactive_update', store=False)
     x_date_vinculation = fields.Date(string="Fecha de vinculación", track_visibility='onchange')
     x_type_vinculation = fields.Many2many('logyca.vinculation_types', string='Tipo de vinculación', track_visibility='onchange')
     x_sponsored = fields.Boolean(string='Patrocinado', track_visibility='onchange')
@@ -123,13 +122,6 @@ class ResPartner(models.Model):
     @api.depends('x_asset_range')
     def _date_update_asset(self):
         self.x_date_update_asset = fields.Date.today()
-
-    @api.depends('x_active_vinculation')
-    def _textactive_update(self):
-        if self.x_active_vinculation:
-            self.x_text_active_inculation = 'Activo'
-        else:
-            self.x_text_active_inculation = 'Inactivo'    
 
     @api.depends('vat')
     def _compute_no_same_vat_partner_id(self):
