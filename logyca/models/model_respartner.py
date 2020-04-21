@@ -158,12 +158,9 @@ class ResPartner(models.Model):
                 self.x_digit_verification = False
 
     #-----------Validaciones
-    _sql_constraints = [
-        ('uniq_vat', 'unique(is_company,vat)', 'Ya existe un Cliente con este número de NIT'),
-    ]
-    # @api.constrains('vat')
-    # def _check_vatnumber(self):
-    #     for record in self:
-    #         obj = self.search([('is_company','=',True),('vat','=',record.vat),('id','!=',record.id)])
-    #         if obj:
-    #             raise Warning("Advertencia", "Ya existe un Cliente con este número de NIT")
+    @api.constrains('is_company','vat')
+    def _check_vatnumber(self):
+        for record in self:
+            obj = self.search([('is_company','=',True),('vat','=',record.vat),('id','!=',record.id)])
+            if obj:
+                raise ValidationError("Ya existe un Cliente con este número de NIT")
