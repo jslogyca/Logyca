@@ -51,6 +51,7 @@ class ResPartner(models.Model):
 
     #VINCULACION CON logyca
     x_active_vinculation = fields.Boolean(string='Estado de la vinculación', track_visibility='onchange')
+    x_text_active_vinculation = fields.Char(string='Vinculación:',compute='_textactive_update', store=False)
     x_date_vinculation = fields.Date(string="Fecha de vinculación", track_visibility='onchange')
     x_type_vinculation = fields.Many2many('logyca.vinculation_types', string='Tipo de vinculación', track_visibility='onchange')
     x_sponsored = fields.Boolean(string='Patrocinado', track_visibility='onchange')
@@ -123,6 +124,14 @@ class ResPartner(models.Model):
     def _date_update_asset(self):
         self.x_date_update_asset = fields.Date.today()
 
+    @api.depends('x_active_vinculation')
+    def _textactive_update(self):
+        for record in self:
+            if record.x_active_vinculation:
+                self.x_text_active_inculation = 'Activo'
+            else:
+                self.x_text_active_inculation = 'Inactivo'    
+
     @api.depends('vat')
     def _compute_no_same_vat_partner_id(self):
         for partner in self:
@@ -157,3 +166,10 @@ class ResPartner(models.Model):
             else:
                 self.x_digit_verification = False
 
+    #-----------Validaciones
+    @api.constrains('vat')
+    def check_vatnumber(self):
+        for record in self:
+            obj = self.search([('x_type_thirdparty','in',[1,3,4]),('vat','=',record.vat),('id','!=',record.id)])
+            if obj:
+                raise Warning("Advertencia", "Ya existe un Cliente con este número de NIT")
