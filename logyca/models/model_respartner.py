@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
-from odoo.exceptions import UserError, ValidationError
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError, ValidationError, RedirectWarning
 
 #---------------------------Modelo RES-PARTNER / TERCEROS-------------------------------#
 
@@ -158,9 +158,10 @@ class ResPartner(models.Model):
                 self.x_digit_verification = False
 
     #-----------Validaciones
-    @api.constrains('is_company','vat')
+    @api.constrains('vat')
     def _check_vatnumber(self):
         for record in self:
             obj = self.search([('is_company','=',True),('vat','=',record.vat),('id','!=',record.id)])
             if obj:
-                raise ValidationError("Ya existe un Cliente con este número de NIT")
+                raise ValidationError(_("Ya existe un Cliente con el número de NIT: %s") % record.vat)
+                
