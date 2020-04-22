@@ -161,6 +161,6 @@ class ResPartner(models.Model):
     @api.constrains('vat')
     def _check_vatnumber(self):
         for record in self:
-            obj = self.search([('is_company','=',True),('vat','=',record.vat),('id','!=',record.id)])
+            obj = self.search([('vat','=',record.vat),('id','!=',record.id)])
             if obj:
-                raise Warning("Advertencia", "Ya existe un Cliente con este número de NIT")
+                raise ValidationError("Ya existe un Cliente con este número de NIT")
