@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
 
 #---------------------------Modelo RES-PARTNER / TERCEROS-------------------------------#
@@ -163,4 +163,5 @@ class ResPartner(models.Model):
         for record in self:
             obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat),('id','!=',record.id)])
             if obj:
-                raise Warning("Warning", "Ya existe un Cliente con este número de NIT")
+                raise ValidationError(_('Ya existe un Cliente con este número de NIT.'))
+                #raise Warning("Warning", "Ya existe un Cliente con este número de NIT")
