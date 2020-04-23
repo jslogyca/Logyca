@@ -157,14 +157,23 @@ class ResPartner(models.Model):
             else:
                 self.x_digit_verification = False
 
+    #---------------Search
+    @api.model
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        if self._context.get('search_by_vat', False):
+            if name:
+                args = args if args else []
+                args.extend(['|', ['name', 'ilike', name], ['vat', 'ilike', name]])
+                name = ''
+        return super(ResPartner, self).name_search(name=name, args=args, operator=operator, limit=limit)
+
     #-----------Validaciones
     @api.constrains('vat')
     def _check_vatnumber(self):
         for record in self:
             obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat),('id','!=',record.id)])
             if obj:
-                raise ValidationError(_('Ya existe un Cliente con este número de NIT.'))
-                #raise Warning("Warning", "Ya existe un Cliente con este número de NIT")
+                raise ValidationError(_('Ya existe un Cliente con este número de NIT.'))                
     
     @api.onchange('vat')
     def _onchange_vatnumber(self):
@@ -173,3 +182,11 @@ class ResPartner(models.Model):
                 obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat)])
                 if obj:
                     raise UserError(_('Ya existe un Cliente con este número de NIT.'))
+
+    @api.onchange('name')
+    def _onchange_namecontact(self):
+        for record in self:
+            if record.name:
+                obj = self.search([('x_type_thirdparty','not in',[1,3]),('name','=',record.name)])
+                if obj:
+                    raise UserError(_('Ya existe un Contacto con ese nombre.'))
