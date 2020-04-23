@@ -168,12 +168,12 @@ class ResPartner(models.Model):
         return super(ResPartner, self).name_search(name=name, args=args, operator=operator, limit=limit)
 
     #-----------Validaciones
-    @api.constrains('vat')
-    def _check_vatnumber(self):
-        for record in self:
-            obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat),('id','!=',record.id)])
-            if obj:
-                raise ValidationError(_('Ya existe un Cliente con este número de NIT.'))                
+    # @api.constrains('vat')
+    # def _check_vatnumber(self):
+    #     for record in self:
+    #         obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat),('id','!=',record.id)])
+    #         if obj:
+    #             raise ValidationError(_('Ya existe un Cliente con este número de NIT.'))                
     
     @api.onchange('vat')
     def _onchange_vatnumber(self):
