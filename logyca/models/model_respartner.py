@@ -158,18 +158,17 @@ class ResPartner(models.Model):
                 self.x_digit_verification = False
 
     #-----------Validaciones
-    @api.constrains('vat')
-    def _check_vatnumber(self):
-        for record in self:
-            obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat),('id','!=',record.id)])
-            if obj:
-                raise ValidationError(_('Ya existe un Cliente con este número de NIT.'))
-                #raise Warning("Warning", "Ya existe un Cliente con este número de NIT")
+    # @api.constrains('vat')
+    # def _check_vatnumber(self):
+    #     for record in self:
+    #         obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat),('id','!=',record.id)])
+    #         if obj:
+    #             raise ValidationError(_('Ya existe un Cliente con este número de NIT.'))                
     
-    @api.onchange('vat')
-    def _onchange_vatnumber(self):
-        for record in self:
-            if record.vat:
-                obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat)])
-                if obj:
-                    raise UserError(_('Ya existe un Cliente con este número de NIT.'))
+    # @api.onchange('vat')
+    # def _onchange_vatnumber(self):
+    #     for record in self:
+    #         if record.vat:
+    #             obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat)])
+    #             if obj:
+    #                 raise UserError(_('Ya existe un Cliente con este número de NIT.'))
