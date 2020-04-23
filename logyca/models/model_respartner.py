@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
 
 #---------------------------Modelo RES-PARTNER / TERCEROS-------------------------------#
@@ -55,6 +55,8 @@ class ResPartner(models.Model):
     x_type_vinculation = fields.Many2many('logyca.vinculation_types', string='Tipo de vinculación', track_visibility='onchange')
     x_sponsored = fields.Boolean(string='Patrocinado', track_visibility='onchange')
     x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora', track_visibility='onchange')
+    x_belongs_academic_allies_cli = fields.Boolean(string='Pertenece a aliados Académicos del CLI', track_visibility='onchange')
+    x_belongs_strategic_allies_cli = fields.Boolean(string='Pertenece a aliados Estratégicos del CLI', track_visibility='onchange')
     x_acceptance_data_policy = fields.Boolean(string='Acepta política de tratamiento de datos', track_visibility='onchange')
     x_acceptance_date = fields.Date(string='Fecha de aceptación', track_visibility='onchange')
     x_not_contacted_again = fields.Boolean(string='No volver a ser contactado', track_visibility='onchange')
@@ -69,44 +71,8 @@ class ResPartner(models.Model):
     x_codes_gtin = fields.Boolean(string='¿Maneja Códigos GTIN-8?', track_visibility='onchange')
 
     #INFORMACION FINANCIERA
-    x_asset_range = fields.Selection([
-                                        ('1', 'DE 0 A 9.9'),
-                                        ('2', 'DE 10 A 24.9'),
-                                        ('3', 'DE 25 A 49.9'),
-                                        ('4', 'DE 50 A 99.9'),
-                                        ('5', 'DE 100 A 249.9'),
-                                        ('6', 'DE 250 A 499.9'),
-                                        ('7', 'DE 500 A 749.9'),
-                                        ('8', 'DE 750 A 999.9'),
-                                        ('9', 'DE 1,000 A 2,499.9'),
-                                        ('10', 'DE 2,500 A 4,999.9'),
-                                        ('11', 'DE 5,000 A 9,999.9'),
-                                        ('12', 'DE 10,000 A 49,999.9'),
-                                        ('13', 'DE 50,000 A 99,999.9'),
-                                        ('14', 'DE 100,000 A 249,999.9'),
-                                        ('15', 'DE 250,000 A 499,999.9'),
-                                        ('16', 'DE 500,000 A 999,999.9'),
-                                        ('17', 'MAS DE 1,000,000')
-                                    ], string='Rango de Activos', track_visibility='onchange')
-    x_income_range = fields.Selection([
-                                        ('1', 'DE 0 A 9.9'),
-                                        ('2', 'DE 10 A 24.9'),
-                                        ('3', 'DE 25 A 49.9'),
-                                        ('4', 'DE 50 A 99.9'),
-                                        ('5', 'DE 100 A 249.9'),
-                                        ('6', 'DE 250 A 499.9'),
-                                        ('7', 'DE 500 A 749.9'),
-                                        ('8', 'DE 750 A 999.9'),
-                                        ('9', 'DE 1,000 A 2,499.9'),
-                                        ('10', 'DE 2,500 A 4,999.9'),
-                                        ('11', 'DE 5,000 A 9,999.9'),
-                                        ('12', 'DE 10,000 A 49,999.9'),
-                                        ('13', 'DE 50,000 A 99,999.9'),
-                                        ('14', 'DE 100,000 A 249,999.9'),
-                                        ('15', 'DE 250,000 A 499,999.9'),
-                                        ('16', 'DE 500,000 A 999,999.9'),
-                                        ('17', 'MAS DE 1,000,000')
-                                    ], string='Rango de Ingresos', track_visibility='onchange')
+    x_asset_range = fields.Many2one('logyca.asset_range', string='Rango de activos', track_visibility='onchange')
+    x_income_range = fields.Many2one('logyca.asset_range', string='Rango de ingresos', track_visibility='onchange')
     #x_date_update_asset = fields.Date(string='Fecha de última modificación', compute='_date_update_asset', store=True, track_visibility='onchange')
     x_date_update_asset = fields.Date(string='Fecha de última modificación', track_visibility='onchange')
     x_company_size = fields.Selection([
@@ -147,6 +113,7 @@ class ResPartner(models.Model):
     x_taken_courses_logyca = fields.Boolean(string='¿Ha tomado cursos en LOGYCA?', track_visibility='onchange')
 
     #CAMPOS HISTORICOS
+    x_owner_history = fields.Char(string='Propietario historico', track_visibility='onchange')
     x_info_creation_history = fields.Char(string='Información de creación y modificación historica', track_visibility='onchange')
     x_history_partner_notes = fields.One2many('logyca.history_partner_notes', 'partner_id', string = 'Notas')
     x_history_partner_emails = fields.One2many('logyca.history_partner_emails', 'partner_id', string = 'Emails')
@@ -190,3 +157,19 @@ class ResPartner(models.Model):
             else:
                 self.x_digit_verification = False
 
+    #-----------Validaciones
+    @api.constrains('vat')
+    def _check_vatnumber(self):
+        for record in self:
+            obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat),('id','!=',record.id)])
+            if obj:
+                raise ValidationError(_('Ya existe un Cliente con este número de NIT.'))
+                #raise Warning("Warning", "Ya existe un Cliente con este número de NIT")
+    
+    @api.onchange('vat')
+    def _onchange_vatnumber(self):
+        for record in self:
+            if record.vat:
+                obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat)])
+                if obj:
+                    raise UserError(_('Ya existe un Cliente con este número de NIT.'))

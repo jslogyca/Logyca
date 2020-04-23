@@ -153,6 +153,37 @@ class x_type_thirdparty(models.Model):
             result.append((record.id, "{}".format(record.name)))
         return result
 
+# Racngos de activos
+class x_asset_range(models.Model):
+    _name = 'logyca.asset_range'
+    _description = 'Rangos de activos'
+    
+    initial_value = fields.Float(string='Valor inicial', required=True)
+    final_value = fields.Float(string='Valor final', required=True)
+    name = fields.Char(string='Nombre', required=True)
+    active = fields.Boolean(string='Activo')
+    assigned_codes = fields.Integer(string='Nro. Asignación de codigos')
+
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{}".format(record.name)))
+        return result
+
+# Grupo Presupuestal
+class x_budget_group(models.Model):
+    _name = 'logyca.budget_group'
+    _description = 'Grupos presupuestal'
+
+    code = fields.Char(string='Código', size=10, required=True)
+    name = fields.Char(string='Nombre', required=True)
+
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "{}".format(record.name)))
+        return result
+
 #--------------------------------Modelos heredados de Odoo------------------------------------#
 
 class ResCountry(models.Model):
@@ -169,3 +200,14 @@ class CRMTeam(models.Model):
     _inherit = 'crm.team'
 	
     invoiced_target = fields.Float('Meta de Facturación',(12,0))
+
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+	
+    x_automatic_activation = fields.Boolean(string='Activación automática')
+    x_code_type = fields.Integer(string='Tipo de codigo')
+    x_mandatory_prefix = fields.Integer(string='Prefijo obligatorio') 
+    x_scheme = fields.Integer(string='Esquema')
+    x_type_document = fields.Integer(string='Tipo documento')
+    x_date_validity = fields.Datetime(string='Fecha de expiración')
+    
