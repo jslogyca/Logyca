@@ -18,7 +18,7 @@ class AccountMove(models.Model):
     x_cufe_dian = fields.Char(string='CUFE - Código único de facturación electrónica')
     x_motive_error = fields.Text(string='Motivo de error')
     
-    
+    @api.depends('partner_id')
     @api.onchange('partner_id')
     def _onchange_partner_id_country(self):
         
