@@ -157,6 +157,18 @@ class ResPartner(models.Model):
             else:
                 self.x_digit_verification = False
 
+    #---------------Search
+    @api.model
+    def _name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
+        args = args or []
+        args.append(['vat', 'ilike', name])
+        if name:
+            # Be sure name_search is symetric to name_get
+            name = name.split(' / ')[-1]
+            args = [('name', operator, name)] + args
+        partner_category_ids = self._search(args, limit=limit, access_rights_uid=name_get_uid)
+        return models.lazy_name_get(self.browse(partner_category_ids).with_user(name_get_uid))
+
     #-----------Validaciones
     @api.constrains('vat')
     def _check_vatnumber(self):
