@@ -20,7 +20,6 @@ class AccountMove(models.Model):
     
     
     @api.onchange('partner_id')
-    @api.depends('partner_id')
     def _onchange_partner_id_country(self):
         
         partner = self.env['res.partner'].browse(self.partner_id.id)
