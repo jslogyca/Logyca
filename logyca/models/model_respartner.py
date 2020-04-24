@@ -6,7 +6,7 @@ from odoo.exceptions import UserError, ValidationError
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
-    _order = 'x_type_thirdparty, x_contact_type, name'
+    _order = 'name'
     #INFORMACION BASICA
     name = fields.Char(track_visibility='onchange')
     same_vat_partner_id = fields.Many2one('res.partner', string='Partner with same Tax ID', compute='_compute_no_same_vat_partner_id', store=False)
