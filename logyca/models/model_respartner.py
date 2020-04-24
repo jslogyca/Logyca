@@ -211,13 +211,16 @@ class ResPartner(models.Model):
                 if obj:
                     raise UserError(_('Ya existe un Cliente con este número de NIT.'))
 
-    @api.onchange('x_contact_type')
-    def _onchange_contacttype(self):
-        for record in self:
-            if len(record.x_contact_type) > 0:
-                obj = self.search([('x_contact_type','in',[3]),('parent_id','=',record.parent_id)])
-                if len(obj) > 0:
-                    raise UserError(_('Ya existe un Contacto de facturación electrónica, por favor verficar,.'))
+    @api.constrains('child_ids')
+    def _check_contacttype(self):
+        cant_contactsFE = 0
+        for record in self.child_ids:
+            obj = record.search([('x_contact_type','in',[3])])
+            if len(obj)>0:
+                cant_contactsFE = cant_contactsFE + 1
+                
+        if cant_contactsFE > 1:
+            raise ValidationError(_('Ya existe un Contacto de facturación electrónica, por favor verficar.'))     
 
     # @api.onchange('name')
     # def _onchange_namecontact(self):
