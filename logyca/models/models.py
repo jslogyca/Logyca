@@ -220,3 +220,10 @@ class HelpDesk(models.Model):
     _inherit = 'helpdesk.ticket'
 	
     x_origen = fields.Char(string='Origen',size=50)
+
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
+	
+    x_reason_cancellation = fields.Text(string='Motivo de cancelación')
+
+    
