@@ -215,8 +215,8 @@ class ResPartner(models.Model):
     def _onchange_contacttype(self):
         for record in self:
             if len(record.x_contact_type) > 0:
-                obj = self.search([('x_contact_type','in',[3]),('parent_id','=',record.parent_id),('id','!=',record.id)])
-                if obj:
+                obj = self.search([('x_contact_type','in',[3]),('parent_id','=',record.parent_id)])
+                if len(obj) > 0:
                     raise UserError(_('Ya existe un Contacto de facturación electrónica, por favor verficar,.'))
 
     # @api.onchange('name')
