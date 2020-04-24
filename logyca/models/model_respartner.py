@@ -7,6 +7,27 @@ from odoo.exceptions import UserError, ValidationError
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     _order = 'name'
+    #TRACK VISIBILITY OLD FIELDS
+    street = fields.Char(track_visibility='onchange')
+    country_id = fields.Many2one(track_visibility='onchange')
+    state_id = fields.Many2one(track_visibility='onchange')
+    zip = fields.Char(track_visibility='onchange')
+    phone = fields.Char(track_visibility='onchange')
+    mobile = fields.Char(track_visibility='onchange')
+    email = fields.Char(track_visibility='onchange')
+    website = fields.Char(track_visibility='onchange')
+    lang = fields.Selection(track_visibility='onchange')
+    category_id = fields.Many2many(track_visibility='onchange')
+    user_id = fields.Many2one(track_visibility='onchange')
+    property_payment_term_id = fields.Many2one(track_visibility='onchange')
+    property_product_pricelist = fields.Many2one(track_visibility='onchange')
+    property_account_position_id = fields.Many2one(track_visibility='onchange')
+    property_supplier_payment_term_id = fields.Many2one(track_visibility='onchange')
+    property_purchase_currency_id = fields.Many2one(track_visibility='onchange')
+    property_account_receivable_id = fields.Many2one(track_visibility='onchange')
+    property_account_payable_id = fields.Many2one(track_visibility='onchange')
+    comment = fields.Text(track_visibility='onchange')
+
     #INFORMACION BASICA
     name = fields.Char(track_visibility='onchange')
     same_vat_partner_id = fields.Many2one('res.partner', string='Partner with same Tax ID', compute='_compute_no_same_vat_partner_id', store=False)
@@ -123,6 +144,13 @@ class ResPartner(models.Model):
     def _date_update_asset(self):
         self.x_date_update_asset = fields.Date.today()
 
+    @api.onchange('x_active_for_logyca')
+    def _onchange_active(self):    
+        if self.x_active_for_logyca == True:
+            self.active = True
+        else:
+            self.active = False        
+
     @api.depends('vat')
     def _compute_no_same_vat_partner_id(self):
         for partner in self:
@@ -183,10 +211,18 @@ class ResPartner(models.Model):
                 if obj:
                     raise UserError(_('Ya existe un Cliente con este número de NIT.'))
 
-    @api.onchange('name')
-    def _onchange_namecontact(self):
+    @api.onchange('x_contact_type')
+    def _onchange_contacttype(self):
         for record in self:
-            if record.name:
-                obj = self.search([('x_type_thirdparty','not in',[1,3]),('name','=',record.name)])
+            if len(record.x_contact_type) > 0:
+                obj = self.search([('x_contact_type','in',[3]),('parent_id','=',record.parent_id),('id','!=',record.id)])
                 if obj:
-                    raise UserError(_('Ya existe un Contacto con ese nombre.'))
+                    raise UserError(_('Ya existe un Contacto de facturación electrónica, por favor verficar,.'))
+
+    # @api.onchange('name')
+    # def _onchange_namecontact(self):
+    #     for record in self:
+    #         if record.name:
+    #             obj = self.search([('x_type_thirdparty','not in',[1,3]),('name','=',record.name)])
+    #             if obj:
+    #                 raise UserError(_('Ya existe un Contacto con ese nombre.'))
