@@ -210,4 +210,13 @@ class ProductTemplate(models.Model):
     x_scheme = fields.Integer(string='Esquema')
     x_type_document = fields.Integer(string='Tipo documento')
     x_date_validity = fields.Datetime(string='Fecha de expiración')
-    
+
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+	
+    x_origen = fields.Char(string='Origen',size=30)
+
+class HelpDesk(models.Model):
+    _inherit = 'helpdesk.ticket'
+	
+    x_origen = fields.Char(string='Origen',size=50)
