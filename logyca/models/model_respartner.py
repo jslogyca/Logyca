@@ -216,13 +216,15 @@ class ResPartner(models.Model):
         cant_contactsFE = 0
         name_contact = ""
         for record in self.child_ids:            
-            obj = record.search([('x_contact_type','in',[3])])            
-            if obj:
-                cant_contactsFE = cant_contactsFE + 1
-                name_contact = name_contact +" | "+record.name
+            ls_contacts = record.x_contact_type  
+
+            for i in ls_contacts:
+                if i == 3:
+                    cant_contactsFE = cant_contactsFE + 1
+                    name_contact = name_contact +" | "+record.name
 
         if cant_contactsFE > 1:
-            raise ValidationError(_('Tiene más de un contacto ('+str(cant_contactsFE)+''+name_contact+') de tipo facturación electrónica, por favor verficar.'))     
+            raise ValidationError(_('Tiene más de un contacto ('+name_contact+') de tipo facturación electrónica, por favor verficar.'))     
 
     # @api.onchange('name')
     # def _onchange_namecontact(self):
