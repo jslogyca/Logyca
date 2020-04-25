@@ -214,15 +214,13 @@ class ResPartner(models.Model):
     @api.constrains('child_ids')
     def _check_contacttype(self):
         cant_contactsFE = 0
-        for record in self.child_ids:
-            print(record)
-            obj = record.search([('x_contact_type','in',[3])])
-            print(obj)
-            if len(obj)>0:
+        for record in self.child_ids:            
+            obj = record.search([('x_contact_type','in',[3])])            
+            if obj>0:
                 cant_contactsFE = cant_contactsFE + 1
 
         if cant_contactsFE > 1:
-            raise ValidationError(_('Tiene más de un contacto de tipo facturación electrónica, por favor verficar.'))     
+            raise ValidationError(_('Tiene más de un contacto de tipo facturación electrónica, por favor verficar.' + str(cant_contactsFE)))     
 
     # @api.onchange('name')
     # def _onchange_namecontact(self):
