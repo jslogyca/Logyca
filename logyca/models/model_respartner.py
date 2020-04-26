@@ -217,7 +217,7 @@ class ResPartner(models.Model):
         name_contact = ""
         for record in self.child_ids:            
             ls_contacts = record.x_contact_type  
-
+            raise ValidationError(_(ls_contacts))     
             for i in ls_contacts:
                 if i == 3:
                     cant_contactsFE = cant_contactsFE + 1
