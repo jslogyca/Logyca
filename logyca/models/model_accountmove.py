@@ -8,8 +8,7 @@ import requests
 # Encabezado Movimiento
 class AccountMove(models.Model):
     _inherit = 'account.move'
-    
-      
+          
     #PAÍS 
     x_country_account_id = fields.Many2one('res.country', string='País', track_visibility='onchange')
     #NUMERO DE ORDEN DE COMPRA
@@ -33,6 +32,10 @@ class AccountMove(models.Model):
     
     #Validaciones antes de permitir PUBLICAR una factura
     def action_post(self): 
+        #Fecha de factura
+        if self.date < fields.Date.today():
+            raise ValidationError(_('La fecha de la factura no puede ser diferente a la fecha actual, por favor verificar.'))     
+        #Contacto de facturación electronica
         partner = self.env['res.partner'].browse(self.partner_id.id)
         cant_contactsFE = 0
         for record in partner.child_ids:   
