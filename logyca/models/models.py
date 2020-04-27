@@ -264,16 +264,16 @@ class PurchaseOrderLine(models.Model):
     x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal')
     
     #Cuenta analitica 
-    @api.onchange('analytic_account_id')
+    @api.onchange('account_analytic_id')    
     def _onchange_analytic_account_id(self):
-        if self.analytic_account_id:
+        if self.account_analytic_id:
             self.analytic_tag_ids = [(5,0,0)]
             
     #Etiqueta analitica
     @api.onchange('analytic_tag_ids')
     def _onchange_analytic_tag_ids(self):
         if self.analytic_tag_ids:
-            self.analytic_account_id = False
+            self.account_analytic_id = False
 
     
     
