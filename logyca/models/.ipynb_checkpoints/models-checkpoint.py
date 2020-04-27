@@ -215,11 +215,30 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 	
     x_origen = fields.Char(string='Origen',size=30)
-
+    
+    def _prepare_invoice(self):        
+        invoice_vals = super(SaleOrder, self)._prepare_invoice()        
+        self.ensure_one()
+        self = self.with_context(default_company_id=self.company_id.id, force_company=self.company_id.id)        
+        country_id = self.partner_invoice_id.country_id.id        
+        invoice_vals['x_country_account_id'] = country_id        
+        return invoice_vals
+    
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
     #Grupo de trabajo 
     x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal')
+    
+class SaleAdvancePaymentInv(models.TransientModel):
+    _inherit = "sale.advance.payment.inv"
+    
+    def _prepare_invoice_values(self, order, name, amount, so_line):
+        invoice_vals = super(SaleAdvancePaymentInv, self)._prepare_invoice_values(order, name, amount, so_line)  
+        country_id = order.partner_invoice_id.country_id.id        
+        invoice_vals['x_country_account_id'] = country_id        
+        
+        return invoice_vals
+
     
 class HelpDesk(models.Model):
     _inherit = 'helpdesk.ticket'
@@ -238,10 +257,23 @@ class PurchaseOrder(models.Model):
                 return super(PurchaseOrder, self).button_cancel()
             else:
                 raise UserError(_("Debe llenar el campo motivo de cancelación antes de cancelar."))
-
+    
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
     #Grupo de trabajo 
     x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal')
+    
+    #Cuenta analitica 
+    @api.onchange('account_analytic_id')    
+    def _onchange_analytic_account_id(self):
+        if self.account_analytic_id:
+            self.analytic_tag_ids = [(5,0,0)]
+            
+    #Etiqueta analitica
+    @api.onchange('analytic_tag_ids')
+    def _onchange_analytic_tag_ids(self):
+        if self.analytic_tag_ids:
+            self.account_analytic_id = False
 
+    
     
