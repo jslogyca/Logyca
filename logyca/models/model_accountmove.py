@@ -57,7 +57,7 @@ class AccountMoveLine(models.Model):
     @api.onchange('analytic_account_id')
     def _onchange_analytic_account_id(self):
         if self.analytic_account_id:
-            self.analytic_tag_ids = []
+            self.analytic_tag_ids = [(5,0,0)]
             
     #Etiqueta analitica
     @api.onchange('analytic_tag_ids')
