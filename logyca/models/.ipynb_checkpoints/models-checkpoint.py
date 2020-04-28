@@ -268,9 +268,12 @@ class PurchaseOrder(models.Model):
     #Validaciones antes de CONFIRMAR una orden de compra
     def button_confirm(self):
         for order_line in self.order_line:
-            if (order_line.account_analytic_id == False) and (order_line._onchange_analytic_tag_ids == False):
+            
+            if not order_line.account_analytic_id and not order_line._onchange_analytic_tag_ids:
                 raise UserError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+order_line.name+", por favor verificar."))
-                
+            
+            raise UserError(_(order_line._onchange_analytic_tag_ids))
+        
         return super(PurchaseOrder, self).button_confirm()            
            
     
