@@ -224,6 +224,13 @@ class SaleOrder(models.Model):
         invoice_vals['x_country_account_id'] = country_id        
         return invoice_vals
     
+    #Validaciones antes de CONFIRMAR una orden de venta
+    #def action_confirm(self):
+    #    for order_line in self.order_line:
+    #        if order_line.account_analytic_id == False:
+    #            raise UserError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+order_line.name+", por favor verificar."))
+    #    return super(SaleOrder, self).action_confirm()  
+    
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
     #Grupo de trabajo 
@@ -257,6 +264,15 @@ class PurchaseOrder(models.Model):
                 return super(PurchaseOrder, self).button_cancel()
             else:
                 raise UserError(_("Debe llenar el campo motivo de cancelación antes de cancelar."))
+    
+    #Validaciones antes de CONFIRMAR una orden de compra
+    def button_confirm(self):
+        for order_line in self.order_line:
+            if (order_line.account_analytic_id == False) and (order_line._onchange_analytic_tag_ids == False):
+                raise UserError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+order_line.name+", por favor verificar."))
+                
+        return super(PurchaseOrder, self).button_confirm()            
+           
     
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'

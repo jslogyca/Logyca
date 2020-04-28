@@ -91,21 +91,22 @@ class AccountMove(models.Model):
     def action_post(self): 
         #Fecha de factura
         if self.date < fields.Date.today():
-            raise ValidationError(_('La fecha de la factura no puede ser diferente a la fecha actual, por favor verificar.'))     
-        #Contacto de facturación electronica
-        partner = self.env['res.partner'].browse(self.partner_id.id)
+            raise ValidationError(_('La fecha de la factura no puede ser menor a la fecha actual, por favor verificar.'))     
+            
+        #Contacto de facturación electronica        
         cant_contactsFE = 0
-        for record in partner.child_ids:   
-            ls_contacts = record.x_contact_type              
-            for i in ls_contacts:
-                if i.id == 3:
-                    cant_contactsFE = cant_contactsFE + 1
+        if self.type == 'out_invoice' or self.type == 'out_refund' or self.type == 'out_receipt':
+            partner = self.env['res.partner'].browse(self.partner_id.id)
+            for record in partner.child_ids:   
+                ls_contacts = record.x_contact_type              
+                for i in ls_contacts:
+                    if i.id == 3:
+                        cant_contactsFE = cant_contactsFE + 1                        
+            if cant_contactsFE == 0:
+                raise ValidationError(_('El cliente al que pertenece la factura no tiene un contacto de tipo facturación electrónica, por favor verificar.'))     
+            
+        return super(AccountMove, self).action_post()
         
-        if cant_contactsFE > 0:
-            return super(AccountMove, self).action_post()
-        else:
-            raise ValidationError(_('El cliente al que pertenece la factura no tiene un contacto de tipo facturación electrónica, por favor verificar.'))     
-
 
 # Detalle Movimiento
 class AccountMoveLine(models.Model):
