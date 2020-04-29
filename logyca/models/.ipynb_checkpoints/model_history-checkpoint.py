@@ -7,6 +7,7 @@ class x_history_partner_notes(models.Model):
     _description = 'Información historia de salesforce NOTAS'
 
     partner_id = fields.Many2one('res.partner',string='Cliente', required=True, ondelete='cascade')
+    id_salesforce = fields.Char(string='Id salesforce', size=100)
     title = fields.Text(string='Titulo', required=True)
     activity_date = fields.Datetime(string='Fecha', required=True)
     body = fields.Text(string='Contenido', required=True)    
@@ -16,6 +17,7 @@ class x_history_partner_emails(models.Model):
     _description = 'Información historia de salesforce EMAILS'
 
     partner_id = fields.Many2one('res.partner',string='Cliente', required=True, ondelete='cascade')
+    id_salesforce = fields.Char(string='Id salesforce', size=100)
     title = fields.Text(string='Titulo', required=True)
     activity_date = fields.Datetime(string='Fecha', required=True)
     body = fields.Text(string='Contenido', required=True)    
@@ -29,6 +31,7 @@ class x_history_partner_opportunity(models.Model):
     _description = 'Información historia de salesforce OPORTUNIDADES'
 
     partner_id = fields.Many2one('res.partner',string='Cliente', required=True, ondelete='cascade')
+    id_salesforce = fields.Char(string='Id salesforce', size=100)
     activity_date = fields.Datetime(string='Fecha creación', required=True)
     name = fields.Char(string='Nombre', size=50, required=True)
     description = fields.Text(string='Descripción') 
@@ -38,7 +41,7 @@ class x_history_partner_opportunity(models.Model):
     expected_revenue = fields.Integer(string='Ingresos esperados')
     opportunity_quantity = fields.Integer(string='Cantidad')
     close_date = fields.Datetime(string='Fecha finalización')
-    lead_source = fields.Char(string='Origen', size=50, required=True)
+    lead_source = fields.Char(string='Origen', size=50)
     x_history_partner_services = fields.One2many('logyca.history_partner_services', 'opportunity_id', string = 'Servicios')
     x_history_partner_invoices = fields.One2many('logyca.history_partner_invoices', 'opportunity_id', string = 'Facturación')
     attachment_number = fields.Integer('Número de adjuntos', compute='_compute_attachment_number')
@@ -62,6 +65,7 @@ class x_history_partner_services(models.Model):
     _description = 'Información historia de salesforce SERVICIOS x OPORTUNIDAD'
 
     opportunity_id = fields.Many2one('logyca.history_partner_opportunity',string='Oportunidad', required=True, ondelete='cascade')
+    id_salesforce = fields.Char(string='Id salesforce', size=100)
     service = fields.Char(string='Servicio', size=150, required=True)
     service_date = fields.Datetime(string='Fecha')
     quantity = fields.Integer(string='Cantidad')
@@ -76,6 +80,7 @@ class x_history_partner_invoices(models.Model):
     _description = 'Información historia de salesforce FACTURAS x OPORTUNIDAD'
 
     opportunity_id = fields.Many2one('logyca.history_partner_opportunity',string='Oportunidad', required=True, ondelete='cascade')
+    id_salesforce = fields.Char(string='Id salesforce', size=100)
     name = fields.Char(string='Número de solicitud', size=50)
     create_date = fields.Datetime(string='Fecha creación')
     description = fields.Text(string='Concepto')
