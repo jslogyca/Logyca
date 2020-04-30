@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
-
+import logging
+_logger = logging.getLogger(__name__)
 #--------------------------------Modelos propios de logyca------------------------------------#
 
 # CIUDAD
@@ -261,7 +262,32 @@ class PurchaseOrder(models.Model):
     def button_cancel(self):        
         for record in self:
             if record.x_reason_cancellation:
-                return super(PurchaseOrder, self).button_cancel()
+                
+                #Envio correo
+                emails = list(set([record.user_id.email]))
+                
+                subject = _("Cancelación orden de compra %s" % record.name)
+                body = _("""La orden de compra (%s) fue cancelada:
+                              - Motivo cancelación: %s 
+                            
+                            Datos de la orden de compra:
+                              - Proveedor: %s
+                              - Fecha pedido: %s
+                              - Referencia: %s"""
+                         % (record.name, record.x_reason_cancellation, record.partner_id.name, record.date_order, record.partner_ref))
+                    
+                email = self.env['ir.mail_server'].build_email(
+                        email_from=self.env.user.email,
+                        email_to=emails,
+                        subject=subject, 
+                        body=body,
+                )
+                
+                self.env['ir.mail_server'].send_email(email)
+                
+                # Ejecutar metodo inicial
+                super(PurchaseOrder, self).button_cancel()
+                
             else:
                 raise UserError(_("Debe llenar el campo motivo de cancelación antes de cancelar."))
     
