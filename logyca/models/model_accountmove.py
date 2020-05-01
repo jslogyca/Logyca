@@ -96,7 +96,12 @@ class AccountMove(models.Model):
         #Contacto de facturación electronica        
         cant_contactsFE = 0
         if self.type == 'out_invoice' or self.type == 'out_refund' or self.type == 'out_receipt':
-            partner = self.env['res.partner'].browse(self.partner_id.id)
+            
+            if self.partner_id.parent_id:
+                partner = self.env['res.partner'].browse(self.partner_id.parent_id.id)
+            else:
+                partner = self.env['res.partner'].browse(self.partner_id.id)
+                
             for record in partner.child_ids:   
                 ls_contacts = record.x_contact_type              
                 for i in ls_contacts:
