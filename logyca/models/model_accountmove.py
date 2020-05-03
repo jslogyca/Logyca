@@ -2,6 +2,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
 import requests
+import datetime
 
 #---------------------------Modelo ACCOUNT-MOVE/ MOVIMIENTO DETALLE-------------------------------#
 
@@ -63,7 +64,10 @@ class AccountMove(models.Model):
         new_lines = self.env['account.move.line']
         for line in po_lines.filtered(lambda l: not l.display_type):
             prepare_line = line._prepare_account_move_line(self)
-            prepare_line['x_budget_group'] = line.x_budget_group
+            if line.x_budget_group:
+                prepare_line['x_budget_group'] = line.x_budget_group
+            else:
+                raise ValidationError(_('El grupo presupuestal esta vacio, por favor verificar.'))     
             new_line = new_lines.new(prepare_line)
             new_line.account_id = new_line._get_computed_account()
             new_line._onchange_price_subtotal()
@@ -89,13 +93,19 @@ class AccountMove(models.Model):
     
     #Validaciones antes de permitir PUBLICAR una factura
     def action_post(self): 
-        #Fecha de factura
-        if self.date < fields.Date.today():
-            raise ValidationError(_('La fecha de la factura no puede ser menor a la fecha actual, por favor verificar.'))     
-            
+        
         #Contacto de facturación electronica        
         cant_contactsFE = 0
         if self.type == 'out_invoice' or self.type == 'out_refund' or self.type == 'out_receipt':
+            
+            #Fecha de factura
+            if (self.date != fields.Date.context_today(self)) and (self.invoice_date != fields.Date.context_today(self)):
+                #https://poncesoft.blogspot.com/2017/07/consulta-de-fecha-actual-traves-de-la.html - LINK DE APOYO
+                raise ValidationError(_('La fecha de la factura no puede ser diferente a la fecha actual, por favor verificar.'))     
+            
+            for line in self.invoice_line_ids:
+                if not line.analytic_account_id:
+                    raise ValidationError(_('La cuenta analitica esta vacia para el registro '+line.name+', por favor verificar.'))     
             
             if self.partner_id.parent_id:
                 partner = self.env['res.partner'].browse(self.partner_id.parent_id.id)
