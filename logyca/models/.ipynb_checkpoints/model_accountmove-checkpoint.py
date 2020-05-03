@@ -121,8 +121,15 @@ class AccountMove(models.Model):
                 raise ValidationError(_('El cliente al que pertenece la factura no tiene un contacto de tipo facturación electrónica, por favor verificar.'))     
             
         return super(AccountMove, self).action_post()
-        
 
+# Nota credito
+class AccountMoveReversal(models.TransientModel):
+    _inherit = "account.move.reversal"
+    
+    reason = fields.Selection([('1', 'Devolución de servicio'),
+                              ('2', 'Diferencia del precio real y el importe cobrado'),
+                              ('3', 'Se emitió una factura por error de tercero')], string='Motivo', required=True)
+        
 # Detalle Movimiento
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
