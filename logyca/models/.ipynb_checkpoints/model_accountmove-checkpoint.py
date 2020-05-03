@@ -120,10 +120,6 @@ class AccountMove(models.Model):
             if cant_contactsFE == 0:
                 raise ValidationError(_('El cliente al que pertenece la factura no tiene un contacto de tipo facturación electrónica, por favor verificar.'))     
         
-        for lines in self.invoice_line_ids:
-            if lines.x_budget_group:
-                x_budget_group
-        
         return super(AccountMove, self).action_post()
 
 # Nota credito
