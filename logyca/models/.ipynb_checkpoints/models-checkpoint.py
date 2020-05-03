@@ -293,7 +293,10 @@ class PurchaseOrder(models.Model):
     
     #Validaciones antes de CONFIRMAR una orden de compra
     def button_confirm(self):
-        for order_line in self.order_line:            
+        for order_line in self.order_line:
+            if not order_line.x_budget_group:
+                raise UserError(_("No se digito información el grupo presupuestal para el registro "+order_line.name+", por favor verificar."))
+                
             if not order_line.account_analytic_id and not order_line.analytic_tag_ids:
                 raise UserError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+order_line.name+", por favor verificar."))
             
