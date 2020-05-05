@@ -264,7 +264,7 @@ class PurchaseOrder(models.Model):
             if record.x_reason_cancellation:
                 
                 #Envio correo
-                emails = list(set([record.user_id.email]))
+                emails = list(set([record.create_uid.email]))
                 
                 subject = _("Cancelación orden de compra %s" % record.name)
                 body = _("""La orden de compra (%s) fue cancelada:
