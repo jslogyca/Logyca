@@ -9,9 +9,24 @@ import datetime
 # Encabezado Movimiento
 class AccountMove(models.Model):
     _inherit = 'account.move'
-          
+    
+    @api.model
+    def _get_default_country_id(self):
+        country_id = 49
+        
+        if self.partner_id:
+            partner = self.env['res.partner'].browse(self.partner_id.id)
+            country_id = partner.country_id
+        
+        values = {
+                'x_country_account_id': country_id ,                
+            }
+        self.update(values)
+        
+        return country_id
+    
     #PAÍS 
-    x_country_account_id = fields.Many2one('res.country', string='País', track_visibility='onchange')
+    x_country_account_id = fields.Many2one('res.country', string='País', default=_get_default_country_id, track_visibility='onchange')
     #NUMERO DE ORDEN DE COMPRA
     x_num_order_purchase = fields.Char(string='Número orden de compra', track_visibility='onchange')
     #FACTURACIÓN ELECTRONICA
