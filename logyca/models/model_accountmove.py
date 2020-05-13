@@ -141,6 +141,7 @@ class AccountMove(models.Model):
 class AccountMoveReversal(models.TransientModel):
     _inherit = "account.move.reversal"
     
+    refund_method = fields.Selection(default='cancel')
     reason = fields.Selection([('1', 'Devolución de servicio'),
                               ('2', 'Diferencia del precio real y el importe cobrado'),
                               ('3', 'Se emitió una factura por error de tercero')], string='Motivo', required=True)
