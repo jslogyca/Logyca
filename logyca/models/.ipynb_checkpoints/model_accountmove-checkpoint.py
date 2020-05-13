@@ -141,7 +141,13 @@ class AccountMove(models.Model):
 class AccountMoveReversal(models.TransientModel):
     _inherit = "account.move.reversal"
     
-    refund_method = fields.Selection(default='cancel')
+    refund_method = fields.Selection(selection=[
+            ('cancel', 'Full Refund'),
+            ('modify', 'Full refund and new draft invoice'),
+            ('refund', 'Partial Refund')
+        ], string='Credit Method', required=True, default='cancel',
+        help='Choose how you want to credit this invoice. You cannot "modify" nor "cancel" if the invoice is already reconciled.')
+    
     reason = fields.Selection([('1', 'Devolución de servicio'),
                               ('2', 'Diferencia del precio real y el importe cobrado'),
                               ('3', 'Se emitió una factura por error de tercero')], string='Motivo', required=True)
