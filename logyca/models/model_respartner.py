@@ -125,8 +125,8 @@ class ResPartner(models.Model):
     x_contact_job_title_historic = fields.Char(string='Cargo histórico', track_visibility='onchange')
     x_contact_area_historic = fields.Char(string='Área histórica', track_visibility='onchange')
 
-    #INFORMACION FACTURACION ELECTRÓNICA - Comentado por que cambio al contacto de tipo facturación electronica
-    #x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas', track_visibility='onchange')
+    #INFORMACION FACTURACION ELECTRÓNICA
+    x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas', track_visibility='onchange')
 
     #INFORMACIÓN EDUCACIÓN - CLIENTES
     X_is_a_student = fields.Boolean(string='¿Es estudiante?', track_visibility='onchange')
