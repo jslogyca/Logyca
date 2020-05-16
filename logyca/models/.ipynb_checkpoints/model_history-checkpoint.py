@@ -134,3 +134,59 @@ class x_history_partner_invoices(models.Model):
         res['domain'] = [('res_model', '=', 'logyca.history_partner_invoices'), ('res_id', 'in', self.ids)]
         res['context'] = {'default_res_model': 'logyca.history_partner_invoices', 'default_res_id': self.id}
         return res
+
+class x_history_partner_case(models.Model):
+    _name = 'logyca.history_partner_case'
+    _description = 'Información historia de salesforce CASOS'
+
+    partner_id = fields.Many2one('res.partner',string='Cliente', required=True, ondelete='cascade')
+    id_salesforce = fields.Char(string='Id salesforce', size=100)
+    case_number = fields.Char(string='Número del caso', size=50)
+    contact = fields.Char(string='Contacto', size=200)
+    supplied_name = fields.Char(string='Nombre administrado', size=200)
+    supplied_email = fields.Char(string='Correo administrado', size=100)
+    supplied_phone = fields.Char(string='Telefono administrado', size=100)
+    case_type = fields.Char(string='Tipo', size=50)
+    case_status = fields.Char(string='Estado', size=50)
+    case_origin = fields.Char(string='Origen', size=50)
+    subject = fields.Char(string='Titulo', size=500)
+    priority = fields.Char(string='Prioridad', size=20)
+    description = fields.Text(string='Descripción') 
+    is_closed = fields.Boolean(string='Cerrado')
+    closed_date = fields.Datetime(string='Fecha finalización')
+    owner = fields.Char(string='Propietario', size=200)
+    created_date = fields.Datetime(string='Fecha creación')
+    created_by = fields.Char(string='Creado por', size=200)
+    sla_time = fields.Char(string='Tiempo SLA', size=20)
+    support_time = fields.Char(string='Tiempo de soporte', size=20)
+    tematic = fields.Char(string='Tematica', size=50)
+    support_amount = fields.Char(string='Saldo de soporte', size=20)
+    name_client = fields.Char(string='Nombre cliente', size=200)
+    origen_form_web = fields.Char(string='Origen del formulario web', size=200)
+    nit_client = fields.Char(string='NIT cliente', size=20)
+    x_history_partner_casehistory = fields.One2many('logyca.history_partner_casehistory', 'case_id', string = 'Historial')
+    attachment_number = fields.Integer('Número de adjuntos', compute='_compute_attachment_number')
+    
+    def _compute_attachment_number(self):
+        attachment_data = self.env['ir.attachment'].read_group([('res_model', '=', 'logyca.history_partner_case'), ('res_id', 'in', self.ids)], ['res_id'], ['res_id'])
+        attachment = dict((data['res_id'], data['res_id_count']) for data in attachment_data)
+        for expense in self:
+            expense.attachment_number = attachment.get(expense.id, 0)   
+    
+    def action_get_attachment_view(self):
+        self.ensure_one()
+        res = self.env['ir.actions.act_window'].for_xml_id('base', 'action_attachment')
+        res['domain'] = [('res_model', '=', 'logyca.history_partner_case'), ('res_id', 'in', self.ids)]
+        res['context'] = {'default_res_model': 'logyca.history_partner_case', 'default_res_id': self.id}
+        return res
+    
+class x_history_partner_casehistory(models.Model):
+    _name = 'logyca.history_partner_casehistory'
+    _description = 'Información historia de salesforce CASOS HISTORIAL'
+
+    case_id = fields.Many2one('logyca.history_partner_case',string='Caso', required=True, ondelete='cascade')
+    id_salesforce = fields.Char(string='Id salesforce', size=100)
+    modify_date = fields.Datetime(string='Fecha')
+    user = fields.Char(string='Usuario', size=200)
+    description = fields.Char(string='Acción', size=500)
+    
