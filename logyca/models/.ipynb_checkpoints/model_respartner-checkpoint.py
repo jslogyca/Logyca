@@ -81,6 +81,7 @@ class ResPartner(models.Model):
     x_acceptance_data_policy = fields.Boolean(string='Acepta política de tratamiento de datos', track_visibility='onchange')
     x_acceptance_date = fields.Date(string='Fecha de aceptación', track_visibility='onchange')
     x_not_contacted_again = fields.Boolean(string='No volver a ser contactado', track_visibility='onchange')
+    x_date_decoupling = fields.Date(string="Fecha de desvinculación", track_visibility='onchange')
     x_reason_desvinculation = fields.Selection([
                                         ('1', 'Desvinculado por no pago'),
                                         ('2', 'Desvinculado Voluntariamente'),
@@ -94,8 +95,8 @@ class ResPartner(models.Model):
     #INFORMACION FINANCIERA
     x_asset_range = fields.Many2one('logyca.asset_range', string='Rango de activos', track_visibility='onchange')
     x_income_range = fields.Many2one('logyca.asset_range', string='Rango de ingresos', track_visibility='onchange')
-    #x_date_update_asset = fields.Date(string='Fecha de última modificación', compute='_date_update_asset', store=True, track_visibility='onchange')
-    x_date_update_asset = fields.Date(string='Fecha de última modificación', track_visibility='onchange')
+    x_date_update_asset = fields.Date(string='Fecha de última modificación', compute='_date_update_asset', store=True, track_visibility='onchange')
+    #x_date_update_asset = fields.Date(string='Fecha de última modificación', track_visibility='onchange')
     x_company_size = fields.Selection([
                                         ('1', 'Mipyme'),
                                         ('2', 'Pyme'),
@@ -139,6 +140,7 @@ class ResPartner(models.Model):
     x_history_partner_notes = fields.One2many('logyca.history_partner_notes', 'partner_id', string = 'Notas')
     x_history_partner_emails = fields.One2many('logyca.history_partner_emails', 'partner_id', string = 'Emails')
     x_history_partner_opportunity = fields.One2many('logyca.history_partner_opportunity', 'partner_id', string = 'Oportunidades')
+    x_history_partner_case = fields.One2many('logyca.history_partner_case', 'partner_id', string = 'Casos')
 
     @api.depends('x_asset_range')
     def _date_update_asset(self):
@@ -196,12 +198,13 @@ class ResPartner(models.Model):
         return super(ResPartner, self).name_search(name=name, args=args, operator=operator, limit=limit)
 
     #-----------Validaciones
-    # @api.constrains('vat')
-    # def _check_vatnumber(self):
-    #     for record in self:
-    #         obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat),('id','!=',record.id)])
-    #         if obj:
-    #             raise ValidationError(_('Ya existe un Cliente con este número de NIT.'))                
+    @api.constrains('vat')
+    def _check_vatnumber(self):
+        for record in self:
+            if record.vat:
+                obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat),('id','!=',record.id)])
+                if obj:
+                    raise ValidationError(_('Ya existe un Cliente con este número de NIT.'))                
     
     @api.onchange('vat')
     def _onchange_vatnumber(self):
