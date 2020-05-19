@@ -216,6 +216,7 @@ class ResPartner(models.Model):
 
     @api.constrains('child_ids')
     def _check_contacttype(self):
+        #Tipo de contacto facturación electronica
         cant_contactsFE = 0
         name_contact = ""
         for record in self.child_ids:            
@@ -227,7 +228,21 @@ class ResPartner(models.Model):
                     name_contact = name_contact +" | "+record.name
 
         if cant_contactsFE > 1:
-            raise ValidationError(_('Tiene más de un contacto ('+name_contact+') de tipo facturación electrónica, por favor verificar.'))     
+            raise ValidationError(_('Tiene más de un contacto ('+name_contact+') de tipo facturación electrónica, por favor verificar.')) 
+        
+        #Tipo de contacto representante ante LOGYCA
+        cant_contactsRL = 0
+        name_contact = ""
+        for record in self.child_ids:            
+            ls_contacts = record.x_contact_type  
+            
+            for i in ls_contacts:
+                if i.id == 2:
+                    cant_contactsRL = cant_contactsRL + 1
+                    name_contact = name_contact +" | "+record.name
+
+        if cant_contactsRL > 1:
+            raise ValidationError(_('Tiene más de un contacto ('+name_contact+') como Representante ante LOGYCA, por favor verificar.'))
 
     # @api.onchange('name')
     # def _onchange_namecontact(self):
