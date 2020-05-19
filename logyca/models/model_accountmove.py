@@ -168,7 +168,7 @@ class AccountMoveReversal(models.TransientModel):
     refund_method = fields.Selection(default='cancel')
     
     reason = fields.Selection([('1', 'Devolución de servicio'),
-                              ('2', 'DiferenDcia del precio real y el importe cobrado'),
+                              ('2', 'Diferencia del precio real y el importe cobrado'),
                               ('3', 'Se emitió una factura por error de tercero')], string='Motivo', required=True)
         
 # Detalle Movimiento
