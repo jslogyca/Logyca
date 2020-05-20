@@ -111,12 +111,12 @@ class AccountMove(models.Model):
         
         #Validar que las cuentas de resultado 4-5-6 OBLIGUEN a cuentas analítica o etiqueta analítica
         for invoice_line in self.invoice_line_ids:            
-            if str(invoice_line.account_id.name).find("4", 0, 0) != -1 or str(invoice_line.account_id.name).find("5", 0, 0) != -1 or str(invoice_line.account_id.name).find("6", 0, 0) != -1:
+            if str(invoice_line.account_id.code).find("4", 0, 1) != -1 or str(invoice_line.account_id.code).find("5", 0, 1) != -1 or str(invoice_line.account_id.code).find("6", 0, 1) != -1:
                 if not invoice_line.analytic_account_id and not invoice_line.analytic_tag_ids:
                     raise ValidationError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+invoice_line.name+", por favor verificar."))
                 
         for line in self.line_ids:
-            if str(line.account_id.name).find("4", 0, 0) != -1 or str(line.account_id.name).find("5", 0, 0) != -1 or str(line.account_id.name).find("6", 0, 0) != -1:
+            if str(line.account_id.code).find("4", 0, 1) != -1 or str(line.account_id.code).find("5", 0, 1) != -1 or str(line.account_id.code).find("6", 0, 1) != -1:
                 if not line.analytic_account_id and not line.analytic_tag_ids:
                     raise ValidationError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+line.name+", por favor verificar."))
         
