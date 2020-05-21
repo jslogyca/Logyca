@@ -28,6 +28,7 @@
         'security/ir.model.access.csv',
         'views/parameterization_views.xml',
         'views/ciiu_view.xml',
+        'views/reports.xml',
         'views/menus.xml',     
     ], 
     
