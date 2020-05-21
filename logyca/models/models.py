@@ -205,6 +205,7 @@ class CRMTeam(models.Model):
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 	
+    x_is_deferred = fields.Boolean(string='¿Es Diferido?')
     x_automatic_activation = fields.Boolean(string='Activación automática')
     x_code_type = fields.Integer(string='Tipo de codigo')
     x_mandatory_prefix = fields.Integer(string='Prefijo obligatorio') 
