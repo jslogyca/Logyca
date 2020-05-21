@@ -201,10 +201,19 @@ class ResPartner(models.Model):
     @api.constrains('vat')
     def _check_vatnumber(self):
         for record in self:
+            cant_vat = 0
+            name_tercer =  ''
+            user_create = ''
             if record.vat:
-                obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat),('id','!=',record.id)])
+                obj = self.search([('is_company', '=', True),('vat','=',record.vat)])
                 if obj:
-                    raise ValidationError(_('Ya existe un Cliente con este número de NIT.'))                
+                    for tercer in obj:
+                        cant_vat = cant_vat + 1
+                        if tercer.id != record.id:
+                            name_tercer = tercer.name
+                            user_create = tercer.create_uid.name
+        if cant_vat > 1:
+            raise ValidationError(_('Ya existe un Cliente ('+name_tercer+') con este número de NIT creado por '+user_create+'.'))                
     
     @api.onchange('vat')
     def _onchange_vatnumber(self):
@@ -216,6 +225,7 @@ class ResPartner(models.Model):
 
     @api.constrains('child_ids')
     def _check_contacttype(self):
+        #Tipo de contacto facturación electronica
         cant_contactsFE = 0
         name_contact = ""
         for record in self.child_ids:            
@@ -227,8 +237,34 @@ class ResPartner(models.Model):
                     name_contact = name_contact +" | "+record.name
 
         if cant_contactsFE > 1:
-            raise ValidationError(_('Tiene más de un contacto ('+name_contact+') de tipo facturación electrónica, por favor verificar.'))     
+            raise ValidationError(_('Tiene más de un contacto ('+name_contact+') de tipo facturación electrónica, por favor verificar.')) 
+        
+        #Tipo de contacto representante ante LOGYCA
+        cant_contactsRL = 0
+        name_contact = ""
+        for record in self.child_ids:            
+            ls_contacts = record.x_contact_type  
+            
+            for i in ls_contacts:
+                if i.id == 2:
+                    cant_contactsRL = cant_contactsRL + 1
+                    name_contact = name_contact +" | "+record.name
 
+        if cant_contactsRL > 1:
+            raise ValidationError(_('Tiene más de un contacto ('+name_contact+') como Representante ante LOGYCA, por favor verificar.'))
+    
+    #Ejecutar consulta SQL
+    def run_sql_rl(self):
+        query = """select c."name" as cuenta,a."name" as contacto
+                    from res_partner a
+                    inner join logyca_contact_types_res_partner_rel b on a.id = b.res_partner_id and b.logyca_contact_types_id = 2
+                    inner join res_partner c on a.parent_id = c.id and c.x_active_vinculation = true
+                    inner join logyca_vinculation_types_res_partner_rel d on c.id = d.res_partner_id and d.logyca_vinculation_types_id in (1,2)"""
+        
+        self._cr.execute(query)
+        _res = self._cr.dictfetchall()
+        return _res
+    
     # @api.onchange('name')
     # def _onchange_namecontact(self):
     #     for record in self:
