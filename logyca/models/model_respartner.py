@@ -261,6 +261,8 @@ class ResPartner(models.Model):
                     inner join res_partner c on a.parent_id = c.id and c.x_active_vinculation = true
                     inner join logyca_vinculation_types_res_partner_rel d on c.id = d.res_partner_id and d.logyca_vinculation_types_id in (1,2)"""
         
+        #query = 'select * from logyca_vinculation_types'
+        
         self._cr.execute(query)
         _res = self._cr.dictfetchall()
         return _res
