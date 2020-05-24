@@ -1,0 +1,52 @@
+<!-- //////////////////////////////// REPORTS //////////////////////////////// -->    
+<odoo>
+    <data>
+        <!--TEST REPORTE -->    
+        <record id="logyca_menu_action_report_test" model="ir.actions.report">
+            <field name="name">TEST REPORTE</field>
+            <field name="model">account.invoice</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">logyca.report_invoice</field>            
+            <field name="report_file">logyca.report_invoice</field>            
+        </record>
+        
+        <template id="report_invoice">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h2>Report title</h2>
+                            <p>This object's name is <span t-field="o.name"/></p>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+        
+        <!-- Clientes y sus contactos de tipo representante ante LOGYCA -->    
+        <record id="logyca_menu_action_report_rl" model="ir.actions.report">
+            <field name="name">Representantes ante LOGYCA</field>
+            <field name="model">res.partner</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">logyca.partner_report_contact_rl</field>            
+            <field name="report_file">logyca.partner_file_contact_rl</field>            
+        </record>
+        
+        <template id="partner_report_contact_rl">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="result_query" t-value="o.run_sql_rl()" />
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h2>Representantes ante LOGYCA</h2>
+                            <t t-foreach="result_query" t-as="part">
+                                 <p> <span t-esc="part_index"/>: <span t-esc="part"/> </p>
+                             </t>                            
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+        
+    </data>
+</odoo>

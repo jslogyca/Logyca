@@ -97,6 +97,7 @@ class x_contact_types(models.Model):
 class x_areas(models.Model):
     _name = 'logyca.areas'
     _description = 'Áreas'
+    _order = 'code,name'
 
     code = fields.Char(string='Código', size=10, required=True)
     name = fields.Char(string='Nombre', required=True)
@@ -111,6 +112,7 @@ class x_areas(models.Model):
 class x_job_title(models.Model):
     _name = 'logyca.job_title'
     _description = 'Cargos'
+    _order = 'area_id,code,name'
 
     area_id = fields.Many2one('logyca.areas', string='Área')
     code = fields.Char(string='Código', size=10, required=True)
@@ -205,6 +207,7 @@ class CRMTeam(models.Model):
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 	
+    x_is_deferred = fields.Boolean(string='¿Es Diferido?')
     x_automatic_activation = fields.Boolean(string='Activación automática')
     x_code_type = fields.Integer(string='Tipo de codigo')
     x_mandatory_prefix = fields.Integer(string='Prefijo obligatorio') 

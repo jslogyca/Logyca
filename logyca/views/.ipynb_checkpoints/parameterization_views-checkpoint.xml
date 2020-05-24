@@ -1,0 +1,242 @@
+<!-- //////////////////////////////// Parameterization VIEWS //////////////////////////////// -->    
+<odoo>
+  <data>
+    <!-- CITY VIEWS -->    
+    <record id="logyca_menu_action_city" model="ir.actions.act_window">
+        <field name="name">Ciudad</field>
+          <field name="res_model">logyca.city</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear ciudad
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_city">
+      <field name="name">logyca list city</field>
+      <field name="model">logyca.city</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="state_id"/>
+          <field name="code"/>
+          <field name="name"/>          
+        </tree>
+      </field>
+    </record>
+
+    <!-- SECTORS VIEWS -->    
+    <record id="logyca_menu_action_sectors" model="ir.actions.act_window">
+        <field name="name">Sectores</field>
+          <field name="res_model">logyca.sectors</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear sector
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_sectors">
+      <field name="name">logyca list sector</field>
+      <field name="model">logyca.sectors</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="code"/>                 
+          <field name="name"/>                 
+        </tree>
+      </field>
+    </record>
+
+    <!-- vinculation_types VIEWS -->    
+    <record id="logyca_menu_action_vinculation_types" model="ir.actions.act_window">
+        <field name="name">Tipos de vinculación</field>
+          <field name="res_model">logyca.vinculation_types</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear tipos de vinculación
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_vinculation_types">
+      <field name="name">logyca list vinculation_types</field>
+      <field name="model">logyca.vinculation_types</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>   
+          <field name="active"/>   
+          <field name="novelty"/>                           
+        </tree>
+      </field>
+    </record>
+
+    <!-- responsibilities_rut VIEWS -->    
+    <record id="logyca_menu_action_responsibilities_rut" model="ir.actions.act_window">
+        <field name="name">Responsabilidades RUT</field>
+          <field name="res_model">logyca.responsibilities_rut</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear responsabilidad RUT
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_responsibilities_rut">
+      <field name="name">logyca list responsibilities_rut</field>
+      <field name="model">logyca.responsibilities_rut</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="description"/>   
+          <field name="valid_for_fe"/>                                   
+        </tree>
+      </field>
+    </record>
+
+    <!-- contact_types VIEWS -->    
+    <record id="logyca_menu_action_contact_types" model="ir.actions.act_window">
+        <field name="name">Tipos de contacto</field>
+          <field name="res_model">logyca.contact_types</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear tipo de contacto
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_contact_types">
+      <field name="name">logyca list contact_types</field>
+      <field name="model">logyca.contact_types</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>                                             
+        </tree>
+      </field>
+    </record>
+
+    <!-- job_title VIEWS -->    
+    <record id="logyca_menu_action_job_title" model="ir.actions.act_window">
+        <field name="name">Cargos</field>
+          <field name="res_model">logyca.job_title</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear cargo
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_job_title">
+      <field name="name">logyca list job_title</field>
+      <field name="model">logyca.job_title</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>                                              
+        </tree>
+      </field>
+    </record>
+    
+    <!-- areas VIEWS -->    
+    <record id="logyca_menu_action_areas" model="ir.actions.act_window">
+        <field name="name">Áreas</field>
+          <field name="res_model">logyca.areas</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear área
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_areas">
+      <field name="name">logyca list areas</field>
+      <field name="model">logyca.areas</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>                                              
+        </tree>
+      </field>
+    </record>
+
+    <!-- Grupos de Trabajo VIEWS -->    
+    <record id="logyca_menu_action_work_groups" model="ir.actions.act_window">
+        <field name="name">Grupos de trabajo</field>
+          <field name="res_model">logyca.work_groups</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear Grupo de trabajo
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_work_groups">
+      <field name="name">logyca list work groups</field>
+      <field name="model">logyca.work_groups</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>                                              
+        </tree>
+      </field>
+    </record>
+
+    <!-- Grupos Presupuestales VIEWS -->    
+    <record id="logyca_menu_action_budget_group" model="ir.actions.act_window">
+        <field name="name">Grupos presupuestales</field>
+          <field name="res_model">logyca.budget_group</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear Grupo presupuestal
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_budget_group">
+      <field name="name">logyca list budget group</field>
+      <field name="model">logyca.budget_group</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>                                              
+        </tree>
+      </field>
+    </record>
+
+    <!-- Rango de activos VIEWS -->    
+    <record id="logyca_menu_action_asset_range" model="ir.actions.act_window">
+        <field name="name">Rango de activos</field>
+          <field name="res_model">logyca.asset_range</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear rango de activos
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_asset_range">
+      <field name="name">logyca list asset range</field>
+      <field name="model">logyca.asset_range</field>
+      <field name="arch" type="xml">
+        <tree>      
+          <field name="id"/>                   
+          <field name="name"/>   
+          <field name="initial_value"/>                 
+          <field name="final_value"/>                                                        
+          <field name="active"/>   
+          <field name="assigned_codes"/>             
+        </tree>
+      </field>
+    </record>
+  </data>
+</odoo>
