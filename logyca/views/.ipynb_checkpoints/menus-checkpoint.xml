@@ -19,6 +19,7 @@
                 <menuitem name="Rango de activos" id="logyca.menu_asset_range" parent="logyca.menus_parameterization"  sequence="9" action="logyca_menu_action_asset_range"/>    
             <!-- menu Reportes -->        
             <menuitem name="Reportes" id="logyca.menus_reports" sequence="4" parent="logyca.menu_root"/>
-                <menuitem name="Representantes ante LOGYCA" id="logyca.report_rl" parent="logyca.menus_reports"  sequence="1" action="logyca_menu_action_report_rl"/>                    
+                <menuitem name="Test" id="logyca.report_test" parent="logyca.menus_reports"  sequence="1" action="logyca_menu_action_report_test"/>                    
+                <menuitem name="Representantes ante LOGYCA" id="logyca.report_rl" parent="logyca.menus_reports"  sequence="2" action="logyca_menu_action_report_rl"/>                    
     </data>
 </odoo>

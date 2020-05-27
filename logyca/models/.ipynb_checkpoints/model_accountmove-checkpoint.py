@@ -175,7 +175,7 @@ class AccountMoveReversal(models.TransientModel):
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
     #Grupo de trabajo 
-    x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal', index=True)
+    x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal', index=True, ondelete='restrict')
     
     #Cuenta analitica 
     @api.onchange('analytic_account_id')
