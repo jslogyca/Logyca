@@ -4,13 +4,13 @@
         <!--TEST REPORTE -->    
         <record id="logyca_menu_action_report_test" model="ir.actions.report">
             <field name="name">TEST REPORTE</field>
-            <field name="model">account.invoice</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">logyca.report_invoice</field>            
-            <field name="report_file">logyca.report_invoice</field>            
+            <field name="model">logyca.responsibilities_rut</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">logyca.report_responsibilities_rut</field>            
+            <field name="report_file">logyca.report_responsibilities_rut</field>            
         </record>
         
-        <template id="report_invoice">
+        <template id="report_responsibilities_rut">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
