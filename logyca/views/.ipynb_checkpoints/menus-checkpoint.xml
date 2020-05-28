@@ -18,8 +18,6 @@
                 <menuitem name="Grupos presupuestales" id="logyca.menu_budget_group" parent="logyca.menus_parameterization"  sequence="8" action="logyca_menu_action_budget_group"/>    
                 <menuitem name="Rango de activos" id="logyca.menu_asset_range" parent="logyca.menus_parameterization"  sequence="9" action="logyca_menu_action_asset_range"/>    
             <!-- menu Reportes -->        
-            <menuitem name="Reportes" id="logyca.menus_reports" sequence="4" parent="logyca.menu_root"/>
-                <menuitem name="Test" id="logyca.report_test" parent="logyca.menus_reports"  sequence="1" action="logyca_menu_action_report_test"/>                    
-                <menuitem name="Representantes ante LOGYCA" id="logyca.report_rl" parent="logyca.menus_reports"  sequence="2" action="logyca_menu_action_report_rl"/>                    
+            <menuitem name="Reportes" id="logyca.menus_reports" sequence="4" parent="logyca.menu_root" action="logyca_menu_action_reports"/>                
     </data>
 </odoo>
