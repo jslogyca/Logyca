@@ -238,5 +238,29 @@
         </tree>
       </field>
     </record>
-  </data>
+      
+    <!-- Crear Reportes VIEWS -->    
+    <record id="logyca_menu_action_reports" model="ir.actions.act_window">
+        <field name="name">Reportes</field>
+          <field name="res_model">logyca.reports</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear reporte
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_reports">
+      <field name="name">logyca list reports</field>
+      <field name="model">logyca.reports</field>
+      <field name="arch" type="xml">
+        <tree>      
+          <field name="name"/>   
+          <field name="description"/>                 
+          <field name="model"/>                                                        
+        </tree>
+      </field>
+    </record>
+    </data>
 </odoo>
