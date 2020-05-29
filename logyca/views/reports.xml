@@ -1,48 +1,37 @@
 <!-- //////////////////////////////// REPORTS //////////////////////////////// -->    
 <odoo>
     <data>
-        <!--TEST REPORTE -->    
-        <record id="logyca_menu_action_report_test" model="ir.actions.report">
-            <field name="name">TEST REPORTE</field>
-            <field name="model">logyca.responsibilities_rut</field>
-            <field name="report_type">qweb-html</field>
-            <field name="report_name">logyca.report_responsibilities_rut</field>            
-            <field name="report_file">logyca.report_responsibilities_rut</field>            
-        </record>
-        
-        <template id="report_responsibilities_rut">
-            <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
-                    <t t-call="web.external_layout">
-                        <div class="page">
-                            <h2>Report title</h2>
-                            <p>This object's name is <span t-field="o.name"/></p>
-                        </div>
-                    </t>
-                </t>
-            </t>
-        </template>
-        
         <!-- Clientes y sus contactos de tipo representante ante LOGYCA -->    
         <record id="logyca_menu_action_report_rl" model="ir.actions.report">
-            <field name="name">Representantes ante LOGYCA</field>
-            <field name="model">res.partner</field>
+            <field name="name">Reportes LOGYCA</field>
+            <field name="model">logyca.reports</field>
             <field name="report_type">qweb-html</field>
-            <field name="report_name">logyca.partner_report_contact_rl</field>            
-            <field name="report_file">logyca.partner_file_contact_rl</field>            
+            <field name="report_name">logyca.reports_logyca</field>                                  
         </record>
         
-        <template id="partner_report_contact_rl">
+        <template id="reports_logyca">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
-                    <t t-set="result_query" t-value="o.run_sql_rl()" />
+                    <t t-set="result_query" t-value="o.run_sql()"/>
+                    <t t-set="result_columns" t-value="o.get_columns()"/>
                     <t t-call="web.external_layout">
-                        <div class="page">
-                            <h2>Representantes ante LOGYCA</h2>
-                            <t t-foreach="result_query" t-as="part">
-                                 <p> <span t-esc="part_index"/>: <span t-esc="part"/> </p>
-                             </t>                            
-                        </div>
+                      <div class="page">
+                        <h2 style="font-style: italic"><span t-field="o.name"/></h2>
+                        <table border="1" class="table table-condensed" style="border-style:solid">
+                          <thead>
+                            <tr>
+                                <th t-foreach="result_columns" t-as="column" style="border: 1px solid black" class="text-center"><span t-esc="column"/></th>                              
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr t-foreach="result_query" t-as="part">
+                              <div t-foreach="part" t-as="result_one">
+                                <td style="border: 1px solid black"><span t-esc="result_one_value"/></td>
+                              </div>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </t>
                 </t>
             </t>
