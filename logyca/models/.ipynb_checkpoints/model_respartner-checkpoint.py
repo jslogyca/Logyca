@@ -255,20 +255,6 @@ class ResPartner(models.Model):
         if cant_contactsRL > 1:
             raise ValidationError(_('Tiene más de un contacto ('+name_contact+') como Representante ante LOGYCA, por favor verificar.'))
     
-    #Ejecutar consulta SQL
-    def run_sql_rl(self):
-        query = """select c."name" as cuenta,a."name" as contacto
-                    from res_partner a
-                    inner join logyca_contact_types_res_partner_rel b on a.id = b.res_partner_id and b.logyca_contact_types_id = 2
-                    inner join res_partner c on a.parent_id = c.id and c.x_active_vinculation = true
-                    inner join logyca_vinculation_types_res_partner_rel d on c.id = d.res_partner_id and d.logyca_vinculation_types_id in (1,2)"""
-        
-        #query = 'select * from logyca_vinculation_types'
-        
-        self._cr.execute(query)
-        _res = self._cr.dictfetchall()
-        return _res
-    
     # @api.onchange('name')
     # def _onchange_namecontact(self):
     #     for record in self:

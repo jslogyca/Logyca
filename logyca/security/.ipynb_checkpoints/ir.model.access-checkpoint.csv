@@ -18,3 +18,4 @@ access_logyca_history_partner_case,logyca.history_partner_case,model_logyca_hist
 access_logyca_history_partner_casehistory,logyca.history_partner_casehistory,model_logyca_history_partner_casehistory,,1,1,1,1
 access_logyca_budget_group,logyca.budget_group,model_logyca_budget_group,,1,1,1,1
 access_logyca_asset_range,logyca.asset_range,model_logyca_asset_range,,1,1,1,1
+access_logyca_reports,logyca.reports,model_logyca_reports,,1,1,1,1

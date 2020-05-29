@@ -207,13 +207,13 @@ class CRMTeam(models.Model):
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 	
-    x_is_deferred = fields.Boolean(string='¿Es Diferido?')
-    x_automatic_activation = fields.Boolean(string='Activación automática')
-    x_code_type = fields.Integer(string='Tipo de codigo')
-    x_mandatory_prefix = fields.Integer(string='Prefijo obligatorio') 
-    x_scheme = fields.Integer(string='Esquema')
-    x_type_document = fields.Integer(string='Tipo documento')
-    x_date_validity = fields.Datetime(string='Fecha de expiración')
+    x_is_deferred = fields.Boolean(string='¿Es Diferido?',track_visibility='onchange')
+    x_automatic_activation = fields.Boolean(string='Activación automática',track_visibility='onchange')
+    x_code_type = fields.Integer(string='Tipo de codigo',track_visibility='onchange')
+    x_mandatory_prefix = fields.Integer(string='Prefijo obligatorio',track_visibility='onchange') 
+    x_scheme = fields.Integer(string='Esquema',track_visibility='onchange')
+    x_type_document = fields.Integer(string='Tipo documento',track_visibility='onchange')
+    x_date_validity = fields.Datetime(string='Fecha de expiración',track_visibility='onchange')
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
