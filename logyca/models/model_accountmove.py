@@ -122,7 +122,16 @@ class AccountMove(models.Model):
         
         #Contacto de facturación electronica        
         cant_contactsFE = 0
-        if self.type == 'out_invoice' or self.type == 'out_refund' or self.type == 'out_receipt':
+        if self.type == 'out_invoice' or self.type == 'out_refund' or self.type == 'out_receipt':            
+            # Referencia
+            if not self.ref:
+                raise ValidationError(_('No se dígito información para el campo Referencia, por favor verificar.'))     
+            #Número orden de compra
+            if not self.x_num_order_purchase:
+                raise ValidationError(_('No se dígito información para el campo Número orden de compra, por favor verificar.'))     
+            #Plazos de pago
+            if not self.invoice_payment_term_id:
+                raise ValidationError(_('No se dígito información para el campo Plazos de pago, por favor verificar.'))                 
             
             #Fecha de factura
             if (self.date != fields.Date.context_today(self)) and (self.invoice_date != fields.Date.context_today(self)):
@@ -170,6 +179,10 @@ class AccountMoveReversal(models.TransientModel):
     reason = fields.Selection([('1', 'Devolución de servicio'),
                               ('2', 'Diferencia del precio real y el importe cobrado'),
                               ('3', 'Se emitió una factura por error de tercero')], string='Motivo', required=True)
+    
+    def reverse_moves(self):
+        self.refund_method = 'cancel'
+        return super(AccountMoveReversal, self).reverse_moves()
         
 # Detalle Movimiento
 class AccountMoveLine(models.Model):
@@ -189,7 +202,23 @@ class AccountMoveLine(models.Model):
         if self.analytic_tag_ids:
             self.analytic_account_id = False
             
+# Reportes Contabilidad
+class AccountInvoiceReport(models.Model):
+    _inherit = 'account.invoice.report'
     
+    #NIT del asociado
+    x_vat = fields.Char(string='NIT Asociado', compute='_search_vat_partner', store=True, readonly=True)
+    
+    @api.depends('partner_id')
+    def _search_vat_partner(self):
+        self.x_vat = partner_id.name
         
+    def _select(self):
+        return super(AccountInvoiceReport, self)._select() + ", partner.vat as x_vat"
+
+    def _group_by(self):
+        return super(AccountInvoiceReport, self)._group_by() + ", partner.vat"
+
     
 
+    
