@@ -202,5 +202,23 @@ class AccountMoveLine(models.Model):
         if self.analytic_tag_ids:
             self.analytic_account_id = False
             
+# Reportes Contabilidad
+class AccountInvoiceReport(models.Model):
+    _inherit = 'account.invoice.report'
+    
+    #NIT del asociado
+    x_vat = fields.Char(string='NIT Asociado', compute='_search_vat_partner', store=True, readonly=True)
+    
+    @api.depends('partner_id')
+    def _search_vat_partner(self):
+        self.x_vat = partner_id.name
+        
+    def _select(self):
+        return super(AccountInvoiceReport, self)._select() + ", partner.vat as x_vat"
+
+    def _group_by(self):
+        return super(AccountInvoiceReport, self)._group_by() + ", partner.vat"
+
+    
 
     
