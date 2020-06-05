@@ -193,7 +193,9 @@ class AccountMoveLine(models.Model):
     
     @api.depends('partner_id')
     def _search_vat_partner(self):
-        self.x_vat_partner = self.partner_id.vat
+        for partner in self.partner_id:
+            if partner.vat:
+                self.x_vat_partner = partner.vat
     
     #Cuenta analitica 
     @api.onchange('analytic_account_id')
