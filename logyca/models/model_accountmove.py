@@ -189,13 +189,9 @@ class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
     #Grupo de trabajo 
     x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal', index=True, ondelete='restrict')
-    x_vat_partner = fields.Char(string='NIT Asociado', compute='_search_vat_partner', store=True, readonly=True)
-    
-    @api.depends('partner_id')
-    def _search_vat_partner(self):
-        for partner in self.partner_id:
-            if partner.vat:
-                self.x_vat_partner = partner.vat
+    # Fields Reports
+    x_vat_partner = fields.Char(string='NIT Asociado', store=True, readonly=True, related='partner_id.vat', change_default=True)
+    x_account_analytic_group = fields.Many2one(string='Grupo Analítico', store=True, readonly=True, related='analytic_account_id.group_id', change_default=True)
     
     #Cuenta analitica 
     @api.onchange('analytic_account_id')
