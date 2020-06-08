@@ -215,13 +215,21 @@ class AccountInvoiceReport(models.Model):
     
     #NIT del asociado
     x_vat = fields.Char(string='NIT Asociado', store=True, readonly=True)
+    x_account_analytic_group = fields.Many2one('account.analytic.group', string='Grupo Analítico')
         
     def _select(self):
-        return super(AccountInvoiceReport, self)._select() + ", partner.vat as x_vat"
-
+        return super(AccountInvoiceReport, self)._select() + ", partner.vat as x_vat, analytic.group_id as x_account_analytic_group"
+    
+    def _from(self):
+        return super(AccountInvoiceReport, self)._from() + " LEFT JOIN account_analytic_account analytic ON line.analytic_account_id = analytic.id LEFT JOIN account_analytic_group analytic_group ON analytic.group_id = analytic_group.id"
+    
     def _group_by(self):
-        return super(AccountInvoiceReport, self)._group_by() + ", partner.vat"
-
+        return super(AccountInvoiceReport, self)._group_by() + ", partner.vat, analytic.group_id"
+    
+    
+    
+    
+    
     
 
     

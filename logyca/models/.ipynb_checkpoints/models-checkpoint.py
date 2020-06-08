@@ -192,7 +192,7 @@ class x_api_gateway(models.Model):
     _description = 'Movimientos API'
 
     method = fields.Char(string='Método', required=True)
-    send_date = fields.Datetime(string='Fecha envió', compute='_date_update_asset', store=True,required=True)    
+    send_date = fields.Datetime(string='Fecha envió', compute='_send_date', store=True,required=True)    
     send_json = fields.Text(string='Json')    
     x_return = fields.Text(string='Respuesta')
     cant_attempts = fields.Integer(string='Cantidad de intentos')
