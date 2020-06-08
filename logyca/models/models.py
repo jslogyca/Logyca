@@ -187,6 +187,20 @@ class x_budget_group(models.Model):
             result.append((record.id, "{}".format(record.name)))
         return result
 
+class x_api_gateway(models.Model):
+    _name = 'logyca.api_gateway'
+    _description = 'Movimientos API'
+
+    method = fields.Char(string='Método', required=True)
+    send_date = fields.Datetime(string='Fecha envió', compute='_send_date', store=True,required=True)    
+    send_json = fields.Text(string='Json')    
+    x_return = fields.Text(string='Respuesta')
+    cant_attempts = fields.Integer(string='Cantidad de intentos')
+    
+    @api.depends('method')
+    def _send_date(self):
+        self.send_date = fields.Date.today()
+    
 #--------------------------------Modelos heredados de Odoo------------------------------------#
 
 class ResCountry(models.Model):
