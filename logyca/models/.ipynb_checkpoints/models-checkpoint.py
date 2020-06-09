@@ -2,6 +2,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
 import logging
+import datetime
 _logger = logging.getLogger(__name__)
 #--------------------------------Modelos propios de logyca------------------------------------#
 
@@ -187,6 +188,21 @@ class x_budget_group(models.Model):
             result.append((record.id, "{}".format(record.name)))
         return result
 
+class x_api_gateway(models.Model):
+    _name = 'logyca.api_gateway'
+    _description = 'Movimientos API'
+
+    method = fields.Char(string='Método', required=True)
+    send_date = fields.Char(string='Fecha envió', compute='_send_date', store=True,required=True)    
+    send_json = fields.Text(string='Json')    
+    x_return = fields.Text(string='Respuesta')
+    cant_attempts = fields.Integer(string='Cantidad de intentos')
+    
+    @api.depends('method')
+    def _send_date(self):
+        send_date = fields.Datetime.context_timestamp(self, timestamp=datetime.datetime.now())
+        self.send_date = str(send_date)
+    
 #--------------------------------Modelos heredados de Odoo------------------------------------#
 
 class ResCountry(models.Model):

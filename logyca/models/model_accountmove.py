@@ -189,13 +189,9 @@ class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
     #Grupo de trabajo 
     x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal', index=True, ondelete='restrict')
-    x_vat_partner = fields.Char(string='NIT Asociado', compute='_search_vat_partner', store=True, readonly=True)
-    
-    @api.depends('partner_id')
-    def _search_vat_partner(self):
-        for partner in self.partner_id:
-            if partner.vat:
-                self.x_vat_partner = partner.vat
+    # Fields Reports
+    x_vat_partner = fields.Char(string='NIT Asociado', store=True, readonly=True, related='partner_id.vat', change_default=True)
+    x_account_analytic_group = fields.Many2one(string='Grupo Analítico', store=True, readonly=True, related='analytic_account_id.group_id', change_default=True)
     
     #Cuenta analitica 
     @api.onchange('analytic_account_id')
@@ -215,13 +211,21 @@ class AccountInvoiceReport(models.Model):
     
     #NIT del asociado
     x_vat = fields.Char(string='NIT Asociado', store=True, readonly=True)
+    x_account_analytic_group = fields.Many2one('account.analytic.group', string='Grupo Analítico')
         
     def _select(self):
-        return super(AccountInvoiceReport, self)._select() + ", partner.vat as x_vat"
-
+        return super(AccountInvoiceReport, self)._select() + ", partner.vat as x_vat, analytic.group_id as x_account_analytic_group"
+    
+    def _from(self):
+        return super(AccountInvoiceReport, self)._from() + " LEFT JOIN account_analytic_account analytic ON line.analytic_account_id = analytic.id LEFT JOIN account_analytic_group analytic_group ON analytic.group_id = analytic_group.id"
+    
     def _group_by(self):
-        return super(AccountInvoiceReport, self)._group_by() + ", partner.vat"
-
+        return super(AccountInvoiceReport, self)._group_by() + ", partner.vat, analytic.group_id"
+    
+    
+    
+    
+    
     
 
     
