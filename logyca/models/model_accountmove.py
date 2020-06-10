@@ -191,7 +191,8 @@ class AccountMoveLine(models.Model):
     x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal', index=True, ondelete='restrict')
     # Fields Reports
     x_vat_partner = fields.Char(string='NIT Asociado', store=True, readonly=True, related='partner_id.vat', change_default=True)
-    x_account_analytic_group = fields.Many2one(string='Grupo Analítico', store=True, readonly=True, related='analytic_account_id.group_id', change_default=True)
+    x_account_analytic_group = fields.Many2one(string='Grupo Analítico / Familia', store=True, readonly=True, related='analytic_account_id.group_id', change_default=True)
+    x_account_analytic_group_two = fields.Many2one(string='Grupo Analítico / Línea', store=True, readonly=True, related='x_account_analytic_group.parent_id', change_default=True)
     
     #Cuenta analitica 
     @api.onchange('analytic_account_id')
@@ -211,21 +212,36 @@ class AccountInvoiceReport(models.Model):
     
     #NIT del asociado
     x_vat = fields.Char(string='NIT Asociado', store=True, readonly=True)
-    x_account_analytic_group = fields.Many2one('account.analytic.group', string='Grupo Analítico')
+    #Grupo Analitico
+    x_account_analytic_group = fields.Many2one('account.analytic.group', string='Grupo Analítico / Familia', readonly=True)
+    x_account_analytic_group_two = fields.Many2one('account.analytic.group', string='Grupo Analítico / Línea', readonly=True)
+    #Categoria de producto
+    product_categ_id_fam = fields.Many2one('product.category', string='Categoría de Prodcuto / Familia', readonly=True)
+    product_categ_id_lin = fields.Many2one('product.category', string='Categoría de Prodcuto / Línea', readonly=True)
         
     def _select(self):
-        return super(AccountInvoiceReport, self)._select() + ", partner.vat as x_vat, analytic.group_id as x_account_analytic_group"
+        add_select = '''
+            , partner.vat as x_vat, 
+            analytic.group_id as x_account_analytic_group, 
+            analytic_group.parent_id as x_account_analytic_group_two,
+            category_fam.id as product_categ_id_fam,
+            category_lin.id as product_categ_id_lin            
+        '''
+        return super(AccountInvoiceReport, self)._select() + add_select
     
     def _from(self):
-        return super(AccountInvoiceReport, self)._from() + " LEFT JOIN account_analytic_account analytic ON line.analytic_account_id = analytic.id LEFT JOIN account_analytic_group analytic_group ON analytic.group_id = analytic_group.id"
+        add_from = '''
+            LEFT JOIN account_analytic_account analytic ON line.analytic_account_id = analytic.id 
+            LEFT JOIN account_analytic_group analytic_group ON analytic.group_id = analytic_group.id
+            LEFT JOIN product_category category_subfam ON template.categ_id = category_subfam.id
+            LEFT JOIN product_category category_fam ON category_subfam.parent_id = category_fam.id
+            LEFT JOIN product_category category_lin ON category_fam.parent_id = category_lin.id
+        '''
+        
+        return super(AccountInvoiceReport, self)._from() + add_from
     
     def _group_by(self):
-        return super(AccountInvoiceReport, self)._group_by() + ", partner.vat, analytic.group_id"
-    
-    
-    
-    
-    
-    
-
-    
+        add_group = '''
+            , partner.vat,analytic.group_id,analytic_group.parent_id,category_fam.id,category_lin.id
+        '''
+        return super(AccountInvoiceReport, self)._group_by() + add_group
