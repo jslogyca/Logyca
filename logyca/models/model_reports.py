@@ -5,6 +5,8 @@ from odoo.exceptions import ValidationError
 import xlwt
 import base64
 import io
+import xlsxwriter
+import requests
 #---------------------------Modelo para generar REPORTES-------------------------------#
 
 # Reportes
@@ -38,11 +40,11 @@ class x_reports(models.Model):
         if self.query and self.columns:
             result_columns = self.get_columns()
             result_query = self.run_sql()
-
-            filename= str(self.name)+'.xls'
+             
+            filename= str(self.name)+'.xlsx'
             stream = io.BytesIO()
-            book = xlwt.Workbook(encoding='utf-8')
-            sheet = book.add_sheet(u'Sheet1')
+            book = xlsxwriter.Workbook(stream, {'in_memory': True})
+            sheet = book.add_worksheet(str(self.name))
 
             #Agregar columnas
             aument_columns = 0
@@ -59,10 +61,9 @@ class x_reports(models.Model):
                     aument_columns = aument_columns + 1
                 aument_rows = aument_rows + 1
                 aument_columns = 0
-
-            book.save(stream)
-
+            
+            book.close()
+            
             self.excel_file = base64.encodestring(stream.getvalue())
             self.excel_file_name = filename
-        
         
