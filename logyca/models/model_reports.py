@@ -64,6 +64,20 @@ class x_reports(models.Model):
             
             book.close()
             
-            self.excel_file = base64.encodestring(stream.getvalue())
-            self.excel_file_name = filename
+            #self.excel_file = base64.encodestring(stream.getvalue())
+            #self.excel_file_name = filename
+            
+            self.write({
+                'excel_file': base64.encodestring(stream.getvalue()),
+                # Filename = <siren>FECYYYYMMDD where YYYMMDD is the closing date
+                'excel_file_name': filename,
+            })
+            
+            action = {
+                        'name': str(self.name),
+                        'type': 'ir.actions.act_url',
+                        'url': "web/content/?model=logyca.reports&id=" + str(self.id) + "&filename_field=excel_file_name&field=excel_file&download=true&filename=" + self.excel_file_name,
+                        'target': 'self',
+                    }
+            return action
         

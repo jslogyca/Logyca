@@ -235,6 +235,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 	
     x_origen = fields.Char(string='Origen',size=30)
+    x_vat_partner = fields.Char(string='NIT Asociado', store=True, readonly=True, related='partner_id.vat', change_default=True)
     
     def _prepare_invoice(self):        
         invoice_vals = super(SaleOrder, self)._prepare_invoice()        
