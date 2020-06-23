@@ -69,6 +69,7 @@ class ResPartner(models.Model):
 
     #GRUPO EMPRESARIAL
     x_is_business_group = fields.Boolean(string='¿Es un Grupo Empresarial?', track_visibility='onchange')
+    x_name_business_group = fields.Char(string='Nombre Grupo Empresarial', track_visibility='onchange')
 
     #VINCULACION CON logyca
     x_active_vinculation = fields.Boolean(string='Estado de la vinculación', track_visibility='onchange')
