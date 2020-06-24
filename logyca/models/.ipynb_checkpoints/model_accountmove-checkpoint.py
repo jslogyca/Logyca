@@ -252,4 +252,4 @@ class AccountInvoiceReport(models.Model):
 #Lineas Analiticas
 class AccountAnalyticLine(models.Model):
     _inherit = 'account.analytic.line'
-    x_groupline_id = fields.Many2one(string='Grupo Analítico / Línea', store=True, readonly=True, related='group_id.parent_id', change_default=True)
+    x_groupline_id = fields.Many2one(string='Grupo Analítico / Línea', store=True, readonly=True, related='group_id.parent_id', change_default=True)    
