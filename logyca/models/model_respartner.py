@@ -69,6 +69,7 @@ class ResPartner(models.Model):
 
     #GRUPO EMPRESARIAL
     x_is_business_group = fields.Boolean(string='¿Es un Grupo Empresarial?', track_visibility='onchange')
+    x_name_business_group = fields.Char(string='Nombre Grupo Empresarial', track_visibility='onchange')
 
     #VINCULACION CON logyca
     x_active_vinculation = fields.Boolean(string='Estado de la vinculación', track_visibility='onchange')
@@ -77,7 +78,8 @@ class ResPartner(models.Model):
     x_sponsored = fields.Boolean(string='Patrocinado', track_visibility='onchange')
     x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora', track_visibility='onchange')
     x_belongs_academic_allies_cli = fields.Boolean(string='Pertenece a aliados Académicos del CLI', track_visibility='onchange')
-    x_belongs_strategic_allies_cli = fields.Boolean(string='Pertenece a aliados Estratégicos del CLI', track_visibility='onchange')
+    x_belongs_strategic_allies_cli = fields.Boolean(string='Pertenece a aliados Estratégicos del CLI', track_visibility='onchange')    
+    x_meeting_logyca_investigation = fields.Boolean(string='Pertenece a la Junta LOGYCA INVESTIGACIÓN', track_visibility='onchange')    
     x_acceptance_data_policy = fields.Boolean(string='Acepta política de tratamiento de datos', track_visibility='onchange')
     x_acceptance_date = fields.Date(string='Fecha de aceptación', track_visibility='onchange')
     x_not_contacted_again = fields.Boolean(string='No volver a ser contactado', track_visibility='onchange')
