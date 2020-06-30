@@ -6,6 +6,31 @@ from odoo import models, fields, api
 from functools import lru_cache
 
 
+class AccountBalancePartnerFilter(models.TransientModel):
+    _name = "account.balance.partner.filter"
+    _description = "Filter - Balance Partner"
+    
+    date_filter = fields.Date(string='Fecha', required=True)
+    
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "Fecha: {}".format(record.date_filter)))
+        return result
+    
+    def open_pivot_view(self):
+        ctx = self.env.context.copy()
+        ctx.update({'date_filter':self.date_filter})
+        self.env['account.balance.partner.report'].with_context(ctx).init()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Pivot Balance',
+            'res_model': 'account.balance.partner.report',
+            'domain': [],
+            'view_mode': 'pivot',
+            'context': ctx
+        }
+    
 class AccountBalancePartnerReport(models.Model):
     _name = "account.balance.partner.report"
     _description = "Report - Balance Partner"
@@ -38,7 +63,7 @@ class AccountBalancePartnerReport(models.Model):
     }
 
     @api.model
-    def _select(self):
+    def _select(self,date_filter):
         return '''
             SELECT
                 Row_Number() Over(Order By G.id,D.Cuenta_Nivel_5,C.display_name) as id,
@@ -50,13 +75,13 @@ class AccountBalancePartnerReport(models.Model):
                 D.Cuenta_Nivel_5 as account_level_five,                
                 C.vat || ' | ' || C.display_name as partner,
                 COALESCE(E.saldo_ant,0) as initial_balance,
-                SUM(case when B."date" >= '2020-01-01' then B.debit else 0 end) as debit,
-                SUM(case when B."date" >= '2020-01-01' then B.credit else 0 end) as credit,
-                COALESCE(E.saldo_ant,0)+SUM((case when B."date" >= '2020-01-01' then B.debit else 0 end - case when B."date" >= '2020-01-01' then B.credit else 0 end)) as new_balance
-        '''
+                SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
+                SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
+                COALESCE(E.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
+        ''' % (date_filter,date_filter,date_filter,date_filter)
 
     @api.model
-    def _from(self):
+    def _from(self,date_filter):
         return '''
             FROM account_move_line B
             INNER JOIN res_partner C on B.partner_id = C.id            
@@ -78,9 +103,9 @@ class AccountBalancePartnerReport(models.Model):
                         SELECT partner_id,account_id,
                                 SUM(debit - credit) as saldo_ant 
                         FROM account_move_line 
-                        WHERE "date" < '2020-01-01' group by partner_id,account_id
+                        WHERE "date" < '%s' group by partner_id,account_id
                       ) as E on C.id = E.partner_id and D.id = E.account_id
-        '''
+        ''' % (date_filter,)
 
     @api.model
     def _where(self):
@@ -102,15 +127,23 @@ class AccountBalancePartnerReport(models.Model):
                 C.display_name,
                 E.saldo_ant
         '''
-
+    
     def init(self):
+        
+        #Obtener filtro
+        if self.env.context.get('date_filter', False):
+            date_filter = self.env.context.get('date_filter')
+        else:
+            date_filter = '2020-01-01'
+        
+        #Ejecutar Query
         tools.drop_view_if_exists(self.env.cr, self._table)
         self.env.cr.execute('''
             CREATE OR REPLACE VIEW %s AS (
                 %s %s %s %s
             )
         ''' % (
-            self._table, self._select(), self._from(), self._where(), self._group_by()
+            self._table, self._select(date_filter), self._from(date_filter), self._where(), self._group_by()
         ))
 
     
