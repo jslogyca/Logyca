@@ -10,17 +10,32 @@ class AccountBalancePartnerFilter(models.TransientModel):
     _name = "account.balance.partner.filter"
     _description = "Filter - Balance Partner"
     
-    date_filter = fields.Date(string='Fecha', required=True)
+    #date_filter = fields.Date(string='Fecha', required=True)
+    x_ano_filter = fields.Integer(string='Año', required=True)
+    x_month_filter = fields.Selection([
+                                        ('1', 'Enero'),
+                                        ('2', 'Febrero'),
+                                        ('3', 'Marzo'),
+                                        ('4', 'Abril'),
+                                        ('5', 'Mayo'),
+                                        ('6', 'Junio'),
+                                        ('7', 'Julio'),
+                                        ('8', 'Agosto'),
+                                        ('9', 'Septiembre'),
+                                        ('10', 'Octubre'),
+                                        ('11', 'Noviembre'),
+                                        ('12', 'Diciembre')        
+                                    ], string='Mes', required=True)
     
     def name_get(self):
         result = []
         for record in self:
-            result.append((record.id, "Fecha: {}".format(record.date_filter)))
+            result.append((record.id, "Año: {} | Mes: {}".format(record.x_ano_filter,record.x_month_filter)))
         return result
     
     def open_pivot_view(self):
         ctx = self.env.context.copy()
-        ctx.update({'date_filter':self.date_filter})
+        ctx.update({'x_ano':self.x_ano_filter,'x_month':self.x_month_filter})
         self.env['account.balance.partner.report'].with_context(ctx).init()
         return {
             'type': 'ir.actions.act_window',
@@ -108,10 +123,10 @@ class AccountBalancePartnerReport(models.Model):
         ''' % (date_filter,)
 
     @api.model
-    def _where(self):
+    def _where(self,date_filter):
         return '''
-            WHERE  B.parent_state = 'posted'
-        '''
+            WHERE  B.parent_state = 'posted' and B."date" < '%s'
+        '''  % (date_filter,)
 
     @api.model
     def _group_by(self):
@@ -131,11 +146,24 @@ class AccountBalancePartnerReport(models.Model):
     def init(self):
         
         #Obtener filtro
-        if self.env.context.get('date_filter', False):
-            date_filter = self.env.context.get('date_filter')
+        if self.env.context.get('x_ano', False) and self.env.context.get('x_month', False):
+            x_ano = self.env.context.get('x_ano')
+            x_month = self.env.context.get('x_month')
         else:
-            date_filter = '2020-01-01'
+            x_ano = 2020
+            x_month = 1
         
+        #Armar fecha
+        date_filter = str(x_ano)+'-'+str(x_month)+'-01'
+        
+        if x_month == 12:
+            x_ano = x_ano + 1 
+            x_month = 1
+        else:
+            x_month = str(int(x_month) + 1)
+        
+        date_filter_next = str(x_ano)+'-'+str(x_month)+'-01'
+                
         #Ejecutar Query
         tools.drop_view_if_exists(self.env.cr, self._table)
         self.env.cr.execute('''
@@ -143,7 +171,7 @@ class AccountBalancePartnerReport(models.Model):
                 %s %s %s %s
             )
         ''' % (
-            self._table, self._select(date_filter), self._from(date_filter), self._where(), self._group_by()
+            self._table, self._select(date_filter), self._from(date_filter), self._where(date_filter_next), self._group_by()
         ))
 
     
