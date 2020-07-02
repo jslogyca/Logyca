@@ -262,5 +262,30 @@
         </tree>
       </field>
     </record>
+    
+    <!-- Filtro Balance VIEW -->    
+    <record id="account_balance_partner_filter__form" model="ir.ui.view">
+        <field name="name">Balance Filter</field>
+        <field name="model">account.balance.partner.filter</field>
+        <field name="arch" type="xml">
+                <form string="Balance"> 
+                    <group>
+                        <group>
+                            <group>
+                                <field name="x_ano_filter" string="Año"/>
+                                <field name="x_month_filter" string="Mes"/>
+                            </group>
+                            <div class="oe_grey" colspan="4">
+                                El balance por generar tomara como saldo inicial todos los movimientos realizados antes de la fecha seleccionada.
+                            </div>
+                        </group>
+                        <br></br>                 
+                        <button name="open_pivot_view" string="Generar Balance" type="object" class="oe_highlight"/>                         
+                    </group>
+                    <footer></footer>
+                </form>
+            </field>
+    </record>
+      
     </data>
 </odoo>
