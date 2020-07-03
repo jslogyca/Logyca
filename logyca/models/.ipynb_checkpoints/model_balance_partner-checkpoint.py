@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import tools
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError, ValidationError
 
 from functools import lru_cache
 
@@ -11,6 +12,11 @@ class AccountBalancePartnerFilter(models.TransientModel):
     _description = "Filter - Balance Partner"
     
     #date_filter = fields.Date(string='Fecha', required=True)
+    x_type_filter = fields.Selection([
+                                        ('1', 'Periodo'),
+                                        ('2', 'Rango de periodos'),
+                                        ('3', 'Anual')        
+                                    ], string='Tipo', required=True, default='1')    
     x_ano_filter = fields.Integer(string='Año', required=True)
     x_month_filter = fields.Selection([
                                         ('1', 'Enero'),
@@ -26,16 +32,42 @@ class AccountBalancePartnerFilter(models.TransientModel):
                                         ('11', 'Noviembre'),
                                         ('12', 'Diciembre')        
                                     ], string='Mes', required=True)
+    x_ano_filter_two = fields.Integer(string='Año 2')
+    x_month_filter_two = fields.Selection([
+                                        ('1', 'Enero'),
+                                        ('2', 'Febrero'),
+                                        ('3', 'Marzo'),
+                                        ('4', 'Abril'),
+                                        ('5', 'Mayo'),
+                                        ('6', 'Junio'),
+                                        ('7', 'Julio'),
+                                        ('8', 'Agosto'),
+                                        ('9', 'Septiembre'),
+                                        ('10', 'Octubre'),
+                                        ('11', 'Noviembre'),
+                                        ('12', 'Diciembre')        
+                                    ], string='Mes 2')
     
     def name_get(self):
         result = []
         for record in self:
-            result.append((record.id, "Año: {} | Mes: {}".format(record.x_ano_filter,record.x_month_filter)))
+            type = ''
+            if record.x_type_filter == '1':
+                type = 'Periodo'
+            elif record.x_type_filter == '2':
+                type = 'Rango de periodos'
+            else:
+                type = 'Anual'
+            
+            if record.x_type_filter == '2':
+                result.append((record.id, "{} - Inicial: {}-{} | Final: {}-{} ".format(type,record.x_ano_filter,record.x_month_filter,record.x_ano_filter_two,record.x_month_filter_two)))
+            else:
+                result.append((record.id, "{} - Año: {} | Mes: {}".format(type,record.x_ano_filter,record.x_month_filter)))
         return result
     
     def open_pivot_view(self):
         ctx = self.env.context.copy()
-        ctx.update({'x_ano':self.x_ano_filter,'x_month':self.x_month_filter})
+        ctx.update({'x_type':self.x_type_filter,'x_ano':self.x_ano_filter,'x_month':self.x_month_filter,'x_ano_two':self.x_ano_filter_two,'x_month_two':self.x_month_filter_two})
         self.env['account.balance.partner.report'].with_context(ctx).init()
         return {
             'type': 'ir.actions.act_window',
@@ -146,25 +178,67 @@ class AccountBalancePartnerReport(models.Model):
     def init(self):
         
         #Obtener filtro
-        if self.env.context.get('x_ano', False) and self.env.context.get('x_month', False):
+        if self.env.context.get('x_type', False) and self.env.context.get('x_ano', False) and self.env.context.get('x_month', False):
+            x_type = self.env.context.get('x_type') 
             x_ano = self.env.context.get('x_ano')
-            x_month = self.env.context.get('x_month')
+            x_month = int(self.env.context.get('x_month'))
+            x_ano_two = self.env.context.get('x_ano_two')
+            x_month_two = int(self.env.context.get('x_month_two'))        
         else:
+            x_type = '1'
             x_ano = 2020
             x_month = 1
+            x_ano_two = 2020
+            x_month_two = 1
         
-        #Armar fecha
-        date_filter = str(x_ano)+'-'+str(x_month)+'-01'
+        #Armar fecha dependiendo el tipo seleccionado
+        date_filter = ''
+        date_filter_next = ''
         
-        if x_month == 12:
-            x_ano = x_ano + 1 
-            x_month = 1
-        else:
-            x_month = str(int(x_month) + 1)
+        # Periodo
+        if x_type == '1': 
+            date_filter = str(x_ano)+'-'+str(x_month)+'-01'    
+            
+            if x_month == 12:
+                x_ano = x_ano + 1 
+                x_month = 1
+            else:
+                x_month = str(int(x_month) + 1)
+
+            date_filter_next = str(x_ano)+'-'+str(x_month)+'-01'
         
-        date_filter_next = str(x_ano)+'-'+str(x_month)+'-01'
+        # Rando de periodos
+        if x_type == '2': 
+            date_filter = str(x_ano)+'-'+str(x_month)+'-01'
+            
+            if x_month_two == 12:
+                x_ano_two = x_ano_two + 1 
+                x_month_two = 1
+            else:
+                x_month_two = str(int(x_month_two) + 1)
+
+            date_filter_next = str(x_ano_two)+'-'+str(x_month_two)+'-01'
+            
+        # Anual
+        if x_type == '3': 
+            date_filter = str(x_ano)+'-01-01'            
+            
+            if x_month == 12:
+                x_ano = x_ano + 1 
+                x_month = 1
+            else:
+                x_month = str(int(x_month) + 1)
+
+            date_filter_next = str(x_ano)+'-'+str(x_month)+'-01'
+        
                 
-        #Ejecutar Query
+        #Ejecutar Query        
+        #Query = '''            
+        #        %s %s %s %s            
+        #''' % (self._select(date_filter), self._from(date_filter), self._where(date_filter_next), self._group_by())
+        
+        #raise ValidationError(_(Query))                
+        
         tools.drop_view_if_exists(self.env.cr, self._table)
         self.env.cr.execute('''
             CREATE OR REPLACE VIEW %s AS (
