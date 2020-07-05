@@ -21,3 +21,4 @@ access_logyca_asset_range,logyca.asset_range,model_logyca_asset_range,,1,1,1,1
 access_logyca_reports,logyca.reports,model_logyca_reports,,1,1,1,1
 access_logyca_api_gateway,logyca.api_gateway,model_logyca_api_gateway,,1,1,1,1
 access_account_balance_partner_report,account.balance.partner.report,model_account_balance_partner_report,,1,0,0,0
+access_account_auxiliar_report,account.auxiliar.report,model_account_auxiliar_report,,1,0,0,0
