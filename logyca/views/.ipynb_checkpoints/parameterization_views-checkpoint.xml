@@ -272,8 +272,11 @@
                     <group>
                         <group>
                             <group>
+                                <field name="x_type_filter" string="Tipo" widget='radio'/>
                                 <field name="x_ano_filter" string="Año"/>
                                 <field name="x_month_filter" string="Mes"/>
+                                <field name="x_ano_filter_two" string="Año Final" attrs="{'invisible':[('x_type_filter', '!=', '2')], 'required': [('x_type_filter', '=', '2')]}"/>
+                                <field name="x_month_filter_two" string="Mes Final" attrs="{'invisible':[('x_type_filter', '!=', '2')], 'required': [('x_type_filter', '=', '2')]}"/>                                 
                             </group>
                             <div class="oe_grey" colspan="4">
                                 El balance por generar tomara como saldo inicial todos los movimientos realizados antes de la fecha seleccionada.
@@ -281,6 +284,33 @@
                         </group>
                         <br></br>                 
                         <button name="open_pivot_view" string="Generar Balance" type="object" class="oe_highlight"/>                         
+                    </group>
+                    <footer></footer>
+                </form>
+            </field>
+    </record>
+    
+    <!-- Filtro Auxiliar VIEW -->    
+    <record id="account_auxiliar_filter__form" model="ir.ui.view">
+        <field name="name">Auxiliar Filter</field>
+        <field name="model">account.auxiliar.filter</field>
+        <field name="arch" type="xml">
+                <form string="Auxiliar"> 
+                    <group>
+                        <group>
+                            <group>
+                                <field name="date_initial" string="Fecha Inicial"/>
+                                <field name="date_finally" string="Fecha Final"/>                                
+                                <field name="partner_id" string="Cliente"/>                                
+                                <field name="account_id" string="Cuenta"/>   
+                                <field name="account_company" string="Compañia a la que pertence la cuenta" attrs="{'invisible':[('account_id', '=', False)]}"/>
+                            </group>
+                            <div class="oe_grey" colspan="4">
+                                El Auxiliar por generar tomara como saldo inicial todos los movimientos realizados antes de la fecha inicial seleccionada y mostrara los movimientos realizados en el rango de fechas.
+                            </div>
+                        </group>
+                        <br></br>                 
+                        <button name="open_pivot_view" string="Generar Auxiliar" type="object" class="oe_highlight"/>                         
                     </group>
                     <footer></footer>
                 </form>
