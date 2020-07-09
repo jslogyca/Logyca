@@ -316,6 +316,29 @@
                 </form>
             </field>
     </record>
+    
+     <!-- Filtro Comercial Report VIEW -->    
+    <record id="logyca_comercial_report_form" model="ir.ui.view">
+        <field name="name">Reporte Comercial</field>
+        <field name="model">logyca.comercial.report</field>
+        <field name="arch" type="xml">
+                <form string="Reporte Comercial"> 
+                    <group>
+                        <group>
+                            <group>
+                                <field name="ano_filter" string="Año"/>
+                            </group>
+                            <div class="oe_grey" colspan="4">
+                                El reporte a generar mostrara lo causado y facturado en el año seleccionado.
+                            </div>
+                        </group>
+                        <br></br>                 
+                        <button name="get_excel" string="Generar" type="object" class="oe_highlight"/>                         
+                    </group>
+                    <footer></footer>
+                </form>
+            </field>
+    </record>
       
     </data>
 </odoo>
