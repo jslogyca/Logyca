@@ -7,6 +7,7 @@ import base64
 import io
 import xlsxwriter
 import requests
+
 #---------------------------Modelo para generar REPORTES-------------------------------#
 
 # Reportes
@@ -26,7 +27,7 @@ class comercial_report(models.TransientModel):
     
     #Retonar columnas
     def get_columns(self):
-        columns = 'RAZÓN SOCIAL,LÍNEA,FAMILIA,CUENTA,SERVICIO,SECTOR,COMERCIAL,CLIENTE,MOVIMIENTO,ENERO,FEBRERO,MARZO,ABRIL,MAYO,JUNIO,JULIO,AGOSTO,SEPTIEMBRE,OCTUBRE,NOVIEMBRE,DICIEMBRE,CAUSADO HOY'
+        columns = 'RAZÓN SOCIAL,LÍNEA,FAMILIA,CUENTA,SERVICIO,SECTOR,COMERCIAL,CLIENTE,MOVIMIENTO,ENERO,FEBRERO,MARZO,ABRIL,MAYO,JUNIO,JULIO,AGOSTO,SEPTIEMBRE,OCTUBRE,NOVIEMBRE,DICIEMBRE,CAUSADO HOY, ASEGURADO AÑO'
         _columns = columns.split(",")
         return _columns
     
@@ -75,7 +76,7 @@ class comercial_report(models.TransientModel):
         #Facturación
         query_two = '''            
             Select e."name" as company,coalesce(i."name",'-') as LineaAnalitica,coalesce(h."name",'-') as FamiliaAnalitica,coalesce(g."name",'-') as CuentaAnalitica,
-                    coalesce(b."name",'-') as Servicio, coalesce(k."name",'-') as Sector,coalesce(n."name",'-') as Comercial,coalesce(j."name",'-') as Cliente,	
+                    coalesce(b."name",'-') as Servicio, coalesce(k."name",coalesce(r."name",'-')) as Sector,coalesce(n."name",coalesce(q."name",'-')) as Comercial,coalesce(j."name",'-') as Cliente,	
                     'Facturación'as Movimiento,
                     Sum(case when extract(month from a."date") = 1 then a.amount_untaxed_signed else 0 end) as Enero,
                     Sum(case when extract(month from a."date") = 2 then a.amount_untaxed_signed else 0 end) as Febrero,
@@ -106,10 +107,13 @@ class comercial_report(models.TransientModel):
             left join res_partner n on m.partner_id = n.id
             --Sector
             left join crm_team k on m.sale_team_id = k.id
-            --Quitar recurrentes
+            --Recurrentes
             left join sale_subscription o on a.invoice_origin = o.code
-            where a.state = 'posted' and a."type" in ('out_invoice','out_receipt','out_refund','entry') and o.code is null and extract(year from a."date") = %s
-            group by e."name",i."name",h."name",g."name",b."name",k."name",n."name",j."name"
+            left join res_users p on o.user_id = p.id
+            left join res_partner q on p.partner_id = q.id
+            left join crm_team r on p.sale_team_id = r.id   
+            where a.state = 'posted' and a."type" in ('out_invoice','out_receipt','out_refund') and extract(year from a."date") = %s
+            group by e."name",i."name",h."name",g."name",b."name",k."name",n."name",j."name",r."name",q."name"
         ''' % (self.ano_filter)
         
         #Suscripciones
@@ -138,7 +142,7 @@ class comercial_report(models.TransientModel):
                         sum(a.recurring_total) as recurring
                         from sale_subscription a
                         where extract(year from a.date_start) = %s or extract(year from a."date") = %s
-                        group by a.company_id,a.partner_id,a.code,a.date_start,a."date",a.user_id) c on a.invoice_origin = c.code
+                        group by a.company_id,a.partner_id,a.code,a.date_start,a."date",a.user_id) c on a.invoice_origin = c.code and a."date" = c.date_start
             --Compañia
             inner join res_company e on a.company_id = e.id
             --Inf Analitica
@@ -157,11 +161,27 @@ class comercial_report(models.TransientModel):
             group by e."name",i."name",h."name",g."name",b."name",k."name",n."name",j."name"
         ''' % (self.ano_filter,self.ano_filter,self.ano_filter,self.ano_filter)
         
+        #Fecha actual        
+        date_today = fields.Date.context_today(self)
         
+        #Consulta final
         query = '''
             Select Company,LineaAnalitica,FamiliaAnalitica,CuentaAnalitica,Servicio,Sector,Comercial,Cliente,Movimiento,
-            Enero,Febrero,Marzo,Abril,Mayo,Junio,Julio,Agosto,Septiembre,Octubre,Noviembre,Diciembre,
-            Enero+Febrero+Marzo+Abril+Mayo+Junio+Julio+Agosto+Septiembre+Octubre+Noviembre+Diciembre As CausadoHoy
+            Sum(Enero) as Enero,Sum(Febrero) as Febrero,Sum(Marzo) as Marzo,Sum(Abril) as Abril,Sum(Mayo) as Mayo,Sum(Junio) as Junio,
+            Sum(Julio) as Julio,Sum(Agosto) as Agosto,Sum(Septiembre) as Septiembre,Sum(Octubre) as Octubre,Sum(Noviembre) as Noviembre,Sum(Diciembre) as Diciembre,		
+            Sum(case when 1 <= extract(month from cast('%s' as date)) then Enero else 0 end +
+            case when 2 <= extract(month from cast('%s' as date)) then Febrero else 0 end +
+            case when 3 <= extract(month from cast('%s' as date)) then Marzo else 0 end +
+            case when 4 <= extract(month from cast('%s' as date)) then Abril else 0 end +
+            case when 5 <= extract(month from cast('%s' as date)) then Mayo else 0 end +
+            case when 6 <= extract(month from cast('%s' as date)) then Junio else 0 end +
+            case when 7 <= extract(month from cast('%s' as date)) then Julio else 0 end +
+            case when 8 <= extract(month from cast('%s' as date)) then Agosto else 0 end +
+            case when 9 <= extract(month from cast('%s' as date)) then Septiembre else 0 end +
+            case when 10 <= extract(month from cast('%s' as date)) then Octubre else 0 end +
+            case when 11 <= extract(month from cast('%s' as date)) then Noviembre else 0 end +
+            case when 12 <= extract(month from cast('%s' as date)) then Diciembre else 0 end) As CausadoHoy,	
+            Sum(Enero+Febrero+Marzo+Abril+Mayo+Junio+Julio+Agosto+Septiembre+Octubre+Noviembre+Diciembre) As AseguradoAño
             From
             (
                 %s
@@ -171,8 +191,9 @@ class comercial_report(models.TransientModel):
                 %s
             ) As A
             Where (Enero+Febrero+Marzo+Abril+Mayo+Junio+Julio+Agosto+Septiembre+Octubre+Noviembre+Diciembre) > 0
-            Order By Company,LineaAnalitica,FamiliaAnalitica,CuentaAnalitica,Servicio,Sector,Comercial,Cliente
-        '''  % (query_one,query_two,query_three)
+            Group By Company,LineaAnalitica,FamiliaAnalitica,CuentaAnalitica,Servicio,Sector,Comercial,Cliente,Movimiento
+            Order By Company,LineaAnalitica,FamiliaAnalitica,CuentaAnalitica,Servicio,Sector,Comercial,Cliente,Movimiento
+        '''  % (date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,query_one,query_two,query_three)
         
         self._cr.execute(query)
         _res = self._cr.dictfetchall()
@@ -253,7 +274,7 @@ class comercial_report(models.TransientModel):
         sheet.set_column('G:H', 25)
         sheet.set_column('I:I', 40)
         sheet.set_column('J:J', 20)
-        sheet.set_column('K:W', 15)
+        sheet.set_column('K:X', 15)
         
         book.close()            
            
