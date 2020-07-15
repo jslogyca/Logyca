@@ -317,7 +317,7 @@
             </field>
     </record>
     
-     <!-- Filtro Comercial Report VIEW -->    
+    <!-- Filtro Comercial Report VIEW -->    
     <record id="logyca_comercial_report_form" model="ir.ui.view">
         <field name="name">Reporte Comercial</field>
         <field name="model">logyca.comercial.report</field>
@@ -325,6 +325,7 @@
                 <form string="Reporte Comercial"> 
                     <group>
                         <group>
+                            <h1>Proyección Ingresos</h1>
                             <group>
                                 <field name="ano_filter" string="Año"/>
                             </group>
