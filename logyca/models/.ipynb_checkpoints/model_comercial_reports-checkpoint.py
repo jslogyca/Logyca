@@ -161,6 +161,47 @@ class comercial_report(models.TransientModel):
             group by e."name",i."name",h."name",g."name",b."name",k."name",n."name",j."name"
         ''' % (self.ano_filter,self.ano_filter,self.ano_filter,self.ano_filter)
         
+        
+        #Facturación x Causación
+        query_four = '''
+            Select e."name" as company,coalesce(i."name",'-') as LineaAnalitica,coalesce(h."name",'-') as FamiliaAnalitica,coalesce(g."name",'-') as CuentaAnalitica,
+                    coalesce(b."name",'-') as Servicio, coalesce(k."name",'-') as Sector,coalesce(n."name",'-') as Comercial,coalesce(j."name",'-') as Cliente,		
+                    'Causación'as Movimiento,
+                    Sum(case when extract(month from a."date") = 1 then a.amount_untaxed_signed else 0 end) as Enero,
+                    Sum(case when extract(month from a."date") = 2 then a.amount_untaxed_signed else 0 end) as Febrero,
+                    Sum(case when extract(month from a."date") = 3 then a.amount_untaxed_signed else 0 end) as Marzo,
+                    Sum(case when extract(month from a."date") = 4 then a.amount_untaxed_signed else 0 end) as Abril,
+                    Sum(case when extract(month from a."date") = 5 then a.amount_untaxed_signed else 0 end) as Mayo,
+                    Sum(case when extract(month from a."date") = 6 then a.amount_untaxed_signed else 0 end) as Junio,
+                    Sum(case when extract(month from a."date") = 7 then a.amount_untaxed_signed else 0 end) as Julio,
+                    Sum(case when extract(month from a."date") = 8 then a.amount_untaxed_signed else 0 end) as Agosto,
+                    Sum(case when extract(month from a."date") = 9 then a.amount_untaxed_signed else 0 end) as Septiembre,
+                    Sum(case when extract(month from a."date") = 10 then a.amount_untaxed_signed else 0 end) as Octubre,
+                    Sum(case when extract(month from a."date") = 11 then a.amount_untaxed_signed else 0 end) as Noviembre,
+                    Sum(case when extract(month from a."date") = 12 then a.amount_untaxed_signed else 0 end) as Diciembre		
+            From account_move a
+            inner join account_move_line b on a.id = b.move_id
+            --Compañia
+            inner join res_company e on a.company_id = e.id
+            --Inf Analitica
+            inner join account_analytic_line f on b.id = f.move_id
+            left join account_analytic_account g on f.account_id = g.id
+            left join account_analytic_group h on g.group_id = h.id
+            left join account_analytic_group i on h.parent_id = i.id
+            --Tercero
+            left join res_partner j on a.partner_id = j.id
+            --Comercial
+            left join sale_order l on a.invoice_origin = l."name"
+            left join res_users m on l.user_id = m.id
+            left join res_partner n on m.partner_id = n.id
+            --Sector
+            left join crm_team k on m.sale_team_id = k.id
+            --Quitar recurrentes
+            left join sale_subscription o on a.invoice_origin = o.code
+            where a.state = 'posted' and a."type" in ('out_invoice','out_receipt','out_refund') and o.code is null and b.asset_id is null and extract(year from a."date") = %s 
+            group by e."name",i."name",h."name",g."name",b."name",k."name",n."name",j."name"
+        ''' % (self.ano_filter)
+        
         #Fecha actual        
         date_today = fields.Date.context_today(self)
         
@@ -189,11 +230,13 @@ class comercial_report(models.TransientModel):
                 %s
                 union
                 %s
+                union
+                %s
             ) As A
             Where (Enero+Febrero+Marzo+Abril+Mayo+Junio+Julio+Agosto+Septiembre+Octubre+Noviembre+Diciembre) > 0
             Group By Company,LineaAnalitica,FamiliaAnalitica,CuentaAnalitica,Servicio,Sector,Comercial,Cliente,Movimiento
             Order By Company,LineaAnalitica,FamiliaAnalitica,CuentaAnalitica,Servicio,Sector,Comercial,Cliente,Movimiento
-        '''  % (date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,query_one,query_two,query_three)
+        '''  % (date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,query_one,query_two,query_three,query_four)
         
         self._cr.execute(query)
         _res = self._cr.dictfetchall()
