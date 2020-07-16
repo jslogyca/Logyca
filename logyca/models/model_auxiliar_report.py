@@ -78,6 +78,7 @@ class AccountAuxiliarReport(models.Model):
     move_name = fields.Char(string='Factura', readonly=True)
     move_date = fields.Date(string='Fecha', readonly=True)
     move_ref = fields.Char(string='Referencia', readonly=True)
+    move_budget_group = fields.Char(string='Grupo presupuestal', readonly=True)
     # Valores
     initial_balance = fields.Float(string='Saldo Anterior', default=0.0)
     debit = fields.Float(string='Débito', default=0.0)
@@ -104,8 +105,8 @@ class AccountAuxiliarReport(models.Model):
                 D.Cuenta_Nivel_4 as account_level_four,
                 D.Cuenta_Nivel_5 as account_level_five,                
                 C.vat || ' | ' || C.display_name as partner,
-                'Factura: ' || B.move_name || ' | Fecha: ' || B."date" || ' | Referencia: ' || B."ref" as move,                
-                B.move_name as move_name,B."date" as move_date,B."ref" as move_ref,
+                'Factura: ' || B.move_name || ' | Fecha: ' || B."date" || ' | Referencia: ' || B."ref" || ' | Grupo presupuestal: ' || coalesce(h."name",'-') as move,                
+                B.move_name as move_name,B."date" as move_date,B."ref" as move_ref,coalesce(h."name",'-') as move_budget_group,
                 COALESCE(E.saldo_ant,0) as initial_balance,
                 SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
                 SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
@@ -131,6 +132,7 @@ class AccountAuxiliarReport(models.Model):
                             LEFT JOIN account_group e on d.parent_id = e.id
                         ) D on B.account_id = D.id            
             INNER JOIN res_company G on B.company_id = G.id
+            LEFT JOIN logyca_budget_group H on b.x_budget_group = h.id
             LEFT JOIN (
                         SELECT partner_id,account_id,
                                 SUM(debit - credit) as saldo_ant 
@@ -162,6 +164,7 @@ class AccountAuxiliarReport(models.Model):
                 B.move_name,
                 B."date",
                 B."ref",
+                H."name",
                 E.saldo_ant
         '''
     
