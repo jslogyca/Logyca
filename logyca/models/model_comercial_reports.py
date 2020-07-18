@@ -36,7 +36,7 @@ class comercial_report(models.TransientModel):
         #Diferidos
         query_one = '''
             Select e."name" as company,coalesce(i."name",'-') as LineaAnalitica,coalesce(h."name",'-') as FamiliaAnalitica,coalesce(g."name",'-') as CuentaAnalitica,
-                    coalesce(b."name",'-') as Servicio, coalesce(k."name",'-') as Sector,coalesce(n."name",'-') as Comercial,coalesce(j."name",'-') as Cliente,		
+                    coalesce(b."name",'-') as Servicio, coalesce(k."name",'-') as Sector,coalesce(n."name",'-') as Comercial,coalesce(jj."name",coalesce(j."name",'-')) as Cliente,		
                     'Causación'as Movimiento,
                     Sum(case when extract(month from d."date") = 1 then d.amount_total else 0 end) as Enero,
                     Sum(case when extract(month from d."date") = 2 then d.amount_total else 0 end) as Febrero,
@@ -63,6 +63,7 @@ class comercial_report(models.TransientModel):
             left join account_analytic_group i on h.parent_id = i.id
             --Tercero
             left join res_partner j on a.partner_id = j.id
+            left join res_partner jj on j.parent_id = jj.id
             --Comercial
             left join sale_order l on a.invoice_origin = l."name"
             left join res_users m on l.user_id = m.id
@@ -70,26 +71,26 @@ class comercial_report(models.TransientModel):
             --Sector
             left join crm_team k on m.sale_team_id = k.id
             where a."type" in ('out_invoice','out_receipt','out_refund') and extract(year from d."date") = %s
-            group by e."name",i."name",h."name",g."name",b."name",k."name",n."name",j."name"
+            group by e."name",i."name",h."name",g."name",b."name",k."name",n."name",j."name",jj."name"
         ''' % (self.ano_filter)
         
         #Facturación
         query_two = '''            
             Select e."name" as company,coalesce(i."name",'-') as LineaAnalitica,coalesce(h."name",'-') as FamiliaAnalitica,coalesce(g."name",'-') as CuentaAnalitica,
-                    coalesce(b."name",'-') as Servicio, coalesce(k."name",coalesce(r."name",'-')) as Sector,coalesce(n."name",coalesce(q."name",'-')) as Comercial,coalesce(j."name",'-') as Cliente,	
+                    coalesce(b."name",'-') as Servicio, coalesce(k."name",coalesce(r."name",'-')) as Sector,coalesce(n."name",coalesce(q."name",'-')) as Comercial,coalesce(jj."name",coalesce(j."name",'-')) as Cliente,	
                     'Facturación'as Movimiento,
-                    Sum(case when extract(month from a."date") = 1 then a.amount_untaxed_signed else 0 end) as Enero,
-                    Sum(case when extract(month from a."date") = 2 then a.amount_untaxed_signed else 0 end) as Febrero,
-                    Sum(case when extract(month from a."date") = 3 then a.amount_untaxed_signed else 0 end) as Marzo,
-                    Sum(case when extract(month from a."date") = 4 then a.amount_untaxed_signed else 0 end) as Abril,
-                    Sum(case when extract(month from a."date") = 5 then a.amount_untaxed_signed else 0 end) as Mayo,
-                    Sum(case when extract(month from a."date") = 6 then a.amount_untaxed_signed else 0 end) as Junio,
-                    Sum(case when extract(month from a."date") = 7 then a.amount_untaxed_signed else 0 end) as Julio,
-                    Sum(case when extract(month from a."date") = 8 then a.amount_untaxed_signed else 0 end) as Agosto,
-                    Sum(case when extract(month from a."date") = 9 then a.amount_untaxed_signed else 0 end) as Septiembre,
-                    Sum(case when extract(month from a."date") = 10 then a.amount_untaxed_signed else 0 end) as Octubre,
-                    Sum(case when extract(month from a."date") = 11 then a.amount_untaxed_signed else 0 end) as Noviembre,
-                    Sum(case when extract(month from a."date") = 12 then a.amount_untaxed_signed else 0 end) as Diciembre		
+                    Sum(case when extract(month from a."date") = 1 then f.amount else 0 end) as Enero,
+                    Sum(case when extract(month from a."date") = 2 then f.amount else 0 end) as Febrero,
+                    Sum(case when extract(month from a."date") = 3 then f.amount else 0 end) as Marzo,
+                    Sum(case when extract(month from a."date") = 4 then f.amount else 0 end) as Abril,
+                    Sum(case when extract(month from a."date") = 5 then f.amount else 0 end) as Mayo,
+                    Sum(case when extract(month from a."date") = 6 then f.amount else 0 end) as Junio,
+                    Sum(case when extract(month from a."date") = 7 then f.amount else 0 end) as Julio,
+                    Sum(case when extract(month from a."date") = 8 then f.amount else 0 end) as Agosto,
+                    Sum(case when extract(month from a."date") = 9 then f.amount else 0 end) as Septiembre,
+                    Sum(case when extract(month from a."date") = 10 then f.amount else 0 end) as Octubre,
+                    Sum(case when extract(month from a."date") = 11 then f.amount else 0 end) as Noviembre,
+                    Sum(case when extract(month from a."date") = 12 then f.amount else 0 end) as Diciembre			
             From account_move a
             inner join account_move_line b on a.id = b.move_id
             --Compañia
@@ -101,6 +102,7 @@ class comercial_report(models.TransientModel):
             left join account_analytic_group i on h.parent_id = i.id
             --Tercero
             left join res_partner j on a.partner_id = j.id
+            left join res_partner jj on j.parent_id = jj.id
             --Comercial
             left join sale_order l on a.invoice_origin = l."name"
             left join res_users m on l.user_id = m.id
@@ -113,13 +115,13 @@ class comercial_report(models.TransientModel):
             left join res_partner q on p.partner_id = q.id
             left join crm_team r on p.sale_team_id = r.id   
             where a.state = 'posted' and a."type" in ('out_invoice','out_receipt','out_refund') and extract(year from a."date") = %s
-            group by e."name",i."name",h."name",g."name",b."name",k."name",n."name",j."name",r."name",q."name"
+            group by e."name",i."name",h."name",g."name",b."name",k."name",n."name",j."name",r."name",q."name",jj."name"
         ''' % (self.ano_filter)
         
         #Suscripciones
         query_three = '''
             Select e."name" as company,coalesce(i."name",'-') as LineaAnalitica,coalesce(h."name",'-') as FamiliaAnalitica,coalesce(g."name",'-') as CuentaAnalitica,
-                coalesce(b."name",'-') as Servicio, coalesce(k."name",'-') as Sector,coalesce(n."name",'-') as Comercial,coalesce(j."name",'-') as Cliente,	
+                coalesce(b."name",'-') as Servicio, coalesce(k."name",'-') as Sector,coalesce(n."name",'-') as Comercial,coalesce(jj."name",coalesce(j."name",'-')) as Cliente,	
                 'Causación' as Movimiento,		
                 Sum(case when 1 between extract(month from c.date_initial) and extract(month from c.date_finally) then c.recurring else 0 end) as Enero,		
                 Sum(case when 2 between extract(month from c.date_initial) and extract(month from c.date_finally) then c.recurring else 0 end) as Febrero,
@@ -152,33 +154,34 @@ class comercial_report(models.TransientModel):
             left join account_analytic_group i on h.parent_id = i.id
             --Tercero
             left join res_partner j on a.partner_id = j.id
+            left join res_partner jj on j.parent_id = jj.id
             --Comercial
             left join res_users m on c.user_id = m.id
             left join res_partner n on m.partner_id = n.id
             --Sector
             left join crm_team k on m.sale_team_id = k.id
             where a.state = 'posted' and a."type" in ('out_invoice','out_receipt','out_refund')
-            group by e."name",i."name",h."name",g."name",b."name",k."name",n."name",j."name"
+            group by e."name",i."name",h."name",g."name",b."name",k."name",n."name",j."name",jj."name"
         ''' % (self.ano_filter,self.ano_filter,self.ano_filter,self.ano_filter)
         
         
         #Facturación x Causación
         query_four = '''
             Select e."name" as company,coalesce(i."name",'-') as LineaAnalitica,coalesce(h."name",'-') as FamiliaAnalitica,coalesce(g."name",'-') as CuentaAnalitica,
-                    coalesce(b."name",'-') as Servicio, coalesce(k."name",'-') as Sector,coalesce(n."name",'-') as Comercial,coalesce(j."name",'-') as Cliente,		
+                    coalesce(b."name",'-') as Servicio, coalesce(k."name",'-') as Sector,coalesce(n."name",'-') as Comercial,coalesce(jj."name",coalesce(j."name",'-')) as Cliente,		
                     'Causación'as Movimiento,
-                    Sum(case when extract(month from a."date") = 1 then a.amount_untaxed_signed else 0 end) as Enero,
-                    Sum(case when extract(month from a."date") = 2 then a.amount_untaxed_signed else 0 end) as Febrero,
-                    Sum(case when extract(month from a."date") = 3 then a.amount_untaxed_signed else 0 end) as Marzo,
-                    Sum(case when extract(month from a."date") = 4 then a.amount_untaxed_signed else 0 end) as Abril,
-                    Sum(case when extract(month from a."date") = 5 then a.amount_untaxed_signed else 0 end) as Mayo,
-                    Sum(case when extract(month from a."date") = 6 then a.amount_untaxed_signed else 0 end) as Junio,
-                    Sum(case when extract(month from a."date") = 7 then a.amount_untaxed_signed else 0 end) as Julio,
-                    Sum(case when extract(month from a."date") = 8 then a.amount_untaxed_signed else 0 end) as Agosto,
-                    Sum(case when extract(month from a."date") = 9 then a.amount_untaxed_signed else 0 end) as Septiembre,
-                    Sum(case when extract(month from a."date") = 10 then a.amount_untaxed_signed else 0 end) as Octubre,
-                    Sum(case when extract(month from a."date") = 11 then a.amount_untaxed_signed else 0 end) as Noviembre,
-                    Sum(case when extract(month from a."date") = 12 then a.amount_untaxed_signed else 0 end) as Diciembre		
+                    Sum(case when extract(month from a."date") = 1 then f.amount else 0 end) as Enero,
+                    Sum(case when extract(month from a."date") = 2 then f.amount else 0 end) as Febrero,
+                    Sum(case when extract(month from a."date") = 3 then f.amount else 0 end) as Marzo,
+                    Sum(case when extract(month from a."date") = 4 then f.amount else 0 end) as Abril,
+                    Sum(case when extract(month from a."date") = 5 then f.amount else 0 end) as Mayo,
+                    Sum(case when extract(month from a."date") = 6 then f.amount else 0 end) as Junio,
+                    Sum(case when extract(month from a."date") = 7 then f.amount else 0 end) as Julio,
+                    Sum(case when extract(month from a."date") = 8 then f.amount else 0 end) as Agosto,
+                    Sum(case when extract(month from a."date") = 9 then f.amount else 0 end) as Septiembre,
+                    Sum(case when extract(month from a."date") = 10 then f.amount else 0 end) as Octubre,
+                    Sum(case when extract(month from a."date") = 11 then f.amount else 0 end) as Noviembre,
+                    Sum(case when extract(month from a."date") = 12 then f.amount else 0 end) as Diciembre			
             From account_move a
             inner join account_move_line b on a.id = b.move_id
             --Compañia
@@ -190,6 +193,7 @@ class comercial_report(models.TransientModel):
             left join account_analytic_group i on h.parent_id = i.id
             --Tercero
             left join res_partner j on a.partner_id = j.id
+            left join res_partner jj on j.parent_id = jj.id
             --Comercial
             left join sale_order l on a.invoice_origin = l."name"
             left join res_users m on l.user_id = m.id
@@ -199,7 +203,7 @@ class comercial_report(models.TransientModel):
             --Quitar recurrentes
             left join sale_subscription o on a.invoice_origin = o.code
             where a.state = 'posted' and a."type" in ('out_invoice','out_receipt','out_refund') and o.code is null and b.asset_id is null and extract(year from a."date") = %s 
-            group by e."name",i."name",h."name",g."name",b."name",k."name",n."name",j."name"
+            group by e."name",i."name",h."name",g."name",b."name",k."name",n."name",j."name",jj."name"
         ''' % (self.ano_filter)
         
         #Fecha actual        
