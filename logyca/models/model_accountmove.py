@@ -34,7 +34,36 @@ class AccountMove(models.Model):
     x_send_dian = fields.Boolean(string='Enviado a la DIAN', copy=False)
     x_cufe_dian = fields.Char(string='CUFE - Código único de facturación electrónica', copy=False)
     x_motive_error = fields.Text(string='Motivo de error', copy=False)
+    #Tiene Nota Credito
+    x_have_out_invoice = fields.Boolean(string='Tiene NC', compute='_have_nc')    
     
+    def _have_nc(self):
+        query_fac = '''
+            select a.id,a.name,b.id,b.name
+            from account_move a
+            inner join account_move b on a.id = b.reversed_entry_id and b.state = 'posted'
+            where a.id = %s
+        ''' % (self.id)
+        
+        self._cr.execute(query_fac)
+        result_query_fac = self._cr.dictfetchall()
+        
+        query_nc = '''
+            select id,name 
+            from account_move 
+            where id = %s and state = 'posted' and reversed_entry_id is not null
+        ''' % (self.id)
+        
+        self._cr.execute(query_nc)
+        result_query_nc = self._cr.dictfetchall()
+            
+        if result_query_fac or result_query_nc:
+            #raise ValidationError(_('TIENE NC'))    
+            self.x_have_out_invoice = True
+        else:
+            #raise ValidationError(_('NO TIENE NC'))    
+            self.x_have_out_invoice = False
+        
     @api.depends('partner_id')
     @api.onchange('partner_id')
     def _onchange_partner_id_country(self):
@@ -174,11 +203,12 @@ class AccountMove(models.Model):
 class AccountMoveReversal(models.TransientModel):
     _inherit = "account.move.reversal"
     
-    refund_method = fields.Selection(default='cancel')
-    
+    refund_method = fields.Selection(default='cancel')    
     reason = fields.Selection([('1', 'Devolución de servicio'),
                               ('2', 'Diferencia del precio real y el importe cobrado'),
-                              ('3', 'Se emitió una factura por error de tercero')], string='Motivo', required=True)
+                              ('3', 'Se emitió una factura por error de tercero')], string='Motivo', required=True)    
+    description = fields.Text(string='Descripción')
+    
     
     def reverse_moves(self):
         self.refund_method = 'cancel'
@@ -190,7 +220,8 @@ class AccountMoveLine(models.Model):
     #Grupo de trabajo 
     x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal', index=True, ondelete='restrict')
     # Fields Reports
-    x_vat_partner = fields.Char(string='NIT Asociado', store=True, readonly=True, related='partner_id.vat', change_default=True)
+    #x_vat_partner = fields.Char(string='NIT Asociado', store=True, readonly=True, related='partner_id.vat', change_default=True)
+    x_type_doc_partner = fields.Char(string='NIT Asociado', store=True, readonly=True, related='partner_id.vat')
     x_account_analytic_group = fields.Many2one(string='Grupo Analítico / Familia', store=True, readonly=True, related='analytic_account_id.group_id', change_default=True)
     x_account_analytic_group_two = fields.Many2one(string='Grupo Analítico / Línea', store=True, readonly=True, related='x_account_analytic_group.parent_id', change_default=True)
     #x_analytic_line_account = fields.Many2one(string='Cuenta Analítica Calculada', store=True, readonly=True, related='analytic_line_ids.account_id', change_default=True)
