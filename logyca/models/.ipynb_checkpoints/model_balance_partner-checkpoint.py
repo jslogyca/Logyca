@@ -113,7 +113,7 @@ class AccountBalancePartnerReport(models.Model):
     def _select(self,date_filter):
         return '''
             SELECT
-                Row_Number() Over(Order By G.id,D.Cuenta_Nivel_5,C.display_name) as id,
+                Row_Number() Over(Order By G.id,D.Cuenta_Nivel_1,D.Cuenta_Nivel_2,D.Cuenta_Nivel_3,D.Cuenta_Nivel_4,D.Cuenta_Nivel_5,C.display_name) as id,
                 G.id as company_id,                
                 D.Cuenta_Nivel_1 as account_level_one,
                 D.Cuenta_Nivel_2 as account_level_two,
@@ -133,10 +133,15 @@ class AccountBalancePartnerReport(models.Model):
             FROM account_move_line B
             INNER JOIN res_partner C on B.partner_id = C.id            
             INNER JOIN (
+                            SELECT Cuenta_Nivel_1,Cuenta_Nivel_2,
+                                    case when Cuenta_Nivel_2 = Cuenta_Nivel_3 then Cuenta_Nivel_4 else Cuenta_Nivel_3 end as Cuenta_Nivel_3,
+                                    Cuenta_Nivel_4,Cuenta_Nivel_5,id
+                            From
+                            (
                             SELECT 
                             COALESCE(e.code_prefix,substring(a.code for 1)) as Cuenta_Nivel_1,
-                            COALESCE(d.code_prefix,coalesce(c.code_prefix,coalesce(b.code_prefix,substring(a.code for 1)))) || ' - ' || coalesce(d."name",coalesce(c."name",coalesce(b."name",'')))  as Cuenta_Nivel_2,
-                            COALESCE(c.code_prefix,coalesce(b.code_prefix,substring(a.code for 1))) || ' - ' || coalesce(c."name",coalesce(b."name",'')) as Cuenta_Nivel_3,
+                            COALESCE(d.code_prefix,coalesce(c.code_prefix,coalesce(b.code_prefix,substring(a.code for 1)))) || ' - ' || coalesce(d."name",coalesce(c."name",coalesce(b."name",a."name")))  as Cuenta_Nivel_2,
+                            COALESCE(c.code_prefix,coalesce(b.code_prefix,substring(a.code for 1))) || ' - ' || coalesce(c."name",coalesce(b."name",a."name")) as Cuenta_Nivel_3,
                             COALESCE(b.code_prefix,substring(a.code for 1)) || ' - ' || COALESCE(b."name",a."name") as Cuenta_Nivel_4,
                             a.code || ' - ' || a."name" as Cuenta_Nivel_5,a.id 
                             FROM account_account a
@@ -144,6 +149,7 @@ class AccountBalancePartnerReport(models.Model):
                             LEFT JOIN account_group c on b.parent_id = c.id
                             LEFT JOIN account_group d on c.parent_id = d.id
                             LEFT JOIN account_group e on d.parent_id = e.id
+                            ) as A
                         ) D on B.account_id = D.id            
             INNER JOIN res_company G on B.company_id = G.id
             LEFT JOIN (
