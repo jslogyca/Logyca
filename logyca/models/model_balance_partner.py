@@ -120,7 +120,7 @@ class AccountBalancePartnerReport(models.Model):
                 D.Cuenta_Nivel_3 as account_level_three,
                 D.Cuenta_Nivel_4 as account_level_four,
                 D.Cuenta_Nivel_5 as account_level_five,                
-                C.vat || ' | ' || C.display_name as partner,
+                COALESCE(C.vat || ' | ' || C.display_name,'Tercero Vacio') as partner,
                 COALESCE(E.saldo_ant,0) as initial_balance,
                 SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
                 SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
@@ -131,8 +131,8 @@ class AccountBalancePartnerReport(models.Model):
     def _from(self,date_filter):
         return '''
             FROM account_move_line B
-            INNER JOIN res_partner C on B.partner_id = C.id            
-            INNER JOIN (
+            LEFT JOIN res_partner C on B.partner_id = C.id            
+            LEFT JOIN (
                             SELECT Cuenta_Nivel_1,Cuenta_Nivel_2,
                                     case when Cuenta_Nivel_2 = Cuenta_Nivel_3 then Cuenta_Nivel_4 else Cuenta_Nivel_3 end as Cuenta_Nivel_3,
                                     Cuenta_Nivel_4,Cuenta_Nivel_5,id
@@ -156,8 +156,8 @@ class AccountBalancePartnerReport(models.Model):
                         SELECT partner_id,account_id,
                                 SUM(debit - credit) as saldo_ant 
                         FROM account_move_line 
-                        WHERE "date" < '%s' group by partner_id,account_id
-                      ) as E on C.id = E.partner_id and D.id = E.account_id
+                        WHERE "date" < '%s' and parent_state = 'posted' group by partner_id,account_id
+                      ) as E on COALESCE(B.partner_id,0) = COALESCE(E.partner_id,0) and D.id = E.account_id
         ''' % (date_filter,)
 
     @api.model
