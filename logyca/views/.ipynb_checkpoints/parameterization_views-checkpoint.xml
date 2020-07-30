@@ -340,6 +340,30 @@
                 </form>
             </field>
     </record>
+    
+    <!-- Filtro Libro Diario Report VIEW -->    
+    <record id="logyca_libro_diario_report_form" model="ir.ui.view">
+        <field name="name">Libro Diario</field>
+        <field name="model">logyca.libro_diario.report</field>
+        <field name="arch" type="xml">
+                <form string="Libro Diario"> 
+                    <group>
+                        <group>
+                            <h1>Libro Diario</h1>
+                            <group>
+                                <field name="company_id" string="Compañia"/>
+                                <field name="ano_filter" string="Año"/>
+                                <field name="month_filter" string="Mes"/>
+                                <field name="num_page_initial" string="Último consecutivo paginación"/>                                
+                            </group>                            
+                        </group>
+                        <br></br>                 
+                        <button name="get_pdf" string="Generar" type="object" class="oe_highlight"/>                         
+                    </group>
+                    <footer></footer>
+                </form>
+            </field>
+    </record>
       
     </data>
 </odoo>
