@@ -104,7 +104,7 @@ class AccountAuxiliarReport(models.Model):
                 D.Cuenta_Nivel_3 as account_level_three,
                 D.Cuenta_Nivel_4 as account_level_four,
                 D.Cuenta_Nivel_5 as account_level_five,                
-                C.vat || ' | ' || C.display_name as partner,
+                COALESCE(C.vat || ' | ' || C.display_name,'Tercero Vacio') as partner,
                 'Factura: ' || B.move_name || ' | Fecha: ' || B."date" || ' | Referencia: ' || B."ref" || ' | Grupo presupuestal: ' || coalesce(h."name",'-') as move,                
                 B.move_name as move_name,B."date" as move_date,B."ref" as move_ref,coalesce(h."name",'-') as move_budget_group,
                 COALESCE(E.saldo_ant,0) as initial_balance,
@@ -117,8 +117,8 @@ class AccountAuxiliarReport(models.Model):
     def _from(self,date_filter):
         return '''
             FROM account_move_line B
-            INNER JOIN res_partner C on B.partner_id = C.id            
-            INNER JOIN (
+            LEFT JOIN res_partner C on B.partner_id = C.id            
+            LEFT JOIN (
                             SELECT 
                             COALESCE(e.code_prefix,substring(a.code for 1)) as Cuenta_Nivel_1,
                             COALESCE(d.code_prefix,coalesce(c.code_prefix,coalesce(b.code_prefix,substring(a.code for 1)))) || ' - ' || coalesce(d."name",coalesce(c."name",coalesce(b."name",'')))  as Cuenta_Nivel_2,
@@ -134,18 +134,18 @@ class AccountAuxiliarReport(models.Model):
             INNER JOIN res_company G on B.company_id = G.id
             LEFT JOIN logyca_budget_group H on b.x_budget_group = h.id
             LEFT JOIN (
-                        SELECT partner_id,account_id,
+                        SELECT partner_id,account_id,move_id,
                                 SUM(debit - credit) as saldo_ant 
                         FROM account_move_line 
-                        WHERE "date" < '%s' group by partner_id,account_id
-                      ) as E on C.id = E.partner_id and D.id = E.account_id
+                        WHERE "date" < '%s' and parent_state = 'posted' group by partner_id,account_id,move_id                      
+                      ) as E on COALESCE(B.partner_id,0) = COALESCE(E.partner_id,0) and D.id = E.account_id and B.move_id = E.move_id
         ''' % (date_filter,)
 
     @api.model
     def _where(self,date_filter,partner_id,account_id):
         return '''
             WHERE  B.parent_state = 'posted' and B."date" < '%s' 
-                    and B.partner_id = case when %s = 0 then B.partner_id else %s end
+                    and COALESCE(B.partner_id,0) = case when %s = 0 then COALESCE(B.partner_id,0) else %s end
                     and B.account_id = case when %s = 0 then B.account_id else %s end
         '''  % (date_filter,partner_id,partner_id,account_id,account_id)
 
@@ -185,7 +185,7 @@ class AccountAuxiliarReport(models.Model):
         #Ejecutar Query        
         #Query = '''            
         #        %s %s %s %s            
-        #''' % (self._select(date_initial), self._from(date_initial), self._where(date_finally), self._group_by())
+        #''' % (self._select(date_initial), self._from(date_initial), self._where(date_finally,partner_id,account_id), self._group_by())
         
         #raise ValidationError(_(Query))                
         
