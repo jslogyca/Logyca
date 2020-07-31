@@ -19,7 +19,7 @@ class InfoAccountPowerBI(models.Model):
     cuenta_analitica = fields.Char(string='Cuenta Analitica', readonly=True)
     ref = fields.Char(string='Referencia', readonly=True)
     tipo_cuenta = fields.Char(string='Tipo Cuenta', readonly=True)
-    clase = fields.Char(string='Clase Cuenta', readonly=True)
+    #clase = fields.Char(string='Clase Cuenta', readonly=True)
     grupo_presupuestal = fields.Char(string='Grupo Presupuestal', readonly=True)
     cuenta_financiera = fields.Char(string='Cuenta financiera', readonly=True)
     apunte_contable = fields.Char(string='Apunte Contable', readonly=True)
@@ -38,6 +38,7 @@ class InfoAccountPowerBI(models.Model):
     
     @api.model
     def _select(self):
+        #coalesce(e."x_studio_clase",'-') as clase,
         return '''
             Select Row_Number() over (order by i.display_name) as ID,
                 coalesce(a."date",'1900-01-01') as fecha, 
@@ -47,7 +48,6 @@ class InfoAccountPowerBI(models.Model):
                 coalesce(d.code,'-') ||' / '|| coalesce(d.name,'-')  as cuenta_analitica,
                 coalesce(a."ref",'-') as ref,
                 coalesce(left(e.code,2),'0')  as tipo_cuenta,
-                coalesce(e."x_studio_clase",'-') as clase,
                 coalesce(m."name",'-') as grupo_presupuestal,
                 coalesce(e.code,'-') ||' / '|| coalesce(e.name,'-') as cuenta_financiera,
                 coalesce(b."name",'-') as apunte_contable, 
