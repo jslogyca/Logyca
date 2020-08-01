@@ -364,6 +364,30 @@
                 </form>
             </field>
     </record>
+    
+    <!-- Filtro Libro Mayor Report VIEW -->    
+    <record id="logyca_libro_mayor_report_form" model="ir.ui.view">
+        <field name="name">Libro Mayor</field>
+        <field name="model">logyca.libro_mayor.report</field>
+        <field name="arch" type="xml">
+                <form string="Libro Mayor"> 
+                    <group>
+                        <group>
+                            <h1>Libro Mayor</h1>
+                            <group>
+                                <field name="company_id" string="Compañia"/>
+                                <field name="ano_filter" string="Año"/>
+                                <field name="month_filter" string="Mes"/>
+                                <field name="num_page_initial" string="Último consecutivo paginación"/>                                
+                            </group>                            
+                        </group>
+                        <br></br>                 
+                        <button name="get_pdf" string="Generar" type="object" class="oe_highlight"/>                         
+                    </group>
+                    <footer></footer>
+                </form>
+            </field>
+    </record>
       
     </data>
 </odoo>

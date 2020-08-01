@@ -24,3 +24,4 @@ access_account_balance_partner_report,account.balance.partner.report,model_accou
 access_account_auxiliar_report,account.auxiliar.report,model_account_auxiliar_report,,1,0,0,0
 access_logyca_reports_account,logyca.reports.account,model_logyca_reports_account,,1,1,1,1
 access_logyca_payment_file,logyca.payment.file,model_logyca_payment_file,,1,1,1,1
+access_account_info_powerbi,account.info.powerbi,model_account_info_powerbi,,1,0,0,0
