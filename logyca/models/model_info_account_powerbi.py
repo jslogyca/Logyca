@@ -22,6 +22,7 @@ class InfoAccountPowerBI(models.Model):
     #clase = fields.Char(string='Clase Cuenta', readonly=True)
     grupo_presupuestal = fields.Char(string='Grupo Presupuestal', readonly=True)
     cuenta_financiera = fields.Char(string='Cuenta financiera', readonly=True)
+    id_account = fields.Integer(string='Id cuenta financiera', readonly=True)
     apunte_contable = fields.Char(string='Apunte Contable', readonly=True)
     producto = fields.Char(string='Producto', readonly=True)
     cantidad = fields.Integer(string='Cantidad', readonly=True)
@@ -50,9 +51,10 @@ class InfoAccountPowerBI(models.Model):
                 coalesce(left(e.code,2),'0')  as tipo_cuenta,
                 coalesce(m."name",'-') as grupo_presupuestal,
                 coalesce(e.code,'-') ||' / '|| coalesce(e.name,'-') as cuenta_financiera,
+                coalesce(e.id,0) as id_account, 
                 coalesce(b."name",'-') as apunte_contable, 
                 coalesce(g.name,'-') as  producto, 
-                coalesce(b.quantity,'0') as cantidad, 
+                coalesce(b.quantity,0) as cantidad, 
                 coalesce(h.name,'-') as unidad, 
                 coalesce(i.display_name,'-') as asociado,
                 coalesce(j."name",'-') as compañia, 

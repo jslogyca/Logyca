@@ -256,7 +256,19 @@ class ResPartner(models.Model):
 
         if cant_contactsRL > 1:
             raise ValidationError(_('Tiene más de un contacto ('+name_contact+') como Representante ante LOGYCA, por favor verificar.'))
-    
+     
+    @api.constrains('x_tax_responsibilities')
+    def _check_tax_responsibilities(self):
+        #Responsabilidades Tributarias Validas para FE
+        if self.company_type == 'company':
+            cant_RT = 0
+            for record in self.x_tax_responsibilities:   
+                if record.valid_for_fe == True:
+                    cant_RT = cant_RT + 1
+
+            if cant_RT == 0:
+                    raise ValidationError(_('El cliente debe tener una Responsabilidad Tributaria válida para Facturación Electrónica.'))  
+        
     # @api.onchange('name')
     # def _onchange_namecontact(self):
     #     for record in self:
