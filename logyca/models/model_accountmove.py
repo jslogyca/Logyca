@@ -149,8 +149,9 @@ class AccountMove(models.Model):
                 if not line.analytic_account_id and not line.analytic_tag_ids:
                     raise ValidationError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+line.name+", por favor verificar."))
         
-        #Contacto de facturación electronica        
+        
         cant_contactsFE = 0
+        cant_RT = 0
         if self.type == 'out_invoice' or self.type == 'out_refund' or self.type == 'out_receipt':            
             # Referencia
             if not self.ref:
@@ -175,7 +176,16 @@ class AccountMove(models.Model):
                 partner = self.env['res.partner'].browse(self.partner_id.parent_id.id)
             else:
                 partner = self.env['res.partner'].browse(self.partner_id.id)
-                
+               
+            #Responsabilidades tributarias            
+            for partner_responsibilities in partner.x_tax_responsibilities:   
+                if partner_responsibilities.valid_for_fe == True:
+                    cant_RT = cant_RT + 1
+
+            if cant_RT == 0:
+                    raise ValidationError(_('El cliente debe tener una Responsabilidad Tributaria válida para Facturación Electrónica.'))  
+                        
+            #Contacto de facturación electronica        
             for record in partner.child_ids:   
                 ls_contacts = record.x_contact_type              
                 for i in ls_contacts:
