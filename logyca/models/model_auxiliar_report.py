@@ -96,8 +96,14 @@ class AccountAuxiliarReport(models.Model):
     @api.model
     def _select(self,date_filter):
         return '''
+            Select Row_Number() Over(Order By company_id,account_level_five,partner,move_date) as id,
+                    company_id,
+                    account_level_one,account_level_two,account_level_three,account_level_four,account_level_five,
+                    partner,"move",move_name,move_date,move_ref,move_budget_group,
+                    Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance
+            From
+            (
             SELECT
-                Row_Number() Over(Order By G.id,D.Cuenta_Nivel_5,C.display_name,B."date") as id,
                 G.id as company_id,                
                 D.Cuenta_Nivel_1 as account_level_one,
                 D.Cuenta_Nivel_2 as account_level_two,
@@ -105,13 +111,15 @@ class AccountAuxiliarReport(models.Model):
                 D.Cuenta_Nivel_4 as account_level_four,
                 D.Cuenta_Nivel_5 as account_level_five,                
                 COALESCE(C.vat || ' | ' || C.display_name,'Tercero Vacio') as partner,
-                'Factura: ' || B.move_name || ' | Fecha: ' || B."date" || ' | Referencia: ' || B."ref" || ' | Grupo presupuestal: ' || coalesce(h."name",'-') as move,                
-                B.move_name as move_name,B."date" as move_date,B."ref" as move_ref,coalesce(h."name",'-') as move_budget_group,
+                case when B."date"<'%s' then 'SALDO INICIAL' else 'Factura: ' || B.move_name || ' | Fecha: ' || B."date" || ' | Referencia: ' || B."ref" || ' | Grupo presupuestal: ' || coalesce(h."name",'-') end as move,                   case when B."date"<'%s' then 'SALDO INICIAL' else  B.move_name end as move_name,
+                case when B."date"<'%s' then CAST('%s' AS DATE) - CAST('1 days' AS INTERVAL) else  B."date" end as move_date,
+                case when B."date"<'%s' then 'SALDO INICIAL' else  B."ref" end as move_ref,
+                case when B."date"<'%s' then 'SALDO INICIAL' else coalesce(h."name",'-') end as move_budget_group,
                 COALESCE(E.saldo_ant,0) as initial_balance,
                 SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
                 SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
                 COALESCE(E.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
-        ''' % (date_filter,date_filter,date_filter,date_filter)
+        ''' % (date_filter,date_filter,date_filter,date_filter,date_filter,date_filter,date_filter,date_filter,date_filter,date_filter)
 
     @api.model
     def _from(self,date_filter):
@@ -152,20 +160,25 @@ class AccountAuxiliarReport(models.Model):
     @api.model
     def _group_by(self):
         return '''
+                GROUP BY
+                    G.id,
+                    D.Cuenta_Nivel_1,
+                    D.Cuenta_Nivel_2,
+                    D.Cuenta_Nivel_3,
+                    D.Cuenta_Nivel_4,
+                    D.Cuenta_Nivel_5,
+                    C.vat,
+                    C.display_name,
+                    B.move_name,
+                    B."date",
+                    B."ref",
+                    H."name",
+                    E.saldo_ant
+            ) as A
             GROUP BY
-                G.id,
-                D.Cuenta_Nivel_1,
-                D.Cuenta_Nivel_2,
-                D.Cuenta_Nivel_3,
-                D.Cuenta_Nivel_4,
-                D.Cuenta_Nivel_5,
-                C.vat,
-                C.display_name,
-                B.move_name,
-                B."date",
-                B."ref",
-                H."name",
-                E.saldo_ant
+                    company_id,
+                    account_level_one,account_level_two,account_level_three,account_level_four,account_level_five,
+                    partner,"move",move_name,move_date,move_ref,move_budget_group
         '''
     
     def init(self):
