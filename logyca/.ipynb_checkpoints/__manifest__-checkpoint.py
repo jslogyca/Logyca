@@ -22,9 +22,6 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base','account','contacts','crm','sale_management','helpdesk','purchase','survey','documents'],
-    'external_dependencies': {
-        'python' : ['qrcode'],
-    },
     
     # always loaded
     'data': [
