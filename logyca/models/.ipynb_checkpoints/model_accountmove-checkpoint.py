@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
+from odoo.addons.base.models.res_bank import sanitize_account_number
 import requests
 import datetime
+import base64
 
+import logging
+_logger = logging.getLogger(__name__)
 #---------------------------Modelo ACCOUNT-MOVE/ MOVIMIENTO DETALLE-------------------------------#
 
 # Encabezado Movimiento
@@ -299,3 +303,19 @@ class AccountAnalyticLine(models.Model):
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
     x_payment_file = fields.Boolean(string='Reportado en archivo de pago')    
+
+#Importar Bancos CSV
+class AccountBankStatementImport(models.TransientModel):
+    _inherit = 'account.bank.statement.import'
+    
+    #attachment_ids = fields.Many2many('ir.attachment', string='Files', required=True, help='Get you bank statements in electronic format from your bank and select them here.')
+    x_documents_odoo = fields.Many2one('documents.document', string='Documentos en Odoo', ondelete='restrict')
+    
+    def import_file(self):        
+        if self.x_documents_odoo:            
+            for data_file in self.x_documents_odoo:                 
+                self.attachment_ids = data_file.attachment_id
+            return super(AccountBankStatementImport, self).import_file()              
+        else:
+            return super(AccountBankStatementImport, self).import_file()
+        
