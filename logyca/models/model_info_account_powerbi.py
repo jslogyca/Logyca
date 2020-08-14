@@ -84,7 +84,7 @@ class InfoAccountPowerBI(models.Model):
                 left join res_partner usu_mod on usu_mod.id = o.partner_id
                 left join account_analytic_group p on d.group_id = p.id
                 left join account_analytic_group q on p.parent_id = q.id
-            Where (e.code like '4%s' or e.code like '5%s' or e.code like '6%s')
+            Where A.state = 'posted' and (e.code like '4%s' or e.code like '5%s' or e.code like '6%s')
         ''' % ('%','%','%')
 
     def init(self):        

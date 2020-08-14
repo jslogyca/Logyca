@@ -2,7 +2,12 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
 import datetime
-import qrcode
+
+try: 
+    import qrcode
+except ImportError:
+    qrcode = None
+
 import base64
 import io
 
