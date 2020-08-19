@@ -75,8 +75,11 @@ class ResPartner(models.Model):
     x_active_vinculation = fields.Boolean(string='Estado de la vinculación', track_visibility='onchange')
     x_date_vinculation = fields.Date(string="Fecha de vinculación", track_visibility='onchange')
     x_type_vinculation = fields.Many2many('logyca.vinculation_types', string='Tipo de vinculación', track_visibility='onchange', ondelete='restrict')
+    #Campos RVC
     x_sponsored = fields.Boolean(string='Patrocinado', track_visibility='onchange')
     x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora', track_visibility='onchange')
+    x_rvc_information = fields.One2many('logyca.rvc_information', 'partner_id', string = 'Productos adquiridos', track_visibility='onchange')
+    #Campos Informativos
     x_belongs_academic_allies_cli = fields.Boolean(string='Pertenece a aliados Académicos del CLI', track_visibility='onchange')
     x_belongs_strategic_allies_cli = fields.Boolean(string='Pertenece a aliados Estratégicos del CLI', track_visibility='onchange')    
     x_meeting_logyca_investigation = fields.Boolean(string='Pertenece a la Junta LOGYCA INVESTIGACIÓN', track_visibility='onchange')    
@@ -276,3 +279,15 @@ class ResPartner(models.Model):
     #             obj = self.search([('x_type_thirdparty','not in',[1,3]),('name','=',record.name)])
     #             if obj:
     #                 raise UserError(_('Ya existe un Contacto con ese nombre.'))
+    
+# TABLA RVC
+class x_rvc_information(models.Model):
+    _name = 'logyca.rvc_information'
+    _description = 'RVC Information'
+    
+    partner_id = fields.Many2one('res.partner',string='Cliente', required=True, ondelete='cascade')
+    types = fields.Selection([('1', 'Logyca / COLABORA'),
+                              ('2', 'Logyca / ANALÍTICA'),
+                              ('3', 'Derechos de identificación')], string='Servicio', required=True)
+    activation_date = fields.Date(string="Fecha activación")    
+    finally_date = fields.Date(string="Fecha finalización")    

@@ -30,6 +30,7 @@
         'views/ciiu_view.xml',
         'views/reports.xml',
         'views/menus.xml',     
+        'views/logyca_survey.xml',
     ], 
     
 }

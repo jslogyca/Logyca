@@ -1,0 +1,44 @@
+<odoo>
+    <data>
+        <template id="little_faces" name="Little_faces">
+            
+            <style type="text/css">
+                .rad{
+                    padding:10px;
+                }
+                .rad > input{
+                  position: absolute;
+                  opacity: 0;
+                  width: 0;
+                  height: 0;
+                }                
+                .rad > input:checked + i{ 
+                  box-shadow: inset 0 0 0 3px #fff;
+                  background: orange;
+                }
+            </style>
+            <div class="row js_radio">            
+                <label class="rad">
+                    <input type="radio" t-att-name="prefix" t-att-value='1' />
+                    <i style="font-size: 50px;">&#128532;</i>
+                </label>
+                <label class="rad">
+                    <input type="radio" t-att-name="prefix" t-att-value='2' />
+                    <i style="font-size: 50px;">&#128543;</i>
+                </label>
+                <label class="rad">
+                    <input type="radio" t-att-name="prefix" t-att-value='3' />
+                    <i style="font-size: 50px;">&#128528;</i>
+                </label>
+                <label class="rad">
+                    <input type="radio" t-att-name="prefix" t-att-value='4' />
+                    <i style="font-size: 50px;">&#128512;</i>
+                </label>
+                <label class="rad">
+                    <input type="radio" t-att-name="prefix" t-att-value='5' />
+                    <i style="font-size: 50px;">&#128513;</i>
+                </label>                
+            </div>                      
+        </template>
+    </data>
+</odoo>

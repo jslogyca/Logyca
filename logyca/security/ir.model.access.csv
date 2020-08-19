@@ -27,3 +27,4 @@ access_logyca_payment_file,logyca.payment.file,model_logyca_payment_file,,1,1,1,
 access_account_info_powerbi,account.info.powerbi,model_account_info_powerbi,,1,0,0,0
 access_logyca_flatfile_payroll,logyca.flatfile.payroll,model_logyca_flatfile_payroll,,1,1,1,1
 access_logyca_homologationfile_payroll,logyca.homologationfile.payroll,model_logyca_homologationfile_payroll,,1,1,1,1
+access_logyca_rvc_information,logyca.rvc_information,model_logyca_rvc_information,,1,1,1,1
