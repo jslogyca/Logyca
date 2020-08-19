@@ -27,7 +27,7 @@ class comercial_report(models.TransientModel):
     
     #Retonar columnas
     def get_columns(self):
-        columns = 'RAZÓN SOCIAL,LÍNEA,FAMILIA,CUENTA,SERVICIO,SECTOR,COMERCIAL,CLIENTE,MOVIMIENTO,ENERO,FEBRERO,MARZO,ABRIL,MAYO,JUNIO,JULIO,AGOSTO,SEPTIEMBRE,OCTUBRE,NOVIEMBRE,DICIEMBRE,CAUSADO HOY, ASEGURADO AÑO'
+        columns = 'RAZÓN SOCIAL,LÍNEA,FAMILIA,CUENTA,SERVICIO,SECTOR,COMERCIAL,CLIENTE,MOVIMIENTO,VALOR DE VENTA,ENERO,FEBRERO,MARZO,ABRIL,MAYO,JUNIO,JULIO,AGOSTO,SEPTIEMBRE,OCTUBRE,NOVIEMBRE,DICIEMBRE,CAUSADO HOY, ASEGURADO AÑO'
         _columns = columns.split(",")
         return _columns
     
@@ -37,7 +37,7 @@ class comercial_report(models.TransientModel):
         query_one = '''
             Select e."name" as company,coalesce(i."name",'-') as LineaAnalitica,coalesce(h."name",'-') as FamiliaAnalitica,coalesce(g."name",'-') as CuentaAnalitica,
                     coalesce(b."name",'-') as Servicio, coalesce(k."name",'-') as Sector,coalesce(n."name",'-') as Comercial,coalesce(jj."name",coalesce(j."name",'-')) as Cliente,		
-                    'Causación'as Movimiento,
+                    Sum(coalesce(l.amount_untaxed,0)) as Valor_Venta,'Causación'as Movimiento,
                     Sum(case when extract(month from d."date") = 1 then d.amount_total else 0 end) as Enero,
                     Sum(case when extract(month from d."date") = 2 then d.amount_total else 0 end) as Febrero,
                     Sum(case when extract(month from d."date") = 3 then d.amount_total else 0 end) as Marzo,
@@ -78,7 +78,7 @@ class comercial_report(models.TransientModel):
         query_two = '''            
             Select e."name" as company,coalesce(i."name",'-') as LineaAnalitica,coalesce(h."name",'-') as FamiliaAnalitica,coalesce(g."name",'-') as CuentaAnalitica,
                     coalesce(b."name",'-') as Servicio, coalesce(k."name",coalesce(r."name",'-')) as Sector,coalesce(n."name",coalesce(q."name",'-')) as Comercial,coalesce(jj."name",coalesce(j."name",'-')) as Cliente,	
-                    'Facturación'as Movimiento,
+                    Sum(coalesce(l.amount_untaxed,0)) as Valor_Venta,'Facturación'as Movimiento,
                     Sum(case when extract(month from a."date") = 1 then f.amount else 0 end) as Enero,
                     Sum(case when extract(month from a."date") = 2 then f.amount else 0 end) as Febrero,
                     Sum(case when extract(month from a."date") = 3 then f.amount else 0 end) as Marzo,
@@ -122,7 +122,7 @@ class comercial_report(models.TransientModel):
         query_three = '''
             Select e."name" as company,coalesce(i."name",'-') as LineaAnalitica,coalesce(h."name",'-') as FamiliaAnalitica,coalesce(g."name",'-') as CuentaAnalitica,
                 coalesce(b."name",'-') as Servicio, coalesce(k."name",'-') as Sector,coalesce(n."name",'-') as Comercial,coalesce(jj."name",coalesce(j."name",'-')) as Cliente,	
-                'Causación' as Movimiento,		
+                Sum(coalesce(l.amount_untaxed,0)) as Valor_Venta,'Causación' as Movimiento,		
                 Sum(case when 1 between extract(month from c.date_initial) and extract(month from c.date_finally) then c.recurring else 0 end) as Enero,		
                 Sum(case when 2 between extract(month from c.date_initial) and extract(month from c.date_finally) then c.recurring else 0 end) as Febrero,
                 Sum(case when 3 between extract(month from c.date_initial) and extract(month from c.date_finally) then c.recurring else 0 end) as Marzo,
@@ -138,13 +138,14 @@ class comercial_report(models.TransientModel):
             From account_move a
             inner join account_move_line b on a.id = b.move_id
             --Suscripciones
-            inner join (select a.company_id,a.partner_id,a.code,a.date_start,a."date",a.user_id,
+            inner join (select a.id,a.company_id,a.partner_id,a.code,a.date_start,a."date",a.user_id,
                         case when extract(year from a.date_start) != %s and extract(year from a.date_start) != extract(year from a."date"::date-'1 month'::interval) then cast(cast(extract(year from a."date"::date-'1 month'::interval) as varchar)||'-01-01' as date) else a.date_start end as date_initial,
 			case when (extract(year from a.date_start) = %s and extract(year from a.date_start) != extract(year from a."date"::date-'1 month'::interval)) or a."date"::date-'1 month'::interval is null then cast(cast(extract(year from a.date_start)as varchar)||'-12-31'as date) else a."date"::date-'1 month'::interval end as date_finally,
                         sum(a.recurring_total) as recurring
                         from sale_subscription a
                         where extract(year from a.date_start) = %s or extract(year from a."date") = %s
-                        group by a.company_id,a.partner_id,a.code,a.date_start,a."date",a.user_id) c on a.invoice_origin = c.code and a."date" = c.date_start
+                        group by a.id,a.company_id,a.partner_id,a.code,a.date_start,a."date",a.user_id) c on a.invoice_origin = c.code 
+                        and extract(year from a."date") = extract(year from c.date_start) and extract(month from a."date") = extract(month from c.date_start)
             --Compañia
             inner join res_company e on a.company_id = e.id
             --Inf Analitica
@@ -156,7 +157,9 @@ class comercial_report(models.TransientModel):
             left join res_partner j on a.partner_id = j.id
             left join res_partner jj on j.parent_id = jj.id
             --Comercial
-            left join res_users m on c.user_id = m.id
+            left join sale_order_line ol on c.id = ol.subscription_id
+            left join sale_order l on ol.order_id = l.id
+            left join res_users m on l.user_id = m.id
             left join res_partner n on m.partner_id = n.id
             --Sector
             left join crm_team k on m.sale_team_id = k.id
@@ -169,7 +172,7 @@ class comercial_report(models.TransientModel):
         query_four = '''
             Select e."name" as company,coalesce(i."name",'-') as LineaAnalitica,coalesce(h."name",'-') as FamiliaAnalitica,coalesce(g."name",'-') as CuentaAnalitica,
                     coalesce(b."name",'-') as Servicio, coalesce(k."name",'-') as Sector,coalesce(n."name",'-') as Comercial,coalesce(jj."name",coalesce(j."name",'-')) as Cliente,		
-                    'Causación'as Movimiento,
+                    Sum(coalesce(l.amount_untaxed,0)) as Valor_Venta,'Causación'as Movimiento,
                     Sum(case when extract(month from a."date") = 1 then f.amount else 0 end) as Enero,
                     Sum(case when extract(month from a."date") = 2 then f.amount else 0 end) as Febrero,
                     Sum(case when extract(month from a."date") = 3 then f.amount else 0 end) as Marzo,
@@ -211,7 +214,7 @@ class comercial_report(models.TransientModel):
         
         #Consulta final
         query = '''
-            Select Company,LineaAnalitica,FamiliaAnalitica,CuentaAnalitica,Servicio,Sector,Comercial,Cliente,Movimiento,
+            Select Company,LineaAnalitica,FamiliaAnalitica,CuentaAnalitica,Servicio,Sector,Comercial,Cliente,Movimiento,Sum(Valor_Venta) as ValorVenta,
             Sum(Enero) as Enero,Sum(Febrero) as Febrero,Sum(Marzo) as Marzo,Sum(Abril) as Abril,Sum(Mayo) as Mayo,Sum(Junio) as Junio,
             Sum(Julio) as Julio,Sum(Agosto) as Agosto,Sum(Septiembre) as Septiembre,Sum(Octubre) as Octubre,Sum(Noviembre) as Noviembre,Sum(Diciembre) as Diciembre,		
             Sum(case when 1 <= extract(month from cast('%s' as date)) then Enero else 0 end +
@@ -243,6 +246,7 @@ class comercial_report(models.TransientModel):
         '''  % (date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,date_today,query_one,query_two,query_three,query_four)
         
         self._cr.execute(query)
+        
         _res = self._cr.dictfetchall()
         return _res
     
@@ -321,7 +325,7 @@ class comercial_report(models.TransientModel):
         sheet.set_column('G:H', 25)
         sheet.set_column('I:I', 40)
         sheet.set_column('J:J', 20)
-        sheet.set_column('K:X', 15)
+        sheet.set_column('K:Y', 15)
         
         book.close()            
            
