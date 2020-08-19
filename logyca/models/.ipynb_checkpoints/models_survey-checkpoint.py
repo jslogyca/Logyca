@@ -23,8 +23,7 @@ class Survey(models.Model):
     qr_survey_name = fields.Char(default="survey_qr.png")
     excel_file_result = fields.Binary('Excel file result')
     excel_file_result_name = fields.Char('Excel file result name', size=64)
-    
-    
+        
     def generate_qr(self):
         qr = qrcode.QRCode(version=1,error_correction=qrcode.constants.ERROR_CORRECT_L,box_size=20,border=4,)
         name = self.title+'_QR.png'
@@ -128,14 +127,13 @@ class Survey(models.Model):
             str_respuesta = ''
             str_quien_responde = ''
             str_encuesta_creada_por = ''
-            for query in result_query: 
-                
+            for query in result_query:                 
                 if i == 0:
                     id_user_ant = query['id']
                 else:
-                    id_user_ant = id_user
-                
+                    id_user_ant = id_user                
                 id_user = query['id']
+                
                 str_encuesta_creada_por = query['encuenta_creada_por']
                 str_quien_responde = query['usuario_respuesta']
                 
@@ -149,13 +147,7 @@ class Survey(models.Model):
                     if aument_columns == 1:
                         str_pregunta = row 
                     if aument_columns == 3:
-                        str_respuesta = row                    
-                    #if aument_columns == 2:
-                    #    str_pregunta = 'Quien Responde'
-                    #    str_respuesta = row                        
-                    #if aument_columns == 4:
-                    #    str_pregunta = 'Encuesta creada por'
-                    #    str_respuesta = row                    
+                        str_respuesta = row                     
                     position_col = 0
                     for col in columns:
                         if col == str_pregunta:

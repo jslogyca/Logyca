@@ -240,7 +240,7 @@ class SaleOrder(models.Model):
     x_origen = fields.Char(string='Origen',size=30)
     x_vat_partner = fields.Char(string='NIT Asociado', store=True, readonly=True, related='partner_id.vat', change_default=True)
     x_type_sale = fields.Selection([('Renovación', 'Renovación'),
-                                      ('Recurrente', 'Recurrente'),
+                                      #('Recurrente', 'Recurrente'),
                                       ('Nueva venta', 'Nueva venta')], string='Tipo de venta') 
     
     def _prepare_invoice(self):        
