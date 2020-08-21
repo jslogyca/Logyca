@@ -111,10 +111,10 @@ class AccountAuxiliarReport(models.Model):
                 D.Cuenta_Nivel_4 as account_level_four,
                 D.Cuenta_Nivel_5 as account_level_five,                
                 COALESCE(C.vat || ' | ' || C.display_name,'Tercero Vacio') as partner,
-                case when B."date"<'%s' then 'SALDO INICIAL' else 'Factura: ' || B.move_name || ' | Fecha: ' || B."date" || ' | Referencia: ' || B."ref" || ' | Grupo presupuestal: ' || coalesce(h."name",'-') end as move,                   case when B."date"<'%s' then 'SALDO INICIAL' else  B.move_name end as move_name,
+                case when B."date"<'%s' then 'AA_SALDO INICIAL' else 'Factura: ' || B.move_name || ' | Fecha: ' || B."date" || ' | Referencia: ' || B."ref" || ' | Grupo presupuestal: ' || coalesce(h."name",'-') end as move,                   case when B."date"<'%s' then 'AA_SALDO INICIAL' else  B.move_name end as move_name,
                 case when B."date"<'%s' then CAST('%s' AS DATE) - CAST('1 days' AS INTERVAL) else  B."date" end as move_date,
-                case when B."date"<'%s' then 'SALDO INICIAL' else  B."ref" end as move_ref,
-                case when B."date"<'%s' then 'SALDO INICIAL' else coalesce(h."name",'-') end as move_budget_group,
+                case when B."date"<'%s' then 'AA_SALDO INICIAL' else  B."ref" end as move_ref,
+                case when B."date"<'%s' then 'AA_SALDO INICIAL' else coalesce(h."name",'-') end as move_budget_group,
                 COALESCE(E.saldo_ant,0) as initial_balance,
                 SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
                 SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
@@ -152,7 +152,7 @@ class AccountAuxiliarReport(models.Model):
     @api.model
     def _where(self,date_filter,partner_id,account_id):
         return '''
-            WHERE  B.parent_state = 'posted' and B."date" < '%s' 
+            WHERE  B.parent_state = 'posted' and B."date" <= '%s' 
                     and COALESCE(B.partner_id,0) = case when %s = 0 then COALESCE(B.partner_id,0) else %s end
                     and B.account_id = case when %s = 0 then B.account_id else %s end
         '''  % (date_filter,partner_id,partner_id,account_id,account_id)
