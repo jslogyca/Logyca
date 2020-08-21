@@ -73,6 +73,131 @@ class libro_diario_report(models.TransientModel):
 
         date_filter_next = str(x_ano)+'-'+str(x_month)+'-01'
         
+        query_account_levelone = '''
+            SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            From (
+            Select
+                A.code,LevelAccount.LevelOne as Code_Cuenta,'' as Name_Cuenta,
+                COALESCE(D.saldo_ant,0) as initial_balance,
+                SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
+                SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
+                COALESCE(D.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
+                FROM (
+                        select distinct substring(A.code_prefix for 1) as LevelOne
+                        From account_group A
+                        left join account_group b on a.id = b.parent_id
+                        where (array_length(string_to_array(a.parent_path, '/'), 1) - 1)  = 1 and a.code_prefix is not null    
+                ) as LevelAccount
+                INNER JOIN account_account A on A.code like LevelAccount.LevelOne || '%s' 
+                INNER JOIN account_move_line B on A.id = B.account_id 
+                INNER JOIN account_move C on B.move_id = C.id and C.company_id = %s
+                LEFT JOIN (
+                            SELECT account_id,
+                                    SUM(debit - credit) as saldo_ant 
+                            FROM account_move_line
+                            WHERE "date" < '%s' and parent_state = 'posted' group by account_id
+                      ) as D on B.account_id = D.account_id
+                WHERE  B.parent_state = 'posted' and B."date" < '%s' 
+                GROUP by A.code,LevelAccount.LevelOne,D.saldo_ant
+                ) as a
+            Group by code_cuenta,name_cuenta
+        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,date_filter,date_filter_next)
+        
+        query_account_leveltwo = '''
+            SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            From (
+            Select
+                A.code,LevelAccount.LevelTwo as Code_Cuenta,LevelAccount.LevelTwoName as Name_Cuenta,
+                COALESCE(D.saldo_ant,0) as initial_balance,
+                SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
+                SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
+                COALESCE(D.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
+                FROM (
+                        select distinct 
+                                A.code_prefix as LevelTwo,A."name" as LevelTwoName					
+                        From account_group A
+                        left join account_group b on a.id = b.parent_id
+                        where (array_length(string_to_array(a.parent_path, '/'), 1) - 1)  = 1 and a.code_prefix is not null    
+                ) as LevelAccount
+                INNER JOIN account_account A on A.code like LevelAccount.LevelTwo || '%s' 
+                INNER JOIN account_move_line B on A.id = B.account_id 
+                INNER JOIN account_move C on B.move_id = C.id and C.company_id = %s
+                LEFT JOIN (
+                            SELECT account_id,
+                                    SUM(debit - credit) as saldo_ant 
+                            FROM account_move_line
+                            WHERE "date" < '%s' and parent_state = 'posted' group by account_id
+                      ) as D on B.account_id = D.account_id
+                WHERE  B.parent_state = 'posted' and B."date" < '%s' 
+                GROUP by A.code,LevelAccount.LevelTwo,LevelAccount.LevelTwoName,D.saldo_ant
+                ) as a
+            Group by code_cuenta,name_cuenta
+        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,date_filter,date_filter_next)
+        
+        query_account_levelthree = '''
+            SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            From (
+            Select
+                A.code,LevelAccount.LevelThree as Code_Cuenta,LevelAccount.LevelThreeName as Name_Cuenta,
+                COALESCE(D.saldo_ant,0) as initial_balance,
+                SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
+                SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
+                COALESCE(D.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
+                FROM (
+                        select distinct 
+                                coalesce(B.code_prefix,'') as LevelThree,coalesce(B."name",'') as LevelThreeName
+                        From account_group A
+                        left join account_group b on a.id = b.parent_id
+                        where (array_length(string_to_array(a.parent_path, '/'), 1) - 1)  = 1 and a.code_prefix is not null    
+                ) as LevelAccount
+                INNER JOIN account_account A on A.code like LevelAccount.LevelThree || '%s' 
+                INNER JOIN account_move_line B on A.id = B.account_id 
+                INNER JOIN account_move C on B.move_id = C.id and C.company_id = %s
+                LEFT JOIN (
+                            SELECT account_id,
+                                    SUM(debit - credit) as saldo_ant 
+                            FROM account_move_line
+                            WHERE "date" < '%s' and parent_state = 'posted' group by account_id
+                      ) as D on B.account_id = D.account_id
+                WHERE  B.parent_state = 'posted' and B."date" < '%s' 
+                GROUP by A.code,LevelAccount.LevelThree,LevelAccount.LevelThreeName,D.saldo_ant
+                ) as a
+            Where code_cuenta != ''
+            Group by code_cuenta,name_cuenta
+        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,date_filter,date_filter_next)
+        
+        query_account_levelfour = '''
+            SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            From (
+            Select
+                A.code,LevelAccount.LevelFour as Code_Cuenta,LevelAccount.LevelFourName as Name_Cuenta,
+                COALESCE(D.saldo_ant,0) as initial_balance,
+                SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
+                SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
+                COALESCE(D.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
+                FROM (
+                        select distinct 
+                                coalesce(B.code_prefix,'') as LevelFour,coalesce(B."name",'') as LevelFourName
+                        From account_group A
+                        left join account_group b on a.id = b.parent_id
+                        where (array_length(string_to_array(a.parent_path, '/'), 1) - 2)  = 1 and a.code_prefix is not null    
+                ) as LevelAccount
+                INNER JOIN account_account A on A.code like LevelAccount.LevelFour || '%s' 
+                INNER JOIN account_move_line B on A.id = B.account_id 
+                INNER JOIN account_move C on B.move_id = C.id and C.company_id = %s
+                LEFT JOIN (
+                            SELECT account_id,
+                                    SUM(debit - credit) as saldo_ant 
+                            FROM account_move_line
+                            WHERE "date" < '%s' and parent_state = 'posted' group by account_id
+                      ) as D on B.account_id = D.account_id
+                WHERE  B.parent_state = 'posted' and B."date" < '%s' 
+                GROUP by A.code,LevelAccount.LevelFour,LevelAccount.LevelFourName,D.saldo_ant
+                ) as a
+            Where code_cuenta != ''
+            Group by code_cuenta,name_cuenta
+        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,date_filter,date_filter_next)
+        
         query_account = '''
             SELECT
             D.code as Code_Cuenta,'' as Code_Documento,D."name" as Name_Cuenta,
@@ -123,9 +248,17 @@ class libro_diario_report(models.TransientModel):
                 %s
                 union
                 %s
+                union
+                %s
+                union
+                %s
+                union
+                %s
+                union
+                %s
             ) As A
             Order By A.code_cuenta,A.code_documento
-        ''' % (query_account,query_journal)
+        ''' % (query_account_levelone,query_account_leveltwo,query_account_levelthree,query_account_levelfour,query_account,query_journal)
         
         #raise ValidationError(_(query))       
         
