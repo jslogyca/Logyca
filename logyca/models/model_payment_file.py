@@ -309,6 +309,13 @@ class comercial_report(models.Model):
             aument_rows = 3
             for query in result_query: 
                 for row in query.values():
+                    if aument_columns == 2 or aument_columns == 8:
+                        row = str(row).replace("/","")
+                        row = str(row).replace(".","")
+                        row = str(row).replace(",","")
+                        row = str(row).replace(":","")
+                        row = str(row).replace(";","")
+                    
                     if aument_columns == 10:
                         sheet.write(aument_rows, aument_columns, row, number_format)
                     else:
