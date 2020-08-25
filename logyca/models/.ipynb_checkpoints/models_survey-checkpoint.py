@@ -54,7 +54,7 @@ class Survey(models.Model):
                     inner join survey_user_input_line as d on D.user_input_id = c.id and a.id = d.survey_id and b.id = d.question_id
                     left join survey_label as e on d.value_suggested  = e.id
                     left join survey_label as f on d.value_suggested_row  = f.id
-                    where a.id = %s
+                    where  d.value_suggested_row is null and  a.id = %s
         ''' % (self.id)
         
         self._cr.execute(query_columns)
@@ -64,12 +64,12 @@ class Survey(models.Model):
         for c in result_columns: 
                 for row in c.values():
                     if columns_str != '':
-                        columns_str = columns_str+','+row
+                        columns_str = columns_str+'|'+row
                     else:
                         columns_str = row
         
         columns_str = 'Encuesta creada por,Quien Responde,'+columns_str
-        columns = columns_str.split(",")
+        columns = columns_str.split("|")
         #raise ValidationError(_(columns))    
         
         #Traer Consultas
@@ -81,8 +81,6 @@ class Survey(models.Model):
                     when d.answer_type = 'number' then cast(d.value_number as varchar)
                     when d.answer_type = 'date' then cast(d.value_date as varchar)
                     when d.answer_type = 'datetime' then cast(d.value_datetime as varchar)
-                    when d.answer_type = 'suggestion' and d.value_suggested_row is null then cast(e.value as varchar)
-                    when d.answer_type = 'suggestion' and d.value_suggested_row is not null then cast(f.value as varchar)
                     when d.answer_type = 'free_text' then cast(d.value_free_text as varchar) 
                     when d.answer_type = 'little_faces' then cast(d.value_little_faces as varchar) else '' end as Respuesta,
                 usu_crea."name" as Encuenta_Creada_Por
@@ -98,7 +96,7 @@ class Survey(models.Model):
                 left join res_partner usu_crea on usu_crea.id = n.partner_id
                 left join res_partner usu_mod on usu_mod.id = o.partner_id
                 left join res_partner Usu_respu on Usu_respu.id = p.partner_id
-                where a.id = %s 
+                where d.answer_type <> 'suggestion' and a.id = %s 
                 order by c.id, b."sequence"
         ''' % (self.id)
                     
