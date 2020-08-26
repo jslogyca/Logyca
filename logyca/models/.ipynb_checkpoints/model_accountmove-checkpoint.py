@@ -226,6 +226,12 @@ class AccountMoveReversal(models.TransientModel):
     
     def reverse_moves(self):
         self.refund_method = 'cancel'
+        #Validar que no deje crear NC a facturas ya pagadas
+        moves = self.env['account.move'].browse(self.env.context['active_ids']) if self.env.context.get('active_model') == 'account.move' else self.move_id        
+        for move in moves:
+            if move.invoice_payment_state == 'paid':
+                    raise ValidationError(_('La factura '+move.name+' ya esta pagada no se puede hacer nota crédito.'))
+        #Ejecutar metodo original
         return super(AccountMoveReversal, self).reverse_moves()
         
 # Detalle Movimiento
@@ -318,4 +324,10 @@ class AccountBankStatementImport(models.TransientModel):
             return super(AccountBankStatementImport, self).import_file()              
         else:
             return super(AccountBankStatementImport, self).import_file()
+        
+#Ingresos diferidos
+class AccountAsset(models.Model):
+    _inherit = 'account.asset'
+    
+    move_ids = fields.Many2one(related='original_move_line_ids.move_id', string='Movimiento Original', readonly=True, copy=False)
         
