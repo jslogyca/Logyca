@@ -9,6 +9,9 @@ class CrmLead(models.Model):
     #AREA Y CARGO
     x_contact_job_title = fields.Many2one('logyca.job_title', string='Cargo', track_visibility='onchange')
     x_contact_area = fields.Many2one('logyca.areas', string='Área', track_visibility='onchange')
+    x_analytic_account_id =  fields.Many2one('account.analytic.account', string ='Cuenta Análitica', track_visibility='onchange')
+    x_analytic_account_family = fields.Many2one( string ='Familia Análitica', related = 'x_analytic_account_id.group_id', readonly = True, store = True )
+    x_analytic_account_line = fields.Many2one( string ='Línea Análitica', related = 'x_analytic_account_family.parent_id', readonly = True, store = True )
     
     @api.onchange('partner_id')
     def _onchange_partner_id_jobposition(self):
