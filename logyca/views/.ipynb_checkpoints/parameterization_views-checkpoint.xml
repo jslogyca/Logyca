@@ -276,7 +276,8 @@
                                 <field name="x_ano_filter" string="Año"/>
                                 <field name="x_month_filter" string="Mes"/>
                                 <field name="x_ano_filter_two" string="Año Final" attrs="{'invisible':[('x_type_filter', '!=', '2')], 'required': [('x_type_filter', '=', '2')]}"/>
-                                <field name="x_month_filter_two" string="Mes Final" attrs="{'invisible':[('x_type_filter', '!=', '2')], 'required': [('x_type_filter', '=', '2')]}"/>                                 
+                                <field name="x_month_filter_two" string="Mes Final" attrs="{'invisible':[('x_type_filter', '!=', '2')], 'required': [('x_type_filter', '=', '2')]}"/>
+                                <field name="company_id" string="Compañia"/> 
                             </group>
                             <div class="oe_grey" colspan="4">
                                 El balance por generar tomara como saldo inicial todos los movimientos realizados antes de la fecha seleccionada.
@@ -301,9 +302,10 @@
                             <group>
                                 <field name="date_initial" string="Fecha Inicial"/>
                                 <field name="date_finally" string="Fecha Final"/>                                
-                                <field name="partner_id" string="Cliente"/>                                
-                                <field name="account_id" string="Cuenta"/>   
-                                <field name="account_company" string="Compañia a la que pertence la cuenta" attrs="{'invisible':[('account_id', '=', False)]}"/>
+                                <field name="partner_id" string="Cliente"/> 
+                                <field name="account_one" string="Cuenta 1"/>                                   
+                                <field name="account_two" string="Cuenta 2"/>                                   
+                                <field name="account_three" string="Cuenta 3"/>
                             </group>
                             <div class="oe_grey" colspan="4">
                                 El Auxiliar por generar tomara como saldo inicial todos los movimientos realizados antes de la fecha inicial seleccionada y mostrara los movimientos realizados en el rango de fechas.
