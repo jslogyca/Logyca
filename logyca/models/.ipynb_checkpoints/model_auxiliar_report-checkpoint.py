@@ -7,18 +7,43 @@ from odoo.exceptions import UserError, ValidationError
 from functools import lru_cache
 
 
+class AccountAuxiliarSchemeFavorite(models.Model):
+    _name = "account.auxiliar.schemefavorite"
+    _description = "Scheme - Auxiliar Favoritos"
+    
+    name_favorite = fields.Char(string='Nombre de favorito')
+    date_initial = fields.Date(string='Fecha Inicial') 
+    date_finally = fields.Date(string='Fecha Final')
+    partner_id = fields.Many2one('res.partner', string='Cliente', domain=[('x_type_thirdparty', 'not in', [2])])
+    account_one = fields.Char(string='Cuenta 1')
+    account_two = fields.Char(string='Cuenta 2')
+    account_three = fields.Char(string='Cuenta 3')
+    
+    def name_get(self):
+        result = []
+        txt_title = ''
+        for record in self:    
+            txt_title = record.name_favorite        
+            if not txt_title:
+                txt_title = 'Id:'+str(record.id)+'- sin nombre asignado'            
+            result.append((record.id, "{}".format(txt_title)))
+        return result
+
 class AccountAuxiliarFilter(models.TransientModel):
     _name = "account.auxiliar.filter"
     _description = "Filter - Auxiliar Report"
     
-    date_initial = fields.Date(string='Fecha Inicial', required=True) 
-    date_finally = fields.Date(string='Fecha Final', required=True)
+    date_initial = fields.Date(string='Fecha Inicial') 
+    date_finally = fields.Date(string='Fecha Final')
     partner_id = fields.Many2one('res.partner', string='Cliente', domain=[('x_type_thirdparty', 'not in', [2])])
     account_one = fields.Char(string='Cuenta 1')
     account_two = fields.Char(string='Cuenta 2')
     account_three = fields.Char(string='Cuenta 3')
     #account_id = fields.Many2one('account.account', string='Cuenta')
     #account_company = fields.Many2one(string='Compañia de la cuenta', readonly=True, related='account_id.company_id', change_default=True)    
+    save_favorite = fields.Boolean(string='¿Guardar como favorito?')
+    name_favorite = fields.Char(string='Nombre de favorito')
+    schema_favorite = fields.Many2one('account.auxiliar.schemefavorite', string='Favoritos')
     
     def name_get(self):
         result = []
@@ -35,6 +60,15 @@ class AccountAuxiliarFilter(models.TransientModel):
             
             result.append((record.id, "{} | Fecha Inicial: {} - Fecha Final: {}".format(filters,record.date_initial,record.date_finally)))
         return result
+    
+    def upload_favorite(self):
+        for favorite in self.schema_favorite:
+            self.date_initial = favorite.date_initial
+            self.date_finally = favorite.date_finally
+            self.partner_id = favorite.partner_id
+            self.account_one = favorite.account_one
+            self.account_two = favorite.account_two
+            self.account_three = favorite.account_three
     
     def open_pivot_view(self):
         ctx = self.env.context.copy()
@@ -62,6 +96,20 @@ class AccountAuxiliarFilter(models.TransientModel):
         if account_one == 0 and partner_id == 0:
             raise UserError(_('Debe seleccionar algún filtro de Cliente y/o Cuenta.'))
         
+        #Guardar como favorito
+        if self.save_favorite == True:
+            model_schemefavorite = self.env['account.auxiliar.schemefavorite']
+            model_schemefavorite.create({
+                    'name_favorite': self.name_favorite,
+                    'date_initial' : self.date_initial,
+                    'date_finally' : self.date_finally,
+                    'partner_id' : self.partner_id.id,
+                    'account_one' : self.account_one,
+                    'account_two' : self.account_two,
+                    'account_three' : self.account_three,
+                })            
+            
+        #Crear contexto
         ctx.update({'date_initial':self.date_initial,'date_finally':self.date_finally,'partner_id':partner_id,
                         'account_one':account_one,'account_two':account_two,'account_three':account_three})
         self.env['account.auxiliar.report'].with_context(ctx).init(),
