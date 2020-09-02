@@ -47,6 +47,7 @@ class AccountBalancePartnerFilter(models.TransientModel):
                                         ('11', 'Noviembre'),
                                         ('12', 'Diciembre')        
                                     ], string='Mes 2')
+    company_id = fields.Many2one('res.company', string='Compañia')
     
     def name_get(self):
         result = []
@@ -66,8 +67,14 @@ class AccountBalancePartnerFilter(models.TransientModel):
         return result
     
     def open_pivot_view(self):
+        
+        if not self.company_id:
+            company_id = 0
+        else:
+            company_id = self.company_id.id
+        
         ctx = self.env.context.copy()
-        ctx.update({'x_type':self.x_type_filter,'x_ano':self.x_ano_filter,'x_month':self.x_month_filter,'x_ano_two':self.x_ano_filter_two,'x_month_two':self.x_month_filter_two})
+        ctx.update({'x_type':self.x_type_filter,'x_ano':self.x_ano_filter,'x_month':self.x_month_filter,'x_ano_two':self.x_ano_filter_two,'x_month_two':self.x_month_filter_two,'company_id':company_id})
         self.env['account.balance.partner.report'].with_context(ctx).init()
         return {
             'type': 'ir.actions.act_window',
@@ -161,10 +168,11 @@ class AccountBalancePartnerReport(models.Model):
         ''' % (date_filter,)
 
     @api.model
-    def _where(self,date_filter):
+    def _where(self,date_filter,company_id):
         return '''
             WHERE  B.parent_state = 'posted' and B."date" < '%s'
-        '''  % (date_filter,)
+            and COALESCE(B.company_id,0) = case when %s = 0 then COALESCE(B.company_id,0) else %s end                                
+        '''  % (date_filter,company_id,company_id)
 
     @api.model
     def _group_by(self):
@@ -189,13 +197,15 @@ class AccountBalancePartnerReport(models.Model):
             x_ano = self.env.context.get('x_ano')
             x_month = int(self.env.context.get('x_month'))
             x_ano_two = self.env.context.get('x_ano_two')
-            x_month_two = int(self.env.context.get('x_month_two'))        
+            x_month_two = int(self.env.context.get('x_month_two'))
+            company_id = self.env.context.get('company_id')
         else:
             x_type = '1'
             x_ano = 2020
             x_month = 1
             x_ano_two = 2020
             x_month_two = 1
+            company_id = 0
         
         #Armar fecha dependiendo el tipo seleccionado
         date_filter = ''
@@ -251,7 +261,7 @@ class AccountBalancePartnerReport(models.Model):
                 %s %s %s %s
             )
         ''' % (
-            self._table, self._select(date_filter), self._from(date_filter), self._where(date_filter_next), self._group_by()
+            self._table, self._select(date_filter), self._from(date_filter), self._where(date_filter_next,company_id), self._group_by()
         ))
 
     

@@ -1,0 +1,65 @@
+<odoo>
+    <data>
+        <template id="little_faces" name="Little_faces">
+            <style type="text/css">
+                .box_faces{
+                  border-style: inset;
+                  display: flex;
+                  justify-content: center;
+                }
+                
+                .title{
+                  border-top:solid;
+                  text-align: center;
+                }
+                .rad{
+                    margin:5px;
+                    padding:5px;
+                    text-align: center;
+                }
+                .rad &gt; input{
+                  position: absolute;
+                  opacity: 0;
+                  width: 0;
+                  height: 0;
+                }                
+                .rad &gt; input:checked + i{ 
+                  box-shadow: inset 0 0 0 3px #fff;
+                  background: orange;
+                }
+            </style>
+            <div class="box_faces row js_radio">            
+                <label class="rad">
+                    <input type="radio" t-att-name="prefix" t-att-value="1"/>
+                    <i style="font-size: 50px; font-style: normal;">&#128545;</i>
+                    <br/>
+                    <label class="title">No me gustó</label>
+                </label>
+                <label class="rad">
+                    <input type="radio" t-att-name="prefix" t-att-value="2"/>
+                    <i style="font-size: 50px; font-style: normal;">&#128543;</i>
+                    <br/>
+                    <label class="title">Podría mejorar</label>
+                </label>
+                <label class="rad">
+                    <input type="radio" t-att-name="prefix" t-att-value="3"/>
+                    <i style="font-size: 50px; font-style: normal;">&#128528;</i>
+                    <br/>
+                    <label class="title">Normal</label>
+                </label>
+                <label class="rad">
+                    <input type="radio" t-att-name="prefix" t-att-value="4"/>
+                    <i style="font-size: 50px; font-style: normal;">&#128512;</i>
+                    <br/>
+                    <label class="title">Bueno</label>
+                </label>
+                <label class="rad">
+                    <input type="radio" t-att-name="prefix" t-att-value="5"/>
+                    <i style="font-size: 50px; font-style: normal;">&#128525;</i>
+                    <br/>
+                    <label class="title">Me encantó</label>
+                </label>                
+            </div>                    
+        </template>
+    </data>
+</odoo>

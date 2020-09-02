@@ -21,7 +21,7 @@
 	'auto_install': False,
 
     # any module necessary for this one to work correctly
-    'depends': ['base','account','contacts','crm','sale_management','helpdesk','purchase','survey','documents'],
+    'depends': ['base','account','contacts','crm','sale_management','helpdesk','purchase','survey','documents','account_asset','approvals'],
     
     # always loaded
     'data': [
@@ -30,6 +30,7 @@
         'views/ciiu_view.xml',
         'views/reports.xml',
         'views/menus.xml',     
+        'views/logyca_survey.xml',
     ], 
     
 }

@@ -240,7 +240,7 @@ class SaleOrder(models.Model):
     x_origen = fields.Char(string='Origen',size=30)
     x_vat_partner = fields.Char(string='NIT Asociado', store=True, readonly=True, related='partner_id.vat', change_default=True)
     x_type_sale = fields.Selection([('Renovación', 'Renovación'),
-                                      ('Recurrente', 'Recurrente'),
+                                      #('Recurrente', 'Recurrente'),
                                       ('Nueva venta', 'Nueva venta')], string='Tipo de venta') 
     
     def _prepare_invoice(self):        
@@ -346,5 +346,16 @@ class PurchaseOrderLine(models.Model):
         if self.analytic_tag_ids:
             self.account_analytic_id = False
 
+class ApprovalRequest(models.Model):
+    _inherit = 'approval.request'          
     
+    @api.model
+    def _get_account_move(self):
+        move = None
+        if self.env.context.get('x_account_move_id', False):
+            move = self.env['account.move'].browse(self.env.context.get('x_account_move_id'))
+        return move
+    
+    #Movimiento contable
+    x_account_move_id = fields.Many2one('account.move', string='Factura Asociada',readonly=True, default=_get_account_move)
     
