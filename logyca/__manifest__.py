@@ -21,7 +21,7 @@
 	'auto_install': False,
 
     # any module necessary for this one to work correctly
-    'depends': ['base','account','contacts','crm','sale_management','helpdesk','purchase','survey','documents','account_asset'],
+    'depends': ['base','account','contacts','crm','sale_management','helpdesk','purchase','survey','documents','account_asset','approvals'],
     
     # always loaded
     'data': [
