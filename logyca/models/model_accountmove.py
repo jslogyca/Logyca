@@ -40,6 +40,37 @@ class AccountMove(models.Model):
     x_motive_error = fields.Text(string='Motivo de error', copy=False)
     #Tiene Nota Credito
     x_have_out_invoice = fields.Boolean(string='Tiene NC', compute='_have_nc')    
+    #Tiene Aprobaciones
+    x_have_approval_request = fields.Boolean(string='Tiene Aprobaciones', compute='_have_approval_request')    
+    
+    def create_approval_request(self):
+        ctx = self.env.context.copy()
+        ctx.update({'x_account_move_id':self.id})
+        self.env['approval.request'].with_context(ctx).init()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'All Approvals',
+            'res_model': 'approval.request',
+            'domain': [],
+            'view_mode': 'form',
+            'context': ctx,
+            'target': 'current',
+        }
+    
+    def _have_approval_request(self):        
+        query_approval = '''
+            Select id,"name" 
+            From approval_request 
+            Where request_status = 'approved' and x_account_move_id = %s
+        ''' % (self.id)
+        
+        self._cr.execute(query_approval)
+        result_query_approval = self._cr.dictfetchall()
+        
+        if result_query_approval:
+            self.x_have_approval_request = True
+        else:
+            self.x_have_approval_request = False
     
     def _have_nc(self):
         query_fac = '''
@@ -67,7 +98,7 @@ class AccountMove(models.Model):
         else:
             #raise ValidationError(_('NO TIENE NC'))    
             self.x_have_out_invoice = False
-        
+            
     @api.depends('partner_id')
     @api.onchange('partner_id')
     def _onchange_partner_id_country(self):
