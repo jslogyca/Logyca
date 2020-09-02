@@ -14,8 +14,11 @@ class AccountAuxiliarFilter(models.TransientModel):
     date_initial = fields.Date(string='Fecha Inicial', required=True) 
     date_finally = fields.Date(string='Fecha Final', required=True)
     partner_id = fields.Many2one('res.partner', string='Cliente', domain=[('x_type_thirdparty', 'not in', [2])])
-    account_id = fields.Many2one('account.account', string='Cuenta')
-    account_company = fields.Many2one(string='Compañia de la cuenta', readonly=True, related='account_id.company_id', change_default=True)    
+    account_one = fields.Char(string='Cuenta 1')
+    account_two = fields.Char(string='Cuenta 2')
+    account_three = fields.Char(string='Cuenta 3')
+    #account_id = fields.Many2one('account.account', string='Cuenta')
+    #account_company = fields.Many2one(string='Compañia de la cuenta', readonly=True, related='account_id.company_id', change_default=True)    
     
     def name_get(self):
         result = []
@@ -23,8 +26,12 @@ class AccountAuxiliarFilter(models.TransientModel):
         for record in self:    
             if record.partner_id:
                 filters = record.partner_id.name
-            if record.account_id:
-                filters = filters +' | Cuenta: '+ record.account_id.code           
+            if record.account_one:
+                filters = filters +' | Cuenta: '+ record.account_one
+            if record.account_two:
+                filters = filters +', '+ record.account_two
+            if record.account_three:
+                filters = filters +', '+ record.account_three
             
             result.append((record.id, "{} | Fecha Inicial: {} - Fecha Final: {}".format(filters,record.date_initial,record.date_finally)))
         return result
@@ -37,15 +44,26 @@ class AccountAuxiliarFilter(models.TransientModel):
         else:
             partner_id = self.partner_id.id
             
-        if not self.account_id:
-            account_id = 0
+        if not self.account_one:
+            account_one = 0
         else:
-            account_id = self.account_id.id
+            account_one = self.account_one
         
-        if account_id == 0 and partner_id == 0:
+        if not self.account_two:
+            account_two = 0
+        else:
+            account_two = self.account_two
+        
+        if not self.account_three:
+            account_three = 0
+        else:
+            account_three = self.account_three
+        
+        if account_one == 0 and partner_id == 0:
             raise UserError(_('Debe seleccionar algún filtro de Cliente y/o Cuenta.'))
         
-        ctx.update({'date_initial':self.date_initial,'date_finally':self.date_finally,'partner_id':partner_id,'account_id':account_id})
+        ctx.update({'date_initial':self.date_initial,'date_finally':self.date_finally,'partner_id':partner_id,
+                        'account_one':account_one,'account_two':account_two,'account_three':account_three})
         self.env['account.auxiliar.report'].with_context(ctx).init(),
         return {
             'type': 'ir.actions.act_window',
@@ -150,12 +168,42 @@ class AccountAuxiliarReport(models.Model):
         ''' % (date_filter,)
 
     @api.model
-    def _where(self,date_filter,partner_id,account_id):
-        return '''
-            WHERE  B.parent_state = 'posted' and B."date" <= '%s' 
-                    and COALESCE(B.partner_id,0) = case when %s = 0 then COALESCE(B.partner_id,0) else %s end
-                    and B.account_id = case when %s = 0 then B.account_id else %s end
-        '''  % (date_filter,partner_id,partner_id,account_id,account_id)
+    def _where(self,date_filter,partner_id,account_one,account_two,account_three):
+        
+        where = ''
+        
+        #Cuando solo filtran cliente
+        if partner_id != 0 and account_one == 0:
+            where = '''
+                        WHERE  B.parent_state = 'posted' and B."date" <= '%s' 
+                                and COALESCE(B.partner_id,0) = case when %s = 0 then COALESCE(B.partner_id,0) else %s end                                
+                    '''  % (date_filter,partner_id,partner_id)
+        
+        #Cuando filtran cliente o una sola cuenta
+        if account_one != 0:
+            where = '''
+                        WHERE  B.parent_state = 'posted' and B."date" <= '%s' 
+                                and COALESCE(B.partner_id,0) = case when %s = 0 then COALESCE(B.partner_id,0) else %s end                                
+                                and D.Cuenta_Nivel_5 like '%s%s'                                
+                    '''  % (date_filter,partner_id,partner_id,account_one,'%')
+            
+        #Cuando filtran cliente o dos cuentas        
+        if account_one != 0 and account_two!=0:
+            where = '''
+                        WHERE  B.parent_state = 'posted' and B."date" <= '%s' 
+                                and COALESCE(B.partner_id,0) = case when %s = 0 then COALESCE(B.partner_id,0) else %s end                                
+                                and (D.Cuenta_Nivel_5 like '%s%s' or D.Cuenta_Nivel_5 like '%s%s')
+                    '''  % (date_filter,partner_id,partner_id,account_one,'%',account_two,'%')
+            
+        #Cuando filtran cliente o tres cuentas
+        if account_one != 0 and account_two!=0 and account_three!=0:
+            where = '''
+                        WHERE  B.parent_state = 'posted' and B."date" <= '%s' 
+                                and COALESCE(B.partner_id,0) = case when %s = 0 then COALESCE(B.partner_id,0) else %s end                                
+                                and (D.Cuenta_Nivel_5 like '%s%s' or D.Cuenta_Nivel_5 like '%s%s' or D.Cuenta_Nivel_5 like '%s%s')
+                    '''  % (date_filter,partner_id,partner_id,account_one,'%',account_two,'%',account_three,'%')
+            
+        return where
 
     @api.model
     def _group_by(self):
@@ -188,12 +236,16 @@ class AccountAuxiliarReport(models.Model):
             date_initial = self.env.context.get('date_initial') 
             date_finally = self.env.context.get('date_finally')   
             partner_id = self.env.context.get('partner_id') 
-            account_id = self.env.context.get('account_id') 
+            account_one = self.env.context.get('account_one')  
+            account_two = self.env.context.get('account_two')  
+            account_three = self.env.context.get('account_three')  
         else:
             date_initial = '2020-01-01'
             date_finally = '2020-02-01'
-            partner_id = 1
-            account_id = 1
+            partner_id = 0
+            account_one = 0
+            account_two = 0
+            account_three = 0
         
         #Ejecutar Query        
         #Query = '''            
@@ -208,7 +260,7 @@ class AccountAuxiliarReport(models.Model):
                 %s %s %s %s
             )
         ''' % (
-            self._table, self._select(date_initial), self._from(date_initial), self._where(date_finally,partner_id,account_id), self._group_by()
+            self._table, self._select(date_initial), self._from(date_initial), self._where(date_finally,partner_id,account_one,account_two,account_three), self._group_by()
         ))
 
     
