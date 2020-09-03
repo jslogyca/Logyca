@@ -40,6 +40,37 @@ class AccountMove(models.Model):
     x_motive_error = fields.Text(string='Motivo de error', copy=False)
     #Tiene Nota Credito
     x_have_out_invoice = fields.Boolean(string='Tiene NC', compute='_have_nc')    
+    #Tiene Aprobaciones
+    x_have_approval_request = fields.Boolean(string='Tiene Aprobaciones', compute='_have_approval_request')    
+    
+    def create_approval_request(self):
+        ctx = self.env.context.copy()
+        ctx.update({'x_account_move_id':self.id})
+        self.env['approval.request'].with_context(ctx).init()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'All Approvals',
+            'res_model': 'approval.request',
+            'domain': [],
+            'view_mode': 'form',
+            'context': ctx,
+            'target': 'current',
+        }
+    
+    def _have_approval_request(self):        
+        query_approval = '''
+            Select id,"name" 
+            From approval_request 
+            Where request_status = 'approved' and x_account_move_id = %s
+        ''' % (self.id)
+        
+        self._cr.execute(query_approval)
+        result_query_approval = self._cr.dictfetchall()
+        
+        if result_query_approval:
+            self.x_have_approval_request = True
+        else:
+            self.x_have_approval_request = False
     
     def _have_nc(self):
         query_fac = '''
@@ -67,7 +98,7 @@ class AccountMove(models.Model):
         else:
             #raise ValidationError(_('NO TIENE NC'))    
             self.x_have_out_invoice = False
-        
+            
     @api.depends('partner_id')
     @api.onchange('partner_id')
     def _onchange_partner_id_country(self):
@@ -212,7 +243,61 @@ class AccountMove(models.Model):
                 raise ValidationError(_('El cliente al que pertenece la factura no tiene un contacto de tipo facturación electrónica, por favor verificar.'))     
         
         return super(AccountMove, self).action_post()
+    
+    #Se reemplaza codigo de _auto_create_asset debido a modificacion del codigo por parte de Odoo que afecto nuestro funcionamiento normal
+    def _auto_create_asset(self):
+        create_list = []
+        invoice_list = []
+        auto_validate = []
+        for move in self:
+            if not move.is_invoice():
+                continue
 
+            for move_line in move.line_ids:
+                if (
+                    move_line.account_id
+                    and (move_line.account_id.can_create_asset)
+                    and move_line.account_id.create_asset != "no"
+                    and not move.reversed_entry_id
+                    and not (move_line.currency_id or move.currency_id).is_zero(move_line.price_total)
+                    and not move_line.asset_id
+                ):
+                    if not move_line.name:
+                        raise UserError(_('Journal Items of {account} should have a label in order to generate an asset').format(account=move_line.account_id.display_name))
+                    vals = {
+                        'name': move_line.name,
+                        'company_id': move_line.company_id.id,
+                        'currency_id': move_line.company_currency_id.id,
+                        'original_move_line_ids': [(6, False, move_line.ids)],
+                        'state': 'draft',
+                    }
+                    model_id = move_line.account_id.asset_model
+                    if model_id:
+                        vals.update({
+                            'model_id': model_id.id,
+                        })
+                    auto_validate.append(move_line.account_id.create_asset == 'validate')
+                    invoice_list.append(move)
+                    create_list.append(vals)
+
+        assets = self.env['account.asset'].create(create_list)
+        for asset, vals, invoice, validate in zip(assets, create_list, invoice_list, auto_validate):
+            if 'model_id' in vals:
+                asset._onchange_model_id()
+                asset._onchange_method_period()
+                if validate:
+                    asset.validate()
+            if invoice:
+                asset_name = {
+                    'purchase': _('Asset'),
+                    'sale': _('Deferred revenue'),
+                    'expense': _('Deferred expense'),
+                }[asset.asset_type]
+                msg = _('%s created from invoice') % (asset_name)
+                msg += ': <a href=# data-oe-model=account.move data-oe-id=%d>%s</a>' % (invoice.id, invoice.name)
+                asset.message_post(body=msg)
+        return assets
+    
 # Nota credito
 class AccountMoveReversal(models.TransientModel):
     _inherit = "account.move.reversal"

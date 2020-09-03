@@ -300,12 +300,22 @@
                     <group>
                         <group>
                             <group>
-                                <field name="date_initial" string="Fecha Inicial"/>
-                                <field name="date_finally" string="Fecha Final"/>                                
-                                <field name="partner_id" string="Cliente"/> 
-                                <field name="account_one" string="Cuenta 1"/>                                   
-                                <field name="account_two" string="Cuenta 2"/>                                   
-                                <field name="account_three" string="Cuenta 3"/>
+                                <fieldset>
+                                    <legend>Escoger favorito</legend>
+                                    <field name="schema_favorite" string="Favoritos"/>
+                                    <button name="upload_favorite" string="Cargar favorito" type="object" class="oe_highlight"/>
+                                </fieldset>
+                                <fieldset>
+                                    <legend>Filtros</legend>
+                                    Fecha Inicial: <field name="date_initial" string="Fecha Inicial"/>
+                                    Fecha Final: <field name="date_finally" string="Fecha Final"/>                                
+                                    Cliente: <field name="partner_id" string="Cliente"/> 
+                                    Cuenta 1: <field name="account_one" string="Cuenta 1"/>                                   
+                                    Cuenta 2: <field name="account_two" string="Cuenta 2"/>                                   
+                                    Cuenta 3: <field name="account_three" string="Cuenta 3"/>
+                                </fieldset>
+                                <field name="save_favorite" string="¿Guardar como favorito?" attrs="{'invisible': [('schema_favorite', '!=', False)]}"/>
+                                <field name="name_favorite" string="Nombre favorito" attrs="{'invisible': ['|',('save_favorite', '=', False), ('schema_favorite', '!=', False)], 'required': [('save_favorite', '=', True)]}"/>
                             </group>
                             <div class="oe_grey" colspan="4">
                                 El Auxiliar por generar tomara como saldo inicial todos los movimientos realizados antes de la fecha inicial seleccionada y mostrara los movimientos realizados en el rango de fechas.
