@@ -14,6 +14,7 @@ class AccountAuxiliarSchemeFavorite(models.Model):
     name_favorite = fields.Char(string='Nombre de favorito')
     date_initial = fields.Date(string='Fecha Inicial') 
     date_finally = fields.Date(string='Fecha Final')
+    company_id = fields.Many2one('res.company', string='Compañia')
     partner_id = fields.Many2one('res.partner', string='Cliente', domain=[('x_type_thirdparty', 'not in', [2])])
     account_one = fields.Char(string='Cuenta 1')
     account_two = fields.Char(string='Cuenta 2')
@@ -35,6 +36,7 @@ class AccountAuxiliarFilter(models.TransientModel):
     
     date_initial = fields.Date(string='Fecha Inicial') 
     date_finally = fields.Date(string='Fecha Final')
+    company_id = fields.Many2one('res.company', string='Compañia')
     partner_id = fields.Many2one('res.partner', string='Cliente', domain=[('x_type_thirdparty', 'not in', [2])])
     account_one = fields.Char(string='Cuenta 1')
     account_two = fields.Char(string='Cuenta 2')
@@ -65,13 +67,19 @@ class AccountAuxiliarFilter(models.TransientModel):
         for favorite in self.schema_favorite:
             self.date_initial = favorite.date_initial
             self.date_finally = favorite.date_finally
+            self.company_id = favorite.company_id
             self.partner_id = favorite.partner_id
             self.account_one = favorite.account_one
             self.account_two = favorite.account_two
-            self.account_three = favorite.account_three
+            self.account_three = favorite.account_three            
     
     def open_pivot_view(self):
         ctx = self.env.context.copy()
+        
+        if not self.company_id:
+            company_id = 0
+        else:
+            company_id = self.company_id.id
         
         if not self.partner_id:
             partner_id = 0
@@ -103,6 +111,7 @@ class AccountAuxiliarFilter(models.TransientModel):
                     'name_favorite': self.name_favorite,
                     'date_initial' : self.date_initial,
                     'date_finally' : self.date_finally,
+                    'company_id' : self.company_id.id,
                     'partner_id' : self.partner_id.id,
                     'account_one' : self.account_one,
                     'account_two' : self.account_two,
@@ -110,7 +119,7 @@ class AccountAuxiliarFilter(models.TransientModel):
                 })            
             
         #Crear contexto
-        ctx.update({'date_initial':self.date_initial,'date_finally':self.date_finally,'partner_id':partner_id,
+        ctx.update({'date_initial':self.date_initial,'date_finally':self.date_finally,'company_id':company_id,'partner_id':partner_id,
                         'account_one':account_one,'account_two':account_two,'account_three':account_three})
         self.env['account.auxiliar.report'].with_context(ctx).init(),
         return {
@@ -216,7 +225,7 @@ class AccountAuxiliarReport(models.Model):
         ''' % (date_filter,)
 
     @api.model
-    def _where(self,date_filter,partner_id,account_one,account_two,account_three):
+    def _where(self,date_filter,company_id,partner_id,account_one,account_two,account_three):
         
         where = ''
         
@@ -224,32 +233,36 @@ class AccountAuxiliarReport(models.Model):
         if partner_id != 0 and account_one == 0:
             where = '''
                         WHERE  B.parent_state = 'posted' and B."date" <= '%s' 
+                                and COALESCE(B.company_id,0) = case when %s = 0 then COALESCE(B.company_id,0) else %s end                                
                                 and COALESCE(B.partner_id,0) = case when %s = 0 then COALESCE(B.partner_id,0) else %s end                                
-                    '''  % (date_filter,partner_id,partner_id)
+                    '''  % (date_filter,company_id,company_id,partner_id,partner_id)
         
         #Cuando filtran cliente o una sola cuenta
         if account_one != 0:
             where = '''
                         WHERE  B.parent_state = 'posted' and B."date" <= '%s' 
+                                and COALESCE(B.company_id,0) = case when %s = 0 then COALESCE(B.company_id,0) else %s end                                
                                 and COALESCE(B.partner_id,0) = case when %s = 0 then COALESCE(B.partner_id,0) else %s end                                
                                 and D.Cuenta_Nivel_5 like '%s%s'                                
-                    '''  % (date_filter,partner_id,partner_id,account_one,'%')
+                    '''  % (date_filter,company_id,company_id,partner_id,partner_id,account_one,'%')
             
         #Cuando filtran cliente o dos cuentas        
         if account_one != 0 and account_two!=0:
             where = '''
                         WHERE  B.parent_state = 'posted' and B."date" <= '%s' 
+                                and COALESCE(B.company_id,0) = case when %s = 0 then COALESCE(B.company_id,0) else %s end                                
                                 and COALESCE(B.partner_id,0) = case when %s = 0 then COALESCE(B.partner_id,0) else %s end                                
                                 and (D.Cuenta_Nivel_5 like '%s%s' or D.Cuenta_Nivel_5 like '%s%s')
-                    '''  % (date_filter,partner_id,partner_id,account_one,'%',account_two,'%')
+                    '''  % (date_filter,company_id,company_id,partner_id,partner_id,account_one,'%',account_two,'%')
             
         #Cuando filtran cliente o tres cuentas
         if account_one != 0 and account_two!=0 and account_three!=0:
             where = '''
                         WHERE  B.parent_state = 'posted' and B."date" <= '%s' 
+                                and COALESCE(B.company_id,0) = case when %s = 0 then COALESCE(B.company_id,0) else %s end                                
                                 and COALESCE(B.partner_id,0) = case when %s = 0 then COALESCE(B.partner_id,0) else %s end                                
                                 and (D.Cuenta_Nivel_5 like '%s%s' or D.Cuenta_Nivel_5 like '%s%s' or D.Cuenta_Nivel_5 like '%s%s')
-                    '''  % (date_filter,partner_id,partner_id,account_one,'%',account_two,'%',account_three,'%')
+                    '''  % (date_filter,company_id,company_id,partner_id,partner_id,account_one,'%',account_two,'%',account_three,'%')
             
         return where
 
@@ -283,6 +296,7 @@ class AccountAuxiliarReport(models.Model):
         if self.env.context.get('date_initial', False) and self.env.context.get('date_finally', False):
             date_initial = self.env.context.get('date_initial') 
             date_finally = self.env.context.get('date_finally')   
+            company_id = self.env.context.get('company_id') 
             partner_id = self.env.context.get('partner_id') 
             account_one = self.env.context.get('account_one')  
             account_two = self.env.context.get('account_two')  
@@ -290,6 +304,7 @@ class AccountAuxiliarReport(models.Model):
         else:
             date_initial = '2020-01-01'
             date_finally = '2020-02-01'
+            company_id = 0
             partner_id = 0
             account_one = 0
             account_two = 0
@@ -308,7 +323,7 @@ class AccountAuxiliarReport(models.Model):
                 %s %s %s %s
             )
         ''' % (
-            self._table, self._select(date_initial), self._from(date_initial), self._where(date_finally,partner_id,account_one,account_two,account_three), self._group_by()
+            self._table, self._select(date_initial), self._from(date_initial), self._where(date_finally,company_id,partner_id,account_one,account_two,account_three), self._group_by()
         ))
 
     
