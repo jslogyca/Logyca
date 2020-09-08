@@ -45,7 +45,17 @@ class AccountMove(models.Model):
     
     def create_approval_request(self):
         ctx = self.env.context.copy()
-        ctx.update({'x_account_move_id':self.id})
+        
+        #Traer categoria de aprobación de NC
+        obj_category_approval = self.env['approval.category'].search([('x_approval_nc', '=', True)])
+        id_category = 0
+        for category in obj_category_approval:
+            id_category = category.id
+        
+        #Traer usuario logeado
+        user_id = self.env.user
+        
+        ctx.update({'x_account_move_id':self.id,'category_id':id_category,'request_owner_id':user_id.id})
         self.env['approval.request'].with_context(ctx).init()
         return {
             'type': 'ir.actions.act_window',
