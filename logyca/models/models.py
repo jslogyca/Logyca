@@ -345,17 +345,3 @@ class PurchaseOrderLine(models.Model):
     def _onchange_analytic_tag_ids(self):
         if self.analytic_tag_ids:
             self.account_analytic_id = False
-
-class ApprovalRequest(models.Model):
-    _inherit = 'approval.request'          
-    
-    @api.model
-    def _get_account_move(self):
-        move = None
-        if self.env.context.get('x_account_move_id', False):
-            move = self.env['account.move'].browse(self.env.context.get('x_account_move_id'))
-        return move
-    
-    #Movimiento contable
-    x_account_move_id = fields.Many2one('account.move', string='Factura Asociada',readonly=True, default=_get_account_move)
-    

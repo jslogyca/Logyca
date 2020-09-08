@@ -77,7 +77,17 @@ class libro_diario_report(models.TransientModel):
             SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
             Select
-                A.code,LevelAccount.LevelOne as Code_Cuenta,'' as Name_Cuenta,
+                A.code,LevelAccount.LevelOne as Code_Cuenta,
+                Case when LevelAccount.LevelOne = '1' then 'ACTIVO'
+                     when LevelAccount.LevelOne = '2' then 'PASIVO'
+                     when LevelAccount.LevelOne = '3' then 'PATRIMONIO'
+                     when LevelAccount.LevelOne = '4' then 'INGRESOS'
+                     when LevelAccount.LevelOne = '5' then 'GASTOS'
+                     when LevelAccount.LevelOne = '6' then 'COSTO DE VENTAS'
+                     when LevelAccount.LevelOne = '7' then 'COSTO DE PRODUCCION'
+                     when LevelAccount.LevelOne = '8' then 'CUENTAS DE ORDEN DEUDORAS'
+                     when LevelAccount.LevelOne = '9' then 'CUENTAS DE ORDEN ACREEDORAS'
+                else '' end as Name_Cuenta,                
                 COALESCE(D.saldo_ant,0) as initial_balance,
                 SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
                 SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
@@ -439,7 +449,17 @@ class libro_mayor_report(models.TransientModel):
             SELECT code_cuenta,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
             Select
-                A.code,LevelAccount.LevelOne as Code_Cuenta,'' as Name_Cuenta,
+                A.code,LevelAccount.LevelOne as Code_Cuenta,
+                Case when LevelAccount.LevelOne = '1' then 'ACTIVO'
+                     when LevelAccount.LevelOne = '2' then 'PASIVO'
+                     when LevelAccount.LevelOne = '3' then 'PATRIMONIO'
+                     when LevelAccount.LevelOne = '4' then 'INGRESOS'
+                     when LevelAccount.LevelOne = '5' then 'GASTOS'
+                     when LevelAccount.LevelOne = '6' then 'COSTO DE VENTAS'
+                     when LevelAccount.LevelOne = '7' then 'COSTO DE PRODUCCION'
+                     when LevelAccount.LevelOne = '8' then 'CUENTAS DE ORDEN DEUDORAS'
+                     when LevelAccount.LevelOne = '9' then 'CUENTAS DE ORDEN ACREEDORAS'
+                else '' end as Name_Cuenta,
                 COALESCE(D.saldo_ant,0) as initial_balance,
                 SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
                 SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
