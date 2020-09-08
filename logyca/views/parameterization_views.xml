@@ -308,7 +308,8 @@
                                 <fieldset>
                                     <legend>Filtros</legend>
                                     Fecha Inicial: <field name="date_initial" string="Fecha Inicial"/>
-                                    Fecha Final: <field name="date_finally" string="Fecha Final"/>                                
+                                    Fecha Final: <field name="date_finally" string="Fecha Final"/>    
+                                    Compañia: <field name="company_id" string="Compañia"/> 
                                     Cliente: <field name="partner_id" string="Cliente"/> 
                                     Cuenta 1: <field name="account_one" string="Cuenta 1"/>                                   
                                     Cuenta 2: <field name="account_two" string="Cuenta 2"/>                                   
