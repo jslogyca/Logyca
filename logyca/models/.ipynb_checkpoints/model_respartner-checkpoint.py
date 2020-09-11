@@ -209,6 +209,7 @@ class ResPartner(models.Model):
     def _check_vatnumber(self):
         for record in self:
             cant_vat = 0
+            cant_vat_archivado = 0
             name_tercer =  ''
             user_create = ''
             if record.vat:
@@ -219,9 +220,19 @@ class ResPartner(models.Model):
                         if tercer.id != record.id:
                             name_tercer = tercer.name
                             user_create = tercer.create_uid.name
+                objArchivado = self.search([('is_company', '=', True),('vat','=',record.vat),('active','=',False)])
+                if objArchivado:
+                    for tercer in objArchivado:
+                        cant_vat_archivado = cant_vat_archivado + 1
+                        if tercer.id != record.id:
+                            name_tercer = tercer.name
+                            user_create = tercer.create_uid.name
         if cant_vat > 1:
             raise ValidationError(_('Ya existe un Cliente ('+name_tercer+') con este número de NIT creado por '+user_create+'.'))                
-    
+        if cant_vat_archivado > 1:
+            raise ValidationError(_('Ya existe un Cliente ('+name_tercer+') con este número de NIT pero se encuentra archivado, fue creado por '+user_create+'.'))                
+        
+        
     @api.onchange('vat')
     def _onchange_vatnumber(self):
         for record in self:
@@ -229,6 +240,9 @@ class ResPartner(models.Model):
                 obj = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat)])
                 if obj:
                     raise UserError(_('Ya existe un Cliente con este número de NIT.'))
+                objArchivado = self.search([('x_type_thirdparty','in',[1,3]),('vat','=',record.vat),('active','=',False)])
+                if objArchivado:
+                    raise UserError(_('Ya existe un Cliente con este número de NIT pero se encuentra archivado.'))
 
     @api.constrains('child_ids')
     def _check_contacttype(self):
