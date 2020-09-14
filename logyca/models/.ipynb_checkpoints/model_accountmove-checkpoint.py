@@ -424,6 +424,7 @@ class AccountAnalyticLine(models.Model):
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
     x_payment_file = fields.Boolean(string='Reportado en archivo de pago')    
+    x_description = fields.Text(string='Descripción')
 
 #Importar Bancos CSV
 class AccountBankStatementImport(models.TransientModel):
