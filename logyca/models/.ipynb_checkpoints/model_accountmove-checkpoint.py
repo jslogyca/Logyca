@@ -42,6 +42,9 @@ class AccountMove(models.Model):
     x_have_out_invoice = fields.Boolean(string='Tiene NC', compute='_have_nc')    
     #Tiene Aprobaciones
     x_have_approval_request = fields.Boolean(string='Tiene Aprobaciones', compute='_have_approval_request')    
+    x_create_approval_request = fields.Boolean(string='Crearon Aprobación para NC',store = True, track_visibility='onchange')    
+    x_approved_approval_request = fields.Boolean(string='Aprobaron la creación de la NC',store = True, track_visibility='onchange')    
+    
     
     def create_approval_request(self):
         ctx = self.env.context.copy()
@@ -67,7 +70,23 @@ class AccountMove(models.Model):
             'target': 'current',
         }
     
-    def _have_approval_request(self):        
+    def _have_approval_request(self):
+        query_have_approval = '''
+            Select id,"name" 
+            From approval_request 
+            Where x_account_move_id = %s
+        ''' % (self.id)
+        
+        self._cr.execute(query_have_approval)
+        result_query_have_approval = self._cr.dictfetchall()
+        
+        if result_query_have_approval:
+            self.x_have_approval_request = True
+            self.x_create_approval_request = True
+        else:
+            self.x_have_approval_request = False
+            self.x_create_approval_request = False
+        
         query_approval = '''
             Select id,"name" 
             From approval_request 
@@ -78,9 +97,10 @@ class AccountMove(models.Model):
         result_query_approval = self._cr.dictfetchall()
         
         if result_query_approval:
-            self.x_have_approval_request = True
+            self.x_approved_approval_request = True
         else:
-            self.x_have_approval_request = False
+            self.x_approved_approval_request = False   
+    
     
     def _have_nc(self):
         query_fac = '''
@@ -404,6 +424,7 @@ class AccountAnalyticLine(models.Model):
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
     x_payment_file = fields.Boolean(string='Reportado en archivo de pago')    
+    x_description = fields.Text(string='Descripción')
 
 #Importar Bancos CSV
 class AccountBankStatementImport(models.TransientModel):
