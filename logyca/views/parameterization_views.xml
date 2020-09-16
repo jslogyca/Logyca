@@ -402,5 +402,66 @@
             </field>
     </record>
       
+    <!-- Report Info History for partner VIEW -->    
+    <record id="logyca_report_history_partner_form" model="ir.ui.view">
+        <field name="name">Consultas Inf Historica</field>
+        <field name="model">logyca.report.history_partner</field>
+        <field name="arch" type="xml">
+                <form string="Consultas Inf Historica">                     
+                    <h2>Consultas Inf. Historica</h2>
+                    <field name="visible_result" invisible='1'/>
+                    <br/>
+                    <b>Inf. Historica a Consultar:</b>
+                    <div style="margin:20px;">                        
+                        <field name="type_info_filter" string="Inf. Historica a Consultar" widget='radio'/>
+                    </div>
+                    <div style="margin:20px;padding:5px;border:solid;">                        
+                        <b>Cliente:   </b>
+                        <field name="partner_id" string="Cliente"/>
+                        <br/>
+                        <b>Filtros:</b>
+                        <field name="filter_domain" widget="domain" options="{'model': 'type_info_filter', 'in_dialog': True}"/>
+                    </div>
+                    <button name="upload_filter" string="Filtrar" type="object" class="oe_highlight"/>                         
+                    <div style="margin:20px;" attrs="{'invisible': [('visible_result','=',False)]}">                        
+                        <h4><b>Resultado</b></h4>
+                        <br/>
+                        <field name="x_history_partner_notes" mode="tree" string="Notas" attrs="{'invisible': ['|', ('type_info_filter', '!=', 'logyca.history_partner_notes'),('visible_result','=',False)]}" readonly="1">
+                            <tree>
+                                <field name="title"/>
+                                <field name="activity_date"/>                                        
+                            </tree>
+                        </field>
+                        <field name="x_history_partner_emails" mode="tree" string="Emails" attrs="{'invisible': ['|', ('type_info_filter', '!=', 'logyca.history_partner_emails'),('visible_result','=',False)]}" readonly="1">
+                            <tree>
+                                <field name="title"/>
+                                <field name="activity_date"/>                                        
+                                <field name="from_address"/>
+                                <field name="to_address"/>                                        
+                            </tree>
+                        </field>
+                        <field name="x_history_partner_opportunity" mode="tree" string="Oportunidades" attrs="{'invisible': ['|', ('type_info_filter', '!=', 'logyca.history_partner_opportunity'),('visible_result','=',False)]}" readonly="1">
+                            <tree>
+                                <field name="name"/>
+                                <field name="activity_date"/>     
+                                <field name="state"/>
+                                <field name="amount"/>                                        
+                            </tree>
+                        </field>
+                        <field name="x_history_partner_case" mode="tree" string="Casos" attrs="{'invisible': ['|', ('type_info_filter', '!=', 'logyca.history_partner_case'),('visible_result','=',False)]}" readonly="1">
+                            <tree>
+                                <field name="case_number"/>
+                                <field name="case_type"/>                                        
+                                <field name="tematic"/>
+                                <field name="contact"/>                                        
+                                <field name="created_date"/>
+                                <field name="case_status"/>                                        
+                            </tree>
+                        </field>  
+                    </div>
+                </form>
+            </field>
+    </record>
+      
     </data>
 </odoo>
