@@ -389,9 +389,10 @@ class AccountMoveReversal(models.TransientModel):
         method_original = super(AccountMoveReversal, self).reverse_moves()
         
         #Eliminar ingresos diferidos en borrador
-        if assets_draft_detele:
-            for assets_draft in assets_draft_detele:    
-                assets_draft.unlink()                   
+        if result_query_assets:
+            if assets_draft_detele:
+                for assets_draft in assets_draft_detele:    
+                    assets_draft.unlink()                   
         
         return method_original        
         #return super(AccountMoveReversal, self).reverse_moves()
