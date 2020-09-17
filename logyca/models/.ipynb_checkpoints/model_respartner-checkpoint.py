@@ -276,9 +276,10 @@ class ResPartner(models.Model):
     
     @api.constrains('x_active_for_logyca')
     def _validate_active_due(self):
-        if self.x_active_for_logyca == False:            
-            if self.total_due > 0:
-                raise UserError(_('El cliente ('+self.name+'). No puede ser archivado por que posee cartera.')) 
+        if self.is_company:
+            if self.x_active_for_logyca == False:            
+                if self.total_due > 0:
+                    raise UserError(_('El cliente ('+self.name+'). No puede ser archivado por que posee cartera.')) 
                 
     @api.constrains('x_tax_responsibilities')
     def _check_tax_responsibilities(self):
