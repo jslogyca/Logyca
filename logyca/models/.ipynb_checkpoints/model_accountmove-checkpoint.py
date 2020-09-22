@@ -128,7 +128,26 @@ class AccountMove(models.Model):
         else:
             #raise ValidationError(_('NO TIENE NC'))    
             self.x_have_out_invoice = False
+    
+    @api.onchange('invoice_origin')
+    def _onchange_invoice_origin_country(self):
+        
+        if self.invoice_origin:
+            country_id = 0
+            sale_order = self.env['sale.order'].search([('name', '=', self.invoice_origin)])        
+            purchase_order = self.env['purchase.order'].search([('name', '=', self.invoice_origin)])        
+        
+            if sale_order:
+                country_id = sale_order.x_country_account_id.id
+            if purchase_order:
+                country_id = purchase_order.x_country_account_id.id
             
+            if country_id != 0:
+                values = {
+                        'x_country_account_id': country_id ,                
+                    }
+                self.update(values)
+    
     @api.depends('partner_id')
     @api.onchange('partner_id')
     def _onchange_partner_id_country(self):
@@ -389,9 +408,10 @@ class AccountMoveReversal(models.TransientModel):
         method_original = super(AccountMoveReversal, self).reverse_moves()
         
         #Eliminar ingresos diferidos en borrador
-        if assets_draft_detele:
-            for assets_draft in assets_draft_detele:    
-                assets_draft.unlink()                   
+        if result_query_assets:
+            if assets_draft_detele:
+                for assets_draft in assets_draft_detele:    
+                    assets_draft.unlink()                   
         
         return method_original        
         #return super(AccountMoveReversal, self).reverse_moves()

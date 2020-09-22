@@ -237,17 +237,38 @@ class ProductTemplate(models.Model):
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 	
+    @api.model
+    def _get_default_country_id(self):
+        country_id = 49
+        
+        if self.partner_id:
+            partner = self.env['res.partner'].browse(self.partner_id.id)
+            country_id = partner.country_id
+        
+        values = {
+                'x_country_account_id': country_id ,                
+            }
+        self.update(values)
+        
+        return country_id
+    
     x_origen = fields.Char(string='Origen',size=30)
     x_vat_partner = fields.Char(string='NIT Asociado', store=True, readonly=True, related='partner_id.vat', change_default=True)
     x_type_sale = fields.Selection([('Renovación', 'Renovación'),
                                       #('Recurrente', 'Recurrente'),
                                       ('Nueva venta', 'Nueva venta')], string='Tipo de venta') 
+    x_country_account_id = fields.Many2one('res.country', string='País', default=_get_default_country_id, track_visibility='onchange')
     
     def _prepare_invoice(self):        
         invoice_vals = super(SaleOrder, self)._prepare_invoice()        
         self.ensure_one()
         self = self.with_context(default_company_id=self.company_id.id, force_company=self.company_id.id)        
-        country_id = self.partner_invoice_id.country_id.id        
+        country_id = 0
+        if self.x_country_account_id:
+            country_id = self.x_country_account_id.id
+        else:
+            country_id = self.partner_invoice_id.country_id.id        
+            
         invoice_vals['x_country_account_id'] = country_id        
         return invoice_vals
     
@@ -282,7 +303,23 @@ class HelpDesk(models.Model):
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 	
+    @api.model
+    def _get_default_country_id(self):
+        country_id = 49
+        
+        if self.partner_id:
+            partner = self.env['res.partner'].browse(self.partner_id.id)
+            country_id = partner.country_id
+        
+        values = {
+                'x_country_account_id': country_id ,                
+            }
+        self.update(values)
+        
+        return country_id
+    
     x_reason_cancellation = fields.Text(string='Motivo de cancelación')
+    x_country_account_id = fields.Many2one('res.country', string='País', default=_get_default_country_id, track_visibility='onchange')
     
     #Validaciones antes de CANCELAR una orden de compra
     def button_cancel(self):        
@@ -327,7 +364,6 @@ class PurchaseOrder(models.Model):
                 raise UserError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+order_line.name+", por favor verificar."))
             
         return super(PurchaseOrder, self).button_confirm()            
-           
     
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
