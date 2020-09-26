@@ -293,6 +293,12 @@ class AccountMove(models.Model):
         
         return super(AccountMove, self).action_post()
     
+    #Se comenta validación para el formato de impresión y de esta forma imprimir todo tipo de movimientos - 25/09/2020
+    def _get_report_base_filename(self):
+        #if any(not move.is_invoice() for move in self):
+        #    raise UserError(_("Only invoices could be printed."))
+        return self._get_move_display_name()
+    
     #Se reemplaza codigo de _auto_create_asset debido a modificacion del codigo por parte de Odoo que afecto nuestro funcionamiento normal
     def _auto_create_asset(self):
         create_list = []
