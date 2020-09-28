@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
 #---------------------------Modelo CRM_LEAD / OPORTUNIDADES-------------------------------#
@@ -23,6 +23,17 @@ class CrmLead(models.Model):
                 'x_contact_job_title': partner.x_contact_job_title ,
             }
         self.update(values)
-
     
+    
+    def action_set_lost(self, **additional_values):  
+        stage_id = self._stage_find(domain=[('is_lose', '=', True)])
+        """ Lost semantic: probability = 0 or active = False """
+        result = self.write({'stage_id':stage_id.id, 'active': False, 'probability': 0, 'automated_probability': 0, **additional_values})
+        self._rebuild_pls_frequency_table_threshold()
+        return result
+    
+class CrmStage(models.Model):   
+    _inherit = 'crm.stage'
+    
+    is_lose = fields.Boolean('¿Es la Etapa NO Ganada?')
     

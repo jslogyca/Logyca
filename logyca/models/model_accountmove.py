@@ -520,4 +520,6 @@ class AccountAsset(models.Model):
     _inherit = 'account.asset'
     
     move_ids = fields.Many2one(related='original_move_line_ids.move_id', string='Movimiento Original', readonly=True, copy=False)
+    x_budget_group = fields.Many2one(string='Grupo presupuestal', readonly=True, related='original_move_line_ids.x_budget_group')
+    
         
