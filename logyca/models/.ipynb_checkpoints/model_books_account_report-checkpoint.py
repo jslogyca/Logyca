@@ -13,7 +13,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 
 try: 
-    from reportlab.lib.pagesizes import cm
+    from reportlab.lib.units import inch, cm
 except ImportError:
     cm = None
     
