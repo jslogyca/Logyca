@@ -10,7 +10,13 @@ import PyPDF2
 #Report Lab - https://www.reportlab.com/docs/reportlab-userguide.pdf
 from reportlab.lib import colors
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter, cm
+from reportlab.lib.pagesizes import letter
+
+try: 
+    from reportlab.lib.units import inch, cm
+except ImportError:
+    cm = None
+    
 from reportlab.lib.styles import getSampleStyleSheet,ParagraphStyle
 from reportlab.platypus import BaseDocTemplate, Frame, PageTemplate, Paragraph, SimpleDocTemplate, Table, TableStyle
 
