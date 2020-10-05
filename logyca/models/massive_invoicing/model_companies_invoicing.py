@@ -14,10 +14,11 @@ class x_MassiveInvoicingCompanies(models.Model):
                                         ('1', 'Facturación'),
                                         ('2', 'Refacturación')        
                                     ], string='Tipo de proceso', required=True)
-    url_enpoint_code_assignment = fields.Char(string='Url enpoint de asignación', help='Url del endpoint del api de asignación dedicado a la facturación/refacturación masiva que recibe como parametro la lista de Nits y el tipo de proceso.',required=True)
+    url_enpoint_code_assignment = fields.Char(string='Url enpoint de asignación', help='Url del endpoint del api de asignación dedicado a la facturación/refacturación masiva que recibe como parametro la lista de Nits y el tipo de proceso.',required=True)    
     thirdparties = fields.Many2many('res.partner',string='Compañías catalogadas como miembros y clientes activos', readonly=True)    
-    cant_thirdparties_miembros = fields.Integer(string='Cantidad de Miembros', readonly=True)
-    cant_thirdparties_clientes = fields.Integer(string='Cantidad de Clientes', readonly=True)
+    cant_thirdparties_miembros = fields.Integer(string='Cantidad de Miembros', help='Empresas que tiene tipo de vinculación Miembros',readonly=True)
+    cant_thirdparties_clientes = fields.Integer(string='Cantidad de Clientes', help='Empresas que tiene tipo de vinculación Cliente',readonly=True)
+    cant_thirdparties_textil = fields.Integer(string='Cantidad de Empresas Textileras', help='Empresas que tiene el Sector 10 - Textil y Confección',readonly=True)
     
     def name_get(self):
         result = []
@@ -44,22 +45,25 @@ class x_MassiveInvoicingCompanies(models.Model):
             types_vinculation.append(c.id)  
             id_clientes = c.id
         #Crear objeto res_partner que traiga la información correspondiente - Compañías catalogadas como miembros y clientes activos
-        thirdparties = self.env['res.partner'].search([('x_active_vinculation', '=', True),('x_type_vinculation','in',types_vinculation)])
+        thirdparties = self.env['res.partner'].search([('x_excluded_massive_invoicing','=',False),('x_active_vinculation', '=', True),('x_type_vinculation','in',types_vinculation)])
         #Cargar las compañias para mostrar en pantalla
         companies = []
         for company in thirdparties:
             companies.append(company.id)            
         
-        #Traer la cantidad de miembros y clientes
-        miembros = self.env['res.partner'].search([('x_active_vinculation', '=', True),('x_type_vinculation','in',[id_miembros])])
+        #Traer la cantidad de miembros, clientes y textileras
+        miembros = self.env['res.partner'].search([('x_excluded_massive_invoicing','=',False),('x_active_vinculation', '=', True),('x_type_vinculation','in',[id_miembros])])
         cant_thirdparties_miembros = len(miembros)
-        clientes = self.env['res.partner'].search([('x_active_vinculation', '=', True),('x_type_vinculation','in',[id_clientes])])
+        clientes = self.env['res.partner'].search([('x_excluded_massive_invoicing','=',False),('x_active_vinculation', '=', True),('x_type_vinculation','in',[id_clientes])])
         cant_thirdparties_clientes = len(clientes)
+        textileras = self.env['res.partner'].search([('x_excluded_massive_invoicing','=',False),('x_active_vinculation', '=', True),('x_type_vinculation','in',types_vinculation),('x_sector_id.code','=','10')])
+        cant_thirdparties_textil = len(textileras)
         
         values_update = {
             'thirdparties' : [(6, 0, companies)],
             'cant_thirdparties_miembros' : cant_thirdparties_miembros, 
-            'cant_thirdparties_clientes' : cant_thirdparties_clientes
+            'cant_thirdparties_clientes' : cant_thirdparties_clientes,
+            'cant_thirdparties_textil' : cant_thirdparties_textil
         }
         self.update(values_update)     
         
@@ -81,7 +85,15 @@ class x_MassiveInvoicingCompanies(models.Model):
 			<field name="cant_thirdparties_miembros" modifiers="{&quot;readonly&quot;: true}"/>
 			<field name="cant_thirdparties_clientes" modifiers="{&quot;readonly&quot;: true}"/>
 			<newline/>
-			<field name="thirdparties" colspan="4" can_create="true" can_write="true" modifiers="{&quot;readonly&quot;: true}"/>
+			<field name="thirdparties" colspan="4" can_create="true" can_write="true" modifiers="{&quot;readonly&quot;: true}">
+          <tree>
+              <field name="name"/>
+              <field name="vat"/>     
+              <field name="x_date_vinculation"/>                                        
+              <field name="x_type_vinculation" widget="many2many_tags"/>                                        
+              <field name="x_sector_id"/>                                                      
+          </tree>
+      </field>
 			<newline/>
 			<separator/>
 		</group>
