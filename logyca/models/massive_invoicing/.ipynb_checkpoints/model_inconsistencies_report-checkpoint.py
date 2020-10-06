@@ -94,7 +94,7 @@ class x_MassiveInvoicingInconsistenciesReport(models.TransientModel):
             # 1.Empresa sin rango de Activos
             if not partner.x_asset_range:
                 inconsistencies.append(['Rango de activos','La empresa NIT {}-{} no tienen rango de activos'.format(partner.vat,partner.name)])
-            # 2.Empresa sin contacto principal o sin conttacto de FE
+            # 2.Empresa sin representante ante Logyca o sin conttacto de FE
             cant_contactsP = 0
             cant_contactsFE = 0
             for record in partner.child_ids:   
@@ -103,17 +103,17 @@ class x_MassiveInvoicingInconsistenciesReport(models.TransientModel):
                     if i.id == 2:
                         cant_contactsP = cant_contactsP + 1
                         if not record.name:
-                            inconsistencies.append(['Nombre contacto principal','La empresa NIT {}-{} tiene contacto principal sin nombre.'.format(partner.vat,partner.name)])
+                            inconsistencies.append(['Nombre representante ante Logyca','La empresa NIT {}-{} tiene representante ante Logyca sin nombre.'.format(partner.vat,partner.name)])
                         if record.x_active_for_logyca == False:
-                            inconsistencies.append(['Activo contacto principal','La empresa NIT {}-{} tiene contacto principal inactivo.'.format(partner.vat,partner.name)])
+                            inconsistencies.append(['Activo representante ante Logyca','La empresa NIT {}-{} tiene representante ante Logyca inactivo.'.format(partner.vat,partner.name)])
                         if not record.street:
-                            inconsistencies.append(['Dirección contacto principal','La empresa NIT {}-{} tiene contacto principal sin dirección.'.format(partner.vat,partner.name)])
+                            inconsistencies.append(['Dirección representante ante Logyca','La empresa NIT {}-{} tiene representante ante Logyca sin dirección.'.format(partner.vat,partner.name)])
                         if not record.x_city:
-                            inconsistencies.append(['Ciudad contacto principal','La empresa NIT {}-{} tiene contacto principal sin ciudad.'.format(partner.vat,partner.name)])
+                            inconsistencies.append(['Ciudad representante ante Logyca','La empresa NIT {}-{} tiene representante ante Logyca sin ciudad.'.format(partner.vat,partner.name)])
                         if not record.email:
-                            inconsistencies.append(['Email contacto principal','La empresa NIT {}-{} tiene contacto principal sin email.'.format(partner.vat,partner.name)])
+                            inconsistencies.append(['Email representante ante Logyca','La empresa NIT {}-{} tiene representante ante Logyca sin email.'.format(partner.vat,partner.name)])
                         if not record.phone and not record.mobile:
-                            inconsistencies.append(['Teléfono contacto principal','La empresa NIT {}-{} tiene contacto principal sin teléfono.'.format(partner.vat,partner.name)])
+                            inconsistencies.append(['Teléfono representante ante Logyca','La empresa NIT {}-{} tiene representante ante Logyca sin teléfono.'.format(partner.vat,partner.name)])
                     if i.id == 3:
                         cant_contactsFE = cant_contactsFE + 1
                         if not record.name:
@@ -130,11 +130,11 @@ class x_MassiveInvoicingInconsistenciesReport(models.TransientModel):
                             inconsistencies.append(['Teléfono contacto FE','La empresa NIT {}-{} tiene contacto FE sin teléfono.'.format(partner.vat,partner.name)])
                         
             if cant_contactsP == 0:
-                inconsistencies.append(['Contacto principal','La empresa NIT {}-{} no tiene contacto principal.'.format(partner.vat,partner.name)])
+                inconsistencies.append(['Representante ante Logyca','La empresa NIT {}-{} no tiene representante ante Logyca.'.format(partner.vat,partner.name)])
             if cant_contactsFE == 0:
                 inconsistencies.append(['Contacto FE','La empresa NIT {}-{} no tiene contacto de facturación electronica.'.format(partner.vat,partner.name)])
             if cant_contactsP > 1:
-                inconsistencies.append(['Contacto principal','La empresa NIT {}-{} tiene más de un contacto principal.'.format(partner.vat,partner.name)])
+                inconsistencies.append(['Representante ante Logyca','La empresa NIT {}-{} tiene más de un representante ante Logyca.'.format(partner.vat,partner.name)])
             if cant_contactsFE > 1:
                 inconsistencies.append(['Contacto FE','La empresa NIT {}-{} tiene más de un contacto de facturación electronica.'.format(partner.vat,partner.name)])
             # 3.Empresas que tiene doble vinculación (Una empresa que es miembro y cliente): Si es posible tener doble vinculación de esta forma (miembro y 99 años) (clientes y 99 años)

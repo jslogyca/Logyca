@@ -14,6 +14,8 @@ class x_MassiveInvoicingCompanies(models.Model):
                                         ('1', 'Facturación'),
                                         ('2', 'Refacturación')        
                                     ], string='Tipo de proceso', required=True)
+    textile_code_capability = fields.Float(string='Capacidad de códigos textiles', required=True)
+    percentage_textile_tariff = fields.Integer(string='Porcentaje de la tarifa que aplica para facturar', required=True)
     url_enpoint_code_assignment = fields.Char(string='Url enpoint de asignación', help='Url del endpoint del api de asignación dedicado a la facturación/refacturación masiva que recibe como parametro la lista de Nits y el tipo de proceso.',required=True)    
     thirdparties = fields.Many2many('res.partner',string='Compañías catalogadas como miembros y clientes activos', readonly=True)    
     cant_thirdparties_miembros = fields.Integer(string='Cantidad de Miembros', help='Empresas que tiene tipo de vinculación Miembros',readonly=True)
@@ -80,10 +82,18 @@ class x_MassiveInvoicingCompanies(models.Model):
 			<newline/>
 			<field name="url_enpoint_code_assignment" modifiers="{&quot;required&quot;: true}"/>
 			<newline/>
-			<button name="consult_companies" string="Consultar compañias" type="object" class="oe_highlight"/>
+			<b>Parametros empresas textileras</b>
+			<div style="padding:5px;border:solid;">                        
+  			Capacidad de códigos: <field name="textile_code_capability" modifiers="{&quot;required&quot;: true}"/>
+  			<br/>
+  			Porcentaje de la tarifa: <field name="percentage_textile_tariff" modifiers="{&quot;required&quot;: true}"/>
+  		</div>
+			<newline/>
+			<button name="consult_companies" string="Consultar compañias" type="object" class="oe_highlight" style="margin:5px;"/>
 			<newline/>
 			<field name="cant_thirdparties_miembros" modifiers="{&quot;readonly&quot;: true}"/>
 			<field name="cant_thirdparties_clientes" modifiers="{&quot;readonly&quot;: true}"/>
+			<field name="cant_thirdparties_textil" modifiers="{&quot;readonly&quot;: true}"/>
 			<newline/>
 			<field name="thirdparties" colspan="4" can_create="true" can_write="true" modifiers="{&quot;readonly&quot;: true}">
           <tree>
@@ -91,7 +101,7 @@ class x_MassiveInvoicingCompanies(models.Model):
               <field name="vat"/>     
               <field name="x_date_vinculation"/>                                        
               <field name="x_type_vinculation" widget="many2many_tags"/>                                        
-              <field name="x_sector_id"/>                                                      
+              <field name="x_sector_id"/>                                        
           </tree>
       </field>
 			<newline/>
