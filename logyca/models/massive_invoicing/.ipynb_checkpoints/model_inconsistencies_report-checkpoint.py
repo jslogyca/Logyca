@@ -47,7 +47,7 @@ class x_MassiveInvoicingInconsistenciesReport(models.TransientModel):
     
     def get_pdf(self):        
         
-        filename= 'Reporte de inconsistencias - '+str(self.invoicing_companies.name)+'.pdf'
+        filename= 'Inconsistencias_'+str(self.invoicing_companies.name)+'.pdf'
         pdf = io.BytesIO()
         
         #Encabezado
