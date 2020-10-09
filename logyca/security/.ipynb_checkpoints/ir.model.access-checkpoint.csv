@@ -32,3 +32,6 @@ access_account_auxiliar_schemefavorite,account.auxiliar.schemefavorite,model_acc
 access_logyca_custom_alerts,logyca.custom_alerts,model_logyca_custom_alerts,,1,1,1,1
 access_massive_invoicing_smlv,massive.invoicing.smlv,model_massive_invoicing_smlv,,1,1,1,1
 access_massive_invoicing_companies,massive.invoicing.companies,model_massive_invoicing_companies,,1,1,1,1
+access_massive_invoicing_codes_assignment,massive.invoicing.codes.assignment,model_massive_invoicing_codes_assignment,,1,1,1,1
+access_massive_invoicing_tariff,massive.invoicing.tariff,model_massive_invoicing_tariff,,1,1,1,1
+access_massive_invoicing_tariff_discounts,massive.invoicing.tariff.discounts,model_massive_invoicing_tariff_discounts,,1,1,1,1
