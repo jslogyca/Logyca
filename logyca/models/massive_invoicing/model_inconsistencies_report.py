@@ -36,7 +36,7 @@ class x_MassiveInvoicingInconsistenciesReport(models.TransientModel):
     def name_get(self):
         result = []
         for record in self:            
-            result.append((record.id, "Reporte de inconsistencias - {}".format(record.invoicing_companies)))
+            result.append((record.id, "Reporte de inconsistencias - {}".format(record.invoicing_companies.name)))
         return result
     
     #Retonar columnas
