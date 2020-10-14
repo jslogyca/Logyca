@@ -43,7 +43,11 @@ class AccountMove(models.Model):
     #Tiene Aprobaciones
     x_have_approval_request = fields.Boolean(string='Tiene Aprobaciones', compute='_have_approval_request')    
     x_create_approval_request = fields.Boolean(string='Crearon Aprobación para NC',store = True, track_visibility='onchange')    
-    x_approved_approval_request = fields.Boolean(string='Aprobaron la creación de la NC',store = True, track_visibility='onchange')    
+    x_approved_approval_request = fields.Boolean(string='Aprobaron la creación de la NC',store = True, track_visibility='onchange')   
+    #Valor total descuentos
+    x_value_discounts = fields.Monetary(string='Valor descuentos', default=0.0, currency_field='company_currency_id')
+    #Recibo de pago - Campo temporal
+    x_receipt_payment = fields.Char(string='N° Recibo de pago', copy=False)
     
     
     def create_approval_request(self):
