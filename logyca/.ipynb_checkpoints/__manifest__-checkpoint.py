@@ -31,6 +31,7 @@
         'views/reports.xml',
         'views/menus.xml',     
         'views/logyca_survey.xml',
+        'views/massive_invoicing_views.xml'
     ], 
     
 }
