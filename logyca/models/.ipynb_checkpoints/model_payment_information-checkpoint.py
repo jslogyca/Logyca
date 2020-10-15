@@ -14,6 +14,7 @@ class PaymentInformation(models.Model):
     move_id = fields.Many2one('account.move', string='Factura',readonly=True)
     amount_total = fields.Float(string='Valor recaudado',required = True)
     way_to_pay = fields.Char(string='Código forma de pago', required=True)
+    date_payment = fields.Date(string='Fecha de pago')
     
     def name_get(self):
         result = []

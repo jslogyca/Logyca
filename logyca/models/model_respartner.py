@@ -76,6 +76,7 @@ class ResPartner(models.Model):
     x_date_vinculation = fields.Date(string="Fecha de vinculación", track_visibility='onchange')
     x_type_vinculation = fields.Many2many('logyca.vinculation_types', string='Tipo de vinculación', track_visibility='onchange', ondelete='restrict')
     x_excluded_massive_invoicing = fields.Boolean(string='¿Empresa que se excluye del proceso de facturación masiva?', track_visibility='onchange')
+    x_gtin_massive_invoicing = fields.Boolean(string='¿Empresa especial GTIN8 incluida en facturación masiva?', track_visibility='onchange')
     #Campos RVC
     x_sponsored = fields.Boolean(string='Patrocinado', track_visibility='onchange')
     x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora', track_visibility='onchange')
