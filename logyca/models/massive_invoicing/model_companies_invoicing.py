@@ -12,15 +12,17 @@ class x_MassiveInvoicingCompanies(models.Model):
     name = fields.Char(string='Descripción', required=True)
     process_type = fields.Selection([
                                         ('1', 'Facturación'),
-                                        ('2', 'Refacturación')        
+                                        ('2', 'Facturación Adicional'),                                        
                                     ], string='Tipo de proceso', required=True)
     textile_code_capability = fields.Float(string='Capacidad de códigos textiles', required=True)
     percentage_textile_tariff = fields.Integer(string='Porcentaje de la tarifa que aplica para facturar', required=True)
     url_enpoint_code_assignment = fields.Char(string='Url enpoint de asignación', help='Url del endpoint del api de asignación dedicado a la facturación/refacturación masiva que recibe como parametro la lista de Nits y el tipo de proceso.',required=True)    
+    expiration_date = fields.Date(string='Fecha de vencimiento proceso',required=True)
     thirdparties = fields.Many2many('res.partner',string='Compañías catalogadas como miembros y clientes activos', readonly=True)    
     cant_thirdparties_miembros = fields.Integer(string='Cantidad de Miembros', help='Empresas que tiene tipo de vinculación Miembros',readonly=True)
     cant_thirdparties_clientes = fields.Integer(string='Cantidad de Clientes', help='Empresas que tiene tipo de vinculación Cliente',readonly=True)
     cant_thirdparties_textil = fields.Integer(string='Cantidad de Empresas Textileras', help='Empresas que tiene el Sector 10 - Textil y Confección',readonly=True)
+    cant_thirdparties_gtin_special = fields.Integer(string='Cantidad de Empresas especiales GTIN8', help='Empresas especiales GTIN8 incluidas en facturación masiva',readonly=True)
     
     def name_get(self):
         result = []
@@ -32,7 +34,7 @@ class x_MassiveInvoicingCompanies(models.Model):
     def consult_companies(self):  
         
         if self.process_type == '2':
-            raise ValidationError(_('La lógica para refacturación está pendiente para ser desarrollada.'))             
+            raise ValidationError(_('¡Por desarrollar!'))             
         
         #Consultar los tipos de vinculación Miembro y cliente
         id_miembros = 0
@@ -51,7 +53,13 @@ class x_MassiveInvoicingCompanies(models.Model):
         #Cargar las compañias para mostrar en pantalla
         companies = []
         for company in thirdparties:
-            companies.append(company.id)            
+            companies.append(company.id)    
+            
+        #Empresas especiales GTIN8 incluidas en facturación masiva
+        thirdparties_gtin = self.env['res.partner'].search([('x_gtin_massive_invoicing','=',True)])
+        cant_thirdparties_gtin_special = len(thirdparties_gtin)
+        for company_gtin in thirdparties_gtin:
+            companies.append(company_gtin.id)  
         
         #Traer la cantidad de miembros, clientes y textileras
         miembros = self.env['res.partner'].search([('x_excluded_massive_invoicing','=',False),('x_active_vinculation', '=', True),('x_type_vinculation','in',[id_miembros])])
@@ -65,7 +73,8 @@ class x_MassiveInvoicingCompanies(models.Model):
             'thirdparties' : [(6, 0, companies)],
             'cant_thirdparties_miembros' : cant_thirdparties_miembros, 
             'cant_thirdparties_clientes' : cant_thirdparties_clientes,
-            'cant_thirdparties_textil' : cant_thirdparties_textil
+            'cant_thirdparties_textil' : cant_thirdparties_textil,
+            'cant_thirdparties_gtin_special' : cant_thirdparties_gtin_special
         }
         self.update(values_update)     
         
@@ -79,6 +88,7 @@ class x_MassiveInvoicingCompanies(models.Model):
 			<field name="name" modifiers="{&quot;required&quot;: true}"/>
 			<newline/>
 			<field name="process_type" modifiers="{'required': true}" widget="radio"/>
+			<field name="expiration_date" modifiers="{&quot;required&quot;: true}"/>
 			<newline/>
 			<field name="url_enpoint_code_assignment" modifiers="{&quot;required&quot;: true}"/>
 			<newline/>
@@ -94,6 +104,7 @@ class x_MassiveInvoicingCompanies(models.Model):
 			<field name="cant_thirdparties_miembros" modifiers="{&quot;readonly&quot;: true}"/>
 			<field name="cant_thirdparties_clientes" modifiers="{&quot;readonly&quot;: true}"/>
 			<field name="cant_thirdparties_textil" modifiers="{&quot;readonly&quot;: true}"/>
+			<field name="cant_thirdparties_gtin_special" modifiers="{&quot;readonly&quot;: true}"/>
 			<newline/>
 			<field name="thirdparties" colspan="4" can_create="true" can_write="true" modifiers="{&quot;readonly&quot;: true}">
           <tree>
