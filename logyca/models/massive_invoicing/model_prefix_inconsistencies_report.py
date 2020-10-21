@@ -142,8 +142,8 @@ class x_MassiveInvoicingPrefixInconsistenciesReport(models.TransientModel):
                 if 'Peso' in partner_range:
                     inconsistencies.append(['Peso en RANGO-PREFIJO','La empresa textilera NIT {}-{} tiene códigos de {}.'.format(partner_vat,partner_name,partner_range)])
             #Si un Miembro o Cliente trae 8D en RANGO-PREFIJO es un error.
-            if partner_range == '8D':
-                inconsistencies.append(['8D en RANGO-PREFIJO','La empresa NIT {}-{} tiene códigos 8D en RANGO-PREFIJO.'.format(partner_vat,partner_name)])
+            if partner_range not in ['4D','5D','6D','7D','8D','PesoFijo','Peso variable','GTIN8','GLN','GL13']:
+                inconsistencies.append(['RANGO-PREFIJO','La empresa NIT {}-{} tiene código {} en RANGO-PREFIJO no permitido.'.format(partner_vat,partner_name,partner_range)])
             
         #raise ValidationError(_(inconsistencies))
         
