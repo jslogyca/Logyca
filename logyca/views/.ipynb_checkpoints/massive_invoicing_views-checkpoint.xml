@@ -42,6 +42,60 @@
                 </form>
             </field>
     </record>
+    
+    <!-- Execute process VIEW --> 
+    <record id="massive_invoicing_process_form" model="ir.ui.view">
+        <field name="name">Facturación Masiva</field>
+        <field name="model">massive.invoicing.process</field>
+        <field name="arch" type="xml">
+                <form string="Facturación Masiva"> 
+                    <group>
+                        <group>
+                            <h1>Facturación Masiva</h1>
+                            <group>
+                                <field name="year" string="Año proceso"/>                                
+                                <field name="invoicing_companies" string="Empresas a ejecutar"/>                                
+                            </group>                            
+                        </group>
+                        <br/>                 
+                        <button name="enpoint_code_assignment" string="1.Obtener información asignación de codigos" type="object" class="oe_highlight"/> 
+                        <br/>   
+                        <group>
+                            <field name="x_enpoint_code_assignment" nolabel="1" colspan="4" modifiers="{&quot;readonly&quot;: true}">
+                                <tree>
+                                    <field name="partner_id"/>
+                                    <field name="Nit"/>     
+                                    <field name="EstadoPrefijo"/>                                        
+                                    <field name="Rango"/>                                        
+                                    <field name="Esquema"/>                                        
+                                    <field name="CapacidadPrefijo"/>                                        
+                                    <field name="PrefixId"/>     
+                                    <field name="FechaAsignacion"/>                                         
+                                </tree>
+                            </field>
+                        </group>  
+                        <br/>                 
+                        <button name="calculation_of_number_prefixes" string="2.Cálculo de cantidad de prefijos" type="object" class="oe_highlight"/> 
+                        <br/>   
+                        <group>
+                            <field name="x_partner_calculation_prefixes" nolabel="1" colspan="4" modifiers="{&quot;readonly&quot;: true}">
+                                <tree>
+                                    <field name="partner_id"/>
+                                    <field name="vat"/>     
+                                    <field name="cant_prefixes_ds"/>                                        
+                                    <field name="cant_prefixes_fixed_weight"/>                                        
+                                    <field name="cant_prefixes_variable_weight"/>                                        
+                                    <field name="cant_prefixes_mixed"/>                                        
+                                    <field name="cant_prefixes_gtin"/>                                        
+                                    <field name="cant_prefixes_gl"/>                                                                            
+                                </tree>
+                            </field>
+                        </group>  
+                    </group>
+                    <footer/>
+                </form>
+            </field>
+    </record>
       
     </data>
 </odoo>
