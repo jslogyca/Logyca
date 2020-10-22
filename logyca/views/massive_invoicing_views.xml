@@ -58,13 +58,38 @@
                             </group>                            
                         </group>
                         <br/>                 
-                        <button name="calculation_of_number_prefixes" string="Cálculo de cantidad de prefijos" type="object" class="oe_highlight"/> 
+                        <button name="enpoint_code_assignment" string="1.Obtener información asignación de codigos" type="object" class="oe_highlight"/> 
                         <br/>   
                         <group>
-                            <field name="cant_prefixes_ds" string="Cantidad de códigos 4D a 7D"/>                                
-                            <field name="cant_prefixes_mixed" string="Cantidad de códigos mixtos"/>                                
-                            <field name="cant_prefixes_gtin" string="Cantidad de códigos GTIN8"/>                                
-                            <field name="cant_prefixes_wrong" string="Cantidad de códigos con inconsistencia (GLN, GL13, 8D)"/>                                
+                            <field name="x_enpoint_code_assignment" nolabel="1" colspan="4" modifiers="{&quot;readonly&quot;: true}">
+                                <tree>
+                                    <field name="partner_id"/>
+                                    <field name="Nit"/>     
+                                    <field name="EstadoPrefijo"/>                                        
+                                    <field name="Rango"/>                                        
+                                    <field name="Esquema"/>                                        
+                                    <field name="CapacidadPrefijo"/>                                        
+                                    <field name="PrefixId"/>     
+                                    <field name="FechaAsignacion"/>                                         
+                                </tree>
+                            </field>
+                        </group>  
+                        <br/>                 
+                        <button name="calculation_of_number_prefixes" string="2.Cálculo de cantidad de prefijos" type="object" class="oe_highlight"/> 
+                        <br/>   
+                        <group>
+                            <field name="x_partner_calculation_prefixes" nolabel="1" colspan="4" modifiers="{&quot;readonly&quot;: true}">
+                                <tree>
+                                    <field name="partner_id"/>
+                                    <field name="vat"/>     
+                                    <field name="cant_prefixes_ds"/>                                        
+                                    <field name="cant_prefixes_fixed_weight"/>                                        
+                                    <field name="cant_prefixes_variable_weight"/>                                        
+                                    <field name="cant_prefixes_mixed"/>                                        
+                                    <field name="cant_prefixes_gtin"/>                                        
+                                    <field name="cant_prefixes_gl"/>                                                                            
+                                </tree>
+                            </field>
                         </group>  
                     </group>
                     <footer/>
