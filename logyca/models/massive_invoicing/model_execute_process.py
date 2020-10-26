@@ -17,24 +17,14 @@ class x_MassiveInvoicingProcess(models.TransientModel):
     x_enpoint_code_assignment = fields.One2many('massive.invoicing.enpointcodeassignment', 'process_id', string = 'Respuesta API - Aginación de códigos', readonly=True)
     #Cantidad de prefijos
     x_partner_calculation_prefixes = fields.One2many('massive.invoicing.partnercalculationprefixes', 'process_id', string = 'Cálculo de cantidad de prefijos', readonly=True)
+    #Ordenes de venta
+    x_partner_sale_order = fields.One2many('massive.invoicing.partner.saleorder', 'process_id', string = 'Ordenes de venta', readonly=True)
         
     def name_get(self):
         result = []
         for record in self:            
             result.append((record.id, "Facturación Masiva - {}".format(record.year)))
         return result
-    
-    #Tipos de vinculación valido (Miembro y cliente)
-    def get_types_vinculation(self):
-        types_vinculation = []
-        obj_type_vinculation_miembros = self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro')])
-        obj_type_vinculation_cliente = self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente')])
-        for m in obj_type_vinculation_miembros:
-            types_vinculation.append(m.id)            
-        for c in obj_type_vinculation_cliente:
-            types_vinculation.append(c.id) 
-        
-        return types_vinculation
     
     #Consumir endpoint API de asignación de códigos
     def enpoint_code_assignment(self):
@@ -165,7 +155,165 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             
             partnercalculationprefixes = self.env['massive.invoicing.partnercalculationprefixes'].create(partnercalculationprefixes_values)
         
-        
+    #Ejecución proceso
+    def execute_process(self): 
+        #Eliminar ordenes de venta si ya existen
+        saleorder_exists = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year))])
+        saleorder_exists.unlink()
+        process_partnersaleorder_exists = self.env['massive.invoicing.partner.saleorder'].search([('process_id', '=', self.id)])
+        process_partnersaleorder_exists.unlink()
+        #Tipos de vinculación Miembro y CLiente
+        type_vinculation_miembro = 0
+        type_vinculation_cliente = 0
+        obj_type_vinculation_miembros = self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro')])
+        obj_type_vinculation_cliente = self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente')])
+        for m in obj_type_vinculation_miembros:
+            type_vinculation_miembro = m.id
+        for c in obj_type_vinculation_cliente:
+            type_vinculation_cliente = c.id
+        #Traer el sector de textileros
+        sector_id_textil = 10 #Id definido, en caso de camviar revisar la tabla de sectores de Logyca
+        #Traer los productos y sus tipos de proceso
+        saler_orders_partner = []
+        obj_massive_invoicing_products = self.env['massive.invoicing.products'].search([('product_id', '!=', False)])
+        for process in obj_massive_invoicing_products:
+            type_vinculation = process.type_vinculation.id
+            type_process = process.type_process
+            product_id = process.product_id.id
+            #Miembros NO textileros.
+            if type_vinculation == type_vinculation_miembro:
+                obj_company = self.env['massive.invoicing.partnercalculationprefixes'].search([('process_id', '=', self.id),('type_vinculation','in',[type_vinculation]),('have_prefixes','=','1'),('partner_id.x_sector_id.id','!=',sector_id_textil)])
+                #,('partner_id.id','in',[125638])
+                    
+                for partner in obj_company:
+                    fee_value = 0
+                    unit_fee_value = 0
+                    discount = 0                       
+                    conditional_discount = 0
+                    conditional_discount_deadline = False
+                        
+                    obj_tariff = self.env['massive.invoicing.tariff'].search([('year', '=', self.year),('type_vinculation','=',type_vinculation),('asset_range','=',partner.partner_id.x_asset_range.id),('product_id','=',product_id)])
+                    for tariff in obj_tariff:
+                        fee_value = tariff.fee_value
+                        unit_fee_value = tariff.unit_fee_value
+                        obj_tariff_discounts = self.env['massive.invoicing.tariff.discounts'].search([('tariff', '=', tariff.id)])
+                        for tariff_discounts in obj_tariff_discounts:
+                            #Logica descuento no condicionado
+                            if tariff_discounts.discount_percentage > 0:
+                                discount = tariff_discounts.discount_percentage
+                            #Logica descuento condicionado
+                            if tariff_discounts.discounts_one > 0:
+                                conditional_discount = tariff_discounts.discounts_one 
+                                conditional_discount_deadline = tariff_discounts.date_discounts_one 
+                        
+                    #Se obtiene el representante ante Logyca al cual quedara asociada la orden de venta
+                    id_contactP = 0
+                    for record in partner.partner_id.child_ids:   
+                        ls_contacts = record.x_contact_type
+                        for i in ls_contacts:
+                            if i.id == 2:
+                                id_contactP = record.id
+                    
+                    if id_contactP == 0:
+                        id_contactP = partner.partner_id.id
+                    
+                    #Renovación Vinculación
+                    if type_process == '1':
+                        #Factura 1: Renovación Aporte Patrimonial corresponde al producto Renovación Aportes Patrimoniales Actividades ECR
+                        sale_order_values = {
+                            'partner_id' : id_contactP,
+                            'x_origen': 'FM {}'.format(self.year),
+                            'x_type_sale': 'Renovación',
+                            'x_conditional_discount': conditional_discount,
+                            'x_conditional_discount_deadline': conditional_discount_deadline,
+                            'validity_date' : self.invoicing_companies.expiration_date                            
+                        }
+                        
+                        sale_order = self.env['sale.order'].create(sale_order_values)
+                        
+                        sale_order_line_values = {
+                            'order_id' : sale_order.id,
+                            'product_id' : product_id,
+                            'product_uom_qty' : 1, #Cantidad
+                            'price_unit' : unit_fee_value,
+                            'discount' : discount                            
+                        }
+                        
+                        sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                        
+                        
+                        values_save_process = {
+                            'process_id' : self.id,
+                            'partner_id' : partner.partner_id.id,
+                            'vat' : partner.partner_id.vat,
+                            'invoice_one' : sale_order.id                                              
+                        }
+                        
+                        process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+                        
+                    #Renovación Prefijos Adicionales
+                    if type_process == '2':
+                        #Cantidad prefijos = (4Da8D + Peso Fijo + Peso Variable + Mixtos + GLNaGL13) - 1 La Renovación Aportes Patrimoniales Actividades ECR
+                        cant_prefixes = (partner.cant_prefixes_ds+partner.cant_prefixes_fixed_weight+partner.cant_prefixes_variable_weight+partner.cant_prefixes_mixed+partner.cant_prefixes_gl)-1
+                        #Factura 2: Renovación Prefijos Adicionales (4D a 8D, Peso Fijo y Variable, Mixtos)
+                        if cant_prefixes > 0:
+                            sale_order_values = {
+                                'partner_id' : id_contactP,
+                                'x_origen': 'FM {}'.format(self.year),
+                                'x_type_sale': 'Renovación',
+                                'x_conditional_discount': (cant_prefixes+partner.cant_prefixes_gtin)*conditional_discount,
+                                'x_conditional_discount_deadline': conditional_discount_deadline,
+                                'validity_date' : self.invoicing_companies.expiration_date                            
+                            }
+                            sale_order = self.env['sale.order'].create(sale_order_values)
+
+                            sale_order_line_values = {
+                                'order_id' : sale_order.id,
+                                'product_id' : product_id,
+                                'product_uom_qty' : cant_prefixes, #Cantidad
+                                'price_unit' : unit_fee_value,
+                                'discount' : discount                            
+                            }
+                        
+                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                        
+                            saler_orders_partner.append({'PartnerId':id_contactP,'IdFac2':sale_order.id})
+                        
+                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].search([('process_id', '=', self.id),('partner_id','=',partner.partner_id.id)])
+                        
+                            values_update_process = {
+                                'invoice_two' : sale_order.id                                              
+                            }
+                        
+                            process_partnersaleorder.update(values_update_process)
+                        
+                    #Renovación Prefijos GTIN8
+                    if type_process == '3':
+                        #Cantidad prefijos = Gtin8
+                        cant_prefixes = partner.cant_prefixes_gtin    
+                        if cant_prefixes > 0:
+                            #Obtener Id Factura 2
+                            sale_order_id = 0
+                            for sale in saler_orders_partner:
+                                partner_id = sale['PartnerId']
+                                if id_contactP == partner_id:
+                                    sale_order_id = sale['IdFac2']                            
+                            #Factura 2: Renovación Prefijos GTIN8 (GTIN8)
+                            if sale_order_id != 0:
+                                sale_order_line_values = {
+                                    'order_id' : sale_order_id,
+                                    'product_id' : product_id,
+                                    'product_uom_qty' : cant_prefixes, #Cantidad
+                                    'price_unit' : unit_fee_value,
+                                    'discount' : discount                            
+                                }
+
+                                sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                    
+                    
+                    #break
+                        #raise ValidationError(_(sale_order)) 
+    
 class x_MassiveInvoicingEnpointCodeAssignment(models.TransientModel):
     _name = 'massive.invoicing.enpointcodeassignment'
     _description = 'Massive Invoicing - Enpoint Code Assignment'
@@ -173,7 +321,8 @@ class x_MassiveInvoicingEnpointCodeAssignment(models.TransientModel):
     process_id = fields.Many2one('massive.invoicing.process',string='Proceso FacMasiva', required=True, ondelete='cascade')
     Nit = fields.Char(string='Nit', required=True)
     RazonSocial = fields.Char(string='Razon Social', required=True)
-    partner_id = fields.Many2one('res.partner', string='Cliente', required=True)
+    partner_id = fields.Many2one('res.partner', string='Compañía', required=True)
+    type_vinculation = fields.Many2many(string='Tipo de vinculación', readonly=True, related='partner_id.x_type_vinculation')    
     IdEstado = fields.Integer(string='Id Estado', required=True)
     EstadoPrefijo = fields.Char(string='Estado', required=True)
     IdRango = fields.Integer(string='Id Rango', required=True)
@@ -189,7 +338,8 @@ class x_MassiveInvoicingPartnerCalculationPrefixes(models.TransientModel):
     _description = 'Massive Invoicing - Partner Calculation Prefixes'
     
     process_id = fields.Many2one('massive.invoicing.process',string='Proceso FacMasiva', required=True, ondelete='cascade')
-    partner_id = fields.Many2one('res.partner', string='Cliente', required=True)
+    partner_id = fields.Many2one('res.partner', string='Compañía', required=True)
+    type_vinculation = fields.Many2many(string='Tipo de vinculación', readonly=True, related='partner_id.x_type_vinculation')    
     vat = fields.Char(string='Nit', required=True)
     have_prefixes = fields.Selection([
                                         ('1', 'Si'),
@@ -213,3 +363,14 @@ class x_MassiveInvoicingPartnerCalculationPrefixes(models.TransientModel):
     
     cant_prefixes_gl = fields.Integer(string='Cant. códigos GLN & GL13', readonly=True) 
     prefixes_gl = fields.Char(string='Códigos GLN & GL13', readonly=True)
+    
+class x_MassiveInvoicingPartnerSaleOrder(models.TransientModel):
+    _name = 'massive.invoicing.partner.saleorder'
+    _description = 'Massive Invoicing - Partner Sale Order'
+    
+    process_id = fields.Many2one('massive.invoicing.process',string='Proceso FacMasiva', required=True, ondelete='cascade')
+    partner_id = fields.Many2one('res.partner', string='Compañía', required=True)
+    type_vinculation = fields.Many2many(string='Tipo de vinculación', readonly=True, related='partner_id.x_type_vinculation')    
+    vat = fields.Char(string='Nit', required=True)
+    invoice_one = fields.Many2one('sale.order', string='Orden de venta #1', readonly=True)
+    invoice_two = fields.Many2one('sale.order', string='Orden de venta #2', readonly=True)

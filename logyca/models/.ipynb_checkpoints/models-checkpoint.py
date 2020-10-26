@@ -258,6 +258,15 @@ class SaleOrder(models.Model):
                                       #('Recurrente', 'Recurrente'),
                                       ('Nueva venta', 'Nueva venta')], string='Tipo de venta') 
     x_country_account_id = fields.Many2one('res.country', string='País', default=_get_default_country_id, track_visibility='onchange')
+    x_conditional_discount = fields.Float(string='Descuento condicionado')
+    x_conditional_discount_deadline = fields.Date(string='Fecha límite descuento condicionado')    
+    x_amount_total_conditional_discount = fields.Float(string='Total con descuento condicionado',compute='_compute_amount_total_conditional_discount')
+    
+    @api.depends('amount_total')
+    def _compute_amount_total_conditional_discount(self):
+        amount_total = self.amount_total
+        conditional_discount = self.x_conditional_discount
+        self.x_amount_total_conditional_discount = amount_total-conditional_discount
     
     def _prepare_invoice(self):        
         invoice_vals = super(SaleOrder, self)._prepare_invoice()        

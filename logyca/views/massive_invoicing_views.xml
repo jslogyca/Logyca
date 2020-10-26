@@ -65,6 +65,7 @@
                                 <tree>
                                     <field name="partner_id"/>
                                     <field name="Nit"/>     
+                                    <field name="type_vinculation" widget="many2many_tags"/>
                                     <field name="EstadoPrefijo"/>                                        
                                     <field name="Rango"/>                                        
                                     <field name="Esquema"/>                                        
@@ -82,6 +83,7 @@
                                 <tree>
                                     <field name="partner_id"/>
                                     <field name="vat"/>     
+                                    <field name="type_vinculation" widget="many2many_tags"/>
                                     <field name="cant_prefixes_ds"/>                                        
                                     <field name="cant_prefixes_fixed_weight"/>                                        
                                     <field name="cant_prefixes_variable_weight"/>                                        
@@ -90,7 +92,21 @@
                                     <field name="cant_prefixes_gl"/>                                                                            
                                 </tree>
                             </field>
-                        </group>  
+                        </group> 
+                        <br/>                 
+                        <button name="execute_process" string="3.Proceso" type="object" class="oe_highlight"/> 
+                        <br/> 
+                        <group>
+                            <field name="x_partner_sale_order" nolabel="1" colspan="4" modifiers="{&quot;readonly&quot;: true}">
+                                <tree>
+                                    <field name="partner_id"/>
+                                    <field name="vat"/>     
+                                    <field name="type_vinculation" widget="many2many_tags"/>
+                                    <field name="invoice_one"/>                                        
+                                    <field name="invoice_two"/>                                                                          
+                                </tree>
+                            </field>
+                        </group>                         
                     </group>
                     <footer/>
                 </form>
