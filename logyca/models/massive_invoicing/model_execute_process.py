@@ -86,13 +86,13 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             cant_prefixes_gl = 0
             prefixes_delete_fixes = []
             prefixes_delete_variable = []
-            total_capacity_prefixes = 0
+            total_capacity_prefixes = []
             enpointcodeassignment = self.env['massive.invoicing.enpointcodeassignment'].search([('process_id', '=', self.id),('partner_id','=',partner.id)])
             
             for data in enpointcodeassignment:            
                 partner_vat = data.Nit
                 partner_range = data.Rango
-                total_capacity_prefixes = total_capacity_prefixes + data.CapacidadPrefijo
+                total_capacity_prefixes.append({'Rango':partner_range,'Capacity':data.CapacidadPrefijo})
                                 
                 if partner_range in ['4D','5D','6D','7D','8D']:
                     prefixes_ds.append(data.PrefixId)
@@ -178,15 +178,16 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         sector_id_textil = 10 #Id definido, en caso de camviar revisar la tabla de sectores de Logyca
         #Traer los productos y sus tipos de proceso
         saler_orders_partner = []
+        cant_prefixes_textil_partner = []
         obj_massive_invoicing_products = self.env['massive.invoicing.products'].search([('product_id', '!=', False)])
         for process in obj_massive_invoicing_products:
             type_vinculation = process.type_vinculation.id
             type_process = process.type_process
             product_id = process.product_id.id
             
-            #NO Textileros
-            obj_company = self.env['massive.invoicing.partnercalculationprefixes'].search([('process_id', '=', self.id),('type_vinculation','in',[type_vinculation]),('have_prefixes','=','1'),('partner_id.x_sector_id.id','!=',sector_id_textil)])
-                    
+            obj_company = self.env['massive.invoicing.partnercalculationprefixes'].search([('process_id', '=', self.id),('type_vinculation','in',[type_vinculation]),('have_prefixes','=','1')])
+            #('partner_id.x_sector_id.id','!=',sector_id_textil),
+            #,('partner_id.vat','in',['860000452','890901672','800197463','900677748','860025900'])
             for partner in obj_company:
                 fee_value = 0
                 unit_fee_value = 0
@@ -219,10 +220,27 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                 if id_contactP == 0:
                     id_contactP = partner.partner_id.id
                     
-                #Clientes / Miembros NO textileros.
+                #Clientes / Miembros.
                 if type_vinculation == type_vinculation_miembro or type_vinculation == type_vinculation_cliente:
                     #Renovación Vinculación
                     if type_process == '1':
+                        #Si es textilero validar capacidad de prefijos
+                        if partner.partner_id.x_sector_id.id == sector_id_textil:
+                            capacity_prefixes = partner.total_capacity_prefixes
+                            capacity_prefixes = capacity_prefixes.replace('[','').replace(']','')
+                            array_capacity_prefixes = capacity_prefixes.split('},')
+                            total_capacity_prefixes = 0
+                            cant_prefixes = 0
+                            for capacity in array_capacity_prefixes:
+                                dict = capacity+'}'
+                                dict = dict.replace('}}','}')
+                                dict_capacity = eval(dict) 
+                                #raise ValidationError(_(dict_capacity))
+                                total_capacity_prefixes = total_capacity_prefixes + dict_capacity.get('Capacity')
+                                cant_prefixes = cant_prefixes + 1
+                                if total_capacity_prefixes >= self.invoicing_companies.textile_code_capability:                           
+                                    cant_prefixes_textil_partner.append({'PartnerId':id_contactP,'CantPrefixes':cant_prefixes})
+                                    break
                         #Factura 1: Renovación Aporte Patrimonial corresponde al producto Renovación Aportes Patrimoniales Actividades ECR
                         sale_order_values = {
                             'partner_id' : id_contactP,
@@ -259,8 +277,30 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                         
                     #Renovación Prefijos Adicionales
                     if type_process == '2':
-                        #Cantidad prefijos = (4Da8D + Peso Fijo + Peso Variable + Mixtos + GLNaGL13) - 1 La Renovación Aportes Patrimoniales Actividades ECR
-                        cant_prefixes = (partner.cant_prefixes_ds+partner.cant_prefixes_fixed_weight+partner.cant_prefixes_variable_weight+partner.cant_prefixes_mixed+partner.cant_prefixes_gl)-1
+                        #Si es textilero validar capacidad de prefijos
+                        if partner.partner_id.x_sector_id.id == sector_id_textil:
+                            #Obtener cantidad a restar de acuerdo a la capacidad
+                            cant_resta = 1
+                            for cant in cant_prefixes_textil_partner:
+                                partner_id = cant['PartnerId']
+                                if id_contactP == partner_id:
+                                    cant_resta = cant['CantPrefixes']
+                            #Cantidad prefijos = (4Da8D + Peso Fijo + Peso Variable + Mixtos + GLNaGL13) - 1 La Renovación Aportes Patrimoniales Actividades ECR
+                            cant_prefixes = (partner.cant_prefixes_ds+partner.cant_prefixes_fixed_weight+partner.cant_prefixes_variable_weight+partner.cant_prefixes_mixed+partner.cant_prefixes_gl)-cant_resta
+                            #Al ser textileros se les cobra solamente un porcentaje de cada prefijo pero si el codigo es cedido se cobra el 100%
+                            obj_cedidos = self.env['massive.invoicing.codes.assignment'].search([('company_receives.id', '=', partner.partner_id.id)])
+                            cant_prefixes_cedidos = 0
+                            prefixes_cedidos = []
+                            for cedidos in obj_cedidos:
+                                prefixes_cedidos.append(cedidos.prefix)
+                            
+                            cant_prefixes_cedidos = len(prefixes_cedidos)
+                            if cant_prefixes != cant_prefixes_cedidos:
+                                unit_fee_value = (unit_fee_value/100)*self.invoicing_companies.percentage_textile_tariff                            
+                            
+                        else:
+                            #Cantidad prefijos = (4Da8D + Peso Fijo + Peso Variable + Mixtos + GLNaGL13) - 1 La Renovación Aportes Patrimoniales Actividades ECR
+                            cant_prefixes = (partner.cant_prefixes_ds+partner.cant_prefixes_fixed_weight+partner.cant_prefixes_variable_weight+partner.cant_prefixes_mixed+partner.cant_prefixes_gl)-1
                         #Factura 2: Renovación Prefijos Adicionales (4D a 8D, Peso Fijo y Variable, Mixtos)
                         if cant_prefixes > 0:
                             if type_vinculation == type_vinculation_miembro:
@@ -333,8 +373,37 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                     'discount' : discount                            
                                 }
 
-                                sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)            
-    
+                                sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                
+                #Tipos de vinculados diferentes a miembros y clientes
+                if type_vinculation != type_vinculation_miembro and type_vinculation != type_vinculation_cliente:
+                    #Especial de Empresas GTIN8
+                    if partner.partner_id.x_gtin_massive_invoicing == True and type_process == '3':
+                        #Cantidad prefijos = Gtin8
+                        cant_prefixes = partner.cant_prefixes_gtin    
+                        if cant_prefixes > 0:
+                            #Factura 1
+                            sale_order_values = {
+                                'partner_id' : id_contactP,
+                                'x_origen': 'FM {}'.format(self.year),
+                                'x_type_sale': 'Renovación',
+                                'x_conditional_discount': conditional_discount,
+                                'x_conditional_discount_deadline': conditional_discount_deadline,
+                                'validity_date' : self.invoicing_companies.expiration_date                            
+                            }
+
+                            sale_order = self.env['sale.order'].create(sale_order_values)                            
+                            
+                            sale_order_line_values = {
+                                'order_id' : sale_order.id,
+                                'product_id' : product_id,
+                                'product_uom_qty' : cant_prefixes, #Cantidad
+                                'price_unit' : unit_fee_value,
+                                'discount' : discount                            
+                            }
+
+                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)            
+                                    
 class x_MassiveInvoicingEnpointCodeAssignment(models.TransientModel):
     _name = 'massive.invoicing.enpointcodeassignment'
     _description = 'Massive Invoicing - Enpoint Code Assignment'
@@ -385,7 +454,7 @@ class x_MassiveInvoicingPartnerCalculationPrefixes(models.TransientModel):
     cant_prefixes_gl = fields.Integer(string='Cant. códigos GLN & GL13', readonly=True) 
     prefixes_gl = fields.Char(string='Códigos GLN & GL13', readonly=True)
     
-    total_capacity_prefixes = fields.Integer(string='Total de capacidad prefijos', readonly=True)
+    total_capacity_prefixes = fields.Char(string='Total de capacidad prefijos', readonly=True)
     
 class x_MassiveInvoicingPartnerSaleOrder(models.TransientModel):
     _name = 'massive.invoicing.partner.saleorder'
@@ -394,6 +463,7 @@ class x_MassiveInvoicingPartnerSaleOrder(models.TransientModel):
     process_id = fields.Many2one('massive.invoicing.process',string='Proceso FacMasiva', required=True, ondelete='cascade')
     partner_id = fields.Many2one('res.partner', string='Compañía', required=True)
     type_vinculation = fields.Many2many(string='Tipo de vinculación', readonly=True, related='partner_id.x_type_vinculation')    
+    sector = fields.Many2one(string='Sector', readonly=True, related='partner_id.x_sector_id')    
     vat = fields.Char(string='Nit', required=True)
     invoice_one = fields.Many2one('sale.order', string='Orden de venta #1', readonly=True)
     invoice_two = fields.Many2one('sale.order', string='Orden de venta #2', readonly=True)

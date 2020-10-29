@@ -102,6 +102,7 @@
                                     <field name="partner_id"/>
                                     <field name="vat"/>     
                                     <field name="type_vinculation" widget="many2many_tags"/>
+                                    <field name="sector"/>                                                                            
                                     <field name="invoice_one"/>                                        
                                     <field name="invoice_two"/>                                                                          
                                 </tree>
