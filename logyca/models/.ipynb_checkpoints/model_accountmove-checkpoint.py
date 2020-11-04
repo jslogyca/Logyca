@@ -44,11 +44,23 @@ class AccountMove(models.Model):
     x_have_approval_request = fields.Boolean(string='Tiene Aprobaciones', compute='_have_approval_request')    
     x_create_approval_request = fields.Boolean(string='Crearon Aprobación para NC',store = True, track_visibility='onchange')    
     x_approved_approval_request = fields.Boolean(string='Aprobaron la creación de la NC',store = True, track_visibility='onchange')   
+    #Es factura de facturación masiva
+    x_is_mass_billing = fields.Boolean(string='Factura creada por el proceso de facturación masiva.', copy=False)
     #Valor total descuentos
     x_value_discounts = fields.Monetary(string='Valor descuentos', default=0.0, currency_field='company_currency_id')
+    x_discounts_deadline = fields.Date(string='Fecha límite descuento condicionado')    
+    x_amount_total_discounts = fields.Monetary(string='Total con descuentos', default=0.0, currency_field='company_currency_id', compute='_compute_amount_total_discounts')
     #Recibo de pago - Campo temporal
     x_receipt_payment = fields.Char(string='N° Recibo de pago', copy=False)
     
+    @api.depends('x_value_discounts')
+    def _compute_amount_total_discounts(self):
+        amount_total_discounts = 0
+        for record in self:
+            amount_total = record.amount_total
+            conditional_discount = record.x_value_discounts
+            amount_total_discounts = amount_total-conditional_discount
+            record.x_amount_total_discounts = amount_total_discounts
     
     def create_approval_request(self):
         ctx = self.env.context.copy()
