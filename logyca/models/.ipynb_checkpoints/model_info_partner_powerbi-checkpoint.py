@@ -31,14 +31,14 @@ class InfoPartnerPowerBI(models.Model):
     job_title = fields.Char(string='Área & Cargo', readonly=True)
     email_contact = fields.Char(string='Contacto/Correo Electrónico ', readonly=True)
     x_not_contacted_again = fields.Integer(string='No volver a ser contactado', readonly=True)
-    ubicación_contact = fields.Char(string='Contacto/Ubicación', readonly=True)
+    ubicacion_contact = fields.Char(string='Contacto/Ubicación', readonly=True)
     street = fields.Char(string='Dirección de contacto', readonly=True)
     
     @api.model
     def _select(self):
         #coalesce(e."x_studio_clase",'-') as clase,
         return '''
-         select * from (
+         select Row_Number() over (order by company) as ID,* from (
                 select coalesce(a.vat,'-') as Nit, 
                 coalesce(a.display_name,'-') as company, 
                 a.x_active_vinculation, 
@@ -59,7 +59,7 @@ class InfoPartnerPowerBI(models.Model):
                 coalesce(la."name",'-') ||' / '|| coalesce(jt."name",'-') as job_title,
                 coalesce(con.email,'-') as email_contact,
                 coalesce(con.x_not_contacted_again,'0') as x_not_contacted_again,
-                coalesce(f."name",'-') ||' / '|| coalesce(h."name",'-') ||' / '|| coalesce(g."name",'-') as ubicación_contact,
+                coalesce(f."name",'-') ||' / '|| coalesce(h."name",'-') ||' / '|| coalesce(g."name",'-') as ubicacion_contact,
                 coalesce(con.street,'-') as street
                 From res_partner a
                 --Tipo de tercero
