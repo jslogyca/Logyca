@@ -12,20 +12,20 @@ class InfoPartnerPowerBI(models.Model):
     _auto = False
     
     # Compañia
-    Nit = fields.Char(string='Nit', readonly=True)
+    nit = fields.Char(string='Nit', readonly=True)
     company = fields.Char(string='Compañia', readonly=True)
     x_active_vinculation = fields.Char(string='Activo', readonly=True)
-    Tipo_de_vinculacion = fields.Char(string='Tipo de vinculacion', readonly=True)
-    Vendedor = fields.Char(string='Vendedor', readonly=True)
+    tipo_de_vinculacion = fields.Char(string='Tipo de vinculacion', readonly=True)
+    vendedor = fields.Char(string='Vendedor', readonly=True)
     x_date_vinculation = fields.Date(string='Fecha de vinculación', readonly=True)
-    Telefono_cliente = fields.Char(string='Teléfono cliente', readonly=True)
+    telefono_cliente = fields.Char(string='Teléfono cliente', readonly=True)
     celular = fields.Char(string='Celular', readonly=True)
     street_company = fields.Char(string='Dirección', readonly=True)
     x_asset_range = fields.Char(string='Rango De Activos', readonly=True)
     x_sector_id = fields.Char(string='Sector', readonly=True)
-    Nombre_contacto = fields.Char(string='Contacto/Nombre', readonly=True)
-    Telefono_contacto = fields.Char(string='Contacto/Teléfono', readonly=True)
-    Tipe_contacto = fields.Char(string='Tipo De Contacto', readonly=True)
+    nombre_contacto = fields.Char(string='Contacto/Nombre', readonly=True)
+    telefono_contacto = fields.Char(string='Contacto/Teléfono', readonly=True)
+    tipe_contacto = fields.Char(string='Tipo De Contacto', readonly=True)
     create_date = fields.Date(string='Creado', readonly=True)
     active_contact = fields.Char(string='Contacto/Activo', readonly=True)
     job_title = fields.Char(string='Área & Cargo', readonly=True)
@@ -39,20 +39,20 @@ class InfoPartnerPowerBI(models.Model):
         #coalesce(e."x_studio_clase",'-') as clase,
         return '''
          select Row_Number() over (order by company) as ID,* from (
-                select coalesce(a.vat,'-') as Nit, 
+                select coalesce(a.vat,'-') as nit, 
                 coalesce(a.display_name,'-') as company, 
                 a.x_active_vinculation, 
-                coalesce(v."name",'-') as Tipo_de_vinculacion,
-                coalesce(ven."name",'-') as Vendedor,
+                coalesce(v."name",'-') as tipo_de_vinculacion,
+                coalesce(ven."name",'-') as vendedor,
                 coalesce(a.x_date_vinculation,'1900-01-01') as x_date_vinculation,
-                coalesce(a.mobile ,'-') as Telefono_cliente,
+                coalesce(a.mobile ,'-') as telefono_cliente,
                 coalesce(a.phone,'-') as celular, 
                 coalesce(a.street,'-') as street_company, 
                 coalesce(r."name",'-') as x_asset_range,
                 coalesce(s."name",'-')  as x_sector_id,
-                coalesce(con."name",'-') as Nombre_contacto,
-                coalesce(con.phone ,'-')  ||' / '|| coalesce(con.mobile ,'-') as Telefono_contacto,
-                coalesce(ct."name",'-')  as Tipe_contacto,
+                coalesce(con."name",'-') as nombre_contacto,
+                coalesce(con.phone ,'-')  ||' / '|| coalesce(con.mobile ,'-') as telefono_contacto,
+                coalesce(ct."name",'-')  as tipe_contacto,
                 coalesce(con.create_date,'1900-01-01') as create_date,
                 coalesce(con.x_active_for_logyca,'0') as active_contact,
                 -- contacto grupos de trabajo 
