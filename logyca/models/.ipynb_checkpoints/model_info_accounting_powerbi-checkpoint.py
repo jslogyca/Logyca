@@ -21,8 +21,8 @@ class InfoPartnerPowerBI(models.Model):
     familiaanalitica = fields.Char(string='Familia Analítica', readonly=True)
     cuenta_analitica = fields.Char(string='Cuenta Analítica', readonly=True)
     ref = fields.Char(string='REF', readonly=True)
-    tipo_auenta = fields.Char(string='Tipo Cuenta', readonly=True)
-    grupo_aresupuestal = fields.Char(string='Grupo Presupuestal', readonly=True)
+    tipo_cuenta = fields.Char(string='Tipo Cuenta', readonly=True)
+    grupo_presupuestal = fields.Char(string='Grupo Presupuestal', readonly=True)
     grupo_definitivo = fields.Char(string='Grupo Definitivo', readonly=True)
     cuenta_financiera = fields.Char(string='Cuenta Financiera', readonly=True)
     producto = fields.Char(string='Producto', readonly=True)
@@ -37,7 +37,7 @@ class InfoPartnerPowerBI(models.Model):
     creado = fields.Date(string='Creado', readonly=True)
     creado_por = fields.Char(string='Creado Por', readonly=True)
     modificado = fields.Date(string='Actualizado', readonly=True)
-    actualizado_Por = fields.Char(string='Actualizado Por', readonly=True)
+    actualizado_por = fields.Char(string='Actualizado Por', readonly=True)
     
     @api.model
     def _select(self):
@@ -49,14 +49,14 @@ class InfoPartnerPowerBI(models.Model):
             date_part('month',a."date")as mes,
             coalesce(e.id,0) as id_account, 
             coalesce(A."name",'-') as descripcion, 
-            coalesce(q."name",'-') as lineaAnalitica,
-            coalesce(p."name",'-') as familiaAnalitica,
+            coalesce(q."name",'-') as lineaanalitica,
+            coalesce(p."name",'-') as familiaanalitica,
             coalesce(d.code,'-') ||' / '|| coalesce(d.name,'-')  as cuenta_analitica,
             coalesce(a."ref",'-') as ref,
-            coalesce(left(e.code,2),'0')  as tipo_Cuenta,
-            coalesce(m."name",'-') as grupo_Presupuestal,
+            coalesce(left(e.code,2),'0')  as tipo_cuenta,
+            coalesce(m."name",'-') as grupo_presupuestal,
             --Mira, si es 5, 6 o 42 y el grupo pptal es NO APLICA o esta NULO, dejar la línea analitica, de lo contrario deje el grupo pptal.
-            coalesce( case when (left(e.code,1) = '5' or left(e.code,1) = '6' or left(e.code,2) = '42')  and  m."name" = '000 NO APLICA' or m."name" is null  then coalesce(q."name",'-') else coalesce(m."name",'-') end ,'-') as grupo_Definitivo,
+            coalesce( case when (left(e.code,1) = '5' or left(e.code,1) = '6' or left(e.code,2) = '42')  and  m."name" = '000 NO APLICA' or m."name" is null  then coalesce(q."name",'-') else coalesce(m."name",'-') end ,'-') as grupo_definitivo,
             coalesce(e.code,'-') ||' / '|| coalesce(e.name,'-') as cuenta_financiera,
             coalesce(b."name",'-') as apunte_contable, coalesce(b.product_id  ||' '||  coalesce(replace(g.name,'(copia)',''),'-') ||' '|| coalesce(pav.name,''),'-')  as  producto , 
             coalesce(b.quantity,'0') as cantidad,
@@ -70,7 +70,7 @@ class InfoPartnerPowerBI(models.Model):
             coalesce(b."create_date",'1900-01-01') as creado, 
             coalesce(usu_crea.name,'-') as creado_por, 
             coalesce(b.write_date,'1900-01-01') as modificado,
-            coalesce(usu_mod.name,'-') as Actualizado_Por
+            coalesce(usu_mod.name,'-') as actualizado_por
             From account_move a
             inner join account_move_line b on a.id = b.move_id
             left join account_analytic_line c on b.id = c.move_id
