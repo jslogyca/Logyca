@@ -67,6 +67,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             values_update = {
                 'x_is_mass_billing' : True,
                 'ref': ref,
+                'x_num_order_purchase': sale.name,
                 'x_value_discounts' : sale.x_conditional_discount,
                 'x_discounts_deadline' : sale.x_conditional_discount_deadline
             }
