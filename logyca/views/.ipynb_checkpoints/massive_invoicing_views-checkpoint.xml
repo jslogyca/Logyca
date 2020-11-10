@@ -113,6 +113,36 @@
                 </form>
             </field>
     </record>
+    
+    <!-- Execute process FAC VIEW --> 
+    <record id="massive_invoicing_process_fac_form" model="ir.ui.view">
+        <field name="name">Facturación Masiva / Contabilidad</field>
+        <field name="model">massive.invoicing.process.fac</field>
+        <field name="arch" type="xml">
+                <form string="Facturación Masiva / Contabilidad"> 
+                    <group>
+                        <group>
+                            <h1>Facturación Masiva | Contabilidad</h1>
+                            <group>
+                                <field name="year" string="Año proceso"/>                                                                
+                                <field name="type_vinculation" string="Tipo de vinculación"/>                                                                
+                                <field name="is_textil" string="Textileros"/>                                                                
+                            </group>                            
+                        </group>
+                        <br/>                 
+                        <button name="create_invoicing_in_state_draft" string="1.Convertir cotizaciones en facturas con estado borrador" type="object" class="oe_highlight"/> 
+                        <br/>                           
+                        <group>
+                            <field name="cant_invoices" string="Cantidad de facturas creadas"/>                                                                
+                        </group>
+                        <br/>                 
+                        <button name="public_invoicing_in_state_draft" string="2.Publicar facturas con estado borrador" type="object" class="oe_highlight"/> 
+                        <br/>   
+                    </group>
+                    <footer/>
+                </form>
+            </field>
+    </record>
       
     </data>
 </odoo>

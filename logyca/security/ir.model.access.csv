@@ -37,3 +37,4 @@ access_massive_invoicing_codes_assignment,massive.invoicing.codes.assignment,mod
 access_massive_invoicing_tariff,massive.invoicing.tariff,model_massive_invoicing_tariff,,1,1,1,1
 access_massive_invoicing_tariff_discounts,massive.invoicing.tariff.discounts,model_massive_invoicing_tariff_discounts,,1,1,1,1
 access_massive_invoicing_products,massive.invoicing.products,model_massive_invoicing_products,,1,1,1,1
+access_accounting_info_powerbi,accounting.info.powerbi,model_accounting_info_powerbi,,1,0,0,0
