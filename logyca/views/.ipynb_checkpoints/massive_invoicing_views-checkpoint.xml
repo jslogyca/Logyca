@@ -125,23 +125,19 @@
                             <h1>Facturación Masiva | Contabilidad</h1>
                             <group>
                                 <field name="year" string="Año proceso"/>                                                                
+                                <field name="type_vinculation" string="Tipo de vinculación"/>                                                                
+                                <field name="is_textil" string="Textileros"/>                                                                
                             </group>                            
                         </group>
                         <br/>                 
                         <button name="create_invoicing_in_state_draft" string="1.Convertir cotizaciones en facturas con estado borrador" type="object" class="oe_highlight"/> 
                         <br/>                           
                         <group>
-                            <field name="x_partner_accountmove" nolabel="1" colspan="4" modifiers="{&quot;readonly&quot;: true}">
-                                <tree>
-                                    <field name="partner_id"/>
-                                    <field name="vat"/>     
-                                    <field name="type_vinculation" widget="many2many_tags"/>
-                                    <field name="sector"/>                                                                            
-                                    <field name="invoice_one"/>                                        
-                                    <field name="invoice_two"/>                                                                          
-                                </tree>
-                            </field>
-                        </group>                         
+                            <field name="cant_invoices" string="Cantidad de facturas creadas"/>                                                                
+                        </group>
+                        <br/>                 
+                        <button name="public_invoicing_in_state_draft" string="2.Publicar facturas con estado borrador" type="object" class="oe_highlight"/> 
+                        <br/>   
                     </group>
                     <footer/>
                 </form>
