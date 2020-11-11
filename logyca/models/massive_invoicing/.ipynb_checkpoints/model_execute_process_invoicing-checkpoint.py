@@ -12,8 +12,14 @@ class x_MassiveInvoicingProcess(models.TransientModel):
     _description = 'Massive Invoicing - Execute Process'
     
     year = fields.Integer(string='Año proceso', required=True)
-    #Facturas
-    x_partner_accountmove = fields.One2many('massive.invoicing.partner.accountmove', 'process_id', string = 'Facturas', readonly=True)
+    type_vinculation = fields.Selection([
+                                        ('1', 'Miembros'),
+                                        ('2', 'Clientes'),                                        
+                                        ('3', 'Otros'),                                        
+                                    ], string='Tipo de vinculación')
+    is_textil = fields.Boolean(string='Textileros')
+    #Info Facturas
+    cant_invoices = fields.Integer(string='Cantidad de facturas creadas', readonly=True)
         
     def name_get(self):
         result = []
@@ -22,65 +28,87 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         return result
     
     #Creación facturas en estado borrador
-    def create_invoicing_in_state_draft(self):   
+    def create_invoicing_in_state_draft(self):
+        if not self.type_vinculation:
+            raise ValidationError(_("Debes seleccionar un tipo de vinculación"))             
         #Eliminar facturas masivas en estado borrador si ya existen
-        accountmove_exists = self.env['account.move'].search([('x_is_mass_billing', '=', True),('state','=','draft')])
-        accountmove_exists.unlink() 
-        process_partneraccountmove_exists = self.env['massive.invoicing.partner.accountmove'].search([('process_id', '=', self.id)])
-        process_partneraccountmove_exists.unlink()
+        #self.env['account.move'].search([('x_is_mass_billing', '=', True),('state','=','draft')]).unlink()
+        #Obtener tipos de vinculación
+        type_vinculation = []
+        if self.type_vinculation == '1':
+            obj_type_vinculation_miembros = self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro')])            
+            for m in obj_type_vinculation_miembros:
+                type_vinculation.append(m.id)
+        if self.type_vinculation == '2':
+            obj_type_vinculation_cliente = self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente')])
+            for c in obj_type_vinculation_cliente:
+                type_vinculation.append(c.id)  
         #Obtener todas las ordenes de venta para confirmarlas y convertirlas en facturas
-        sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('state','not in',['sale','cancel'])])
-        #raise ValidationError(_(len(sales_order))) 
-        #cant = 0
+        code_textileros = 10
+        if self.type_vinculation == '1' or self.type_vinculation == '2':
+            if self.is_textil:
+                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','=',code_textileros)])
+            else:
+                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','!=',code_textileros)])
+        else:
+            sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_gtin_massive_invoicing','=',True)])
+        #,('state','not in',['sale','cancel'])
+        cant = len(sales_order)
+        #raise ValidationError(_(cant)) 
         for sale in sales_order:
-            #cant = cant + 1
-            #if cant == 800:
-            #    break
-            #Confirmar orden de venta
-            sale.action_confirm()
-            #Crear factura en estado borrador
-            id_factura = sale._create_invoices()
-            #Actualizar campos de Fac Masiva
+            #Referencia
+            ref = ''
+            if sale.x_conditional_discount > 0:
+                ref = 'Por pago de la factura antes de la fecha {} aplica un descuento al valor total de la factura de {} - No. Orden de venta {}.'.format(str(sale.x_conditional_discount_deadline),str(sale.x_conditional_discount),sale.name)
+            else:
+                ref = 'No. Orden de venta {}'.format(sale.name)
+            
+            #Campos de fac masiva
             values_update = {
                 'x_is_mass_billing' : True,
+                'ref': ref,
+                'x_num_order_purchase': sale.name,
                 'x_value_discounts' : sale.x_conditional_discount,
                 'x_discounts_deadline' : sale.x_conditional_discount_deadline
             }
+            #Confirmar orden de venta
+            if sale.state != 'sale' and sale.state != 'cancel':
+                sale.action_confirm()
+            #Crear factura en estado borrador
+            id_factura = sale._create_invoices()
+            #Actualizar campos de Fac Masiva
             id_factura.update(values_update)
-            #Obtener Id Compañia
-            partner_id = 0
-            vat = ''
-            if sale.partner_id.parent_id.id:
-                partner_id = sale.partner_id.parent_id.id
-                vat = sale.partner_id.parent_id.vat
+        
+        self.cant_invoices = cant
+        
+    #Publicar facturas en estado borrador
+    def public_invoicing_in_state_draft(self):
+        code_textileros = 10
+        #Obtener tipos de vinculación
+        type_vinculation = []
+        if self.type_vinculation == '1':
+            obj_type_vinculation_miembros = self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro')])            
+            for m in obj_type_vinculation_miembros:
+                type_vinculation.append(m.id)
+        if self.type_vinculation == '2':
+            obj_type_vinculation_cliente = self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente')])
+            for c in obj_type_vinculation_cliente:
+                type_vinculation.append(c.id)  
+        #Traer facturas a publicar
+        if self.type_vinculation == '1' or self.type_vinculation == '2':
+            if self.is_textil:
+                account_move = self.env['account.move'].search([('x_is_mass_billing', '=', True),('state','=','draft'),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','=',code_textileros)])
             else:
-                partner_id = sale.partner_id.id
-                vat = sale.partner_id.vat
-            #Guardar en tabla intermedia las facturas creadas para consultarlas de forma rapida
-            process_partneraccountmove = self.env['massive.invoicing.partner.accountmove'].search([('process_id', '=', self.id),('partner_id','=',partner_id)])
-            if not process_partneraccountmove:
-                values_save_process = {
-                    'process_id' : self.id,
-                    'partner_id' : partner_id,
-                    'vat' : vat,
-                    'invoice_one' : id_factura.id                                              
-                }            
-                process_partneraccountmove_create = self.env['massive.invoicing.partner.accountmove'].create(values_save_process)
-            else:
-                values_update_process = {
-                    'invoice_two' : id_factura.id                                              
-                }
-                process_partneraccountmove.update(values_update_process)
+                account_move = self.env['account.move'].search([('x_is_mass_billing', '=', True),('state','=','draft'),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','!=',code_textileros)])
+        else:
+            account_move = self.env['account.move'].search([('x_is_mass_billing', '=', True),('state','=','draft'),('partner_id.parent_id.x_gtin_massive_invoicing','=',True)])
             
+        for move in account_move:
+          #Publicar factura
+          move.action_post()
+          values_update = {
+            'x_studio_aprobada_para_pagar' : True
+          }
+          move.update(values_update)
 
-class x_MassiveInvoicingPartnerAccountMove(models.TransientModel):
-    _name = 'massive.invoicing.partner.accountmove'
-    _description = 'Massive Invoicing - Partner Account Move'
-    
-    process_id = fields.Many2one('massive.invoicing.process.fac',string='Proceso FacMasiva', required=True, ondelete='cascade')
-    partner_id = fields.Many2one('res.partner', string='Compañía', required=True)
-    type_vinculation = fields.Many2many(string='Tipo de vinculación', readonly=True, related='partner_id.x_type_vinculation')    
-    sector = fields.Many2one(string='Sector', readonly=True, related='partner_id.x_sector_id')    
-    vat = fields.Char(string='Nit', required=True)
-    invoice_one = fields.Many2one('account.move', string='Factura #1', readonly=True)
-    invoice_two = fields.Many2one('account.move', string='Factura #2', readonly=True)
+            
