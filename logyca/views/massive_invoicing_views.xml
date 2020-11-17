@@ -134,10 +134,14 @@
                         <br/>                           
                         <group>
                             <field name="cant_invoices" string="Cantidad de facturas creadas"/>                                                                
+                            <h3><field name="state_process" nolabel="1"/></h3>                            
                         </group>
                         <br/>                 
                         <button name="public_invoicing_in_state_draft" string="2.Publicar facturas con estado borrador" type="object" class="oe_highlight"/> 
-                        <br/>   
+                        <br/>  
+                        <group>                            
+                            <b><h3><field name="state_process_publish" nolabel="1"/></h3></b>
+                        </group>
                     </group>
                     <footer/>
                 </form>
