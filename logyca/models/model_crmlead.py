@@ -12,7 +12,6 @@ class CrmLead(models.Model):
     x_analytic_account_id =  fields.Many2one('account.analytic.account', string ='Cuenta Análitica', track_visibility='onchange')
     x_analytic_account_family = fields.Many2one( string ='Familia Análitica', related = 'x_analytic_account_id.group_id', readonly = True, store = True )
     x_analytic_account_line = fields.Many2one( string ='Línea Análitica', related = 'x_analytic_account_family.parent_id', readonly = True, store = True )
-    x_test = fields.Char( string ='Test')
     
     @api.onchange('partner_id')
     def _onchange_partner_id_jobposition(self):
