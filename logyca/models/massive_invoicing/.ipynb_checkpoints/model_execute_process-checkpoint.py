@@ -244,6 +244,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                         #Factura 1: Renovación Aporte Patrimonial corresponde al producto Renovación Aportes Patrimoniales Actividades ECR
                         sale_order_values = {
                             'partner_id' : id_contactP,
+                            'partner_invoice_id' : id_contactP,
                             'x_origen': 'FM {}'.format(self.year),
                             'x_type_sale': 'Renovación',
                             'x_conditional_discount': conditional_discount,
@@ -306,6 +307,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             if type_vinculation == type_vinculation_miembro:
                                 sale_order_values = {
                                     'partner_id' : id_contactP,
+                                    'partner_invoice_id' : id_contactP,
                                     'x_origen': 'FM {}'.format(self.year),
                                     'x_type_sale': 'Renovación',
                                     'x_conditional_discount': (cant_prefixes+partner.cant_prefixes_gtin)*conditional_discount,
@@ -385,6 +387,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             #Factura 1
                             sale_order_values = {
                                 'partner_id' : id_contactP,
+                                'partner_invoice_id' : id_contactP,
                                 'x_origen': 'FM {}'.format(self.year),
                                 'x_type_sale': 'Renovación',
                                 'x_conditional_discount': conditional_discount,
