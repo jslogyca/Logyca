@@ -20,6 +20,8 @@ class x_MassiveInvoicingProcess(models.TransientModel):
     is_textil = fields.Boolean(string='Textileros')
     #Info Facturas
     cant_invoices = fields.Integer(string='Cantidad de facturas creadas', readonly=True)
+    state_process = fields.Char(String='Estado del proceso', readonly=True)
+    state_process_publish = fields.Char(String='Estado del proceso 2', readonly=True)
         
     def name_get(self):
         result = []
@@ -47,11 +49,11 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         code_textileros = 10
         if self.type_vinculation == '1' or self.type_vinculation == '2':
             if self.is_textil:
-                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','=',code_textileros)])
+                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','=',code_textileros),('invoice_status','!=','invoiced')])
             else:
-                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','!=',code_textileros)])
+                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','!=',code_textileros),('invoice_status','!=','invoiced')])
         else:
-            sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_gtin_massive_invoicing','=',True)])
+            sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_gtin_massive_invoicing','=',True),('invoice_status','!=','invoiced')])
         #,('state','not in',['sale','cancel'])
         cant = len(sales_order)
         #raise ValidationError(_(cant)) 
@@ -59,15 +61,25 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             #Referencia
             ref = ''
             if sale.x_conditional_discount > 0:
-                ref = 'Por pago de la factura antes de la fecha {} aplica un descuento al valor total de la factura de {} - No. Orden de venta {}.'.format(str(sale.x_conditional_discount_deadline),str(sale.x_conditional_discount),sale.name)
+                ref = 'Por pago de la factura antes de la fecha {} aplica un descuento al valor total de la factura de {}'.format(str(sale.x_conditional_discount_deadline),str(sale.x_conditional_discount))
             else:
-                ref = 'No. Orden de venta {}'.format(sale.name)
+                ref = '.'
+            
+            #Plazo de pago
+            id_payment_term = 0
+            obj_account_payment_term = self.env['account.payment.term'].search([('x_is_mass_billing', '=', True)])            
+            for i in obj_account_payment_term:
+                id_payment_term = i.id
+
+            if id_payment_term == 0:
+                raise ValidationError(_('No esta configurado un plazo de pago valido para facturación masiva')) 
             
             #Campos de fac masiva
             values_update = {
                 'x_is_mass_billing' : True,
                 'ref': ref,
-                'x_num_order_purchase': sale.name,
+                'invoice_payment_term_id':id_payment_term,
+                'x_num_order_purchase': '.',
                 'x_value_discounts' : sale.x_conditional_discount,
                 'x_discounts_deadline' : sale.x_conditional_discount_deadline
             }
@@ -80,6 +92,8 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             id_factura.update(values_update)
         
         self.cant_invoices = cant
+        self.state_process = 'Se crearon las facturas en estado borrador correctamente.'
+        self.state_process_publish = ''
         
     #Publicar facturas en estado borrador
     def public_invoicing_in_state_draft(self):
@@ -104,11 +118,11 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             account_move = self.env['account.move'].search([('x_is_mass_billing', '=', True),('state','=','draft'),('partner_id.parent_id.x_gtin_massive_invoicing','=',True)])
             
         for move in account_move:
-          #Publicar factura
-          move.action_post()
-          values_update = {
-            'x_studio_aprobada_para_pagar' : True
-          }
-          move.update(values_update)
-
-            
+            #Publicar factura
+            move.action_post()
+            values_update = {
+                'x_studio_aprobada_para_pagar' : True
+            }
+            move.update(values_update)
+        
+        self.state_process_publish = 'Se publicaron las facturas correctamente.'

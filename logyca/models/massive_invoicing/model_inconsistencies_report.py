@@ -94,6 +94,12 @@ class x_MassiveInvoicingInconsistenciesReport(models.TransientModel):
             # 1.Empresa sin rango de Activos
             if not partner.x_asset_range:
                 inconsistencies.append(['Rango de activos','La empresa NIT {}-{} no tienen rango de activos'.format(partner.vat,partner.name)])
+            # 1.1. Empresa sin sector
+            if not partner.x_sector_id:
+                inconsistencies.append(['Sector','La empresa NIT {}-{} no tienen configurado el sector'.format(partner.vat,partner.name)])
+            # 1.2. Empresa que no tengan asociada la cuenta 13050599
+            if partner.property_account_receivable_id.code != '13050599':
+                inconsistencies.append(['Cuenta por cobrar','La empresa NIT {}-{} tienen una cuenta por cobrar diferente a 13050599'.format(partner.vat,partner.name)])
             # 2.Empresa sin representante ante Logyca o sin conttacto de FE
             cant_contactsP = 0
             cant_contactsFE = 0
