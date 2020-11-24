@@ -57,7 +57,7 @@
                     <input type="radio" t-att-name="prefix" t-att-value="5"/>
                     <i style="font-size: 50px; font-style: normal;">&#128525;</i>
                     <br/>
-                    <label class="title">Me encantó</label>
+                    <label class="title">Excelente</label>
                 </label>                
             </div>                    
         </template>
