@@ -31,6 +31,7 @@ access_logyca_rvc_information,logyca.rvc_information,model_logyca_rvc_informatio
 access_account_auxiliar_schemefavorite,account.auxiliar.schemefavorite,model_account_auxiliar_schemefavorite,,1,1,1,1
 access_logyca_custom_alerts,logyca.custom_alerts,model_logyca_custom_alerts,,1,1,1,1
 access_logyca_payment_information,logyca.payment.information,model_logyca_payment_information,,1,1,1,1
+access_logyca_payment_methods,logyca.payment.methods,model_logyca_payment_methods,,1,1,1,1
 access_massive_invoicing_smlv,massive.invoicing.smlv,model_massive_invoicing_smlv,,1,1,1,1
 access_massive_invoicing_companies,massive.invoicing.companies,model_massive_invoicing_companies,,1,1,1,1
 access_massive_invoicing_codes_assignment,massive.invoicing.codes.assignment,model_massive_invoicing_codes_assignment,,1,1,1,1
