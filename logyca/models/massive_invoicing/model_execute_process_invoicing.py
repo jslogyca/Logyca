@@ -61,7 +61,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             #Referencia
             ref = ''
             if sale.x_conditional_discount > 0:
-                ref = 'Por pago de la factura antes de la fecha {} aplica un descuento al valor total de la factura de {}'.format(str(sale.x_conditional_discount_deadline),str(sale.x_conditional_discount))
+                ref = 'Por pago de la factura antes de la fecha {} aplica un descuento al valor total de la factura de ${:,.2f}'.format(str(sale.x_conditional_discount_deadline),sale.x_conditional_discount)
             else:
                 ref = '.'
             
