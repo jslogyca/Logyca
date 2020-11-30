@@ -20,7 +20,7 @@ class PaymentMethods(models.Model):
     account_convenio = fields.Many2one('account.account', string='Cuenta convenio', ondelete="restrict", check_company=True)
     account_discount = fields.Many2one('account.account', string='Cuenta descuento pronto pago', ondelete="restrict", check_company=True)
     journal_convenio = fields.Many2one('account.journal', string='Diario convenio')    
-    partner_id = fields.Many2one('res.partner', string='Tercero', ondelete='restrict')
+    partner_id = fields.Many2one('res.partner', string='Tercero Comisión y IVA', ondelete='restrict')
     analytic_account_id = fields.Many2one('account.analytic.account', string='Cuenta Analítica')
     x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal', ondelete='restrict')
     
@@ -67,11 +67,11 @@ class PaymentInformation(models.Model):
             for method in obj_payment_method:
                 # -----------------1.Crear Pago
                 #Tercero
-                partner_id = 0
-                if method.partner_id:
-                    partner_id = method.partner_id.id
-                else:
-                    partner_id = self.move_id.commercial_partner_id.id
+                #partner_id = 0
+                #if method.partner_id:
+                #    partner_id = method.partner_id.id
+                #else:
+                partner_id = self.move_id.commercial_partner_id.id
                 #Pago
                 payment = {
                     'payment_type': 'inbound',
@@ -86,7 +86,11 @@ class PaymentInformation(models.Model):
                     'invoice_ids': [(6, 0, [self.move_id.id])],
                 }
                 obj_payment_id = self.env['account.payment'].create(payment)
-                move_payment = obj_payment_id.post()           
+                move_payment = obj_payment_id.post()
+                #Asignar el dato del recibo de pago
+                obj_bank = self.env['account.move.line'].search([('payment_id', '=', obj_payment_id.id)])
+                x_receipt_payment = obj_bank.move_id.name
+                self.env['account.move'].search([('id', '=', self.move_id.id)]).write({'x_receipt_payment':x_receipt_payment})                
         else:
             raise ValidationError(_("Pago ya procesado, por favor verificar"))
             
@@ -144,7 +148,7 @@ class AccountPayment(models.Model):
                                         'name': name,
                                         'currency_id': line_debit.get('currency_id'),
                                         'date_maturity': line_debit.get('date_maturity'),
-                                        'partner_id': line_debit.get('partner_id'),
+                                        'partner_id': method.partner_id.id,
                                         'debit': amount_comision,
                                         'account_id': method.account_comision.id,
                                         'x_budget_group': x_budget_group,
@@ -166,7 +170,7 @@ class AccountPayment(models.Model):
                                         'name': name,
                                         'currency_id': line_debit.get('currency_id'),
                                         'date_maturity': line_debit.get('date_maturity'),
-                                        'partner_id': line_debit.get('partner_id'),
+                                        'partner_id': method.partner_id.id,
                                         'debit': amount_iva,
                                         'account_id': method.account_iva.id,
                                         'x_budget_group': x_budget_group,
