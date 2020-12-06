@@ -160,9 +160,10 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         
     #Ejecución proceso
     def execute_process(self): 
-        #Eliminar ordenes de venta si ya existen
-        saleorder_exists = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year))])
-        saleorder_exists.unlink()
+        #Eliminar ordenes de venta si ya existen solamente cuando se ejecute facturación masiva general y no adicional
+        if self.invoicing_companies.process_type == '1':
+            saleorder_exists = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year))])
+            saleorder_exists.unlink()
         process_partnersaleorder_exists = self.env['massive.invoicing.partner.saleorder'].search([('process_id', '=', self.id)])
         process_partnersaleorder_exists.unlink()
         #Tipos de vinculación Miembro y CLiente

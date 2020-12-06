@@ -45,7 +45,7 @@ class AccountMove(models.Model):
     x_create_approval_request = fields.Boolean(string='Crearon Aprobación para NC',store = True, track_visibility='onchange')    
     x_approved_approval_request = fields.Boolean(string='Aprobaron la creación de la NC',store = True, track_visibility='onchange')   
     #Es factura de facturación masiva
-    x_is_mass_billing = fields.Boolean(string='Factura creada por el proceso de facturación masiva.', copy=False)
+    x_is_mass_billing = fields.Boolean(string='Factura creada por el proceso de facturación masiva.')
     #Valor total descuentos
     x_value_discounts = fields.Monetary(string='Valor descuentos', default=0.0, currency_field='company_currency_id')
     x_discounts_deadline = fields.Date(string='Fecha límite descuento condicionado')    
@@ -112,7 +112,7 @@ class AccountMove(models.Model):
         self._cr.execute(query_approval)
         result_query_approval = self._cr.dictfetchall()
         
-        if result_query_approval:
+        if result_query_approval or self.x_is_mass_billing:
             self.x_approved_approval_request = True
         else:
             self.x_approved_approval_request = False   

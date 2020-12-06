@@ -18,7 +18,7 @@ class x_MassiveInvoicingCompanies(models.Model):
     percentage_textile_tariff = fields.Integer(string='Porcentaje de la tarifa que aplica para facturar', required=True)
     url_enpoint_code_assignment = fields.Char(string='Url enpoint de asignación', help='Url del endpoint del api de asignación dedicado a la facturación/refacturación masiva que recibe como parametro la lista de Nits y el tipo de proceso.',required=True)    
     expiration_date = fields.Date(string='Fecha de vencimiento proceso',required=True)
-    thirdparties = fields.Many2many('res.partner',string='Compañías catalogadas como miembros y clientes activos', readonly=True)    
+    thirdparties = fields.Many2many('res.partner',string='Compañías catalogadas como miembros y clientes activos')    
     cant_thirdparties_miembros = fields.Integer(string='Cantidad de Miembros', help='Empresas que tiene tipo de vinculación Miembros',readonly=True)
     cant_thirdparties_clientes = fields.Integer(string='Cantidad de Clientes', help='Empresas que tiene tipo de vinculación Cliente',readonly=True)
     cant_thirdparties_textil = fields.Integer(string='Cantidad de Empresas Textileras', help='Empresas que tiene el Sector 10 - Textil y Confección',readonly=True)
@@ -99,14 +99,14 @@ class x_MassiveInvoicingCompanies(models.Model):
   			Porcentaje de la tarifa: <field name="percentage_textile_tariff" modifiers="{&quot;required&quot;: true}"/>
   		</div>
 			<newline/>
-			<button name="consult_companies" string="Consultar compañias" type="object" class="oe_highlight" style="margin:5px;"/>
+			<button name="consult_companies" string="Consultar compañias" type="object" class="oe_highlight" style="margin:5px;" attrs="{'invisible': [('process_type', '=', '2')]}"/>
 			<newline/>
-			<field name="cant_thirdparties_miembros" modifiers="{&quot;readonly&quot;: true}"/>
-			<field name="cant_thirdparties_clientes" modifiers="{&quot;readonly&quot;: true}"/>
-			<field name="cant_thirdparties_textil" modifiers="{&quot;readonly&quot;: true}"/>
-			<field name="cant_thirdparties_gtin_special" modifiers="{&quot;readonly&quot;: true}"/>
+			<field name="cant_thirdparties_miembros" modifiers="{&quot;readonly&quot;: true}" attrs="{'invisible': [('process_type', '=', '2')]}"/>
+			<field name="cant_thirdparties_clientes" modifiers="{&quot;readonly&quot;: true}" attrs="{'invisible': [('process_type', '=', '2')]}"/>
+			<field name="cant_thirdparties_textil" modifiers="{&quot;readonly&quot;: true}" attrs="{'invisible': [('process_type', '=', '2')]}"/>
+			<field name="cant_thirdparties_gtin_special" modifiers="{&quot;readonly&quot;: true}" attrs="{'invisible': [('process_type', '=', '2')]}"/>
 			<newline/>
-			<field name="thirdparties" colspan="4" can_create="true" can_write="true" modifiers="{&quot;readonly&quot;: true}">
+			<field name="thirdparties" colspan="4" can_create="true" can_write="true" attrs="{'readonly': [('process_type', '=', '1')]}">
           <tree>
               <field name="name"/>
               <field name="vat"/>     
