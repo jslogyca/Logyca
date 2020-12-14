@@ -178,7 +178,7 @@ class AccountPayment(models.Model):
                                     })
                                     lines.append(line_iva)
                                 #Se revisa si el valor pagado contiene descuento
-                                if amount_payment == (obj_payment_information.move_id.amount_total-obj_payment_information.move_id.x_value_discounts):
+                                if amount_payment == (obj_payment_information.move_id.amount_total-obj_payment_information.move_id.x_value_discounts) and obj_payment_information.move_id.x_value_discounts > 0:
                                     if str(method.account_discount.code).startswith('4') or str(method.account_discount.code).startswith('5')  or str(method.account_discount.code).startswith('6'): 
                                         x_budget_group = budget_group
                                         analytic_account_id = analytic_account
