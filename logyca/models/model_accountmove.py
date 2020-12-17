@@ -435,6 +435,16 @@ class AccountMoveReversal(models.TransientModel):
                 for assets_draft in assets_draft_detele:    
                     assets_draft.unlink()                   
         
+        #Si es una NC de facturación masvia debe cancelar la orden de venta que se genero por este proceso
+        id_nc = method_original.get('res_id')
+        obj_nc = self.env['account.move'].search([('id', '=', id_nc)])
+        if obj_nc.x_is_mass_billing == True:
+            name_sale_order = obj_nc.invoice_origin
+            partner_sale_order = obj_nc.partner_id.id
+            company_sale_order = obj_nc.company_id.id
+            obj_sale_order = self.env['sale.order'].search([('name', '=', name_sale_order),('partner_id.id','=',partner_sale_order),('company_id.id','=',company_sale_order)])
+            obj_sale_order.action_cancel()
+            
         return method_original        
         #return super(AccountMoveReversal, self).reverse_moves()
         
