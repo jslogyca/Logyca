@@ -63,7 +63,18 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             if sale.x_conditional_discount > 0:
                 ref = 'Por pago de la factura antes de la fecha {} aplica un descuento al valor total de la factura de ${:,.2f}'.format(str(sale.x_conditional_discount_deadline),sale.x_conditional_discount)
             else:
-                ref = '.'
+                for line in sale.order_line:
+                    if line.discount > 0:
+                        value_discount = (line.price_unit / 100)*line.discount
+                        if self.type_vinculation == '1':
+                            ref = 'Entendiendo los retos económicos que están afrontando las empresas por el nuevo entorno que trae el post COVID, {} facturado a los miembros de LOGYCA / ASOCIACION en el año {} tiene un descuento de ${:,.2f}'.format(line.product_id.name,self.year,value_discount)
+                        if self.type_vinculation == '2':
+                            ref = 'Entendiendo los retos económicos que están afrontando las empresas por el nuevo entorno que trae el post COVID, {} facturado a los clientes de LOGYCA / ASOCIACION en el año {} tiene un descuento de ${:,.2f}'.format(line.product_id.name,self.year,value_discount)                        
+                        if ref == '':
+                            ref = '.'
+                    else:
+                        if ref == '':
+                            ref = '.'
             
             #Plazo de pago
             id_payment_term = 0
