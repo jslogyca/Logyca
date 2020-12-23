@@ -49,11 +49,11 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         code_textileros = 10
         if self.type_vinculation == '1' or self.type_vinculation == '2':
             if self.is_textil:
-                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','=',code_textileros),('invoice_status','!=','invoiced')])
+                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','=',code_textileros),('invoice_status','!=','invoiced'),('state','=','draft')])
             else:
-                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','!=',code_textileros),('invoice_status','!=','invoiced')])
+                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','!=',code_textileros),('invoice_status','!=','invoiced'),('state','=','draft')])
         else:
-            sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_gtin_massive_invoicing','=',True),('invoice_status','!=','invoiced')])
+            sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_gtin_massive_invoicing','=',True),('invoice_status','!=','invoiced'),('state','=','draft')])
         #,('state','not in',['sale','cancel'])
         cant = len(sales_order)
         #raise ValidationError(_(cant)) 

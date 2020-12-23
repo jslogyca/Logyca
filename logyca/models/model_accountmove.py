@@ -50,6 +50,7 @@ class AccountMove(models.Model):
     x_value_discounts = fields.Monetary(string='Valor descuentos', default=0.0, currency_field='company_currency_id')
     x_discounts_deadline = fields.Date(string='Fecha límite descuento condicionado')    
     x_amount_total_discounts = fields.Monetary(string='Total con descuentos', default=0.0, currency_field='company_currency_id', compute='_compute_amount_total_discounts')
+    x_discount_payment = fields.Boolean(string='Pago con descuento', copy=False)
     #Recibo de pago - Campo temporal
     x_receipt_payment = fields.Char(string='N° Recibo de pago', copy=False)
     
@@ -546,5 +547,14 @@ class AccountAsset(models.Model):
 class AccountPaymentTerm(models.Model):
     _inherit = 'account.payment.term'
     
-    x_is_mass_billing = fields.Boolean(string='Facturación masiva')    
+    x_is_mass_billing = fields.Boolean(string='Facturación masiva')   
+    
+#Plan contable
+class AccountAccount(models.Model):
+    _inherit = 'account.account'
+    
+    x_discount_account = fields.Boolean(string='Cuenta asignada para descuento')   
+    
+    
+
         

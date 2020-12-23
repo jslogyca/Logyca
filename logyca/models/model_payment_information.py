@@ -53,10 +53,10 @@ class PaymentInformation(models.Model):
     @api.depends('move_name')
     def _account_move_id(self):
         for record in self:
-            if record.move_name:
-                obj_account_move = self.env['account.move'].search([('name', 'like', record.move_name),('commercial_partner_id','=',record.partner_id.id),('state','=','posted')])
-                for move in obj_account_move:
-                    record.move_id = obj_account_move.id
+            obj_account_move = self.env['account.move'].search([('name', 'like', record.move_name),('commercial_partner_id.id','=',record.partner_id.id),('state','=','posted')])
+            record.move_id = obj_account_move.id
+            #for move in obj_account_move:
+            #record.move_id = move.id
                 
     #Proceso de liquidación de Recaudo
     def create_collection_liquidation(self):
@@ -230,11 +230,26 @@ class AccountPayment(models.Model):
                         all_move_vals_new.append(line)
                         #Marcar como pago completado
                         obj_payment_information.write({'payment_completed':True})
-                        
+        
+        #Validar si el pago tiene la cuenta de descuento, en caso de tenerla marcar el check de pago con descuento en la factura
+        obj_discount_account = self.env['account.account'].search([('x_discount_account', '=', True)])
         #Retornar movimiento final con los cambios realizados si estos existieron sino retornar el movimiento original
         if len(all_move_vals_new) > 0:
+            for line in all_move_vals_new:
+                lines = line.get('line_ids')
+                obj_move = self.env['account.move'].search([('name', '=', line.get('ref'))])
+                for item in lines:
+                    if item[2].get('account_id') == obj_discount_account.id:
+                        obj_move.write({'x_discount_payment':True})                        
             return all_move_vals_new                
         else:
+            #raise ValidationError(_("PAGO POR MODO NORMAL - EN DESARROLLO"))
+            for line in all_move_vals:
+                lines = line.get('line_ids')
+                obj_move = self.env['account.move'].search([('name', '=', line.get('ref'))])
+                for item in lines:
+                    if item[2].get('account_id') == obj_discount_account.id:
+                        obj_move.write({'x_discount_payment':True})
             return all_move_vals
         
         
