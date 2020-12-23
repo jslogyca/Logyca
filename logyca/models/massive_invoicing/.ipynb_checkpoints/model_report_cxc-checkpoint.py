@@ -137,7 +137,7 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                     porcentage_discount = 0
                     discount = 0
                     collected_value = 0
-                    value_cxc = 0
+                    value_cxc = price_subtotal
                     if value_paid > 0:
                         if move.x_discount_payment:
                             #Descuento %
@@ -162,7 +162,7 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                                 #Recaudo
                                 collected_value = price_subtotal
                                 #CXC
-                                value_cxc = 0
+                                value_cxc = price_subtotal
                     #--------Info final
                     #Impuestos
                     tax = items.tax_ids.display_name
