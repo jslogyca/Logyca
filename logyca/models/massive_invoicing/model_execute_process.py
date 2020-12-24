@@ -29,17 +29,18 @@ class x_MassiveInvoicingProcess(models.TransientModel):
     #Consumir endpoint API de asignación de códigos
     def enpoint_code_assignment(self):
         #Tipo de proceso
-        process_type = self.invoicing_companies.process_type
-        if process_type == '1':
-            process = False
-        else:
-            process = True
+        #process_type = self.invoicing_companies.process_type
+        #if process_type == '1':
+        #    process = False
+        #else:
+        #    process = True
         #Obtener lista de Nits
         thirdparties = []
         for partner in self.invoicing_companies.thirdparties:            
             if partner.vat:
                 thirdparties.append(partner.vat)
         #Ejecutar API de asignación de codigos
+        process = False
         body_api = json.dumps({'IsRefact': process, 'Nits': thirdparties})
         headers_api = {'content-type': 'application/json'}
         url_api = self.invoicing_companies.url_enpoint_code_assignment
@@ -160,9 +161,10 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         
     #Ejecución proceso
     def execute_process(self): 
-        #Eliminar ordenes de venta si ya existen
-        saleorder_exists = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year))])
-        saleorder_exists.unlink()
+        #Eliminar ordenes de venta si ya existen solamente cuando se ejecute facturación masiva general y no adicional
+        if self.invoicing_companies.process_type == '1':
+            saleorder_exists = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year))])
+            saleorder_exists.unlink()
         process_partnersaleorder_exists = self.env['massive.invoicing.partner.saleorder'].search([('process_id', '=', self.id)])
         process_partnersaleorder_exists.unlink()
         #Tipos de vinculación Miembro y CLiente
@@ -231,6 +233,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             array_capacity_prefixes = capacity_prefixes.split('},')
                             total_capacity_prefixes = 0
                             cant_prefixes = 0
+                            bool_insert = False
                             for capacity in array_capacity_prefixes:
                                 dict = capacity+'}'
                                 dict = dict.replace('}}','}')
@@ -240,7 +243,12 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                 cant_prefixes = cant_prefixes + 1
                                 if total_capacity_prefixes >= self.invoicing_companies.textile_code_capability:                           
                                     cant_prefixes_textil_partner.append({'PartnerId':id_contactP,'CantPrefixes':cant_prefixes})
+                                    bool_insert = True
                                     break
+                            if bool_insert == False:
+                                cant_prefixes_textil_partner.append({'PartnerId':id_contactP,'CantPrefixes':cant_prefixes})
+                                bool_insert = True
+                                
                         #Factura 1: Renovación Aporte Patrimonial corresponde al producto Renovación Aportes Patrimoniales Actividades ECR
                         sale_order_values = {
                             'partner_id' : id_contactP,

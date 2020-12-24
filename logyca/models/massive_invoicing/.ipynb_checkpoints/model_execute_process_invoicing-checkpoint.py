@@ -49,11 +49,11 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         code_textileros = 10
         if self.type_vinculation == '1' or self.type_vinculation == '2':
             if self.is_textil:
-                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','=',code_textileros),('invoice_status','!=','invoiced')])
+                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','=',code_textileros),('invoice_status','!=','invoiced'),('state','=','draft')])
             else:
-                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','!=',code_textileros),('invoice_status','!=','invoiced')])
+                sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','!=',code_textileros),('invoice_status','!=','invoiced'),('state','=','draft')])
         else:
-            sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_gtin_massive_invoicing','=',True),('invoice_status','!=','invoiced')])
+            sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_gtin_massive_invoicing','=',True),('invoice_status','!=','invoiced'),('state','=','draft')])
         #,('state','not in',['sale','cancel'])
         cant = len(sales_order)
         #raise ValidationError(_(cant)) 
@@ -61,9 +61,20 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             #Referencia
             ref = ''
             if sale.x_conditional_discount > 0:
-                ref = 'Por pago de la factura antes de la fecha {} aplica un descuento al valor total de la factura de {}'.format(str(sale.x_conditional_discount_deadline),str(sale.x_conditional_discount))
+                ref = 'Por pago de la factura antes de la fecha {} aplica un descuento al valor total de la factura de ${:,.2f}'.format(str(sale.x_conditional_discount_deadline),sale.x_conditional_discount)
             else:
-                ref = '.'
+                for line in sale.order_line:
+                    if line.discount > 0:
+                        value_discount = (line.price_unit / 100)*line.discount
+                        if self.type_vinculation == '1':
+                            ref = 'Entendiendo los retos económicos que están afrontando las empresas por el nuevo entorno que trae el post COVID, {} facturado a los miembros de LOGYCA / ASOCIACION en el año {} tiene un descuento de ${:,.2f}'.format(line.product_id.name,self.year,value_discount)
+                        if self.type_vinculation == '2':
+                            ref = 'Entendiendo los retos económicos que están afrontando las empresas por el nuevo entorno que trae el post COVID, {} facturado a los clientes de LOGYCA / ASOCIACION en el año {} tiene un descuento de ${:,.2f}'.format(line.product_id.name,self.year,value_discount)                        
+                        if ref == '':
+                            ref = '.'
+                    else:
+                        if ref == '':
+                            ref = '.'
             
             #Plazo de pago
             id_payment_term = 0

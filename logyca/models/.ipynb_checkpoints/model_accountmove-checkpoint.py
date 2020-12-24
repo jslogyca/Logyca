@@ -45,11 +45,12 @@ class AccountMove(models.Model):
     x_create_approval_request = fields.Boolean(string='Crearon Aprobación para NC',store = True, track_visibility='onchange')    
     x_approved_approval_request = fields.Boolean(string='Aprobaron la creación de la NC',store = True, track_visibility='onchange')   
     #Es factura de facturación masiva
-    x_is_mass_billing = fields.Boolean(string='Factura creada por el proceso de facturación masiva.', copy=False)
+    x_is_mass_billing = fields.Boolean(string='Factura creada por el proceso de facturación masiva.')
     #Valor total descuentos
     x_value_discounts = fields.Monetary(string='Valor descuentos', default=0.0, currency_field='company_currency_id')
     x_discounts_deadline = fields.Date(string='Fecha límite descuento condicionado')    
     x_amount_total_discounts = fields.Monetary(string='Total con descuentos', default=0.0, currency_field='company_currency_id', compute='_compute_amount_total_discounts')
+    x_discount_payment = fields.Boolean(string='Pago con descuento', copy=False)
     #Recibo de pago - Campo temporal
     x_receipt_payment = fields.Char(string='N° Recibo de pago', copy=False)
     
@@ -112,7 +113,7 @@ class AccountMove(models.Model):
         self._cr.execute(query_approval)
         result_query_approval = self._cr.dictfetchall()
         
-        if result_query_approval:
+        if result_query_approval or self.x_is_mass_billing:
             self.x_approved_approval_request = True
         else:
             self.x_approved_approval_request = False   
@@ -435,6 +436,16 @@ class AccountMoveReversal(models.TransientModel):
                 for assets_draft in assets_draft_detele:    
                     assets_draft.unlink()                   
         
+        #Si es una NC de facturación masvia debe cancelar la orden de venta que se genero por este proceso
+        id_nc = method_original.get('res_id')
+        obj_nc = self.env['account.move'].search([('id', '=', id_nc)])
+        if obj_nc.x_is_mass_billing == True:
+            name_sale_order = obj_nc.invoice_origin
+            partner_sale_order = obj_nc.partner_id.id
+            company_sale_order = obj_nc.company_id.id
+            obj_sale_order = self.env['sale.order'].search([('name', '=', name_sale_order),('partner_id.id','=',partner_sale_order),('company_id.id','=',company_sale_order)])
+            obj_sale_order.action_cancel()
+            
         return method_original        
         #return super(AccountMoveReversal, self).reverse_moves()
         
@@ -510,12 +521,6 @@ class AccountAnalyticLine(models.Model):
     _inherit = 'account.analytic.line'
     x_groupline_id = fields.Many2one(string='Grupo Analítico / Línea', store=True, readonly=True, related='group_id.parent_id', change_default=True)    
 
-#Pagos
-class AccountPayment(models.Model):
-    _inherit = 'account.payment'
-    x_payment_file = fields.Boolean(string='Reportado en archivo de pago')    
-    x_description = fields.Text(string='Descripción')
-
 #Importar Bancos CSV
 class AccountBankStatementImport(models.TransientModel):
     _inherit = 'account.bank.statement.import'
@@ -542,5 +547,14 @@ class AccountAsset(models.Model):
 class AccountPaymentTerm(models.Model):
     _inherit = 'account.payment.term'
     
-    x_is_mass_billing = fields.Boolean(string='Facturación masiva')    
+    x_is_mass_billing = fields.Boolean(string='Facturación masiva')   
+    
+#Plan contable
+class AccountAccount(models.Model):
+    _inherit = 'account.account'
+    
+    x_discount_account = fields.Boolean(string='Cuenta asignada para descuento')   
+    
+    
+
         
