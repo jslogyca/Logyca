@@ -137,7 +137,7 @@ class x_reports_account(models.Model):
         x_ano_finally = self.x_ano_finally
         x_month_finally = self.x_month_finally
         
-        if x_month_finally == 12:
+        if x_month_finally == '12':
             x_ano_finally = x_ano_finally + 1 
             x_month_finally = 1
         else:
