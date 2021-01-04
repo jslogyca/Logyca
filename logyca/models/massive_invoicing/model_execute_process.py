@@ -382,8 +382,38 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                     'price_unit' : unit_fee_value,
                                     'discount' : discount                            
                                 }
+                                
+                                sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)                                
+                            else:
+                                sale_order_values = {
+                                    'partner_id' : id_contactP,
+                                    'partner_invoice_id' : id_contactP,
+                                    'x_origen': 'FM {}'.format(self.year),
+                                    'x_type_sale': 'Renovación',
+                                    'validity_date' : self.invoicing_companies.expiration_date                            
+                                }
+                                sale_order = self.env['sale.order'].create(sale_order_values)
 
-                                sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                                sale_order_line_values = {
+                                    'order_id' : sale_order.id,
+                                    'product_id' : product_id,
+                                    'product_uom_qty' : cant_prefixes, #Cantidad
+                                    'price_unit' : unit_fee_value,
+                                    'discount' : discount                            
+                                }
+                                
+                                sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)       
+                                
+                                saler_orders_partner.append({'PartnerId':id_contactP,'IdFac2':sale_order.id})
+                        
+                                process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].search([('process_id', '=', self.id),('partner_id','=',partner.partner_id.id)])
+
+                                values_update_process = {
+                                    'invoice_two' : sale_order.id                                              
+                                }
+
+                                process_partnersaleorder.update(values_update_process)
+                                
                 
                 #Tipos de vinculados diferentes a miembros y clientes
                 if type_vinculation != type_vinculation_miembro and type_vinculation != type_vinculation_cliente:
