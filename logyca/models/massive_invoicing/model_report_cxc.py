@@ -28,7 +28,7 @@ class MassiveInvoicingCXC_report(models.TransientModel):
     
     #Retonar columnas
     def get_columns(self):
-        columns = 'DOCUMENTO,AÑO,NÚMERO,FECHA DE FACTURA,NIT,ASOCIADO,REPRESENTANTE ANTE LOGYCA,CIUDAD,DIRECCIÓN,TELEFONO,MOVIL,EMAIL REPRESENTATE ANTE LOGYCA, EMAIL FACTURA ELECTRONICA,TIPO VINCULACIÓN,ACTIVOS,CUENTA POR PAGAR,FECHA VENCIMIENTO,PLAZOS DE PAGO,REFERENCIA,ORIGEN,VENDEDOR,PRODUCTO,CANTIDAD,PRECIO UNITARIO,SUBTOTAL,IMPUESTOS,TOTAL,DESCUENTO (%),DCTO CONDICIONADO,RECAUDADO ANTES DE IVA,CXC ANTES DE IVA,ESTADO,CUENTA ANALÍTICA,PAGOS,DOCUMENTO PAGO,FECHA DEL PAGO, VALOR PAGADO'
+        columns = 'DOCUMENTO,AÑO,NÚMERO,FECHA DE FACTURA,NIT,RAZÓN SOCIAL,SECTOR,REPRESENTANTE ANTE LOGYCA,CIUDAD,DIRECCIÓN,TELEFONO,MOVIL,EMAIL REPRESENTATE ANTE LOGYCA, EMAIL FACTURA ELECTRONICA,TIPO VINCULACIÓN,ACTIVOS,CUENTA POR PAGAR,FECHA VENCIMIENTO,PLAZOS DE PAGO,REFERENCIA,ORIGEN,VENDEDOR,PRODUCTO,CANTIDAD,PRECIO UNITARIO,SUBTOTAL,IMPUESTOS,TOTAL,DESCUENTO (%),DCTO CONDICIONADO,RECAUDADO ANTES DE IVA,CXC ANTES DE IVA,ESTADO,CUENTA ANALÍTICA,PAGOS,DOCUMENTO PAGO,FECHA DEL PAGO, VALOR PAGADO'
         #CANTIDAD SIN IMPUESTOS,IMPUESTO,TOTAL,MONDO ADEUDADO,% ABONADO,DESCUENTO CONDICIONADO,TOTAL CON DESCUENTO,SIN IVA,
         _columns = columns.split(",")
         return _columns
@@ -66,6 +66,7 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                 street = move.partner_id.street
                 phone = move.partner_id.phone
                 mobile = move.partner_id.mobile
+                classification = move.partner_id.parent_id.x_sector_id.name
                 #Tipo vinculación
                 for client in move.partner_id.parent_id:
                     vinculations = ''
@@ -174,7 +175,7 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                     analytic_account = items.analytic_account_id.display_name
 
                     #------Insertar datos obtenidos
-                    lst_move = [doc,year,num,invoice_date,nit,partner,represent_logyca_name,city,street,phone,mobile,represent_logyca_email,contact_fe,vinculations,asset_range,account,date_due,payment_term,ref,origin,
+                    lst_move = [doc,year,num,invoice_date,nit,partner,classification,represent_logyca_name,city,street,phone,mobile,represent_logyca_email,contact_fe,vinculations,asset_range,account,date_due,payment_term,ref,origin,
                                 salesperson,product,quantity,price_unit,price_subtotal,tax,price_total,porcentage_discount,discount,collected_value,value_cxc,state,analytic_account,paid,document_paid,date_paid,value_paid]
                     lst_account_moves.append(lst_move)
             except Exception as e:
@@ -251,20 +252,27 @@ class MassiveInvoicingCXC_report(models.TransientModel):
             aument_columns = 1
         
         #Tamaño columnas
-        sheet.set_column('B:F', 15)
-        sheet.set_column('G:H', 40)
-        sheet.set_column('I:I', 20)
-        sheet.set_column('J:J', 40)
-        sheet.set_column('K:L', 15)
-        sheet.set_column('M:N', 40)
-        sheet.set_column('O:S', 20)
-        sheet.set_column('T:T', 60)
-        sheet.set_column('U:V', 20)
-        sheet.set_column('W:W', 40)
-        sheet.set_column('X:X', 10)
+        sheet.set_column('B:D', 15)
+        sheet.set_column('E:E', 30)
+        sheet.set_column('F:F', 15)
+        sheet.set_column('G:G', 40)
+        sheet.set_column('H:H', 25)
+        sheet.set_column('I:I', 40)
+        sheet.set_column('J:J', 15)
+        sheet.set_column('K:K', 30)
+        sheet.set_column('L:L', 15)
+        sheet.set_column('M:M', 20)
+        sheet.set_column('N:N', 30)
+        sheet.set_column('O:O', 40)
+        sheet.set_column('P:T', 20)
+        sheet.set_column('U:U', 60)
+        sheet.set_column('V:V', 20)
+        sheet.set_column('W:W', 20)
+        sheet.set_column('X:X', 40)
         sheet.set_column('Y:AD', 16)
-        sheet.set_column('AE:AE', 20)
-        sheet.set_column('AF:AI', 16)
+        sheet.set_column('AE:AF', 30)
+        sheet.set_column('AG:AH', 16)
+        sheet.set_column('AI:AI', 30)
         sheet.set_column('AJ:AJ', 20)
         sheet.set_column('AK:AN', 16)
         
