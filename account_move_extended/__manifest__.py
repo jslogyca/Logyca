@@ -21,6 +21,8 @@
 
 ''',    
     'data': [
+        'views/account_sector_red_view.xml',
+        'security/ir.model.access.csv',
     ],
     'qweb': [
     ]
