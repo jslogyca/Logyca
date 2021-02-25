@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="revenue_macro_sector_view_form" model="ir.ui.view">
+        <field name="name">revenue.macro.sector.form</field>
+        <field name="model">revenue.macro.sector</field>
+        <field name="arch" type="xml">
+            <form string="Macro Sector Ingreso">
+                <sheet>					
+                <group>
+                    <group>
+                        <field name="macro_sector" required="True"/>
+                    </group>
+                    <group>
+                        <field name="amount" required="True"/>
+                    </group>
+                </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="revenue_macro_sector_view_tree" model="ir.ui.view">
+        <field name="name">revenue.macro.sector.tree</field>
+        <field name="model">revenue.macro.sector</field>
+        <field name="arch" type="xml">
+            <tree string="Macro Sector Ingreso" >
+                <field name="macro_sector" />
+                <field name="amount" />
+            </tree>
+        </field>
+    </record>	
+
+    <record id="action_revenue_macro_sector" model="ir.actions.act_window">
+        <field name="name">Macro Sector Ingreso</field>
+        <field name="res_model">revenue.macro.sector</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="revenue_macro_sector_view_tree"/>
+    </record>
+
+    <menuitem
+        id="hr_menu_revenue_macro_sector"
+        name="Macro Sector Ingreso"
+        action="action_revenue_macro_sector"
+        parent="account.menu_analytic_accounting"
+        sequence="501"/>
+</odoo>
