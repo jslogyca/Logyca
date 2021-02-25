@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<record id="view_res_partner_finan" model="ir.ui.view">
+		<field name="name">res_partner_finan</field>
+		<field name="model">res.partner</field>
+		<field name="inherit_id" ref="studio_customization.odoo_studio_res_part_96c3b415-a333-436c-9b90-db13f23de750"/>
+		<field name="arch" type="xml">
+            <xpath expr="//page[@name='studio_page_6zNV9']" position="inside">
+                <group>
+                    <field name="macro_sector"/>
+                </group>
+                <group>
+                    <field name="income_ids" nolabel="1">
+                        <tree editable="bottom">
+                            <field name="revenue_ids" />
+                            <field name="year_id"/>
+                            <field name="macro_sector"/>
+                        </tree>
+                    </field>                    
+                </group>
+			</xpath>
+		</field>
+	</record>
+</odoo>

@@ -6,3 +6,5 @@ from . import purchase_order_line
 from . import account_analytic_account
 from . import account_analytic_tag
 from . import account_sector_red
+from . import revenue_macro_sector
+from . import res_partner
