@@ -60,7 +60,12 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                                 represent_logyca_name = contacts.name
                                 represent_logyca_email = contacts.email
                             if contact_type.code == 'FE':
-                                contact_fe = contacts.email                    
+                                contact_fe = contacts.email
+                
+                if represent_logyca_name not in locals():
+                    represent_logyca_name = move.partner_id.name
+
+                #represent_logyca_name = move.partner_id.name                    
                 #Datos de contacto
                 city = move.partner_id.x_city.name
                 street = move.partner_id.street
