@@ -22,9 +22,9 @@
 
 ''',    
     'data': [
-        'wizard/report_excel_sale_product_wizard_view.xml',
         'security/security.xml',
         'security/ir.model.access.csv',
+        'wizard/report_excel_sale_product_wizard_view.xml',
     ],
     'qweb': [
     ]
