@@ -40,6 +40,15 @@
         name="Facturación por producto"
         parent="sale.menu_sale_report"
         action="action_report_excel_sale_product_wizard_view"
-        sequence="4"/>
+        sequence="4"
+        groups="account_reports_excel.group_report_invoice_manager" />
+
+    <menuitem id="menu_report_excel_sale_product_root"
+        name="Factura por Producto"
+        action="action_report_excel_sale_product_wizard_view"
+        web_icon="account_reports_excel,static/description/icon.png"
+        active="True"
+        sequence="7"
+        groups="account_reports_excel.group_report_invoice_manager"/>
 
 </odoo>
