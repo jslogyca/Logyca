@@ -43,6 +43,12 @@ class MassiveInvoicingCXC_report(models.TransientModel):
         lst_account_moves = []
         for move in obj_account_moves:
             try:
+                #Determinar el cliente de la factura
+                if move.partner_id.parent_id:
+                    partner_id = move.partner_id.parent_id
+                else:
+                    partner_id = move.partner_id
+
                 #Documento, año y número de factura
                 doc = move.name.split('/')[0]
                 year = move.name.split('/')[1]
@@ -50,10 +56,10 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                 #Fecha de factura
                 invoice_date = str(move.invoice_date)
                 #Cliente
-                nit = move.partner_id.parent_id.vat
-                partner = move.partner_id.parent_id.name
+                nit = partner_id.vat
+                partner = partner_id.name
                 #Representate ante logyca y contacto de factura electronica
-                for client in move.partner_id.parent_id:
+                for client in partner_id:
                     for contacts in client.child_ids:
                         for contact_type in contacts.x_contact_type:
                             if contact_type.code == '002':
@@ -62,18 +68,15 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                             if contact_type.code == 'FE':
                                 contact_fe = contacts.email
                 
-                if represent_logyca_name not in locals():
-                    represent_logyca_name = move.partner_id.name
-
                 #represent_logyca_name = move.partner_id.name                    
                 #Datos de contacto
                 city = move.partner_id.x_city.name
                 street = move.partner_id.street
                 phone = move.partner_id.phone
                 mobile = move.partner_id.mobile
-                classification = move.partner_id.parent_id.x_sector_id.name
+                classification = partner_id.x_sector_id.name
                 #Tipo vinculación
-                for client in move.partner_id.parent_id:
+                for client in partner_id:
                     vinculations = ''
                     for vinculation in client.x_type_vinculation:
                         if vinculations == '':
@@ -81,7 +84,7 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                         else:
                             vinculations = vinculations +', ' + vinculation.name
                 #Activos
-                asset_range = move.partner_id.parent_id.x_asset_range.name
+                asset_range = partner_id.x_asset_range.name
                 #Cuenta
                 for line in move.line_ids:
                     if line.debit > 0:
