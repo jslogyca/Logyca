@@ -11,6 +11,7 @@ class AccountMoveLine(models.Model):
 
 
     invoice_tag_ids = fields.Many2one('account.analytic.tag', string='Etiqueta Red de Valor')
+    inter_company = fields.Boolean('Intercompany', related='product_id.product_tmpl_id.inter_company', readonly=True, store=True)
 
 class AccountMove(models.Model):
     _inherit = 'account.move'

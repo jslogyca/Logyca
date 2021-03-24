@@ -6,18 +6,40 @@
 		<field name="model">res.partner</field>
 		<field name="inherit_id" ref="studio_customization.odoo_studio_res_part_96c3b415-a333-436c-9b90-db13f23de750"/>
 		<field name="arch" type="xml">
-            <xpath expr="//page[@name='studio_page_6zNV9']" position="inside">
-                <group>
-                    <field name="macro_sector"/>
-                </group>
-                <group>
-                    <field name="income_ids" nolabel="1">
-                        <tree editable="bottom">
-                            <field name="revenue_ids" />
+            <xpath expr="//page[@name='studio_page_6zNV9']" position="replace">
+                <page name="financ" string="Inf. Financiera ">
+                    <group>
+                        <group>
+                            <field name="fact_annual"/>
                             <field name="macro_sector"/>
-                        </tree>
-                    </field>                    
-                </group>
+                            <field name="x_company_size" force_save="1" readonly="1"/>
+                            <field name="size_sector_int" force_save="1" readonly="1"/>
+                        </group>
+                        <group attrs="{'invisible': [('fact_annual', '=', 'ingresos')]}" >
+                            <field name="x_asset_range"/>
+                            <field name="x_date_update_asset"/>
+                            <field name="x_income_range" invisible="1"/>
+                            
+                        </group>
+                        <group attrs="{'invisible': [('fact_annual', '=', 'activos')]}">
+                            <field name="amount_revenue_membre" force_save="1" readonly="1"/>
+                            <field name="revenue_memb_ids" force_save="1" readonly="1"/>
+                            <button name="action_update_revenue_partner_membre" string="Ingresos Membresías" type="object" class="oe_highlight" icon="fa-archive" />
+                        </group>
+                    </group>
+                    <group attrs="{'invisible': [('fact_annual', '=', 'activos')]}">
+                        <group>
+                            <button name="action_update_revenue_partner" string="Actualizar Ingresos" type="object" class="oe_highlight" icon="fa-archive"/>
+                        </group>
+                        <field name="income_ids" nolabel="1" readonly="1">
+                            <tree editable="bottom">
+                                <field name="revenue_ids" />
+                                <field name="amount" />
+                                <field name="fiscal_id"/>
+                            </tree>
+                        </field>                         
+                    </group>                    
+                  </page>               
 			</xpath>
 		</field>
 	</record>

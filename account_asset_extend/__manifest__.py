@@ -19,7 +19,7 @@
 
 ''',    
     'data': [
-
+        'views/account_asset_view.xml',
     ],
     'qweb': [
     ]

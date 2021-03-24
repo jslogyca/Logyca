@@ -1,175 +1,346 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="1">
-        <record id="revenue_macro_sector1" model="revenue.macro.sector">
+    <data noupdate="0">
+        <record id="revenue_macro_sector46" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">DE $1 A $669.999.999</field>
+            <field name="amount_start">1</field>
+            <field name="amount_end">669999999</field>
+            <field name="size_sector_int">micro1</field>
+            <field name="x_company_size">1</field>
         </record>
-        <record id="revenue_macro_sector2" model="revenue.macro.sector">
+        <record id="revenue_macro_sector47" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">DE $670.000.000 A $839.999.999</field>
+            <field name="amount_start">670000000</field>
+            <field name="amount_end">839999999</field>
+            <field name="size_sector_int">micro2</field>
+            <field name="x_company_size">1</field>            
         </record>
-        <record id="revenue_macro_sector3" model="revenue.macro.sector">
+        <record id="revenue_macro_sector48" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">DE $840.000.000 A $2.199.999.999</field>
+            <field name="amount_start">840000000</field>
+            <field name="amount_end">2199999999</field>
+            <field name="size_sector_int">micro3</field>
+            <field name="x_company_size">1</field>                 
         </record>
-        <record id="revenue_macro_sector4" model="revenue.macro.sector">
+        <record id="revenue_macro_sector49" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">DE $2.200.000.000 A $5.199.999.999</field>
+            <field name="amount_start">2200000000</field>
+            <field name="amount_end">5199999999</field>
+            <field name="size_sector_int">pequena1</field>
+            <field name="x_company_size">2</field>              
         </record>
-        <record id="revenue_macro_sector42" model="revenue.macro.sector">
+        <record id="revenue_macro_sector50" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">DE $5.200.000.000 A $7.299.999.999</field>
+            <field name="amount_start">5200000000</field>
+            <field name="amount_end">7299999999</field>
+            <field name="size_sector_int">pequena2</field>
+            <field name="x_company_size">2</field>              
         </record>
-        <record id="revenue_macro_sector5" model="revenue.macro.sector">
+        <record id="revenue_macro_sector51" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">DE $7.300.000.000 A $24.999.999.999</field>
+            <field name="amount_start">7300000000</field>
+            <field name="amount_end">24999999999</field>
+            <field name="size_sector_int">pequena3</field>
+            <field name="x_company_size">2</field>              
         </record>
-        <record id="revenue_macro_sector6" model="revenue.macro.sector">
+        <record id="revenue_macro_sector52" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">DE $25.000.000.000 A $30.999.999.999</field>
+            <field name="amount_start">25000000000</field>
+            <field name="amount_end">30999999999</field>
+            <field name="size_sector_int">mediana1</field>
+            <field name="x_company_size">3</field>              
         </record>
-        <record id="revenue_macro_sector7" model="revenue.macro.sector">
+        <record id="revenue_macro_sector53" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">DE $31.000.000.000 A $48.999.999.999</field>
+            <field name="amount_start">31000000000</field>
+            <field name="amount_end">48999999999</field>
+            <field name="size_sector_int">mediana2</field>
+            <field name="x_company_size">3</field>             
         </record>
-        <record id="revenue_macro_sector8" model="revenue.macro.sector">
+        <record id="revenue_macro_sector54" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">DE $49.000.000.000 A $59.999.999.999</field>
+            <field name="amount_start">49000000000</field>
+            <field name="amount_end">59999999999</field>
+            <field name="size_sector_int">mediana3</field>
+            <field name="x_company_size">3</field>               
         </record>
-        <record id="revenue_macro_sector9" model="revenue.macro.sector">
+        <record id="revenue_macro_sector55" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">DE $60.000.000.000 A $99.999.999.999</field>
+            <field name="amount_start">60000000000</field>
+            <field name="amount_end">99999999999</field>
+            <field name="size_sector_int">grande1</field>
+            <field name="x_company_size">4</field>              
         </record>
-        <record id="revenue_macro_sector10" model="revenue.macro.sector">
+        <record id="revenue_macro_sector56" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">DE $100.000.000.000 A $499.999.999.999</field>
+            <field name="amount_start">100000000000</field>
+            <field name="amount_end">499999999999</field>
+            <field name="size_sector_int">grande2</field>
+            <field name="x_company_size">4</field>             
         </record>
-        <record id="revenue_macro_sector11" model="revenue.macro.sector">
+        <record id="revenue_macro_sector57" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">DE $500.000.000.000 A $999.999.999.999</field>
+            <field name="amount_start">500000000000</field>
+            <field name="amount_end">999999999999</field>
+            <field name="size_sector_int">grande3</field>
+            <field name="x_company_size">4</field>               
         </record>
-        <record id="revenue_macro_sector12" model="revenue.macro.sector">
+        <record id="revenue_macro_sector58" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">DE $1.000.000.000.000 A $2.999.999.999.999</field>
+            <field name="amount_start">1000000000000</field>
+            <field name="amount_end">2999999999999</field>
+            <field name="size_sector_int">grande4</field>
+            <field name="x_company_size">4</field>                
         </record>
-        <record id="revenue_macro_sector13" model="revenue.macro.sector">
+        <record id="revenue_macro_sector59" model="revenue.macro.sector">
             <field name="macro_sector">manufactura</field>
             <field name="amount">Mayor que 3.000.000.000.000</field>
+            <field name="amount_start">3000000000000</field>
+            <field name="amount_end">300000000000000000000</field>
+            <field name="size_sector_int">grande5</field>
+            <field name="x_company_size">4</field>              
         </record>
 
         <!-- ######## -->
-        <record id="revenue_macro_sector14" model="revenue.macro.sector">
+        <record id="revenue_macro_sect605" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">DE $1 A $949.999.999</field>
+            <field name="amount_start">1</field>
+            <field name="amount_end">949999999</field>
+            <field name="size_sector_int">micro1</field>
+            <field name="x_company_size">1</field>              
         </record>
-        <record id="revenue_macro_sector15" model="revenue.macro.sector">
+        <record id="revenue_macro_sect60" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">DE $950.000.000 A $1.199.999.999</field>
+            <field name="amount_start">950000000</field>
+            <field name="amount_end">1199999999</field>
+            <field name="size_sector_int">micro2</field>
+            <field name="x_company_size">1</field>              
         </record>
-        <record id="revenue_macro_sector16" model="revenue.macro.sector">
+        <record id="revenue_macro_sector61" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">DE $1.200.000.000 A $1.499.999.999</field>
+            <field name="amount_start">1200000000</field>
+            <field name="amount_end">1499999999</field>
+            <field name="size_sector_int">micro3</field>
+            <field name="x_company_size">1</field>               
         </record>
-        <record id="revenue_macro_sector17" model="revenue.macro.sector">
+        <record id="revenue_macro_sector62" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">DE $1.500.000.000 A $3.299.999.999</field>
+            <field name="amount_start">1500000000</field>
+            <field name="amount_end">3299999999</field>
+            <field name="size_sector_int">pequena1</field>
+            <field name="x_company_size">2</field>                  
         </record>
-        <record id="revenue_macro_sector18" model="revenue.macro.sector">
+        <record id="revenue_macro_sector63" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">DE $3.300.000.000 A $4.699.999.999</field>
+            <field name="amount_start">3300000000</field>
+            <field name="amount_end">4699999999</field>
+            <field name="size_sector_int">pequena2</field>
+            <field name="x_company_size">2</field>              
         </record>
-        <record id="revenue_macro_sector19" model="revenue.macro.sector">
+        <record id="revenue_macro_sector64" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">DE $4.700.000.000 A $6.899.999.999</field>
+            <field name="amount_start">7300000000</field>
+            <field name="amount_end">24999999999</field>
+            <field name="size_sector_int">pequena3</field>
+            <field name="x_company_size">2</field>               
         </record>
-        <record id="revenue_macro_sector20" model="revenue.macro.sector">
+        <record id="revenue_macro_sector65" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">DE $6.900.000.000 A $8.699.999.999</field>
+            <field name="amount_start">25000000000</field>
+            <field name="amount_end">30999999999</field>
+            <field name="size_sector_int">mediana1</field>
+            <field name="x_company_size">3</field>              
         </record>
-        <record id="revenue_macro_sector21" model="revenue.macro.sector">
+        <record id="revenue_macro_sector66" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">DE $8.700.000.000 A $13.799.999.999</field>
+            <field name="amount_start">31000000000</field>
+            <field name="amount_end">48999999999</field>
+            <field name="size_sector_int">mediana2</field>
+            <field name="x_company_size">3</field>              
         </record>
-        <record id="revenue_macro_sector22" model="revenue.macro.sector">
+        <record id="revenue_macro_sector67" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">DE $13.800.000.000 A $19.999.999.999</field>
+            <field name="amount_start">49000000000</field>
+            <field name="amount_end">59999999999</field>
+            <field name="size_sector_int">mediana3</field>
+            <field name="x_company_size">3</field>               
         </record>
-        <record id="revenue_macro_sector23" model="revenue.macro.sector">
+        <record id="revenue_macro_sector68" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">DE $20.000.000.000 A $49.999.999.999</field>
+            <field name="amount_start">60000000000</field>
+            <field name="amount_end">99999999999</field>
+            <field name="size_sector_int">grande1</field>
+            <field name="x_company_size">4</field>              
         </record>
-        <record id="revenue_macro_sector24" model="revenue.macro.sector">
+        <record id="revenue_macro_sector69" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">DE $50.000.000.000 A $399.999.999.999</field>
+            <field name="amount_start">100000000000</field>
+            <field name="amount_end">499999999999</field>
+            <field name="size_sector_int">grande2</field>
+            <field name="x_company_size">4</field>              
         </record>
-        <record id="revenue_macro_sector25" model="revenue.macro.sector">
+        <record id="revenue_macro_sector70" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">DE $400.000.000.000 A $799.999.999.999</field>
+            <field name="amount_start">500000000000</field>
+            <field name="amount_end">999999999999</field>
+            <field name="size_sector_int">grande3</field>
+            <field name="x_company_size">4</field>               
         </record>
-        <record id="revenue_macro_sector26" model="revenue.macro.sector">
+        <record id="revenue_macro_sector71" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">DE $800.000.000.000 A $1.499.999.999.999</field>
+            <field name="amount_start">800000000000</field>
+            <field name="amount_end">1499999999999</field>
+            <field name="size_sector_int">grande4</field>
+            <field name="x_company_size">4</field>             
         </record>
-        <record id="revenue_macro_sector27" model="revenue.macro.sector">
+        <record id="revenue_macro_sector72" model="revenue.macro.sector">
             <field name="macro_sector">servicios</field>
             <field name="amount">Mayor que 1.500.000.000.000</field>
+            <field name="amount_start">1500000000000</field>
+            <field name="amount_end">15000000000000000000</field>
+            <field name="size_sector_int">grande5</field>
+            <field name="x_company_size">4</field>              
         </record>
-        <record id="revenue_macro_sector28" model="revenue.macro.sector">
+
+        <!-- ############     -->
+
+        <record id="revenue_macro_sect28" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">DE $1 A $1.299.999.999</field>
+            <field name="amount_start">1</field>
+            <field name="amount_end">1299999999</field>
+            <field name="size_sector_int">micro1</field>
+            <field name="x_company_size">1</field>
         </record>
-        <record id="revenue_macro_sector29" model="revenue.macro.sector">
+        <record id="revenue_macro_sect29" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">DE $1.300.000.000 A $1.599.999.999</field>
+            <field name="amount_start">1300000000</field>
+            <field name="amount_end">1599999999</field>
+            <field name="size_sector_int">micro2</field>
+            <field name="x_company_size">1</field>
         </record>
-        <record id="revenue_macro_sector30" model="revenue.macro.sector">
+        <record id="revenue_macro_sect30" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">DE $1.600.000.000 A $4.699.999.999</field>
+            <field name="amount_start">1600000000</field>
+            <field name="amount_end">4699999999</field>
+            <field name="size_sector_int">micro3</field>
+            <field name="x_company_size">1</field>     
         </record>
-        <record id="revenue_macro_sector31" model="revenue.macro.sector">
+        <record id="revenue_macro_sect31" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">DE $4.700.000.000 A $10.799.999.999</field>
+            <field name="amount_start">4700000000</field>
+            <field name="amount_end">10799999999</field>
+            <field name="size_sector_int">pequena1</field>
+            <field name="x_company_size">2</field>      
         </record>
-        <record id="revenue_macro_sector32" model="revenue.macro.sector">
+        <record id="revenue_macro_sect32" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">DE $10.800.000.000 A $15.399.999.999</field>
+            <field name="amount_start">10800000000</field>
+            <field name="amount_end">15399999999</field>
+            <field name="size_sector_int">pequena2</field>
+            <field name="x_company_size">2</field>     
         </record>
-        <record id="revenue_macro_sector33" model="revenue.macro.sector">
+        <record id="revenue_macro_sect33" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">DE $15.400.000.000 A $30.799.999.999</field>
+            <field name="amount_start">15400000000</field>
+            <field name="amount_end">30799999999</field>
+            <field name="size_sector_int">pequena3</field>
+            <field name="x_company_size">2</field>      
         </record>
-        <record id="revenue_macro_sector34" model="revenue.macro.sector">
+        <record id="revenue_macro_sect34" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">DE $30.800.000.000 A $38.799.999.999</field>
+            <field name="amount_start">30800000000</field>
+            <field name="amount_end">38799999999</field>
+            <field name="size_sector_int">mediana1</field>
+            <field name="x_company_size">3</field>         
         </record>
-        <record id="revenue_macro_sector35" model="revenue.macro.sector">
+        <record id="revenue_macro_sect35" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">DE $38.800.000.000 A $61.599.999.999</field>
+            <field name="amount_start">38800000000</field>
+            <field name="amount_end">61599999999</field>
+            <field name="size_sector_int">mediana2</field>
+            <field name="x_company_size">3</field>     
         </record>
-        <record id="revenue_macro_sector36" model="revenue.macro.sector">
+        <record id="revenue_macro_sect36" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">DE $61.600.000.000 A $79.999.999.999</field>
+            <field name="amount_start">61600000000</field>
+            <field name="amount_end">79999999999</field>
+            <field name="size_sector_int">mediana3</field>
+            <field name="x_company_size">3</field>     
         </record>
-        <record id="revenue_macro_sector37" model="revenue.macro.sector">
+        <record id="revenue_macro_sect37" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">DE $80.000.000.000 A $199.999.999.999</field>
+            <field name="amount_start">80000000000</field>
+            <field name="amount_end">199999999999</field>
+            <field name="size_sector_int">grande1</field>
+            <field name="x_company_size">4</field>      
         </record>
-        <record id="revenue_macro_sector38" model="revenue.macro.sector">
+        <record id="revenue_macro_sect38" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">DE $200.000.000.000 A $699.999.999.999</field>
+            <field name="amount_start">200000000000</field>
+            <field name="amount_end">699999999999</field>
+            <field name="size_sector_int">grande2</field>
+            <field name="x_company_size">4</field>    
         </record>
-        <record id="revenue_macro_sector39" model="revenue.macro.sector">
+        <record id="revenue_macro_sect39" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">DE $700.000.000.000 A $1.499.999.999.999</field>
+            <field name="amount_start">700000000000</field>
+            <field name="amount_end">1499999999999</field>
+            <field name="size_sector_int">grande3</field>
+            <field name="x_company_size">4</field>     
         </record>
-        <record id="revenue_macro_sector40" model="revenue.macro.sector">
+        <record id="revenue_macro_sect40" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">DE $1.500.000.000.000 A $4.999.999.999.999</field>
+            <field name="amount_start">1500000000000</field>
+            <field name="amount_end">4999999999999</field>
+            <field name="size_sector_int">grande4</field>
+            <field name="x_company_size">4</field>     
         </record>
-        <record id="revenue_macro_sector41" model="revenue.macro.sector">
+        <record id="revenue_macro_sect41" model="revenue.macro.sector">
             <field name="macro_sector">comercio</field>
             <field name="amount">Mayor que 5.000.000.000.000</field>
+            <field name="amount_start">5000000000000</field>
+            <field name="amount_end">50000000000000000</field>
+            <field name="size_sector_int">grande5</field>
+            <field name="x_company_size">4</field>     
         </record>
     </data>
 </odoo>
