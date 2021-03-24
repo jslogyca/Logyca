@@ -1,5 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 account_sector_red,account.sector.red,model_account_sector_red,account.group_account_manager,1,1,1,1
+account_sector_macro,account.sector.macro,model_account_sector_macro,account.group_account_manager,1,1,1,1
 sector_red,sector.red,model_sector_red,account.group_account_manager,1,1,1,1
 revenue_macro_sector,revenue.macro.sector,model_revenue_macro_sector,account.group_account_manager,1,1,1,1
 revenue_macro_sector_partner,revenue.macro.sector.partner,model_revenue_macro_sector_partner,account.group_account_manager,1,1,1,1

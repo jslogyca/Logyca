@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<record id="view_account_asset_form_tags_red" model="ir.ui.view">
+		<field name="name">view.account.asset.form.tags.red</field>
+		<field name="model">account.asset</field>
+		<field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='analytic_tag_ids']" position="after">
+				<field name="invoice_tag_ids" domain="[('red_valor', '=', True)]" />
+			</xpath>
+		</field>
+	</record>
+</odoo>

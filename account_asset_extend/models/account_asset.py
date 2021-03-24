@@ -12,6 +12,7 @@ class AccountAsset(models.Model):
 
 
     invoice_sell_id = fields.Many2one(string='Invoice Sell', comodel_name='account.move', ondelete='restrict')
+    invoice_tag_ids = fields.Many2one('account.analytic.tag', string='Etiqueta Red de Valor')
 
 
     def set_to_close_full(self, invoice_line_id, date=None):

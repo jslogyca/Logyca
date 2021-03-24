@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_sector_macro_view_form" model="ir.ui.view">
+        <field name="name">account.sector.macro.form</field>
+        <field name="model">account.sector.macro</field>
+        <field name="arch" type="xml">
+            <form string="Sector-MacroSector">
+                <sheet>					
+                <group>
+                    <group>
+                        <field name="macro_sector" required="True"/>
+                    </group>
+                    <group>
+                        <field name="sector_id" required="True"/>
+                    </group>
+                </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="account_sector_macro_view_tree" model="ir.ui.view">
+        <field name="name">account.sector.macro.tree</field>
+        <field name="model">account.sector.macro</field>
+        <field name="arch" type="xml">
+            <tree string="Sector-MacroSector" >
+                <field name="macro_sector" />
+                <field name="sector_id" />
+            </tree>
+        </field>
+    </record>	
+
+    <record id="action_account_sector_macro" model="ir.actions.act_window">
+        <field name="name">Sector-MacroSector</field>
+        <field name="res_model">account.sector.macro</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="account_sector_macro_view_tree"/>
+    </record>
+
+    <menuitem
+        id="hr_menu_account_sector_macro"
+        name="Sector-MacroSector"
+        action="action_account_sector_macro"
+        parent="account.menu_analytic_accounting"
+        sequence="501"/>
+</odoo>
