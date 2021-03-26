@@ -42,6 +42,9 @@ class x_sectors(models.Model):
 
     code = fields.Char(string='Código', size=10,required=True)
     name = fields.Char(string='Nombre', required=True)
+    macro_sector = fields.Selection([('manufactura', 'Manufactura'),
+                                    ('servicios', 'Servicios'),
+                                    ('comercio', 'Comercio')], string='Macrosector')
 
     def name_get(self):
         result = []

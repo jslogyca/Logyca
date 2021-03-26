@@ -43,7 +43,8 @@
       <field name="arch" type="xml">
         <tree>
           <field name="code"/>                 
-          <field name="name"/>                 
+          <field name="name"/>
+          <field name="macro_sector"/>             
         </tree>
       </field>
     </record>
