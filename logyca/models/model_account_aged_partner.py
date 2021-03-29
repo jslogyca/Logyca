@@ -86,7 +86,7 @@ class AccountAgedPartner(models.AbstractModel):
                             'default_type': aml.move_id.type,
                             'default_journal_id': aml.move_id.journal_id.id,
                         },
-                        'title_hover': self._format_aml_name(aml.name, '-', currency),
+                        'title_hover': self._format_aml_name(aml.name, currency, aml.move_id.name),
                     }
                     lines.append(vals)
         if total and not line_id:
