@@ -240,7 +240,8 @@ class FlatFilePayRoll(models.Model):
                 }
             
             logging.info("Move Line ==>" + str(move_line))
-            logging.info("Invoice Vals ==>" + str(move_line))
+            logging.info("Invoice Vals ==>" + str(invoice_vals))
+
             invoice_vals['invoice_line_ids'].append((0, 0, move_line))
             cant = cant + 1
             
