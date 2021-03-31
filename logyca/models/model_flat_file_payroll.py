@@ -214,7 +214,7 @@ class FlatFilePayRoll(models.Model):
                     'ref': self.ref,
                     'name': self.description,                
                     'journal_id': self.journal_id.id,  
-                    #'company_id': line.company_id.id,
+                    'company_id': line.company_id.id,
                     'account_id': line.account_id.id,
                     'debit': line.debit,
                     'credit': line.credit,
@@ -229,7 +229,7 @@ class FlatFilePayRoll(models.Model):
                     'ref': self.ref,
                     'name': self.description,                
                     'journal_id': self.journal_id.id,  
-                    #'company_id': line.company_id.id,
+                    'company_id': line.company_id.id,
                     'account_id': line.account_id.id,
                     'debit': line.debit,
                     'credit': line.credit,
@@ -239,8 +239,8 @@ class FlatFilePayRoll(models.Model):
                     'x_budget_group': line.budget_group.id
                 }
             
-            logging.debug("Move Line ==>" + str(move_line))
-            logging.debug("Invoice Vals ==>" + str(move_line))
+            logging.info("Move Line ==>" + str(move_line))
+            logging.info("Invoice Vals ==>" + str(move_line))
             invoice_vals['invoice_line_ids'].append((0, 0, move_line))
             cant = cant + 1
             
