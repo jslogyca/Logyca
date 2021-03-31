@@ -11,7 +11,6 @@ import xlsxwriter
 import requests
 import math
 import os
-import logging
 
 #---------------------------Modelo para generar REPORTES-------------------------------#
 
@@ -207,8 +206,24 @@ class FlatFilePayRoll(models.Model):
                     'x_country_account_id': self.country_id.id,
                     'line_ids': [],
                 }
-            else:    
-                #Detalle account_move_line
+                
+            #Detalle account_move_line
+            if line.analytic_tag_ids.id:
+                move_line = {
+                    'ref': self.ref,
+                    'name': self.description,                
+                    'journal_id': self.journal_id.id,  
+                    'company_id': line.company_id.id,
+                    'account_id': line.account_id.id,
+                    'debit': line.debit,
+                    'credit': line.credit,
+                    'partner_id': line.partner_id.id,
+                    'quantity': 1,
+                    'discount': 0,
+                    'x_budget_group': line.budget_group.id,
+                    'analytic_tag_ids': [(6, 0, [line.analytic_tag_ids.id])],                
+                }
+            else:
                 move_line = {
                     'ref': self.ref,
                     'name': self.description,                
@@ -223,10 +238,7 @@ class FlatFilePayRoll(models.Model):
                     'x_budget_group': line.budget_group.id
                 }
             
-                logging.info("Move Line ==>" + str(move_line))
-                logging.info("Invoice Vals ==>" + str(invoice_vals))
-
-                invoice_vals['line_ids'].append((0, 0, move_line))
+            invoice_vals['line_ids'].append((0, 0, move_line))
             cant = cant + 1
             
         #Insertar en Contabilidad
