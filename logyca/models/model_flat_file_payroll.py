@@ -11,6 +11,7 @@ import xlsxwriter
 import requests
 import math
 import os
+import logging
 
 #---------------------------Modelo para generar REPORTES-------------------------------#
 
@@ -238,6 +239,8 @@ class FlatFilePayRoll(models.Model):
                     'x_budget_group': line.budget_group.id
                 }
             
+            logging.debug("Move Line ==>" + str(move_line))
+            logging.debug("Invoice Vals ==>" + str(move_line))
             invoice_vals['invoice_line_ids'].append((0, 0, move_line))
             cant = cant + 1
             
