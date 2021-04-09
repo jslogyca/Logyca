@@ -441,7 +441,7 @@ class libro_mayor_report(models.TransientModel):
         
         date_filter = str(x_ano)+'-'+str(x_month)+'-01'    
             
-        if x_month == 12:
+        if x_month == '12':
             x_ano = x_ano + 1 
             x_month = 1
         else:
