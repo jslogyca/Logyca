@@ -24,5 +24,4 @@
     'data': [
         'report/certification_report_templates.xml',
     ], 
-    
 }
