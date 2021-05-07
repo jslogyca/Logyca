@@ -1,0 +1,231 @@
+<template id="report_invoice_support">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t
+                t-call="invoice_support_report.doc24651541"
+            />
+        </t>
+    </t>
+</template>
+
+<template id="doc24651541">
+    <t t-name="studio_report_document">
+        <t t-call="web.external_layout">
+            <div class="page"/>
+        </t>
+    </t>
+</template>
+
+<template id="doc5798456784" inherit_id="invoice_support_report.doc24651541">
+    <data>
+    <xpath expr="/t/t/div" position="inside">
+        <div class="row" style="margin-top:10px">
+        <div class="col">
+            <span t-field="doc.name" class="h1 text-gamma o_bold"/>
+        </div>
+        </div>
+    </xpath>
+    <xpath expr="/t/t/div/div" position="after">
+        <div class="row" style="margin-top:20px">
+        <div class="col-6">
+            <span>
+            <strong t-if='doc.type != "out_invoice" and doc.type != "out_refund"'>FECHA DOCUMENTO:</strong>
+            <strong t-if='doc.type == "out_invoice" or doc.type == "out_refund"'>FECHA FACTURA:</strong>
+            <br/>
+            </span>
+            <span t-field="doc.invoice_date"/>
+        </div>
+        <div class="col-3"/>
+        <div class="col-3"/>
+        </div>
+    </xpath>
+    <xpath expr="/t/t/div/div[2]/div[2]" position="inside">
+        <span>
+        <strong>REFERENCIA:</strong>
+        <br/>
+        </span>
+    </xpath>
+    <xpath expr="/t/t/div/div[2]/div[2]" position="inside">
+        <span t-field="doc.ref"/>
+    </xpath>
+    <xpath expr="/t/t/div/div[2]" position="after">
+        <div class="row" style="margin-top:10px">
+        <div class="col-3">
+            <span>
+            <strong>FECHA CONTABLE:</strong>
+            <br/>
+            </span>
+            <span t-field="doc.date"/>
+        </div>
+        <div class="col-3"/>
+        <div class="col-3"/>
+        <div class="col-3"/>
+        </div>
+    </xpath>
+    <xpath expr="/t/t/div/div[3]/div[3]" position="inside">
+        <span>
+        <strong>DIARIO:</strong>
+        <br/>
+        </span>
+    </xpath>
+    <xpath expr="/t/t/div/div[3]/div[3]" position="inside">
+        <span t-field="doc.journal_id"/>
+    </xpath>
+    <xpath expr="/t/t/div/div[3]" position="after">
+        <table class="table o_report_block_table">
+        <thead>
+            <tr>
+            <th>
+                <span>DESCRIPCIÓN</span>
+            </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr t-foreach="doc.invoice_line_ids" t-as="table_line">
+            <td>
+                <span t-field="table_line.display_name"/>
+            </td>
+            </tr>
+        </tbody>
+        </table>
+    </xpath>
+    <xpath expr="/t/t/div/table/thead/tr/th" position="before">
+        <th>
+        <span>CUENTA</span>
+        </th>
+    </xpath>
+    <xpath expr="/t/t/div/table/tbody/tr/td" position="before">
+        <td>
+        <span t-field="table_line.account_id"/>
+        </td>
+    </xpath>
+    <xpath expr="/t/t/div/table" position="attributes">
+        <attribute name="style" separator=";" add="margin-top:20px"/>
+    </xpath>
+    <xpath expr="/t/t/div/table/thead/tr/th[2]" position="after">
+        <th>
+        <span>ASOCIADO</span>
+        </th>
+    </xpath>
+    <xpath expr="/t/t/div/table/tbody/tr/td[2]" position="after">
+        <td>
+        <span t-field="table_line.partner_id"/>
+        </td>
+    </xpath>
+    <xpath expr="/t/t/div/table/thead/tr/th[3]" position="after">
+        <th>
+        <span>IMPORTE MONEDA</span>
+        </th>
+    </xpath>
+    <xpath expr="/t/t/div/table/tbody/tr/td[3]" position="after">
+        <td>
+        <span t-field="table_line.amount_currency"/>
+        </td>
+    </xpath>
+    <xpath expr="/t/t/div/table/thead/tr/th[4]" position="after">
+        <th>
+        <span>MONEDA</span>
+        </th>
+    </xpath>
+    <xpath expr="/t/t/div/table/tbody/tr/td[4]" position="after">
+        <td>
+        <span t-field="table_line.currency_id"/>
+        </td>
+    </xpath>
+    <xpath expr="/t/t/div/table/thead/tr/th[5]" position="after">
+        <th>
+        <span>DÉBITOS</span>
+        </th>
+    </xpath>
+    <xpath expr="/t/t/div/table/tbody/tr/td[5]" position="after">
+        <td>
+        <span t-field="table_line.debit"/>
+        </td>
+    </xpath>
+    <xpath expr="/t/t/div/table/thead/tr/th[6]" position="after">
+        <th>
+        <span>CRÉDITOS</span>
+        </th>
+    </xpath>
+    <xpath expr="/t/t/div/table/tbody/tr/td[6]" position="after">
+        <td>
+        <span t-field="table_line.credit"/>
+        </td>
+    </xpath>
+    <xpath expr="/t/t/div/table" position="after">
+        <div class="row">
+        <div class="col-5"/>
+        <div class="col-5 offset-2">
+            <table class="table table-sm o_report_block_total">
+            <t t-set="total_currency_id" t-value="doc.currency_id"/>
+            <t t-set="total_amount_total" t-value="doc.amount_total"/>
+            <t t-set="total_amount_untaxed" t-value="doc.amount_untaxed"/>
+            <t t-set="total_amount_by_groups" t-value="doc.amount_by_group"/>
+            <tr class="border-black o_subtotal">
+                <td>
+                <strong>Subtotal</strong>
+                </td>
+                <td class="text-right">
+                <span t-esc="total_amount_untaxed" t-options="{'widget': 'monetary', 'display_currency': total_currency_id}"/>
+                </td>
+            </tr>
+            <t t-foreach="total_amount_by_groups" t-as="total_amount_by_group">
+                <tr>
+                <t t-if="len(total_amount_by_group) == 1 and total_amount_untaxed == total_amount_by_group[2]">
+                    <td>
+                    <span t-esc="total_amount_by_group[0]"/>
+                    </td>
+                    <td class="text-right o_price_total">
+                    <span t-esc="total_amount_by_group[3]"/>
+                    </td>
+                </t>
+                <t t-else="">
+                    <td>
+                    <span t-esc="total_amount_by_group[0]"/>
+                    <span>
+                        <span>on</span>
+                        <t t-esc="total_amount_by_group[4]"/>
+                    </span>
+                    </td>
+                    <td class="text-right o_price_total">
+                    <span t-esc="total_amount_by_group[3]"/>
+                    </td>
+                </t>
+                </tr>
+            </t>
+            <t t-if="total_amount_by_groups is None">
+                <tr>
+                <td>Taxes</td>
+                <td class="text-right">
+                    <span t-esc="total_amount_total - total_amount_untaxed" t-options="{'widget': 'monetary', 'display_currency': total_currency_id}"/>
+                </td>
+                </tr>
+            </t>
+            <tr class="border-black o_total">
+                <td>
+                <strong>Total</strong>
+                </td>
+                <td class="text-right">
+                <span t-esc="total_amount_total" t-options="{'widget': 'monetary', 'display_currency': total_currency_id}"/>
+                </td>
+            </tr>
+            </table>
+        </div>
+        </div>
+    </xpath>
+    <xpath expr="/t/t/div/div[4]" position="after">
+        <div class="row" style="margin-top:20px">
+        <div class="col-3">
+            <span>
+            <strong>ELABORADO POR:</strong>
+            <br/>
+            </span>
+            <span t-field="user_id.name"/>
+        </div>
+        <div class="col-3"/>
+        <div class="col-3"/>
+        <div class="col-3"/>
+        </div>
+    </xpath>
+    </data>
+</template>
