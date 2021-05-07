@@ -22,7 +22,7 @@
     
     # always loaded
     'data': [
-        'data/l10n_co_reports.xml',
+        'report/certification_report_templates.xml',
     ], 
     
 }
