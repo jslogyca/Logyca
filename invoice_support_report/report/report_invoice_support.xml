@@ -215,7 +215,7 @@
         </div>
     </xpath>
     <xpath expr="/t/t/t/div/div[4]" position="after">
-        <div class="row" style="margin-top:20px">
+        <div class="row" style="margin-top:40px">
         <div class="col-3">
             <span>
             <strong>ELABORADO POR:</strong>
@@ -225,7 +225,13 @@
         </div>
         <div class="col-3"/>
         <div class="col-3"/>
-        <div class="col-3"/>
+        <div class="col-3">
+            <span>
+            <strong t-if="doc.reviewed_by">REVISADO POR:</strong>
+            <br/>
+            </span>
+            <span t-field="doc.reviewed_by"/>
+        </div>
         </div>
     </xpath>
     </data>
