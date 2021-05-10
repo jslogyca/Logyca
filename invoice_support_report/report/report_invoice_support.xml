@@ -1,3 +1,4 @@
+<odoo>
 <template id="report_invoice_support">
     <t t-call="web.html_container">
         <t t-foreach="docs" t-as="o">
@@ -18,14 +19,14 @@
 
 <template id="doc5798456784" inherit_id="invoice_support_report.doc24651541">
     <data>
-    <xpath expr="/t/t/div" position="inside">
+    <xpath expr="/t/t/t/div" position="inside">
         <div class="row" style="margin-top:10px">
         <div class="col">
             <span t-field="doc.name" class="h1 text-gamma o_bold"/>
         </div>
         </div>
     </xpath>
-    <xpath expr="/t/t/div/div" position="after">
+    <xpath expr="/t/t/t/div/div" position="after">
         <div class="row" style="margin-top:20px">
         <div class="col-6">
             <span>
@@ -39,16 +40,16 @@
         <div class="col-3"/>
         </div>
     </xpath>
-    <xpath expr="/t/t/div/div[2]/div[2]" position="inside">
+    <xpath expr="/t/t/t/div/div[2]/div[2]" position="inside">
         <span>
         <strong>REFERENCIA:</strong>
         <br/>
         </span>
     </xpath>
-    <xpath expr="/t/t/div/div[2]/div[2]" position="inside">
+    <xpath expr="/t/t/t/div/div[2]/div[2]" position="inside">
         <span t-field="doc.ref"/>
     </xpath>
-    <xpath expr="/t/t/div/div[2]" position="after">
+    <xpath expr="/t/t/t/div/div[2]" position="after">
         <div class="row" style="margin-top:10px">
         <div class="col-3">
             <span>
@@ -62,16 +63,16 @@
         <div class="col-3"/>
         </div>
     </xpath>
-    <xpath expr="/t/t/div/div[3]/div[3]" position="inside">
+    <xpath expr="/t/t/t/div/div[3]/div[3]" position="inside">
         <span>
         <strong>DIARIO:</strong>
         <br/>
         </span>
     </xpath>
-    <xpath expr="/t/t/div/div[3]/div[3]" position="inside">
+    <xpath expr="/t/t/t/div/div[3]/div[3]" position="inside">
         <span t-field="doc.journal_id"/>
     </xpath>
-    <xpath expr="/t/t/div/div[3]" position="after">
+    <xpath expr="/t/t/t/div/div[3]" position="after">
         <table class="table o_report_block_table">
         <thead>
             <tr>
@@ -89,70 +90,70 @@
         </tbody>
         </table>
     </xpath>
-    <xpath expr="/t/t/div/table/thead/tr/th" position="before">
+    <xpath expr="/t/t/t/div/table/thead/tr/th" position="before">
         <th>
         <span>CUENTA</span>
         </th>
     </xpath>
-    <xpath expr="/t/t/div/table/tbody/tr/td" position="before">
+    <xpath expr="/t/t/t/div/table/tbody/tr/td" position="before">
         <td>
         <span t-field="table_line.account_id"/>
         </td>
     </xpath>
-    <xpath expr="/t/t/div/table" position="attributes">
+    <xpath expr="/t/t/t/div/table" position="attributes">
         <attribute name="style" separator=";" add="margin-top:20px"/>
     </xpath>
-    <xpath expr="/t/t/div/table/thead/tr/th[2]" position="after">
+    <xpath expr="/t/t/t/div/table/thead/tr/th[2]" position="after">
         <th>
         <span>ASOCIADO</span>
         </th>
     </xpath>
-    <xpath expr="/t/t/div/table/tbody/tr/td[2]" position="after">
+    <xpath expr="/t/t/t/div/table/tbody/tr/td[2]" position="after">
         <td>
         <span t-field="table_line.partner_id"/>
         </td>
     </xpath>
-    <xpath expr="/t/t/div/table/thead/tr/th[3]" position="after">
+    <xpath expr="/t/t/t/div/table/thead/tr/th[3]" position="after">
         <th>
         <span>IMPORTE MONEDA</span>
         </th>
     </xpath>
-    <xpath expr="/t/t/div/table/tbody/tr/td[3]" position="after">
+    <xpath expr="/t/t/t/div/table/tbody/tr/td[3]" position="after">
         <td>
         <span t-field="table_line.amount_currency"/>
         </td>
     </xpath>
-    <xpath expr="/t/t/div/table/thead/tr/th[4]" position="after">
+    <xpath expr="/t/t/t/div/table/thead/tr/th[4]" position="after">
         <th>
         <span>MONEDA</span>
         </th>
     </xpath>
-    <xpath expr="/t/t/div/table/tbody/tr/td[4]" position="after">
+    <xpath expr="/t/t/t/div/table/tbody/tr/td[4]" position="after">
         <td>
         <span t-field="table_line.currency_id"/>
         </td>
     </xpath>
-    <xpath expr="/t/t/div/table/thead/tr/th[5]" position="after">
+    <xpath expr="/t/t/t/div/table/thead/tr/th[5]" position="after">
         <th>
         <span>DÉBITOS</span>
         </th>
     </xpath>
-    <xpath expr="/t/t/div/table/tbody/tr/td[5]" position="after">
+    <xpath expr="/t/t/t/div/table/tbody/tr/td[5]" position="after">
         <td>
         <span t-field="table_line.debit"/>
         </td>
     </xpath>
-    <xpath expr="/t/t/div/table/thead/tr/th[6]" position="after">
+    <xpath expr="/t/t/t/div/table/thead/tr/th[6]" position="after">
         <th>
         <span>CRÉDITOS</span>
         </th>
     </xpath>
-    <xpath expr="/t/t/div/table/tbody/tr/td[6]" position="after">
+    <xpath expr="/t/t/t/div/table/tbody/tr/td[6]" position="after">
         <td>
         <span t-field="table_line.credit"/>
         </td>
     </xpath>
-    <xpath expr="/t/t/div/table" position="after">
+    <xpath expr="/t/t/t/div/table" position="after">
         <div class="row">
         <div class="col-5"/>
         <div class="col-5 offset-2">
@@ -213,7 +214,7 @@
         </div>
         </div>
     </xpath>
-    <xpath expr="/t/t/div/div[4]" position="after">
+    <xpath expr="/t/t/t/div/div[4]" position="after">
         <div class="row" style="margin-top:20px">
         <div class="col-3">
             <span>
@@ -229,3 +230,4 @@
     </xpath>
     </data>
 </template>
+</odoo>
