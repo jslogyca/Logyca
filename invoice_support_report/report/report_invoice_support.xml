@@ -1,15 +1,15 @@
 <odoo>
 <template id="report_invoice_support">
     <t t-call="web.html_container">
-        <t t-foreach="docs" t-as="o">
+        <t t-foreach="docs" t-as="doc">
             <t
-                t-call="invoice_support_report.doc24651541"
+                t-call="invoice_support_report.report_invoice_support_document"
             />
         </t>
     </t>
 </template>
 
-<template id="doc24651541">
+<template id="report_invoice_support_document">
     <t t-name="studio_report_document">
         <t t-call="web.external_layout">
             <div class="page"/>
@@ -17,7 +17,7 @@
     </t>
 </template>
 
-<template id="doc5798456784" inherit_id="invoice_support_report.doc24651541">
+<template id="report_invoice_support_document_customization" inherit_id="invoice_support_report.report_invoice_support_document">
     <data>
     <xpath expr="/t/t/t/div" position="inside">
         <div class="row" style="margin-top:10px">
