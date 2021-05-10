@@ -12,6 +12,7 @@ class AccountMoveLine(models.Model):
 
     invoice_tag_ids = fields.Many2one('account.analytic.tag', string='Etiqueta Red de Valor')
     inter_company = fields.Boolean('Intercompany', related='product_id.product_tmpl_id.inter_company', readonly=True, store=True)
+    reviewed_by = fields.Many2one('res.partner', string='Revisado Por', help="Este campo aparece en el reporte de Soporte de Factura")
 
 class AccountMove(models.Model):
     _inherit = 'account.move'
