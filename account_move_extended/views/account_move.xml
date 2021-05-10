@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="account_move_reviewed_by" model="ir.ui.view">
+		<field name="name">account.move.reviewed.form.inherit</field>
+		<field name="model">account.move</field>
+		<field name="inherit_id" ref="account.view_move_form"/>
+		<field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_origin']" position="before">
+                <field name="reviewed_by"/>
+			</xpath>
+		</field>
+	</record>
+</odoo>
