@@ -2,7 +2,7 @@
 <odoo>
     <data>                    
         <template id="report_certification_period_added" inherit_id="l10n_co_reports.report_certification">
-            <xpath expr="/t/t/t/div/row[3]" position="replace">
+            <xpath expr="/t/t/t/t/div/div[3]" position="replace">
                 <div class="row">
                     <div class="col-6">
                         Ciudad Tercero: <t t-esc="partner['partner_id'].city"/>

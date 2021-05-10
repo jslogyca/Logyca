@@ -13,3 +13,4 @@ class RetentionReportWizard(models.TransientModel):
             'date_from': self._context.get('date_from'),
             'date_to': self._context.get('date_to'),
         }
+        return self.env.ref('l10n_co_reports.action_report_certification').report_action([], data=data)
