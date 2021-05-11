@@ -30,6 +30,7 @@
         'views/account_sector_macro_view.xml',
         'wizard/update_revenue_wizard_view.xml',
         'security/ir.model.access.csv',
+        'security/account_move_extended_security.xml',
         'data/data.xml',
     ],
     'qweb': [

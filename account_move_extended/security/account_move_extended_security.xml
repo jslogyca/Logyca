@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_move_extended_reviewer" model="res.groups">
+        <field name="name">Revisor Asientos Contables</field>
+        <field name="category_id" ref="base.module_category_accounting_accounting"/>
+    </record>
+</odoo>

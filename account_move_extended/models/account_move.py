@@ -18,7 +18,7 @@ class AccountMove(models.Model):
 
 
     analytic_account_id = fields.Many2one('account.analytic.account', string='Red de Valor')
-    reviewed_by = fields.Many2one('res.partner', string='Revisado Por', help="Este campo aparece en el reporte de Soporte de Factura")
+    reviewed_by = fields.Many2one('res.users', string='Revisado Por', help="Este campo aparece en el reporte de Soporte de Factura", readonly="1")
 
     """
     This method is overwritten because an error was found in the original code when making a
@@ -57,3 +57,6 @@ class AccountMove(models.Model):
                 move.asset_id.message_post(body=msg)
 
         return super(AccountMove, self)._reverse_moves(default_values_list, cancel)
+
+    def action_reviewed_by(self):
+        self.reviewed_by = self.env.user
