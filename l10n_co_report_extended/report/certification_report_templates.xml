@@ -5,7 +5,7 @@
             <xpath expr="/t/t/t/t/div/div[3]" position="replace">
                 <div class="row">
                     <div class="col-6">
-                        Ciudad Tercero: <t t-esc="partner['partner_id'].x_city"/>
+                        Ciudad Tercero: <t t-esc="partner['partner_id'].x_city.name"/>
                     </div>
                     <div class="col-6">
                         Periodo Certificado: <t t-esc="date_from"/> Al <t t-esc="date_to"/>
