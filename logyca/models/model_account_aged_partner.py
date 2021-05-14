@@ -6,6 +6,8 @@ from odoo.exceptions import UserError, ValidationError
 from odoo.tools.misc import format_date
 from functools import lru_cache
 
+
+
 class AccountAgedPartner(models.AbstractModel):
     _inherit = "account.aged.partner"
 
@@ -123,7 +125,7 @@ class AccountBalancePartnerFilter(models.TransientModel):
                                         ('10', 'Octubre'),
                                         ('11', 'Noviembre'),
                                         ('12', 'Diciembre')        
-                                    ], string='Mes')
+                                    ], string='Mes', required=True)
     x_ano_filter_two = fields.Integer(string='Año 2')
     x_month_filter_two = fields.Selection([
                                         ('1', 'Enero'),
@@ -154,13 +156,12 @@ class AccountBalancePartnerFilter(models.TransientModel):
             
             if record.x_type_filter == '2':
                 result.append((record.id, "{} - Inicial: {}-{} | Final: {}-{} ".format(type,record.x_ano_filter,record.x_month_filter,record.x_ano_filter_two,record.x_month_filter_two)))
-            elif record.x_type_filter == '3':
-                result.append((record.id, "{} - Año: {} | Mes: {}".format(type,record.x_ano_filter,'Enero')))
             else:
                 result.append((record.id, "{} - Año: {} | Mes: {}".format(type,record.x_ano_filter,record.x_month_filter)))
         return result
     
     def open_pivot_view(self):
+        
         if not self.company_id:
             company_id = 0
         else:

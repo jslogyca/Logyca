@@ -275,7 +275,7 @@
                             <group>
                                 <field name="x_type_filter" string="Tipo" widget='radio'/>
                                 <field name="x_ano_filter" string="Año"/>
-                                <field name="x_month_filter" string="Mes" attrs="{'invisible':[('x_type_filter', '=', '3')]}"/>
+                                <field name="x_month_filter" string="Mes"/>
                                 <field name="x_ano_filter_two" string="Año Final" attrs="{'invisible':[('x_type_filter', '!=', '2')], 'required': [('x_type_filter', '=', '2')]}"/>
                                 <field name="x_month_filter_two" string="Mes Final" attrs="{'invisible':[('x_type_filter', '!=', '2')], 'required': [('x_type_filter', '=', '2')]}"/>
                                 <field name="company_id" string="Compañia"/> 
