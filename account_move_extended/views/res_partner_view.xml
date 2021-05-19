@@ -14,12 +14,11 @@
                             <field name="macro_sector"/>
                             <field name="x_company_size" force_save="1" readonly="1"/>
                             <field name="size_sector_int" force_save="1" readonly="1"/>
+                            <field name="x_income_range" invisible="1"/>
                         </group>
                         <group attrs="{'invisible': [('fact_annual', '=', 'ingresos')]}" >
                             <field name="x_asset_range"/>
                             <field name="x_date_update_asset"/>
-                            <field name="x_income_range" invisible="1"/>
-                            
                         </group>
                         <group attrs="{'invisible': [('fact_annual', '=', 'activos')]}">
                             <field name="amount_revenue_membre" force_save="1" readonly="1"/>
