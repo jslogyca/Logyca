@@ -103,7 +103,7 @@ class ResPartner(models.Model):
 
     #INFORMACION FINANCIERA
     x_asset_range = fields.Many2one('logyca.asset_range', string='Rango de activos', track_visibility='onchange', ondelete='restrict')
-    x_income_range = fields.Many2one('logyca.asset_range', string='Rango de ingresos', track_visibility='onchange', ondelete='restrict')
+    x_income_range = fields.Many2one('revenue.macro.sector', string='Rango de ingresos', track_visibility='onchange', ondelete='restrict')
     x_date_update_asset = fields.Date(string='Fecha de última modificación', compute='_date_update_asset', store=True, track_visibility='onchange')
     #x_date_update_asset = fields.Date(string='Fecha de última modificación', track_visibility='onchange')
     x_company_size = fields.Selection([

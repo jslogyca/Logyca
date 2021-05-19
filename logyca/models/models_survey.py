@@ -3,6 +3,8 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
 import datetime
 import random
+import pytz
+
 
 try: 
     import qrcode
@@ -56,6 +58,7 @@ class Survey(models.Model):
         for question in obj_survey_question: 
             matrix = []
             obj_survey_label = self.env['survey.label'].search([('question_id_2', '=', question.id)])
+
             if obj_survey_label:
                 matrix.append(question.title)
                 for label in obj_survey_label:
@@ -112,13 +115,23 @@ class Survey(models.Model):
         
         #Traer Preguntas 
         obj_survey_question = self.env['survey.question'].search([('survey_id', '=', self.id),('is_page','=',False)])
+
         #Traer entrada de usuario
         obj_survey_user_input = self.env['survey.user_input'].search([('survey_id', '=', self.id),('state','=','done')])
-        
+
+        format = "%d-%m-%Y %H:%M:%S"
+
+        # Tiempo actual en UTC
+        local_tz = pytz.timezone('US/Central')
+
         results = []
         for user_input in obj_survey_user_input:
             result_user = []
             result_user.append('IDUSER:'+str(user_input.id))
+            result_user.append('Fecha de Diligenciamiento')
+            date_tz = user_input.create_date.astimezone(local_tz).strftime(format)
+            result_user.append(str(date_tz))
+
             for question in obj_survey_question:
                 obj_survey_user_input_line = self.env['survey.user_input_line'].search([('survey_id', '=', self.id),('user_input_id','=',user_input.id),('question_id','=',question.id)])
                 for result in obj_survey_user_input_line:
@@ -126,7 +139,7 @@ class Survey(models.Model):
                         result_user.append(question.title+' - '+result.value_suggested_row.value)
                     else:
                         result_user.append(question.title)
-                    
+
                     if result.value_text:
                         result_user.append(result.value_text)
                     if result.value_number:
@@ -144,40 +157,6 @@ class Survey(models.Model):
                     #value_suggested,value_suggested_row
             results.append(result_user)
         
-        #query = '''
-        #    Select c.id,
-        #        b.title || ' ' || case when d.value_suggested_row is not null then e.value else '' end  as Pregunta,
-        #        Usu_respu.name as Usuario_Respuesta,
-        #        case when d.answer_type = 'text' then d.value_text
-        #            when d.answer_type = 'number' then cast(d.value_number as varchar)
-        #            when d.answer_type = 'date' then cast(d.value_date as varchar)
-        #            when d.answer_type = 'datetime' then cast(d.value_datetime as varchar)
-        #            when d.answer_type = 'suggestion' and d.value_suggested_row is null then cast(e.value as varchar)
-        #            when d.answer_type = 'suggestion' and d.value_suggested_row is not null then cast(f.value as varchar)
-        #            when d.answer_type = 'free_text' then cast(d.value_free_text as varchar) 
-        #            when d.answer_type = 'little_faces' then cast(d.value_little_faces as varchar) else '' end as Respuesta,
-        #        usu_crea."name" as Encuenta_Creada_Por
-        #        from survey_survey as A
-        #        
-        #        inner join survey_question as b on b.survey_id  = a.id
-        #        inner join survey_user_input as c on c.survey_id = a.id
-        #        inner join survey_user_input_line as d on D.user_input_id = c.id and a.id = d.survey_id and b.id = d.question_id
-        #        left join survey_label as e on d.value_suggested  = e.id
-        #        left join survey_label as f on d.value_suggested_row  = f.id
-        #        
-        #        left join res_users n on n.id = a.create_uid
-        #        left join res_users o on o.id = a.write_uid
-        #        left join res_users p on p.id = c.write_uid
-        #        left join res_partner usu_crea on usu_crea.id = n.partner_id
-        #        left join res_partner usu_mod on usu_mod.id = o.partner_id
-        #        left join res_partner Usu_respu on Usu_respu.id = p.partner_id
-        #        where a.id = %s 
-        #        order by c.id, b."sequence"
-        #''' % (self.id)
-                    
-        #self._cr.execute(query)
-        #result_query = self._cr.dictfetchall()
-        
         if results and columns:             
             filename= 'Resultados-'+str(self.title)+'.xlsx'
             stream = io.BytesIO()
@@ -186,6 +165,11 @@ class Survey(models.Model):
 
             #Agregar columnas
             aument_columns = 0
+
+            #Agregar nombre de primera columna
+            sheet.write(0, aument_columns, "Fecha de Diligenciamiento")
+
+            aument_columns = aument_columns + 1
             for col in columns:            
                 sheet.write(0, aument_columns, col)
                 aument_columns = aument_columns + 1

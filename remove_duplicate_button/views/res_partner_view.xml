@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_res_partner_remove_duplicate" model="ir.ui.view">
+        <field name="name">res.partner.remove.duplicate.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <data>
+               <xpath expr="//form" position="attributes">    
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

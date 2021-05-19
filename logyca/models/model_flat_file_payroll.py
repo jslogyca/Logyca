@@ -204,7 +204,7 @@ class FlatFilePayRoll(models.Model):
                     'journal_id': self.journal_id.id,  
                     'invoice_origin': 'Archivo Plano Nomina',
                     'x_country_account_id': self.country_id.id,
-                    'invoice_line_ids': [],
+                    'line_ids': [],
                 }
                 
             #Detalle account_move_line
@@ -238,7 +238,7 @@ class FlatFilePayRoll(models.Model):
                     'x_budget_group': line.budget_group.id
                 }
             
-            invoice_vals['invoice_line_ids'].append((0, 0, move_line))
+            invoice_vals['line_ids'].append((0, 0, move_line))
             cant = cant + 1
             
         #Insertar en Contabilidad
