@@ -110,7 +110,9 @@ class ResPartner(models.Model):
                                         ('1', 'Mipyme'),
                                         ('2', 'Pyme'),
                                         ('3', 'Mediana'),
-                                        ('4', 'Grande')
+                                        ('4', 'Grande'),
+                                        ('5', 'Micro'),
+                                        ('6', 'Pequeña')
                                     ], string='Tamaño empresa', track_visibility='onchange')
 
     #INFORMACION TRIBUTARIA
