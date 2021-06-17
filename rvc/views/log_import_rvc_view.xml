@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="log_import_rvc_form" model="ir.ui.view">
+		<field name="name">log.import.rvc.form</field>
+		<field name="model">log.import.rvc</field>
+		<field name="arch" type="xml">
+			<form string="RVC Log">			
+				<sheet>
+					<group>
+						<group>
+							<field name="name" />
+							<field name="date_init" />
+						</group>
+						<group>
+							<field name="user_id" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="log_import_rvc_tree" model="ir.ui.view">
+		<field name="name">log.import.rvc.tree</field>
+		<field name="model">log.import.rvc</field>
+		<field name="arch" type="xml">
+			<tree string="RVC Log" >
+				<field name="name"/>
+				<field name="date_init"/>
+				<field name="user_id"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_log_import_rvc" model="ir.actions.act_window">
+		<field name="name">RVC Config</field>
+		<field name="res_model">log.import.rvc</field>
+		<field name="view_mode">tree</field>
+	</record>
+
+    <menuitem 
+		id="menu_log_import_rvc"
+        name="Log RVC"
+        parent="rvc.menu_config_rvc_parent"
+        sequence="12"
+        action="action_log_import_rvc"
+        groups="rvc.group_rvc_manager"/>
+		
+</odoo>

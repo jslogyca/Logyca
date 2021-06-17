@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="rvc_beneficiary_form" model="ir.ui.view">
+		<field name="name">rvc.beneficiary.form</field>
+		<field name="model">rvc.beneficiary</field>
+		<field name="arch" type="xml">
+			<form string="RVC Beneficiary">
+				<header>
+					<button string="Confirmar" name="action_confirm" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}"
+								 class="oe_highlight"/>
+					<button string="Send" name="action_send" type="object" attrs="{'invisible': [('state', '!=', 'confirm')]}"
+								 class="oe_highlight"/>
+					<field name="state" widget="statusbar" statusbar_visible="draft,confirm,send,done"/>
+				</header>			
+				<sheet>
+					<group>
+						<group>
+							<field name="name" />
+							<field name="partner_id" />
+							<field name="vat" />
+							<field name="parent_id" />
+							<field name="company_id" />
+							<field name="name_contact" />
+						</group>
+						<group>
+							<field name="phone" />
+							<field name="email" />						
+							<field name="type_beneficio" />
+							<field name="cant_cod" attrs="{'invisible': [('type_beneficio', '!=', 'codigos')]}" />
+							<field name="x_sector_id" />
+							<field name="date_send" />
+							<field name="x_company_size" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="rvc_beneficiary_tree" model="ir.ui.view">
+		<field name="name">rvc.beneficiary.tree</field>
+		<field name="model">rvc.beneficiary</field>
+		<field name="arch" type="xml">
+			<tree string="RVC Beneficiary" >
+				<field name="partner_id"/>
+				<field name="vat"/>
+				<field name="parent_id"/>
+				<field name="type_beneficio"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_rvc_beneficiary" model="ir.actions.act_window">
+		<field name="name">RVC Beneficiary</field>
+		<field name="res_model">rvc.beneficiary</field>
+		<field name="view_mode">tree,form</field>
+	</record>	
+
+	<menuitem
+		id="hr_menu_rvc_beneficiary"
+		name="RVC Beneficiary"
+		action="action_rvc_beneficiary"
+		parent="rvc.menu_rvc_import_file_wizard"
+		sequence="1"
+		groups="rvc.group_rvc_manager"/>          
+</odoo>

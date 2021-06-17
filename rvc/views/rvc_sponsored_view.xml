@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="rvc_sponsored_form" model="ir.ui.view">
+		<field name="name">rvc.sponsored.form</field>
+		<field name="model">rvc.sponsored</field>
+		<field name="arch" type="xml">
+			<form string="RVC Sponsored">
+				<header>
+					<button string="Confirmar" name="action_confirm" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}"
+										 class="oe_highlight"/>
+					<field name="state" widget="statusbar" statusbar_visible="draft,confirm,send,done"/>
+				</header>			
+				<sheet>
+					<group>
+						<group>
+							<field name="name" />
+							<field name="partner_id" />
+							<field name="vat" />
+							<field name="name_contact" />
+						</group>
+						<group>
+							<field name="phone" />
+							<field name="email" />
+							<field name="x_sector_id" />
+							<field name="x_company_size" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="rvc_sponsored_tree" model="ir.ui.view">
+		<field name="name">rvc.sponsored.tree</field>
+		<field name="model">rvc.sponsored</field>
+		<field name="arch" type="xml">
+			<tree string="RVC Sponsored" >
+				<field name="partner_id"/>
+				<field name="vat"/>
+				<field name="x_sector_id"/>
+				<field name="x_company_size"/>
+				<field name="state" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_rvc_sponsored" model="ir.actions.act_window">
+		<field name="name">RVC Sponsored</field>
+		<field name="res_model">rvc.sponsored</field>
+		<field name="view_mode">tree,form</field>
+	</record>	
+
+	<menuitem
+		id="hr_menu_rvc_sponsored"
+		name="RVC Sponsored"
+		action="action_rvc_sponsored"
+		parent="rvc.menu_rvc_import_file_wizard"
+		sequence="2"
+		groups="rvc.group_rvc_manager"/>          
+</odoo>
