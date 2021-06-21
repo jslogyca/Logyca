@@ -6,21 +6,32 @@
         <field name="arch" type="xml">
             <form string="">
                 <sheet>
-                    <div>
-                        <a href="/rvc/static/xls/Plantilla_Beneficiarias_Identificacion.xlsx" aria-label="Download" title="Descargar">
-                            <i class="fa fa-download"></i> <span>Plantilla Beneficio Identificacion</span>
-                        </a>
-                    </div>
-                    <div>
-                        <a href="/rvc/static/xls/Plantilla_Beneficiarias_Analitica.xlsx" aria-label="Download" title="Descargar">
-                            <i class="fa fa-download"></i> <span>Plantilla Beneficio Analítica</span>
-                        </a>
-                    </div>               
-                    <div>
-                        <a href="/rvc/static/xls/Plantilla_Beneficiarias_Colabora.xlsx" aria-label="Download" title="Descargar">
-                            <i class="fa fa-download"></i> <span>Plantilla Beneficio Colabora</span>
-                        </a>
-                    </div>               
+                    <p class="oe_grey">
+                        Asistente para importar masivamente Beneficiarios
+                    </p>                
+                    <group>
+                        <group>
+                            <div>
+                                <a href="/rvc/static/xls/Plantilla_Beneficiarias_Identificacion.xlsx" aria-label="Download" title="Descargar">
+                                    <i class="fa fa-download"></i> <span>Plantilla Beneficio Identificacion</span>
+                                </a>
+                            </div>
+                        </group>
+                        <group>
+                            <div>
+                                <a href="/rvc/static/xls/Plantilla_Beneficiarias_Analitica.xlsx" aria-label="Download" title="Descargar">
+                                    <i class="fa fa-download"></i> <span>Plantilla Beneficio Analítica</span>
+                                </a>
+                            </div>
+                        </group>
+                        <group>
+                            <div>
+                                <a href="/rvc/static/xls/Plantilla_Beneficiarias_Colabora.xlsx" aria-label="Download" title="Descargar">
+                                    <i class="fa fa-download"></i> <span>Plantilla Beneficio Colabora</span>
+                                </a>
+                            </div>
+                        </group>
+                    </group>             
                     <group>
                         <group>
                             <field name="file_data" filename="filename" placeholder="Choose a file to import..."/>
@@ -56,10 +67,16 @@
         active="True"
         groups="rvc.group_rvc_manager"/>
 
-    <menuitem id="menu_report_excel_sale_product_root"
-        name="Importar Patrocinados"
+    <menuitem id="menu_import_file_root"
+        name="Importar Archivos"
         parent="rvc.menu_rvc_import_file_wizard"
         sequence="3"
+        groups="rvc.group_rvc_manager"/>
+
+    <menuitem id="menu_report_excel_sale_product_root"
+        name="Importar Patrocinados"
+        parent="rvc.menu_import_file_root"
+        sequence="1"
         action="action_rvc_import_file_wizard_view"
         groups="rvc.group_rvc_manager"/>
 

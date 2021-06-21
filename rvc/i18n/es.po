@@ -310,7 +310,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:rvc.rvc_beneficiary_form
 #: model_terms:ir.ui.view,arch_db:rvc.rvc_beneficiary_tree
 msgid "RVC Beneficiary"
-msgstr "Benefiarios"
+msgstr "Beneficiarios"
 
 #. module: rvc
 #: model:ir.actions.act_window,name:rvc.action_config_rvc
