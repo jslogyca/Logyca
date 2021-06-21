@@ -6,11 +6,16 @@
         <field name="arch" type="xml">
             <form string="">
                 <sheet>
-                    <div>
-                        <a href="/rvc/static/xls/Plantilla_Jalonadores.xlsx" aria-label="Download" title="Descargar">
-                            <i class="fa fa-download"></i> <span>Plantilla Patrocinadores</span>
-                        </a>
-                    </div>                 
+                    <p class="oe_grey">
+                        Asistente para importar masivamente Patrocinadores
+                    </p> 
+                    <group>
+                        <div>
+                            <a href="/rvc/static/xls/Plantilla_Jalonadores.xlsx" aria-label="Download" title="Descargar">
+                                <i class="fa fa-download"></i> <span>Plantilla Patrocinadores</span>
+                            </a>
+                        </div>
+                    </group>                               
                     <group>
                         <group>
                             <field name="file_data" filename="filename" placeholder="Choose a file to import..."/>
@@ -39,7 +44,7 @@
 
     <menuitem id="menu_rvc_import_file_sponsored_wizard_view"
         name="Importar Patrocinadores"
-        parent="rvc.menu_rvc_import_file_wizard"
+        parent="rvc.menu_import_file_root"
         sequence="4"
         action="action_rvc_import_file_sponsored_wizard_view"
         groups="rvc.group_rvc_manager"/>
