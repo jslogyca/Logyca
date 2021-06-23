@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="hr_payroll_structure_type_view_form_period" model="ir.ui.view">
+		<field name="name">hr.payroll.structure.type.view.form.period</field>
+		<field name="model">hr.payroll.structure.type</field>
+		<field name="inherit_id" ref="hr_payroll.hr_payroll_structure_type_view_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='default_work_entry_type_id']" position="after">
+                <field name="period_epayroll" />
+			</xpath>
+		</field>
+	</record>
+</odoo>

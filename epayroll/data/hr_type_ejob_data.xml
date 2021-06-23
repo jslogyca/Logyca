@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="hr_type_ejob1" model="hr.type.ejob">
+            <field name="code">01</field>
+            <field name="name">Dependiente</field>
+        </record>
+        <record id="hr_type_ejob2" model="hr.type.ejob">
+            <field name="code">02</field>
+            <field name="name">Servicio domestico</field>
+        </record>
+        <record id="hr_type_ejob4" model="hr.type.ejob">
+            <field name="code">04</field>
+            <field name="name">Madre comunitaria</field>
+        </record>
+        <record id="hr_type_ejob12" model="hr.type.ejob">
+            <field name="code">12</field>
+            <field name="name">Aprendices del Sena en etapa lectiva</field>
+        </record>
+        <record id="hr_type_ejob18" model="hr.type.ejob">
+            <field name="code">18</field>
+            <field name="name">Funcionarios públicos sin tope máximo de ibc</field>
+        </record>
+        <record id="hr_type_ejob19" model="hr.type.ejob">
+            <field name="code">19</field>
+            <field name="name">Aprendices del SENA en etapa productiva</field>
+        </record>
+        <record id="hr_type_ejob21" model="hr.type.ejob">
+            <field name="code">21</field>
+            <field name="name">Estudiantes de postgrado en salud</field>
+        </record>
+        <record id="hr_type_ejob22" model="hr.type.ejob">
+            <field name="code">22</field>
+            <field name="name">Profesor de establecimiento particular</field>
+        </record>
+        <record id="hr_type_ejob23" model="hr.type.ejob">
+            <field name="code">23</field>
+            <field name="name">Estudiantes aportes solo riesgos laborales</field>
+        </record>
+        <record id="hr_type_ejob30" model="hr.type.ejob">
+            <field name="code">30</field>
+            <field name="name">Dependiente entidades o universidades públicas con régimen especial en salud</field>
+        </record>
+        <record id="hr_type_ejob31" model="hr.type.ejob">
+            <field name="code">31</field>
+            <field name="name">Cooperados o pre cooperativas de trabajo asociado</field>
+        </record>
+        <record id="hr_type_ejob47" model="hr.type.ejob">
+            <field name="code">47</field>
+            <field name="name">Trabajador dependiente de entidad beneficiaria del sistema general de participaciones ‐ aportes patronales</field>
+        </record>
+        <record id="hr_type_ejob51" model="hr.type.ejob">
+            <field name="code">51</field>
+            <field name="name">Trabajador de tiempo parcial</field>
+        </record>
+        <record id="hr_type_ejob54" model="hr.type.ejob">
+            <field name="code">54</field>
+            <field name="name">Pre pensionado de entidad en liquidación.</field>
+        </record>
+        <record id="hr_type_ejob56" model="hr.type.ejob">
+            <field name="code">56</field>
+            <field name="name">Pre pensionado con aporte voluntario a salud</field>
+        </record>
+        <record id="hr_type_ejob58" model="hr.type.ejob">
+            <field name="code">58</field>
+            <field name="name">Estudiantes de prácticas laborales en el sector público</field>
+        </record>
+    </data>
+</odoo>

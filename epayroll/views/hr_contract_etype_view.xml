@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="hr_contract_etype_form" model="ir.ui.view">
+		<field name="name">hr.contract.etype.form</field>
+		<field name="model">hr.contract.etype</field>
+		<field name="arch" type="xml">
+			<form string="Type EContract">		
+				<sheet>
+					<group>
+						<group>
+							<field name="name" />
+						</group>
+						<group>
+							<field name="code" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="hr_contract_etype_tree" model="ir.ui.view">
+		<field name="name">hr.contract.etype.tree</field>
+		<field name="model">hr.contract.etype</field>
+		<field name="arch" type="xml">
+			<tree string="Type EContract" >
+				<field name="name"/>
+				<field name="code"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_hr_contract_etype" model="ir.actions.act_window">
+		<field name="name">Type EContract</field>
+		<field name="res_model">hr.contract.etype</field>
+		<field name="view_mode">tree,form</field>
+	</record>     
+
+	<menuitem
+		id="hr_menu_hr_contract_etype"
+		name="Type EContract"
+		action="action_hr_contract_etype"
+		parent="epayroll.hr_menu_epayroll_setting"
+		sequence="10"
+		groups="epayroll.group_epayslip_manager"/>          
+</odoo>

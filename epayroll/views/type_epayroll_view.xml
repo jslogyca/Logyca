@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="type_epayroll_form" model="ir.ui.view">
+		<field name="name">type.epayroll.form</field>
+		<field name="model">type.epayroll</field>
+		<field name="arch" type="xml">
+			<form string="Tipo de XML">		
+				<sheet>
+					<group>
+						<group>
+							<field name="name" />
+							<field name="code" />
+						</group>
+						<group>
+							<field name="type" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="type_epayroll_tree" model="ir.ui.view">
+		<field name="name">type.epayroll.tree</field>
+		<field name="model">type.epayroll</field>
+		<field name="arch" type="xml">
+			<tree string="Tipo de XML" >
+				<field name="name"/>
+				<field name="code"/>
+				<field name="type"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_type_epayroll" model="ir.actions.act_window">
+		<field name="name">Tipo de XML</field>
+		<field name="res_model">type.epayroll</field>
+		<field name="view_mode">tree,form</field>
+	</record>	
+
+	<menuitem
+		id="hr_menu_epayroll_setting"
+		name="EPayslip"
+		parent="hr_payroll.menu_hr_payroll_configuration"
+		sequence="100"
+		groups="epayroll.group_epayslip_manager"/>          
+
+	<menuitem
+		id="hr_menu_epayroll_type"
+		name="Tipo de XML"
+		action="action_type_epayroll"
+		parent="epayroll.hr_menu_epayroll_setting"
+		sequence="0"
+		groups="epayroll.group_epayslip_manager"/>          
+</odoo>

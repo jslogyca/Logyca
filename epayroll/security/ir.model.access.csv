@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+account_type_epayroll,type.epayroll,model_type_epayroll,epayroll.group_epayslip_manager,1,1,1,1
+account_type_note_epayroll,type.note.epayroll,model_type_note_epayroll,epayroll.group_epayslip_manager,1,1,1,1
+account_payment_method_epayroll,payment.method.epayroll,model_payment_method_epayroll,epayroll.group_epayslip_manager,1,1,1,1
+account_payment_form_epayroll,payment.form.epayroll,model_payment_form_epayroll,epayroll.group_epayslip_manager,1,1,1,1
+account_hr_sub_type_job,hr.sub.type.job,model_hr_sub_type_job,epayroll.group_epayslip_manager,1,1,1,1
+account_hr_type_ejob,hr.type.ejob,model_hr_type_ejob,epayroll.group_epayslip_manager,1,1,1,1
+account_hr_contract_etype,hr.contract.etype,model_hr_contract_etype,epayroll.group_epayslip_manager,1,1,1,1

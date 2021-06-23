@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="type_note_epayroll_form" model="ir.ui.view">
+		<field name="name">type.note.epayroll.form</field>
+		<field name="model">type.note.epayroll</field>
+		<field name="arch" type="xml">
+			<form string="Type Note EPayroll">		
+				<sheet>
+					<group>
+						<group>
+							<field name="name" />
+						</group>
+						<group>
+							<field name="code" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="type_note_epayroll_tree" model="ir.ui.view">
+		<field name="name">type.note.epayroll.tree</field>
+		<field name="model">type.note.epayroll</field>
+		<field name="arch" type="xml">
+			<tree string="Type Note EPayroll" >
+				<field name="name"/>
+				<field name="code"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_type_note_epayroll" model="ir.actions.act_window">
+		<field name="name">Type Note EPayroll</field>
+		<field name="res_model">type.note.epayroll</field>
+		<field name="view_mode">tree,form</field>
+	</record>     
+
+	<menuitem
+		id="hr_menu_type_note_epayroll"
+		name="Type Note EPayroll"
+		action="action_type_note_epayroll"
+		parent="epayroll.hr_menu_epayroll_setting"
+		sequence="1"
+		groups="epayroll.group_epayslip_manager"/>          
+</odoo>

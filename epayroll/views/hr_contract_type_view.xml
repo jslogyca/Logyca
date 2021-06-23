@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="hr_contract_type_view_form_epayroll" model="ir.ui.view">
+		<field name="name">hr.contract.type.view.form.epayroll</field>
+		<field name="model">hr.contract.type</field>
+		<field name="inherit_id" ref="hr_contract_types.hr_contract_type_view_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='name']" position="after">
+				<field name="etype_id"/>
+			</xpath>
+		</field>
+	</record>
+</odoo>

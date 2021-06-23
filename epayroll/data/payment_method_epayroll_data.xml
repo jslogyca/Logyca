@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="payment_method_epayroll1" model="payment.method.epayroll">
+            <field name="code">1</field>
+            <field name="name">Instrumento no definido</field>
+        </record>
+        <record id="payment_method_epayroll2" model="payment.method.epayroll">
+            <field name="code">2</field>
+            <field name="name">Crédito ACH</field>
+        </record>
+        <record id="payment_method_epayroll3" model="payment.method.epayroll">
+            <field name="code">3</field>
+            <field name="name">Débito ACH</field>
+        </record>
+        <record id="payment_method_epayroll4" model="payment.method.epayroll">
+            <field name="code">4</field>
+            <field name="name">Reversión débito de demanda ACH</field>
+        </record>
+    </data>
+</odoo>

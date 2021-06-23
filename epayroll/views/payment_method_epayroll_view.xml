@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="payment_method_epayroll_form" model="ir.ui.view">
+		<field name="name">payment.method.epayroll.form</field>
+		<field name="model">payment.method.epayroll</field>
+		<field name="arch" type="xml">
+			<form string="Medios de Pago">		
+				<sheet>
+					<group>
+						<group>
+							<field name="name" />
+						</group>
+						<group>
+							<field name="code" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="payment_method_epayroll_tree" model="ir.ui.view">
+		<field name="name">payment.method.epayroll.tree</field>
+		<field name="model">payment.method.epayroll</field>
+		<field name="arch" type="xml">
+			<tree string="Medios de Pago" >
+				<field name="name"/>
+				<field name="code"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_payment_method_epayroll" model="ir.actions.act_window">
+		<field name="name">Medios de Pago</field>
+		<field name="res_model">payment.method.epayroll</field>
+		<field name="view_mode">tree,form</field>
+	</record>     
+
+	<menuitem
+		id="hr_menu_payment_method_epayroll"
+		name="Medios de Pago"
+		action="action_payment_method_epayroll"
+		parent="epayroll.hr_menu_epayroll_setting"
+		sequence="2"
+		groups="epayroll.group_epayslip_manager"/>          
+</odoo>
