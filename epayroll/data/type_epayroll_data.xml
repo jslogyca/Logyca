@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="type_epayroll1" model="type.epayroll">
+            <field name="code">102</field>
+            <field name="name">NominaIndividual</field>
+            <field name="type">epayroll</field>
+        </record>
+        <record id="type_epayroll2" model="type.epayroll">
+            <field name="code">103</field>
+            <field name="name">NominaIndividualDeAjuste</field>
+            <field name="type">epayroll_ajus</field>
+        </record>
+    </data>
+</odoo>

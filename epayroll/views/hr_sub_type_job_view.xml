@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="hr_sub_type_job_form" model="ir.ui.view">
+		<field name="name">hr.sub.type.job.form</field>
+		<field name="model">hr.sub.type.job</field>
+		<field name="arch" type="xml">
+			<form string="Sub Job">		
+				<sheet>
+					<group>
+						<group>
+							<field name="name" />
+						</group>
+						<group>
+							<field name="code" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="hr_sub_type_job_tree" model="ir.ui.view">
+		<field name="name">hr.sub.type.job.tree</field>
+		<field name="model">hr.sub.type.job</field>
+		<field name="arch" type="xml">
+			<tree string="Sub Job" >
+				<field name="name"/>
+				<field name="code"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_hr_sub_type_job" model="ir.actions.act_window">
+		<field name="name">Sub Job</field>
+		<field name="res_model">hr.sub.type.job</field>
+		<field name="view_mode">tree,form</field>
+	</record>     
+
+	<menuitem
+		id="hr_menu_hr_sub_type_job"
+		name="Sub Job"
+		action="action_hr_sub_type_job"
+		parent="epayroll.hr_menu_epayroll_setting"
+		sequence="3"
+		groups="epayroll.group_epayslip_manager"/>          
+</odoo>
