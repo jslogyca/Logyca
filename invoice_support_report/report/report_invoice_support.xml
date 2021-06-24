@@ -221,7 +221,7 @@
             <strong>ELABORADO POR:</strong>
             <br/>
             </span>
-            <span t-field="user_id.name"/>
+            <span t-field="doc.create_uid"/>
         </div>
         <div class="col-3"/>
         <div class="col-3"/>
