@@ -72,10 +72,9 @@
                     <tbody>
                         <tr>
                             <td width="100%" class="o_mail_h_padding o_mail_v_padding">
-                                <p> Hi there!</p>
-                                <p> The next edition of Odoo Experience looks very promising. More than 150 talks are scheduled during those 3 days!
-                                    Find below some stand-out talks for the Business tracks.</p>
-                                <p> To stir up your curiosity, have a look at all the great talks scheduled and highlighted in our agenda!</p>
+                                <p> Apreciad@ cliente,</p>
+                                <p>Aprende las <strong>mejores prácticas logísticas</strong> de la mano de los <strong>expertos</strong>.</p>
+                                <p>Somos una marca de LOGYCA en alianza con el Centro de Transporte y Logística del Instituto Tecnológico de Massachusetts (MIT-CTL), a través de nuestra oferta académica apostamos por la generación de aprendizaje continuo y permanente para crear perfiles profesionales capaces de potenciar el nivel de productividad y competitividad en las empresas.</p>
                             </td>
                         </tr>
                     </tbody>
@@ -88,21 +87,21 @@
                     <tbody><tr>
                         <td style="width:25%;min-height: 150px;vertical-align:middle;" class="o_mail_h_padding o_mail_v_padding bg-beta text-center o_mail_col_mv">
                             <h3 class="o_mail_no_margin ">21 Jul</h3>
-                            <p class="o_mail_no_margin ">ALL DAY</p>
+                            <p class="o_mail_no_margin " style="color:#ffff">TODO EL DÍA</p>
                         </td>
                         <td style="width:25%;min-height: 150px;" class="text-center bg-delta o_mail_col_mv">
-                            <img src="/logyca_mass_mailing_theme/static/src/img/theme_logyca/logycax-25-mayo1_01.jpg" class="center-block" alt="Photo"/>
+                            <img src="/logyca_mass_mailing_theme/static/src/img/theme_logyca/logycaX-25-Mayo1_17.png" class="center-block" alt="Photo"/>
                         </td>
                         <td class="o_mail_h_padding o_mail_v_padding o_mail_col_mv" style="min-height: 150px;">
                             <div style="min-height: 111px">
-                                <h4>Register Now!</h4>
+                                <h4>Separa tu cupo ya!</h4>
                                 <p class="o_mail_no_margin ">
-                                    Discover the new version of our software, with a great overview on all the new features.
+                                    Descubre nuestros nuevos cursos y nuestra oferta educativa para ti y tu organización.
                                 </p>
                             </div>
                             <div class="small mt16">
-                                <a href="#" class="btn btn-sm btn-primary ">Registration</a>
-                                <a href="#" class="btn btn-sm btn-link " style="margin-left:10px">More Info</a>
+                                <a href="#" class="btn btn-sm btn-primary ">Registrarse</a>
+                                <a href="#" class="btn btn-sm btn-link " style="margin-left:10px">Más Información</a>
                             </div>
                         </td>
                     </tr>
@@ -148,7 +147,7 @@
                     <tbody>
                         <tr>
                             <td style="width: 250px; text-align: center; vertical-align: middle;" class="o_mail_col_mv o_mail_img_container o_mail_h_padding o_mail_v_padding">
-                                <img src="/logyca_mass_mailing_theme/static/src/img/theme_logyca/logycax-25-mayo1_06.png" class="center-block" alt="Photo" style=""/>
+                                <img src="/logyca_mass_mailing_theme/static/src/img/theme_logyca/logycax-25-mayo1_01.png" class="center-block" alt="Photo" style=""/>
                             </td>
                             <td style="width: 350px; vertical-align: middle; text-align: center;" class="o_mail_col_mv o_mail_h_padding o_mail_v_padding">
                                 <h3 class="text-left mt0">Call for Speakers</h3>
