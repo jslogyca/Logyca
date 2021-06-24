@@ -12,6 +12,10 @@
             <xpath expr="/form/header" position="inside">
                 <button name="action_reviewed_by" string="Revisado" type="object" groups="account_move_extended.account_move_extended_reviewer"/>
 			</xpath>
+
+			<xpath expr="//field[@name='ref']" position="before">
+                <field name="create_uid" string="Creado por"/>
+			</xpath>
 		</field>
 	</record>
 </odoo>
