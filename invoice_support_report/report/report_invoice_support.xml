@@ -82,7 +82,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr t-foreach="doc.invoice_line_ids" t-as="table_line">
+            <tr t-foreach="doc.line_ids" t-as="table_line">
             <td>
                 <span t-field="table_line.display_name"/>
             </td>
