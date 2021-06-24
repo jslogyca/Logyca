@@ -31,11 +31,6 @@
                                           <span class="fa fa-facebook"></span>
                                         </a>
                                     </t>
-                                    <t t-if="company_id.social_googleplus">
-                                        <a t-att-href="company_id.social_googleplus" style="margin-left:10px">
-                                            <span class="fa fa-google-plus"></span>
-                                        </a>
-                                    </t>
                                     <t t-if="company_id.social_linkedin">
                                         <a t-att-href="company_id.social_linkedin" style="margin-left:10px">
                                             <span class="fa fa-linkedin"></span>
