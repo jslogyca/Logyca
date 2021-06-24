@@ -115,7 +115,6 @@ class RVCImportFileWizard(models.TransientModel):
                     cre.append(rvc_benf.id)
                     self.env.cr.commit()
                 elif self.type_beneficio == 'colabora':
-                    print('VALIDACIONES COLABORA')
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
                     partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
                     if not partner_id:

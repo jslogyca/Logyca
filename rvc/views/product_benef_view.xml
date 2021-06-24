@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="product_benef_form" model="ir.ui.view">
+		<field name="name">product.benef.form</field>
+		<field name="model">product.benef</field>
+		<field name="arch" type="xml">
+			<form string="Gestión y Administración de Beneficios">
+				<header>
+				</header>			
+				<sheet>
+					<group>
+						<group>
+							<field name="partner_id" />
+							<field name="parent_id" />
+						</group>
+						<group>
+							<field name="product_id" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="product_benef_tree" model="ir.ui.view">
+		<field name="name">product.benef.tree</field>
+		<field name="model">product.benef</field>
+		<field name="arch" type="xml">
+			<tree string="Gestión y Administración de Beneficios" >
+				<field name="partner_id"/>
+				<field name="parent_id"/>
+				<field name="product_id"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_product_benef" model="ir.actions.act_window">
+		<field name="name">Gestión y Administración de Beneficios</field>
+		<field name="res_model">product.benef</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem
+		id="hr_menu_product_benef"
+		name="Gestión y Administración de Beneficios"
+		action="action_product_benef"
+		parent="rvc.hr_menu_rvc_partners"
+		sequence="3"
+		groups="rvc.group_rvc_manager"/>
+
+</odoo>

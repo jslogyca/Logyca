@@ -6,23 +6,24 @@
 		<field name="arch" type="xml">
 			<form string="RVC Sponsored">
 				<header>
-					<button string="Confirmar" name="action_confirm" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}"
-										 class="oe_highlight"/>
-					<field name="state" widget="statusbar" statusbar_visible="draft,confirm,send,done"/>
 				</header>			
 				<sheet>
 					<group>
 						<group>
-							<field name="name" />
-							<field name="partner_id" />
 							<field name="vat" />
-							<field name="name_contact" />
+							<field name="partner_id" force_save="1" readonly="1"/>
+							<field name="phone" />		
+							<field name="email" />												
+							<field name="macro_sector" />
+							<field name="x_company_size" />
+							<field name="x_sector_id" />
 						</group>
 						<group>
-							<field name="phone" />
-							<field name="email" />
-							<field name="x_sector_id" />
-							<field name="x_company_size" />
+							<field name="name_contact" />
+							<field name="phone_contact" />
+							<field name="email_contact" />
+							<field name="cargo_contact" />
+							<field name="active" />
 						</group>
 					</group>
 				</sheet>
@@ -35,11 +36,12 @@
 		<field name="model">rvc.sponsored</field>
 		<field name="arch" type="xml">
 			<tree string="RVC Sponsored" >
-				<field name="partner_id"/>
 				<field name="vat"/>
-				<field name="x_sector_id"/>
+				<field name="partner_id"/>
+				<field name="macro_sector" />
 				<field name="x_company_size"/>
-				<field name="state" />
+				<field name="name_contact" />
+				<field name="active" />
 			</tree>
 		</field>
 	</record>
@@ -54,7 +56,7 @@
 		id="hr_menu_rvc_sponsored"
 		name="RVC Sponsored"
 		action="action_rvc_sponsored"
-		parent="rvc.menu_rvc_import_file_wizard"
+		parent="rvc.hr_menu_rvc_partners"
 		sequence="2"
 		groups="rvc.group_rvc_manager"/>          
 </odoo>

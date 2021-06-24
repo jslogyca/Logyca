@@ -4,32 +4,27 @@
 		<field name="name">rvc.beneficiary.form</field>
 		<field name="model">rvc.beneficiary</field>
 		<field name="arch" type="xml">
-			<form string="RVC Beneficiary">
+			<form string="RVC Beneficiary" >
 				<header>
-					<button string="Confirmar" name="action_confirm" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}"
-								 class="oe_highlight"/>
-					<button string="Send" name="action_send" type="object" attrs="{'invisible': [('state', '!=', 'confirm')]}"
-								 class="oe_highlight"/>
-					<field name="state" widget="statusbar" statusbar_visible="draft,confirm,send,done"/>
 				</header>			
 				<sheet>
 					<group>
 						<group>
-							<field name="name" />
-							<field name="partner_id" />
-							<field name="vat" />
-							<field name="parent_id" />
+							<field name="vat" />						
+							<field name="partner_id" force_save="1" readonly="1"/>
 							<field name="company_id" />
-							<field name="name_contact" />
-						</group>
-						<group>
 							<field name="phone" />
 							<field name="email" />						
-							<field name="type_beneficio" />
-							<field name="cant_cod" attrs="{'invisible': [('type_beneficio', '!=', 'codigos')]}" />
 							<field name="x_sector_id" />
-							<field name="date_send" />
+							<field name="macro_sector" />
 							<field name="x_company_size" />
+						</group>
+						<group>
+							<field name="name_contact" />						
+							<field name="phone_contact" />
+							<field name="email_contact" />
+							<field name="cargo_contact" />
+							<field name="active" />
 						</group>
 					</group>
 				</sheet>
@@ -42,11 +37,11 @@
 		<field name="model">rvc.beneficiary</field>
 		<field name="arch" type="xml">
 			<tree string="RVC Beneficiary" >
-				<field name="partner_id"/>
 				<field name="vat"/>
-				<field name="parent_id"/>
-				<field name="type_beneficio"/>
-				<field name="state"/>
+				<field name="partner_id"/>
+				<field name="macro_sector" />
+				<field name="x_company_size" />
+				<field name="active" />
 			</tree>
 		</field>
 	</record>
@@ -54,14 +49,58 @@
 	<record id="action_rvc_beneficiary" model="ir.actions.act_window">
 		<field name="name">RVC Beneficiary</field>
 		<field name="res_model">rvc.beneficiary</field>
-		<field name="view_mode">tree,form</field>
+		<field name="view_mode">kanban,tree,form</field>
 	</record>	
+
+	<record model="ir.ui.view" id="view_rvc_beneficiary_kanban">
+		<field name="name">rvc.beneficiary.kanban</field>
+		<field name="model">rvc.beneficiary</field>
+		<field name="arch" type="xml">
+			<kanban class="o_res_partner_kanban" create="false">
+				<field name="id"/>
+				<field name="name"/>
+				<field name="partner_id"/>
+				<templates>
+					<t t-name="kanban-box">
+						<div t-attf-class="oe_kanban_global_click o_has_icon">
+							<div class="oe_kanban_details">
+								<strong class="o_kanban_record_title">
+									<field name="partner_id"/>
+								</strong>
+								<div>
+									<field name="x_sector_id"/>
+								</div>
+								<div>
+									<field name="vat"/>
+								</div>
+							</div>
+						</div>
+					</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+
+	<menuitem
+		id="hr_menu_rvc_partners"
+		name="Empresas"
+		parent="rvc.menu_rvc_import_file_wizard"
+		sequence="0"
+		groups="rvc.group_rvc_manager"/>
 
 	<menuitem
 		id="hr_menu_rvc_beneficiary"
 		name="RVC Beneficiary"
 		action="action_rvc_beneficiary"
-		parent="rvc.menu_rvc_import_file_wizard"
+		parent="rvc.hr_menu_rvc_partners"
 		sequence="1"
-		groups="rvc.group_rvc_manager"/>          
+		groups="rvc.group_rvc_manager"/>
+
+	<menuitem
+		id="hr_menu_rvc_report"
+		name="Reportes"
+		parent="rvc.menu_rvc_import_file_wizard"
+		sequence="200"
+		groups="rvc.group_rvc_manager"/>
+
 </odoo>

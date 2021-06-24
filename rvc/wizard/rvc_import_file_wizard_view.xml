@@ -63,7 +63,7 @@
         id="menu_rvc_import_file_wizard"
         name="RVC"
         sequence="4"
-        web_icon="account_reports_excel,static/description/icon.png"
+        web_icon="rvc,static/description/icon.png"
         active="True"
         groups="rvc.group_rvc_manager"/>
 
