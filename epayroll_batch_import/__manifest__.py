@@ -1,0 +1,23 @@
+# -*- coding: utf-8 -*-
+
+{
+    'name': 'Epayroll Importar Archivo',
+    'summary': 'Description',
+    'version': '13.0.1.0.0',
+    'category': 'Accounting/Accounting',
+    'website': 'https://logyca.com',
+    'author': 'LOGYCA',
+    'license': '',
+    'application': True,
+    'installable': True,
+    'depends': [
+
+        ],
+    'description': '''
+
+    ========================
+
+    ''',    
+    'data': [],
+    'qweb': []
+}
