@@ -10,6 +10,7 @@ class RVCSponsored(models.Model):
     _rec_name = 'name'
 
     name = fields.Char(string='Name')
+    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company)
     partner_id = fields.Many2one('res.partner', string='Patrocinador')
     vat = fields.Char('NIT')
     phone = fields.Char('Phone', related='partner_id.phone')
@@ -30,7 +31,16 @@ class RVCSponsored(models.Model):
     email_contact = fields.Char('Email')
     cargo_contact = fields.Char('Cargo')
     active = fields.Boolean('Activo', default=True)
-                                     
+
+
+    _sql_constraints = [
+        ('partner_id_company_uniq', 'unique (vat,company_id)', 'La empresa halonadora ya esta creada')
+    ]    
+
+
+    def name_get(self):
+        return [(sponsored.id, '%s - %s' % (sponsored.partner_id.name, sponsored.vat)) for sponsored in self]
+
 
     @api.onchange('vat')
     def _onchange_vat(self):

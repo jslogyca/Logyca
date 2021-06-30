@@ -26,7 +26,7 @@ class RVCBeneficiary(models.Model):
     name_contact = fields.Char('Nombre del contacto')
     phone_contact = fields.Char('Phone',)
     email_contact = fields.Char('Email')
-    cargo_contact = fields.Char('Cargo')
+    cargo_contact = fields.Many2one('logyca.job_title', string='Cargo')
     active = fields.Boolean('Activo', default=True)
     cant_cod = fields.Integer('Cantidad de Códigos')
     macro_sector = fields.Selection([('manufactura', 'Manufactura'), 

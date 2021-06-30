@@ -4,7 +4,7 @@
 		<field name="name">rvc.sponsored.form</field>
 		<field name="model">rvc.sponsored</field>
 		<field name="arch" type="xml">
-			<form string="RVC Sponsored">
+			<form string="Empresas Halonadoras">
 				<header>
 				</header>			
 				<sheet>
@@ -35,7 +35,7 @@
 		<field name="name">rvc.sponsored.tree</field>
 		<field name="model">rvc.sponsored</field>
 		<field name="arch" type="xml">
-			<tree string="RVC Sponsored" >
+			<tree string="Empresas Halonadoras" >
 				<field name="vat"/>
 				<field name="partner_id"/>
 				<field name="macro_sector" />
@@ -47,14 +47,14 @@
 	</record>
 
 	<record id="action_rvc_sponsored" model="ir.actions.act_window">
-		<field name="name">RVC Sponsored</field>
+		<field name="name">Empresas Halonadoras</field>
 		<field name="res_model">rvc.sponsored</field>
 		<field name="view_mode">tree,form</field>
 	</record>	
 
 	<menuitem
 		id="hr_menu_rvc_sponsored"
-		name="RVC Sponsored"
+		name="Empresas Halonadoras"
 		action="action_rvc_sponsored"
 		parent="rvc.hr_menu_rvc_partners"
 		sequence="2"

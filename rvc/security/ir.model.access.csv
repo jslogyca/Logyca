@@ -8,3 +8,4 @@ account_log_import_rvc,log.import.rvc,model_log_import_rvc,rvc.group_rvc_manager
 account_product_rvc,product.rvc,model_product_rvc,rvc.group_rvc_manager,1,1,1,1
 account_sub_product_rvc,sub.product.rvc,model_sub_product_rvc,rvc.group_rvc_manager,1,1,1,1
 account_product_benef,product.benef,model_product_benef,rvc.group_rvc_manager,1,1,1,1
+account_agreement_rvc,agreement.rvc,model_agreement_rvc,rvc.group_rvc_manager,1,1,1,1

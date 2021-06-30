@@ -33,6 +33,7 @@
         'views/product_rvc_view.xml',
         'views/sector_view.xml',
         'views/product_benef_view.xml',
+        'views/agreement_rvc_view.xml',
     ],
     'qweb': [
     ]

@@ -5,4 +5,5 @@ from . import rvc_sponsored
 from . import config_rvc
 from . import log_import_rvc
 from . import product_rvc
+from . import agreement_rvc
 from . import product_benef

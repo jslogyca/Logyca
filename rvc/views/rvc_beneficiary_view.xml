@@ -4,7 +4,7 @@
 		<field name="name">rvc.beneficiary.form</field>
 		<field name="model">rvc.beneficiary</field>
 		<field name="arch" type="xml">
-			<form string="RVC Beneficiary" >
+			<form string="Empresas Patrocinada" create="false" edit="false">
 				<header>
 				</header>			
 				<sheet>
@@ -36,7 +36,7 @@
 		<field name="name">rvc.beneficiary.tree</field>
 		<field name="model">rvc.beneficiary</field>
 		<field name="arch" type="xml">
-			<tree string="RVC Beneficiary" >
+			<tree string="Empresas Patrocinada" create="false" >
 				<field name="vat"/>
 				<field name="partner_id"/>
 				<field name="macro_sector" />
@@ -47,7 +47,7 @@
 	</record>
 
 	<record id="action_rvc_beneficiary" model="ir.actions.act_window">
-		<field name="name">RVC Beneficiary</field>
+		<field name="name">Empresas Patrocinada</field>
 		<field name="res_model">rvc.beneficiary</field>
 		<field name="view_mode">kanban,tree,form</field>
 	</record>	
@@ -83,14 +83,15 @@
 
 	<menuitem
 		id="hr_menu_rvc_partners"
-		name="Empresas"
+		name="Gestión y Administración de Empresas"
 		parent="rvc.menu_rvc_import_file_wizard"
 		sequence="0"
 		groups="rvc.group_rvc_manager"/>
 
+
 	<menuitem
 		id="hr_menu_rvc_beneficiary"
-		name="RVC Beneficiary"
+		name="Empresas Patrocinadas"
 		action="action_rvc_beneficiary"
 		parent="rvc.hr_menu_rvc_partners"
 		sequence="1"

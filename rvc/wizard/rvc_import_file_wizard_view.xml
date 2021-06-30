@@ -4,10 +4,15 @@
         <field name="name">rvc.import.file.wizard.form</field>
         <field name="model">rvc.import.file.wizard</field>
         <field name="arch" type="xml">
-            <form string="">
+            <form string="Cargue Masivo de Beneficios">
                 <sheet>
                     <p class="oe_grey">
-                        Asistente para importar masivamente Beneficiarios
+                        Asistente para importar masivamente Beneficios de Derechos de Identificación
+                    </p>                
+                    <p class="oe_grey">
+                        Condiciones de registro de empresas:
+                        ** Estar registrada en Odoo
+                        ** Estar activa
                     </p>                
                     <group>
                         <group>
@@ -30,7 +35,7 @@
                                     <i class="fa fa-download"></i> <span>Plantilla Beneficio Colabora</span>
                                 </a>
                             </div>
-                        </group>
+                        </group>                        
                     </group>             
                     <group>
                         <group>
@@ -39,7 +44,7 @@
                         </group>
                         <group>
                             <field name="type_beneficio" required="1"/>
-                        </group>
+                        </group>                        
                     </group>
                 </sheet>
                 <footer>
@@ -51,7 +56,7 @@
     </record>
 
     <record id="action_rvc_import_file_wizard_view" model="ir.actions.act_window">
-        <field name="name">Importar Patrocinados</field>
+        <field name="name">Cargue Masivo de Beneficios</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">rvc.import.file.wizard</field>
         <field name="view_mode">form</field>
@@ -73,9 +78,16 @@
         sequence="3"
         groups="rvc.group_rvc_manager"/>
 
+	<menuitem
+		id="hr_menu_product_benef_parent"
+		name="Gestión y Administración de Beneficios"
+		parent="rvc.menu_rvc_import_file_wizard"
+		sequence="3"
+		groups="rvc.group_rvc_manager"/>	        
+
     <menuitem id="menu_report_excel_sale_product_root"
-        name="Importar Patrocinados"
-        parent="rvc.menu_import_file_root"
+        name="Cargue Masivo de Beneficios"
+        parent="rvc.hr_menu_product_benef_parent"
         sequence="1"
         action="action_rvc_import_file_wizard_view"
         groups="rvc.group_rvc_manager"/>
