@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="agreement_rvc_form" model="ir.ui.view">
+		<field name="name">agreement.rvc.form</field>
+		<field name="model">agreement.rvc</field>
+		<field name="arch" type="xml">
+			<form string="Agreement RVC">			
+				<sheet>
+					<group>
+						<group>
+							<field name="name" />
+							<field name="code" />
+						</group>
+						<group>
+							<field name="company_id" />
+							<field name="active" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="agreement_rvc_tree" model="ir.ui.view">
+		<field name="name">agreement.rvc.tree</field>
+		<field name="model">agreement.rvc</field>
+		<field name="arch" type="xml">
+			<tree string="Agreement RVC" >
+				<field name="name"/>
+				<field name="code"/>
+				<field name="company_id"/>
+				<field name="active"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_agreement_rvc" model="ir.actions.act_window">
+		<field name="name">Agreement RVC</field>
+		<field name="res_model">agreement.rvc</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+    <menuitem 
+		id="menu_agreement_rvc"
+        name="Agreement RVC"
+        parent="rvc.menu_config_rvc_parent"
+        sequence="2"
+        action="action_agreement_rvc"
+        groups="rvc.group_rvc_manager"/>
+		
+</odoo>

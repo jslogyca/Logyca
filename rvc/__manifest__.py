@@ -30,6 +30,10 @@
         'views/rvc_sponsored_view.xml',
         'views/config_rvc_view.xml',
         'views/log_import_rvc_view.xml',
+        'views/product_rvc_view.xml',
+        'views/sector_view.xml',
+        'views/product_benef_view.xml',
+        'views/agreement_rvc_view.xml',
     ],
     'qweb': [
     ]

@@ -42,12 +42,12 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem id="menu_rvc_import_file_sponsored_wizard_view"
+    <!-- <menuitem id="menu_rvc_import_file_sponsored_wizard_view"
         name="Importar Patrocinadores"
-        parent="rvc.menu_import_file_root"
+        parent="rvc.hr_menu_product_benef_parent"
         sequence="4"
         action="action_rvc_import_file_sponsored_wizard_view"
-        groups="rvc.group_rvc_manager"/>
+        groups="rvc.group_rvc_manager"/> -->
 
 
 
