@@ -11,6 +11,7 @@
     'category': 'Marketing',
     'depends': [
         'mass_mailing',
+        'mass_mailing_themes'
     ],
     'data': [
         'static/src/xml/assets.xml',
