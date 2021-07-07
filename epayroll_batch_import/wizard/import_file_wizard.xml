@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="epayroll_batch_import_wizard_view" model="ir.ui.view">
+        <field name="name">epayroll.import.file.wizard.form</field>
+        <field name="model">epayroll.import.file.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Importar Nóminas de Heinshon">
+                <sheet>
+                    <p class="oe_grey">
+                        Asistente para importar masivamente nóminas procesadas con Heinshon.
+                    </p>                   
+                    <group>
+                        <group>
+                            <field name="file_data" filename="filename" placeholder="Choose a file to import..."/>
+                            <field name="filename" invisible="1"/>
+                        </group>
+                        <group>
+                        </group>                        
+                    </group>
+                    <group>
+                            <field name="date_from" required="1"/>
+                            <field name="date_to" required="1"/>
+                            <field name="company_id" required="1"/>
+                            <field name="payslip_batch_id" domain="[('company_id', '=', company_id)]" required="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="import_file" string="Import" type="object" class="btn-primary" />
+                    <button string="Cancelar" special="cancel" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_epayroll_batch_import_wizard_view" model="ir.actions.act_window">
+        <field name="name">Import payroll File</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">epayroll.import.file.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="epayroll_batch_import_wizard_view"/>
+        <field name="target">new</field>
+    </record>   
+
+</odoo>

@@ -11,13 +11,16 @@
     'application': True,
     'installable': True,
     'depends': [
-
+        'hr_payroll'
         ],
     'description': '''
 
     ========================
 
     ''',    
-    'data': [],
+    'data': [
+        'wizard/import_file_wizard.xml',
+        'views/hr_payroll_batch_import_menu.xml'
+    ],
     'qweb': []
 }
