@@ -37,6 +37,7 @@ class EpayrollImportFileWizard(models.TransientModel):
         payroll_lines_list = []
         employee_rules_list = []
         missing_rules_dict = {}
+        rule_row_indexes = [] # indice de las reglas en orden
         rules_found = []
         contract = ""
         
@@ -77,6 +78,7 @@ class EpayrollImportFileWizard(models.TransientModel):
               # un empleado está enlazado con un res_user
               # un res_user está enlazado con un partner
         for fila in record_list:
+            rule_row_indexes = [] # limpiamos la lista de indices de reglas
             
             #nombre del empleado
             employee_name = fila[employee_name_loc]
@@ -134,6 +136,7 @@ class EpayrollImportFileWizard(models.TransientModel):
                                 #para cada regla de la estructura, ver si coincide con las reglas identificadas del empl.
                                 if rule.x_reference == current_column:
                                     employee_rules_list.append(rule)
+                                    rule_row_indexes.append(index)
                                     rules_found.append(rule.x_reference)
                                     break
                             
@@ -146,7 +149,7 @@ class EpayrollImportFileWizard(models.TransientModel):
                     #vals = {}
                     #vals['line_ids'] = {(4, for rec in )}
                     payslip_id = self.env['hr.payslip'].create({
-                            'name' : employee.name + '-' + str(self.date_from) + '-' + str(self.date_to), 
+                            'name' : str(self.date_from) + '/' + str(self.date_to), 
                             'employee_id': employee.id,
                             'contract_id': contract.id,
                             'struct_id' : structure.id,
@@ -154,7 +157,23 @@ class EpayrollImportFileWizard(models.TransientModel):
                             'date_to': self.date_to
                         })
                     payslip_id._onchange_employee()
-                    payslip_id.write()
+                    
+                    
+                    for rule in rules:
+                        
+                        move_line = {
+                        'name': rule.x_reference,
+                        'code': rule.x_reference,                
+                        'category_id': rule.category_id.id,  
+                        'quantity': 1.0,
+                        'rate': 100.0,
+                        'salary_rule_id': rule.id,
+                        'amount': 100,
+                        }
+                        
+                        payslip_id.write({'line_ids': [(0, 0, move_line)]})
+                
+                    
                     
                         #volverlo done
                     #payslip_id.action_payslip_done()
@@ -182,3 +201,5 @@ class EpayrollImportFileWizard(models.TransientModel):
         logging.info(str(non_employee_employees))
         
         return True
+
+    

@@ -21,6 +21,7 @@
     'data': [
         'wizard/import_file_wizard.xml',
         'views/hr_payroll_batch_import_menu.xml'
+        'views/hr_salary_rule_view.xml'
     ],
     'qweb': []
 }
