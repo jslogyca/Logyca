@@ -3,7 +3,7 @@
     <menuitem
         id="hr_payroll_batch_import_menu"
         name="Importar de Heinsohn"
-        action="hr_work_entry.hr_work_entry_action_conflict"
+        action="action_epayroll_batch_import_wizard_view"
         parent="hr_payroll.menu_hr_payroll_root"
         sequence="70"/>
 
