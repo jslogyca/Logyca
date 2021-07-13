@@ -4,11 +4,12 @@
 		<field name="name">product.benef.form</field>
 		<field name="model">product.benef</field>
 		<field name="arch" type="xml">
-			<form string="Gestión y Administración de Beneficios" create="false" edit="false">
+			<form string="Gestión y Administración de Beneficios">
 				<header>
 				 	<button name="action_notified" type="object" states="draft" string="Notified" class="oe_highlight"/>
 				 	<button name="action_cancel" type="object" states="draft" string="Cancel" class="oe_highlight"/>
 				 	<button name="action_confirm" type="object" states="notified" string="Confirm" class="oe_highlight"/>
+				 	<button name="action_notified" type="object" states="notified" string="Volver a notificar" class="oe_highlight"/>
 				 	<button name="action_done" type="object" states="confirm" string="Done" class="oe_highlight"/>
 				 	<button name="action_re_done" type="object" states="done" string="Re-Done" class="oe_highlight"/>
 				 	<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight"/>
@@ -17,18 +18,23 @@
 				<sheet>
 					<group>
 						<group>
-							<field name="partner_id" />
-							<field name="parent_id" />
-							<field name="product_id" />
-							<field name="agreement_id" />
-							<field name="type_beneficio" invisible="1"/>
+							<field name="partner_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+							<field name="vat" attrs="{'readonly': [('state','!=','draft')]}"/>
+							<field name="parent_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+							<field name="name_contact" />
+							<field name="phone_contact" />
+							<field name="email_contact" />
+							<field name="cargo_contact" />
 						</group>
 						<group>
-							<field name="cant_cod" attrs="{'invisible': [('type_beneficio','!=','codigos')]}"/>
-							<field name="cant_cod_disp" attrs="{'invisible': [('type_beneficio','!=','codigos')]}"/>
-							<field name="sub_product_ids" attrs="{'invisible': [('type_beneficio','!=','colabora')]}"/>
-							<field name="date_end" attrs="{'invisible': [('type_beneficio','!=','colabora')]}"/>
-							<field name="gln" attrs="{'invisible': [('type_beneficio','not in',('colabora','codigos'))]}" />
+							<field name="product_id" attrs="{'readonly': [('state','!=','draft')]}" />
+							<field name="agreement_id" attrs="{'readonly': [('state','!=','draft')]}" />
+							<field name="type_beneficio" invisible="1"/>						
+							<field name="cant_cod" attrs="{'invisible': [('type_beneficio','!=','codigos')], 'readonly': [('state','!=','draft')]}"/>
+							<field name="cant_cod_disp" attrs="{'invisible': [('type_beneficio','!=','codigos')], 'readonly': [('state','!=','draft')]}"/>
+							<field name="sub_product_ids" attrs="{'invisible': [('type_beneficio','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
+							<field name="date_end" attrs="{'invisible': [('type_beneficio','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
+							<field name="gln" attrs="{'invisible': [('type_beneficio','not in',('colabora','codigos'))], 'readonly': [('state','!=','draft')]}" />
 						</group>
 					</group>
 				</sheet>
@@ -45,8 +51,13 @@
 		<field name="name">product.benef.tree</field>
 		<field name="model">product.benef</field>
 		<field name="arch" type="xml">
-			<tree string="Gestión y Administración de Beneficios" create="false" >
+			<tree string="Gestión y Administración de Beneficios"  >
 				<field name="partner_id"/>
+				<field name="vat"/>
+				<field name="name_contact" />
+				<field name="phone_contact" />
+				<field name="email_contact" />
+				<field name="cargo_contact" />				
 				<field name="parent_id"/>
 				<field name="product_id"/>
 				<field name="type_beneficio" invisible="1"/>
