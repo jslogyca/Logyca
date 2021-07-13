@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="rvc_template_email_wizard_form" model="ir.ui.view">
+            <field name="name">rvc.template.email.wizard.form</field>
+            <field name="model">rvc.template.email.wizard</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <p>
+                        Se va a notificar el beneficio otorgado:
+                    </p>
+                    <group>
+                        <group>
+                        </group>
+                        <group>
+                            <field name="note_deactive"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Ok" name="action_reason_desactive" type="object" default_focus="1" class="oe_highlight"/>
+                        <button string="Cancelar" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_rvc_template_email_wizard" model="ir.actions.act_window">
+            <field name="name">Are you sure?</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rvc.template.email.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="rvc_template_email_wizard_form"/>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

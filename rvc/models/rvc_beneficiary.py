@@ -7,31 +7,32 @@ from odoo.exceptions import ValidationError
 class RVCBeneficiary(models.Model):
     _name = 'rvc.beneficiary'
     _description = 'RVC Beneficiary'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'name'
 
-    name = fields.Char(string='Name')
-    partner_id = fields.Many2one('res.partner', string='Patrocinado')
-    vat = fields.Char('Número de documento')
-    phone = fields.Char('Phone', related='partner_id.phone')
-    email = fields.Char('Email', related='partner_id.email')
+    name = fields.Char(string='Name', track_visibility='onchange')
+    partner_id = fields.Many2one('res.partner', string='Patrocinado', track_visibility='onchange')
+    vat = fields.Char('Número de documento', track_visibility='onchange')
+    phone = fields.Char('Phone', related='partner_id.phone', track_visibility='onchange')
+    email = fields.Char('Email', related='partner_id.email', track_visibility='onchange')
     x_sector_id = fields.Many2one('logyca.sectors', string='Sector', related='partner_id.x_sector_id', readonly=True, store=True)
-    date_send = fields.Date(string='Fecha de Envio')
+    date_send = fields.Date(string='Fecha de Envio', track_visibility='onchange')
     x_company_size = fields.Selection([('1', 'Mipyme'),
                                         ('2', 'Pyme'),
                                         ('3', 'Mediana'),
                                         ('4', 'Grande'),
                                         ('5', 'Micro'),
-                                        ('6', 'Pequeña')], string='Tamaño empresa', related='partner_id.x_company_size', readonly=True, store=True)
-    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company)
-    name_contact = fields.Char('Nombre del contacto')
-    phone_contact = fields.Char('Phone',)
-    email_contact = fields.Char('Email')
-    cargo_contact = fields.Many2one('logyca.job_title', string='Cargo')
-    active = fields.Boolean('Activo', default=True)
-    cant_cod = fields.Integer('Cantidad de Códigos')
+                                        ('6', 'Pequeña')], string='Tamaño empresa', related='partner_id.x_company_size', readonly=True, store=True, track_visibility='onchange')
+    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, track_visibility='onchange')
+    name_contact = fields.Char('Nombre del contacto', track_visibility='onchange')
+    phone_contact = fields.Char('Phone', track_visibility='onchange')
+    email_contact = fields.Char('Email', track_visibility='onchange')
+    cargo_contact = fields.Char('Cargo', track_visibility='onchange')
+    active = fields.Boolean('Activo', default=True, track_visibility='onchange')
+    cant_cod = fields.Integer('Cantidad de Códigos', track_visibility='onchange')
     macro_sector = fields.Selection([('manufactura', 'Manufactura'), 
                                     ('servicios', 'Servicios'),
-                                    ('comercio', 'Comercio')], string='Macrosector', related='partner_id.macro_sector')
+                                    ('comercio', 'Comercio')], string='Macrosector', related='partner_id.macro_sector', track_visibility='onchange')
 
 
 
