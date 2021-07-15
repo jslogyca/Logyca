@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="view_employee_form_epayroll" model="ir.ui.view">
+		<field name="name">view.employee.form.epayroll</field>
+		<field name="model">hr.employee</field>
+		<field name="inherit_id" ref="hr.view_employee_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='department_id']" position="after">
+				<field name="depart_parent_id"/>
+			</xpath>
+			<xpath expr="//field[@name='identification_id']" position="before">
+				<field name="x_document_type"/>
+			</xpath>
+			<xpath expr="//field[@name='department_id']" position="attributes">
+				<attribute name="string">Equipo</attribute>
+			</xpath>
+		</field>
+	</record>
+</odoo>
