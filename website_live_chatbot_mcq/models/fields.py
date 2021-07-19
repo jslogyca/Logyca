@@ -138,7 +138,7 @@ def convert_to_column(self, value, record, values=None, validate=True):
     if value is None or value is False:
         return None
     if self.sanitize:
-        if value.find('<p>Website Live ChatBot MCQ Questions</p>') > -1:
+        if str(value).find('<p>Website Live ChatBot MCQ Questions</p>') > -1:
             return html_sanitize(
                 value, silent=True,
                 sanitize_tags=self.sanitize_tags,
