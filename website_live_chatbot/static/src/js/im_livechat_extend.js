@@ -185,27 +185,27 @@ odoo.define('website_live_chatbot.im_livechat_extend', function (require) {
 				var html = '<div class="container" id="prechatform" >' +
 					'<div class="row" >' + ' <div class = "wrapper" > ' +
 					'<div class="contact-form-page show-profile" >' +
-					'<h5 class="info-chat">  We are online! Please fill up your details and query in message box. we will connect you to one of our representative right away.</h5>' +
+					'<h5 class="info-chat">Estamos en línea! Por favor diligencia tu información y tu consulta. Te contactaremos lo antes posible para atender tu solicitud.</h5>' +
 					'<form>' +
 					'<div class="form-group"> ' +
 					'<label for="exampleInputText">Name</label>' +
-					'<input type="text" name="name" id="name" class="form-control" t-att-value="user_id.name" autofocus="autofocus" required="required"/>' +
+					'<input type="text" name="Nombre Completo" id="name" class="form-control" t-att-value="user_id.name" autofocus="autofocus" required="required"/>' +
 					'</div>' + ' <div class = "form-group" > ' +
 					'<label for="exampleInputEmail1">Email</label>' +
-					'<input type="email" name="email" id="email" class="form-control" required="required"/>' +
+					'<input type="email" name="Correo Electrónico" id="email" class="form-control" required="required"/>' +
 					'</div>' + '<div class = "form-group" >' +
-					'<label for="issue">Category:</label>' + ' <select class="form-control" id="category" name="category" required="required">' +
+					'<label for="issue">Categoría:</label>' + ' <select class="form-control" id="category" name="category" required="required">' +
 					'<option value="0"> -- Select--  </option>' +
 					'</select>' + ' </div>' + ' <div class="form-group" > ' +
-					'<label for="exampleInputMessage">Message</label>' +
+					'<label for="exampleInputMessage">Mensaje/Consulta</label>' +
 					'<textarea class="form-control" id="note" rows="3" required="required"></textarea>' +
 					'</div>' +
-					'<span class="btn btn-default submit_buttom">Send</span>' +
+					'<span class="btn btn-default submit_buttom">Enviar</span>' +
 					'</form> ' + '</div> ' + '</div> ' + '</div> ' + '</div>';
 				var waitingscreen = '<div class="container" id="waitingscreen">' +
 					'<div class="row">' +
 					'<div class="contact-form-page show-profile">' +
-					'<h3 class="wait-message"> “Our representatives are busy with other customers. Hold tight, we are connecting you shortly...” </h3>' +
+					'<h3 class="wait-message"> “Nuestros agentes están ocupados con otro cliente. Te atenderemos en un momento, por favor espera...” </h3>' +
 					'<div class="circle">' + '<div class="wave"> </div>' +
 					'</div> </div> </div> </div>';
 				var options = {
@@ -260,8 +260,8 @@ odoo.define('website_live_chatbot.im_livechat_extend', function (require) {
 												}
 											} else {
 												$.confirm({
-													title: 'Sorry, User is not available!',
-													content: 'Please select different category.',
+													title: 'Lo sentimos! el usuario no está disponible',
+													content: 'Por favor seleccione una categoría diferente.',
 												});
 											}
 										});
