@@ -150,7 +150,7 @@ class LivechatMcqController(LivechatController):
             if answer_val.end_of_mcq_message:
                 msg = '<p>' + answer_val.end_of_mcq_message +'</p>'
             else:
-                msg = '<p>End of Chat. Thanks for replying our questions!</p>'
+                msg = '<p>¡Hasta pronto! gracias por comunicarse con soporte.</p>'
             author_id = request.env['res.partner'].sudo().browse(int(2))
             mes_ex = Message.sudo().with_context(do_not_remve_form_tags=True).create({'body':msg,
                         'channel_ids':[(6, 0, [channel.id])],
