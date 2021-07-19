@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="assets_frontend_live_chatbot" name="im_livechat assets backend" inherit_id="website.assets_frontend">
+		<xpath expr="." position="inside">
+			<script t-if="not mail_chat" type="text/javascript" src="/website_live_chatbot/static/src/js/im_livechat_extend.js"/>
+		</xpath>
+	</template>
+	
+	<template id="support_page_extend_live_chatbot" inherit_id="im_livechat.support_page">
+		<xpath expr="//h1[hasclass('channel_name')]" position="after">
+			<script t-if="mail_chat" type="text/javascript" src="/website_live_chatbot/static/src/js/im_livechat_extend.js"></script>
+		</xpath>
+	</template>
+</odoo>

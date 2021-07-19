@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="report_channel_template">
+		<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="web.external_layout">
+						<div class="page" style="padding-top:43px !important;">
+							<div class="container" style="border-width: thin;border-style: dashed;">
+								<div class="col-12" style="border-bottom:1px solid;">
+									<t t-set="totalsession" t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>
+									<h1 style="padding-top: 20px !important;"><span t-esc="doc.name"></span> <small style="color:grey;"><span class="float-right" t-esc="datetime.datetime.now().strftime('%Y-%m-%d')"/></small></h1>
+									<h4><small style="color:grey;"> Total Session : <strong t-field="doc.nbr_channel"/></small> |
+										<small style="color:grey;"> Happy Customer : <strong t-if="doc.rating_percentage_satisfaction > 0" t-field="doc.rating_percentage_satisfaction"/>  <strong t-else=" ">0</strong> % </small> | 
+										<small style="color:grey;"> Total Members : <strong  t-esc="len(doc.user_ids)"/></small>
+									</h4>
+								</div>
+								<div class="col-12">
+									<h3 style="padding-top: 12px !important;"> The Team </h3>
+								</div>
+								<t t-foreach="doc.user_ids" t-as="user">
+									<t t-set='connect' t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>	
+									<t t-set='connect_rating_5' t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids),
+														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','5')])"/>
+									<t t-set='connect_rating_10' t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids),
+														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','10')])"/>
+									<t t-set='connect_rating_1' t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids),
+														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','1')])"/>
+									<t t-set='connect_rating_0' t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids),
+														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','0')])"/>
+														 
+									<t t-if="len(connect_rating_10) > 0" t-set="connect_rating_10" t-value="(len(connect_rating_10) * 100 ) / len(connect)"/>
+									<t t-if="len(connect_rating_5) > 0" t-set="connect_rating_5" t-value="(len(connect_rating_5) * 100 ) / len(connect)"/>
+									<t t-if="len(connect_rating_1) > 0" t-set="connect_rating_1" t-value="(len(connect_rating_1) * 100 ) / len(connect)"/>
+									<t t-if="len(connect_rating_0) > 0" t-set="connect_rating_0" t-value="(len(connect_rating_0) * 100 ) / len(connect)"/>
+									<t t-set="connects" t-value="len(connect)"/>
+									<div class="row">
+										<div style="margin-left: 45px;">
+											<span>
+												<storage><t t-esc="user.name"/></storage>
+											</span>
+										</div>
+										<div style="width: 50% !important;margin-left: 30px;">
+											<div class="progress" style="height: 30px;">
+												<div class="progress-bar progress-bar-info progress-bar-striped"
+													aria-valuenow="connect" aria-valuemin="0" aria-valuemax="500" t-att-style="'color: black;background: deepskyblue;width:' + str(connects) + '%'">
+													<t t-esc="connects"/> Call Attend.
+												</div>
+											</div>
+										</div>
+										<div class="col-4">
+											Total Attended Session(s)
+										</div>
+									</div>
+									<div class="row" style="padding-top: 20px;margin-bottom:20px !important;">
+										<div class="col-9">
+											<div class="progress" style="height: 30px;margin-left:30px;">
+												<t t-if="connect_rating_10">
+													<div class="progress-bar progress-bar-success" role="progressbar" t-att-style="'background:#28a745;width:' + str(connect_rating_10) + '%'">
+														Excellent (<t t-esc="'%.2f'% connect_rating_10"/> % )
+													</div>
+												</t>
+												<t t-if="connect_rating_5">
+													<div class="progress-bar progress-bar-info" role="progressbar" t-att-style="'background:#17a2b8;width:' + str(connect_rating_5) + '%'">
+														Very Good (<t t-esc="'%.2f'% connect_rating_5"/> % )
+													</div>
+												</t>
+												<t t-if="connect_rating_1">
+													<div class="progress-bar progress-bar-danger" role="progressbar" t-att-style="'background:#dc3545;width:' + str(connect_rating_1) + '%'">
+														Fair (<t t-esc="'%.2f'% connect_rating_1"/> % )
+													</div>
+												</t>
+												<t t-if="connect_rating_0">
+													<div class="progress-bar progress-bar-warning" role="progressbar" t-att-style="'background:#FFC106;width:' + str(connect_rating_0) + '%'">
+														No Feedback (<t t-esc="'%.2f'% connect_rating_0"/> % )
+													</div>
+												</t>
+											</div>
+										</div>
+										<div class="col-3">
+											<strong>Session Analysis</strong>
+										</div>
+									</div>
+								</t>
+							</div>
+						</div>
+					</t>
+				</t>
+		</t>
+	</template>
+	
+	<template id="report_month_channel_template">
+		<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="web.external_layout">
+						<div class="page" style="padding-top:43px !important;">
+							<t t-set="user" t-value="request.env.user"/>
+							<div class="container" style="border-width: thin;border-style: dashed;">
+								<div class="col-12" style="border-bottom:1px solid;">
+									<t t-set="totalsession" t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>
+									<h1 style="padding-top: 20px !important;"><span t-field="doc.name"></span> <small style="color:grey;"><span class="float-right" t-esc="datetime.datetime.now().strftime('%Y-%m-%d')"/></small> </h1>
+									<h4>Total Session : <small><strong t-field="doc.nbr_channel"/></small> | 
+										My Session : <small><strong t-esc="len(totalsession)"/></small> |
+										Total Members : <small><strong  t-esc="len(doc.user_ids)"/></small>
+									</h4>
+									<h3> <t t-esc="user.name"/> <small> Report Period - <t t-esc="form['from_date']"/> To <t t-esc="form['to_date']"/> </small></h3>
+								</div>
+								<t t-foreach="monthlist" t-as="month">
+									<t t-set="connect" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>	
+									<t t-set="connect_rating_5" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','5')])"/>
+									<t t-set="connect_rating_10" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','10')])"/>
+									<t t-set="connect_rating_1" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','1')])"/>
+									<t t-set="connect_rating_0" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+														 ('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','0')])"/>
+														 
+									<t t-if="len(connect_rating_10) > 0" t-set="connect_rating_10" t-value="(len(connect_rating_10) * 100 ) / len(connect)"/>
+									<t t-if="len(connect_rating_5) > 0" t-set="connect_rating_5" t-value="(len(connect_rating_5) * 100 ) / len(connect)"/>
+									<t t-if="len(connect_rating_1) > 0" t-set="connect_rating_1" t-value="(len(connect_rating_1) * 100 ) / len(connect)"/>
+									<t t-if="len(connect_rating_0) > 0" t-set="connect_rating_0" t-value="(len(connect_rating_0) * 100 ) / len(connect)"/>
+									<t t-set="connects" t-value="len(connect)"/>
+									<div class="col-12 text-left">
+											<h4><small> ------------------------------------------------| <strong> 
+											<t t-esc="month[0]"/> To <t t-esc="month[1]"/></strong>	| ------------------------------------------------ </small></h4>
+									</div>
+									<div class="row">
+										<div style="width: 75% !important;margin-left: 30px !important;">
+											<div class="progress" style="height: 30px;">
+												<div class="progress-bar bg-info progress-bar-striped" role="progressbar"
+													aria-valuenow="connect" aria-valuemin="0" aria-valuemax="500" t-att-style="'color: black;width:' + str(connects) + '%'">
+													<t t-esc="connects"/> Call Attend.
+												</div>
+											</div>
+										</div>
+										<div class="col-4">
+											Total Attended Session(s)
+										</div>
+									</div>
+									
+									<div class="row" style="padding-top: 20px;margin-bottom:20px !important;">
+										<div style="width: 80% !important;margin-left: 15px;">
+											<div class="progress" style="height: 30px;margin-left: 15px;">
+												<t t-if="connect_rating_10">
+													<div class="progress-bar bg-success" role="progressbar" t-att-style="'width:' + str(connect_rating_10) + '%'">
+														<span style="margin-top: 15px !important;">Excellent (<t t-esc="'%.2f'% connect_rating_10"/> % )</span>
+													</div>
+												</t>
+												<t t-if="connect_rating_5">
+													<div class="progress-bar bg-info" role="progressbar" t-att-style="'width:' + str(connect_rating_5) + '%'">
+														<span style="margin-top: 15px !important;">Very Good (<t t-esc="'%.2f'% connect_rating_5"/> % )</span>
+													</div>
+												</t>
+												<t t-if="connect_rating_1">
+													<div class="progress-bar bg-danger" role="progressbar" t-att-style="'width:' + str(connect_rating_1) + '%'">
+														<span style="margin-top: 15px !important;">Fair (<t t-esc="'%.2f'% connect_rating_1"/> % )</span>
+													</div>
+												</t>
+												<t t-if="connect_rating_0">
+													<div class="progress-bar bg-warning" role="progressbar" t-att-style="'width:' + str(connect_rating_0) + '%'">
+														<span style="margin-top: 15px !important;">No Feedback (<t t-esc="'%.2f'% connect_rating_0"/> % )</span>
+													</div>
+												</t>
+											</div>
+										</div>
+										<div style="width: 25% !important; margin-left: 5px !important;text-align:left !important;">
+											<strong>Session Analysis</strong>
+										</div>
+									</div>
+								</t>
+							</div>
+						</div>
+					</t>
+				</t>
+		</t>
+	</template>
+	
+	<template id="report_manager_channel_template">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="web.external_layout">
+					<div class="page" style="padding-top:43px !important;">
+						<t t-set="user" t-value="request.env.user"/>
+						<div class="container" style="border-width: thin;border-style: dashed;">
+							<div class="col-12">
+								<h1><span t-field="doc.name"></span> <small><span class="float-right" t-esc="datetime.datetime.now().strftime('%Y-%m-%d')"/></small></h1>
+								<h4>
+									<small> Total Session : <strong t-field="doc.nbr_channel"/></small> | <small> Total Members : <strong  t-esc="len(doc.user_ids)"/></small> |
+									<small> Report Period - <t t-esc="form['from_date']"/> To <t t-esc="form['to_date']"/> </small>
+								</h4>
+							</div>
+						</div>
+						<div class="container" style="border-width: thin;border-style: dashed;">
+							<t t-set="users" t-value="request.env['res.users'].sudo().search([('id','in',form['user_ids']),('id','in',doc.user_ids.ids)])"/>
+							<t t-foreach="users" t-as="user">
+								<div class="col-12">
+									<t t-set="totalsession" t-value="request.env['mail.channel'].sudo().search([('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>
+									<h4> <t t-esc="user.name"/> | <small> My Session : <strong t-esc="len(totalsession)"/></small> </h4>
+								</div>
+								<t t-foreach="monthlist" t-as="month">
+									<t t-set="connect" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids), ('channel_partner_ids','in',user.partner_id.id)])"/>	
+									<t t-set="connect_rating_5" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+														('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','5')])"/>
+									<t t-set="connect_rating_10" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+														('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','10')])"/>
+									<t t-set="connect_rating_1" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+														('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','1')])"/>
+									<t t-set="connect_rating_0" t-value="request.env['mail.channel'].sudo().search([('create_date','&lt;',month[1]),('create_date','&gt;',month[0]),('livechat_channel_id', 'in', doc.ids),
+														('channel_partner_ids','in',user.partner_id.id),('helpdesk_lead_id.rating','=','0')])"/>
+									<t t-if="len(connect_rating_10) > 0" t-set="connect_rating_10" t-value="(len(connect_rating_10) * 100 ) / len(connect)"/>
+									<t t-if="len(connect_rating_5) > 0" t-set="connect_rating_5" t-value="(len(connect_rating_5) * 100 ) / len(connect)"/>
+									<t t-if="len(connect_rating_1) > 0" t-set="connect_rating_1" t-value="(len(connect_rating_1) * 100 ) / len(connect)"/>
+									<t t-if="len(connect_rating_0) > 0" t-set="connect_rating_0" t-value="(len(connect_rating_0) * 100 ) / len(connect)"/>
+									<t t-set="connects" t-value="len(connect)"/>
+									<div class="col-12 text-left">
+										<h4><small> ---------------------------------------------| <strong> 
+										<t t-esc="month[0]"/> To <t t-esc="month[1]"/></strong>	| ------------------------------------------- </small></h4>
+									</div>
+									<div class="row">
+										<div style="width: 75% !important;margin-left: 30px !important;">
+											<div class="progress" style="height: 30px;">
+												<div class="progress-bar bg-info progress-bar-striped" role="progressbar"
+													aria-valuenow="connect" aria-valuemin="0" aria-valuemax="500" t-att-style="'color: black;width:' + str(connects) + '%'">
+													<t t-esc="connects"/> Call Attend.
+												</div>
+											</div>
+										</div>
+										<div class="col-4">
+											Total Attended Session(s).
+										</div>
+									</div>
+									<div class="row" style="padding-top: 20px;margin-bottom:20px !important;">
+										<div style="width: 80% !important;margin-left: 15px;">
+											<div class="progress" style="height: 30px;margin-left: 15px;">
+												<t t-if="connect_rating_10">
+													<div class="progress-bar bg-success" role="progressbar" t-att-style="'width:' + str(connect_rating_10) + '%'">
+														<span style="margin-top: 15px !important;">Excellent (<t t-esc="'%.2f'% connect_rating_10"/> % )</span>
+													</div>
+												</t>
+												<t t-if="connect_rating_5">
+													<div class="progress-bar bg-info" role="progressbar" t-att-style="'width:' + str(connect_rating_5) + '%'">
+														<span style="margin-top: 15px !important;">Very Good (<t t-esc="'%.2f'% connect_rating_5"/> % )</span>
+													</div>
+												</t>
+												<t t-if="connect_rating_1">
+													<div class="progress-bar bg-danger" role="progressbar" t-att-style="'width:' + str(connect_rating_1) + '%'">
+														<span style="margin-top: 15px !important;">Fair (<t t-esc="'%.2f'% connect_rating_1"/> % )</span>
+													</div>
+												</t>
+												<t t-if="connect_rating_0">
+													<div class="progress-bar bg-warning" role="progressbar" t-att-style="'width:' + str(connect_rating_0) + '%'">
+														<span style="margin-top: 15px !important;">No Feedback (<t t-esc="'%.2f'% connect_rating_0"/> % )</span>
+													</div>
+												</t>
+											</div>
+										</div>
+										<div style="width: 25% !important; margin-left: 5px !important;text-align:left !important;">
+											<strong>Session Analysis</strong>
+										</div>
+									</div>
+								</t>
+							</t>
+						</div>
+					</div>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

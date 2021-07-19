@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="ir_cron_module_online_helpdesk" model="ir.cron">
+		<field name="name">Check Helpdesk Lead</field>
+		<field name="user_id" ref="base.user_root"/>
+		<field name="interval_number">1</field>
+		<field name="interval_type">days</field>
+		<field name="numbercall">-1</field>
+		<field eval="False" name="doall"/>
+		<field eval="True" name="active"/>
+		<field name="model_id" ref="multi_chatbot_connector.model_online_helpdesk"/>
+		<field name="code">model.online_helpdesk_process()</field>
+		<field name="priority">1001</field>
+	</record>
+</odoo>

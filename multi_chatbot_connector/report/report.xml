@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report 
+            id="report_channel"
+            string="Channel"
+            model="im_livechat.channel" 
+            report_type="qweb-pdf"
+            file="multi_chatbot_connector.report_channel_template" 
+            name="multi_chatbot_connector.report_channel_template"
+            menu="False"
+            print_report_name="'%s Activity' % str(object.name)" 
+        />
+        
+        <report 
+            id="report_month_channel"
+            string="Channel"
+            model="im_livechat.channel" 
+            report_type="qweb-pdf"
+            file="multi_chatbot_connector.report_month_channel_template" 
+            name="multi_chatbot_connector.report_month_channel_template"
+            menu="False"
+            print_report_name="'%s Month Activity' % str(object.name)"
+        />
+        
+        <report 
+            id="report_manager_channel"
+            string="Channel Manager"
+            model="im_livechat.channel" 
+            report_type="qweb-pdf"
+            file="multi_chatbot_connector.report_manager_channel_template" 
+            name="multi_chatbot_connector.report_manager_channel_template"
+            menu="False"
+            print_report_name="'%s Manager Activity' % str(object.name)"
+        />
+    </data>
+</odoo>

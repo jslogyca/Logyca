@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="tree_help_category_inherit" model="ir.ui.view">
+		<field name="name">help.category.tree.inherit</field>
+		<field name="model">online.help.category</field>
+		<field name="inherit_id" ref="multi_chatbot_connector.tree_help_category"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='name']" position="after">
+				<field name="source_question_id"/>
+			</xpath>
+		</field>
+	</record>
+	
+	<!-- Form Mail Channel -->
+	<record id="im_livechat_channel_view_form_mcq_inherit" model="ir.ui.view">
+		<field name="name">im_livechat.channel.form.inherit.mcq</field>
+		<field name="model">im_livechat.channel</field>
+		<field name="type">form</field>
+		<field name="inherit_id" ref="im_livechat.im_livechat_channel_view_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='default_message']" position="replace">
+			</xpath>
+		</field>
+	</record>
+	
+	<!-- Form Mail Channel -->
+	<record id="im_livechat_channel_view_form_extend_inehrit" model="ir.ui.view">
+		<field name="name">im_livechat.channel.form.inherit.mcq</field>
+		<field name="model">im_livechat.channel</field>
+		<field name="type">form</field>
+		<field name="inherit_id" ref="website_live_chatbot.im_livechat_channel_view_form_extend"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='bot_default_reply']" position="replace">
+				<field name="is_mcq_channel" attrs="{'invisible':['|',('multi_chatbot','!=','scripted_bot'),('is_private_bot','=',True)]}"/>
+				<field name="default_message" attrs="{'invisible':[('is_mcq_channel','=',True),('multi_chatbot','=','scripted_bot')]}"/>
+				<field name="bot_default_reply" attrs="{'invisible':['|',('multi_chatbot','=',False),'&amp;',('multi_chatbot','=','scripted_bot'),('is_mcq_channel','=',True)],'required':['|',('multi_chatbot','in',('rasa_bot','google_bot')),'&amp;',('multi_chatbot','=','scripted_bot'),('is_mcq_channel','!=',True)]}"/>
+				<field name="source_question_id" attrs="{'invisible':['|',('multi_chatbot','in',(False,'rasa_bot','google_bot')),'&amp;',('multi_chatbot','=','scripted_bot'),('is_mcq_channel','!=',True)]}"/>
+			</xpath>
+			<xpath expr="//field[@name='is_private_bot']" position="replace">
+				<field name="is_private_bot" attrs="{'invisible':['|',('multi_chatbot','!=', 'scripted_bot'),('is_mcq_channel','=',True)]}"/>
+			</xpath>
+		</field>
+	</record>
+</odoo>

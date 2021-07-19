@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="wizard_view_operators_user" model="ir.ui.view">
+		<field name="name">operators.user.form</field>
+		<field name="model">operators.user</field>
+		<field name="arch" type="xml">
+			<form string="Operator User">
+				<group>
+					<field name="user_ids" nolabel="1" >
+						<tree create="false" delete="false" editable="bottom">
+							<field name="check_box"/>
+							<field name="user_id" options="{'no_quick_create':True,'no_create_edit':True}" readonly="1"/>
+							<field name="login" readonly="1"/>
+							<field name="language" readonly="1"/>
+						</tree>
+					</field>
+				</group>
+				<footer>
+					<button name="action_add_user" string="Add User" type="object" class="btn-primary"/>
+					<button name="cancel" string="Cancel" special="cancel" class="oe_link"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+	
+	<record id="action_operators_user" model="ir.actions.act_window">
+		<field name="name">Operators User</field>
+		<field name="res_model">operators.user</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+		<field name="search_view_id" ref="wizard_view_operators_user"/>
+	</record>	
+</odoo>
