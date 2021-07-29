@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="mail_shortcode_option_tree_view" model="ir.ui.view">
+		<field name="name">mail.shortcode.radio.options.tree.view</field>
+		<field name="model">mail.shortcode.radio.options</field>
+		<field name="arch" type="xml">
+			<tree string="Mail Shortcode Options">
+				<field name="name"/>
+			</tree>
+		</field>
+	</record>
+	
+	<record id="mail_shortcode_option_form_view" model="ir.ui.view">
+		<field name="name">mail.shortocde.radio.options.form.view</field>
+		<field name="model">mail.shortcode.radio.options</field>
+		<field name="arch" type="xml">
+			<form string="Mail Shortcode Options">
+				<group>
+					<group>
+						<field name="name"/>
+						<field name="image" widget="image"/>
+						<field name="representation"/>
+					</group>
+				</group>
+			</form>
+		</field>
+	</record>
+	
+	<record id="mail_shortcode_option_action" model="ir.actions.act_window">
+		<field name="name">Mail Shortcode Options</field>
+		<field name="res_model">mail.shortcode.radio.options</field>
+		<field name="view_mode">tree,form</field>
+		<field name="view_id" ref="mail_shortcode_option_tree_view"/>
+	</record>
+	
+	<record id="mail_shortcode_tree_views_inherit" model="ir.ui.view">
+		<field name="name">mail.shortcode.tree.view.inherit</field>
+		<field name="model">mail.shortcode</field>
+		<field name="inherit_id" ref="im_livechat.im_livechat_canned_response_view_tree"/>
+		<field name="arch" type="xml">
+			<xpath expr="//tree" position="attributes">
+				<attribute name="editable"></attribute>
+			</xpath>
+			<xpath expr="//field[@name='substitution']" position="replace">
+				<field name="substitution_type"/>
+			</xpath>
+		</field>
+	</record>
+	
+	<record id="mail_shortcode_form_view" model="ir.ui.view">
+		<field name="name">mail.shortocde.form.view</field>
+		<field name="model">mail.shortcode</field>
+		<field name="priority" eval="1"/>
+		<field name="arch" type="xml">
+			<form string="Canned Responses">
+				<group>
+					<group>
+						<field name="source"/>
+						<field name="substitution_type"/>
+						<field name="substitution" attrs="{'required' : [('substitution_type','=','text')], 'invisible' : [('substitution_type','=','radio')]}"/>
+					</group>
+				</group>
+				<group>
+					<field name="radio_answer_ids" attrs="{'invisible' : [('substitution_type','=','text')]}">
+						<tree editable="bottom">
+							<field name="answer_id"/>
+							<field name="next_question_id" attrs="{'required' : [('is_end_of_mcq','=',False)]}"/>
+							<field name="is_end_of_mcq"/>
+							<field name="end_of_mcq_message" attrs="{'required' : [('is_end_of_mcq','=',True	)]}"/>
+						</tree>
+					</field>
+				</group>
+			</form>
+		</field>
+	</record>
+	
+	<record id="im_livechat.im_livechat_canned_response_action" model="ir.actions.act_window">
+        <field name="name">Canned Responses</field>
+        <field name="res_model">mail.shortcode</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="im_livechat.im_livechat_canned_response_view_tree"/>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new canned response
+          </p><p>
+            Canned responses allow you to insert prewritten responses in
+            your messages by typing <i>:shortcut</i>. The shortcut is
+            replaced directly in your message, so that you can still edit
+            it before sending.
+          </p>
+        </field>
+    </record>
+    
+	<menuitem
+            id="mail_shortocde_radio_options_responses"
+            name="Canned Radio Options"
+            parent="im_livechat.livechat_config"
+            action="mail_shortcode_option_action"
+            groups="im_livechat.im_livechat_group_user"
+            sequence="16"/>
+</odoo>

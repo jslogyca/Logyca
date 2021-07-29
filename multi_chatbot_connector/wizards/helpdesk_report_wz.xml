@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="wizard_view_online_helpdesk_wz" model="ir.ui.view">
+		<field name="name">Helpdesk Report</field>
+		<field name="model">online.helpdesk.wz</field>
+		<field name="arch" type="xml">
+			<form string="Helpdesk Report">
+				<group>
+					<group>
+						<field name="is_channel" string="All Data"/>
+					</group>
+					<group attrs="{'invisible': [('is_channel', '=', True)]}">
+						<field name="typee" widget="radio" class="oe_edit_only" options="{'horizontal': true}"/>
+					</group>
+				</group>
+				<group col="4" string="Date Filter" attrs="{'invisible': [('is_channel', '=', True)]}">
+					<field name="from_date" attrs="{'required': [('is_channel', '=', False)], 'invisible': [('by_periods', '=', 'y')]}"/>
+					<field name="to_date" attrs="{'required': [('is_channel', '=', False)], 'invisible': [('by_periods', '=', 'y')]}"/>
+					<field name="by_periods" attrs="{'required': [('is_channel', '=', False)]}"/>
+					<field name="year" attrs="{'invisible': [('by_periods', '=', 'm')]}"/>
+				</group>
+				<group col="4">
+					<field name="channel_ids" options="{&quot;always_reload&quot;: True,'no_quick_create': True,'no_create': True}" domain="[('user_ids', 'in', uid)]" widget="many2many_tags" required="1"/>
+					<field name="user_ids" 
+							options="{&quot;always_reload&quot;: True,'no_quick_create': True,'no_create': True}"
+							attrs="{'invisible': ['|',('typee', '=', 'is_self'),('is_channel', '=', True)]}" 
+							widget="many2many_tags"/>
+				</group>
+				
+				<footer>
+					<button name="print_report" 
+						string="Print" 
+						type="object" 
+						class="btn-primary"
+						attrs="{'invisible': [('is_channel', '=', False)]}"/>
+					<button name="print_self_report" 
+						string="Print" 
+						type="object" 
+						class="btn-primary" attrs="{'invisible': [('is_channel', '=', True)]}"/>
+					or
+					<button name="cancel" string="Cancel" special="cancel" class="oe_link"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<record id="action_wizard_view_online_helpdesk_wz" model="ir.actions.act_window">
+		<field name="name">Helpdesk Report</field>
+		<field name="res_model">online.helpdesk.wz</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+		<field name="search_view_id" ref="wizard_view_online_helpdesk_wz"/>
+	</record>
+
+	<menuitem id="view_online_helpdesk_wz" action="action_wizard_view_online_helpdesk_wz" 
+		name="Helpdesk Report" parent="im_livechat.menu_reporting_livechat"/>
+</odoo>

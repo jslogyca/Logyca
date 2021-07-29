@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!-- Form Res Users -->
+	<record id="base_view_users_form_extends" model="ir.ui.view">
+		<field name="name">res.users.form.inherit</field>
+		<field name="model">res.users</field>
+		<field name="type">form</field>
+		<field name="inherit_id" ref="base.view_users_form"/>
+		<field name="arch" type="xml">
+			<notebook position="inside">
+				<page string="Helpdesk">
+					<group>
+						<group>
+							<field name="issue_category" options="{'no_quick_create':True,'no_create_edit':True}" widget="selection"/>
+							<field name="is_busy" invisible="1"/>
+						</group>
+					</group>
+				</page>
+			</notebook>
+		</field>
+	</record>
+	
+	<!-- Form Mail Channel -->
+	<record id="im_livechat_mail_channel_view_form_extend" model="ir.ui.view">
+		<field name="name">mail.channel.form.inherit</field>
+		<field name="model">mail.channel</field>
+		<field name="type">form</field>
+		<field name="inherit_id" ref="im_livechat.mail_channel_view_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='name']" position="after">
+				<field name="helpdesk_lead_id" options="{'no_quick_create':True,'no_create_edit':True}"/>
+			</xpath>
+		</field>
+	</record>
+	
+	<!-- Tree online.helpdesk -->
+	<record id="tree_online_helpdesk" model="ir.ui.view">
+		<field name="name">Online Helpdesk</field>
+		<field name="model">online.helpdesk</field>
+		<field name="arch" type="xml">
+			<tree string="Online Helpdesk" edit="false" create="false" delete="false">
+				<field name="create_date"/>
+				<field name="name"/>
+				<field name="email"/>
+				<field name="status"/>
+				<field name="rating" widget="priority"/>
+			</tree>
+		</field>
+	</record>
+	
+	<!-- Form online.helpdesk -->
+	<record id="form_online_helpdesk" model="ir.ui.view">
+		<field name="name">Online Helpdesk</field>
+		<field name="model">online.helpdesk</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+			<form string="Online Helpdesk" edit="false" create="false" delete="false">
+				<header>
+					<field name="status" widget="statusbar"/>
+				</header>
+				<sheet>
+					<div class="oe_button_box" name="button_box">
+						<button class="oe_stat_button" type="object" name="action_schedule_meeting" icon="fa-commenting-o">
+							<div class="o_stat_info">
+								<span class="o_stat_text"> Meetings</span>
+							</div>
+						</button>
+						<button class="oe_stat_button" type="object" name="action_talk_to_client" icon="fa-phone" attrs="{'invisible': [('status', '=', 'finish')]}">
+							<div class="o_stat_info">
+								<span class="o_stat_text"> Talk to Client</span>
+							</div>
+						</button>
+						<button class="oe_stat_button" type="object" name="send_by_chat_history_mail" icon="fa-envelope-o">
+							<div class="o_stat_info">
+								<span class="o_stat_text"> Send by Email</span>
+							</div>
+						</button>
+					</div>
+					<group col="4">
+						<field name="name" required="1" placeholder="Name"/>
+						<field name="email" placeholder="E-mail"/>
+						<field name="issue_category" options="{'no_quick_create':True,'no_create_edit':True}"/>
+						<field name="rating" widget="priority"/>
+						<field name="maill_channel_id" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                        <field name="company_id"/>
+					</group>
+					<notebook>
+						<page  string="Message">
+							<field name="note"/>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	
+	<!-- Action Online Helpdesk -->
+	<record id="action_all_online_helpdesk" model="ir.actions.act_window">
+		<field name="name">Support Ticket (All)</field>
+		<field name="res_model">online.helpdesk</field>
+		<field name="view_mode">tree,form</field>
+		<field name="view_id" ref="tree_online_helpdesk"/>
+	</record>
+	
+	<record id="action_new_online_helpdesk" model="ir.actions.act_window">
+		<field name="name">Support Ticket (New)</field>
+		<field name="res_model">online.helpdesk</field>
+		<field name="domain">[('status', '=', 'new')]</field>
+		<field name="view_mode">tree,form</field>
+		<field name="view_id" ref="tree_online_helpdesk"/>
+	</record>
+	
+	<record id="action_working_online_helpdesk" model="ir.actions.act_window">
+		<field name="name">Support Ticket (Progress)</field>
+		<field name="res_model">online.helpdesk</field>
+		<field name="domain">[('status', '=', 'working')]</field>
+		<field name="view_mode">tree,form</field>
+		<field name="view_id" ref="tree_online_helpdesk"/>
+	</record>
+	
+	<record id="action_finish_online_helpdesk" model="ir.actions.act_window">
+		<field name="name">Support Ticket (Finished)</field>
+		<field name="res_model">online.helpdesk</field>
+		<field name="domain">[('status', '=', 'finish')]</field>
+		<field name="view_mode">tree,form</field>
+		<field name="view_id" ref="tree_online_helpdesk"/>
+	</record>
+	
+	<record id="im_livechat.mail_channel_action" model="ir.actions.act_window">
+		<field name="name">Session History</field>
+		<field name="res_model">mail.channel</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="im_livechat.mail_channel_view_search"/>
+		<field name="domain">[('livechat_channel_id', '!=', None)]</field>
+		<field name="context">{}</field>
+		<field name="help" type="html">
+			<p>
+				Your chatter history is empty. Create a channel and start chatting to fill up your history.
+			</p>
+		</field>
+	</record>
+	
+	<record id="im_livechat.mail_channel_action" model="ir.actions.act_window">
+		<field name="name">Session History</field>
+		<field name="res_model">mail.channel</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="im_livechat.mail_channel_view_search"/>
+		<field name="domain">[('livechat_channel_id', '!=', None)]</field>
+		<field name="context">{}</field>
+		<field name="help" type="html">
+			<p>
+				Your chatter history is empty. Create a channel and start chatting to fill up your history.
+			</p>
+		</field>
+	</record>
+	
+	<record id="im_livechat.im_livechat_report_channel_action" model="ir.actions.act_window">
+		<field name="name">Session Statistics</field>
+		<field name="res_model">im_livechat.report.channel</field>
+		<field name="view_mode">pivot,graph</field>
+		<field name="context">{"search_default_last_week":1}</field>
+		<field name="help">Livechat Support Channel Statistics allows you to easily check and analyse your company livechat session performance. Extract information about the missed sessions, the audiance, the duration of a session, etc.</field>
+	</record>
+	
+	<record id="im_livechat.im_livechat_report_operator_action" model="ir.actions.act_window">
+		<field name="name">Operator Analysis</field>
+		<field name="res_model">im_livechat.report.operator</field>
+		<field name="view_mode">pivot,graph</field>
+		<field name="context">{"search_default_last_week":1}</field>
+		<field name="help">Livechat Support Channel Statistics allows you to easily check and analyse your company livechat session performance. Extract information about the missed sessions, the audiance, the duration of a session, etc.</field>
+	</record>
+
+	<menuitem name="Online Helpdesk" 
+		id="root_online_helpdesk_menu" 
+		parent="im_livechat.menu_livechat_root" 
+		sequence="6"
+		groups="im_livechat.im_livechat_group_user,im_livechat.im_livechat_group_manager"/>
+	
+	<menuitem name="Support Ticket (New)" 
+		action="action_new_online_helpdesk" 
+		id="root_new_lead_menu" 
+		parent="root_online_helpdesk_menu" 
+		sequence="1"
+		 groups="im_livechat.im_livechat_group_user,im_livechat.im_livechat_group_manager"/>
+	
+	<menuitem name="Support Ticket (Progress)"
+		action="action_working_online_helpdesk" 
+		id="root_working_lead_menu" 
+		parent="root_online_helpdesk_menu" 
+		sequence="2"
+		groups="im_livechat.im_livechat_group_user,im_livechat.im_livechat_group_manager"/>
+	
+	<menuitem name="Support Ticket (Finished)"
+		action="action_finish_online_helpdesk" 
+		id="root_finish_lead_menu" 
+		parent="root_online_helpdesk_menu" 
+		sequence="3"
+		groups="im_livechat.im_livechat_group_user,im_livechat.im_livechat_group_manager"/>
+	
+	<menuitem name="Support Ticket (All)"
+		action="action_all_online_helpdesk" 
+		id="root_all_leads_menu" 
+		parent="root_online_helpdesk_menu" 
+		sequence="4"
+		groups="im_livechat.im_livechat_group_user,im_livechat.im_livechat_group_manager"/>
+	
+	<menuitem
+		id="im_livechat.session_history"
+		name="Session History"
+		parent="im_livechat.menu_reporting_livechat"
+		action="im_livechat.mail_channel_action"
+		groups="im_livechat.im_livechat_group_user"
+		sequence="1"/>
+	
+</odoo>

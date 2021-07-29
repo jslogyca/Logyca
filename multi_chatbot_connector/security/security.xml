@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">  
+        <record id="mail_online_helpdesk_rule" model="ir.rule">
+            <field name="name">online.helpdesk: access only public and joined groups</field>
+            <field name="model_id" ref="model_online_helpdesk"/>
+            <field name="domain_force">[('maill_channel_id.channel_partner_ids', 'in', [user.partner_id.id])]</field>
+            <field name="perm_create" eval="False"/>
+        </record>
+    
+        <record id="ir_rule_set_multi_channel" model="ir.rule">
+                <field name="name">User: Multi Channel</field>
+                <field name="model_id" ref="im_livechat.model_im_livechat_channel"/>
+                <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+                <field name="groups" eval="[(4, ref('base.group_multi_company'))]"/>
+        </record>
+        
+        <record id="ir_rule_set_online_helpdesk" model="ir.rule">
+                <field name="name">User: Online Helpdesk</field>
+                <field name="model_id" ref="model_online_helpdesk"/>
+                <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+                <field name="groups" eval="[(4, ref('base.group_multi_company'))]"/>
+        </record>
+        
+        <record id="ir_rule_set_website_visitor" model="ir.rule">
+                <field name="name">User: Website Visitor</field>
+                <field name="model_id" ref="website_livechat.model_website_visitor"/>
+                <field name="domain_force">['|',('partner_id','=',False),('partner_id.company_id', 'in', company_ids)]</field>
+                <field name="groups" eval="[(4, ref('base.group_multi_company'))]"/>
+        </record>
+        
+        <record id="ir_rule_set_im_livechat_report_operator" model="ir.rule">
+                <field name="name">User: Livechat Report Oprator</field>
+                <field name="model_id" ref="im_livechat.model_im_livechat_report_operator"/>
+                <field name="domain_force">['|',('partner_id','=',False),('partner_id.company_id', 'in', company_ids)]</field>
+                <field name="groups" eval="[(4, ref('base.group_multi_company'))]"/>
+        </record>
+        
+        <record id="ir_rule_set_im_livechat_report_channel" model="ir.rule">
+                <field name="name">User: Livechat Report Channel</field>
+                <field name="model_id" ref="im_livechat.model_im_livechat_report_channel"/>
+                <field name="domain_force">['|',('livechat_channel_id','=',False),('livechat_channel_id.company_id', 'in', company_ids)]</field>
+                <field name="groups" eval="[(4, ref('base.group_multi_company'))]"/>
+        </record>
+        
+        <record id="ir_rule_set_rating_rating" model="ir.rule">
+                <field name="name">User: Rating Rating</field>
+                <field name="model_id" ref="rating.model_rating_rating"/>
+                <field name="domain_force">['|',('partner_id','=',False),('partner_id.company_id', 'in', company_ids)]</field>
+                <field name="groups" eval="[(4, ref('base.group_multi_company'))]"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="online_helpdesk_template">
+		<t t-call="report.external_layout">
+			<div class="page">
+				<div class="row">
+					
+				</div>
+			</div>
+		</t>
+	</template>
+	
+	<template id="online_helpdesk_tmp">
+		<t t-call="report.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="multi_chatbot_connector.online_helpdesk_template"/>
+			</t>
+		</t>
+	</template>
+	
+	<template id="online_helpdesk_template">
+		<t t-call="report.external_layout">
+			<div class="page">
+				<div class="row">	
+				</div>
+			</div>
+		</t>
+	</template>
+</odoo>

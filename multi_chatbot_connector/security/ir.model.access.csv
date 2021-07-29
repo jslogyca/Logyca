@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_online_helpdesk_user,online.helpdesk.user,model_online_helpdesk,im_livechat.im_livechat_group_user,1,1,1,0
+access_online_helpdesk_manager,online.helpdesk.manager,model_online_helpdesk,im_livechat.im_livechat_group_manager,1,1,1,1
+access_online_help_category_user,online.help.category.user,model_online_help_category,im_livechat.im_livechat_group_user,1,1,1,0
+access_online_help_category_manager,online.help.category.manager,model_online_help_category,im_livechat.im_livechat_group_manager,1,1,1,1
+access_online_help_category_portal,online.help.category.portal,model_online_help_category,base.group_portal,1,1,1,0
+access_online_help_category_public,online.help.category.public,model_online_help_category,base.group_public,1,1,1,0
+access_operators_user_public,operators.user.public,model_operators_user,,1,1,1,1
+access_operators_user_line_public,operators.user.line.public,model_operators_user_line,,1,1,1,1
+access_online_helpdesk_wz_public,online_helpdesk_wz_public,model_online_helpdesk_wz,,1,1,1,1
+access_chain_bots_public,chain_bots_public,model_chain_bots,,1,1,1,1

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_mail_shortcode_radio_options,mail.shortcode.radio.options.public,model_mail_shortcode_radio_options,,1,1,1,1
+access_mail_shortcode_radio_answers,mail.shortcode.radio.answers.public,model_mail_shortcode_radio_answers,,1,1,1,1

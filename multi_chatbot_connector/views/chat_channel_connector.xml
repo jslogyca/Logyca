@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+	<record id="res_config_settings_form_chain_bot__view" model="ir.ui.view">
+        <field name="name">res.config.settings.form.chain_bot.view</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='business_documents']" position="after">
+                <div data-string="General Settings" data-key="general_settings">
+                    <h2>Chain Of Bot</h2>
+                    <div class="row mt16 o_settings_container" id="chain_bot">
+                        <div class="col-12 col-lg-6 o_setting_box" title="Using your chain of bot msg replay.">
+                            <div class="o_setting_left_pane">
+                                <field name="is_chain_of_bot"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="is_chain_of_bot"/>
+                                <div class="text-muted" id="is_chain_of_bot">
+                                    Use your chain of bot reply
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+    
+	<record id="base_view_company_form_inherit" model="ir.ui.view">
+		<field name="name">res.company.form.inherit</field>
+		<field name="model">res.company</field>
+		<field name="type">form</field>
+		<field name="inherit_id" ref="base.view_company_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//notebook" position="inside">
+				<page string="Chain of bots">
+					<field name="chain_of_bots" mode="tree">
+						<tree create="1" delete="1">
+							<field name="sequence"/>
+							<field name="chatbot"/>
+						</tree>
+					</field>
+				</page>
+            </xpath>
+        </field>
+    </record>
+    
+	<!-- Form Mail Channel -->
+	<record id="im_livechat_channel_view_form_extend" model="ir.ui.view">
+		<field name="name">im_livechat.channel.form.inherit</field>
+		<field name="model">im_livechat.channel</field>
+		<field name="type">form</field>
+		<field name="inherit_id" ref="im_livechat.im_livechat_channel_view_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//div[hasclass('oe_title')]" position="after">
+				<group>
+                	<field name="multi_chatbot" style="width: 50%"/>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='default_message']" position="after">
+                <field name="company_id" attrs="{'invisible': [('multi_chatbot', '=',False)], 'required': [('multi_chatbot', '!=',False)]}"/>
+                <field name="bot_default_reply" attrs="{'invisible':[('multi_chatbot','=',False)],'required':[('multi_chatbot','!=',False)]}" required="0"/>
+				<field name="mailing_list_id" options="{'no_quick_create':True,'no_create_edit':True}" attrs="{'invisible': [('multi_chatbot', '=',False)], 'required': [('multi_chatbot', '!=',False)]}" widget="selection"/>
+				<field name="issue_category" options="{'no_quick_create':True,'no_create_edit':True}" attrs="{'invisible': [('multi_chatbot', '=',False)], 'required': [('multi_chatbot', '!=',False)]}" widget="selection"/>
+				<field name="timer" attrs="{'invisible':[('multi_chatbot','=',False)] , 'required':[('multi_chatbot','!=',False)]}" />
+			</xpath>
+			<xpath expr="//field[@name='user_ids']/kanban" position="attributes">
+				<attribute name="create">false</attribute>
+			</xpath>
+			<xpath expr="//field[@name='user_ids']" position="before">
+				<button name="action_operators_user" type="object" string="Operators" class="oe_highlight" attrs="{'invisible': [('multi_chatbot', '=',False)]}"/>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="tree_help_category" model="ir.ui.view">
+		<field name="name">help.category.tree</field>
+		<field name="model">online.help.category</field>
+		<field name="arch" type="xml">
+			<tree string="Help Category" editable="bottom">
+				<field name="name" required="1"/>
+			</tree>
+		</field>
+	</record>
+
+	<!-- Form Help Category -->
+	<record id="form_help_category" model="ir.ui.view">
+		<field name="name">help.category.form</field>
+		<field name="model">online.help.category</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+			<form string="Help Category">
+				<group>
+					<group>
+						<field name="name" required="1" placeholder="Name"/>
+					</group>
+				</group>
+			</form>
+		</field>
+	</record>
+	
+	<!-- Action Help Category -->
+	<record id="action_online_help_category" model="ir.actions.act_window">
+		<field name="name">Support Category</field>
+		<field name="res_model">online.help.category</field>
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="tree_help_category"/>
+	</record>
+	
+	<!-- Action Menu -->
+	<menuitem
+		id="help_category_online"
+		name="Support Category"
+		parent="im_livechat.livechat_config"
+		action="action_online_help_category"
+		sequence="16"/>
+	
+	<record id="mail_channel_extends" model="ir.ui.view">
+		<field name="name">mail.channel.form.inherit</field>
+		<field name="model">mail.channel</field>
+		<field name="type">form</field>
+		<field name="inherit_id" ref="im_livechat.mail_channel_view_tree"/>
+		<field name="arch" type="xml">
+			<field name="rating_last_image" position="attributes">
+				<attribute name="string">Rating</attribute>
+			</field>
+		</field>
+	</record>
+</odoo>
