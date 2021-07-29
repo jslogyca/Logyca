@@ -11,11 +11,11 @@ class ProductBenef(models.Model):
 
 
     state = fields.Selection([('draft', 'Draft'), 
-                                    ('notified', 'Notified'),
-                                    ('confirm', 'Confirm'),
-                                    ('rejected', 'Rejected'),
-                                    ('cancel', 'Cancel'),
-                                    ('done', 'Done')], string='State', default='draft', readonly=True, track_visibility='onchange')
+                                    ('notified', 'Notificado'),
+                                    ('confirm', 'Aceptado'),
+                                    ('rejected', 'Rechazado'),
+                                    ('cancel', 'Cancelado'),
+                                    ('done', 'Entregado')], string='State', default='draft', readonly=True, track_visibility='onchange')
     partner_id = fields.Many2one('rvc.beneficiary', string='Empresa Beneficiaria', track_visibility='onchange')
     parent_id = fields.Many2one('rvc.sponsored', string='Empresa Patrocinadora', track_visibility='onchange')
     product_id = fields.Many2one('product.rvc', string='Producto', track_visibility='onchange')
@@ -36,6 +36,10 @@ class ProductBenef(models.Model):
     cargo_contact = fields.Char('Cargo', related='partner_id.cargo_contact', track_visibility='onchange')
     vat = fields.Char('Número de documento', related='partner_id.vat', track_visibility='onchange')
 
+
+    def name_get(self):
+        return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]    
+
     def unlink(self):
         for product_benef in self:
             if product_benef.state not in ('draft', 'cancel'):
@@ -48,14 +52,55 @@ class ProductBenef(models.Model):
 
 
     def action_confirm(self):
+        for product_benef in self:
+            if product_benef.state in ('notified'):
+                view_id = self.env.ref('rvc.rvc_template_email_confirm_wizard_form').id,
+                return {
+                    'name':_("Enviar Aceptación"),
+                    'view_mode': 'form',
+                    'view_id': view_id,
+                    'view_type': 'form',
+                    'res_model': 'rvc.template.email.wizard',
+                    'type': 'ir.actions.act_window',
+                    'nodestroy': True,
+                    'target': 'new',
+                    'domain': '[]'
+                }
         self.write({'state': 'confirm'})
 
 
     def action_done(self):
+        for product_benef in self:
+            if product_benef.state in ('confirm'):
+                view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
+                return {
+                    'name':_("Enviar Kit de Bienvenida"),
+                    'view_mode': 'form',
+                    'view_id': view_id,
+                    'view_type': 'form',
+                    'res_model': 'rvc.template.email.wizard',
+                    'type': 'ir.actions.act_window',
+                    'nodestroy': True,
+                    'target': 'new',
+                    'domain': '[]'
+                }        
         self.write({'state': 'done'})
 
 
     def action_rejected(self):
+        for product_benef in self:
+            view_id = self.env.ref('rvc.rvc_template_email_rejected_wizard_form').id,
+            return {
+                'name':_("Rechazar Beneficio"),
+                'view_mode': 'form',
+                'view_id': view_id,
+                'view_type': 'form',
+                'res_model': 'rvc.template.email.wizard',
+                'type': 'ir.actions.act_window',
+                'nodestroy': True,
+                'target': 'new',
+                'domain': '[]'
+            }
         self.write({'state': 'rejected'})
 
 
@@ -65,7 +110,7 @@ class ProductBenef(models.Model):
 
     def action_notified(self):
         for product_benef in self:
-            if product_benef.state in ('draft'):
+            if product_benef.state in ('draft', 'notified'):
                 view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id,
                 return {
                     'name':_("Are you sure?"),

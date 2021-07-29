@@ -7,11 +7,11 @@ from odoo.exceptions import ValidationError
 class RVCBeneficiary(models.Model):
     _name = 'rvc.beneficiary'
     _description = 'RVC Beneficiary'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
+    # _inherit = ['mail.thread']
     _rec_name = 'name'
 
     name = fields.Char(string='Name', track_visibility='onchange')
-    partner_id = fields.Many2one('res.partner', string='Patrocinado', track_visibility='onchange')
+    partner_id = fields.Many2one('res.partner', string='Patrocinado')
     vat = fields.Char('Número de documento', track_visibility='onchange')
     phone = fields.Char('Phone', related='partner_id.phone', track_visibility='onchange')
     email = fields.Char('Email', related='partner_id.email', track_visibility='onchange')
@@ -35,12 +35,18 @@ class RVCBeneficiary(models.Model):
                                     ('comercio', 'Comercio')], string='Macrosector', related='partner_id.macro_sector', track_visibility='onchange')
 
 
+    def name_get(self):
+        return [(benef.id, '%s - %s' % (benef.vat, benef.partner_id.name)) for benef in self]
 
     @api.onchange('vat')
     def _onchange_vat(self):
+        print('adfadsfadsf')
         if self.vat:
+            print('adfadsfadsf 1111')
             partner_id = self.env['res.partner'].search([('vat','=',self.vat), ('is_company','=',True)])
+            print('adfadsfadsf 22222')
             if partner_id:
+                print('adfadsfadsf 33333', partner_id)
                 self.write({'partner_id': partner_id.id})
             else:
                 raise ValidationError('La empresa no esta registrada en Odoo')

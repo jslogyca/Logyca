@@ -82,7 +82,7 @@
 		id="hr_menu_product_benef_parent"
 		name="Gestión y Administración de Beneficios"
 		parent="rvc.menu_rvc_import_file_wizard"
-		sequence="3"
+		sequence="0"
 		groups="rvc.group_rvc_manager"/>	        
 
     <menuitem id="menu_report_excel_sale_product_root"

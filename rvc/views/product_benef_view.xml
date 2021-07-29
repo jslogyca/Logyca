@@ -6,11 +6,11 @@
 		<field name="arch" type="xml">
 			<form string="Gestión y Administración de Beneficios">
 				<header>
-				 	<button name="action_notified" type="object" states="draft" string="Notified" class="oe_highlight"/>
+				 	<button name="action_notified" type="object" states="draft" string="Notificar al Beneficiario" class="oe_highlight"/>
 				 	<button name="action_cancel" type="object" states="draft" string="Cancel" class="oe_highlight"/>
 				 	<button name="action_confirm" type="object" states="notified" string="Confirm" class="oe_highlight"/>
 				 	<button name="action_notified" type="object" states="notified" string="Volver a notificar" class="oe_highlight"/>
-				 	<button name="action_done" type="object" states="confirm" string="Done" class="oe_highlight"/>
+				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight"/>
 				 	<button name="action_re_done" type="object" states="done" string="Re-Done" class="oe_highlight"/>
 				 	<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight"/>
 					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />
@@ -31,7 +31,7 @@
 							<field name="agreement_id" attrs="{'readonly': [('state','!=','draft')]}" />
 							<field name="type_beneficio" invisible="1"/>						
 							<field name="cant_cod" attrs="{'invisible': [('type_beneficio','!=','codigos')], 'readonly': [('state','!=','draft')]}"/>
-							<field name="cant_cod_disp" attrs="{'invisible': [('type_beneficio','!=','codigos')], 'readonly': [('state','!=','draft')]}"/>
+							<field name="cant_cod_disp" attrs="{'invisible': [('type_beneficio','!=','codigos')]}" force_save="1" readonly="1"/>
 							<field name="sub_product_ids" attrs="{'invisible': [('type_beneficio','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
 							<field name="date_end" attrs="{'invisible': [('type_beneficio','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
 							<field name="gln" attrs="{'invisible': [('type_beneficio','not in',('colabora','codigos'))], 'readonly': [('state','!=','draft')]}" />
@@ -79,7 +79,7 @@
 		name="Postulación y Entrega del Beneficio"
 		action="action_product_benef"
 		parent="rvc.hr_menu_product_benef_parent"
-		sequence="4"
+		sequence="0"
 		groups="rvc.group_rvc_manager"/>
 
 </odoo>

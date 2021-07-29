@@ -4,7 +4,7 @@
 		<field name="name">rvc.beneficiary.form</field>
 		<field name="model">rvc.beneficiary</field>
 		<field name="arch" type="xml">
-			<form string="Empresas Patrocinada" create="false" >
+			<form string="Empresas Patrocinada" create="true" >
 				<header>
 				</header>			
 				<sheet>
@@ -28,12 +28,6 @@
 						</group>
 					</group>
 				</sheet>
-				<!-- Chatter -->
-				<div class="oe_chatter">
-					<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
-					<field name="activity_ids" widget="mail_activity"/>
-					<field name="message_ids" widget="mail_thread"/>
-				</div>					
 			</form>
 		</field>
 	</record>
@@ -42,7 +36,7 @@
 		<field name="name">rvc.beneficiary.tree</field>
 		<field name="model">rvc.beneficiary</field>
 		<field name="arch" type="xml">
-			<tree string="Empresas Patrocinada" create="false" >
+			<tree string="Empresas Patrocinada" create="true" >
 				<field name="vat"/>
 				<field name="partner_id"/>
 				<field name="macro_sector" />
@@ -62,7 +56,7 @@
 		<field name="name">rvc.beneficiary.kanban</field>
 		<field name="model">rvc.beneficiary</field>
 		<field name="arch" type="xml">
-			<kanban class="o_res_partner_kanban" create="false">
+			<kanban class="o_res_partner_kanban" create="true">
 				<field name="id"/>
 				<field name="name"/>
 				<field name="partner_id"/>
@@ -74,10 +68,25 @@
 									<field name="partner_id"/>
 								</strong>
 								<div>
+									<field name="vat"/>
+								</div>								
+								<div>
 									<field name="x_sector_id"/>
 								</div>
 								<div>
-									<field name="vat"/>
+									<field name="x_company_size"/>
+								</div>
+								<div>
+									<field name="name_contact"/>
+								</div>
+								<div>
+									<field name="phone_contact"/>
+								</div>
+								<div>
+									<field name="email_contact"/>
+								</div>
+								<div>
+									<field name="cargo_contact"/>
 								</div>
 							</div>
 						</div>
@@ -91,7 +100,7 @@
 		id="hr_menu_rvc_partners"
 		name="Gestión y Administración de Empresas"
 		parent="rvc.menu_rvc_import_file_wizard"
-		sequence="0"
+		sequence="1"
 		groups="rvc.group_rvc_manager"/>
 
 
