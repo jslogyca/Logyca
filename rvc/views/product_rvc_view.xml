@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="product_rvc_form" model="ir.ui.view">
+		<field name="name">product.rvc.form</field>
+		<field name="model">product.rvc</field>
+		<field name="arch" type="xml">
+			<form string="Products">
+				<header>
+					<field name="state" widget="statusbar" statusbar_visible="activo,inactivo"/>
+				</header>			
+				<sheet>
+					<group>
+						<group>
+							<field name="name" />
+							<field name="code" />
+						</group>
+						<group>
+							<field name="company_id" />
+							<field name="type_beneficio" />
+						</group>
+					</group>
+					<notebook>
+						<page name="subproduct" string="Sub Products" attrs="{'invisible': [('type_beneficio','!=','colabora')]}">
+							<field name="sub_product_ids" >
+								<tree editable="bottom" >
+									<field name="name"/>
+									<field name="cant_min"/>
+									<field name="cant_max"/>
+									<field name="code"/>
+									<field name="state"/>
+								</tree>                        
+							</field>							
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="product_rvc_tree" model="ir.ui.view">
+		<field name="name">product.rvc.tree</field>
+		<field name="model">product.rvc</field>
+		<field name="arch" type="xml">
+			<tree string="Products" >
+				<field name="name"/>
+				<field name="code"/>
+				<field name="company_id"/>
+				<field name="type_beneficio"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_product_rvc" model="ir.actions.act_window">
+		<field name="name">Products</field>
+		<field name="res_model">product.rvc</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem
+		id="hr_menu_product_rvc"
+		name="Products"
+		action="action_product_rvc"
+		parent="rvc.menu_config_rvc_parent"
+		sequence="1"
+		groups="rvc.group_rvc_manager"/>
+
+</odoo>

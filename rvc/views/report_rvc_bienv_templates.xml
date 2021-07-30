@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_rvc_bienv_template">
+        <t t-call="web.html_container">
+            <t t-foreach="inside_foreach_docs or docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <t t-set="o" t-value="o.with_context(lang=o.partner_id.partner_id.lang or o.env.lang)"/>
+                    <div class="page">
+                        <h2 t-field="o.name"/>
+                        <!-- <t t-set="is_invalid" t-value="o._is_invalid()"/>
+                        <t t-if="is_invalid">
+                            <strong><t t-esc="is_invalid"/></strong>
+                        </t>
+                        <table name="employee-infos" class="table table-sm table-bordered">
+                            <tr>
+                                <td class="w-25"><strong>Employee</strong></td>
+                                <td class="w-25"><strong>Marital Status</strong></td>
+                                <td class="w-25"><strong>Designation</strong></td>
+                                <td class="w-25"><strong>Pay Period</strong></td>
+                            </tr>
+                            <tr>
+                                <td><span t-field="o.employee_id"/></td>
+                                <td><span t-field="o.employee_id.marital"/></td>
+                                <td><span t-field="o.employee_id.job_title"/></td>
+                                <td><span t-field="o.date_from"/> - <span t-field="o.date_to"/></td>
+                            </tr>
+                            <tr>
+                                <td><span t-field="o.employee_id.address_home_id.street"/></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><span t-field="o.employee_id.address_home_id.city"/> <span t-field="o.employee_id.address_home_id.zip"/></td>
+                                <td><strong>Person in charge</strong></td>
+                                <td><strong>Identification</strong></td>
+                                <td><strong>Computed on </strong></td>
+                            </tr>
+                            <tr>
+                                <td><span t-field="o.employee_id.work_email"/></td>
+                                <td name="personne-in-charge"><t t-esc="o.employee_id.children"/></td>
+                                <td><span t-field="o.employee_id.identification_id"/></td>
+                                <td><span t-field="o.compute_date"/></td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td class="w-25"><strong>Basic Salary</strong></td>
+                                <td style="color:#875A7B" class="w-25">
+                                    <span t-esc="o.line_ids.filtered(lambda line: line.code == 'BASIC').total"
+                                        t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                </td>
+                                <td class="w-25"></td>
+                                <td class="w-25"></td>
+                            </tr>
+                        </table>
+                        <div id="total">
+                            <table class="table table-sm">
+                                <thead class="o_black_border">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Number of Hours</th>
+                                        <th>Number of Days</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <span t-foreach="o.worked_days_line_ids" t-as="worked_days">
+                                        <t t-if="worked_days.code != 'OUT'">
+                                            <tr style="color:none">
+                                                <td>
+                                                    <span t-field="worked_days.name"/>
+                                                </td>
+                                                <td><span t-field="worked_days.number_of_hours"/></td>
+                                                <td><span t-field="worked_days.number_of_days"/></td>
+                                                <td><span t-esc="worked_days.amount" digits="[42, 2]"
+                                                        t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                            </tr>
+                                        </t>
+                                    </span>
+                                    <span t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip)" t-as="line">
+                                        <t t-set="line_style"/>
+                                        <t t-set="line_class"/>
+                                        <t t-if="line.code == 'NET'">
+                                            <t t-set="line_style" t-value="'color:#875A7B;'"/>
+                                            <t t-set="line_class" t-value="'o_total o_border_bottom'"/>
+                                        </t>
+                                        <t t-if="(line.code == 'BASIC') or (line.code == 'GROSS')">
+                                            <t t-set="line_style" t-value="'color:#00A09D;'"/>
+                                            <t t-set="line_class" t-value="'o_subtotal o_border_bottom'"/>
+                                        </t>
+                                        <tr t-att-class="line_class" t-att-style="line_style">
+                                            <td><span t-field="line.name"/></td>
+                                            <td></td>
+                                            <td><span t-if="line.quantity > 1" t-esc="line.quantity"/></td>
+                                            <td><span t-esc="line.total"
+                                                    t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                        </tr>
+                                    </span>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p t-if="o.net_wage &gt;= 0">Total to pay on <td><span t-field="o.employee_id.bank_account_id"/></td>, bank account of <span t-field="o.employee_id"/>: <td><span t-field="o.net_wage"/></td></p>
+                        <p t-if="o.net_wage &lt; 0">The net amount will be recovered from the first positive remuneration established after this.</p>
+
+                        <table name="contract-infos" class="table table-sm table-bordered">
+                            <tr>
+                                <td class="w-25"><strong>Contract Start Date</strong></td>
+                                <td class="w-25"><strong>Working Schedule</strong></td>
+                                <td class="w-25" name="company-car-title"></td>
+                            </tr>
+                            <tr>
+                                <td><span t-field="o.employee_id.first_contract_date"/></td>
+                                <td><span t-field="o.employee_id.contract_id.hours_per_week"/></td>
+                                <td class="w-25" name="company-car-model"></td>
+                            </tr>
+                        </table>
+                        <p class="text-center">Made by Odoo</p> -->
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_rvc_bienv">
+        <t t-foreach="docs" t-as="o">
+            <t t-set="inside_foreach_docs" t-value="o"/>
+            <t t-call="rvc.report_rvc_bienv_template" t-lang="o.partner_id.sudo().partner_id.lang"/>
+        </t>
+    </template>
+</odoo>

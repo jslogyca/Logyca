@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="rvc_sponsored_form" model="ir.ui.view">
+		<field name="name">rvc.sponsored.form</field>
+		<field name="model">rvc.sponsored</field>
+		<field name="arch" type="xml">
+			<form string="Empresas Halonadoras">
+				<header>
+				</header>			
+				<sheet>
+					<group>
+						<group>
+							<field name="vat" />
+							<field name="partner_id" force_save="1" readonly="1"/>
+							<field name="phone" />		
+							<field name="email" />												
+							<field name="macro_sector" />
+							<field name="x_company_size" />
+							<field name="x_sector_id" />
+						</group>
+						<group>
+							<field name="name_contact" />
+							<field name="phone_contact" />
+							<field name="email_contact" />
+							<field name="cargo_contact" />
+							<field name="active" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="rvc_sponsored_tree" model="ir.ui.view">
+		<field name="name">rvc.sponsored.tree</field>
+		<field name="model">rvc.sponsored</field>
+		<field name="arch" type="xml">
+			<tree string="Empresas Halonadoras" >
+				<field name="vat"/>
+				<field name="partner_id"/>
+				<field name="macro_sector" />
+				<field name="x_company_size"/>
+				<field name="name_contact" />
+				<field name="active" />
+			</tree>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="view_rvc_sponsored_kanban">
+		<field name="name">rvc.sponsored.kanban</field>
+		<field name="model">rvc.sponsored</field>
+		<field name="arch" type="xml">
+			<kanban class="o_res_partner_kanban" create="true">
+				<field name="id"/>
+				<field name="name"/>
+				<field name="partner_id"/>
+				<templates>
+					<t t-name="kanban-box">
+						<div t-attf-class="oe_kanban_global_click o_has_icon">
+							<div class="oe_kanban_details">
+								<strong class="o_kanban_record_title">
+									<field name="partner_id"/>
+								</strong>
+								<div>
+									<field name="vat"/>
+								</div>								
+								<div>
+									<field name="x_sector_id"/>
+								</div>
+								<div>
+									<field name="x_company_size"/>
+								</div>
+								<div>
+									<field name="name_contact"/>
+								</div>
+								<div>
+									<field name="phone_contact"/>
+								</div>
+								<div>
+									<field name="email_contact"/>
+								</div>
+								<div>
+									<field name="cargo_contact"/>
+								</div>
+							</div>
+						</div>
+					</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+
+	<record id="action_rvc_sponsored" model="ir.actions.act_window">
+		<field name="name">Empresas Halonadoras</field>
+		<field name="res_model">rvc.sponsored</field>
+		<field name="view_mode">kanban,tree,form</field>
+	</record>	
+
+	<menuitem
+		id="hr_menu_rvc_sponsored"
+		name="Empresas Halonadoras"
+		action="action_rvc_sponsored"
+		parent="rvc.hr_menu_rvc_partners"
+		sequence="2"
+		groups="rvc.group_rvc_manager"/>          
+</odoo>
