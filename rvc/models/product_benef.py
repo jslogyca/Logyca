@@ -8,6 +8,7 @@ class ProductBenef(models.Model):
     _name = 'product.benef'
     _description = 'Product Benef'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = "id desc, partner_id"
 
 
     state = fields.Selection([('draft', 'Draft'), 
@@ -19,7 +20,6 @@ class ProductBenef(models.Model):
     partner_id = fields.Many2one('rvc.beneficiary', string='Empresa Beneficiaria', track_visibility='onchange')
     parent_id = fields.Many2one('rvc.sponsored', string='Empresa Patrocinadora', track_visibility='onchange')
     product_id = fields.Many2one('product.rvc', string='Producto', track_visibility='onchange')
-    agreement_id = fields.Many2one('agreement.rvc', string='Agreement', track_visibility='onchange')
     name = fields.Char(string='Name', track_visibility='onchange')
     cant_cod = fields.Float('Cantidad de Códigos', track_visibility='onchange')
     cant_cod_disp = fields.Float('Cantidad de Códigos Disponibles', track_visibility='onchange')

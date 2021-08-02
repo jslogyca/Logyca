@@ -95,13 +95,6 @@ class RVCImportFileWizard(models.TransientModel):
                             e.append(validation)
                             continue
                             # raise ValidationError(validation)
-                    #CONVENIO
-                    agreement_rvc_id = self.env['agreement.rvc'].search([('name','=',str(fila[8])),('active','=',True)])
-                    if not agreement_rvc_id:
-                        validation = 'El convenio no existe o no esta activo' + ' - ' + str(fila[8])
-                        e.append(validation)
-                        continue
-                        # raise ValidationError(validation)
                     if not rvc_beneficiary_id:
                         # contact_id=self.env['res.partner'].search([('name','=',str(fila[4])), ('is_company','=',False), ('parent_id','=',partner_id.id)], limit=1)
                         # if not contact_id:
@@ -111,7 +104,6 @@ class RVCImportFileWizard(models.TransientModel):
                         #     # raise ValidationError(validation)
                         # print('ERRORES556565656565656565656656565')
                         try:
-                            print('ERRORES 32323232323')
                             rvc_beneficiary_id = self.env['rvc.beneficiary'].create({
                                                                 'name': partner_id.name + '-' + 'Derechos de Identificación',
                                                                 'partner_id': partner_id.id,
@@ -123,18 +115,14 @@ class RVCImportFileWizard(models.TransientModel):
                                                                 'active': True})
                             self.env.cr.commit()
                         except:
-                            print('ERRORES 3298989898989', rvc_beneficiary_id)
                             validation = 'La Empresa beneficiaria no se puede crear'
                             e.append(validation)
                             continue
-                    print('ERRORES 47474747474747')
                     if rvc_beneficiary_id and rvc_beneficiary_id.id:
-                        print('ERRORES 47474747474747', rvc_beneficiary_id, rvc_beneficiary_id.id, str(fila[2]))
                         product_benef = self.env['product.benef'].create({
                                                             'name': partner_id.name + '-' + 'Derechos de Identificación',
                                                             'partner_id': rvc_beneficiary_id.id,
                                                             'parent_id': sponsored_id.id,
-                                                            'agreement_id': agreement_rvc_id.id,
                                                             'product_id': product_id.id,
                                                             'cant_cod': str(fila[2])})
                         cre.append(product_benef.id)
@@ -177,11 +165,6 @@ class RVCImportFileWizard(models.TransientModel):
                         if product_benef_id:
                             validation = 'La empresa Beneficiaria ya tiene una entrega de beneficio activa' + ' - ' + str(fila[0] + ' - ' + partner_id.name)
                             raise ValidationError(validation)
-                    #CONVENIO
-                    agreement_rvc_id = self.env['agreement.rvc'].search([('name','=',str(fila[8])),('active','=',True)])
-                    if not agreement_rvc_id:
-                        validation = 'El convenio no existe o no esta activo' + ' - ' + str(fila[8])
-                        raise ValidationError(validation)
                     if not rvc_beneficiary_id:
                         contact_id=self.env['res.partner'].search([('name','=',str(fila[4])), ('is_company','=',False), ('parent_id','=',partner_id.id)], limit=1)
                         if not contact_id:
@@ -201,7 +184,6 @@ class RVCImportFileWizard(models.TransientModel):
                                                         'name': partner_id.name + '-' + 'LOGYCA/COLABORA',
                                                         'partner_id': rvc_beneficiary_id.id,
                                                         'parent_id': sponsored_id.id,
-                                                        'agreement_id': agreement_rvc_id.id,
                                                         'product_id': product_id.id,
                                                         'sub_product_ids': sub_product_id[0],
                                                         'date_end': '2022-01-31'})
@@ -274,15 +256,12 @@ class RVCImportFileWizard(models.TransientModel):
                                                         'state': 'confirm',
                                                         'type_beneficio' : self.type_beneficio})
                     cre.append(rvc_benf.id)
-                    self.env.cr.commit()                    
-        print('ERRORES', e)
+                    self.env.cr.commit()
         if len(e)>1:
             error.append(e)
-        print('ERRORES222222', error)
         if error:
             msj='No se puede importar el archivo, contiene los siguientes errores: \n\n'
             for e in error:
-                print('ERRORES3333333', e)
                 msj+=str(e)
                 msj+='\n'
             raise ValidationError(msj)            

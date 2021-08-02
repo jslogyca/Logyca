@@ -28,7 +28,6 @@
 						</group>
 						<group>
 							<field name="product_id" attrs="{'readonly': [('state','!=','draft')]}" />
-							<field name="agreement_id" attrs="{'readonly': [('state','!=','draft')]}" />
 							<field name="type_beneficio" invisible="1"/>						
 							<field name="cant_cod" attrs="{'invisible': [('type_beneficio','!=','codigos')], 'readonly': [('state','!=','draft')]}"/>
 							<field name="cant_cod_disp" attrs="{'invisible': [('type_beneficio','!=','codigos')]}" force_save="1" readonly="1"/>
@@ -62,7 +61,6 @@
 				<field name="product_id"/>
 				<field name="type_beneficio" invisible="1"/>
 				<field name="sub_product_ids" attrs="{'invisible': [('type_beneficio','!=','colabora')]}"/>
-				<field name="agreement_id"/>
 				<field name="state"/>
 			</tree>
 		</field>
