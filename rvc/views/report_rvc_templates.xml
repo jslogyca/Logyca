@@ -3,129 +3,224 @@
     <template id="report_rvc_template">
         <t t-call="web.html_container">
             <t t-foreach="inside_foreach_docs or docs" t-as="o">
-                <t t-call="web.external_layout">
-                    <t t-set="o" t-value="o.with_context(lang=o.partner_id.partner_id.lang or o.env.lang)"/>
+                <!-- <t t-call="web.external_layout"> -->
+                    <!-- <t t-set="o" t-value="o.with_context(lang=o.partner_id.partner_id.lang or o.env.lang)"/> -->
+
+
+                    <style>
+                        #logo
+                        {
+                        width 100%;
+                        margin-top:1px;
+                        }
+                        #logo1
+                        {
+                            width 45%;
+                            float: left;
+                            height: 100%;
+                            
+                        }
+                    </style>
+                    <section id="logo">
+                        <div class="header"  style= "text-align: left;">
+                            <div class="col-xs-4" id="logo1"  style= "text-align: center;">
+                                <img  class="img img-responsive" src='rvc/static/img/logo_oferta.png' 
+                                            style="margin: 0px auto; -webkit-animation-play-state: paused; -webkit-transition: none; transition: none;  " align="right" />
+                            </div>
+                        </div>
+                    </section>
                     <div class="page">
                         <h2 t-field="o.name"/>
-                        <!-- <t t-set="is_invalid" t-value="o._is_invalid()"/>
-                        <t t-if="is_invalid">
-                            <strong><t t-esc="is_invalid"/></strong>
-                        </t>
-                        <table name="employee-infos" class="table table-sm table-bordered">
-                            <tr>
-                                <td class="w-25"><strong>Employee</strong></td>
-                                <td class="w-25"><strong>Marital Status</strong></td>
-                                <td class="w-25"><strong>Designation</strong></td>
-                                <td class="w-25"><strong>Pay Period</strong></td>
-                            </tr>
-                            <tr>
-                                <td><span t-field="o.employee_id"/></td>
-                                <td><span t-field="o.employee_id.marital"/></td>
-                                <td><span t-field="o.employee_id.job_title"/></td>
-                                <td><span t-field="o.date_from"/> - <span t-field="o.date_to"/></td>
-                            </tr>
-                            <tr>
-                                <td><span t-field="o.employee_id.address_home_id.street"/></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><span t-field="o.employee_id.address_home_id.city"/> <span t-field="o.employee_id.address_home_id.zip"/></td>
-                                <td><strong>Person in charge</strong></td>
-                                <td><strong>Identification</strong></td>
-                                <td><strong>Computed on </strong></td>
-                            </tr>
-                            <tr>
-                                <td><span t-field="o.employee_id.work_email"/></td>
-                                <td name="personne-in-charge"><t t-esc="o.employee_id.children"/></td>
-                                <td><span t-field="o.employee_id.identification_id"/></td>
-                                <td><span t-field="o.compute_date"/></td>
-                            </tr>
-                        </table>
-
-                        <table class="table table-sm">
-                            <tr>
-                                <td class="w-25"><strong>Basic Salary</strong></td>
-                                <td style="color:#875A7B" class="w-25">
-                                    <span t-esc="o.line_ids.filtered(lambda line: line.code == 'BASIC').total"
-                                        t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
-                                </td>
-                                <td class="w-25"></td>
-                                <td class="w-25"></td>
-                            </tr>
-                        </table>
-                        <div id="total">
-                            <table class="table table-sm">
-                                <thead class="o_black_border">
+                        <div class='header head-img'></div>
+                        <div class='content'>
+                            <h2 style="text-align: center;">OFERTA MERCANTIL PARA LA CONCESIÓN DEL DERECHO AL USO DE CÓDIGOS DE IDENTIFICACIÓN DE PRODUCTO
+                                Y/O GLN </h2>
+                            <h3 style="text-align: center;">Empresas beneficiarias del proyecto RVC.</h3>
+                            <p>LEONEL PAVA CASILIMAS en calidad de Director Ejecutivo y Representante Legal de LOGYCA/ASOCIACION, entidad sin ánimo de 
+                                lucro, con domicilio en Bogotá, con Personería Jurídica reconocida mediante Resolución Especial No. 1298 del diecinueve 
+                                (19) de octubre de mil novecientos ochenta y ocho (1988), de la Alcaldía Mayor de Bogotá, D.C. representada en este acto, 
+                                entidad que administra en Colombia el sistema estándar internacional de identificación GS1, quien en adelante se denominará 
+                                EL OFERENTE CONCEDENTE, se permite presentar la siguiente oferta mercantil, la cual se regula por la ley colombiana, el 
+                                artículo 845 y siguientes del Código de Comercio y demás normas concordantes, de conformidad con las estipulaciones que a 
+                                continuación se detallan</p>
+                            <p>Para todos los efectos del contrato de Concesión que se celebra por la aceptación de la presente oferta, el Aceptante se 
+                                denominará CONCESIONARIA</p>
+                            <h2>PRIMERA: OBJETO DE LA OFERTA: </h2>
+                            <p>De conformidad con el presente contrato, LA CONCEDENTE permite a LA CONCESIONARIA la utilización del SISTEMA GS1 a los 
+                                productores o dueños de marca para la identificación de sus productos mediante la imposición del código de barras, a los 
+                                Intermediarios para la obtención de información mediante la lectura de códigos, a las empresas o servicios para su propia 
+                                identificación a través de códigos numéricos de localización empresarial.</p>
+                            <h2>SEGUNDA: IMPLICACIONES DE LA ACEPTACIÓN DE LA PRESENTE OFERTA: </h2>
+                            <p>En consecuencia, de la aceptación y legalización de la presente oferta mercantil, el negocio que se celebre de acuerdo 
+                                con esta se encuentra exento del impuesto de timbre de conformidad con el artículo 530 del estatuto tributario.</p>
+                            <h2>TERCERA: OBLIGACIONES DEL CONCEDENTE: </h2>
+                            <p><strong>3.1</strong> Asignar usuario y contraseña para que LA ACEPTANTE CONCESIONARIA ingrese a la plataforma de 
+                                asignación de códigos y asigne uno a uno los códigos de los productos que este requiera y tenga disponibles, previo 
+                                el pago establecido de las tarifas vigentes del año en curso.<strong>3.2</strong> Brindar a LA ACEPTANTE 
+                                CONCESIONARIA, la información técnica básica necesaria para la asignación e impresión del código de identificación 
+                                GS1, a través de la guía de identificación, en formato pdf.<strong>3.3</strong> Verificar de calidad de impresión 
+                                del código o paquete de códigos, durante los 3 meses siguientes a la adquisición. GS1 Colombia emitirá dicha 
+                                certificación de calidad de la impresión de las etiquetas impresas siempre y cuando la empresa envíe las muestras 
+                                físicas de las mismas a GS1 Colombia, en la ciudad de Bogotá, al área de Soporte y Verificaciones.<strong>3.4</strong>
+                                Entregar por 99 años el derecho al uso de las identificaciones asignadas a los productos registrados.
+                                <strong>3.5</strong> Entregar el soporte técnico básico, que incluye 60 minutos de soporte (telefónico, por mail o 
+                                chat) que pueden ser usados durante el primer año.</p>
+                            <h2>CUARTA. OBLIGACIONES DE LA ACEPTANTE CONCESIONARIA:</h2>
+                            <p><strong>4.1</strong> Utilizar el SISTEMA GS1 de acuerdo con la moral y las buenas costumbres.
+                                <strong>4.2</strong> Cumplir durante todo el tiempo de vigencia del presente contrato, con los reglamentos que 
+                                para el uso del SISTEMA GS1 COLOMBIA adopte LA OFERENTE CONCEDENTE, los cuales hacen parte del contrato de concesión 
+                                que se celebra con la aceptación de la presente oferta.<strong>4.3</strong> No utilizar el SISTEMA GS1, si siendo 
+                                intermediario en la venta de productos de terceros, los mismos no tienen o han perdido el derecho al uso del SISTEMA 
+                                GS1 conferido por LA OFERENTE CONCEDENTE.<strong>4.4</strong> No marcar, ni comercializar productos identificados 
+                                con el SISTEMA GS1, si se pierde el derecho al uso del SISTEMA GS1 que le otorgó LA OFERENTE CONCEDENTE. LA ACEPTANTE 
+                                CONCESIONARIA que sea productora o dueña de marca tendrá un máximo de tres meses para dejar de utilizar los códigos 
+                                sobre los cuales tuvo derecho al uso.<strong>4.5</strong>No introducir modificaciones o imitar el SISTEMA GS1.
+                                <strong>4.6</strong> No hacer uso de los códigos de localización asignados por LA CONCEDENTE inmediatamente 
+                                termine el presente contrato.<strong>4.7</strong>Está obligada a informar a LA CONCEDENTE los códigos asignados 
+                                antes de la comercialización de los productos marcados con el SISTEMA GS 1.</p>
+                            <h2>QUINTA: CESIÓN:</h2>
+                            <p>Una vez haya sido aceptada la presente oferta mercantil de Concesión, este contrato no podrá ser cedido por LA 
+                                ACEPTANTE CONCESIONARIA sin previa autorización por escrito de LA OFERENTE CONCEDENTE. La inobservancia a la 
+                                anterior obligación dará lugar a la terminación del contrato de concesión que se perfecciona por la aceptación 
+                                de esta oferta mercantil.</p>
+                            <h2>SEXTA: FECHA DE VIGENCIA, TÉRMINO DE DURACIÓN Y RENOVACIÓN:</h2>
+                            <p> El contrato de concesión que se perfeccione por la aceptación de la presente oferta mercantil rige a partir de 
+                                la fecha de aceptación y TENDRA VIGENCIA DE 99 AÑOS.</p>
+                            <h2>SÉPTIMA: TERMINACIÓN DEL CONTRATO DE CONCESIÓN:</h2>
+                            <p><strong>7.1</strong> Se terminará por expiración de su término de vigencia sin que se haya prorrogado.
+                                <strong>7.2</strong> LA OFERENTE CONCEDENTE puede dar por terminado el presente contrato si LA ACEPTANTE 
+                                CONCESIONARIA entra en estado de liquidación, de concordato, acuerdo de reestructuración de que trata la ley 550 
+                                de 1999, o por muerte si es persona natural. </p>
+                            <p><strong>7.3</strong>Cualquiera de las partes podrá dar por terminado 
+                                el presente contrato frente al incumplimiento de la otra, en un plazo no menor de treinta (30) días contados a 
+                                partir de la notificación del incumplimiento a menos que la parte que incumplió haya subsanado el incumplimiento 
+                                o haya dado garantías suficientes a juicio de LA OFERENTE CONCEDENTE de lo que subsanará dentro del mismo plazo.
+                                <strong>PARAGRAFO:</strong> A la terminación del presente contrato sobrevivirán, y LA ACEPTANTE CONCESIONARIA 
+                                continuará obligada al cumplimiento de las obligaciones previstas de la cláusula cuarta numerales: 4.3, 4.4, 4.5 
+                                y 4.6 de la presente oferta mercantil.</p>
+                            <h2>OCTAVA: CLAUSULA PENAL:</h2>
+                            <p>El incumplimiento o violación de cualquiera de las obligaciones de la presente oferta mercantil, por parte de la 
+                                ACEPTANTE CONCESIONARIA, la constituirá en deudora de LA OFERENTE CONCEDENTE, por una suma ajustada en salarios 
+                                mínimos dependiendo del nivel de activos de cada compañía como se contempla en la siguiente tabla de rangos:
+                                <table border="1" style="margin: 0 auto; text-align:center;">
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Number of Hours</th>
-                                        <th>Number of Days</th>
-                                        <th>Amount</th>
+                                        <td colspan="2"><strong>RANGOS DE ACTIVOS EN MILLONES DE PESOS</strong></td>
+                                        <td><strong>SLM POR RANGO DE ACTIVOS</strong></td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <span t-foreach="o.worked_days_line_ids" t-as="worked_days">
-                                        <t t-if="worked_days.code != 'OUT'">
-                                            <tr style="color:none">
-                                                <td>
-                                                    <span t-field="worked_days.name"/>
-                                                </td>
-                                                <td><span t-field="worked_days.number_of_hours"/></td>
-                                                <td><span t-field="worked_days.number_of_days"/></td>
-                                                <td><span t-esc="worked_days.amount" digits="[42, 2]"
-                                                        t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
-                                            </tr>
-                                        </t>
-                                    </span>
-                                    <span t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip)" t-as="line">
-                                        <t t-set="line_style"/>
-                                        <t t-set="line_class"/>
-                                        <t t-if="line.code == 'NET'">
-                                            <t t-set="line_style" t-value="'color:#875A7B;'"/>
-                                            <t t-set="line_class" t-value="'o_total o_border_bottom'"/>
-                                        </t>
-                                        <t t-if="(line.code == 'BASIC') or (line.code == 'GROSS')">
-                                            <t t-set="line_style" t-value="'color:#00A09D;'"/>
-                                            <t t-set="line_class" t-value="'o_subtotal o_border_bottom'"/>
-                                        </t>
-                                        <tr t-att-class="line_class" t-att-style="line_style">
-                                            <td><span t-field="line.name"/></td>
-                                            <td></td>
-                                            <td><span t-if="line.quantity > 1" t-esc="line.quantity"/></td>
-                                            <td><span t-esc="line.total"
-                                                    t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
-                                        </tr>
-                                    </span>
-                                </tbody>
-                            </table>
-                        </div>
-                        <p t-if="o.net_wage &gt;= 0">Total to pay on <td><span t-field="o.employee_id.bank_account_id"/></td>, bank account of <span t-field="o.employee_id"/>: <td><span t-field="o.net_wage"/></td></p>
-                        <p t-if="o.net_wage &lt; 0">The net amount will be recovered from the first positive remuneration established after this.</p>
+                                    <tr>
+                                        <td>-</td>
+                                        <td>9.9</td>
+                                        <td>0.54</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10.0</td>
+                                        <td>24.9</td>
+                                        <td>1.05</td>
+                                    </tr>
+                                    <tr>
+                                        <td>25.0</td>
+                                        <td>49.9</td>
+                                        <td>1.59</td>
+                                    </tr>
+                                    <tr>
+                                        <td>50.0</td>
+                                        <td>99.9</td>
+                                        <td>2.10</td>
+                                    </tr>
+                                    <tr>
+                                        <td>100.0</td>
+                                        <td>249.9</td>
+                                        <td>4.20</td>
+                                    </tr>
+                                    <tr>
+                                        <td>250.0</td>
+                                        <td>499.9</td>
+                                        <td>6.32</td>
+                                    </tr>
+                                    <tr>
+                                        <td>500.0</td>
+                                        <td>749.9</td>
+                                        <td>8.42</td>
+                                    </tr>
+                                    <tr>
+                                        <td>750.0</td>
+                                        <td>999.9</td>
+                                        <td>10.53</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1.000.0</td>
+                                        <td>2.499.9</td>
+                                        <td>12.63</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2.500.0</td>
+                                        <td>4.999.9</td>
+                                        <td>13.90</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5.000.0</td>
+                                        <td>9.999.9</td>
+                                        <td>16.22</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">10.000 en adelante</td>
+                                        <td>20.00</td>
+                                    </tr>
+                                </table></p>
+                            <h2>NOVENA: CLAUSULA COMPROMISORIA:</h2>
+                            <p>Toda controversia o diferencia relacionada con la presente oferta mercantil, sus anexos y su ejecución, será resuelta 
+                                por un Tribunal de Arbitramento, integrado por tres (3) árbitros designados por la Cámara de Comercio de Bogotá en la 
+                                que las partes delegan esta facultad. Cuando se presenten controversias en relación con este contrato o su ejecución 
+                                cualquiera de las partes podrá solicitar por escrito a la Cámara de Comercio de Bogotá que designe los árbitros a fin 
+                                de integrar el tribunal. La Cámara de Comercio de Bogotá elegirá por sorteo los árbitros de entre los árbitros inscritos 
+                                en las listas que lleva el Centro de Arbitraje y Conciliación Mercantiles de dicha Cámara. El tribunal así constituido 
+                                fallará en derecho y se sujetará a lo dispuesto por el Decreto 2279 de 1989 y por la Ley 23 de 1.991 en todo lo relativo 
+                                a impedimentos, recusaciones, instalación, regulación de gastos, honorarios, etc.</p>
+                            <h2>DÉCIMA: VIGENCIA DE LA OFERTA MERCANTIL:</h2>
+                            <p>La presente oferta mercantil tiene una vigencia de cinco (5) días hábiles, transcurridos los cuales sin que haya sido 
+                                ceptada en los términos previstos en el numeral segundo de la presente oferta se entenderá como rechazada.
+                                
+                                Para constancia se firma la presente el día _____ del mes _____ del año _________.</p>
+                            <!-- <div class='signature'>
+                                <div class='signatureLine'>
 
-                        <table name="contract-infos" class="table table-sm table-bordered">
-                            <tr>
-                                <td class="w-25"><strong>Contract Start Date</strong></td>
-                                <td class="w-25"><strong>Working Schedule</strong></td>
-                                <td class="w-25" name="company-car-title"></td>
-                            </tr>
-                            <tr>
-                                <td><span t-field="o.employee_id.first_contract_date"/></td>
-                                <td><span t-field="o.employee_id.contract_id.hours_per_week"/></td>
-                                <td class="w-25" name="company-car-model"></td>
-                            </tr>
-                        </table>
-                        <p class="text-center">Made by Odoo</p> -->
+                                </div>
+                                <h4>FIRMA REPRESENTANTE LEGAL NOMBRE: </h4>
+                                <h4>RL DE LA ACEPTANTE CONCESIONARIA: </h4>
+                                <h4>NIT: </h4>
+                            </div>                                 -->
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div class='signature'>
+                                <div class="row">
+                                    <div class="col-xs-1">
+                                        <div style="border-top: 1px solid black;">FIRMA REPRESENTANTE LEGAL NOMBRE: </div>
+                                        <div>RL DE LA ACEPTANTE CONCESIONARIA: </div>
+                                        <div>NIT: </div>
+                                        
+                                    </div>                                   
+                                </div>                            
+                            </div> 
+
+
+                        </div>
+                        <div class='footer footer-img'></div>
                     </div>
                 </t>
-            </t>
+            <!-- </t> -->
         </t>
     </template>
 
     <template id="report_rvc_lang">
         <t t-foreach="docs" t-as="o">
-            <t t-set="inside_foreach_docs" t-value="o"/>
+            <!-- <t t-set="inside_foreach_docs" t-value="o"/> -->
             <t t-call="rvc.report_rvc_template" t-lang="o.partner_id.sudo().partner_id.lang"/>
         </t>
     </template>
