@@ -30,7 +30,6 @@
 							<field name="product_id" attrs="{'readonly': [('state','!=','draft')]}" />
 							<field name="type_beneficio" invisible="1"/>						
 							<field name="cant_cod" attrs="{'invisible': [('type_beneficio','!=','codigos')], 'readonly': [('state','!=','draft')]}"/>
-							<field name="cant_cod_disp" attrs="{'invisible': [('type_beneficio','!=','codigos')]}" force_save="1" readonly="1"/>
 							<field name="sub_product_ids" attrs="{'invisible': [('type_beneficio','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
 							<field name="date_end" attrs="{'invisible': [('type_beneficio','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
 							<field name="gln" attrs="{'invisible': [('type_beneficio','not in',('colabora','codigos'))], 'readonly': [('state','!=','draft')]}" />

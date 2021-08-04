@@ -131,11 +131,6 @@ msgid "Cantidad de Códigos"
 msgstr ""
 
 #. module: rvc
-#: model:ir.model.fields,field_description:rvc.field_product_benef__cant_cod_disp
-msgid "Cantidad de Códigos Disponibles"
-msgstr ""
-
-#. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__cargo_contact
 #: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__cargo_contact
 msgid "Cargo"

@@ -88,7 +88,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
             product_benef.write({'state': 'done'})
             # Actualizar Contacto y Empresa
             self.update_contact(product_benef.partner_id)
-            self.update_company(product_benef)
+            if product_benef.parent_id:
+                self.update_company(product_benef)
         return {'type': 'ir.actions.act_window_close'}
 
 
