@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Report Sale Product -->
+    <record id="report_excel_sale_product_search" model="ir.ui.view">
+        <field name="name">report.excel.sale.product.search</field>
+        <field name="model">report.excel.sale.product</field>
+        <field name="arch" type="xml">
+            <search string="Report Sale Product">
+                <field name="id"/>
+                <field name="partner_id"/>
+                <field name="invoice_date"/>
+                <separator/>
+                <group  string="Extended Filters">
+                    <filter string="Today" name="today_invoices" help="today invoices."
+                        domain="[('invoice_date', '=', context_today().strftime('%Y-%m-%d'))]"/>                       
+                </group>         
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="partner_id" string="Partner" context="{'group_by':'partner_id'}"/>
+                    <filter name="invoice_date" string="Date" context="{'group_by':'invoice_date'}"/>
+                    <filter name="id" string="Invoice" context="{'group_by':'id'}"/>
+                </group>                    
+            </search>
+        </field>
+    </record>
+    <record id="report_excel_sale_product_tree" model="ir.ui.view">
+        <field name="name">report.excel.sale.product.tree</field>
+        <field name="model">report.excel.sale.product</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0" delete="0" string="Report Sale Product">
+                <field name="move_id"/>
+                <field name="partner_id"/>
+                <field name="vat"/>
+                <field name="invoice_date"/>
+                <field name="invoice_date_due"/>
+                <field name="company_id"/>
+                <field name="invoice_origin"/>
+                <field name="product_id"/>
+                <field name="analytic_account_id"/>
+                <field name="analytic_account_red"/>
+                <field name="analytic_group_id"/>
+                <field name="analytic_group_two_id"/>
+                <field name="state"/>
+                <field name="vendedor_id"/>
+                <field name="team_id"/>
+                <field name="x_send_dian"/>
+                <field name="x_date_send_dian"/>
+                <field name="x_cufe_dian"/>
+                <field name="currency_id"/>
+                <field name="price_unit_by_product" sum="Total Payment"/>
+                <field name="quantity" sum="Total Payment"/>
+                <field name="price_unit" sum="Total Payment"/>
+                <field name="discount" sum="Total Payment"/>
+                <field name="neto" sum="Total Payment"/>
+                <field name="tax" sum="Total Payment"/>
+                <field name="price_total" sum="Total Payment"/>
+            </tree>
+        </field>
+    </record>
+    <record id="report_excel_sale_product_pivot" model="ir.ui.view">
+        <field name="model">report.excel.sale.product</field>
+        <field name="arch" type="xml">
+            <pivot string="Report Sale Product" disable_linking="True">
+                <field name="price_unit_by_product" type="measure" />
+                <field name="price_total" type="measure" />
+            </pivot>            
+        </field>
+    </record>
+
+    <record id="action_report_excel_sale_product" model="ir.actions.act_window">
+        <field name="name">Report Sale Product</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">report.excel.sale.product</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="context">
+            {
+                'search_default_today_invoices': 1,
+            }
+        </field>
+    </record>
+
+    <menuitem
+        id="report_excel_sale_product_menu"
+        name="Report Sale Product"
+        action="action_report_excel_sale_product"
+        parent="account_reports_excel.menu_report_excel_sale_product_root" 
+        sequence="1" />    
+</odoo>

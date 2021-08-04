@@ -77,15 +77,19 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     m.x_date_send_dian,
                                     m.x_cufe_dian,
                                     mc.name,
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_unit*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_unit
-                                    END AS price_unit_by_product,   
+                                    END AS price_unit_by_product,
                                     l.quantity,   
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN ((l.price_unit*l.quantity)*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE (l.price_unit*l.quantity)
@@ -95,12 +99,14 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     ELSE 0.0
                                     END AS discount,
                                     l.discount,
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE ((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))
-                                    END AS neto, 
+                                    END AS neto,
                                     CASE WHEN l.discount=100
                                     THEN 0.0
                                     WHEN (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)=0
@@ -111,12 +117,14 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     THEN round((coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0)*-1),2)
                                     ELSE round(coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0),2)
                                     END AS tax,
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_total*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_total
-                                    END AS price_total                       
+                                    END AS price_total
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
                                     inner join res_partner p on p.id=m.partner_id
@@ -163,15 +171,19 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     m.x_date_send_dian,
                                     m.x_cufe_dian,
                                     mc.name,
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_unit*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_unit
-                                    END AS price_unit_by_product,   
+                                    END AS price_unit_by_product,
                                     l.quantity,   
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN ((l.price_unit*l.quantity)*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE (l.price_unit*l.quantity)
@@ -181,12 +193,14 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     ELSE 0.0
                                     END AS discount,
                                     l.discount,
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE ((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))
-                                    END AS neto, 
+                                    END AS neto,
                                     CASE WHEN l.discount=100
                                     THEN 0.0
                                     WHEN (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)=0
@@ -197,12 +211,14 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     THEN round((coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0)*-1),2)
                                     ELSE round(coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0),2)
                                     END AS tax,
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_total*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_total
-                                    END AS price_total                         
+                                    END AS price_total
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
                                     inner join res_partner p on p.id=m.partner_id
@@ -255,15 +271,19 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     m.x_date_send_dian,
                                     m.x_cufe_dian,
                                     mc.name,
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_unit*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_unit
-                                    END AS price_unit_by_product,   
+                                    END AS price_unit_by_product,
                                     l.quantity,   
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN ((l.price_unit*l.quantity)*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE (l.price_unit*l.quantity)
@@ -273,12 +293,14 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     ELSE 0.0
                                     END AS discount,
                                     l.discount,
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE ((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))
-                                    END AS neto, 
+                                    END AS neto,
                                     CASE WHEN l.discount=100
                                     THEN 0.0
                                     WHEN (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)=0
@@ -289,8 +311,10 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     THEN round((coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0)*-1),2)
                                     ELSE round(coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0),2)
                                     END AS tax,
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_total*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_total
@@ -340,15 +364,19 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     m.x_date_send_dian,
                                     m.x_cufe_dian,
                                     mc.name,
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_unit*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_unit
-                                    END AS price_unit_by_product,   
-                                    l.quantity,   
-                                    CASE WHEN m.type = 'out_refund'
+                                    END AS price_unit_by_product,
+                                                                        l.quantity,   
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN ((l.price_unit*l.quantity)*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE (l.price_unit*l.quantity)
@@ -358,12 +386,14 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     ELSE 0.0
                                     END AS discount,
                                     l.discount,
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE ((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))
-                                    END AS neto, 
+                                    END AS neto,
                                     CASE WHEN l.discount=100
                                     THEN 0.0
                                     WHEN (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)=0
@@ -374,12 +404,14 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     THEN round((coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0)*-1),2)
                                     ELSE round(coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0),2)
                                     END AS tax,
-                                    CASE WHEN m.type = 'out_refund'
+                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_total*-1)
+                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    THEN l.debit
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_total
-                                    END AS price_total                          
+                                    END AS price_total
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
                                     inner join res_partner p on p.id=m.partner_id
