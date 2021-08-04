@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="account_income_report_search" model="ir.ui.view">
+        <field name="model">account.income.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="sale_order"/>
+                <field name="move_id"/>
+                <field name="company_id"/>                                    
+                <separator/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_date_invoice" string="Fecha" context="{'group_by': 'invoice_date'}"/>
+                    <filter name="group_partner_id" string="Cliente" context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_move_id" string="Factura" context="{'group_by': 'move_id'}"/>
+                    <filter name="group_company_id" string="Company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="account_income_report_tree" model="ir.ui.view">
+        <field name="model">account.income.report</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0" delete="0">
+                <field name="partner_id"/>
+                <field name="sale_order"/>
+                <field name="move_id" widget="many2one_clickable" />
+                <field name="state"/>
+                <field name="invoice_date"/>
+                <field name="amount_invoice"/>
+                <field name="amount_untaxed"/>
+                <field name="name_asset"/>
+                <field name="move_dif_id"/>
+                <field name="name_dif_move"/>
+                <field name="amount_total"/>
+                <field name="date"/>
+                <field name="state_dif"/>
+                <field name="company_id"/>
+                <field name="create_uid"/>
+            </tree>
+        </field>
+    </record>
+    <record id="account_income_report_pivot" model="ir.ui.view">
+        <field name="model">account.income.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Incomes" disable_linking="True">
+                <field name="amount_untaxed" type="measure" />
+                <field name="amount_total" type="measure" />
+            </pivot>            
+        </field>
+    </record>
+<record id="view_wizard_account_income_report" model="ir.ui.view">
+    <field name="name">wizard.account.income.report</field>
+    <field name="model">wizard.account.income.report</field>
+    <field name="type">form</field>
+    <field name="arch" type="xml">
+        <form string="Income">
+            <sheet>
+                <group>					
+                    <field name='date_start' required="1"/>
+                    <field name='date_stop' required="1"/>
+                </group>		    				    		
+                <footer>
+                    <button name="cargar_tabla" string="Cargar" type="object" class="oe_highlight"/>
+                    <button special='cancel' string='Cancelar'/>
+                </footer>
+            </sheet>
+        </form>               
+        </field>
+    </record>
+    <record id="action_wizard_account_income_report" model="ir.actions.act_window">
+        <field name="name">Income</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wizard.account.income.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_wizard_account_income_report"/>
+    </record>
+    <record id="action_account_income_report" model="ir.actions.act_window">
+        <field name="name">Incomes</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.income.report</field>
+        <field name="view_mode">tree,pivot</field>
+    </record>
+    <menuitem name="Income" 
+            action="action_wizard_account_income_report" 
+            id="menu_wizard_account_income_report" 
+            parent="account.account_reports_management_menu" 
+            sequence="10"/>    
+</odoo>
