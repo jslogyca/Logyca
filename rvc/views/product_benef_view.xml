@@ -7,17 +7,17 @@
 			<form string="Gestión y Administración de Beneficios">
 				<header>
 				 	<button name="action_notified" type="object" states="draft" string="Notificar al Beneficiario" class="oe_highlight"/>
-				 	<button name="action_cancel" type="object" states="draft" string="Cancel" class="oe_highlight"/>
 				 	<button name="action_confirm" type="object" states="notified" string="Confirm" class="oe_highlight"/>
 				 	<button name="action_notified" type="object" states="notified" string="Volver a notificar" class="oe_highlight"/>
 				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight"/>
 				 	<button name="action_re_done" type="object" states="done" string="Re-Done" class="oe_highlight"/>
 				 	<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight"/>
 					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />
+					<button name="action_cancel" type="object" states="notified" string="Cancel" class="btn-secondary" attrs="{'invisible': [('id','=', False)]}"/>
 				</header>			
 				<sheet>
 					<group>
-						<group>
+						<group string="Empresa Beneficiaria">
 							<field name="partner_id" attrs="{'readonly': [('state','!=','draft')]}"/>
 							<field name="vat" attrs="{'readonly': [('state','!=','draft')]}"/>
 							<field name="parent_id" attrs="{'readonly': [('state','!=','draft')]}"/>
@@ -26,13 +26,20 @@
 							<field name="email_contact" />
 							<field name="cargo_contact" />
 						</group>
-						<group>
+						<group string="Detalles del Beneficio">
 							<field name="product_id" attrs="{'readonly': [('state','!=','draft')]}" />
 							<field name="type_beneficio" invisible="1"/>						
 							<field name="cant_cod" attrs="{'invisible': [('type_beneficio','!=','codigos')], 'readonly': [('state','!=','draft')]}"/>
 							<field name="sub_product_ids" attrs="{'invisible': [('type_beneficio','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
 							<field name="date_end" attrs="{'invisible': [('type_beneficio','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
 							<field name="gln" attrs="{'invisible': [('type_beneficio','not in',('colabora','codigos'))], 'readonly': [('state','!=','draft')]}" />
+						</group>
+					</group>
+					<group>
+						<group string="Empresa Halonadora">
+							<field name="parent_id" attrs="{'readonly': [('state','!=','draft')],'required': [('state','=','draft')]}"/>
+						</group>
+						<group>
 						</group>
 					</group>
 				</sheet>

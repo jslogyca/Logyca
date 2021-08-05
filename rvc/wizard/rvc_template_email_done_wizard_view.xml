@@ -12,11 +12,7 @@
                             Se va a notificar el beneficio otorgado:
                         </h3>
                         <group>
-                            <group>
-                            </group>
-                            <group>
-                                <field name="note_deactive"/>
-                            </group>
+                            <field name="note_deactive"/>
                         </group>
                     </sheet>
                     <footer>
