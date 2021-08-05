@@ -3,6 +3,8 @@
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError, UserError
 import json
+import re
+import requests
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -30,14 +32,13 @@ class ProductBenef(models.Model):
                                     ('analitica', 'Analítica')], related='product_id.type_beneficio', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
     sub_product_ids = fields.Many2one('sub.product.rvc', string='Sub-Productos', track_visibility='onchange')
     date_end = fields.Date(string='Date End', track_visibility='onchange')
-    gln = fields.Char('GLN', track_visibility='onchange')
+    gln = fields.Char('Código GLN', track_visibility='onchange')
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, track_visibility='onchange')
     name_contact = fields.Char('Nombre del contacto', related='partner_id.name_contact', track_visibility='onchange')
     phone_contact = fields.Char('Phone', related='partner_id.phone_contact', track_visibility='onchange')
     email_contact = fields.Char('Email', related='partner_id.email_contact', track_visibility='onchange')
     cargo_contact = fields.Char('Cargo', related='partner_id.cargo_contact', track_visibility='onchange')
     vat = fields.Char('Número de documento', related='partner_id.vat', track_visibility='onchange')
-
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]    
@@ -89,7 +90,6 @@ class ProductBenef(models.Model):
                     }
         self.write({'state': 'done'})
 
-
     def action_rejected(self):
         for product_benef in self:
             view_id = self.env.ref('rvc.rvc_template_email_rejected_wizard_form').id,
@@ -127,65 +127,90 @@ class ProductBenef(models.Model):
                     'domain': '[]'
                 }
         self.write({'state': 'notified'})
-        
+
     @api.model
     def create(self, vals):
         res = super(ProductBenef, self).create(vals)
+        res._validate_gln_only_numbers()
         res._validate_gln()
         res._validate_bought_products()
         return res
 
-    
     def write(self, vals):
         res = super(ProductBenef, self).write(vals)
+        self._validate_gln_only_numbers()
         self._validate_gln()
         self._validate_bought_products()
         return res
 
-    
-    def _validate_gln(self, strict_validation=False):
-        available_gln_codes = ""
+    def _validate_gln_only_numbers(self):
+        if self.gln and not re.match(r'^[0-9]+$', str(self.gln)):
+            raise ValidationError(_('Código GLN "%s" es inválido.\n\nLos códigos GLN solo están compuestos de números.' % str(self.gln)))
+        return True
+
+    def _validate_gln(self):
+        available_gln_codes = "No codes"
         found = False
-        
+        qty_codes_found = 0
+
         if self.partner_id and (self.product_id.type_beneficio == 'codigos' or self.product_id.type_beneficio == 'colabora'):
             
-            import requests
             url = "https://asctestdocker.azurewebsites.net/codes/EmpresaGln/"
             payload = {'nit': str(self.vat)}
 
             response = requests.get(url, data=json.dumps(payload))
             if response.status_code == 200:
                 result = response.json()
-                
-                #cuando no escriben un gln pero se encontró que hay uno registrado.
-                if len(result) == 1 and not self.gln:
-                    self.gln = result[0].get('id')
-                    return True
+
+                if len(result) > 0:
+                    available_gln_codes = ""
+                    qty_codes_found = len(result)
 
                 for gln in result:
                     available_gln_codes = available_gln_codes + "\n" + str(gln.get('id'))
 
-                    #cuando escriben un gln lo buscamos entre los que hay registrados para el nit dado.
-                    if str(gln.get('id')) == self.gln: 
-                        found = True
+                    #caso 1: usuario ingresa un gln
+                    if self.gln:
+                        #caso 2: usuario ingresa gln y si está registrado.
+                        if str(gln.get('id')) == self.gln:
+                            found = True
+                            break
+                    #caso 5: usuario no ingresa un gln
+                    else:
+                        # caso 6: usuario no ingresa gln pero se encontró que hay uno registrado.
+                        if len(result) == 1:
+                            self.gln = result[0].get('id')
+                            return True
 
-            if not found and available_gln_codes:
-                raise ValidationError('\
-                    La empresa seleccionada tiene más de un GLN disponible, utilice alguno de los siguientes: \n %s' % str(available_gln_codes))
-            elif strict_validation and not found and not available_gln_codes:
-                raise ValidationError('No hay códigos GLN activos para la empresa seleccionada .')
+            #caso 3: usuario ingresa gln pero es incorrecto y se encuentra uno válido.
+            if self.gln and found == False and available_gln_codes != "No codes" and qty_codes_found == 1:
+                raise ValidationError(\
+                    _('El código GLN ingresado es incorrecto, sin embargo encontramos uno registrado:\n\
+                        %s \n\nPor favor copie y pegue éste.' % str(available_gln_codes)))
+            #caso 4: usuario ingresa gln incorrecto pero hay varios válidos registrados.
+            elif self.gln and found == False and available_gln_codes != "No codes":
+                raise ValidationError(\
+                    _('El código GLN "%s" no es válido, sin embargo encontramos los siguientes %s códigos registrados: \n\
+                        %s \n\nPor favor copie y pegue alguno.' % (self.gln, str(qty_codes_found), str(available_gln_codes))))
+            #caso 7: usuario no ingresa gln pero hay varios registrados.
+            if not self.gln and found == False and available_gln_codes != "No codes":
+                raise ValidationError(\
+                    _('Usted no ingresó un código GLN, sin embargo encontramos los siguientes %s códigos registrados: \n\
+                        %s \n\nPor favor copie y pegue alguno.' % (str(qty_codes_found), str(available_gln_codes))))
+
+            #caso 8: no tiene gln registrado. Registrando uno para la empresa seleccionada.
+            elif found == False and available_gln_codes == "":
+                logging.info(" ==> Asignando GLN (en Desarollo) <===")
                 
     def _validate_bought_products(self):
-        import requests
         #url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str("10203040"))
         url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
-        
-        
+
         response = requests.get(url)
         if response.status_code == 200:
             result = response.json()
             
             if result.get('CodigosCompradosDisponibles') > 0:
                  raise ValidationError(\
-                    '¡Lo sentimos! La empresa seleccionada tiene %s código(s) comprados disponibles.' % (str(result.get('CodigosCompradosDisponibles'))) )
+                    _('¡Lo sentimos! La empresa seleccionada tiene %s código(s) comprados disponibles.' % (str(result.get('CodigosCompradosDisponibles')))))
         return True
