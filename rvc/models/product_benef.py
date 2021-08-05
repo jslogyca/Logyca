@@ -199,7 +199,7 @@ class ProductBenef(models.Model):
                         %s \n\nPor favor copie y pegue alguno.' % (str(qty_codes_found), str(available_gln_codes))))
 
             #caso 8: no tiene gln registrado. Registrando uno para la empresa seleccionada.
-            elif found == False and available_gln_codes == "":
+            elif found == False and available_gln_codes == "No codes":
                 logging.info(" ==> Asignando GLN (en Desarollo) <===")
                 
     def _validate_bought_products(self):
