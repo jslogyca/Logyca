@@ -21,9 +21,9 @@ class RVCImportFileWizard(models.TransientModel):
     file_data = fields.Binary(string='File', required=True)
     filename = fields.Char(string='Name File')
     type_beneficio = fields.Selection([('codigos', 'Derechos de Identificación'), 
-                                    ('colabora', 'Colabora'),
-                                    ('analitica', 'Analítica')], string="Beneficio")                                  
-        
+                                    ('colabora', 'Logyca Colabora'),
+                                    ('analitica', 'Logyca Analítica')], string="Beneficio")
+
 
     def import_file(self):
         if not self.file_data:

@@ -16,7 +16,7 @@
 				</header>			
 				<sheet>
 					<group>
-						<group string="Empresa Beneficiaria">
+						<group string="Beneficiario">
 							<field name="partner_id" attrs="{'readonly': [('state','!=','draft')]}"/>
 							<field name="vat" attrs="{'readonly': [('state','!=','draft')]}"/>
 							<field name="name_contact" />
@@ -34,7 +34,7 @@
 						</group>
 					</group>
 					<group>
-						<group string="Empresa Halonadora">
+						<group string="Halonador">
 							<field name="parent_id" attrs="{'readonly': [('state','!=','draft')],'required': [('state','=','draft')]}"/>
 						</group>
 						<group>

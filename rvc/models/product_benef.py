@@ -75,7 +75,23 @@ class ProductBenef(models.Model):
     def action_done(self):
         for product_benef in self:
             if product_benef.state in ('confirm'):
-                if self._validate_gln() and self._validate_bought_products():
+                # validamos que no hayan productos comprados disponibles
+                if self.product_id.type_beneficio == 'codigos' :
+                    if  self._validate_bought_products() and self._validate_qty_codes():
+                        view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
+                        return {
+                            'name':_("Enviar Kit de Bienvenida"),
+                            'view_mode': 'form',
+                            'view_id': view_id,
+                            'view_type': 'form',
+                            'res_model': 'rvc.template.email.wizard',
+                            'type': 'ir.actions.act_window',
+                            'nodestroy': True,
+                            'target': 'new',
+                            'domain': '[]'
+                        }
+                        self.write({'state': 'done'})
+                else:
                     view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
                     return {
                         'name':_("Enviar Kit de Bienvenida"),
@@ -88,7 +104,7 @@ class ProductBenef(models.Model):
                         'target': 'new',
                         'domain': '[]'
                     }
-        self.write({'state': 'done'})
+                    self.write({'state': 'done'})
 
     def action_rejected(self):
         for product_benef in self:
@@ -214,3 +230,9 @@ class ProductBenef(models.Model):
                  raise ValidationError(\
                     _('¡Lo sentimos! La empresa seleccionada tiene %s código(s) comprados disponibles.' % (str(result.get('CodigosCompradosDisponibles')))))
         return True
+
+    def _validate_qty_codes(self):
+        for rec in self:
+            if rec.cant_cod == 0:
+                raise ValidationError(\
+                    _('Por favor indique la cantidad de códigos que se entregará a la empresa beneficiaria %s' % (str(self.partner_id.partner_id.name))))
