@@ -10,7 +10,6 @@
 				 	<button name="action_confirm" type="object" states="notified" string="Confirm" class="oe_highlight"/>
 				 	<button name="action_notified" type="object" states="notified" string="Volver a notificar" class="oe_highlight"/>
 				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight"/>
-				 	<button name="action_re_done" type="object" states="done" string="Re-Done" class="oe_highlight"/>
 				 	<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight"/>
 					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />
 					<button name="action_cancel" type="object" states="notified" string="Cancel" class="btn-secondary" attrs="{'invisible': [('id','=', False)]}"/>
@@ -20,7 +19,6 @@
 						<group string="Empresa Beneficiaria">
 							<field name="partner_id" attrs="{'readonly': [('state','!=','draft')]}"/>
 							<field name="vat" attrs="{'readonly': [('state','!=','draft')]}"/>
-							<field name="parent_id" attrs="{'readonly': [('state','!=','draft')]}"/>
 							<field name="name_contact" />
 							<field name="phone_contact" />
 							<field name="email_contact" />

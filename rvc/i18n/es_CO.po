@@ -40,22 +40,22 @@ msgstr ""
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__message_needaction
 msgid "Action Needed"
-msgstr ""
+msgstr "Acción Necesaria"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__activity_ids
 msgid "Activities"
-msgstr ""
+msgstr "Actividades"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr ""
+msgstr "Decoración de excepción de actividad"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__activity_state
 msgid "Activity State"
-msgstr ""
+msgstr "Estado de actividad"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_agreement_rvc__active
@@ -101,7 +101,7 @@ msgstr ""
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "Contador de adjuntos"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_config_rvc__product_id
@@ -152,14 +152,14 @@ msgstr "Cargue Masivo de Beneficios"
 #: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_sponsored_wizard_view
 #: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
 msgid "Choose a file to import..."
-msgstr ""
+msgstr "Escoja un archivo para importar ..."
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_agreement_rvc__code
 #: model:ir.model.fields,field_description:rvc.field_product_rvc__code
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__code
 msgid "Code"
-msgstr ""
+msgstr "Código"
 
 #. module: rvc
 #: model:ir.model.fields.selection,name:rvc.selection__config_rvc__type_beneficio__colabora
@@ -208,7 +208,7 @@ msgstr "Aceptado"
 #: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__create_uid
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_agreement_rvc__create_date
@@ -222,7 +222,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__create_date
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creado el"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__date_end
@@ -253,19 +253,19 @@ msgstr ""
 #: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__display_name
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nombre para mostrar"
 
 #. module: rvc
 #: model:ir.model.fields.selection,name:rvc.selection__product_benef__state__done
 #: model_terms:ir.ui.view,arch_db:rvc.product_benef_form
 msgid "Done"
-msgstr ""
+msgstr "Hecho"
 
 #. module: rvc
 #: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_sponsored_wizard_view
 #: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
 msgid "Download"
-msgstr ""
+msgstr "Descargar"
 
 #. module: rvc
 #: model:ir.model.fields.selection,name:rvc.selection__product_benef__state__draft
@@ -329,17 +329,17 @@ msgstr "Plantilla"
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__message_follower_ids
 msgid "Followers"
-msgstr ""
+msgstr "Seguidores"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__message_channel_ids
 msgid "Followers (Channels)"
-msgstr ""
+msgstr "Seguidores (Canales)"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__message_partner_ids
 msgid "Followers (Partners)"
-msgstr ""
+msgstr "Seguidores (Terceros)"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__gln
@@ -376,12 +376,12 @@ msgstr ""
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__activity_exception_icon
 msgid "Icon"
-msgstr ""
+msgstr "Icono"
 
 #. module: rvc
 #: model:ir.model.fields,help:rvc.field_product_benef__activity_exception_icon
 msgid "Icon to indicate an exception activity."
-msgstr ""
+msgstr "Ícono para indicar una excepción de actividad"
 
 #. module: rvc
 #: model:ir.model.fields.selection,name:rvc.selection__config_rvc__type_beneficio__codigos
@@ -392,19 +392,19 @@ msgstr "Derechos de Identificación"
 #: model:ir.model.fields,help:rvc.field_product_benef__message_needaction
 #: model:ir.model.fields,help:rvc.field_product_benef__message_unread
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "Si está seleccionado, nuevos mensajes requieren su atención."
 
 #. module: rvc
 #: model:ir.model.fields,help:rvc.field_product_benef__message_has_error
 #: model:ir.model.fields,help:rvc.field_product_benef__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
-msgstr ""
+msgstr "Si está seleccionado, algunos mensajes tienen error de envío."
 
 #. module: rvc
 #: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_sponsored_wizard_view
 #: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
 msgid "Import"
-msgstr ""
+msgstr "Importar"
 
 #. module: rvc
 #: model:ir.ui.menu,name:rvc.menu_import_file_root
@@ -425,7 +425,7 @@ msgstr ""
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__message_is_follower
 msgid "Is Follower"
-msgstr ""
+msgstr "Es Seguidor"
 
 #. module: rvc
 #: model:ir.model.constraint,message:rvc.constraint_rvc_sponsored_partner_id_company_uniq
@@ -444,7 +444,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:rvc.field_rvc_sponsored____last_update
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última modificación el"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_agreement_rvc__write_uid
@@ -458,7 +458,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__write_uid
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Última actualización por"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_agreement_rvc__write_date
@@ -472,17 +472,17 @@ msgstr ""
 #: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__write_date
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Última actualización en"
 
 #. module: rvc
 #: model:ir.model,name:rvc.model_log_import_rvc
 msgid "Log Import RVC"
-msgstr "Log"
+msgstr "Log de importación RVC"
 
 #. module: rvc
 #: model:ir.ui.menu,name:rvc.menu_log_import_rvc
 msgid "Log RVC"
-msgstr "Log"
+msgstr "Log RVC"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__macro_sector
@@ -493,12 +493,12 @@ msgstr ""
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__message_main_attachment_id
 msgid "Main Attachment"
-msgstr ""
+msgstr "Adjunto Principal"
 
 #. module: rvc
 #: model:res.groups,name:rvc.group_rvc_manager
 msgid "Manager RVC"
-msgstr ""
+msgstr "Administrador RVC"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__cant_max
@@ -508,12 +508,12 @@ msgstr ""
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "Mensaje de Error de Envío"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__message_ids
 msgid "Messages"
-msgstr ""
+msgstr "Mensajes"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__cant_min
@@ -539,7 +539,7 @@ msgstr "Nombre"
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__filename
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__filename
 msgid "Name File"
-msgstr ""
+msgstr "Nombre Archivo"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__activity_date_deadline
@@ -566,32 +566,32 @@ msgstr ""
 #: model:ir.model.fields.selection,name:rvc.selection__product_benef__state__notified
 #: model_terms:ir.ui.view,arch_db:rvc.product_benef_form
 msgid "Notified"
-msgstr ""
+msgstr "Notificado"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
+msgstr "Número de Acciones"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__message_has_error_counter
 msgid "Number of errors"
-msgstr ""
+msgstr "Número de Errores"
 
 #. module: rvc
 #: model:ir.model.fields,help:rvc.field_product_benef__message_needaction_counter
 msgid "Number of messages which requires an action"
-msgstr ""
+msgstr "Número de mensajes que requieren su atención"
 
 #. module: rvc
 #: model:ir.model.fields,help:rvc.field_product_benef__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "Número de mensajes con error de envío"
 
 #. module: rvc
 #: model:ir.model.fields,help:rvc.field_product_benef__message_unread_counter
 msgid "Number of unread messages"
-msgstr ""
+msgstr "Número de mensajes sin leer"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__vat
@@ -626,7 +626,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__name
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__product_id
 msgid "Product"
-msgstr ""
+msgstr "Producto"
 
 #. module: rvc
 #: model:ir.model,name:rvc.model_product_benef
@@ -683,15 +683,10 @@ msgid "RVC Sponsored"
 msgstr "Patrocinadores"
 
 #. module: rvc
-#: model_terms:ir.ui.view,arch_db:rvc.product_benef_form
-msgid "Re-Done"
-msgstr ""
-
-#. module: rvc
 #: model:ir.model.fields.selection,name:rvc.selection__product_benef__state__rejected
 #: model_terms:ir.ui.view,arch_db:rvc.product_benef_form
 msgid "Rejected"
-msgstr ""
+msgstr "Rechazado"
 
 #. module: rvc
 #: model:ir.ui.menu,name:rvc.hr_menu_rvc_report
@@ -701,12 +696,12 @@ msgstr ""
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__activity_user_id
 msgid "Responsible User"
-msgstr ""
+msgstr "Usuario Responsable"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_product_benef__message_has_sms_error
 msgid "SMS Delivery error"
-msgstr ""
+msgstr "SMS - Error de envío"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__x_sector_id
@@ -730,7 +725,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:rvc.field_product_rvc__state
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__state
 msgid "State"
-msgstr ""
+msgstr "Estado"
 
 #. module: rvc
 #: model:ir.model.fields,help:rvc.field_product_benef__activity_state
