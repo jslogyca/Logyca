@@ -4,14 +4,23 @@
 		<field name="name">rvc.beneficiary.form</field>
 		<field name="model">rvc.beneficiary</field>
 		<field name="arch" type="xml">
-			<form string="Empresas Patrocinada" create="true" >
+			<form string="Empresas Patrocinada">
 				<header>
+                    <button name="deactivate_beneficiary" string="Deactivate" type="object" class="btn-primary" attrs="{'invisible': ['|',('id','=', False), ('active','=', False)]}"/>
+                    <button name="activate_beneficiary" string="Activate" type="object" class="btn-primary" attrs="{'invisible': ['|', ('id','=', False), ('active','=', True)]}"/>
 				</header>			
 				<sheet>
-					<group>
-						<group>
-							<field name="vat" />						
-							<field name="partner_id" force_save="1" readonly="1"/>
+                    <h1>Registro de Empresa Beneficiaria</h1>
+                    <group>
+                        <group string="Buscar Empresa">
+                            <field name="partner_id" nolabel="1"/>
+                        </group>
+                        <group>
+                        </group>
+					</group>
+					<group string="Detalles de la Empresa">
+						<group >
+                            <field name="vat"/>
 							<field name="company_id" />
 							<field name="phone" />
 							<field name="email" />						
@@ -19,12 +28,13 @@
 							<field name="macro_sector" />
 							<field name="x_company_size" />
 						</group>
-						<group>
+						<group string="Detalles de Contacto">
 							<field name="name_contact" />						
 							<field name="phone_contact" />
 							<field name="email_contact" />
 							<field name="cargo_contact" />
-							<field name="active" />
+
+                            <field name="active" invisible="1"/>
 						</group>
 					</group>
 				</sheet>

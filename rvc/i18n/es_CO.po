@@ -306,6 +306,16 @@ msgid "Empresas Patrocinada"
 msgstr "Empresas Beneficiarias"
 
 #. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_beneficiary_form
+msgid "Deactivate"
+msgstr "Desactivar"
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_beneficiary_form
+msgid "Activate"
+msgstr "Activar"
+
+#. module: rvc
 #: model:ir.ui.menu,name:rvc.hr_menu_rvc_beneficiary
 msgid "Empresas Patrocinadas"
 msgstr "Empresas Beneficiarias"
