@@ -9,9 +9,9 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-class ProductBenef(models.Model):
-    _name = 'product.benef'
-    _description = 'Product Benef'
+class BenefitsAdmon(models.Model):
+    _name = 'benefits.admon'
+    _description = 'Benefits Administration.'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
 
@@ -26,28 +26,28 @@ class ProductBenef(models.Model):
     product_id = fields.Many2one('product.rvc', string='Producto', track_visibility='onchange')
     agreement_id = fields.Many2one('agreement.rvc', string='Agreement', track_visibility='onchange')
     name = fields.Char(string='Name', track_visibility='onchange')
-    cant_cod = fields.Float('Cantidad de Códigos', track_visibility='onchange')
-    type_beneficio = fields.Selection([('codigos', 'Derechos de Identificación'), 
+    codes_quantity = fields.Float('Cantidad de Códigos', track_visibility='onchange')
+    benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
                                     ('colabora', 'Colabora'),
-                                    ('analitica', 'Analítica')], related='product_id.type_beneficio', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
+                                    ('analitica', 'Analítica')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
     sub_product_ids = fields.Many2one('sub.product.rvc', string='Sub-Productos', track_visibility='onchange')
     date_end = fields.Date(string='Date End', track_visibility='onchange')
     gln = fields.Char('Código GLN', track_visibility='onchange')
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, track_visibility='onchange')
-    name_contact = fields.Char('Nombre del contacto', related='partner_id.name_contact', track_visibility='onchange')
-    phone_contact = fields.Char('Phone', related='partner_id.phone_contact', track_visibility='onchange')
-    email_contact = fields.Char('Email', related='partner_id.email_contact', track_visibility='onchange')
-    cargo_contact = fields.Char('Cargo', related='partner_id.cargo_contact', track_visibility='onchange')
+    contact_name = fields.Char('Nombre del contacto', related='partner_id.contact_name', track_visibility='onchange')
+    contact_phone = fields.Char('Phone', related='partner_id.contact_phone', track_visibility='onchange')
+    contact_email = fields.Char('Email', related='partner_id.contact_email', track_visibility='onchange')
+    contact_position = fields.Char('Cargo', related='partner_id.contact_position', track_visibility='onchange')
     vat = fields.Char('Número de documento', related='partner_id.vat', track_visibility='onchange')
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]    
 
     def unlink(self):
-        for product_benef in self:
-            if product_benef.state not in ('draft', 'cancel'):
+        for benefits_admon in self:
+            if benefits_admon.state not in ('draft', 'cancel'):
                 raise ValidationError(_('You cannot delete an Benef which is not draft or cancelled. You should create a credit note instead.'))
-        return super(ProductBenef, self).unlink()
+        return super(BenefitsAdmon, self).unlink()
 
 
     def action_cancel(self):
@@ -55,8 +55,8 @@ class ProductBenef(models.Model):
 
 
     def action_confirm(self):
-        for product_benef in self:
-            if product_benef.state in ('notified'):
+        for benefits_admon in self:
+            if benefits_admon.state in ('notified'):
                 view_id = self.env.ref('rvc.rvc_template_email_confirm_wizard_form').id,
                 return {
                     'name':_("Enviar Aceptación"),
@@ -73,10 +73,10 @@ class ProductBenef(models.Model):
 
 
     def action_done(self):
-        for product_benef in self:
-            if product_benef.state in ('confirm'):
+        for benefits_admon in self:
+            if benefits_admon.state in ('confirm'):
                 # validamos que no hayan productos comprados disponibles
-                if self.product_id.type_beneficio == 'codigos' :
+                if self.product_id.benefit_type == 'codigos' :
                     if  self._validate_bought_products() and self._validate_qty_codes():
                         view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
                         return {
@@ -107,7 +107,7 @@ class ProductBenef(models.Model):
                     self.write({'state': 'done'})
 
     def action_rejected(self):
-        for product_benef in self:
+        for benefits_admon in self:
             view_id = self.env.ref('rvc.rvc_template_email_rejected_wizard_form').id,
             return {
                 'name':_("Rechazar Beneficio"),
@@ -128,8 +128,8 @@ class ProductBenef(models.Model):
 
 
     def action_notified(self):
-        for product_benef in self:
-            if product_benef.state in ('draft', 'notified'):
+        for benefits_admon in self:
+            if benefits_admon.state in ('draft', 'notified'):
                 view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id,
                 return {
                     'name':_("Are you sure?"),
@@ -146,14 +146,14 @@ class ProductBenef(models.Model):
 
     @api.model
     def create(self, vals):
-        res = super(ProductBenef, self).create(vals)
+        res = super(BenefitsAdmon, self).create(vals)
         res._validate_gln_only_numbers()
         res._validate_gln()
         res._validate_bought_products()
         return res
 
     def write(self, vals):
-        res = super(ProductBenef, self).write(vals)
+        res = super(BenefitsAdmon, self).write(vals)
         self._validate_gln_only_numbers()
         self._validate_gln()
         self._validate_bought_products()
@@ -169,7 +169,7 @@ class ProductBenef(models.Model):
         found = False
         qty_codes_found = 0
 
-        if self.partner_id and (self.product_id.type_beneficio == 'codigos' or self.product_id.type_beneficio == 'colabora'):
+        if self.partner_id and (self.product_id.benefit_type == 'codigos' or self.product_id.benefit_type == 'colabora'):
             
             url = "https://asctestdocker.azurewebsites.net/codes/EmpresaGln/"
             payload = {'nit': str(self.vat)}
@@ -233,6 +233,6 @@ class ProductBenef(models.Model):
 
     def _validate_qty_codes(self):
         for rec in self:
-            if rec.cant_cod == 0:
+            if rec.codes_quantity == 0:
                 raise ValidationError(\
                     _('Por favor indique la cantidad de códigos que se entregará a la empresa beneficiaria %s' % (str(self.partner_id.partner_id.name))))

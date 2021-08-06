@@ -75,7 +75,7 @@ class RVCImportFileSponsoredWizard(models.TransientModel):
                                                     'name': partner_id.name + ' - ' + 'RVC',
                                                     'partner_id': partner_id.id,
                                                     'state': 'confirm',
-                                                    'name_contact': str(fila[3])})
+                                                    'contact_name': str(fila[3])})
                 cre.append(rvc_patroc.id)
                 self.env.cr.commit()
         obj_model = self.env['ir.model.data']

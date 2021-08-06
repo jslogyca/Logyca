@@ -23,7 +23,7 @@
 ''',    
     'data': [
         'security/security.xml',
-        'data/product_benef_data.xml',
+        'data/benefits_admon_data.xml',
         'data/aceptacion_beneficios_rvc_data.xml',
         'data/kitbienvenida_derechos_identificiacion.xml',
         'data/rechazo_beneficios_data.xml',
@@ -40,8 +40,7 @@
         'views/config_rvc_view.xml',
         'views/log_import_rvc_view.xml',
         'views/product_rvc_view.xml',
-        'views/sector_view.xml',
-        'views/product_benef_view.xml',
+        'views/benefits_admon_view.xml',
         'views/agreement_rvc_view.xml',
         'report/rvc_report.xml',
         'views/report_rvc_templates.xml',

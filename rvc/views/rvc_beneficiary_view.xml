@@ -21,7 +21,6 @@
 					<group string="Detalles de la Empresa">
 						<group >
                             <field name="vat"/>
-							<field name="company_id" />
 							<field name="phone" />
 							<field name="email" />						
 							<field name="x_sector_id" />
@@ -29,10 +28,10 @@
 							<field name="x_company_size" />
 						</group>
 						<group string="Detalles de Contacto">
-							<field name="name_contact" />						
-							<field name="phone_contact" />
-							<field name="email_contact" />
-							<field name="cargo_contact" />
+							<field name="contact_name" />						
+							<field name="contact_phone" />
+							<field name="contact_email" />
+							<field name="contact_position" />
 
                             <field name="active" invisible="1"/>
 						</group>
@@ -87,16 +86,16 @@
 									<field name="x_company_size"/>
 								</div>
 								<div>
-									<field name="name_contact"/>
+									<field name="contact_name"/>
 								</div>
 								<div>
-									<field name="phone_contact"/>
+									<field name="contact_phone"/>
 								</div>
 								<div>
-									<field name="email_contact"/>
+									<field name="contact_email"/>
 								</div>
 								<div>
-									<field name="cargo_contact"/>
+									<field name="contact_position"/>
 								</div>
 							</div>
 						</div>

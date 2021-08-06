@@ -10,7 +10,7 @@ class ProductRVC(models.Model):
 
     name = fields.Char(string='Product')
     code = fields.Char(string='Code')
-    type_beneficio = fields.Selection([('codigos', 'Derechos de Identificación'), 
+    benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
                                     ('colabora', 'Colabora'),
                                     ('analitica', 'Analítica')], string="Beneficio")
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company)
@@ -32,6 +32,6 @@ class SubProductRVC(models.Model):
     state = fields.Selection([('activo', 'Activo'), 
                             ('inactivo', 'Inactivo')], string="State", default='activo')
     product_id = fields.Many2one('product.rvc', string='Product')
-    cant_min = fields.Integer('Min.')
-    cant_max = fields.Integer('Max.')
+    min_qty = fields.Integer('Min.')
+    max_qty = fields.Integer('Max.')
                             

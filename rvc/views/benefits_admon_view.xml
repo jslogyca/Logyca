@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<record id="product_benef_form" model="ir.ui.view">
-		<field name="name">product.benef.form</field>
-		<field name="model">product.benef</field>
+	<record id="benefits_admon_form" model="ir.ui.view">
+		<field name="name">benefits.admon.form</field>
+		<field name="model">benefits.admon</field>
 		<field name="arch" type="xml">
 			<form string="Gestión y Administración de Beneficios">
 				<header>
@@ -19,18 +19,18 @@
 						<group string="Beneficiario">
 							<field name="partner_id" attrs="{'readonly': [('state','!=','draft')]}"/>
 							<field name="vat" attrs="{'readonly': [('state','!=','draft')]}"/>
-							<field name="name_contact" />
-							<field name="phone_contact" />
-							<field name="email_contact" />
-							<field name="cargo_contact" />
+							<field name="contact_name" />
+							<field name="contact_phone" />
+							<field name="contact_email" />
+							<field name="contact_position" />
 						</group>
 						<group string="Detalles del Beneficio">
 							<field name="product_id" attrs="{'readonly': [('state','!=','draft')]}" />
-							<field name="type_beneficio" invisible="1"/>						
-							<field name="cant_cod" attrs="{'invisible': [('type_beneficio','!=','codigos')], 'readonly': [('state','!=','draft')]}"/>
-							<field name="sub_product_ids" attrs="{'invisible': [('type_beneficio','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
-							<field name="date_end" attrs="{'invisible': [('type_beneficio','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
-							<field name="gln" attrs="{'invisible': [('type_beneficio','not in',('colabora','codigos'))], 'readonly': [('state','!=','draft')]}" />
+							<field name="benefit_type" invisible="1"/>						
+							<field name="codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','!=','draft')]}"/>
+							<field name="sub_product_ids" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
+							<field name="date_end" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
+							<field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos'))], 'readonly': [('state','!=','draft')]}" />
 						</group>
 					</group>
 					<group>
@@ -50,38 +50,38 @@
 			</form>
 		</field>
 	</record>
-	<record id="product_benef_tree" model="ir.ui.view">
-		<field name="name">product.benef.tree</field>
-		<field name="model">product.benef</field>
+	<record id="benefits_admon_tree" model="ir.ui.view">
+		<field name="name">benefits.admon.tree</field>
+		<field name="model">benefits.admon</field>
 		<field name="arch" type="xml">
 			<tree string="Gestión y Administración de Beneficios" default_order="create_date desc" >
 				<field name="partner_id"/>
 				<field name="vat"/>
 				<field name="create_date" string="Fecha de Postulación"/>
-				<field name="name_contact" />
-				<field name="phone_contact" />
-				<field name="email_contact" />
-				<field name="cargo_contact" />				
+				<field name="contact_name" />
+				<field name="contact_phone" />
+				<field name="contact_email" />
+				<field name="contact_position" />				
 				<field name="parent_id"/>
 				<field name="product_id"/>
-				<field name="type_beneficio" invisible="1"/>
-				<field name="sub_product_ids" attrs="{'invisible': [('type_beneficio','!=','colabora')]}"/>
+				<field name="benefit_type" invisible="1"/>
+				<field name="sub_product_ids" attrs="{'invisible': [('benefit_type','!=','colabora')]}"/>
 				<field name="state"/>
 			</tree>
 		</field>
 	</record>
 
-	<record id="action_product_benef" model="ir.actions.act_window">
+	<record id="action_benefits_admon" model="ir.actions.act_window">
 		<field name="name">Gestión y Administración de Beneficios</field>
-		<field name="res_model">product.benef</field>
+		<field name="res_model">benefits.admon</field>
 		<field name="view_mode">tree,form</field>
 	</record>
 
 	<menuitem
-		id="hr_menu_product_benef"
+		id="hr_menu_benefits_admon"
 		name="Postulación y Entrega del Beneficio"
-		action="action_product_benef"
-		parent="rvc.hr_menu_product_benef_parent"
+		action="action_benefits_admon"
+		parent="rvc.hr_menu_benefits_admon_parent"
 		sequence="0"
 		groups="rvc.group_rvc_manager"/>
 

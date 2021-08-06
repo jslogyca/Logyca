@@ -4,10 +4,10 @@
 
         <record id="mail_template_deactivated_partner_benef" model="mail.template">
             <field name="name">Beneficio Derechos Identificacion</field>
-            <field name="model_id" ref="rvc.model_product_benef"/>
+            <field name="model_id" ref="rvc.model_benefits_admon"/>
             <field name="subject">Beneficio Derechos Identificacion</field>
             <field name="email_from">${(object.company_id.email or '')}</field>
-            <field name="email_to">${(object.email_contact|safe)}</field>
+            <field name="email_to">${(object.contact_email|safe)}</field>
             <field name="body_html" type="html">
                 <p>Beneficio Derechos Identificacion</p>
             </field>

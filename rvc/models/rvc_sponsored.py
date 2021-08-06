@@ -26,10 +26,10 @@ class RVCSponsored(models.Model):
                                     ('servicios', 'Servicios'),
                                     ('comercio', 'Comercio')], string='Macrosector', related='partner_id.macro_sector')       
 
-    name_contact = fields.Char('Nombre del contacto')
-    phone_contact = fields.Char('Phone',)
-    email_contact = fields.Char('Email')
-    cargo_contact = fields.Char('Cargo')
+    contact_name = fields.Char('Nombre del contacto')
+    contact_phone = fields.Char('Phone',)
+    contact_email = fields.Char('Email')
+    contact_position = fields.Char('Cargo')
     active = fields.Boolean('Activo', default=True)
 
 

@@ -19,10 +19,10 @@
 							<field name="x_sector_id" />
 						</group>
 						<group>
-							<field name="name_contact" />
-							<field name="phone_contact" />
-							<field name="email_contact" />
-							<field name="cargo_contact" />
+							<field name="contact_name" />
+							<field name="contact_phone" />
+							<field name="contact_email" />
+							<field name="contact_position" />
 							<field name="active" />
 						</group>
 					</group>
@@ -40,7 +40,7 @@
 				<field name="partner_id"/>
 				<field name="macro_sector" />
 				<field name="x_company_size"/>
-				<field name="name_contact" />
+				<field name="contact_name" />
 				<field name="active" />
 			</tree>
 		</field>
@@ -71,16 +71,16 @@
 									<field name="x_company_size"/>
 								</div>
 								<div>
-									<field name="name_contact"/>
+									<field name="contact_name"/>
 								</div>
 								<div>
-									<field name="phone_contact"/>
+									<field name="contact_phone"/>
 								</div>
 								<div>
-									<field name="email_contact"/>
+									<field name="contact_email"/>
 								</div>
 								<div>
-									<field name="cargo_contact"/>
+									<field name="contact_position"/>
 								</div>
 							</div>
 						</div>

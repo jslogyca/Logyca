@@ -20,7 +20,7 @@ class RVCImportFileWizard(models.TransientModel):
 
     file_data = fields.Binary(string='File', required=True)
     filename = fields.Char(string='Name File')
-    type_beneficio = fields.Selection([('codigos', 'Derechos de Identificación'), 
+    benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
                                     ('colabora', 'Logyca Colabora'),
                                     ('analitica', 'Logyca Analítica')], string="Beneficio")
 
@@ -49,7 +49,7 @@ class RVCImportFileWizard(models.TransientModel):
                 count+=1
                 continue
             if fila[0] and fila[1]:
-                if self.type_beneficio == 'codigos':
+                if self.benefit_type == 'codigos':
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
                     partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
                     if not partner_id:
@@ -78,7 +78,7 @@ class RVCImportFileWizard(models.TransientModel):
                         e.append(validation)
                         continue
                         # raise ValidationError(validation)
-                    product_id=self.env['product.rvc'].search([('type_beneficio','=',self.type_beneficio)])
+                    product_id=self.env['product.rvc'].search([('benefit_type','=',self.benefit_type)])
                     parent_id=self.env['res.partner'].search([('vat','=',str(fila[1])), ('is_company','=',True)], limit=1)
                     sponsored_id=self.env['rvc.sponsored'].search([('partner_id','=',parent_id.id)])
                     if not sponsored_id:
@@ -89,8 +89,8 @@ class RVCImportFileWizard(models.TransientModel):
                     rvc_beneficiary_id=self.env['rvc.beneficiary'].search([('partner_id','=',partner_id.id)])
                     # Validar que la empresa beneficiaria no tenga otra postulación o entrega activa de este beneficio
                     if rvc_beneficiary_id:
-                        product_benef_id=self.env['product.benef'].search([('partner_id','=',rvc_beneficiary_id.id),('product_id','=',product_id.id)])
-                        if product_benef_id:
+                        benefits_admon_id=self.env['benefits.admon'].search([('partner_id','=',rvc_beneficiary_id.id),('product_id','=',product_id.id)])
+                        if benefits_admon_id:
                             validation = 'La empresa Beneficiaria ya tiene una entrega de beneficio activa' + ' - ' + str(fila[0] + ' - ' + partner_id.name)
                             e.append(validation)
                             continue
@@ -108,10 +108,10 @@ class RVCImportFileWizard(models.TransientModel):
                                                                 'name': partner_id.name + '-' + 'Derechos de Identificación',
                                                                 'partner_id': partner_id.id,
                                                                 'vat': partner_id.vat,
-                                                                'name_contact': str(fila[4]),
-                                                                'phone_contact': str(fila[6]),
-                                                                'email_contact': str(fila[7]),
-                                                                'cargo_contact': str(fila[5]),
+                                                                'contact_name': str(fila[4]),
+                                                                'contact_phone': str(fila[6]),
+                                                                'contact_email': str(fila[7]),
+                                                                'contact_position': str(fila[5]),
                                                                 'active': True})
                             self.env.cr.commit()
                         except:
@@ -119,14 +119,14 @@ class RVCImportFileWizard(models.TransientModel):
                             e.append(validation)
                             continue
                     if rvc_beneficiary_id and rvc_beneficiary_id.id:
-                        product_benef = self.env['product.benef'].create({
+                        benefits_admon = self.env['benefits.admon'].create({
                                                             'name': partner_id.name + '-' + 'Derechos de Identificación',
                                                             'partner_id': rvc_beneficiary_id.id,
                                                             'parent_id': sponsored_id.id,
                                                             'product_id': product_id.id,
-                                                            'cant_cod': str(fila[2])})
-                        cre.append(product_benef.id)
-                elif self.type_beneficio == 'colabora':
+                                                            'codes_quantity': str(fila[2])})
+                        cre.append(benefits_admon.id)
+                elif self.benefit_type == 'colabora':
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
                     partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
                     if not partner_id:
@@ -147,8 +147,8 @@ class RVCImportFileWizard(models.TransientModel):
                         # raise ValidationError('El tipo de vinculación de la empresa beneficiaria es miembro o cliente CE')
                         validation = 'Por favor corrija el archivo, El tipo de vinculación de la empresa beneficiaria es miembro o cliente CE' + ' - ' + str(fila[0])                      
                         raise ValidationError(validation)
-                    product_id=self.env['product.rvc'].search([('type_beneficio','=',self.type_beneficio)])
-                    self._cr.execute(''' SELECT id FROM sub_product_rvc WHERE product_id=%s AND %s between cant_min AND cant_max and state=%s''', (product_id.id, int(fila[2]), 'activo'))
+                    product_id=self.env['product.rvc'].search([('benefit_type','=',self.benefit_type)])
+                    self._cr.execute(''' SELECT id FROM sub_product_rvc WHERE product_id=%s AND %s between min_qty AND max_qty and state=%s''', (product_id.id, int(fila[2]), 'activo'))
                     sub_product_id = self._cr.fetchone()
                     if not sub_product_id:
                         validation = 'No existe un subnivel COLABORA configurado para ' + ' - ' + str(fila[2])
@@ -161,8 +161,8 @@ class RVCImportFileWizard(models.TransientModel):
                     rvc_beneficiary_id=self.env['rvc.beneficiary'].search([('partner_id','=',partner_id.id)])
                     # Validar que la empresa beneficiaria no tenga otra postulación o entrega activa de este beneficio
                     if rvc_beneficiary_id:
-                        product_benef_id=self.env['product.benef'].search([('partner_id','=',rvc_beneficiary_id.id),('product_id','=',product_id.id)])
-                        if product_benef_id:
+                        benefits_admon_id=self.env['benefits.admon'].search([('partner_id','=',rvc_beneficiary_id.id),('product_id','=',product_id.id)])
+                        if benefits_admon_id:
                             validation = 'La empresa Beneficiaria ya tiene una entrega de beneficio activa' + ' - ' + str(fila[0] + ' - ' + partner_id.name)
                             raise ValidationError(validation)
                     if not rvc_beneficiary_id:
@@ -174,20 +174,20 @@ class RVCImportFileWizard(models.TransientModel):
                                                             'name': partner_id.name + '-' + 'Derechos de Identificación',
                                                             'partner_id': partner_id.id,
                                                             'vat': partner_id.vat,
-                                                            'name_contact': contact_id.name,
-                                                            'phone_contact': contact_id.phone,
-                                                            'email_contact': contact_id.email,
-                                                            'cargo_contact': contact_id.x_contact_job_title.id,
+                                                            'contact_name': contact_id.name,
+                                                            'contact_phone': contact_id.phone,
+                                                            'contact_email': contact_id.email,
+                                                            'contact_position': contact_id.x_contact_job_title.id,
                                                             'active': True})
                         self.env.cr.commit()
-                    product_benef = self.env['product.benef'].create({
+                    benefits_admon = self.env['benefits.admon'].create({
                                                         'name': partner_id.name + '-' + 'LOGYCA/COLABORA',
                                                         'partner_id': rvc_beneficiary_id.id,
                                                         'parent_id': sponsored_id.id,
                                                         'product_id': product_id.id,
                                                         'sub_product_ids': sub_product_id[0],
                                                         'date_end': '2022-01-31'})
-                    cre.append(product_benef.id)
+                    cre.append(benefits_admon.id)
                 else:
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
                     partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
@@ -218,7 +218,7 @@ class RVCImportFileWizard(models.TransientModel):
                                                             'user_id' : self.env.user.id})
                         continue                        
                     # Validar que la empresa beneficiaria no tenga otra postulación o entrega activa de este beneficio
-                    benf_id=self.env['rvc.beneficiary'].search([('partner_id','=',partner_id.id),('type_beneficio','=',self.type_beneficio)])
+                    benf_id=self.env['rvc.beneficiary'].search([('partner_id','=',partner_id.id),('benefit_type','=',self.benefit_type)])
                     if benf_id:
                         # raise ValidationError('La empresa beneficiaria tiene otra postulación o entrega activa de este beneficio)')
                         validation = 'La empresa beneficiaria tiene otra postulación o entrega activa de este beneficio' + ' - ' + str(fila[0])
@@ -238,7 +238,7 @@ class RVCImportFileWizard(models.TransientModel):
                                                             'user_id' : self.env.user.id})
                         continue
                     # Validar que el patrocinador no tenga otra postulación o entrega activa de este beneficio para otra empresa beneficiaria
-                    benf_patro_id=self.env['rvc.beneficiary'].search([('parent_id','=',parent_id.id),('type_beneficio','=',self.type_beneficio)])
+                    benf_patro_id=self.env['rvc.beneficiary'].search([('parent_id','=',parent_id.id),('benefit_type','=',self.benefit_type)])
                     if not benf_patro_id:
                         validation = 'El patrocinador tiene otra postulación o entrega activa de este beneficio para otra empresa beneficiaria' + ' - ' + str(fila[1])
                         self.env['log.import.rvc'].create({
@@ -250,11 +250,11 @@ class RVCImportFileWizard(models.TransientModel):
                     rvc_benf = self.env['rvc.beneficiary'].create({
                                                         'name': partner_id.name + '-' + 'Identificación de Productos',
                                                         'partner_id': partner_id.id,
-                                                        'name_contact': str(fila[4]),
-                                                        'cant_cod': str(fila[2]),
+                                                        'contact_name': str(fila[4]),
+                                                        'codes_quantity': str(fila[2]),
                                                         'parent_id' : sponsored_id.partner_id.id,
                                                         'state': 'confirm',
-                                                        'type_beneficio' : self.type_beneficio})
+                                                        'benefit_type' : self.benefit_type})
                     cre.append(rvc_benf.id)
                     self.env.cr.commit()
         if len(e)>1:
@@ -266,13 +266,13 @@ class RVCImportFileWizard(models.TransientModel):
                 msj+='\n'
             raise ValidationError(msj)            
         obj_model = self.env['ir.model.data']
-        res = obj_model.get_object_reference('rvc', 'product_benef_tree')
+        res = obj_model.get_object_reference('rvc', 'benefits_admon_tree')
         return {
             'name': 'Registros Importados'+str(datetime.now().date().strftime("%d/%m/%Y")),
             'type': 'ir.actions.act_window',
             'view_type': 'form',
             'view_mode': 'tree,form',
-            'res_model': 'product.benef',
+            'res_model': 'benefits.admon',
             'views': [([res and res[1] or False], 'tree')],
             'domain': [('id','in',cre)],
             'target': 'current'
