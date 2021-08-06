@@ -12,7 +12,7 @@
 				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight"/>
 				 	<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight"/>
 					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />
-					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary" attrs="{'invisible': [|, ('id','=', False), ('state','!=', 'notified')]}"/>
+					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary" attrs="{'invisible': ['|', ('id','=', False), ('state','!=', 'notified')]}"/>
 				</header>			
 				<sheet>
 					<group>
