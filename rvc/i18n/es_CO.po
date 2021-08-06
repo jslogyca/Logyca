@@ -116,7 +116,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:rvc.selection__product_benef__state__cancel
 #: model_terms:ir.ui.view,arch_db:rvc.product_benef_form
 msgid "Cancel"
-msgstr "Cancelado"
+msgstr "Cancelar"
 
 #. module: rvc
 #: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_sponsored_wizard_view

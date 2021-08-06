@@ -12,7 +12,7 @@
 				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight"/>
 				 	<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight"/>
 					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />
-					<button name="action_cancel" type="object" states="notified" string="Cancel" class="btn-secondary" attrs="{'invisible': [('id','=', False)]}"/>
+					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary" attrs="{'invisible': [|, ('id','=', False), ('state','!=', 'notified')]}"/>
 				</header>			
 				<sheet>
 					<group>
@@ -54,9 +54,10 @@
 		<field name="name">product.benef.tree</field>
 		<field name="model">product.benef</field>
 		<field name="arch" type="xml">
-			<tree string="Gestión y Administración de Beneficios"  >
+			<tree string="Gestión y Administración de Beneficios" default_order="create_date desc" >
 				<field name="partner_id"/>
 				<field name="vat"/>
+				<field name="create_date" string="Fecha de Postulación"/>
 				<field name="name_contact" />
 				<field name="phone_contact" />
 				<field name="email_contact" />
