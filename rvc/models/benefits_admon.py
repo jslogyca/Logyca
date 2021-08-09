@@ -24,7 +24,6 @@ class BenefitsAdmon(models.Model):
     partner_id = fields.Many2one('rvc.beneficiary', string='Empresa Beneficiaria', track_visibility='onchange')
     parent_id = fields.Many2one('rvc.sponsored', string='Empresa Patrocinadora', track_visibility='onchange')
     product_id = fields.Many2one('product.rvc', string='Producto', track_visibility='onchange')
-    agreement_id = fields.Many2one('agreement.rvc', string='Agreement', track_visibility='onchange')
     name = fields.Char(string='Name', track_visibility='onchange')
     codes_quantity = fields.Float('Cantidad de Códigos', track_visibility='onchange')
     benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
@@ -39,6 +38,10 @@ class BenefitsAdmon(models.Model):
     contact_email = fields.Char('Email', related='partner_id.contact_email', track_visibility='onchange')
     contact_position = fields.Char('Cargo', related='partner_id.contact_position', track_visibility='onchange')
     vat = fields.Char('Número de documento', related='partner_id.vat', track_visibility='onchange')
+
+    _sql_constraints = [
+        ('benefits_partner_product_uniq', 'unique (partner_id, product_id)', '¡Error Guardando! La empresa seleccionada ya está aplicando para este beneficio.')
+    ]
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]    
@@ -77,7 +80,7 @@ class BenefitsAdmon(models.Model):
             if benefits_admon.state in ('confirm'):
                 # validamos que no hayan productos comprados disponibles
                 if self.product_id.benefit_type == 'codigos' :
-                    if  self._validate_bought_products() and self._validate_qty_codes():
+                    if self._validate_qty_codes() and self._validate_bought_products():
                         view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
                         return {
                             'name':_("Enviar Kit de Bienvenida"),
@@ -236,3 +239,51 @@ class BenefitsAdmon(models.Model):
             if rec.codes_quantity == 0:
                 raise ValidationError(\
                     _('Por favor indique la cantidad de códigos que se entregará a la empresa beneficiaria %s' % (str(self.partner_id.partner_id.name))))
+        return True
+
+    def _assignate_gln_code(self):
+        #creando código
+        url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
+        body_assignate = json.dumps({
+            "AgreementName":"",
+            "IdAgreement":"1",
+            "Request": [{
+                "Quantity": 1,
+                "Nit": self.vat,
+                "PreferIndicatedPrefix": False,
+                "BusinessName": self.partner_id.name, 
+                "Schema": 2,
+                "ScalePrefixes": False,
+                "Type": 55603,
+                "PrefixType": "",
+                "VariedFixedUse": False}],
+                "UserName": "Admin"})
+        headers_assignate = {'Content-Type': 'application/json'}
+        
+        #Making http post request
+        response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
+        
+        if response_assignate.get('respuesta') == 200:
+            #marcando código
+            url_mark = "https://asctestdocker.azurewebsites.net/codes/mark/"
+            body_mark = json.dumps({
+                "Nit": self.vat,
+                "TipoProducto": 1,
+                "Username": "RVC",
+                "Esquemas": [
+                    2,
+                    3,
+                    6
+                ],
+                "Codigos": [
+                    {
+                        "Descripcion": "Gln Empresa ".join(self.partner_id.name),
+                        "TipoProducto": 4
+                    }
+                ]
+            })
+            headers_mark = {'Content-Type': 'application/json'}
+            response_mark = requests.post(url_mark, headers=headers_mark, data=body_mark, verify=True)
+
+            if response_mark.get('Respuesta') == 'InsertOK':
+                logging.info("Código GLN '%s' creado y marcado para la empresa %s" % (response_mark.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.name)))

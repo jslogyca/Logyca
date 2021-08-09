@@ -38,16 +38,6 @@ class RVCBeneficiary(models.Model):
     def name_get(self):
         return [(benef.id, '%s - %s' % (benef.vat, benef.partner_id.name)) for benef in self]
 
-    @api.onchange('partner_id')
-    def onchange_partner_id(self):
-        #es un contacto
-        if self.partner_id.is_company == False or self.partner_id.parent_id:
-            partner = self.partner_id
-            self.contact_name = partner.name
-            self.contact_phone = partner.phone if partner.phone else partner.mobile
-            self.contact_email = partner.email
-            self.contact_position = partner.x_contact_job_title.name if partner.x_contact_job_title else ''
-
     @api.model
     def create(self, vals):
         if vals.get('partner_id', False):

@@ -41,7 +41,6 @@
         'views/log_import_rvc_view.xml',
         'views/product_rvc_view.xml',
         'views/benefits_admon_view.xml',
-        'views/agreement_rvc_view.xml',
         'report/rvc_report.xml',
         'views/report_rvc_templates.xml',
         'views/report_rvc_bienv_templates.xml',
