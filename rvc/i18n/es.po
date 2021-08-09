@@ -145,8 +145,8 @@ msgstr ""
 #: model:ir.actions.act_window,name:rvc.action_rvc_import_file_wizard_view
 #: model:ir.ui.menu,name:rvc.menu_report_excel_sale_product_root
 #: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
-msgid "Cargue Masivo de Beneficios"
-msgstr "Cargue Masivo de Beneficios"
+msgid "Cargue Masivo de Postulaciones"
+msgstr ""
 
 #. module: rvc
 #: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_sponsored_wizard_view
@@ -351,12 +351,12 @@ msgstr ""
 #: model:ir.ui.menu,name:rvc.hr_menu_benefits_admon_parent
 #: model_terms:ir.ui.view,arch_db:rvc.benefits_admon_form
 #: model_terms:ir.ui.view,arch_db:rvc.benefits_admon_tree
-msgid "Gestión y Administración de Beneficios"
+msgid "Postulaciones a Beneficios"
 msgstr ""
 
 #. module: rvc
 #: model:ir.ui.menu,name:rvc.hr_menu_rvc_partners
-msgid "Gestión y Administración de Empresas"
+msgid "Empresas"
 msgstr ""
 
 #. module: rvc

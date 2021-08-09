@@ -4,7 +4,7 @@
         <field name="name">rvc.import.file.wizard.form</field>
         <field name="model">rvc.import.file.wizard</field>
         <field name="arch" type="xml">
-            <form string="Cargue Masivo de Beneficios">
+            <form string="Cargue Masivo de Postulaciones a Beneficios">
                 <sheet>
                     <p class="oe_grey">
                         Asistente para importar masivamente Beneficios de Derechos de Identificación
@@ -56,7 +56,7 @@
     </record>
 
     <record id="action_rvc_import_file_wizard_view" model="ir.actions.act_window">
-        <field name="name">Cargue Masivo de Beneficios</field>
+        <field name="name">Cargue Masivo de Postulaciones</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">rvc.import.file.wizard</field>
         <field name="view_mode">form</field>
@@ -80,13 +80,13 @@
 
 	<menuitem
 		id="hr_menu_benefits_admon_parent"
-		name="Gestión y Administración de Beneficios"
+		name="Postulaciones a Beneficios"
 		parent="rvc.menu_rvc_import_file_wizard"
 		sequence="0"
 		groups="rvc.group_rvc_manager"/>	        
 
     <menuitem id="menu_report_excel_sale_product_root"
-        name="Cargue Masivo de Beneficios"
+        name="Cargue Masivo de Postulaciones"
         parent="rvc.hr_menu_benefits_admon_parent"
         sequence="1"
         action="action_rvc_import_file_wizard_view"

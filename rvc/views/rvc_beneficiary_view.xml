@@ -108,7 +108,7 @@
 
 	<menuitem
 		id="hr_menu_rvc_partners"
-		name="Gestión y Administración de Empresas"
+		name="Empresas"
 		parent="rvc.menu_rvc_import_file_wizard"
 		sequence="1"
 		groups="rvc.group_rvc_manager"/>

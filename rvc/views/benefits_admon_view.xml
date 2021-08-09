@@ -4,7 +4,7 @@
 		<field name="name">benefits.admon.form</field>
 		<field name="model">benefits.admon</field>
 		<field name="arch" type="xml">
-			<form string="Gestión y Administración de Beneficios">
+			<form string="Postulación a Beneficios">
 				<header>
 				 	<button name="action_notified" type="object" states="draft" string="Notificar al Beneficiario" class="oe_highlight"/>
 				 	<button name="action_confirm" type="object" states="notified" string="Confirm" class="oe_highlight"/>
@@ -15,6 +15,7 @@
 					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary" attrs="{'invisible': ['|', ('id','=', False), ('state','!=', 'notified')]}"/>
 				</header>			
 				<sheet>
+                    <h1>Postulación a Beneficio RVC</h1>
 					<group>
 						<group string="Beneficiario">
 							<field name="partner_id" attrs="{'readonly': [('state','!=','draft')]}"/>
@@ -54,7 +55,7 @@
 		<field name="name">benefits.admon.tree</field>
 		<field name="model">benefits.admon</field>
 		<field name="arch" type="xml">
-			<tree string="Gestión y Administración de Beneficios" default_order="create_date desc" >
+			<tree string="Postulaciones a Beneficios" default_order="create_date desc" >
 				<field name="partner_id"/>
 				<field name="vat"/>
 				<field name="create_date" string="Fecha de Postulación"/>
@@ -72,7 +73,7 @@
 	</record>
 
 	<record id="action_benefits_admon" model="ir.actions.act_window">
-		<field name="name">Gestión y Administración de Beneficios</field>
+		<field name="name">Postulación a Beneficio</field>
 		<field name="res_model">benefits.admon</field>
 		<field name="view_mode">tree,form</field>
 	</record>

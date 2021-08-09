@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 
 class RVCImportFileWizard(models.TransientModel):
     _name = 'rvc.import.file.wizard'
-    _description = 'Cargue Masivo Derechos de Identificación'
+    _description = 'Cargue Masivo de Postulaciones a Beneficios'
 
 
     file_data = fields.Binary(string='File', required=True)
