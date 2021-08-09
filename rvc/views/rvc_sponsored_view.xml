@@ -6,24 +6,35 @@
 		<field name="arch" type="xml">
 			<form string="Empresas Halonadoras">
 				<header>
-				</header>			
+                    <button name="deactivate_beneficiary" string="Deactivate" type="object" class="btn-primary" attrs="{'invisible': ['|',('id','=', False), ('active','=', False)]}"/>
+                    <button name="activate_beneficiary" string="Activate" type="object" class="btn-primary" attrs="{'invisible': ['|', ('id','=', False), ('active','=', True)]}"/>
+				</header>
 				<sheet>
+                    <widget name="web_ribbon" title="Desactivado" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <h1>Registro de Empresa Halonadora</h1>
+                    <group>
+                        <group string="Buscar Empresa">
+                            <field name="partner_id" nolabel="1"/>
+                        </group>
+                        <group>
+                        </group>
+					</group>
 					<group>
-						<group>
+						<group string="Detalles de la Empresa">
 							<field name="vat" />
-							<field name="partner_id" force_save="1" readonly="1"/>
 							<field name="phone" />		
 							<field name="email" />												
 							<field name="macro_sector" />
 							<field name="x_company_size" />
 							<field name="x_sector_id" />
 						</group>
-						<group>
+						<group string="Detalles de Contacto">
 							<field name="contact_name" />
 							<field name="contact_phone" />
 							<field name="contact_email" />
 							<field name="contact_position" />
-							<field name="active" />
+
+                            <field name="active" invisible="1"/>
 						</group>
 					</group>
 				</sheet>
