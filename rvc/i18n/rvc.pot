@@ -649,8 +649,8 @@ msgstr ""
 #: model:ir.ui.menu,name:rvc.hr_menu_product_rvc
 #: model_terms:ir.ui.view,arch_db:rvc.product_rvc_form
 #: model_terms:ir.ui.view,arch_db:rvc.product_rvc_tree
-msgid "Products"
-msgstr "Gestión y Administración de Productos"
+msgid "Beneficios"
+msgstr "Beneficios"
 
 #. module: rvc
 #: model:ir.ui.menu,name:rvc.menu_rvc_import_file_wizard

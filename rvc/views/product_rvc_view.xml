@@ -59,7 +59,7 @@
 
 	<menuitem
 		id="hr_menu_product_rvc"
-		name="Products"
+		name="Beneficios"
 		action="action_product_rvc"
 		parent="rvc.menu_config_rvc_parent"
 		sequence="1"
