@@ -10,7 +10,7 @@
                     <button name="activate_beneficiary" string="Activate" type="object" class="btn-primary" attrs="{'invisible': ['|', ('id','=', False), ('active','=', True)]}"/>
 				</header>
 				<sheet>
-                    <widget name="web_ribbon" title="Desactivado" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <widget name="web_ribbon" title="Desactivada" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                     <h1>Registro de Empresa Halonadora</h1>
                     <group>
                         <group string="Buscar Empresa">

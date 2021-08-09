@@ -307,11 +307,13 @@ msgstr "Empresas Beneficiarias"
 
 #. module: rvc
 #: model_terms:ir.ui.view,arch_db:rvc.rvc_beneficiary_form
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_sponsored_form
 msgid "Deactivate"
 msgstr "Desactivar"
 
 #. module: rvc
 #: model_terms:ir.ui.view,arch_db:rvc.rvc_beneficiary_form
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_sponsored_form
 msgid "Activate"
 msgstr "Activar"
 
