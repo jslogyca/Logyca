@@ -21,8 +21,8 @@
 							<field name="partner_id" attrs="{'readonly': [('state','!=','draft')]}"/>
 							<field name="vat" attrs="{'readonly': [('state','!=','draft')]}"/>
 							<field name="contact_name" attrs="{'required': [('state','=','draft')]}"/>
-							<field name="contact_phone" />
-							<field name="contact_email" />
+							<field name="contact_phone"/>
+							<field name="contact_email"/>
 							<field name="contact_position" />
 						</group>
 						<group string="Detalles del Beneficio">

@@ -112,4 +112,3 @@ class RVCTemplateEmailWizard(models.TransientModel):
             benefits_admon.write({'state': 'rejected'})
         return {'type': 'ir.actions.act_window_close'}
 
-#

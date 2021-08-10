@@ -79,7 +79,7 @@ class BenefitsAdmon(models.Model):
         for benefits_admon in self:
             if benefits_admon.state in ('confirm'):
                 # validamos que no hayan productos comprados disponibles
-                if self.product_id.benefit_type == 'codigos' :
+                if self.product_id.benefit_type == 'codigos':
                     if self._validate_qty_codes() and self._validate_bought_products():
                         view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
                         return {
@@ -238,7 +238,7 @@ class BenefitsAdmon(models.Model):
         for rec in self:
             if rec.codes_quantity == 0:
                 raise ValidationError(\
-                    _('Por favor indique la cantidad de códigos que se entregará a la empresa beneficiaria %s' % (str(self.partner_id.partner_id.name))))
+                    _('Por favor indique la -Cantidad de Códigos- que se entregará a la empresa beneficiaria.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
         return True
 
     def assignate_gln_code(self):
@@ -262,8 +262,8 @@ class BenefitsAdmon(models.Model):
         
         #Making http post request
         response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
-        
-        if response_assignate.get('respuesta') == 200:
+
+        if response_assignate.status_code == 200:
             #marcando código
             url_mark = "https://asctestdocker.azurewebsites.net/codes/mark/"
             body_mark = json.dumps({
@@ -277,7 +277,7 @@ class BenefitsAdmon(models.Model):
                 ],
                 "Codigos": [
                     {
-                        "Descripcion": "Gln Empresa ".join(self.partner_id.name),
+                        "Descripcion": "Gln Empresa %s" % str(self.partner_id.name),
                         "TipoProducto": 4
                     }
                 ]
@@ -285,6 +285,7 @@ class BenefitsAdmon(models.Model):
             headers_mark = {'Content-Type': 'application/json'}
             response_mark = requests.post(url_mark, headers=headers_mark, data=body_mark, verify=True)
 
-            if response_mark.get('Respuesta') == 'InsertOK':
+            if response_mark.status_code == 200:
+                response_mark = response_mark.json()
                 self.write({'gln': str(response_mark.get('IdCodigos')[0].get('Codigo'))})
                 logging.info("Código GLN '%s' creado y marcado para la empresa %s" % (response_mark.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.name)))
