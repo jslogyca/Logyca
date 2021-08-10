@@ -1,36 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, http
+from odoo import http
 from odoo.http import request
 from odoo.addons.web.controllers.main import serialize_exception, content_disposition
 import base64
-from odoo.exceptions import Warning
-
-# class Binary(http.Controller):
-
-#     def document(self, filename, filecontent):
-#         if not filecontent:
-#             return request.not_found()
-#         else:
-
-#             headers=[('Content-Type', 'application/vnd.ms-excel'), ('Content-Disposition', content_disposition(filename))
-#             ]
-#             return request.make_response(filecontent, headers=headers, cookies=None)
-
-#     @http.route(["/download/xlsx/envio/<model('report.excel.sale.product.wizard'):document_id>"], type='http', auth='user')
-#     @serialize_exception
-#     def download_document(self, document_id, **post):
-#         filename = ('%s.xlsx' % document_id.data_name).replace(' ', '_')
-#         filecontent = document_id.data
-#         return self.document(filename, filecontent)
-
-
-    # @http.route(["/download/xlsx/envio/<model('report.excel.sale.product.wizard'):document_id>"], type='http', auth='user')
-    # @serialize_exception
-    # def download_document_zip(self, document_id, **post):
-    #     filename = document_id.data_name
-    #     filecontent = document_id.data
-    #     return self.document(filename, filecontent)    
 
 class Binary(http.Controller):
 

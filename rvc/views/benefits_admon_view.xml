@@ -20,7 +20,7 @@
 						<group string="Beneficiario">
 							<field name="partner_id" attrs="{'readonly': [('state','!=','draft')]}"/>
 							<field name="vat" attrs="{'readonly': [('state','!=','draft')]}"/>
-							<field name="contact_name" />
+							<field name="contact_name" attrs="{'required': [('state','=','draft')]}"/>
 							<field name="contact_phone" />
 							<field name="contact_email" />
 							<field name="contact_position" />
@@ -28,10 +28,10 @@
 						<group string="Detalles del Beneficio">
 							<field name="product_id" attrs="{'readonly': [('state','!=','draft')]}" />
 							<field name="benefit_type" invisible="1"/>						
-							<field name="codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','!=','draft')]}"/>
+							<field name="codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
 							<field name="sub_product_ids" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
 							<field name="date_end" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
-							<field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos'))], 'readonly': [('state','=','done')]}" />
+							<field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos'))], 'readonly': [('state','!=','draft')]}" />
 						</group>
 					</group>
 					<group>

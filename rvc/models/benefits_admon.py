@@ -241,7 +241,7 @@ class BenefitsAdmon(models.Model):
                     _('Por favor indique la cantidad de códigos que se entregará a la empresa beneficiaria %s' % (str(self.partner_id.partner_id.name))))
         return True
 
-    def _assignate_gln_code(self):
+    def assignate_gln_code(self):
         #creando código
         url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
         body_assignate = json.dumps({
@@ -286,4 +286,5 @@ class BenefitsAdmon(models.Model):
             response_mark = requests.post(url_mark, headers=headers_mark, data=body_mark, verify=True)
 
             if response_mark.get('Respuesta') == 'InsertOK':
+                self.write({'gln': str(response_mark.get('IdCodigos')[0].get('Codigo'))})
                 logging.info("Código GLN '%s' creado y marcado para la empresa %s" % (response_mark.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.name)))
