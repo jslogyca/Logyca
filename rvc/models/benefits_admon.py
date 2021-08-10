@@ -216,10 +216,24 @@ class BenefitsAdmon(models.Model):
                 raise ValidationError(\
                     _('Usted no ingresó un código GLN, sin embargo encontramos los siguientes %s códigos registrados: \n\
                         %s \n\nPor favor copie y pegue alguno.' % (str(qty_codes_found), str(available_gln_codes))))
-
             #caso 8: no tiene gln registrado. Registrando uno para la empresa seleccionada.
-            elif found == False and available_gln_codes == "No codes":
+            elif not self.gln and found == False and available_gln_codes == "No codes":
                 logging.info(" ==> Asignando GLN (en Desarollo) <===")
+
+            #caso 9: usuario ingresa GLN pero es incorrecto y no tiene GLN's.
+            elif self.gln and found == False and available_gln_codes == "No codes":
+                partner_id = False
+
+                #es un contacto
+                if self.partner_id.partner_id.is_company == False or self.partner_id.partner_id.parent_id:
+                    partner_id = self.partner_id.partner_id.parent_id
+                else:
+                    partner_id = self.partner_id.partner_id
+                tmp_code = str(self.gln)
+
+                raise ValidationError(\
+                    _('El Código GLN "%s" es inválido. La empresa "%s" no tiene código(s) GLN registrados.'\
+                    '\n\nPor favor deje el campo Código GLN vacío, le asignaremos uno en la entrega del beneficio.' % (tmp_code, str(partner_id.name))))
                 
     def _validate_bought_products(self):
         #url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str("10203040"))
