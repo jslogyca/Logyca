@@ -11,7 +11,11 @@
             <field name="body_html" type="html">
                 <p>Beneficio Derechos Identificacion</p>
             </field>
-            <field name="lang">${object.lang}</field>
+            <field name="report_template" ref="action_report_rvc"/>
+            <field name="report_name">Oferta Mercantil RVC</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="user_signature" eval="False"/>
+            <field name="auto_delete" eval="True"/>
         </record>
 
     </data>
