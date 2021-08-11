@@ -85,13 +85,20 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 access_link = partner._notify_get_action_link('view')
                 template = self.env.ref('rvc.mail_template_kit_bienvenida_derecho_rvc')
                 template.with_context(url=access_link).send_mail(benefits_admon.id, force_send=True)
-                benefits_admon.write({'state': 'done'})
+
+                if not benefits_admon.gln:
+                    # si no tiene GLN, asignamos uno.
+                    benefits_admon.assignate_gln_code()
+
+                # Asignar beneficio de códigos de identificación
+                benefits_admon.assign_identification_codes()
+
                 # Actualizar Contacto y Empresa
                 self.update_contact(benefits_admon.partner_id)
                 if benefits_admon.parent_id:
                     self.update_company(benefits_admon)
-                if not benefits_admon.gln:
-                    benefits_admon.assignate_gln_code()
+
+                benefits_admon.write({'state': 'done'})
             else:
                 raise ValidationError(_('La empresa seleccionada no tiene email.'))
             
