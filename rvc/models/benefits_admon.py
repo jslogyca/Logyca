@@ -84,7 +84,7 @@ class BenefitsAdmon(models.Model):
             if benefits_admon.state in ('confirm'):
                 # validamos que no hayan productos comprados disponibles
                 if self.product_id.benefit_type == 'codigos':
-                    if self._validate_bought_products():
+                    if self._validate_bought_products() and self._validate_qty_codes():
                         view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
                         return {
                             'name':_("Enviar Kit de Bienvenida"),
@@ -163,7 +163,9 @@ class BenefitsAdmon(models.Model):
         res = super(BenefitsAdmon, self).write(vals)
         self._validate_gln_only_numbers()
         self._validate_gln()
-        self._validate_bought_products()
+
+        if 'state' in vals and vals['state'] != 'done':
+            self._validate_bought_products()
         return res
 
     def _validate_gln_only_numbers(self):
@@ -184,6 +186,7 @@ class BenefitsAdmon(models.Model):
             response = requests.get(url, data=json.dumps(payload))
             if response.status_code == 200:
                 result = response.json()
+                response.close()
 
                 if len(result) > 0:
                     available_gln_codes = ""
@@ -246,6 +249,7 @@ class BenefitsAdmon(models.Model):
         response = requests.get(url)
         if response.status_code == 200:
             result = response.json()
+            response.close()
             
             if result.get('CodigosCompradosDisponibles') > 0:
                  raise ValidationError(\
@@ -282,6 +286,7 @@ class BenefitsAdmon(models.Model):
         response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
 
         if response_assignate.status_code == 200:
+            response_assignate.close()
             #marcando código
             url_mark = "https://asctestdocker.azurewebsites.net/codes/mark/"
             body_mark = json.dumps({
@@ -304,40 +309,45 @@ class BenefitsAdmon(models.Model):
             response_mark = requests.post(url_mark, headers=headers_mark, data=body_mark, verify=True)
 
             if response_mark.status_code == 200:
-                response_mark = response_mark.json()
-                self.write({'gln': str(response_mark.get('IdCodigos')[0].get('Codigo'))})
+                response_mark.close()
+                result = response_mark.json()
+
+                self.write({'gln': str(result.get('IdCodigos')[0].get('Codigo'))})
                 self.message_post(body=_('El Código GLN fue creado y entregado con el beneficio.'))
-                logging.info("Código GLN '%s' creado y marcado para la empresa %s" % (response_mark.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.name)))
+                logging.info(\
+                    "Código GLN '%s' creado y marcado para la empresa %s"\
+                        % (result.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.partner_id.name)))
 
     def assign_identification_codes(self):
-        if self._validate_qty_codes():
+        url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
+        body_assignate = json.dumps({
+            "AgreementName":"",
+            "IdAgreement":"",
+            "Request": [{
+                "Quantity": int(self.codes_quantity),
+                "Nit": self.vat,
+                "PreferIndicatedPrefix": False,
+                "BusinessName": self.partner_id.name,
+                "Schema": 2,
+                "ScalePrefixes": False,
+                "Type": 55600,
+                "PrefixType": "",
+                "VariedFixedUse": False}],
+                "UserName": "Admin"})
+        headers_assignate = {'Content-Type': 'application/json'}
 
-            url_assignate = ""
-            body_assignate = json.dumps({
-                "AgreementName":"",
-                "IdAgreement":"",
-                "Request": [{
-                    "Quantity": int(self.codes_quantity),
-                    "Nit": self.vat,
-                    "PreferIndicatedPrefix": False,
-                    "BusinessName": self.partner_id.name,
-                    "Schema": 2,
-                    "ScalePrefixes": False,
-                    "Type": 55600,
-                    "PrefixType": "",
-                    "VariedFixedUse": False}],
-                    "UserName": "Admin"})
-            headers_assignate = {'Content-Type': 'application/json'}
+        #Making http post request
+        response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
 
-            #Making http post request
-            response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
+        logging.info("====> response_assignate =>" + str(response_assignate))
 
-            if response_assignate.status_code == 200:
-                #TODO: logging
-                pass
-            else:
-                #TODO: logging
-                pass
+        if response_assignate.status_code == 200:
+            #TODO: logging
+            response_assignate.close()
+            pass
+        else:
+            #TODO: logging
+            pass
 
     def today_date_spanish(self):
         locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')

@@ -102,6 +102,11 @@
                             <p>El incumplimiento o violación de cualquiera de las obligaciones de la presente oferta mercantil, por parte de la 
                                 ACEPTANTE CONCESIONARIA, la constituirá en deudora de LA OFERENTE CONCEDENTE, por una suma ajustada en salarios 
                                 mínimos dependiendo del nivel de activos de cada compañía como se contempla en la siguiente tabla de rangos:
+                                <br/><br/>
+                                <br/><br/>
+                                <br/><br/>
+                                <br/><br/>
+                                <br/>
                                 <table border="1" style="margin: 0 auto; text-align:center;">
                                     <tr>
                                         <td colspan="2"><strong>RANGOS DE ACTIVOS EN MILLONES DE PESOS</strong></td>
@@ -181,17 +186,6 @@
                                 ceptada en los términos previstos en el numeral segundo de la presente oferta se entenderá como rechazada.
                                 
                                 Para constancia se firma la presente el día <span t-esc="o.today_date_spanish()" />.</p>
-                            <!-- <div class='signature'>
-                                <div class='signatureLine'>
-
-                                </div>
-                                <h4>FIRMA REPRESENTANTE LEGAL NOMBRE: </h4>
-                                <h4>RL DE LA ACEPTANTE CONCESIONARIA: </h4>
-                                <h4>NIT: </h4>
-                            </div>                                 -->
-                            <br/>
-                            <br/>
-                            <br/>
                             <div class='signature'>
                                 <div class="row">
                                     <p style='font-weight: bold; text-align: left'>
