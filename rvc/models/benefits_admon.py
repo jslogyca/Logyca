@@ -10,6 +10,7 @@ import re
 import requests
 import logging
 
+
 _logger = logging.getLogger(__name__)
 
 class BenefitsAdmon(models.Model):
@@ -83,7 +84,7 @@ class BenefitsAdmon(models.Model):
             if benefits_admon.state in ('confirm'):
                 # validamos que no hayan productos comprados disponibles
                 if self.product_id.benefit_type == 'codigos':
-                    if self._validate_qty_codes() and self._validate_bought_products():
+                    if self._validate_bought_products():
                         view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
                         return {
                             'name':_("Enviar Kit de Bienvenida"),
@@ -307,6 +308,36 @@ class BenefitsAdmon(models.Model):
                 self.write({'gln': str(response_mark.get('IdCodigos')[0].get('Codigo'))})
                 self.message_post(body=_('El Código GLN fue creado y entregado con el beneficio.'))
                 logging.info("Código GLN '%s' creado y marcado para la empresa %s" % (response_mark.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.name)))
+
+    def assign_identification_codes(self):
+        if self._validate_qty_codes():
+
+            url_assignate = ""
+            body_assignate = json.dumps({
+                "AgreementName":"",
+                "IdAgreement":"",
+                "Request": [{
+                    "Quantity": int(self.codes_quantity),
+                    "Nit": self.vat,
+                    "PreferIndicatedPrefix": False,
+                    "BusinessName": self.partner_id.name,
+                    "Schema": 2,
+                    "ScalePrefixes": False,
+                    "Type": 55600,
+                    "PrefixType": "",
+                    "VariedFixedUse": False}],
+                    "UserName": "Admin"})
+            headers_assignate = {'Content-Type': 'application/json'}
+
+            #Making http post request
+            response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
+
+            if response_assignate.status_code == 200:
+                #TODO: logging
+                pass
+            else:
+                #TODO: logging
+                pass
 
     def today_date_spanish(self):
         locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')

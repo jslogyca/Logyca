@@ -54,7 +54,7 @@ class RVCBeneficiary(models.Model):
         self.contact_phone = partner.phone if partner.phone else partner.mobile
         self.contact_email = partner.email
         self.contact_position = partner.x_contact_job_title.name if partner.x_contact_job_title else ''
-    
+
     def clear_contact_fields(self):
         self.contact_name = ""
         self.contact_phone = ""
