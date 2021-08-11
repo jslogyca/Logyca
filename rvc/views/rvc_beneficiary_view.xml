@@ -14,13 +14,14 @@
                     <h1>Registro de Empresa Beneficiaria</h1>
                     <group>
                         <group string="Buscar Empresa">
-                            <field name="partner_id" nolabel="1"/>
+                            <field name="partner_id" nolabel="1" domain="['|', ('parent_id', '=', False),('is_company', '=', True)]"/>
                         </group>
-                        <group>
+                        <group string="Buscar Contacto" attrs="{'invisible': [('partner_id', '=', False)]}">
+                            <field name="contact_id" nolabel="1" domain="[('is_company', '=', False), ('parent_id', '=', partner_id)]"/>
                         </group>
 					</group>
-					<group string="Detalles de la Empresa">
-						<group >
+					<group>
+						<group string="Detalles de la Empresa">
                             <field name="vat"/>
 							<field name="phone" />
 							<field name="email" />						

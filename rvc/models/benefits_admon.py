@@ -302,4 +302,5 @@ class BenefitsAdmon(models.Model):
             if response_mark.status_code == 200:
                 response_mark = response_mark.json()
                 self.write({'gln': str(response_mark.get('IdCodigos')[0].get('Codigo'))})
+                self.message_post(body=_('El Código GLN fue creado y entregado con el beneficio.'))
                 logging.info("Código GLN '%s' creado y marcado para la empresa %s" % (response_mark.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.name)))
