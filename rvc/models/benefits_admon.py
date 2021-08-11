@@ -2,6 +2,7 @@
 
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError, UserError
+from dateutil.relativedelta import relativedelta
 from datetime import datetime
 import time
 import locale
@@ -339,15 +340,70 @@ class BenefitsAdmon(models.Model):
         #Making http post request
         response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
 
-        logging.info("====> response_assignate =>" + str(response_assignate))
+        logging.info("====> response_assignate_codes_to_beneficiary =>" + str(response_assignate))
 
         if response_assignate.status_code == 200:
             #TODO: logging
             response_assignate.close()
-            pass
+            self.message_post(body=_('Los %s Códigos de Identificación fueron entregados al beneficiario' % str(int(self.codes_quantity))))
+            return True
         else:
             #TODO: logging
-            pass
+            return False
+
+    def get_token_assign_credentials(self):
+        url_get_token = "http://apiauthenticationssodev.azurewebsites.net/api/Token/Authenticate"
+        body_get_token = json.dumps({
+            "email": "tiendavirtualapi@yopmail.com",
+            "password": "Logyca2020"
+            })
+        headers_get_token = {'Content-Type': 'application/json'}
+
+        response_get_token = requests.post(url_get_token, headers=headers_get_token, data=body_get_token, verify=True)
+
+        if response_get_token.status_code == 200:
+            result = response_get_token.json()
+            response_get_token.close()
+
+            token = str(result.get('resultToken').get('token'))
+            return token
+
+        return False
+
+    def assign_credentials_for_codes(self):
+        bearer_token = self.get_token_assign_credentials()
+
+        if bearer_token:
+            today_date = datetime.now()
+            today_one_year_later = today_date + relativedelta(years=1)
+
+            url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
+            body_assignate = json.dumps({
+                    "Nit": self.vat,
+                    "Name": self.contact_name,
+                    "UserMail": self.contact_email,
+                    "InitialDate": today_date.strftime('%Y-%m-%d'),
+                    "EndDate": today_one_year_later.strftime('%Y-%m-%d'),
+                    "level": 0,
+                    "TypeService": 1,
+                    "NumberOverConsumption": 0,
+                    "IsOverconsumption": False
+                })
+            headers_assignate = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
+
+            #Making http post request
+            response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
+
+            logging.info("====> response_assignate_credentials =>" + str(response_assignate))
+
+            if response_assignate.status_code == 200:
+                #TODO: logging
+                response_assignate.close()
+                self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
+                return True
+            else:
+                #TODO: logging
+                return False
 
     def today_date_spanish(self):
         locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
