@@ -2,6 +2,9 @@
 
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError, UserError
+from datetime import datetime
+import time
+import locale
 import json
 import re
 import requests
@@ -304,3 +307,7 @@ class BenefitsAdmon(models.Model):
                 self.write({'gln': str(response_mark.get('IdCodigos')[0].get('Codigo'))})
                 self.message_post(body=_('El Código GLN fue creado y entregado con el beneficio.'))
                 logging.info("Código GLN '%s' creado y marcado para la empresa %s" % (response_mark.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.name)))
+
+    def today_date_spanish(self):
+        locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+        return datetime.now().strftime('%d de %B de %Y')

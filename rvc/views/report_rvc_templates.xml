@@ -180,7 +180,7 @@
                             <p>La presente oferta mercantil tiene una vigencia de cinco (5) días hábiles, transcurridos los cuales sin que haya sido 
                                 ceptada en los términos previstos en el numeral segundo de la presente oferta se entenderá como rechazada.
                                 
-                                Para constancia se firma la presente el día _____ del mes _____ del año _________.</p>
+                                Para constancia se firma la presente el día <span t-esc="o.today_date_spanish()" />.</p>
                             <!-- <div class='signature'>
                                 <div class='signatureLine'>
 
@@ -192,20 +192,15 @@
                             <br/>
                             <br/>
                             <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
                             <div class='signature'>
                                 <div class="row">
-                                    <div class="col-xs-1">
-                                        <div style="border-top: 1px solid black;">FIRMA REPRESENTANTE LEGAL NOMBRE: </div>
-                                        <div>RL DE LA ACEPTANTE CONCESIONARIA: </div>
-                                        <div>NIT: </div>
-                                        
-                                    </div>                                   
+                                    <p style='font-weight: bold; text-align: left'>
+                                        <td><img src="https://saintegracionesvtex.blob.core.windows.net/mailimages/RvcSoluciona/Leonel.png" width="250" height="150" alt="" />
+                                        <br/></td>
+                                            _________________________________________ 
+                                        <br/>Leonel Pava <br/>
+                                        Director: LOGYCA / ASOCIACIÓN
+                                    </p>                             
                                 </div>                            
                             </div> 
 

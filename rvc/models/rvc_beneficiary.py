@@ -43,7 +43,7 @@ class RVCBeneficiary(models.Model):
     def onchange_partner_id(self):
         if self.partner_id:
             self.contact_id = False
-   
+
     @api.onchange('contact_id')
     def onchange_contact_id(self):
         self.clear_contact_fields()
