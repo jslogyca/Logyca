@@ -403,6 +403,8 @@ class BenefitsAdmon(models.Model):
                 return True
             else:
                 #TODO: logging
+                logging.exception("====> assign_credentials_for_codes =>" + str(response_assignate))
+                logging.exception("====> assign_credentials_for_codes =>" + str(response_assignate.text))
                 return False
 
     def today_date_spanish(self):

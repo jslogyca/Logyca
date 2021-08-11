@@ -91,7 +91,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     benefits_admon.assignate_gln_code()
 
                 # Asignar beneficio de códigos de identificación
-                benefits_admon.assign_identification_codes()
+                if benefits_admon.assign_identification_codes():
+                    benefits_admon.assign_credentials_for_codes()
 
                 # Actualizar Contacto y Empresa
                 self.update_contact(benefits_admon.partner_id)
@@ -118,4 +119,3 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 template.with_context(url=access_link).send_mail(benefits_admon.id, force_send=True)
             benefits_admon.write({'state': 'rejected'})
         return {'type': 'ir.actions.act_window_close'}
-
