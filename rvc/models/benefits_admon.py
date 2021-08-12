@@ -10,15 +10,18 @@ import json
 import re
 import requests
 import logging
-
+import uuid
 
 _logger = logging.getLogger(__name__)
 
 class BenefitsAdmon(models.Model):
     _name = 'benefits.admon'
-    _description = 'Benefits Administration.'
+    _description = 'Postulación a beneficio'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
+    @api.model
+    def _default_access_token(self):
+        return uuid.uuid4().hex
 
     state = fields.Selection([('draft', 'Draft'), 
                                     ('notified', 'Notificado'),
@@ -43,6 +46,7 @@ class BenefitsAdmon(models.Model):
     contact_email = fields.Char('Email', related='partner_id.contact_email', track_visibility='onchange')
     contact_position = fields.Char('Cargo', related='partner_id.contact_position', track_visibility='onchange')
     vat = fields.Char('Número de documento', related='partner_id.vat', track_visibility='onchange')
+    access_token = fields.Char('Security Token', default=_default_access_token, help="Access token to set the rating of the value")
 
     _sql_constraints = [
         ('benefits_partner_product_uniq', 'unique (partner_id, product_id)', '¡Error Guardando! La empresa seleccionada ya está aplicando para este beneficio.')
