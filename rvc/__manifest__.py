@@ -28,6 +28,7 @@
         'data/kitbienvenida_derechos_identificiacion.xml',
         'data/rechazo_beneficios_data.xml',
         'data/logyca_contact_types_data.xml',
+        'data/cron_send_welcome_kit.xml',
         'security/ir.model.access.csv',
         'wizard/rvc_import_file_wizard_view.xml',
         'wizard/rvc_import_file_sponsored_wizard_view.xml',
