@@ -26,9 +26,9 @@
 							<field name="contact_position" />
 						</group>
 						<group string="Detalles del Beneficio">
-							<field name="product_id" attrs="{'readonly': [('state','!=','draft')]}" />
+							<field name="product_id" attrs="{'readonly': [('state','!=','draft')],'required': [('state','=','draft')]}"/>
 							<field name="benefit_type" invisible="1"/>						
-							<field name="codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
+							<field name="codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','!=','draft')]}"/>
 							<field name="sub_product_ids" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
 							<field name="date_end" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
 							<field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos'))], 'readonly': [('state','=','done')]}" />

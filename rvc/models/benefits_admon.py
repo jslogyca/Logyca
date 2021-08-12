@@ -46,7 +46,7 @@ class BenefitsAdmon(models.Model):
     contact_email = fields.Char('Email', related='partner_id.contact_email', track_visibility='onchange')
     contact_position = fields.Char('Cargo', related='partner_id.contact_position', track_visibility='onchange')
     vat = fields.Char('Número de documento', related='partner_id.vat', track_visibility='onchange')
-    access_token = fields.Char('Security Token', default=_default_access_token, help="Access token to set the rating of the value")
+    access_token = fields.Char('Token', default=_default_access_token, help="Token de acceso para aceptar beneficio desde el correo")
 
     _sql_constraints = [
         ('benefits_partner_product_uniq', 'unique (partner_id, product_id)', '¡Error Guardando! La empresa seleccionada ya está aplicando para este beneficio.')
@@ -58,7 +58,7 @@ class BenefitsAdmon(models.Model):
     def unlink(self):
         for benefits_admon in self:
             if benefits_admon.state not in ('draft', 'cancel'):
-                raise ValidationError(_('You cannot delete an Benef which is not draft or cancelled. You should create a credit note instead.'))
+                raise ValidationError(_('¡Oops! No puede eliminar una postulación que no esté en estado borrador o cancelada.'))
         return super(BenefitsAdmon, self).unlink()
 
 
@@ -89,7 +89,7 @@ class BenefitsAdmon(models.Model):
             if benefits_admon.state in ('confirm'):
                 # validamos que no hayan productos comprados disponibles
                 if self.product_id.benefit_type == 'codigos':
-                    if self._validate_bought_products() and self._validate_qty_codes():
+                    if self._validate_bought_products():
                         view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
                         return {
                             'name':_("Enviar Kit de Bienvenida"),
@@ -141,20 +141,23 @@ class BenefitsAdmon(models.Model):
 
     def action_notified(self):
         for benefits_admon in self:
-            if benefits_admon.state in ('draft', 'notified'):
-                view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id,
-                return {
-                    'name':_("Are you sure?"),
-                    'view_mode': 'form',
-                    'view_id': view_id,
-                    'view_type': 'form',
-                    'res_model': 'rvc.template.email.wizard',
-                    'type': 'ir.actions.act_window',
-                    'nodestroy': True,
-                    'target': 'new',
-                    'domain': '[]'
-                }
-        self.write({'state': 'notified'})
+            #Antes de notificar al beneficiario validamos si beneficio es codigos
+            # y si cantidad de codigos es mayor a cero
+            if self.product_id.benefit_type == 'codigos' and self._validate_qty_codes():
+                if benefits_admon.state in ('draft', 'notified'):
+                    view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id,
+                    return {
+                        'name':_("Are you sure?"),
+                        'view_mode': 'form',
+                        'view_id': view_id,
+                        'view_type': 'form',
+                        'res_model': 'rvc.template.email.wizard',
+                        'type': 'ir.actions.act_window',
+                        'nodestroy': True,
+                        'target': 'new',
+                        'domain': '[]'
+                    }
+                self.write({'state': 'notified'})
 
     @api.model
     def create(self, vals):

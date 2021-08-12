@@ -13,7 +13,10 @@ class AcceptRvcBenefit(http.Controller):
         if not postulation_id:
             return request.not_found()
 
-        postulation_id.write({'state': 'confirm'})
+        # Marcar la posituación como aceptada
+        if postulation_id.state == 'notified':
+            postulation_id.write({'state': 'confirm'})
+
         lang = postulation_id.partner_id.partner_id.lang
         return request.env['ir.ui.view'].with_context(lang=lang).render_template('rvc.accept_rvc_benefit_page_view', {
             'benefits_admon': postulation_id, 'token': token

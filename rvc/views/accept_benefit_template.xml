@@ -5,7 +5,7 @@
             <div class="container">
                 <div clas="row">
                     <h1 style="margin-top:30px;color:#fc4c02" class="text-center">Gracias por aceptar su beneficio RVC: <b t-esc="benefits_admon.product_id.name"/>.</h1>
-                    <h4 class="text-center text-muted" style="margin-top:30px,margin-bottom: 32px;">¡Nos complace informarle que su empresa <b t-esc="benefits_admon.partner_id.partner_id.name"></b> 
+                    <h4 class="text-center text-muted" style="margin-top:30px;margin-bottom: 32px;">¡Nos complace informarle que su empresa <b t-esc="benefits_admon.partner_id.partner_id.name"></b>
                         ya hace parte de las Redes de Valor Colaborativas!</h4>
                 
                     <div class="clearfix"></div>
