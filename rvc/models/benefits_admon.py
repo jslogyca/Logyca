@@ -405,8 +405,20 @@ class BenefitsAdmon(models.Model):
 
             if response_assignate.status_code == 200:
                 #TODO: logging
+                result = response_assignate.json()
                 response_assignate.close()
-                self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
+
+                #error al crear credenciales
+                if result.get('dataError') == True:
+                    #TODO: logging
+                    error_message = result.get('apiException').get('message')
+                    if not error_message:
+                        error_message = result.get('resultMessage')
+                    self.message_post(body=_(\
+                        'No pudieron asignarse las credenciales para acceder a la administración de códigos.'\
+                            '\n<strong>Error:</strong> %s' % str(error_message)))
+                else:
+                    self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
                 return True
             else:
                 #TODO: logging
@@ -461,7 +473,7 @@ class BenefitsAdmon(models.Model):
                 if postulation_id.partner_id.contact_email:
                     access_link = postulation_id.partner_id.partner_id._notify_get_action_link('view')
                     template = self.env.ref('rvc.mail_template_kit_bienvenida_derecho_rvc')
-                    template.with_context(url=access_link).send_mail(postulation_id.id, force_send=False)
+                    template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
 
                     if not postulation_id.gln:
                         # si no tiene GLN, asignamos uno.

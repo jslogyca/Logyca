@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="0">
-        <record id="mail_template_kit_bienvenida_derecho_rvc" model="mail.template">
-            <field name="name">Kit de Bienvenida Derechos Identificiacion</field>
+        <record id="mail_template_welcome_kit_rvc" model="mail.template">
+            <field name="name">Kit de Bienvenida Derechos Identificación</field>
             <field name="model_id" ref="rvc.model_benefits_admon"/>
-            <field name="subject">Kit de Bienvenida Derechos Identificiacion</field>
+            <field name="subject">Kit de Bienvenida Derechos Identificación</field>
             <field name="email_from">${(object.company_id.email or '')}</field>
             <field name="email_to">${(object.contact_email|safe)}</field>
             <field name="body_html" type="html">
-                <p>Kit de Bienvenida Derechos Identificiacion</p>
+                <p>Kit de Bienvenida Derechos Identificación</p>
             </field>
             <field name="lang">${object.lang}</field>
         </record>
