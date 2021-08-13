@@ -65,8 +65,10 @@ class RVCSponsored(models.Model):
         if partner_id:
             if partner_id.active == False:
                 raise ValidationError('¡Error de validación! La empresa NO está activa.')
-            if partner_id.x_type_vinculation and partner_id.x_type_vinculation.code == '01':
-                raise ValidationError('¡Error de validación! La empresa es miembro.')
+            if partner_id.x_type_vinculation:
+                    for vinculation in partner_id.x_type_vinculation:
+                        if vinculation.code == '01':
+                            raise ValidationError('¡Error de validación! La empresa es miembro.')
         return super(RVCSponsored, self).create(vals)
 
 
@@ -75,8 +77,10 @@ class RVCSponsored(models.Model):
         if partner_id:
             if partner_id.active == False:
                 raise ValidationError('¡Error de validación! La empresa NO está activa.')
-            if partner_id.x_type_vinculation and partner_id.x_type_vinculation.code == '01':
-                raise ValidationError('¡Error de validación! La empresa es miembro.')
+            if partner_id.x_type_vinculation:
+                    for vinculation in partner_id.x_type_vinculation:
+                        if vinculation.code == '01':
+                            raise ValidationError('¡Error de validación! La empresa es miembro.')
         return super(RVCSponsored, self).write(vals)
 
                 

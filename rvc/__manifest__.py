@@ -24,7 +24,6 @@
     'data': [
         'security/security.xml',
         'data/benefits_admon_data.xml',
-        'data/aceptacion_beneficios_rvc_data.xml',
         'data/kitbienvenida_derechos_identificiacion.xml',
         'data/rechazo_beneficios_data.xml',
         'data/logyca_contact_types_data.xml',

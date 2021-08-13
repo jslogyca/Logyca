@@ -44,7 +44,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
             partner=self.env['res.partner'].search([('id','=',benefits_admon.partner_id.partner_id.id)])
             if partner.email:
                 access_link = partner._notify_get_action_link('view')
-                template = self.env.ref('rvc.mail_template_kit_bienvenida_derecho_rvc')
+                template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
                 template.with_context(url=access_link).send_mail(benefits_admon.id, force_send=True)
 
                 if not benefits_admon.gln:

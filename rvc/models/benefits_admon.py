@@ -472,7 +472,7 @@ class BenefitsAdmon(models.Model):
 
                 if postulation_id.partner_id.contact_email:
                     access_link = postulation_id.partner_id.partner_id._notify_get_action_link('view')
-                    template = self.env.ref('rvc.mail_template_kit_bienvenida_derecho_rvc')
+                    template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
                     template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
 
                     if not postulation_id.gln:
