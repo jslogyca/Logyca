@@ -288,7 +288,7 @@ class BenefitsAdmon(models.Model):
                 "Quantity": 1,
                 "Nit": self.vat,
                 "PreferIndicatedPrefix": False,
-                "BusinessName": self.partner_id.name, 
+                "BusinessName": self.partner_id.partner_id.name,
                 "Schema": 2,
                 "ScalePrefixes": False,
                 "Type": 55603,
@@ -315,7 +315,7 @@ class BenefitsAdmon(models.Model):
                 ],
                 "Codigos": [
                     {
-                        "Descripcion": "Gln Empresa %s" % str(self.partner_id.name),
+                        "Descripcion": "Gln Empresa %s" % str(self.partner_id.partner_id.name),
                         "TipoProducto": 4
                     }
                 ]
@@ -342,7 +342,7 @@ class BenefitsAdmon(models.Model):
                 "Quantity": int(self.codes_quantity),
                 "Nit": self.vat,
                 "PreferIndicatedPrefix": False,
-                "BusinessName": self.partner_id.name,
+                "BusinessName": self.partner_id.partner_id.name,
                 "Schema": 2,
                 "ScalePrefixes": False,
                 "Type": 55600,
