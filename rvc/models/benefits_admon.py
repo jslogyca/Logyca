@@ -137,7 +137,7 @@ class BenefitsAdmon(models.Model):
 
 
     def action_re_done(self):
-        self.write({'state': 'confirm'})
+        self.write({'state': 'confirm', 'acceptance_date': datetime.now()})
 
 
     def action_notified(self):
@@ -162,6 +162,10 @@ class BenefitsAdmon(models.Model):
 
     @api.model
     def create(self, vals):
+        if 'partner_id' in vals:
+            beneficiary = self.env['rvc.beneficiary'].browse(vals.get('partner_id'))
+            vals['name'] = beneficiary.partner_id.vat + '-' + beneficiary.partner_id.name
+
         res = super(BenefitsAdmon, self).create(vals)
         res._validate_gln_only_numbers()
         res._validate_gln()
@@ -420,7 +424,7 @@ class BenefitsAdmon(models.Model):
                             '\n<strong>Error:</strong> %s' % str(error_message)))
                 else:
                     self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
-                return True
+                    return True
             else:
                 #TODO: logging
                 logging.exception("====> assign_credentials_for_codes =>" + str(response_assignate))
@@ -465,30 +469,37 @@ class BenefitsAdmon(models.Model):
         return True
 
     def _cron_send_welcome_kit(self):
+        logging.warning("==> Iniciando cron de enviar kits de bienvenida ...")
+
         if not self:
+            counter = 0
             self = self.search([('state', '=', 'confirm')])
-            logging.info("=====> %s" % str(self))
 
             for postulation_id in self:
+                counter =+ 1
+                # limitamos el envío de kits para no saturar el servidor.
+                if counter < 30:
+                    if postulation_id.partner_id.contact_email:
+                        access_link = postulation_id.partner_id.partner_id._notify_get_action_link('view')
+                        template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                        template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
 
-                if postulation_id.partner_id.contact_email:
-                    access_link = postulation_id.partner_id.partner_id._notify_get_action_link('view')
-                    template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
-                    template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
+                        if not postulation_id.gln:
+                            # si no tiene GLN, asignamos uno.
+                            postulation_id.assignate_gln_code()
 
-                    if not postulation_id.gln:
-                        # si no tiene GLN, asignamos uno.
-                        postulation_id.assignate_gln_code()
+                        # Asignar beneficio de códigos de identificación
+                        if postulation_id.assign_identification_codes():
+                            postulation_id.assign_credentials_for_codes()
 
-                    # Asignar beneficio de códigos de identificación
-                    if postulation_id.assign_identification_codes():
-                        postulation_id.assign_credentials_for_codes()
+                        # Actualizar Contacto y Empresa
+                        self.update_contact(postulation_id.partner_id)
+                        if postulation_id.parent_id:
+                            self.update_company(postulation_id)
 
-                    # Actualizar Contacto y Empresa
-                    self.update_contact(postulation_id.partner_id)
-                    if postulation_id.parent_id:
-                        self.update_company(postulation_id)
-
-                    postulation_id.write({'state': 'done'})
+                        postulation_id.write({'state': 'done'})
+                        counter += 1
+                    else:
+                        raise ValidationError(_('La empresa seleccionada no tiene email.'))
                 else:
-                    raise ValidationError(_('La empresa seleccionada no tiene email.'))
+                    logging.exception("====> Cron alcanzó el límite de kits a enviar, esperando la próxima ejecución para enviar más...")

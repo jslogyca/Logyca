@@ -2,7 +2,7 @@
 <odoo>
     <record id="ir_cron_send_welcome_kit" model="ir.cron">
         <field name="name">RVC: Enviar Kit de Bienvenida</field>
-        <field name="interval_number">5</field>
+        <field name="interval_number">30</field>
         <field name="interval_type">minutes</field>
         <field name="numbercall">-1</field>
         <field name="nextcall" eval="(DateTime.now() + timedelta(minutes=5)).strftime('%Y-%m-%d %H:%M:%S')" />
