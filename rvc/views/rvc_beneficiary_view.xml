@@ -69,7 +69,6 @@
 		<field name="arch" type="xml">
 			<kanban class="o_res_partner_kanban" create="true">
 				<field name="id"/>
-				<field name="name"/>
 				<field name="partner_id"/>
 				<templates>
 					<t t-name="kanban-box">

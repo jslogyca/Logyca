@@ -76,6 +76,9 @@
         <field name="model">benefits.admon</field>
         <field name="arch" type="xml">
             <search string="Búsqueda de Postulaciones">
+                <field name="name" string="Postulación" filter_domain="['|', ('name', 'ilike', self), ('partner_id', 'ilike', self)]"/>
+                <field name="parent_id" string="Halonadora"/>
+                <separator/>
                 <filter string="En Borrador" name="draft" domain="[('state', '=', 'draft')]"/>
                 <filter string="Notificadas" name="notified" domain="[('state', '=', 'notified')]"/>
                 <filter string="Aceptadas" name="confirm" domain="[('state', '=', 'confirm')]"/>
@@ -85,8 +88,8 @@
 
                 <group expand="1" string="Agrupar por">
                     <filter string="Estado" name="state" context="{'group_by':'state'}"/>
-                    <filter string="Beneficio" name="benefit" context="{'group_by':'product_id'}"/>
-                    <filter string="Halonadora" name="sponsor" context="{'group_by':'parent_id'}"/>
+                    <filter string="Beneficio" name="benefit" context="{'group_by':'product_id','residual_visible':True}"/>
+                    <filter string="Halonadora" name="sponsor" context="{'group_by':'parent_id','residual_visible':True}"/>
                 </group>
             </search>
         </field>

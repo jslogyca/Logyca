@@ -8,9 +8,8 @@ class RVCBeneficiary(models.Model):
     _name = 'rvc.beneficiary'
     _description = 'RVC Beneficiary'
     _inherit = ['mail.thread']
-    _rec_name = 'name'
+    _rec_name = 'partner_id'
 
-    name = fields.Char(string='Name', track_visibility='onchange')
     partner_id = fields.Many2one('res.partner', string='Patrocinado')
     contact_id = fields.Many2one('res.partner', string='Contacto')
     vat = fields.Char('Número de documento', related='partner_id.vat', track_visibility='onchange')
