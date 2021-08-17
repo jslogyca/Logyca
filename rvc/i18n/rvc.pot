@@ -278,7 +278,7 @@ msgstr "Borrador"
 #: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__email
 #: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__contact_email
 msgid "Email"
-msgstr "Correo electrónico"
+msgstr "Correo Electrónico"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_benefits_admon__partner_id

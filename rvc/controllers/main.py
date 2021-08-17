@@ -3,7 +3,7 @@ from odoo import http
 from odoo.http import request
 from odoo.tools.translate import _
 from odoo.tools.misc import get_lang
-
+from datetime import datetime
 
 class AcceptRvcBenefit(http.Controller):
 
@@ -17,7 +17,7 @@ class AcceptRvcBenefit(http.Controller):
 
             # Marcar la posituación como aceptada
             if postulation_id.state == 'notified':
-                postulation_id.write({'state': 'confirm'})
+                postulation_id.write({'state': 'confirm', 'acceptance_date': datetime.now()})
                 postulation_id.message_post(body=_(\
                     '%s <u><strong>ACEPTÓ</strong></u> el beneficio desde el correo electrónico.' % str(postulation_id.partner_id.partner_id.name)))
 

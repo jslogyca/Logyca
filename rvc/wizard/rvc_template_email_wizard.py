@@ -2,6 +2,7 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
+from datetime import datetime
 
 class RVCTemplateEmailWizard(models.TransientModel):
     _name = "rvc.template.email.wizard"
@@ -32,7 +33,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
         active_id = context.get('active_ids', False)
         benefits_admon = self.env['benefits.admon'].browse(active_id)
         if benefits_admon:
-            benefits_admon.write({'state': 'confirm'})
+            benefits_admon.write({'state': 'confirm', 'acceptance_date': datetime.now()})
         return {'type': 'ir.actions.act_window_close'}
 
     def action_done(self):

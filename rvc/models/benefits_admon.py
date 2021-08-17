@@ -39,13 +39,14 @@ class BenefitsAdmon(models.Model):
                                     ('analitica', 'Analítica')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
     sub_product_ids = fields.Many2one('sub.product.rvc', string='Sub-Productos', track_visibility='onchange')
     date_end = fields.Date(string='Date End', track_visibility='onchange')
+    acceptance_date = fields.Date(string='Fecha Aceptación', track_visibility='onchange', readonly=True)
     gln = fields.Char('Código GLN', track_visibility='onchange')
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, track_visibility='onchange')
-    contact_name = fields.Char('Nombre del contacto', related='partner_id.contact_name', track_visibility='onchange')
+    contact_name = fields.Char('Nombre Contacto', related='partner_id.contact_name', track_visibility='onchange')
     contact_phone = fields.Char('Phone', related='partner_id.contact_phone', track_visibility='onchange')
     contact_email = fields.Char('Email', related='partner_id.contact_email', track_visibility='onchange')
     contact_position = fields.Char('Cargo', related='partner_id.contact_position', track_visibility='onchange')
-    vat = fields.Char('Número de documento', related='partner_id.vat', track_visibility='onchange')
+    vat = fields.Char('Número Documento', related='partner_id.vat', track_visibility='onchange')
     access_token = fields.Char('Token', default=_default_access_token, help="Token de acceso para aceptar beneficio desde el correo")
 
     _sql_constraints = [
@@ -81,7 +82,7 @@ class BenefitsAdmon(models.Model):
                     'target': 'new',
                     'domain': '[]'
                 }
-        self.write({'state': 'confirm'})
+                self.write({'state': 'confirm'})
 
 
     def action_done(self):

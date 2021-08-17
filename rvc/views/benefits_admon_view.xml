@@ -58,11 +58,10 @@
 			<tree string="Postulaciones a Beneficios" default_order="create_date desc" >
 				<field name="partner_id"/>
 				<field name="vat"/>
-				<field name="create_date" string="Postulación"/>
+				<field name="create_date" string="Fecha Postulación"/>
 				<field name="contact_name" />
 				<field name="contact_phone" />
 				<field name="contact_email" />
-				<field name="contact_position" />				
 				<field name="parent_id"/>
 				<field name="product_id"/>
 				<field name="benefit_type" invisible="1"/>
