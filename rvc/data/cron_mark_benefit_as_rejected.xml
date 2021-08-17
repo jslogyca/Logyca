@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_mark_benefit_as_rejected" model="ir.cron">
+        <field name="name">RVC: Marcar Postulaciones Como Rechazadas</field>
+        <field name="interval_number">30</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=30)).strftime('%Y-%m-%d %H:%M:%S')" />
+        <field name="user_id" ref="base.user_root" />
+        <field name="model_id" ref="model_benefits_admon"/>
+        <field name="code">model._cron_mark_as_rejected()</field>
+        <field name="state">code</field>
+    </record>
+</odoo>
