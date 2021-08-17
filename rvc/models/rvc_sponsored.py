@@ -7,9 +7,8 @@ from odoo.exceptions import ValidationError
 class RVCSponsored(models.Model):
     _name = 'rvc.sponsored'
     _description = 'RVC Sponsored'
-    _rec_name = 'name'
+    _rec_name = 'partner_id'
 
-    name = fields.Char(string='Name')
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company)
     partner_id = fields.Many2one('res.partner', string='Patrocinador')
     vat = fields.Char('NIT', related='partner_id.vat')
