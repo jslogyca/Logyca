@@ -23,7 +23,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 access_link = partner._notify_get_action_link('view')
                 template = self.env.ref('rvc.mail_template_deactivated_partner_benef')
                 template.with_context(url=access_link).send_mail(benefits_admon.id, force_send=True)
-            benefits_admon.write({'state': 'notified'})
+                benefits_admon.write({'state': 'notified', 'notification_date': datetime.now()})
         return {'type': 'ir.actions.act_window_close'}
 
 
@@ -74,5 +74,5 @@ class RVCTemplateEmailWizard(models.TransientModel):
         active_id = context.get('active_ids', False)
         benefits_admon = self.env['benefits.admon'].browse(active_id)
         if benefits_admon:
-            benefits_admon.write({'state': 'rejected'})
+            benefits_admon.write({'state': 'rejected', 'rejection_date': datetime.now()})
         return {'type': 'ir.actions.act_window_close'}

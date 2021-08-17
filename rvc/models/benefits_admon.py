@@ -39,7 +39,9 @@ class BenefitsAdmon(models.Model):
                                     ('analitica', 'Analítica')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
     sub_product_ids = fields.Many2one('sub.product.rvc', string='Sub-Productos', track_visibility='onchange')
     date_end = fields.Date(string='Date End', track_visibility='onchange')
-    acceptance_date = fields.Date(string='Fecha Aceptación', track_visibility='onchange', readonly=True)
+    acceptance_date = fields.DateTime(string='Fecha/Hora Aceptación', track_visibility='onchange', readonly=True)
+    notification_date = fields.DateTime(string='Fecha/Hora Notificación', track_visibility='onchange', readonly=True)
+    rejection_date = fields.DateTime(string='Fecha/Hora Rechazo', track_visibility='onchange', readonly=True)
     gln = fields.Char('Código GLN', track_visibility='onchange')
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, track_visibility='onchange')
     contact_name = fields.Char('Nombre Contacto', related='partner_id.contact_name', track_visibility='onchange')
@@ -133,7 +135,7 @@ class BenefitsAdmon(models.Model):
                 'target': 'new',
                 'domain': '[]'
             }
-        self.write({'state': 'rejected'})
+            self.write({'state': 'rejected', 'rejection_date': datetime.now()})
 
 
     def action_re_done(self):
@@ -158,7 +160,7 @@ class BenefitsAdmon(models.Model):
                         'target': 'new',
                         'domain': '[]'
                     }
-                self.write({'state': 'notified'})
+                    self.write({'state': 'notified', 'notification_date': datetime.now()})
 
     @api.model
     def create(self, vals):
