@@ -510,8 +510,8 @@ class BenefitsAdmon(models.Model):
         logging.warning("==> Iniciando cron de marcar postulaciones como rechazadas ...")
 
         if not self:
-            self = self.search([('state', '=', 'notified'), ('notification_date', '>', datetime.now() - relativedelta(days=31))])
-
+            self = self.search([('state', '=', 'notified'), ('notification_date', '<', datetime.now() - relativedelta(days=31))])  
+            
             for postulation_id in self:
                 postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
                 #TODO: logging
