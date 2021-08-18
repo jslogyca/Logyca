@@ -146,7 +146,8 @@ class BenefitsAdmon(models.Model):
         for benefits_admon in self:
             #Antes de notificar al beneficiario validamos si beneficio es codigos
             # y si cantidad de codigos es mayor a cero
-            if self.product_id.benefit_type == 'codigos' and self._validate_qty_codes():
+            # y si no tiene productos comprados disponibles
+            if self.product_id.benefit_type == 'codigos' and self._validate_qty_codes() and self._validate_bought_products():
                 if benefits_admon.state in ('draft', 'notified'):
                     view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id,
                     return {
@@ -164,7 +165,7 @@ class BenefitsAdmon(models.Model):
 
     @api.model
     def create(self, vals):
-        if 'partner_id' in vals:
+        if 'partner_id' in vals and 'name' not in vals:
             beneficiary = self.env['rvc.beneficiary'].browse(vals.get('partner_id'))
             vals['name'] = beneficiary.partner_id.vat + '-' + beneficiary.partner_id.name
 
@@ -431,6 +432,8 @@ class BenefitsAdmon(models.Model):
                 #TODO: logging
                 logging.exception("====> assign_credentials_for_codes =>" + str(response_assignate))
                 logging.exception("====> assign_credentials_for_codes =>" + str(response_assignate.text))
+                self.message_post(body=_(\
+                        'No pudieron asignarse las credenciales. El servidor no contesta.'))
                 return False
 
     def today_date_spanish(self):

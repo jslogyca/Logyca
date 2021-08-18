@@ -9,7 +9,7 @@
                 <form string="Notificar">
                     <sheet>
                         <h3>
-                            Se notificara al beneficiario:
+                            Se notificará al beneficiario:
                         </h3>
                         <group>
                             <field name="note_deactive"/>

@@ -10,7 +10,7 @@
                         <div class='header head-img'></div>                    
                         <!-- <div class='header head-logyca'></div> -->
                         <div class='content'>
-                            <p align="left"> Bogotá D.C., Agosto de 2020</p><br/><br/>
+                            <p align="left"> Bogotá D.C., <span t-esc="o.today_date_spanish()"/></p><br/><br/>
                             <p>Señores<br/>
                             <t t-if="o.partner_id">
                                 <span t-field="o.partner_id.partner_id.name"/>
