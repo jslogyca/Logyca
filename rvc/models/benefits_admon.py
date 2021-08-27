@@ -223,6 +223,10 @@ class BenefitsAdmon(models.Model):
                         if len(result) == 1:
                             self.gln = result[0].get('id')
                             return True
+            else:
+                raise ValidationError(\
+                    _('No se ha podido validar el Código GLN de la empresa seleccionada.\
+                       Inténtelo nuevamente o comuníquese con soporte. <strong>Error:</strong> %s' % str(response)))
 
             #caso 3: usuario ingresa gln pero es incorrecto y se encuentra uno válido.
             if self.gln and found == False and available_gln_codes != "No codes" and qty_codes_found == 1:
@@ -270,6 +274,10 @@ class BenefitsAdmon(models.Model):
             if result.get('CodigosCompradosDisponibles') > 0:
                  raise ValidationError(\
                     _('¡Lo sentimos! La empresa seleccionada tiene %s código(s) comprados disponibles.' % (str(result.get('CodigosCompradosDisponibles')))))
+        else:
+            raise ValidationError(\
+                    _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
+                        Inténtelo nuevamente o comuníquese con soporte. <strong>Error:</strong> %s' % (str(response))))
         return True
 
     def _validate_qty_codes(self):
@@ -333,6 +341,8 @@ class BenefitsAdmon(models.Model):
                 logging.info(\
                     "Código GLN '%s' creado y marcado para la empresa %s"\
                         % (result.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.partner_id.name)))
+        else:
+            self.message_post(body=_('No se pudo asignar al beneficiario un Código GLN. El servidor respondió %s' % str(response_assignate)))
 
     def assign_identification_codes(self):
         url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
@@ -364,6 +374,7 @@ class BenefitsAdmon(models.Model):
             return True
         else:
             #TODO: logging
+            self.message_post(body=_('Los Códigos de Identificación no pudieron ser entregados al beneficiario. <strong>Error:</strong> %s' % str(response_assignate)))
             return False
 
     def get_token_assign_credentials(self):
@@ -388,7 +399,7 @@ class BenefitsAdmon(models.Model):
     def assign_credentials_for_codes(self):
         bearer_token = self.get_token_assign_credentials()
 
-        if bearer_token:
+        if bearer_token or bearer_token[0]:
             today_date = datetime.now()
             today_one_year_later = today_date + relativedelta(years=1)
 
@@ -433,8 +444,12 @@ class BenefitsAdmon(models.Model):
                 logging.exception("====> assign_credentials_for_codes =>" + str(response_assignate))
                 logging.exception("====> assign_credentials_for_codes =>" + str(response_assignate.text))
                 self.message_post(body=_(\
-                        'No pudieron asignarse las credenciales. El servidor no contesta.'))
+                        'No pudieron asignarse las credenciales. <strong>Error:</strong> %s' % str(response_assignate)))
                 return False
+        else:
+            self.message_post(body=_("No pudo obtenerse el token para realizar la asignación de credenciales en Colabora."\
+                                     "Inténtelo nuevamente o comuníquese con soporte."))
+            return False
 
     def today_date_spanish(self):
         locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')

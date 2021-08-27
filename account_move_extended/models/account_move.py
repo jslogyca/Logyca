@@ -13,6 +13,29 @@ class AccountMoveLine(models.Model):
     invoice_tag_ids = fields.Many2one('account.analytic.tag', string='Etiqueta Red de Valor')
     inter_company = fields.Boolean('Intercompany', related='product_id.product_tmpl_id.inter_company', readonly=True, store=True)
 
+    @api.onchange('x_budget_group')
+    def onchange_budget_group(self):
+        company_id = self.product_id.company_id.id
+                
+        if company_id and company_id == 1:
+            #servicios 1
+            if self.x_budget_group.lser_analytic_tag_ids:
+                self.analytic_tag_ids = [(6,0, self.x_budget_group.lser_analytic_tag_ids.ids)]
+            else:
+                self.analytic_tag_ids = [(5,0,0)]
+        elif company_id and company_id == 2:
+            #asociación  2
+            if self.x_budget_group.iac_analytic_tag_ids:
+                self.analytic_tag_ids = [(6,0, self.x_budget_group.iac_analytic_tag_ids.ids)]
+            else:
+                self.analytic_tag_ids = [(5,0,0)]
+        elif company_id and company_id == 3:
+            #investigación 3
+            if self.x_budget_group.log_analytic_tag_ids:
+                self.analytic_tag_ids = [(6,0, self.x_budget_group.log_analytic_tag_ids.ids)]
+            else:
+                self.analytic_tag_ids = [(5,0,0)]
+
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
