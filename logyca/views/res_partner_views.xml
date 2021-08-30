@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <record id="view_partner_not_contacted_again_inherit" model="ir.ui.view">
+            <field name="name">not.contacted.again.res.partner</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='x_not_contacted_again']" position="after">
+                        <field name="x_not_contacted_again_partially"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+            
+    </data>
+            
+</odoo>
