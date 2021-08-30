@@ -87,7 +87,8 @@ class ResPartner(models.Model):
     x_meeting_logyca_investigation = fields.Boolean(string='Pertenece a la Junta LOGYCA INVESTIGACIÓN', track_visibility='onchange')    
     x_acceptance_data_policy = fields.Boolean(string='Acepta política de tratamiento de datos', track_visibility='onchange')
     x_acceptance_date = fields.Date(string='Fecha de aceptación', track_visibility='onchange')
-    x_not_contacted_again = fields.Boolean(string='No volver a ser contactado', track_visibility='onchange')
+    x_not_contacted_again = fields.Boolean(string='No volver a ser contactado total', help="Prohibido enviar información referente a LOGYCA", track_visibility='onchange')
+    x_not_contacted_again_partially = fields.Boolean(string='No volver a ser contactado parcial', help="Prohibido enviar información comercial, eventos, formaciones, campañas", track_visibility='onchange')
     x_date_decoupling = fields.Date(string="Fecha de desvinculación", track_visibility='onchange')
     x_reason_desvinculation = fields.Selection([
                                         ('1', 'Desvinculado por no pago'),
