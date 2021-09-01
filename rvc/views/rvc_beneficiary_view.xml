@@ -106,6 +106,18 @@
 		</field>
 	</record>
 
+	<record id="view_rvc_beneficiary_filter" model="ir.ui.view">
+            <field name="name">rvc.beneficiary.filters</field>
+            <field name="model">rvc.beneficiary</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Empresa Beneficiaria">
+                    <field name="partner_id" string="Nombre"/>
+                    <field name="vat" string="# identificación"/>
+                    <field name="contact_email" string="Email" filter_domain="['|', ('email', 'ilike', self), ('contact_email', 'ilike', self)]"/>
+                </search>
+            </field>
+    </record>
+
 	<menuitem
 		id="hr_menu_rvc_partners"
 		name="Empresas"

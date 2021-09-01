@@ -100,6 +100,18 @@
 		</field>
 	</record>
 
+	<record id="view_rvc_sponsor_filter" model="ir.ui.view">
+            <field name="name">rvc.sponsored.filters</field>
+            <field name="model">rvc.sponsored</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Empresa Halonadora">
+                    <field name="partner_id" string="Nombre"/>
+                    <field name="vat" string="# identificación"/>
+                    <field name="email" string="Email" filter_domain="['|', ('email', 'ilike', self), ('contact_email', 'ilike', self)]"/>
+                </search>
+            </field>
+    </record>
+
 	<record id="action_rvc_sponsored" model="ir.actions.act_window">
 		<field name="name">Empresas Halonadoras</field>
 		<field name="res_model">rvc.sponsored</field>
