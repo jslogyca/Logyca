@@ -12,7 +12,7 @@
 				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight"/>
 				 	<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight"/>
 					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />
-					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary" attrs="{'invisible': ['|', ('id','=', False), ('state','!=', 'notified')]}"/>
+					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary" attrs="{'invisible': ['|','|','|',('id','=', False),('state','=','rejected'),('state','=','cancel'),('state','=','done')]}"/>
 				</header>			
 				<sheet>
                     <h1>Postulación a Beneficio RVC</h1>
@@ -37,6 +37,7 @@
 					<group>
 						<group string="Halonador">
 							<field name="parent_id" attrs="{'readonly': [('state','!=','draft')],'required': [('state','=','draft')]}"/>
+                            <field name="id" invisible="1"/>
 						</group>
 						<group>
 						</group>

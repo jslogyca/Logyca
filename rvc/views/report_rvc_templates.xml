@@ -30,7 +30,6 @@
                         </div>
                     </section>
                     <div class="page">
-                        <h2 t-field="o.name"/>
                         <div class='header head-img'></div>
                         <div class='content'>
                             <h2 style="text-align: center;">OFERTA MERCANTIL PARA LA CONCESIÓN DEL DERECHO AL USO DE CÓDIGOS DE IDENTIFICACIÓN DE PRODUCTO

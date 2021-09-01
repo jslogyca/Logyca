@@ -6,7 +6,6 @@
                 <!-- <t t-call="web.external_layout"> -->
                     <t t-set="o" t-value="o.with_context(lang=o.partner_id.partner_id.lang or o.env.lang)"/>
                     <div class="page">
-                        <h2 t-field="o.name"/>
                         <div class='header head-img'></div>                    
                         <!-- <div class='header head-logyca'></div> -->
                         <div class='content'>
@@ -35,7 +34,7 @@
                             <p>En caso de que requiera más información o tenga alguna pregunta no dude en contactarnos.</p><br/>
                             <p style='font-weight: bold; text-align: left'>
                                 <td><img src="https://saintegracionesvtex.blob.core.windows.net/mailimages/RvcSoluciona/Leonel.png"
-                                        width="350" height="250" alt="" /><br/></td>
+                                        width="250" height="150" alt="" /><br/></td>
                                 _________________________________________ <br/>Leonel Pava <br/>Director LOGYCA / ASOCIACIÓN
                             </p> <br/><br/>
                                 <br/><br/><br/><br/><br/><br/><br/><br/>

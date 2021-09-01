@@ -162,6 +162,10 @@ class BenefitsAdmon(models.Model):
                         'domain': '[]'
                     }
                     self.write({'state': 'notified', 'notification_date': datetime.now()})
+            elif not self._validate_qty_codes():
+                logging.info("===> _validate_qty_codes no pasó la validación")
+            elif not self._validate_bought_products():
+                logging.info("===> _validate_bought_products no pasó la validación")
 
     @api.model
     def create(self, vals):

@@ -33,6 +33,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
         active_id = context.get('active_ids', False)
         benefits_admon = self.env['benefits.admon'].browse(active_id)
         if benefits_admon:
+            benefits_admon.message_post(body=_(\
+                    '%s <u><strong>ACEPTÓ</strong></u> el beneficio.' % str(benefits_admon.partner_id.partner_id.name)))
             benefits_admon.write({'state': 'confirm', 'acceptance_date': datetime.now()})
         return {'type': 'ir.actions.act_window_close'}
 
