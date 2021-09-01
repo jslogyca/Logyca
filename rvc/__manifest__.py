@@ -23,7 +23,7 @@
 ''',    
     'data': [
         'security/security.xml',
-        'data/notify_codes_benefit_template.xml.xml',
+        'data/notify_codes_benefit_template.xml',
         'data/welcome_kit_codes_benefit_template.xml',
         'data/rechazo_beneficios_data.xml',
         'data/logyca_contact_types_data.xml',
