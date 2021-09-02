@@ -163,10 +163,13 @@ class BenefitsAdmon(models.Model):
                         'domain': '[]'
                     }
                     self.write({'state': 'notified', 'notification_date': datetime.now()})
+            elif self.product_id.benefit_type != 'codigos':
+                raise ValidationError(_('Oops! Muy pronto podrás notificar los beneficios LOGYCA/COLABORA y LOGYCA/ANALÍTICA.\n\n'\
+                    'Por el momento solo puedes notificar el beneficio DERECHOS DE IDENTIFICACIÓN.'))
             elif not self._validate_qty_codes():
-                logging.info("===> _validate_qty_codes no pasó la validación")
+                logging.warning("===> _validate_qty_codes no pasó la validación")
             elif not self._validate_bought_products():
-                logging.info("===> _validate_bought_products no pasó la validación")
+                logging.warning("===> _validate_bought_products no pasó la validación")
 
     @api.model
     def create(self, vals):
@@ -287,7 +290,7 @@ class BenefitsAdmon(models.Model):
 
     def _validate_qty_codes(self):
         for rec in self:
-            if rec.codes_quantity == 0:
+            if rec.codes_quantity == 0 and self.product_id.benefit_type == 'codigos':
                 raise ValidationError(\
                     _('Por favor indique la -Cantidad de Códigos- que se entregará a la empresa beneficiaria.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
         return True

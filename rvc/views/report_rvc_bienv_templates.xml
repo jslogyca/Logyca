@@ -11,12 +11,8 @@
                         text-justify: inter-word;
                       }
                     </style>
-                    <div id="logo" style="margin-top:1px;">
-                        <div>
-                            <div>
-                                <img src='rvc/static/img/banner-kit-bienv-codigos.png' align="left" />
-                            </div>
-                        </div>
+                    <div id="logo" class="row">
+                         <img class="img img-fluid" src='rvc/static/img/banner-kit-bienv-codigos.png' align="left" />
                     </div>
                     <div class="page">
                         <div class="content">
@@ -29,17 +25,17 @@
                                 <span t-field="o.partner_id.partner_id.vat"/>
                             </t></p><br/>
                             <p>Raciban un cordial saludo.</p>
-                            <p>Desde el año 2015, LOGYCA dio inicio al programa de <strong>Redes de Valor Colaborativas – RVC</strong>, iniciativa de 
+                            <p>Desde el año 2015, LOGYCA dio inicio al programa Redes de Valor Colaborativas (RVC), iniciativa de 
                                 fortalecimiento empresarial liderada por nuestros miembros, que busca mejorar la eficiencia y competitividad 
                                 sostenible de las <strong>micro, pequeñas y medianas empresas.</strong></p>
-                            <p>Dicho esfuerzo nos ha permitido avanzar en el propósito de potenciar la competitividad de este segmento de 
+                            <p>Dicho esfuerzo nos ha permitido avanzar en el propósito de potenciar la competitividad de este segmento de
                                 empresas, de forma tal que, logren responder de manera mucho más eficaz a los retos que demanda el mercado.</p>
                             <p>Dentro de este programa, <strong>su empresa ha sido seleccionada para recibir el beneficio del Acceso al Sistema 
-                                GS1</strong> el cual aplica para todas las micro, pequeñas y medianas empresas (Mipymes).<br/>
-                                Este beneficio incluye el derecho al uso de los códigos de barras que requieran, para identificar su portafolio 
-                                de productos, servicios y localizaciones sin costo. En caso de que su compañía pueda acceder a este beneficio y 
-                                ya es usuario del sistema GS1 con nuestra organización, esta definición no altera las condiciones contractuales 
-                                vigentes. Así mismo, este beneficio aplicará únicamente para los servicios, productos y localizaciones nuevas.
+                                GS1</strong> el cual aplica para todas las micro, pequeñas y medianas empresas (Mipymes).Este beneficio incluye
+                                el derecho al uso de los códigos de barras que requieran, para identificar su portafolio de productos, servicios
+                                y localizaciones sin costo. En caso de que su compañía pueda acceder a este beneficio y ya es usuario del sistema
+                                GS1 con nuestra organización, esta definición no altera las condiciones contractuales vigentes. Así mismo, este
+                                beneficio aplicará únicamente para los servicios, productos y localizaciones nuevas.
                                 </p><br/>
                             <p>Consulte la <a href="https://www.gs1co.org/Portals/0/infografia%20uso%20inadecuado%20del%20codigo.pdf" style="color: #00b398;">Guía de uso del codigo</a></p><br/>
                             <p>En caso de que requiera más información o tenga alguna pregunta no dude en contactarnos.</p><br/>

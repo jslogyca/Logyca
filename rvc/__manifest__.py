@@ -23,6 +23,7 @@
 ''',    
     'data': [
         'security/security.xml',
+        'report/rvc_report.xml',
         'data/notify_codes_benefit_template.xml',
         'data/welcome_kit_codes_benefit_template.xml',
         'data/rechazo_beneficios_data.xml',
@@ -42,7 +43,6 @@
         'views/log_import_rvc_view.xml',
         'views/product_rvc_view.xml',
         'views/benefits_admon_view.xml',
-        'report/rvc_report.xml',
         'views/report_rvc_templates.xml',
         'views/report_rvc_bienv_templates.xml',
         'views/accept_benefit_template.xml'

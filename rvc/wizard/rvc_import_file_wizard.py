@@ -58,6 +58,14 @@ class RVCImportFileWizard(models.TransientModel):
                 if self.benefit_type == 'codigos':
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
                     partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
+
+                    if len(partner_id) == 0:
+                        partner_id=self.env['res.partner'].search([('x_type_thirdparty','=',1),('vat','=', str(fila[0]))])
+
+                    if len(partner_id) > 1:
+                        partner_id=self.env['res.partner'].search([('vat','=',str(fila[0]))])[0]
+
+
                     if not partner_id:
                         validation = 'La empresa beneficiaria con NIT %s no existe en Odoo' % str(fila[0])
                         errors.append(validation)
@@ -283,4 +291,3 @@ class RVCImportFileWizard(models.TransientModel):
             'domain': [('id','in',cre)],
             'target': 'current'
         }
-                    
