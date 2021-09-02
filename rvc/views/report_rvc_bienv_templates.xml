@@ -6,8 +6,27 @@
                 <!-- <t t-call="web.external_layout"> -->
                     <t t-set="o" t-value="o.with_context(lang=o.partner_id.partner_id.lang or o.env.lang)"/>
                     <div class="page">
-                        <div class='header head-img'></div>                    
-                        <!-- <div class='header head-logyca'></div> -->
+                    <style>
+                        #logo
+                        {
+                        width 100%;
+                        margin-top:1px;
+                        }
+                        #logo1
+                        {
+                            width 100%;
+                            float: center;
+                            
+                        }
+                    </style>
+                    <section id="logo">
+                        <div class="header"  style= "text-align: left;">
+                            <div class="col-xs-4" id="logo1"  style= "text-align: center;">
+                                <img  class="img img-responsive" src='rvc/static/img/banner-kit-bienv-codigos.jpg' 
+                                            style="margin: 0px auto; -webkit-animation-play-state: paused; -webkit-transition: none; transition: none;  " align="right" />
+                            </div>
+                        </div>
+                    </section>
                         <div class='content'>
                             <p align="left"> Bogotá D.C., <span t-esc="o.today_date_spanish()"/></p><br/><br/>
                             <p>Señores<br/>
@@ -17,12 +36,12 @@
                             <t t-if="o.partner_id">
                                 <span t-field="o.partner_id.partner_id.vat"/>
                             </t></p><br/>
-                            <p>Raciban un cordial saludo.</p><br/>
+                            <p>Raciban un cordial saludo.</p>
                             <p>Desde el año 2015, LOGYCA dio inicio al programa de <strong>Redes de Valor Colaborativas – RVC</strong>, iniciativa de 
                                 fortalecimiento empresarial liderada por nuestros miembros, que busca mejorar la eficiencia y competitividad 
-                                sostenible de las <strong>micro, pequeñas y medianas empresas.</strong></p><br/>
+                                sostenible de las <strong>micro, pequeñas y medianas empresas.</strong></p>
                             <p>Dicho esfuerzo nos ha permitido avanzar en el propósito de potenciar la competitividad de este segmento de 
-                                empresas, de forma tal que, logren responder de manera mucho más eficaz a los retos que demanda el mercado.</p><br/>
+                                empresas, de forma tal que, logren responder de manera mucho más eficaz a los retos que demanda el mercado.</p>
                             <p>Dentro de este programa, <strong>su empresa ha sido seleccionada para recibir el beneficio del Acceso al Sistema 
                                 GS1</strong> el cual aplica para todas las micro, pequeñas y medianas empresas (Mipymes).<br/>
                                 Este beneficio incluye el derecho al uso de los códigos de barras que requieran, para identificar su portafolio 
@@ -36,14 +55,10 @@
                                 <td><img src="https://saintegracionesvtex.blob.core.windows.net/mailimages/RvcSoluciona/Leonel.png"
                                         width="250" height="150" alt="" /><br/></td>
                                 _________________________________________ <br/>Leonel Pava <br/>Director LOGYCA / ASOCIACIÓN
-                            </p> <br/><br/>
-                                <br/><br/><br/><br/><br/><br/><br/><br/>
-                        </div>
-                        <div class='footer footer-img'>
+                            </p>
                         </div>
                     </div>
                 </t>
-            <!-- </t> -->
         </t>
     </template>
 

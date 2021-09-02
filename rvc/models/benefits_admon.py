@@ -33,7 +33,7 @@ class BenefitsAdmon(models.Model):
     parent_id = fields.Many2one('rvc.sponsored', string='Empresa Patrocinadora', track_visibility='onchange')
     product_id = fields.Many2one('product.rvc', string='Producto', track_visibility='onchange')
     name = fields.Char(string='Name', track_visibility='onchange')
-    codes_quantity = fields.Float('Cantidad de Códigos', track_visibility='onchange')
+    codes_quantity = fields.Integer('Cantidad de Códigos', track_visibility='onchange')
     benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
                                     ('colabora', 'Colabora'),
                                     ('analitica', 'Analítica')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
