@@ -8,7 +8,7 @@
     'website': 'https://logyca.com',
     'author': 'LOGYCA',
     'license': '',
-    'application': False,
+    'application': True,
     'installable': True,
     'depends': [
         'account',
