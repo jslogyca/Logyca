@@ -1,33 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <template id="report_rvc_bienv_template">
+<?xml version="1.0"?>
+<t t-name="rvc.report_rvc_bienv_template">
         <t t-call="web.html_container">
             <t t-foreach="inside_foreach_docs or docs" t-as="o">
                 <!-- <t t-call="web.external_layout"> -->
                     <t t-set="o" t-value="o.with_context(lang=o.partner_id.partner_id.lang or o.env.lang)"/>
-                    <div class="page">
                     <style>
-                        #logo
-                        {
-                        width 100%;
-                        margin-top:1px;
-                        }
-                        #logo1
-                        {
-                            width 100%;
-                            float: center;
-                            
-                        }
+                      p{
+                        text-align: justify;
+                        text-justify: inter-word;
+                      }
                     </style>
-                    <section id="logo">
-                        <div class="header"  style= "text-align: left;">
-                            <div class="col-xs-4" id="logo1"  style= "text-align: center;">
-                                <img  class="img img-responsive" src='rvc/static/img/banner-kit-bienv-codigos.jpg' 
-                                            style="margin: 0px auto; -webkit-animation-play-state: paused; -webkit-transition: none; transition: none;  " align="right" />
+                    <div id="logo" style="margin-top:1px;">
+                        <div>
+                            <div>
+                                <img src='rvc/static/img/banner-kit-bienv-codigos.png' align="left" />
                             </div>
                         </div>
-                    </section>
-                        <div class='content'>
+                    </div>
+                    <div class="page">
+                        <div class="content">
                             <p align="left"> Bogotá D.C., <span t-esc="o.today_date_spanish()"/></p><br/><br/>
                             <p>Señores<br/>
                             <t t-if="o.partner_id">
@@ -51,21 +42,12 @@
                                 </p><br/>
                             <p>Consulte la <a href="https://www.gs1co.org/Portals/0/infografia%20uso%20inadecuado%20del%20codigo.pdf" style="color: #00b398;">Guía de uso del codigo</a></p><br/>
                             <p>En caso de que requiera más información o tenga alguna pregunta no dude en contactarnos.</p><br/>
-                            <p style='font-weight: bold; text-align: left'>
-                                <td><img src="https://saintegracionesvtex.blob.core.windows.net/mailimages/RvcSoluciona/Leonel.png"
-                                        width="250" height="150" alt="" /><br/></td>
+                            <p style="font-weight: bold; text-align: left">
+                                <td><img src="https://saintegracionesvtex.blob.core.windows.net/mailimages/RvcSoluciona/Leonel.png" width="250" height="150" alt=""/><br/></td>
                                 _________________________________________ <br/>Leonel Pava <br/>Director LOGYCA / ASOCIACIÓN
                             </p>
                         </div>
                     </div>
                 </t>
         </t>
-    </template>
-
-    <template id="report_rvc_bienv">
-        <t t-foreach="docs" t-as="o">
-            <!-- <t t-set="inside_foreach_docs" t-value="o"/> -->
-            <t t-call="rvc.report_rvc_bienv_template" t-lang="o.partner_id.sudo().partner_id.lang"/>
-        </t>
-    </template>
-</odoo>
+    </t>
