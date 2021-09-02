@@ -4,6 +4,7 @@ from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError, UserError
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
+import base64
 import time
 import locale
 import json
@@ -537,3 +538,18 @@ class BenefitsAdmon(models.Model):
             for postulation_id in self:
                 postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
                 #TODO: logging
+    
+    
+    def attach_OM_2_partner(self, postulation_id):
+
+        content, content_type = self.env.ref('rvc.action_report_rvc').render_qweb_pdf(postulation_id.id)
+        attachment = self.env['ir.attachment'].create({
+            'name': "Oferta Mercantil RVC.pdf",
+            'type': 'binary',
+            'datas': base64.encodestring(content),
+            'res_model':'res.partner',
+            'res_id': postulation_id.partner_id.partner_id.id
+        })
+        if not attachment:
+            return True 
+        return False

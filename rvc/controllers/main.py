@@ -20,7 +20,10 @@ class AcceptRvcBenefit(http.Controller):
                 postulation_id.write({'state': 'confirm', 'acceptance_date': datetime.now()})
                 postulation_id.message_post(body=_(\
                     '%s <u><strong>ACEPTÓ</strong></u> el beneficio desde el correo electrónico.' % str(postulation_id.partner_id.partner_id.name)))
-
+                
+                #agregando adjunto al tercero
+                postulation_id.attach_OM_2_partner(postulation_id)
+                
                 lang = postulation_id.partner_id.partner_id.lang
                 return request.env['ir.ui.view'].with_context(lang=lang).render_template('rvc.accept_rvc_benefit_page_view', {
                     'benefits_admon': postulation_id, 'token': token
