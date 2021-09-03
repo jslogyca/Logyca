@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, tools, _
+from odoo.osv import expression
 from odoo.exceptions import ValidationError
-
+import logging
 
 class RVCBeneficiary(models.Model):
     _name = 'rvc.beneficiary'
@@ -37,6 +38,15 @@ class RVCBeneficiary(models.Model):
 
     def name_get(self):
         return [(benef.id, '%s - %s' % (benef.vat, benef.partner_id.name)) for benef in self]
+
+    @api.model
+    def name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
+        args = args or []
+        domain = []
+        if name:
+            domain = ['|', '|', '|', ['vat', 'like', name], ['partner_id', operator, name], ['email', operator, name], ['contact_email', operator, name]]
+        rvc_beneficiary_union_ids = self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
+        return self.browse(rvc_beneficiary_union_ids).name_get()
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
