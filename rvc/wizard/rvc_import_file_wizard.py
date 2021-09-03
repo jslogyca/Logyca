@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
-
+from datetime import datetime, timedelta
 import xlwt
 import base64
 import io
@@ -11,7 +11,7 @@ import tempfile
 import xlrd
 import logging
 import time
-from datetime import datetime, timedelta
+import re
 
 class RVCImportFileWizard(models.TransientModel):
     _name = 'rvc.import.file.wizard'
@@ -23,7 +23,13 @@ class RVCImportFileWizard(models.TransientModel):
     benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
                                     ('colabora', 'Logyca Colabora'),
                                     ('analitica', 'Logyca Analítica')], string="Beneficio")
-
+    
+    def validate_mail(self, email):
+        if email:
+            match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email)
+        if match == None:
+            return False
+        return True
 
     def import_file(self):
         if not self.file_data:
@@ -53,6 +59,7 @@ class RVCImportFileWizard(models.TransientModel):
 
             #validar si están los NIT de las empresas (benef y halonadora)
             if fila[0] and fila[1]:
+                
                 if self.benefit_type == 'codigos':
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
                     partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
@@ -113,6 +120,15 @@ class RVCImportFileWizard(models.TransientModel):
                         validation = 'Fila %s: La empresa Halonadora con NIT %s no existe' % (str(count), str(fila[1]))
                         errors.append(validation)
                         continue
+                    
+                    #si se ingresa correo electrónico del contacto
+                    if fila[4]:
+                        #si no es un email válido
+                        if self.validate_mail(str(fila[4])) == False:
+                            validation = 'Fila %s: %s tiene un email de contacto no válido (%s)' %\
+                                (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper(), str(fila[4]))
+                            errors.append(validation)
+                            continue
 
                     if not rvc_beneficiary_id:
                         try:
