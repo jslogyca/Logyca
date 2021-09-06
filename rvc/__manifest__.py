@@ -37,6 +37,7 @@
         'wizard/rvc_template_email_confirm_wizard_view.xml',
         'wizard/rvc_template_email_done_wizard_view.xml',
         'wizard/rvc_template_email_rejected_wizard_view.xml',
+        'wizard/send_notification_beneficiary_view.xml',
         'views/rvc_beneficiary_view.xml',
         'views/rvc_sponsored_view.xml',
         'views/config_rvc_view.xml',

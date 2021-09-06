@@ -556,3 +556,12 @@ class BenefitsAdmon(models.Model):
         if not attachment:
             return True 
         return False
+
+    def send_notification_benefit(self):
+        for benefit_admon in self:
+            partner=self.env['res.partner'].search([('id','=',benefit_admon.partner_id.partner_id.id)])
+            if partner and benefit_admon.partner_id.contact_email:
+                access_link = partner._notify_get_action_link('view')
+                template = self.env.ref('rvc.mail_template_deactivated_partner_benef')
+                template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False)
+                benefit_admon.write({'state': 'notified', 'notification_date': datetime.now()})
