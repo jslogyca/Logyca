@@ -9,7 +9,7 @@ class AcceptRvcBenefit(http.Controller):
 
     @http.route('/rvc/accept_benefit/<string:token>', type='http', auth="public", website=True)
     def accept_benefit(self, token, **kwargs):
-        postulation_ids = request.env['benefits.admon'].sudo().search([('access_token', '=', token)])
+        postulation_ids = request.env['benefit.application'].sudo().search([('access_token', '=', token)])
         if not postulation_ids:
             return request.not_found()
 
@@ -26,5 +26,5 @@ class AcceptRvcBenefit(http.Controller):
                 
                 lang = postulation_id.partner_id.partner_id.lang
                 return request.env['ir.ui.view'].with_context(lang=lang).render_template('rvc.accept_rvc_benefit_page_view', {
-                    'benefits_admon': postulation_id, 'token': token
+                    'benefit_application': postulation_id, 'token': token
                 })

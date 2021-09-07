@@ -8,7 +8,7 @@ class SendNotificationBeneficiary(models.TransientModel):
 
     def sendNotification(self):
         context = dict(self._context or {})
-        benefits = self.env['benefits.admon'].browse(context.get('active_ids'))
+        benefits = self.env['benefit.application'].browse(context.get('active_ids'))
         draft_to_notified = benefits.filtered(lambda m: m.state == 'draft').sorted(lambda m: (m.id))
         if not draft_to_notified:
             raise UserError(_('No hay postulaciones en borrador para notificar'))

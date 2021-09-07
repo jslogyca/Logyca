@@ -44,7 +44,7 @@
 
     <!-- <menuitem id="menu_rvc_import_file_sponsored_wizard_view"
         name="Importar Patrocinadores"
-        parent="rvc.hr_menu_benefits_admon_parent"
+        parent="rvc.hr_menu_benefit_application_parent"
         sequence="4"
         action="action_rvc_import_file_sponsored_wizard_view"
         groups="rvc.group_rvc_manager"/> -->

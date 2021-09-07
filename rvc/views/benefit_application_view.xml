@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<record id="benefits_admon_form" model="ir.ui.view">
-		<field name="name">benefits.admon.form</field>
-		<field name="model">benefits.admon</field>
+	<record id="benefit_application_form" model="ir.ui.view">
+		<field name="name">benefit.application.form</field>
+		<field name="model">benefit.application</field>
 		<field name="arch" type="xml">
 			<form string="Postulación a Beneficios">
 				<header>
@@ -52,9 +52,9 @@
 			</form>
 		</field>
 	</record>
-	<record id="benefits_admon_tree" model="ir.ui.view">
-		<field name="name">benefits.admon.tree</field>
-		<field name="model">benefits.admon</field>
+	<record id="benefit_application_tree" model="ir.ui.view">
+		<field name="name">benefit.application.tree</field>
+		<field name="model">benefit.application</field>
 		<field name="arch" type="xml">
 			<tree string="Postulaciones a Beneficios" default_order="create_date desc" >
 				<field name="partner_id"/>
@@ -72,9 +72,9 @@
 		</field>
 	</record>
 
-    <record id="view_benefits_admon_search" model="ir.ui.view">
-        <field name="name">benefits.admon.search</field>
-        <field name="model">benefits.admon</field>
+    <record id="view_benefit_application_search" model="ir.ui.view">
+        <field name="name">benefit.application.search</field>
+        <field name="model">benefit.application</field>
         <field name="arch" type="xml">
             <search string="Búsqueda de Postulaciones">
                 <field name="name" string="Postulación" filter_domain="['|', ('name', 'ilike', self), ('partner_id', 'ilike', self)]"/>
@@ -96,18 +96,18 @@
         </field>
     </record>
 
-	<record id="action_benefits_admon" model="ir.actions.act_window">
+	<record id="action_benefit_application" model="ir.actions.act_window">
 		<field name="name">Postulación a Beneficio</field>
-		<field name="res_model">benefits.admon</field>
+		<field name="res_model">benefit.application</field>
 		<field name="view_mode">tree,form</field>
-        <field name="search_view_id" ref="view_benefits_admon_search"/>
+        <field name="search_view_id" ref="view_benefit_application_search"/>
 	</record>
 
 	<menuitem
-		id="hr_menu_benefits_admon"
+		id="hr_menu_benefit_application"
 		name="Postulación y Entrega del Beneficio"
-		action="action_benefits_admon"
-		parent="rvc.hr_menu_benefits_admon_parent"
+		action="action_benefit_application"
+		parent="rvc.hr_menu_benefit_application_parent"
 		sequence="0"
 		groups="rvc.group_rvc_manager"/>
 

@@ -15,8 +15,8 @@ import uuid
 
 _logger = logging.getLogger(__name__)
 
-class BenefitsAdmon(models.Model):
-    _name = 'benefits.admon'
+class BenefitApplication(models.Model):
+    _name = 'benefit.application'
     _description = 'Postulación a beneficio'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
@@ -46,9 +46,9 @@ class BenefitsAdmon(models.Model):
     gln = fields.Char('Código GLN', track_visibility='onchange')
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, track_visibility='onchange')
     contact_name = fields.Char('Nombre Contacto', related='partner_id.contact_name', track_visibility='onchange')
-    contact_phone = fields.Char('Phone', related='partner_id.contact_phone', track_visibility='onchange')
-    contact_email = fields.Char('Email', related='partner_id.contact_email', track_visibility='onchange')
-    contact_position = fields.Char('Cargo', related='partner_id.contact_position', track_visibility='onchange')
+    contact_phone = fields.Char('Teléfono Contacto', related='partner_id.contact_phone', track_visibility='onchange')
+    contact_email = fields.Char('Email Contacto', related='partner_id.contact_email', track_visibility='onchange')
+    contact_position = fields.Char('Cargo Contacto', related='partner_id.contact_position', track_visibility='onchange')
     vat = fields.Char('Número Documento', related='partner_id.vat', track_visibility='onchange')
     access_token = fields.Char('Token', default=_default_access_token, help="Token de acceso para aceptar beneficio desde el correo")
 
@@ -60,10 +60,10 @@ class BenefitsAdmon(models.Model):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]    
 
     def unlink(self):
-        for benefits_admon in self:
-            if benefits_admon.state not in ('draft', 'cancel'):
+        for benefit_application in self:
+            if benefit_application.state not in ('draft', 'cancel'):
                 raise ValidationError(_('¡Oops! No puede eliminar una postulación que no esté en estado borrador o cancelada.'))
-        return super(BenefitsAdmon, self).unlink()
+        return super(BenefitApplication, self).unlink()
 
 
     def action_cancel(self):
@@ -71,8 +71,8 @@ class BenefitsAdmon(models.Model):
 
 
     def action_confirm(self):
-        for benefits_admon in self:
-            if benefits_admon.state in ('notified'):
+        for benefit_application in self:
+            if benefit_application.state in ('notified'):
                 view_id = self.env.ref('rvc.rvc_template_email_confirm_wizard_form').id,
                 return {
                     'name':_("Enviar Aceptación"),
@@ -89,8 +89,8 @@ class BenefitsAdmon(models.Model):
 
 
     def action_done(self):
-        for benefits_admon in self:
-            if benefits_admon.state in ('confirm'):
+        for benefit_application in self:
+            if benefit_application.state in ('confirm'):
                 # validamos que no hayan productos comprados disponibles
                 if self.product_id.benefit_type == 'codigos':
                     if self._validate_bought_products():
@@ -123,7 +123,7 @@ class BenefitsAdmon(models.Model):
                     self.write({'state': 'done'})
 
     def action_rejected(self):
-        for benefits_admon in self:
+        for benefit_application in self:
             view_id = self.env.ref('rvc.rvc_template_email_rejected_wizard_form').id,
             return {
                 'name':_("Rechazar Beneficio"),
@@ -144,12 +144,12 @@ class BenefitsAdmon(models.Model):
 
 
     def action_notified(self):
-        for benefits_admon in self:
+        for benefit_application in self:
             #Antes de notificar al beneficiario validamos si beneficio es codigos
             # y si cantidad de codigos es mayor a cero
             # y si no tiene productos comprados disponibles
             if self.product_id.benefit_type == 'codigos' and self._validate_qty_codes() and self._validate_bought_products():
-                if benefits_admon.state in ('draft', 'notified'):
+                if benefit_application.state in ('draft', 'notified'):
                     view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id,
                     return {
                         'name':_("Are you sure?"),
@@ -177,14 +177,14 @@ class BenefitsAdmon(models.Model):
             beneficiary = self.env['rvc.beneficiary'].browse(vals.get('partner_id'))
             vals['name'] = beneficiary.partner_id.vat + '-' + beneficiary.partner_id.name
 
-        res = super(BenefitsAdmon, self).create(vals)
+        res = super(BenefitApplication, self).create(vals)
         res._validate_gln_only_numbers()
         res._validate_gln()
         res._validate_bought_products()
         return res
 
     def write(self, vals):
-        res = super(BenefitsAdmon, self).write(vals)
+        res = super(BenefitApplication, self).write(vals)
         self._validate_gln_only_numbers()
         self._validate_gln()
 

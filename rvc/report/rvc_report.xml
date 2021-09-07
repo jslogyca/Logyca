@@ -2,22 +2,22 @@
 <odoo>
         <record id="action_report_rvc" model="ir.actions.report">
             <field name="name">Oferta Mercantil RVC</field>
-            <field name="model">benefits.admon</field>
+            <field name="model">benefit.application</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">rvc.report_rvc_lang</field>
             <field name="report_file">rvc.report_rvc_lang</field>
             <field name="print_report_name">'rvc - %s' % (object.partner_id.partner_id.name)</field>
-            <field name="binding_model_id" ref="model_benefits_admon"/>
+            <field name="binding_model_id" ref="model_benefit_application"/>
             <field name="binding_type">report</field>
         </record>
         <record id="action_carta_bienv_rvc" model="ir.actions.report">
             <field name="name">Carta Bienvenida GS1</field>
-            <field name="model">benefits.admon</field>
+            <field name="model">benefit.application</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">rvc.report_rvc_bienv</field>
             <field name="report_file">rvc.report_rvc_bienv</field>
             <field name="print_report_name">'rvc - %s' % (object.partner_id.partner_id.name)</field>
-            <field name="binding_model_id" ref="model_benefits_admon"/>
+            <field name="binding_model_id" ref="model_benefit_application"/>
             <field name="binding_type">report</field>
         </record>
 </odoo>

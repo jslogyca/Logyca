@@ -79,7 +79,7 @@
         groups="rvc.group_rvc_manager"/>
 
 	<menuitem
-		id="hr_menu_benefits_admon_parent"
+		id="hr_menu_benefit_application_parent"
 		name="Postulaciones a Beneficios"
 		parent="rvc.menu_rvc_import_file_wizard"
 		sequence="0"
@@ -87,7 +87,7 @@
 
     <menuitem id="menu_report_excel_sale_product_root"
         name="Cargue Masivo de Postulaciones"
-        parent="rvc.hr_menu_benefits_admon_parent"
+        parent="rvc.hr_menu_benefit_application_parent"
         sequence="1"
         action="action_rvc_import_file_wizard_view"
         groups="rvc.group_rvc_manager"/>

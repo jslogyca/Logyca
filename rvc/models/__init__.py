@@ -5,4 +5,4 @@ from . import rvc_sponsor
 from . import config_rvc
 from . import log_import_rvc
 from . import product_rvc
-from . import benefits_admon
+from . import benefit_application

@@ -24,7 +24,7 @@
             <field name="context">{}</field>
             <field name="target">new</field>
             <field name="help">Todas las postulaciones (en estado borrador) seleccionadas serán notificadas por correo a los beneficiarios.</field>
-            <field name="binding_model_id" ref="rvc.model_benefits_admon"/>
+            <field name="binding_model_id" ref="rvc.model_benefit_application"/>
             <field name="binding_view_types">list</field>
         </record>
 
