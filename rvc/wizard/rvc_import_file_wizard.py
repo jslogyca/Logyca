@@ -77,6 +77,19 @@ class RVCImportFileWizard(models.TransientModel):
                         errors.append(validation)
                         continue
 
+                    # Validar que el tipo de vinculación de la empresa beneficiaria no sea miembro, ni cliente CE
+                    if partner_id.x_type_vinculation:
+                        member_or_ce = False
+                        for vinculation in partner_id.x_type_vinculation:
+                            logging.info("=====>" + str(partner_id.x_type_vinculation))
+                            if vinculation.code in ('01', '02'):
+                                member_or_ce = True
+                                validation = 'Fila %s: %s no aplica para el beneficio. Es miembro o cliente CE' %\
+                                        (str(count), partner_id.vat + '-' + str(partner_id.name.strip()))
+                                errors.append(validation)
+                        if member_or_ce:
+                            continue
+
                     #buscando el registro de la empresa como beneficiaria
                     rvc_beneficiary_id=self.env['rvc.beneficiary'].search([('partner_id','=',partner_id.id)])
 
@@ -92,7 +105,7 @@ class RVCImportFileWizard(models.TransientModel):
                                                                 'active': True})
                             self.env.cr.commit()
                         except Exception as e:
-                            validation = "Fila %s: La empresa beneficiaria %s no se puede crear. Error: %s" % (partner_id.name, str(e))
+                            validation = "Fila %s: %s no se pudo crear como empresa beneficiaria. %s" % (str(count), partner_id.vat + '-' + str(partner_id.name.strip()),str(e))
                             errors.append(validation)
                             continue
                     else:
@@ -113,24 +126,14 @@ class RVCImportFileWizard(models.TransientModel):
 
                     # Validar que la empresa beneficiaria esté activa
                     if not partner_id.active:
-                        # raise ValidationError('La empresa beneficiaria no esta activa')
                         validation = 'Fila %s: La empresa beneficiaria %s con NIT %s no esta activa' % (str(count), str(partner_id.name).strip(), str(fila[0]))
                         errors.append(validation)
                         continue
-                        # raise ValidationError(validation)
+
                     # Validar que el tamaño de la empresa beneficiaria sea micro, pequeña o mediana (MIPYME)
                     if partner_id.x_company_size == '4':
-                        # raise ValidationError('el tamaño de la empresa beneficiaria no es micro, pequeña o mediana (MIPYME)')
                         validation = 'Fila %s: El tamaño de la empresa beneficiaria %s no es micro, pequeña o mediana (MIPYME)' %\
                                 str(count), partner_id.vat + '-' + str(partner_id.name.strip())
-                        errors.append(validation)
-                        continue
-                        # raise ValidationError(validation)
-                    # Validar que el tipo de vinculación de la empresa beneficiaria no sea miembro, ni cliente CE
-                    if partner_id.x_type_vinculation and partner_id.x_type_vinculation.code in ('01', '02'):
-                        # raise ValidationError('El tipo de vinculación de la empresa beneficiaria es miembro o cliente CE')
-                        validation = 'Fila %s: El tipo de vinculación de la empresa beneficiaria %s es miembro o cliente CE' %\
-                                str(count), str(partner_id.name.strip()+'-'+partner_id.vat)
                         errors.append(validation)
                         continue
 
@@ -172,7 +175,7 @@ class RVCImportFileWizard(models.TransientModel):
                             if benefits_admon:
                                 self.env.cr.commit()
                                 cre.append(benefits_admon.id)
-                                validation = "Fila %s: %s <strong>postulación creada correctamente</strong>" % (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper())
+                                validation = "Fila %s: %s postulación creada correctamente" % (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper())
                                 errors.append(validation)
                         except Exception as e:
                             validation = "Fila %s: La empresa beneficiaria %s no se puede crear. Error: %s" % (str(count), partner_id.name, str(e))
@@ -326,6 +329,9 @@ class RVCImportFileWizard(models.TransientModel):
             raise ValidationError(msj)            
         obj_model = self.env['ir.model.data']
         res = obj_model.get_object_reference('rvc', 'benefits_admon_tree')
+
+        if not cre:
+            raise UserError(_("No se importaron postulaciones a beneficios RVC."))
         return {
             'name': 'Registros Importados '+str(datetime.now().date().strftime("%d/%m/%Y")),
             'type': 'ir.actions.act_window',
