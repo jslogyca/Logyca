@@ -3,7 +3,6 @@
     <template id="report_rvc_bienv_template">
         <t t-call="web.html_container">
             <t t-foreach="inside_foreach_docs or docs" t-as="o">
-                <!-- <t t-call="web.external_layout"> -->
                     <t t-set="o" t-value="o.with_context(lang=o.partner_id.partner_id.lang or o.env.lang)"/>
                     <style>
                       p{
@@ -11,8 +10,8 @@
                         text-justify: inter-word;
                       }
                     </style>
-                    <div id="logo" class="row">
-                         <img class="img img-fluid" src='rvc/static/img/banner-kit-bienv-codigos.png' align="left" />
+                    <div class="header">
+                         <img src='https://saintegracionesvtex.blob.core.windows.net/mailimages/head-logyca.jpg' align="left"/>
                     </div>
                     <div class="page">
                         <div class="content">

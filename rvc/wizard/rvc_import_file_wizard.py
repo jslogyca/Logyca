@@ -90,6 +90,20 @@ class RVCImportFileWizard(models.TransientModel):
                         if member_or_ce:
                             continue
 
+                    #si se ingresa correo electrónico del contacto
+                    if fila[4]:
+                        #si no es un email válido
+                        if self.validate_mail(str(fila[4])) == False:
+                            validation = 'Fila %s: %s tiene un email de contacto no válido (%s)' %\
+                                (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper(), str(fila[4]))
+                            errors.append(validation)
+                            continue
+                    else:
+                        validation = 'Fila %s: %s no tiene email de contacto' %\
+                                (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper())
+                        errors.append(validation)
+                        continue
+
                     #buscando el registro de la empresa como beneficiaria
                     rvc_beneficiary_id=self.env['rvc.beneficiary'].search([('partner_id','=',partner_id.id)])
 
@@ -148,19 +162,6 @@ class RVCImportFileWizard(models.TransientModel):
                         errors.append(validation)
                         continue
                     
-                    #si se ingresa correo electrónico del contacto
-                    if fila[4]:
-                        #si no es un email válido
-                        if self.validate_mail(str(fila[4])) == False:
-                            validation = 'Fila %s: %s tiene un email de contacto no válido (%s)' %\
-                                (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper(), str(fila[4]))
-                            errors.append(validation)
-                            continue
-                    else:
-                        validation = 'Fila %s: %s no tiene email de contacto' %\
-                                (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper())
-                        errors.append(validation)
-                        continue
 
                     if rvc_beneficiary_id and rvc_beneficiary_id.id:
                         try:

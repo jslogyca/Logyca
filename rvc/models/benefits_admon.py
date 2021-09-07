@@ -545,11 +545,13 @@ class BenefitsAdmon(models.Model):
     
     def attach_OM_2_partner(self, postulation_id):
 
-        content, content_type = self.env.ref('rvc.action_report_rvc').render_qweb_pdf(postulation_id.id)
+        pdf = self.env.ref('rvc.action_report_rvc').render_qweb_pdf(postulation_id.id)
+        b64_pdf = base64.b64encode(pdf[0])
+
         attachment = self.env['ir.attachment'].create({
             'name': "Oferta Mercantil RVC.pdf",
             'type': 'binary',
-            'datas': base64.encodestring(content),
+            'datas': b64_pdf,
             'res_model':'res.partner',
             'res_id': postulation_id.partner_id.partner_id.id
         })

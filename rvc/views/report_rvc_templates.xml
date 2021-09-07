@@ -3,32 +3,9 @@
     <template id="report_rvc_template">
         <t t-call="web.html_container">
             <t t-foreach="inside_foreach_docs or docs" t-as="o">
-                <!-- <t t-call="web.external_layout"> -->
-                    <!-- <t t-set="o" t-value="o.with_context(lang=o.partner_id.partner_id.lang or o.env.lang)"/> -->
-
-
-                    <style>
-                        #logo
-                        {
-                        width 100%;
-                        margin-top:1px;
-                        }
-                        #logo1
-                        {
-                            width 45%;
-                            float: left;
-                            height: 100%;
-                            
-                        }
-                    </style>
-                    <section id="logo">
-                        <div class="header"  style= "text-align: left;">
-                            <div class="col-xs-4" id="logo1"  style= "text-align: center;">
-                                <img  class="img img-responsive" src='rvc/static/img/logo_oferta.png' 
-                                            style="margin: 0px auto; -webkit-animation-play-state: paused; -webkit-transition: none; transition: none;  " align="right" />
-                            </div>
-                        </div>
-                    </section>
+                    <div class="header">
+                         <img src='https://saintegracionesvtex.blob.core.windows.net/mailimages/head-img.jpg' align="left"/>
+                    </div>
                     <div class="page">
                         <div class='header head-img'></div>
                         <div class='content'>
@@ -195,20 +172,16 @@
                                         <strong>Director: LOGYCA / ASOCIACIÓN</strong>
                                     </p>                             
                                 </div>                            
-                            </div> 
-
-
+                            </div>
                         </div>
                         <div class='footer footer-img'></div>
                     </div>
                 </t>
-            <!-- </t> -->
-        </t>
+            </t>
     </template>
 
     <template id="report_rvc_lang">
         <t t-foreach="docs" t-as="o">
-            <!-- <t t-set="inside_foreach_docs" t-value="o"/> -->
             <t t-call="rvc.report_rvc_template" t-lang="o.partner_id.sudo().partner_id.lang"/>
         </t>
     </template>
