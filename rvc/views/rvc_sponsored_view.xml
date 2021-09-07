@@ -14,7 +14,7 @@
                     <h1>Registro de Empresa Halonadora</h1>
                     <group>
                         <group string="Buscar Empresa">
-                            <field name="partner_id" nolabel="1"/>
+							<field name="partner_id" domain="[('x_type_thirdparty', '=', 1)]" nolabel="1"/>
                         </group>
                         <group>
                         </group>

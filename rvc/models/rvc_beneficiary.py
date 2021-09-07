@@ -25,16 +25,19 @@ class RVCBeneficiary(models.Model):
                                         ('5', 'Micro'),
                                         ('6', 'Pequeña')], string='Tamaño empresa', related='partner_id.x_company_size', readonly=True, store=True, track_visibility='onchange')
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, track_visibility='onchange')
-    contact_name = fields.Char('Nombre del contacto', track_visibility='onchange')
-    contact_phone = fields.Char('Phone', track_visibility='onchange')
-    contact_email = fields.Char('Email', track_visibility='onchange')
-    contact_position = fields.Char('Cargo', track_visibility='onchange')
+    contact_name = fields.Char('Nombre Contacto', track_visibility='onchange')
+    contact_phone = fields.Char('Teléfono Contacto', track_visibility='onchange')
+    contact_email = fields.Char('Email Contacto', track_visibility='onchange')
+    contact_position = fields.Char('Cargo Contacto', track_visibility='onchange')
     active = fields.Boolean('Activo', default=True, track_visibility='onchange')
     codes_quantity = fields.Integer('Cantidad de Códigos', track_visibility='onchange')
     macro_sector = fields.Selection([('manufactura', 'Manufactura'), 
                                     ('servicios', 'Servicios'),
                                     ('comercio', 'Comercio')], string='Macrosector', related='partner_id.macro_sector', track_visibility='onchange')
 
+    _sql_constraints = [
+        ('rvc_beneficiary_uniq', 'unique (partner_id)', 'La empresa beneficiaria que está tratando de crear ya existe.')
+    ]
 
     def name_get(self):
         return [(benef.id, '%s - %s' % (benef.vat, benef.partner_id.name)) for benef in self]

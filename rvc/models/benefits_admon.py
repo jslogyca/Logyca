@@ -253,7 +253,7 @@ class BenefitsAdmon(models.Model):
                         %s \n\nPor favor copie y pegue alguno.' % (str(qty_codes_found), str(available_gln_codes))))
             #caso 8: no tiene gln registrado. Registrando uno para la empresa seleccionada.
             elif not self.gln and found == False and available_gln_codes == "No codes":
-                logging.info(" ==> Asignando GLN (en Desarollo) <===")
+                logging.info(" ==> Se asignará GLN con el beneficio <===")
 
             #caso 9: usuario ingresa GLN pero es incorrecto y no tiene GLN's.
             elif self.gln and found == False and available_gln_codes == "No codes":

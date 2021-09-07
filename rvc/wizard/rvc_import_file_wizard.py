@@ -55,6 +55,8 @@ class RVCImportFileWizard(models.TransientModel):
         #almacena las excepciones
         error=[]
         for fila in record_list:
+            rvc_beneficiary_id = False
+            partner_id = False
             count+=1
 
             #validar si están los NIT de las empresas (benef y halonadora)
@@ -77,8 +79,29 @@ class RVCImportFileWizard(models.TransientModel):
 
                     #buscando el registro de la empresa como beneficiaria
                     rvc_beneficiary_id=self.env['rvc.beneficiary'].search([('partner_id','=',partner_id.id)])
+
+                    if not rvc_beneficiary_id:
+                        try:
+                            rvc_beneficiary_id = self.env['rvc.beneficiary'].create({
+                                                                'partner_id': partner_id.id,
+                                                                'vat': partner_id.vat,
+                                                                'contact_name': str(fila[3]),
+                                                                'contact_phone': str(fila[5]),
+                                                                'contact_email': str(fila[4]),
+                                                                'contact_position': str(fila[6]),
+                                                                'active': True})
+                            self.env.cr.commit()
+                        except Exception as e:
+                            validation = "Fila %s: La empresa beneficiaria %s no se puede crear. Error: %s" % (partner_id.name, str(e))
+                            errors.append(validation)
+                            continue
+                    else:
+                        #beneficiario existe entonces traemos el registro.
+                        rvc_beneficiary_id=self.env['rvc.beneficiary'].browse(rvc_beneficiary_id.id)
+
                     #beneficio
                     product_id=self.env['product.rvc'].search([('benefit_type','=',self.benefit_type)])
+
                     # Validar que la empresa beneficiaria no tenga otra postulación o entrega activa de este beneficio
                     if rvc_beneficiary_id:
                         benefits_admon_id=self.env['benefits.admon'].search([('partner_id','=',rvc_beneficiary_id.id),('product_id','=',product_id.id)])
@@ -111,9 +134,10 @@ class RVCImportFileWizard(models.TransientModel):
                         errors.append(validation)
                         continue
 
-                    #empresa beneficiaria
+                    #empresa patrocinadora
                     parent_id=self.env['res.partner'].search([('vat','=',str(fila[1])), ('is_company','=',True)], limit=1)
-                    #halonadora
+
+                    #patrocinadora como halonadora rvc
                     sponsored_id=self.env['rvc.sponsored'].search([('partner_id','=',parent_id.id)])
 
                     if not sponsored_id:
@@ -129,22 +153,11 @@ class RVCImportFileWizard(models.TransientModel):
                                 (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper(), str(fila[4]))
                             errors.append(validation)
                             continue
-
-                    if not rvc_beneficiary_id:
-                        try:
-                            rvc_beneficiary_id = self.env['rvc.beneficiary'].create({
-                                                                'partner_id': partner_id.id,
-                                                                'vat': partner_id.vat,
-                                                                'contact_name': str(fila[3]),
-                                                                'contact_phone': str(fila[5]),
-                                                                'contact_email': str(fila[4]),
-                                                                'contact_position': str(fila[6]),
-                                                                'active': True})
-                            self.env.cr.commit()
-                        except Exception as e:
-                            validation = "Fila %s: La empresa beneficiaria %s no se puede crear. Error: %s" % (partner_id.name, str(e))
-                            errors.append(validation)
-                            continue
+                    else:
+                        validation = 'Fila %s: %s no tiene email de contacto' %\
+                                (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper())
+                        errors.append(validation)
+                        continue
 
                     if rvc_beneficiary_id and rvc_beneficiary_id.id:
                         try:
@@ -155,14 +168,19 @@ class RVCImportFileWizard(models.TransientModel):
                                 'codes_quantity': int(fila[2])
                             }
                             benefits_admon = self.env['benefits.admon'].sudo().create(vals)
-                            logging.warning("benefits_admon id es: %s y su name es %s" % (str(benefits_admon.id), benefits_admon.partner_id))
                             
                             if benefits_admon:
+                                self.env.cr.commit()
                                 cre.append(benefits_admon.id)
+                                validation = "Fila %s: %s <strong>postulación creada correctamente</strong>" % (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper())
+                                errors.append(validation)
                         except Exception as e:
                             validation = "Fila %s: La empresa beneficiaria %s no se puede crear. Error: %s" % (str(count), partner_id.name, str(e))
                             errors.append(validation)
                             continue
+                    else:
+                        logging.warning("=================> no entra a la creacion de benefits.admon")
+
                 elif self.benefit_type == 'colabora':
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
                     partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
