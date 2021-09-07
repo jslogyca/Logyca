@@ -204,7 +204,8 @@ class BenefitApplication(models.Model):
 
         if self.partner_id and (self.product_id.benefit_type == 'codigos' or self.product_id.benefit_type == 'colabora'):
             
-            url = "https://asctestdocker.azurewebsites.net/codes/EmpresaGln/"
+            #url = "https://asctestdocker.azurewebsites.net/codes/EmpresaGln/"
+            url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/EmpresaGln/"
             payload = {'nit': str(self.vat)}
 
             response = requests.get(url, data=json.dumps(payload))
@@ -271,8 +272,8 @@ class BenefitApplication(models.Model):
                     '\n\nPor favor deje el campo Código GLN vacío, le asignaremos uno en la entrega del beneficio.' % (tmp_code, str(partner_id.name))))
                 
     def _validate_bought_products(self):
-        #url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str("10203040"))
-        url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+        # url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+        url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
 
         response = requests.get(url)
         if response.status_code == 200:
@@ -297,7 +298,9 @@ class BenefitApplication(models.Model):
 
     def assignate_gln_code(self):
         #creando código
-        url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
+        #url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
+        url_assignate = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/assignate/"
+
         body_assignate = json.dumps({
             "AgreementName":"",
             "IdAgreement":"1",
@@ -320,7 +323,9 @@ class BenefitApplication(models.Model):
         if response_assignate.status_code == 200:
             response_assignate.close()
             #marcando código
-            url_mark = "https://asctestdocker.azurewebsites.net/codes/mark/"
+            #url_mark = "https://asctestdocker.azurewebsites.net/codes/mark/"
+            url_mark = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/mark/"
+
             body_mark = json.dumps({
                 "Nit": self.vat,
                 "TipoProducto": 1,
@@ -353,7 +358,9 @@ class BenefitApplication(models.Model):
             self.message_post(body=_('No se pudo asignar al beneficiario un Código GLN. El servidor respondió %s' % str(response_assignate)))
 
     def assign_identification_codes(self):
-        url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
+        #url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
+        url_assignate = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/assignate/"
+
         body_assignate = json.dumps({
             "AgreementName":"",
             "IdAgreement":"",
@@ -386,7 +393,9 @@ class BenefitApplication(models.Model):
             return False
 
     def get_token_assign_credentials(self):
-        url_get_token = "http://apiauthenticationssodev.azurewebsites.net/api/Token/Authenticate"
+        #url_get_token = "http://apiauthenticationssodev.azurewebsites.net/api/Token/Authenticate"
+        url_get_token = "http://logycassoapi.azurewebsites.net/api/Token/Authenticate"
+
         body_get_token = json.dumps({
             "email": "tiendavirtualapi@yopmail.com",
             "password": "Logyca2020"
@@ -411,7 +420,9 @@ class BenefitApplication(models.Model):
             today_date = datetime.now()
             today_one_year_later = today_date + relativedelta(years=1)
 
-            url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
+            #url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
+            url_assignate= "https://logycacolaboraapiv1.azurewebsites.net/api/Company/AddCompanyEcommerce"
+
             body_assignate = json.dumps({
                     "Nit": self.vat,
                     "Name": self.contact_name,
