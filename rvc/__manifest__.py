@@ -43,7 +43,7 @@
         'views/config_rvc_view.xml',
         'views/log_import_rvc_view.xml',
         'views/product_rvc_view.xml',
-        'views/benefits_admon_view.xml',
+        'views/benefit_application_view.xml',
         'views/report_rvc_templates.xml',
         'views/report_rvc_bienv_templates.xml',
         'views/accept_benefit_template.xml'
