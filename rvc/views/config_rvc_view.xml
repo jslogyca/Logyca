@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="config_rvc_form" model="ir.ui.view">
+		<field name="name">config.rvc.form</field>
+		<field name="model">config.rvc</field>
+		<field name="arch" type="xml">
+			<form string="RVC Config">			
+				<sheet>
+					<group>
+						<group>
+							<field name="name" />
+							<field name="benefit_type" />
+						</group>
+						<group>
+							<field name="product_id" />
+							<field name="company_id" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="config_rvc_tree" model="ir.ui.view">
+		<field name="name">config.rvc.tree</field>
+		<field name="model">config.rvc</field>
+		<field name="arch" type="xml">
+			<tree string="RVC Config" >
+				<field name="name"/>
+				<field name="benefit_type"/>
+				<field name="product_id"/>
+			</tree>
+		</field>
+	</record>
+
+	<menuitem
+		id="menu_config_rvc_parent"
+		name="Config"
+		parent="rvc.menu_rvc_import_file_wizard"
+		sequence="10"
+		groups="rvc.group_rvc_manager"/>
+		
+</odoo>

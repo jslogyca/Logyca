@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="contact_types_rvc" model="logyca.contact_types">
+            <field name="name">Representante RVC</field>
+            <field name="code">RVC</field>
+        </record>
+    </data>
+</odoo>

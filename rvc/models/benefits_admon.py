@@ -4,6 +4,7 @@ from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError, UserError
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
+import base64
 import time
 import locale
 import json
@@ -33,7 +34,7 @@ class BenefitsAdmon(models.Model):
     parent_id = fields.Many2one('rvc.sponsored', string='Empresa Patrocinadora', track_visibility='onchange')
     product_id = fields.Many2one('product.rvc', string='Producto', track_visibility='onchange')
     name = fields.Char(string='Name', track_visibility='onchange')
-    codes_quantity = fields.Float('Cantidad de Códigos', track_visibility='onchange')
+    codes_quantity = fields.Integer('Cantidad de Códigos', track_visibility='onchange')
     benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
                                     ('colabora', 'Colabora'),
                                     ('analitica', 'Analítica')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
@@ -162,6 +163,13 @@ class BenefitsAdmon(models.Model):
                         'domain': '[]'
                     }
                     self.write({'state': 'notified', 'notification_date': datetime.now()})
+            elif self.product_id.benefit_type != 'codigos':
+                raise ValidationError(_('Oops! Muy pronto podrás notificar los beneficios LOGYCA/COLABORA y LOGYCA/ANALÍTICA.\n\n'\
+                    'Por el momento solo puedes notificar el beneficio DERECHOS DE IDENTIFICACIÓN.'))
+            elif not self._validate_qty_codes():
+                logging.warning("===> _validate_qty_codes no pasó la validación")
+            elif not self._validate_bought_products():
+                logging.warning("===> _validate_bought_products no pasó la validación")
 
     @api.model
     def create(self, vals):
@@ -245,7 +253,7 @@ class BenefitsAdmon(models.Model):
                         %s \n\nPor favor copie y pegue alguno.' % (str(qty_codes_found), str(available_gln_codes))))
             #caso 8: no tiene gln registrado. Registrando uno para la empresa seleccionada.
             elif not self.gln and found == False and available_gln_codes == "No codes":
-                logging.info(" ==> Asignando GLN (en Desarollo) <===")
+                logging.info(" ==> Se asignará GLN con el beneficio <===")
 
             #caso 9: usuario ingresa GLN pero es incorrecto y no tiene GLN's.
             elif self.gln and found == False and available_gln_codes == "No codes":
@@ -282,7 +290,7 @@ class BenefitsAdmon(models.Model):
 
     def _validate_qty_codes(self):
         for rec in self:
-            if rec.codes_quantity == 0:
+            if rec.codes_quantity == 0 and self.product_id.benefit_type == 'codigos':
                 raise ValidationError(\
                     _('Por favor indique la -Cantidad de Códigos- que se entregará a la empresa beneficiaria.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
         return True
@@ -533,3 +541,29 @@ class BenefitsAdmon(models.Model):
             for postulation_id in self:
                 postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
                 #TODO: logging
+    
+    
+    def attach_OM_2_partner(self, postulation_id):
+
+        pdf = self.env.ref('rvc.action_report_rvc').render_qweb_pdf(postulation_id.id)
+        b64_pdf = base64.b64encode(pdf[0])
+
+        attachment = self.env['ir.attachment'].create({
+            'name': "Oferta Mercantil RVC.pdf",
+            'type': 'binary',
+            'datas': b64_pdf,
+            'res_model':'res.partner',
+            'res_id': postulation_id.partner_id.partner_id.id
+        })
+        if not attachment:
+            return True 
+        return False
+
+    def send_notification_benefit(self):
+        for benefit_admon in self:
+            partner=self.env['res.partner'].search([('id','=',benefit_admon.partner_id.partner_id.id)])
+            if partner and benefit_admon.partner_id.contact_email:
+                access_link = partner._notify_get_action_link('view')
+                template = self.env.ref('rvc.mail_template_deactivated_partner_benef')
+                template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False)
+                benefit_admon.write({'state': 'notified', 'notification_date': datetime.now()})

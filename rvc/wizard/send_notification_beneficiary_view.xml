@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="send_notification_beneficiary" model="ir.ui.view">
+            <field name="name">Send Notification To Beneficiary</field>
+            <field name="model">send.notification.beneficiary</field>
+            <field name="arch" type="xml">
+                <form string="Send Notification To Beneficiaries">
+                    <span class="o_form_label">Todas las postulaciones (en estado borrador) seleccionadas serán notificadas por correo a los beneficiarios.</span>
+                    <footer>
+                        <button string="Notificar" name="sendNotification" type="object" default_focus="1" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_send_notification_beneficiary" model="ir.actions.act_window">
+            <field name="name">Notificar Beneficiarios </field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">send.notification.beneficiary</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="send_notification_beneficiary"/>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+            <field name="help">Todas las postulaciones (en estado borrador) seleccionadas serán notificadas por correo a los beneficiarios.</field>
+            <field name="binding_model_id" ref="rvc.model_benefits_admon"/>
+            <field name="binding_view_types">list</field>
+        </record>
+
+    </data>
+</odoo>

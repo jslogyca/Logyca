@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_rvc_bienv_template">
+        <t t-call="web.html_container">
+            <t t-foreach="inside_foreach_docs or docs" t-as="o">
+                    <t t-set="o" t-value="o.with_context(lang=o.partner_id.partner_id.lang or o.env.lang)"/>
+                    <style>
+                      p{
+                        text-align: justify;
+                        text-justify: inter-word;
+                      }
+                    </style>
+                    <div class="header">
+                         <img src='https://saintegracionesvtex.blob.core.windows.net/mailimages/head-logyca.jpg' align="left"/>
+                    </div>
+                    <div class="page">
+                        <div class="content">
+                            <p align="left"> Bogotá D.C., <span t-esc="o.today_date_spanish()"/></p><br/><br/>
+                            <p>Señores<br/>
+                            <t t-if="o.partner_id">
+                                <span t-field="o.partner_id.partner_id.name"/>
+                            </t><br/>
+                            <t t-if="o.partner_id">
+                                <span t-field="o.partner_id.partner_id.vat"/>
+                            </t></p><br/>
+                            <p>Raciban un cordial saludo.</p>
+                            <p>Desde el año 2015, LOGYCA dio inicio al programa Redes de Valor Colaborativas (RVC), iniciativa de 
+                                fortalecimiento empresarial liderada por nuestros miembros, que busca mejorar la eficiencia y competitividad 
+                                sostenible de las <strong>micro, pequeñas y medianas empresas.</strong></p>
+                            <p>Dicho esfuerzo nos ha permitido avanzar en el propósito de potenciar la competitividad de este segmento de
+                                empresas, de forma tal que, logren responder de manera mucho más eficaz a los retos que demanda el mercado.</p>
+                            <p>Dentro de este programa, <strong>su empresa ha sido seleccionada para recibir el beneficio del Acceso al Sistema 
+                                GS1</strong> el cual aplica para todas las micro, pequeñas y medianas empresas (Mipymes).Este beneficio incluye
+                                el derecho al uso de los códigos de barras que requieran, para identificar su portafolio de productos, servicios
+                                y localizaciones sin costo. En caso de que su compañía pueda acceder a este beneficio y ya es usuario del sistema
+                                GS1 con nuestra organización, esta definición no altera las condiciones contractuales vigentes. Así mismo, este
+                                beneficio aplicará únicamente para los servicios, productos y localizaciones nuevas.
+                                </p><br/>
+                            <p>Consulte la <a href="https://www.gs1co.org/Portals/0/infografia%20uso%20inadecuado%20del%20codigo.pdf" style="color: #00b398;">Guía de uso del codigo</a></p><br/>
+                            <p>En caso de que requiera más información o tenga alguna pregunta no dude en contactarnos.</p><br/>
+                            <p style="font-weight: bold; text-align: left">
+                                <td><img src="https://saintegracionesvtex.blob.core.windows.net/mailimages/RvcSoluciona/Leonel.png" width="250" height="150" alt=""/><br/></td>
+                                _________________________________________ <br/>Leonel Pava <br/>Director LOGYCA / ASOCIACIÓN
+                            </p>
+                        </div>
+                    </div>
+                </t>
+        </t>
+    </template>
+
+    <template id="report_rvc_bienv">
+        <t t-foreach="docs" t-as="o">
+            <!-- <t t-set="inside_foreach_docs" t-value="o"/> -->
+            <t t-call="rvc.report_rvc_bienv_template" t-lang="o.partner_id.sudo().partner_id.lang"/>
+        </t>
+    </template>
+</odoo>

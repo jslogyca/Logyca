@@ -1,0 +1,805 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* rvc
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0+e-20191227\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-06-30 20:46+0000\n"
+"PO-Revision-Date: 2021-06-30 20:46+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
+msgid "<i class=\"fa fa-download\"/> <span>Plantilla Beneficio Analítica</span>"
+msgstr ""
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
+msgid "<i class=\"fa fa-download\"/> <span>Plantilla Beneficio Colabora</span>"
+msgstr ""
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
+msgid ""
+"<i class=\"fa fa-download\"/> <span>Plantilla Beneficio "
+"Identificacion</span>"
+msgstr ""
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_sponsored_wizard_view
+msgid "<i class=\"fa fa-download\"/> <span>Plantilla Patrocinadores</span>"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_needaction
+msgid "Action Needed"
+msgstr "Acción Necesaria"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__activity_ids
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "Decoración de excepción de actividad"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__activity_state
+msgid "Activity State"
+msgstr "Estado de actividad"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_agreement_rvc__active
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__active
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__active
+#: model:ir.model.fields.selection,name:rvc.selection__product_rvc__state__activo
+#: model:ir.model.fields.selection,name:rvc.selection__sub_product_rvc__state__activo
+msgid "Activo"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__agreement_id
+msgid "Agreement"
+msgstr "Convenio"
+
+#. module: rvc
+#: model:ir.actions.act_window,name:rvc.action_agreement_rvc
+#: model:ir.model,name:rvc.model_agreement_rvc
+#: model:ir.ui.menu,name:rvc.menu_agreement_rvc
+#: model_terms:ir.ui.view,arch_db:rvc.agreement_rvc_form
+#: model_terms:ir.ui.view,arch_db:rvc.agreement_rvc_tree
+msgid "Agreement RVC"
+msgstr "Convenios"
+
+#. module: rvc
+#: model:ir.model.fields.selection,name:rvc.selection__config_rvc__benefit_type__analitica
+#: model:ir.model.fields.selection,name:rvc.selection__product_rvc__benefit_type__analitica
+#: model:ir.model.fields.selection,name:rvc.selection__rvc_import_file_wizard__benefit_type__analitica
+msgid "Analítica"
+msgstr ""
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
+msgid ""
+"Asistente para importar masivamente Beneficios de Derechos de Identificación"
+msgstr ""
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_sponsored_wizard_view
+msgid "Asistente para importar masivamente Patrocinadores"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_attachment_count
+msgid "Attachment Count"
+msgstr "Contador de adjuntos"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_config_rvc__product_id
+#: model:ir.model.fields,field_description:rvc.field_config_rvc__benefit_type
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__benefit_type
+#: model:ir.model.fields,field_description:rvc.field_product_rvc__benefit_type
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__benefit_type
+msgid "Beneficio"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields.selection,name:rvc.selection__benefits_admon__state__cancel
+#: model_terms:ir.ui.view,arch_db:rvc.benefits_admon_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_sponsored_wizard_view
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
+msgid "Cancelar"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__codes_quantity
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__codes_quantity
+msgid "Cantidad de Códigos"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__contact_position
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__contact_position
+msgid "Cargo"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model,name:rvc.model_rvc_import_file_wizard
+msgid "Cargue Masivo Derechos de Identificación"
+msgstr ""
+
+#. module: rvc
+#: model:ir.actions.act_window,name:rvc.action_rvc_import_file_wizard_view
+#: model:ir.ui.menu,name:rvc.menu_report_excel_sale_product_root
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
+msgid "Cargue Masivo de Postulaciones"
+msgstr "Cargue Masivo de Postulaciones"
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_sponsored_wizard_view
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
+msgid "Choose a file to import..."
+msgstr "Escoja un archivo para importar ..."
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_agreement_rvc__code
+#: model:ir.model.fields,field_description:rvc.field_product_rvc__code
+#: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__code
+msgid "Code"
+msgstr "Código"
+
+#. module: rvc
+#: model:ir.model.fields.selection,name:rvc.selection__config_rvc__benefit_type__colabora
+#: model:ir.model.fields.selection,name:rvc.selection__product_rvc__benefit_type__colabora
+#: model:ir.model.fields.selection,name:rvc.selection__rvc_import_file_wizard__benefit_type__colabora
+msgid "Colabora"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_agreement_rvc__company_id
+#: model:ir.model.fields,field_description:rvc.field_config_rvc__company_id
+#: model:ir.model.fields,field_description:rvc.field_product_rvc__company_id
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__company_id
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
+msgid ""
+"Condiciones de registro de empresas:\n"
+"                        ** Estar registrada en Odoo\n"
+"                        ** Estar activa"
+msgstr ""
+
+#. module: rvc
+#: model:ir.ui.menu,name:rvc.menu_config_rvc_parent
+msgid "Config"
+msgstr "Configuración"
+
+#. module: rvc
+#: model:ir.model.fields.selection,name:rvc.selection__benefits_admon__state__confirm
+#: model_terms:ir.ui.view,arch_db:rvc.benefits_admon_form
+msgid "Confirm"
+msgstr "Aceptado"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_agreement_rvc__create_uid
+#: model:ir.model.fields,field_description:rvc.field_config_rvc__create_uid
+#: model:ir.model.fields,field_description:rvc.field_log_import_rvc__create_uid
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__create_uid
+#: model:ir.model.fields,field_description:rvc.field_product_rvc__create_uid
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__create_uid
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__create_uid
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__create_uid
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__create_uid
+#: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_agreement_rvc__create_date
+#: model:ir.model.fields,field_description:rvc.field_config_rvc__create_date
+#: model:ir.model.fields,field_description:rvc.field_log_import_rvc__create_date
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__create_date
+#: model:ir.model.fields,field_description:rvc.field_product_rvc__create_date
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__create_date
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__create_date
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__create_date
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__create_date
+#: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__date_end
+msgid "Date End"
+msgstr "Fecha de Finalización"
+
+#. module: rvc
+#: model:ir.model.fields.selection,name:rvc.selection__product_rvc__benefit_type__codigos
+#: model:ir.model.fields.selection,name:rvc.selection__rvc_import_file_wizard__benefit_type__codigos
+msgid "Derechos de Identificación"
+msgstr ""
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_sponsored_wizard_view
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
+msgid "Descargar"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_agreement_rvc__display_name
+#: model:ir.model.fields,field_description:rvc.field_config_rvc__display_name
+#: model:ir.model.fields,field_description:rvc.field_log_import_rvc__display_name
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__display_name
+#: model:ir.model.fields,field_description:rvc.field_product_rvc__display_name
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__display_name
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__display_name
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__display_name
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__display_name
+#: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: rvc
+#: model:ir.model.fields.selection,name:rvc.selection__benefits_admon__state__done
+#: model_terms:ir.ui.view,arch_db:rvc.benefits_admon_form
+msgid "Done"
+msgstr "Hecho"
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_sponsored_wizard_view
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
+msgid "Download"
+msgstr "Descargar"
+
+#. module: rvc
+#: model:ir.model.fields.selection,name:rvc.selection__benefits_admon__state__draft
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__email
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__contact_email
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__email
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__contact_email
+msgid "Email"
+msgstr "Correo Electrónico"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__partner_id
+msgid "Empresa Beneficiaria"
+msgstr "Empresa Beneficiaria"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__parent_id
+msgid "Empresa Patrocinadora"
+msgstr "Empresa Halonadora"
+
+#. module: rvc
+#: model:ir.actions.act_window,name:rvc.action_rvc_sponsored
+#: model:ir.ui.menu,name:rvc.hr_menu_rvc_sponsored
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_sponsored_form
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_sponsored_tree
+msgid "Empresas Halonadoras"
+msgstr "Empresas Halonadoras"
+
+#. module: rvc
+#: model:ir.actions.act_window,name:rvc.action_rvc_beneficiary
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_beneficiary_form
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_beneficiary_tree
+msgid "Empresas Patrocinada"
+msgstr "Empresas Beneficiarias"
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_beneficiary_form
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_sponsored_form
+msgid "Deactivate"
+msgstr "Desactivar"
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_beneficiary_form
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_sponsored_form
+msgid "Activate"
+msgstr "Activar"
+
+#. module: rvc
+#: model:ir.ui.menu,name:rvc.hr_menu_rvc_beneficiary
+msgid "Empresas Patrocinadas"
+msgstr "Empresas Beneficiarias"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__date_send
+msgid "Fecha de Envio"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_log_import_rvc__date_init
+msgid "Fecha de Importación"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__file_data
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__file_data
+msgid "File"
+msgstr "Plantilla"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_follower_ids
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Seguidores (Canales)"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Seguidores (Terceros)"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__gln
+msgid "GLN"
+msgstr ""
+
+#. module: rvc
+#: model:ir.actions.act_window,name:rvc.action_benefits_admon
+#: model:ir.ui.menu,name:rvc.hr_menu_benefits_admon_parent
+#: model_terms:ir.ui.view,arch_db:rvc.benefits_admon_form
+#: model_terms:ir.ui.view,arch_db:rvc.benefits_admon_tree
+msgid "Empresas"
+msgstr ""
+
+#. module: rvc
+#: model:ir.ui.menu,name:rvc.hr_menu_rvc_partners
+msgid "Empresas"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_agreement_rvc__id
+#: model:ir.model.fields,field_description:rvc.field_config_rvc__id
+#: model:ir.model.fields,field_description:rvc.field_log_import_rvc__id
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__id
+#: model:ir.model.fields,field_description:rvc.field_product_rvc__id
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__id
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__id
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__id
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__id
+#: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__id
+msgid "ID"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__activity_exception_icon
+msgid "Icon"
+msgstr "Icono"
+
+#. module: rvc
+#: model:ir.model.fields,help:rvc.field_benefits_admon__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "Ícono para indicar una excepción de actividad"
+
+#. module: rvc
+#: model:ir.model.fields.selection,name:rvc.selection__config_rvc__benefit_type__codigos
+msgid "Identificación de Productos"
+msgstr "Derechos de Identificación"
+
+#. module: rvc
+#: model:ir.model.fields,help:rvc.field_benefits_admon__message_needaction
+#: model:ir.model.fields,help:rvc.field_benefits_admon__message_unread
+msgid "If checked, new messages require your attention."
+msgstr "Si está seleccionado, nuevos mensajes requieren su atención."
+
+#. module: rvc
+#: model:ir.model.fields,help:rvc.field_benefits_admon__message_has_error
+#: model:ir.model.fields,help:rvc.field_benefits_admon__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Si está seleccionado, algunos mensajes tienen error de envío."
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_sponsored_wizard_view
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_import_file_wizard_view
+msgid "Import"
+msgstr "Importar"
+
+#. module: rvc
+#: model:ir.ui.menu,name:rvc.menu_import_file_root
+msgid "Importar Archivos"
+msgstr ""
+
+#. module: rvc
+#: model:ir.actions.act_window,name:rvc.action_rvc_import_file_sponsored_wizard_view
+msgid "Importar Patrocinadores"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields.selection,name:rvc.selection__product_rvc__state__inactivo
+#: model:ir.model.fields.selection,name:rvc.selection__sub_product_rvc__state__inactivo
+msgid "Inactivo"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_is_follower
+msgid "Is Follower"
+msgstr "Es Seguidor"
+
+#. module: rvc
+#: model:ir.model.constraint,message:rvc.constraint_rvc_sponsored_partner_id_company_uniq
+msgid "La empresa halonadora ya esta creada"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_agreement_rvc____last_update
+#: model:ir.model.fields,field_description:rvc.field_config_rvc____last_update
+#: model:ir.model.fields,field_description:rvc.field_log_import_rvc____last_update
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon____last_update
+#: model:ir.model.fields,field_description:rvc.field_product_rvc____last_update
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary____last_update
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard____last_update
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard____last_update
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored____last_update
+#: model:ir.model.fields,field_description:rvc.field_sub_product_rvc____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_agreement_rvc__write_uid
+#: model:ir.model.fields,field_description:rvc.field_config_rvc__write_uid
+#: model:ir.model.fields,field_description:rvc.field_log_import_rvc__write_uid
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__write_uid
+#: model:ir.model.fields,field_description:rvc.field_product_rvc__write_uid
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__write_uid
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__write_uid
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__write_uid
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__write_uid
+#: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_agreement_rvc__write_date
+#: model:ir.model.fields,field_description:rvc.field_config_rvc__write_date
+#: model:ir.model.fields,field_description:rvc.field_log_import_rvc__write_date
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__write_date
+#: model:ir.model.fields,field_description:rvc.field_product_rvc__write_date
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__write_date
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__write_date
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__write_date
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__write_date
+#: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: rvc
+#: model:ir.model,name:rvc.model_log_import_rvc
+msgid "Log Import RVC"
+msgstr "Log de importación RVC"
+
+#. module: rvc
+#: model:ir.ui.menu,name:rvc.menu_log_import_rvc
+msgid "Log RVC"
+msgstr "Log RVC"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__macro_sector
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__macro_sector
+msgid "Macrosector"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_main_attachment_id
+msgid "Main Attachment"
+msgstr "Adjunto Principal"
+
+#. module: rvc
+#: model:res.groups,name:rvc.group_rvc_manager
+msgid "Manager RVC"
+msgstr "Administrador RVC"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__max_qty
+msgid "Max."
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_has_error
+msgid "Message Delivery error"
+msgstr "Mensaje de Error de Envío"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_ids
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__min_qty
+msgid "Min."
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__vat
+msgid "NIT"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_agreement_rvc__name
+#: model:ir.model.fields,field_description:rvc.field_config_rvc__name
+#: model:ir.model.fields,field_description:rvc.field_log_import_rvc__name
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__name
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__name
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__filename
+#: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__filename
+msgid "Name File"
+msgstr "Nombre Archivo"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__contact_name
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__contact_name
+msgid "Nombre del contacto"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields.selection,name:rvc.selection__benefits_admon__state__notified
+#: model_terms:ir.ui.view,arch_db:rvc.benefits_admon_form
+msgid "Notified"
+msgstr "Notificado"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Número de Acciones"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_has_error_counter
+msgid "Number of errors"
+msgstr "Número de Errores"
+
+#. module: rvc
+#: model:ir.model.fields,help:rvc.field_benefits_admon__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Número de mensajes que requieren su atención"
+
+#. module: rvc
+#: model:ir.model.fields,help:rvc.field_benefits_admon__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Número de mensajes con error de envío"
+
+#. module: rvc
+#: model:ir.model.fields,help:rvc.field_benefits_admon__message_unread_counter
+msgid "Number of unread messages"
+msgstr "Número de mensajes sin leer"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__vat
+msgid "Número de documento"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__partner_id
+msgid "Patrocinado"
+msgstr "Beneficiario"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__partner_id
+msgid "Patrocinador"
+msgstr "Halonador"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__phone
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__contact_phone
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__phone
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__contact_phone
+msgid "Phone"
+msgstr "Teléfono"
+
+#. module: rvc
+#: model:ir.ui.menu,name:rvc.hr_menu_benefits_admon
+msgid "Postulación y Entrega del Beneficio"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_product_rvc__name
+#: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__name
+#: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: rvc
+#: model:ir.model,name:rvc.model_benefits_admon
+msgid "Product Benef"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model,name:rvc.model_product_rvc
+#: model:ir.model,name:rvc.model_sub_product_rvc
+msgid "Product RVC"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__product_id
+msgid "Producto"
+msgstr ""
+
+#. module: rvc
+#: model:ir.actions.act_window,name:rvc.action_product_rvc
+#: model:ir.ui.menu,name:rvc.hr_menu_product_rvc
+#: model_terms:ir.ui.view,arch_db:rvc.product_rvc_form
+#: model_terms:ir.ui.view,arch_db:rvc.product_rvc_tree
+msgid "Beneficios"
+msgstr "Beneficios"
+
+#. module: rvc
+#: model:ir.ui.menu,name:rvc.menu_rvc_import_file_wizard
+msgid "RVC"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model,name:rvc.model_rvc_beneficiary
+msgid "RVC Beneficiary"
+msgstr "Beneficiarios"
+
+#. module: rvc
+#: model:ir.actions.act_window,name:rvc.action_log_import_rvc
+#: model:ir.model,name:rvc.model_config_rvc
+#: model_terms:ir.ui.view,arch_db:rvc.config_rvc_form
+#: model_terms:ir.ui.view,arch_db:rvc.config_rvc_tree
+msgid "RVC Config"
+msgstr "Configuración"
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.log_import_rvc_form
+#: model_terms:ir.ui.view,arch_db:rvc.log_import_rvc_tree
+msgid "RVC Log"
+msgstr "Log"
+
+#. module: rvc
+#: model:ir.model,name:rvc.model_rvc_sponsored
+msgid "RVC Sponsored"
+msgstr "Patrocinadores"
+
+#. module: rvc
+#: model:ir.model.fields.selection,name:rvc.selection__benefits_admon__state__rejected
+#: model_terms:ir.ui.view,arch_db:rvc.benefits_admon_form
+msgid "Rejected"
+msgstr "Rechazado"
+
+#. module: rvc
+#: model:ir.ui.menu,name:rvc.hr_menu_rvc_report
+msgid "Reportes"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__activity_user_id
+msgid "Responsible User"
+msgstr "Usuario Responsable"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "SMS - Error de envío"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__x_sector_id
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__x_sector_id
+msgid "Sector"
+msgstr ""
+
+#. module: rvc
+#: model:ir.actions.act_window,name:rvc.action_account_sector_macro_rvc
+#: model_terms:ir.ui.view,arch_db:rvc.account_sector_macro_view_tree_rvc
+msgid "Sector/MacroSector"
+msgstr ""
+
+#. module: rvc
+#: model:ir.ui.menu,name:rvc.hr_menu_account_sector_macro_rvc
+msgid "Sectores/Macrosectores"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__state
+#: model:ir.model.fields,field_description:rvc.field_product_rvc__state
+#: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__state
+msgid "State"
+msgstr "Estado"
+
+#. module: rvc
+#: model:ir.model.fields,help:rvc.field_benefits_admon__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: rvc
+#: model_terms:ir.ui.view,arch_db:rvc.product_rvc_form
+msgid "Sub Products"
+msgstr "Niveles"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__sub_product_ids
+#: model:ir.model.fields,field_description:rvc.field_product_rvc__sub_product_ids
+msgid "Sub-Productos"
+msgstr "Niveles"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__x_company_size
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__x_company_size
+msgid "Tamaño empresa"
+msgstr ""
+
+#. module: rvc
+#: model:ir.ui.menu,name:rvc.menu_config_rvc
+msgid "Type RVC"
+msgstr "Tipo RVC"
+
+#. module: rvc
+#: model:ir.model.fields,help:rvc.field_benefits_admon__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_unread
+msgid "Unread Messages"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_log_import_rvc__user_id
+msgid "Users"
+msgstr "Usuario"
+
+#. module: rvc
+#: model:ir.model.fields,field_description:rvc.field_benefits_admon__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model.fields,help:rvc.field_benefits_admon__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: rvc
+#: model:ir.model,name:rvc.model_rvc_import_file_sponsored_wizard
+msgid "rvc.import.file.sponsored.wizard"
+msgstr ""

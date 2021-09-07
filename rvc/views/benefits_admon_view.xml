@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="benefits_admon_form" model="ir.ui.view">
+		<field name="name">benefits.admon.form</field>
+		<field name="model">benefits.admon</field>
+		<field name="arch" type="xml">
+			<form string="Postulación a Beneficios">
+				<header>
+				 	<button name="action_notified" type="object" states="draft" string="Notificar al Beneficiario" class="oe_highlight"/>
+				 	<button name="action_confirm" type="object" states="notified" string="Confirm" class="oe_highlight"/>
+				 	<button name="action_notified" type="object" states="notified" string="Volver a notificar" class="oe_highlight"/>
+				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight"/>
+				 	<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight"/>
+					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />
+					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary" attrs="{'invisible': ['|','|','|',('id','=', False),('state','=','rejected'),('state','=','cancel'),('state','=','done')]}"/>
+				</header>			
+				<sheet>
+                    <h1>Postulación a Beneficio RVC</h1>
+					<group>
+						<group string="Beneficiario">
+							<field name="partner_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+							<field name="vat" attrs="{'readonly': [('state','!=','draft')]}"/>
+							<field name="contact_name" attrs="{'required': [('state','=','draft')]}"/>
+							<field name="contact_phone"/>
+							<field name="contact_email"/>
+							<field name="contact_position" />
+						</group>
+						<group string="Detalles del Beneficio">
+							<field name="product_id" attrs="{'readonly': [('state','!=','draft')],'required': [('state','=','draft')]}"/>
+							<field name="benefit_type" invisible="1"/>						
+							<field name="codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
+							<field name="sub_product_ids" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
+							<field name="date_end" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
+							<field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos'))], 'readonly': [('state','=','done')]}" />
+						</group>
+					</group>
+					<group>
+						<group string="Halonador">
+							<field name="parent_id" attrs="{'readonly': [('state','!=','draft')],'required': [('state','=','draft')]}"/>
+                            <field name="id" invisible="1"/>
+						</group>
+						<group>
+						</group>
+					</group>
+				</sheet>
+				<!-- Chatter -->
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+					<field name="activity_ids" widget="mail_activity"/>
+					<field name="message_ids" widget="mail_thread"/>
+				</div>				
+			</form>
+		</field>
+	</record>
+	<record id="benefits_admon_tree" model="ir.ui.view">
+		<field name="name">benefits.admon.tree</field>
+		<field name="model">benefits.admon</field>
+		<field name="arch" type="xml">
+			<tree string="Postulaciones a Beneficios" default_order="create_date desc" >
+				<field name="partner_id"/>
+				<field name="vat"/>
+				<field name="create_date" string="Fecha Postulación"/>
+				<field name="contact_name" />
+				<field name="contact_phone" />
+				<field name="contact_email" />
+				<field name="parent_id"/>
+				<field name="product_id"/>
+				<field name="benefit_type" invisible="1"/>
+				<field name="sub_product_ids" attrs="{'invisible': [('benefit_type','!=','colabora')]}"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+    <record id="view_benefits_admon_search" model="ir.ui.view">
+        <field name="name">benefits.admon.search</field>
+        <field name="model">benefits.admon</field>
+        <field name="arch" type="xml">
+            <search string="Búsqueda de Postulaciones">
+                <field name="name" string="Postulación" filter_domain="['|', ('name', 'ilike', self), ('partner_id', 'ilike', self)]"/>
+                <field name="parent_id" string="Halonadora"/>
+                <separator/>
+                <filter string="En Borrador" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Notificadas" name="notified" domain="[('state', '=', 'notified')]"/>
+                <filter string="Aceptadas" name="confirm" domain="[('state', '=', 'confirm')]"/>
+                <filter string="Rechazadas" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <filter string="Canceladas" name="notified" domain="[('state', '=', 'cancel')]"/>
+                <filter string="En Hecho" name="done" domain="[('state', '=', 'done')]"/>
+
+                <group expand="1" string="Agrupar por">
+                    <filter string="Estado" name="state" context="{'group_by':'state'}"/>
+                    <filter string="Beneficio" name="benefit" context="{'group_by':'product_id','residual_visible':True}"/>
+                    <filter string="Halonadora" name="sponsor" context="{'group_by':'parent_id','residual_visible':True}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+	<record id="action_benefits_admon" model="ir.actions.act_window">
+		<field name="name">Postulación a Beneficio</field>
+		<field name="res_model">benefits.admon</field>
+		<field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_benefits_admon_search"/>
+	</record>
+
+	<menuitem
+		id="hr_menu_benefits_admon"
+		name="Postulación y Entrega del Beneficio"
+		action="action_benefits_admon"
+		parent="rvc.hr_menu_benefits_admon_parent"
+		sequence="0"
+		groups="rvc.group_rvc_manager"/>
+
+</odoo>
