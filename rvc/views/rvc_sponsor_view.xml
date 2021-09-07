@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<record id="rvc_sponsored_form" model="ir.ui.view">
-		<field name="name">rvc.sponsored.form</field>
-		<field name="model">rvc.sponsored</field>
+	<record id="rvc_sponsor_form" model="ir.ui.view">
+		<field name="name">rvc.sponsor.form</field>
+		<field name="model">rvc.sponsor</field>
 		<field name="arch" type="xml">
 			<form string="Empresas Halonadoras">
 				<header>
@@ -42,9 +42,9 @@
 		</field>
 	</record>
 
-	<record id="rvc_sponsored_tree" model="ir.ui.view">
-		<field name="name">rvc.sponsored.tree</field>
-		<field name="model">rvc.sponsored</field>
+	<record id="rvc_sponsor_tree" model="ir.ui.view">
+		<field name="name">rvc.sponsor.tree</field>
+		<field name="model">rvc.sponsor</field>
 		<field name="arch" type="xml">
 			<tree string="Empresas Halonadoras" >
 				<field name="vat"/>
@@ -57,9 +57,9 @@
 		</field>
 	</record>
 
-	<record model="ir.ui.view" id="view_rvc_sponsored_kanban">
-		<field name="name">rvc.sponsored.kanban</field>
-		<field name="model">rvc.sponsored</field>
+	<record model="ir.ui.view" id="view_rvc_sponsor_kanban">
+		<field name="name">rvc.sponsor.kanban</field>
+		<field name="model">rvc.sponsor</field>
 		<field name="arch" type="xml">
 			<kanban class="o_res_partner_kanban" create="true">
 				<field name="id"/>
@@ -101,8 +101,8 @@
 	</record>
 
 	<record id="view_rvc_sponsor_filter" model="ir.ui.view">
-            <field name="name">rvc.sponsored.filters</field>
-            <field name="model">rvc.sponsored</field>
+            <field name="name">rvc.sponsor.filters</field>
+            <field name="model">rvc.sponsor</field>
             <field name="arch" type="xml">
                 <search string="Buscar Empresa Halonadora">
                     <field name="partner_id" string="Nombre"/>
@@ -112,16 +112,16 @@
             </field>
     </record>
 
-	<record id="action_rvc_sponsored" model="ir.actions.act_window">
+	<record id="action_rvc_sponsor" model="ir.actions.act_window">
 		<field name="name">Empresas Halonadoras</field>
-		<field name="res_model">rvc.sponsored</field>
+		<field name="res_model">rvc.sponsor</field>
 		<field name="view_mode">kanban,tree,form</field>
 	</record>	
 
 	<menuitem
-		id="hr_menu_rvc_sponsored"
+		id="hr_menu_rvc_sponsor"
 		name="Empresas Halonadoras"
-		action="action_rvc_sponsored"
+		action="action_rvc_sponsor"
 		parent="rvc.hr_menu_rvc_partners"
 		sequence="2"
 		groups="rvc.group_rvc_manager"/>          

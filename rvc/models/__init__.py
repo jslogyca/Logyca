@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from . import rvc_beneficiary
-from . import rvc_sponsored
+from . import rvc_sponsor
 from . import config_rvc
 from . import log_import_rvc
 from . import product_rvc

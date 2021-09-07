@@ -155,7 +155,7 @@ class RVCImportFileWizard(models.TransientModel):
                     parent_id=self.env['res.partner'].search([('vat','=',str(fila[1])), ('is_company','=',True)], limit=1)
 
                     #patrocinadora como halonadora rvc
-                    sponsored_id=self.env['rvc.sponsored'].search([('partner_id','=',parent_id.id)])
+                    sponsored_id=self.env['rvc.sponsor'].search([('partner_id','=',parent_id.id)])
 
                     if not sponsored_id:
                         validation = 'Fila %s: La empresa Halonadora con NIT %s no existe' % (str(count), str(fila[1]))
@@ -215,7 +215,7 @@ class RVCImportFileWizard(models.TransientModel):
                         validation = 'No existe un subnivel COLABORA configurado para ' + ' - ' + str(fila[2])
                         raise ValidationError(validation)                        
                     parent_id=self.env['res.partner'].search([('vat','=',str(fila[1])), ('is_company','=',True)], limit=1)
-                    sponsored_id=self.env['rvc.sponsored'].search([('partner_id','=',parent_id.id)])
+                    sponsored_id=self.env['rvc.sponsor'].search([('partner_id','=',parent_id.id)])
                     if not sponsored_id:
                         validation = 'La empresa Halonadora no existe' + ' - ' + str(fila[1])
                         raise ValidationError(validation)
@@ -290,7 +290,7 @@ class RVCImportFileWizard(models.TransientModel):
                         continue
                     # Validar que el Patrocinador exista
                     parent_id=self.env['res.partner'].search([('vat','=',str(fila[1])), ('is_company','=',True)], limit=1)
-                    sponsored_id=self.env['rvc.sponsored'].search([('partner_id','=',parent_id.id)])
+                    sponsored_id=self.env['rvc.sponsor'].search([('partner_id','=',parent_id.id)])
                     if not sponsored_id:
                         validation = 'La empresa Halonadora no existe' + ' - ' + str(fila[1])
                         self.env['log.import.rvc'].create({
