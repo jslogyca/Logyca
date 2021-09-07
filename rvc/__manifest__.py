@@ -39,7 +39,7 @@
         'wizard/rvc_template_email_rejected_wizard_view.xml',
         'wizard/send_notification_beneficiary_view.xml',
         'views/rvc_beneficiary_view.xml',
-        'views/rvc_sponsored_view.xml',
+        'views/rvc_sponsor_view.xml',
         'views/config_rvc_view.xml',
         'views/log_import_rvc_view.xml',
         'views/product_rvc_view.xml',

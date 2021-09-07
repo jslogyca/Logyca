@@ -71,7 +71,7 @@ class RVCImportFileSponsoredWizard(models.TransientModel):
                                                         'date_init': fields.Datetime.now(),
                                                         'user_id' : self.env.user.id})
                     continue
-                rvc_patroc = self.env['rvc.sponsored'].create({
+                rvc_patroc = self.env['rvc.sponsor'].create({
                                                     'name': partner_id.name + ' - ' + 'RVC',
                                                     'partner_id': partner_id.id,
                                                     'state': 'confirm',
@@ -79,13 +79,13 @@ class RVCImportFileSponsoredWizard(models.TransientModel):
                 cre.append(rvc_patroc.id)
                 self.env.cr.commit()
         obj_model = self.env['ir.model.data']
-        res = obj_model.get_object_reference('rvc', 'rvc_sponsored_tree')
+        res = obj_model.get_object_reference('rvc', 'rvc_sponsor_tree')
         return {
             'name': 'Registros Importados'+str(datetime.now().date().strftime("%d/%m/%Y")),
             'type': 'ir.actions.act_window',
             'view_type': 'form',
             'view_mode': 'tree,form',
-            'res_model': 'rvc.sponsored',
+            'res_model': 'rvc.sponsor',
             'views': [([res and res[1] or False], 'tree')],
             'domain': [('id','in',cre)],
             'target': 'current'

@@ -1,6 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 account_rvc_import_file_wizard,rvc.import.file.wizard,model_rvc_import_file_wizard,rvc.group_rvc_manager,1,1,1,1
-account_rvc_sponsored,rvc.sponsored,model_rvc_sponsored,rvc.group_rvc_manager,1,1,1,1
+account_rvc_sponsor,rvc.sponsor,model_rvc_sponsor,rvc.group_rvc_manager,1,1,1,1
 account_rvc_beneficiary,rvc.beneficiary,model_rvc_beneficiary,rvc.group_rvc_manager,1,1,1,1
 account_rvc_import_file_sponsored_wizard,rvc.import.file.sponsored.wizard,model_rvc_import_file_sponsored_wizard,rvc.group_rvc_manager,1,1,1,1
 account_config_rvc,config.rvc,model_config_rvc,rvc.group_rvc_manager,1,1,1,1

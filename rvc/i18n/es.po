@@ -60,7 +60,7 @@ msgstr "Estado de Actividad"
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_agreement_rvc__active
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__active
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__active
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__active
 #: model:ir.model.fields.selection,name:rvc.selection__product_rvc__state__activo
 #: model:ir.model.fields.selection,name:rvc.selection__sub_product_rvc__state__activo
 msgid "Activo"
@@ -132,7 +132,7 @@ msgstr ""
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__contact_position
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__contact_position
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__contact_position
 msgid "Cargo"
 msgstr ""
 
@@ -173,7 +173,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:rvc.field_config_rvc__company_id
 #: model:ir.model.fields,field_description:rvc.field_product_rvc__company_id
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__company_id
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__company_id
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__company_id
 msgid "Company"
 msgstr "Compañía"
 
@@ -205,7 +205,7 @@ msgstr "Aceptado"
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__create_uid
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__create_uid
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__create_uid
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__create_uid
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__create_uid
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__create_uid
 msgid "Created by"
 msgstr "Creado por"
@@ -219,7 +219,7 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__create_date
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__create_date
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__create_date
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__create_date
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__create_date
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__create_date
 msgid "Created on"
 msgstr "Creado el"
@@ -250,7 +250,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__display_name
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__display_name
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__display_name
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__display_name
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__display_name
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__display_name
 msgid "Display Name"
 msgstr "Nombre a Mostrar"
@@ -275,8 +275,8 @@ msgstr "Borrador"
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__email
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__contact_email
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__email
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__contact_email
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__email
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__contact_email
 msgid "Email"
 msgstr "Correo Electrónico"
 
@@ -291,10 +291,10 @@ msgid "Empresa Patrocinadora"
 msgstr "Empresas Halonadora"
 
 #. module: rvc
-#: model:ir.actions.act_window,name:rvc.action_rvc_sponsored
-#: model:ir.ui.menu,name:rvc.hr_menu_rvc_sponsored
-#: model_terms:ir.ui.view,arch_db:rvc.rvc_sponsored_form
-#: model_terms:ir.ui.view,arch_db:rvc.rvc_sponsored_tree
+#: model:ir.actions.act_window,name:rvc.action_rvc_sponsor
+#: model:ir.ui.menu,name:rvc.hr_menu_rvc_sponsor
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_sponsor_form
+#: model_terms:ir.ui.view,arch_db:rvc.rvc_sponsor_tree
 msgid "Empresas Halonadoras"
 msgstr "Empresas Halonadoras"
 
@@ -368,7 +368,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__id
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__id
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__id
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__id
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__id
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__id
 msgid "ID"
 msgstr ""
@@ -428,7 +428,7 @@ msgid "Is Follower"
 msgstr "Es Seguidor"
 
 #. module: rvc
-#: model:ir.model.constraint,message:rvc.constraint_rvc_sponsored_partner_id_company_uniq
+#: model:ir.model.constraint,message:rvc.constraint_rvc_sponsor_partner_id_company_uniq
 msgid "La empresa halonadora ya esta creada"
 msgstr ""
 
@@ -441,7 +441,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary____last_update
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard____last_update
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard____last_update
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored____last_update
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor____last_update
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc____last_update
 msgid "Last Modified on"
 msgstr "Última Modificación el "
@@ -455,7 +455,7 @@ msgstr "Última Modificación el "
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__write_uid
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__write_uid
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__write_uid
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__write_uid
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__write_uid
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__write_uid
 msgid "Last Updated by"
 msgstr "Última Modificación por"
@@ -469,7 +469,7 @@ msgstr "Última Modificación por"
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__write_date
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_sponsored_wizard__write_date
 #: model:ir.model.fields,field_description:rvc.field_rvc_import_file_wizard__write_date
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__write_date
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__write_date
 #: model:ir.model.fields,field_description:rvc.field_sub_product_rvc__write_date
 msgid "Last Updated on"
 msgstr "Última Actualización el"
@@ -486,7 +486,7 @@ msgstr "Log"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__macro_sector
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__macro_sector
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__macro_sector
 msgid "Macrosector"
 msgstr ""
 
@@ -521,7 +521,7 @@ msgid "Min."
 msgstr ""
 
 #. module: rvc
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__vat
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__vat
 msgid "NIT"
 msgstr ""
 
@@ -531,7 +531,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:rvc.field_log_import_rvc__name
 #: model:ir.model.fields,field_description:rvc.field_benefits_admon__name
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__name
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__name
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__name
 msgid "Name"
 msgstr "Nombre"
 
@@ -558,7 +558,7 @@ msgstr ""
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__contact_name
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__contact_name
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__contact_name
 msgid "Nombre del contacto"
 msgstr ""
 
@@ -604,15 +604,15 @@ msgid "Patrocinado"
 msgstr "Beneficiario"
 
 #. module: rvc
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__partner_id
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__partner_id
 msgid "Patrocinador"
 msgstr "Halonador"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__phone
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__contact_phone
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__phone
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__contact_phone
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__phone
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__contact_phone
 msgid "Phone"
 msgstr "Teléfono"
 
@@ -677,7 +677,7 @@ msgid "RVC Log"
 msgstr "Log"
 
 #. module: rvc
-#: model:ir.model,name:rvc.model_rvc_sponsored
+#: model:ir.model,name:rvc.model_rvc_sponsor
 msgid "RVC Sponsored"
 msgstr "Patrocinadores"
 
@@ -704,7 +704,7 @@ msgstr ""
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__x_sector_id
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__x_sector_id
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__x_sector_id
 msgid "Sector"
 msgstr ""
 
@@ -748,7 +748,7 @@ msgstr "Niveles"
 
 #. module: rvc
 #: model:ir.model.fields,field_description:rvc.field_rvc_beneficiary__x_company_size
-#: model:ir.model.fields,field_description:rvc.field_rvc_sponsored__x_company_size
+#: model:ir.model.fields,field_description:rvc.field_rvc_sponsor__x_company_size
 msgid "Tamaño empresa"
 msgstr ""
 

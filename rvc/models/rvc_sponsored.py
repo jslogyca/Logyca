@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 
 
 class RVCSponsored(models.Model):
-    _name = 'rvc.sponsored'
+    _name = 'rvc.sponsor'
     _description = 'RVC Sponsored'
     _rec_name = 'partner_id'
 

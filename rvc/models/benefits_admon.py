@@ -31,7 +31,7 @@ class BenefitsAdmon(models.Model):
                                     ('cancel', 'Cancelado'),
                                     ('done', 'Entregado')], string='State', default='draft', readonly=True, track_visibility='onchange')
     partner_id = fields.Many2one('rvc.beneficiary', string='Empresa Beneficiaria', track_visibility='onchange')
-    parent_id = fields.Many2one('rvc.sponsored', string='Empresa Patrocinadora', track_visibility='onchange')
+    parent_id = fields.Many2one('rvc.sponsor', string='Empresa Patrocinadora', track_visibility='onchange')
     product_id = fields.Many2one('product.rvc', string='Producto', track_visibility='onchange')
     name = fields.Char(string='Name', track_visibility='onchange')
     codes_quantity = fields.Integer('Cantidad de Códigos', track_visibility='onchange')
