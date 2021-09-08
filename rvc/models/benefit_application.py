@@ -204,7 +204,7 @@ class BenefitApplication(models.Model):
 
         if self.partner_id and (self.product_id.benefit_type == 'codigos' or self.product_id.benefit_type == 'colabora'):
             
-            if get_odoo_url() == 'https://logyca.odoo.com':
+            if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/EmpresaGln/"
             else:
                 url = "https://asctestdocker.azurewebsites.net/codes/EmpresaGln/"
@@ -276,7 +276,7 @@ class BenefitApplication(models.Model):
                 
     def _validate_bought_products(self):
 
-        if get_odoo_url() == 'https://logyca.odoo.com':
+        if self.get_odoo_url() == 'https://logyca.odoo.com':
             url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
         else:
             url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
@@ -304,7 +304,7 @@ class BenefitApplication(models.Model):
 
     def assignate_gln_code(self):
         #creando código
-        if get_odoo_url() == 'https://logyca.odoo.com':
+        if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_assignate = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/assignate/"
         else:
             url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
@@ -331,7 +331,7 @@ class BenefitApplication(models.Model):
         if response_assignate.status_code == 200:
             response_assignate.close()
             #marcando código
-            if get_odoo_url() == 'https://logyca.odoo.com':
+            if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url_mark = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/mark/"
             else:
                 url_mark = "https://asctestdocker.azurewebsites.net/codes/mark/"            
@@ -369,7 +369,7 @@ class BenefitApplication(models.Model):
 
     def assign_identification_codes(self):
 
-        if get_odoo_url() == 'https://logyca.odoo.com':
+        if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_assignate = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/assignate/"
         else:
             url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"        
@@ -407,7 +407,7 @@ class BenefitApplication(models.Model):
 
     def get_token_assign_credentials(self):
         
-        if get_odoo_url() == 'https://logyca.odoo.com':
+        if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_get_token = "http://logycassoapi.azurewebsites.net/api/Token/Authenticate"
         else:
             url_get_token = "http://apiauthenticationssodev.azurewebsites.net/api/Token/Authenticate"
@@ -437,7 +437,7 @@ class BenefitApplication(models.Model):
             today_date = datetime.now()
             today_one_year_later = today_date + relativedelta(years=1)
 
-            if get_odoo_url() == 'https://logyca.odoo.com':
+            if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url_assignate= "https://logycacolaboraapiv1.azurewebsites.net/api/Company/AddCompanyEcommerce"            
             else:
                 url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
