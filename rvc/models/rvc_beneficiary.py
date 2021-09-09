@@ -14,7 +14,7 @@ class RVCBeneficiary(models.Model):
     partner_id = fields.Many2one('res.partner', string='Patrocinado')
     contact_id = fields.Many2one('res.partner', string='Contacto')
     vat = fields.Char('Número de documento', related='partner_id.vat', track_visibility='onchange')
-    phone = fields.Char('Phone', related='partner_id.phone', track_visibility='onchange')
+    phone = fields.Char('Teléfono', related='partner_id.phone', track_visibility='onchange')
     email = fields.Char('Email', related='partner_id.email', track_visibility='onchange')
     x_sector_id = fields.Many2one('logyca.sectors', string='Sector', related='partner_id.x_sector_id', readonly=True, store=True)
     date_send = fields.Date(string='Fecha de Envio', track_visibility='onchange')
