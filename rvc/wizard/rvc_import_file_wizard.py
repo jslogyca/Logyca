@@ -74,7 +74,7 @@ class RVCImportFileWizard(models.TransientModel):
                         partner_id=self.env['res.partner'].search([('vat','=',str(fila[0]))])[0]
 
                     if not partner_id:
-                        validation = 'Fila %s: La empresa beneficiaria con NIT %s no existe en Odoo' % str(count), str(fila[0])
+                        validation = 'Fila %s: La empresa beneficiaria con NIT %s no existe en Odoo' % (str(count), str(fila[0]))
                         errors.append(validation)
                         continue
 
@@ -82,7 +82,6 @@ class RVCImportFileWizard(models.TransientModel):
                     if partner_id.x_type_vinculation:
                         member_or_ce = False
                         for vinculation in partner_id.x_type_vinculation:
-                            logging.info("=====>" + str(partner_id.x_type_vinculation))
                             if vinculation.code in ('01', '02'):
                                 member_or_ce = True
                                 validation = 'Fila %s: %s no aplica para el beneficio. Es miembro o cliente CE' %\
@@ -183,7 +182,8 @@ class RVCImportFileWizard(models.TransientModel):
                                 validation = "Fila %s: %s postulación creada correctamente" % (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper())
                                 errors.append(validation)
                         except Exception as e:
-                            validation = "Fila %s: La empresa beneficiaria %s no se puede crear. Error: %s" % (str(count), partner_id.name, str(e))
+                            validation = "Fila %s: %s no se puede crear. Error: %s" %\
+                                (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper(), str(e))
                             errors.append(validation)
                             continue
                     else:

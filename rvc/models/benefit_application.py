@@ -177,11 +177,15 @@ class BenefitApplication(models.Model):
             beneficiary = self.env['rvc.beneficiary'].browse(vals.get('partner_id'))
             vals['name'] = beneficiary.partner_id.vat + '-' + beneficiary.partner_id.name
 
-        res = super(BenefitApplication, self).create(vals)
-        res._validate_gln_only_numbers()
-        res._validate_gln()
-        res._validate_bought_products()
-        return res
+            if 'product_id' in vals:
+                product_id = self.env['product.rvc'].browse(int(vals['product_id']))
+
+                #validar si producto rvc es codigos
+                if product_id.code == '01':
+                    # validar si tiene códigos comprados
+                    self._validate_bought_products(beneficiary.partner_id.vat)
+
+        return super(BenefitApplication, self).create(vals)
 
     def write(self, vals):
         res = super(BenefitApplication, self).write(vals)
@@ -192,6 +196,7 @@ class BenefitApplication(models.Model):
             self._validate_bought_products()
         return res
 
+    @api.constrains('gln')
     def _validate_gln_only_numbers(self):
         if self.gln and not re.match(r'^[0-9]+$', str(self.gln)):
             raise ValidationError(_('Código GLN "%s" es inválido.\n\nLos códigos GLN solo están compuestos de números.' % str(self.gln)))
@@ -271,20 +276,46 @@ class BenefitApplication(models.Model):
                     '\n\nPor favor deje el campo Código GLN vacío, le asignaremos uno en la entrega del beneficio.' % (tmp_code, str(partner_id.name))))
                 
     def _validate_bought_products(self):
+        for benefit_application in self:
+            if self.get_odoo_url() == 'https://logyca.odoo.com':
+                url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+            else:
+                url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
 
-        if self.get_odoo_url() == 'https://logyca.odoo.com':
-            url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+            response = requests.get(url)
+            if response.status_code == 200:
+                result = response.json()
+                response.close()
+
+                if result.get('CodigosCompradosDisponibles') > 0:
+                     raise ValidationError(\
+                        _('¡Lo sentimos! La empresa %s tiene %s código(s) comprados disponibles.' % (str(self.partner_id.partner_id.vat) + '-' + str(self.partner_id.partner_id.name), str(result.get('CodigosCompradosDisponibles')))))
+            else:
+                raise ValidationError(\
+                        _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
+                            Inténtelo nuevamente o comuníquese con soporte. <strong>Error:</strong> %s' % (str(response))))
+            return True
+
+    # validacion para el create, ya que no tenemos self entonces en esta funcion no se usa self.
+    def _validate_bought_products(self, vat):
+        cr = self._cr
+        cr.execute("SELECT value FROM ir_config_parameter WHERE key='web.base.url'")
+        query_result = self.env.cr.dictfetchone()
+
+        if query_result['value'] == 'https://logyca.odoo.com':
+            url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(vat))
         else:
-            url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+            url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(vat))
 
         response = requests.get(url)
+
         if response.status_code == 200:
             result = response.json()
             response.close()
-            
+
             if result.get('CodigosCompradosDisponibles') > 0:
                  raise ValidationError(\
-                    _('¡Lo sentimos! La empresa seleccionada tiene %s código(s) comprados disponibles.' % (str(result.get('CodigosCompradosDisponibles')))))
+                    _('¡Lo sentimos! La empresa tiene %s código(s) comprados disponibles.') % str(result.get('CodigosCompradosDisponibles')))
         else:
             raise ValidationError(\
                     _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
