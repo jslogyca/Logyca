@@ -78,31 +78,17 @@ class RVCImportFileWizard(models.TransientModel):
                         continue
 
                     # Validar que el tipo de vinculación de la empresa beneficiaria no sea miembro, ni cliente CE
-                    if partner_id.x_active_vinculation:
-                        if partner_id.x_type_vinculation:
-                            member_or_ce = False
-                            for vinculation in partner_id.x_type_vinculation:
-                                logging.info("=====>" + str(partner_id.x_type_vinculation))
-                                # Miembro=01
-                                # Cliente=02
-                                # NoTieneVinculacion=12
-                                if vinculation.code in ('01', '02'):
-                                    member_or_ce = True
-                                    validation = 'Fila %s: %s no aplica para el beneficio. Es miembro o cliente CE' %\
-                                            (str(count), partner_id.vat + '-' + str(partner_id.name.strip()))
-                                    errors.append(validation)
-                            if member_or_ce:
-                                continue
-                        else:
-                            validation = 'Fila %s: %s no aplica para el beneficio. Revise la vinculación de la empresa' %\
-                                            (str(count), partner_id.vat + '-' + str(partner_id.name.strip()))
-                            errors.append(validation)
+                    if partner_id.x_type_vinculation:
+                        member_or_ce = False
+                        for vinculation in partner_id.x_type_vinculation:
+                            logging.info("=====>" + str(partner_id.x_type_vinculation))
+                            if vinculation.code in ('01', '02'):
+                                member_or_ce = True
+                                validation = 'Fila %s: %s no aplica para el beneficio. Es miembro o cliente CE' %\
+                                        (str(count), partner_id.vat + '-' + str(partner_id.name.strip()))
+                                errors.append(validation)
+                        if member_or_ce:
                             continue
-                    else:
-                        validation = 'Fila %s: %s no aplica para el beneficio. La empresa está desvinculada.' %\
-                                            (str(count), partner_id.vat + '-' + str(partner_id.name.strip()))
-                        errors.append(validation)
-                        continue
 
                     #si se ingresa correo electrónico del contacto
                     if fila[4]:
