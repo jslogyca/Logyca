@@ -2,6 +2,7 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime, timedelta
+from psycopg2 import IntegrityError
 import xlwt
 import base64
 import io
@@ -26,7 +27,7 @@ class RVCImportFileWizard(models.TransientModel):
     
     def validate_mail(self, email):
         if email:
-            match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email)
+            match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', str(email.lower()))
         if match == None:
             return False
         return True
@@ -109,19 +110,22 @@ class RVCImportFileWizard(models.TransientModel):
 
                     if not rvc_beneficiary_id:
                         try:
-                            rvc_beneficiary_id = self.env['rvc.beneficiary'].create({
-                                                                'partner_id': partner_id.id,
-                                                                'vat': partner_id.vat,
-                                                                'contact_name': str(fila[3]),
-                                                                'contact_phone': str(fila[5]),
-                                                                'contact_email': str(fila[4]),
-                                                                'contact_position': str(fila[6]),
-                                                                'active': True})
-                            self.env.cr.commit()
+                            with self._cr.savepoint():
+                                rvc_beneficiary_id = self.env['rvc.beneficiary'].create({
+                                                                    'partner_id': partner_id.id,
+                                                                    'vat': partner_id.vat,
+                                                                    'contact_name': str(fila[3]),
+                                                                    'contact_phone': str(fila[5]),
+                                                                    'contact_email': str(fila[4]).strip().lower(),
+                                                                    'contact_position': str(fila[6]),
+                                                                    'active': True})
+                                self.env.cr.commit()
                         except Exception as e:
                             validation = "Fila %s: %s no se pudo crear como empresa beneficiaria. %s" % (str(count), partner_id.vat + '-' + str(partner_id.name.strip()),str(e))
                             errors.append(validation)
                             continue
+                        except IntegrityError:
+                            self.env.cr.rollback()
                     else:
                         #beneficiario existe entonces traemos el registro.
                         rvc_beneficiary_id=self.env['rvc.beneficiary'].browse(rvc_beneficiary_id.id)

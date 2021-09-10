@@ -199,7 +199,7 @@ class BenefitApplication(models.Model):
 
     def _validate_gln(self):
         available_gln_codes = "No codes"
-        found = False
+        gln_from_user_found = False
         qty_codes_found = 0
 
         if self.partner_id and (self.product_id.benefit_type == 'codigos' or self.product_id.benefit_type == 'colabora'):
@@ -227,40 +227,36 @@ class BenefitApplication(models.Model):
                     if self.gln:
                         #caso 2: usuario ingresa gln y si está registrado.
                         if str(gln.get('id')) == self.gln:
-                            found = True
+                            gln_from_user_found = True
                             break
                     #caso 5: usuario no ingresa un gln
                     else:
-                        # caso 6: usuario no ingresa gln pero se encontró que hay uno registrado.
-                        if len(result) == 1:
+                        # caso 6 y 7: usuario no ingresa gln pero se encontró que hay uno (caso 6) o varios registrados (caso 7).
+                        if len(result) >= 1:
                             self.gln = result[0].get('id')
                             return True
+
             else:
                 raise ValidationError(\
                     _('No se ha podido validar el Código GLN de la empresa seleccionada.\
                        Inténtelo nuevamente o comuníquese con soporte. <strong>Error:</strong> %s' % str(response)))
 
             #caso 3: usuario ingresa gln pero es incorrecto y se encuentra uno válido.
-            if self.gln and found == False and available_gln_codes != "No codes" and qty_codes_found == 1:
+            if self.gln and gln_from_user_found == False and available_gln_codes != "No codes" and qty_codes_found == 1:
                 raise ValidationError(\
                     _('El código GLN ingresado es incorrecto, sin embargo encontramos uno registrado:\n\
                         %s \n\nPor favor copie y pegue éste.' % str(available_gln_codes)))
             #caso 4: usuario ingresa gln incorrecto pero hay varios válidos registrados.
-            elif self.gln and found == False and available_gln_codes != "No codes":
+            elif self.gln and gln_from_user_found == False and available_gln_codes != "No codes":
                 raise ValidationError(\
                     _('El código GLN "%s" no es válido, sin embargo encontramos los siguientes %s códigos registrados: \n\
                         %s \n\nPor favor copie y pegue alguno.' % (self.gln, str(qty_codes_found), str(available_gln_codes))))
-            #caso 7: usuario no ingresa gln pero hay varios registrados.
-            if not self.gln and found == False and available_gln_codes != "No codes":
-                raise ValidationError(\
-                    _('Usted no ingresó un código GLN, sin embargo encontramos los siguientes %s códigos registrados: \n\
-                        %s \n\nPor favor copie y pegue alguno.' % (str(qty_codes_found), str(available_gln_codes))))
             #caso 8: no tiene gln registrado. Registrando uno para la empresa seleccionada.
-            elif not self.gln and found == False and available_gln_codes == "No codes":
+            elif not self.gln and gln_from_user_found == False and available_gln_codes == "No codes":
                 logging.info(" ==> Se asignará GLN con el beneficio <===")
 
             #caso 9: usuario ingresa GLN pero es incorrecto y no tiene GLN's.
-            elif self.gln and found == False and available_gln_codes == "No codes":
+            elif self.gln and gln_from_user_found == False and available_gln_codes == "No codes":
                 partner_id = False
 
                 #es un contacto
