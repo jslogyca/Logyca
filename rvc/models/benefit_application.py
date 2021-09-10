@@ -183,7 +183,7 @@ class BenefitApplication(models.Model):
                 #validar si producto rvc es codigos
                 if product_id.code == '01':
                     # validar si tiene códigos comprados
-                    self._validate_bought_products(beneficiary.partner_id.vat)
+                    self._validate_bought_products_create(beneficiary.partner_id.vat)
 
         return super(BenefitApplication, self).create(vals)
 
@@ -297,7 +297,7 @@ class BenefitApplication(models.Model):
             return True
 
     # validacion para el create, ya que no tenemos self entonces en esta funcion no se usa self.
-    def _validate_bought_products(self, vat):
+    def _validate_bought_products_create(self, vat):
         cr = self._cr
         cr.execute("SELECT value FROM ir_config_parameter WHERE key='web.base.url'")
         query_result = self.env.cr.dictfetchone()
