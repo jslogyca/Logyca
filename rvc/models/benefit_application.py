@@ -599,4 +599,4 @@ class BenefitApplication(models.Model):
                 benefit_admon.write({'state': 'notified', 'notification_date': datetime.now()})
 
     def get_odoo_url(self):
-        return self.env['ir.config_parameter'].get_param('web.base.url')
+        return self.env['ir.config_parameter'].sudo().get_param('web.base.url')
