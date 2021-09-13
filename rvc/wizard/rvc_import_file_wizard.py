@@ -118,16 +118,12 @@ class RVCImportFileWizard(models.TransientModel):
                                                                     'contact_email': str(fila[4]).strip().lower(),
                                                                     'contact_position': str(fila[6]),
                                                                     'active': True})
-                                self.env.cr.commit()
+                                if rvc_beneficiary_id:
+                                    self.env.cr.commit()
                         except Exception as e:
                             validation = "Fila %s: %s no se pudo crear como empresa beneficiaria. %s" % (str(count), partner_id.vat + '-' + str(partner_id.name.strip()),str(e))
                             errors.append(validation)
                             continue
-                        except IntegrityError:
-                            self.env.cr.rollback()
-                        except Error:
-                            self.env.cr.rollback()
-
                     else:
                         #beneficiario existe entonces traemos el registro.
                         rvc_beneficiary_id=self.env['rvc.beneficiary'].browse(rvc_beneficiary_id.id)
