@@ -121,8 +121,6 @@ class RVCImportFileWizard(models.TransientModel):
                             validation = "Fila %s: %s no se pudo crear como empresa beneficiaria. %s" % (str(count), partner_id.vat + '-' + str(partner_id.name.strip()),str(e))
                             errors.append(validation)
                             continue
-                        except IntegrityError:
-                            self.env.cr.rollback()
                     else:
                         #beneficiario existe entonces traemos el registro.
                         rvc_beneficiary_id=self.env['rvc.beneficiary'].browse(rvc_beneficiary_id.id)
