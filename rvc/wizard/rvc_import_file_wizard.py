@@ -2,7 +2,7 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime, timedelta
-from psycopg2 import IntegrityError
+from psycopg2 import IntegrityError, Error
 import xlwt
 import base64
 import io
@@ -125,6 +125,9 @@ class RVCImportFileWizard(models.TransientModel):
                             continue
                         except IntegrityError:
                             self.env.cr.rollback()
+                        except Error:
+                            self.env.cr.rollback()
+
                     else:
                         #beneficiario existe entonces traemos el registro.
                         rvc_beneficiary_id=self.env['rvc.beneficiary'].browse(rvc_beneficiary_id.id)
