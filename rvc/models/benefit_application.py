@@ -597,9 +597,9 @@ class BenefitApplication(models.Model):
             
             for postulation_id in self:
                 postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
-                #TODO: logging
-    
-    
+                postulation_id.message_post(body=_('La postulación se marcó como rechazada dado que pasaron'\
+                    'más de 30 días desde su notificación y no fue aceptado el beneficio.'))
+
     def attach_OM_2_partner(self, postulation_id):
 
         pdf = self.env.ref('rvc.action_report_rvc').render_qweb_pdf(postulation_id.id)

@@ -2,7 +2,6 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime, timedelta
-from psycopg2 import IntegrityError
 import xlwt
 import base64
 import io
@@ -118,7 +117,6 @@ class RVCImportFileWizard(models.TransientModel):
                                                                     'contact_email': str(fila[4]).strip().lower(),
                                                                     'contact_position': str(fila[6]),
                                                                     'active': True})
-                                self.env.cr.commit()
                         except Exception as e:
                             validation = "Fila %s: %s no se pudo crear como empresa beneficiaria. %s" % (str(count), partner_id.vat + '-' + str(partner_id.name.strip()),str(e))
                             errors.append(validation)
