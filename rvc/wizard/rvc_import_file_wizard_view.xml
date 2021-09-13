@@ -83,7 +83,7 @@
 		name="Postulaciones a Beneficios"
 		parent="rvc.menu_rvc_import_file_wizard"
 		sequence="0"
-		groups="rvc.group_rvc_manager"/>	        
+		groups="rvc.group_rvc_manager,rvc.group_rvc_support"/>	        
 
     <menuitem id="menu_report_excel_sale_product_root"
         name="Cargue Masivo de Postulaciones"
