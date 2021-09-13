@@ -109,6 +109,6 @@
 		action="action_benefit_application"
 		parent="rvc.hr_menu_benefit_application_parent"
 		sequence="0"
-		groups="rvc.group_rvc_manager"/>
+		groups="rvc.group_rvc_manager,rvc.group_rvc_support"/>
 
 </odoo>

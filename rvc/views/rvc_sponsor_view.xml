@@ -61,7 +61,7 @@
 		<field name="name">rvc.sponsor.kanban</field>
 		<field name="model">rvc.sponsor</field>
 		<field name="arch" type="xml">
-			<kanban class="o_res_partner_kanban" create="true">
+			<kanban class="o_res_partner_kanban">
 				<field name="id"/>
 				<field name="partner_id"/>
 				<templates>
@@ -124,5 +124,5 @@
 		action="action_rvc_sponsor"
 		parent="rvc.hr_menu_rvc_partners"
 		sequence="2"
-		groups="rvc.group_rvc_manager"/>          
+		groups="rvc.group_rvc_manager,rvc.group_rvc_support"/>
 </odoo>
