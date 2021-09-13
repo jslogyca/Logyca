@@ -150,7 +150,7 @@ class RVCImportFileWizard(models.TransientModel):
                     # Validar que el tamaño de la empresa beneficiaria sea micro, pequeña o mediana (MIPYME)
                     if partner_id.x_company_size == '4':
                         validation = 'Fila %s: El tamaño de la empresa beneficiaria %s no es micro, pequeña o mediana (MIPYME)' %\
-                                str(count), partner_id.vat + '-' + str(partner_id.name.strip())
+                            (str(count), partner_id.vat + '-' + str(partner_id.name.strip()))
                         errors.append(validation)
                         continue
 
