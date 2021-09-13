@@ -70,7 +70,7 @@
         sequence="4"
         web_icon="rvc,static/description/icon.png"
         active="True"
-        groups="rvc.group_rvc_manager"/>
+        groups="rvc.group_rvc_manager,rvc.group_rvc_support"/>
 
     <menuitem id="menu_import_file_root"
         name="Importar Archivos"

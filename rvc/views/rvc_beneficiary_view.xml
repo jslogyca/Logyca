@@ -47,7 +47,7 @@
 		<field name="name">rvc.beneficiary.tree</field>
 		<field name="model">rvc.beneficiary</field>
 		<field name="arch" type="xml">
-			<tree string="Empresas Patrocinada" create="true" >
+			<tree string="Empresas Patrocinada" >
 				<field name="vat"/>
 				<field name="partner_id"/>
 				<field name="macro_sector" />
@@ -67,7 +67,7 @@
 		<field name="name">rvc.beneficiary.kanban</field>
 		<field name="model">rvc.beneficiary</field>
 		<field name="arch" type="xml">
-			<kanban class="o_res_partner_kanban" create="true">
+			<kanban class="o_res_partner_kanban">
 				<field name="id"/>
 				<field name="partner_id"/>
 				<templates>
@@ -123,7 +123,7 @@
 		name="Empresas"
 		parent="rvc.menu_rvc_import_file_wizard"
 		sequence="1"
-		groups="rvc.group_rvc_manager"/>
+		groups="rvc.group_rvc_manager,rvc.group_rvc_support"/>
 
 
 	<menuitem
@@ -132,7 +132,7 @@
 		action="action_rvc_beneficiary"
 		parent="rvc.hr_menu_rvc_partners"
 		sequence="1"
-		groups="rvc.group_rvc_manager"/>
+		groups="rvc.group_rvc_manager,rvc.group_rvc_support"/>
 
 	<menuitem
 		id="hr_menu_rvc_report"
