@@ -6,8 +6,8 @@
 		<field name="arch" type="xml">
 			<form string="Empresas Patrocinada">
 				<header>
-                    <button name="deactivate_beneficiary" string="Desactivar" type="object" class="btn-primary" attrs="{'invisible': ['|',('id','=', False), ('active','=', False)]}"/>
-                    <button name="activate_beneficiary" string="Activar" type="object" class="btn-primary" attrs="{'invisible': ['|', ('id','=', False), ('active','=', True)]}"/>
+                    <button name="deactivate_beneficiary" string="Desactivar" type="object" class="btn-primary" attrs="{'invisible': ['|',('id','=', False), ('active','=', False)]}" groups="rvc.group_rvc_manager"/>
+                    <button name="activate_beneficiary" string="Activar" type="object" class="btn-primary" attrs="{'invisible': ['|', ('id','=', False), ('active','=', True)]}" groups="rvc.group_rvc_manager"/>
 				</header>			
 				<sheet>
 					<widget name="web_ribbon" title="Archivada" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
