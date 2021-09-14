@@ -6,13 +6,13 @@
 		<field name="arch" type="xml">
 			<form string="Postulación a Beneficios">
 				<header>
-				 	<button name="action_notified" type="object" states="draft" string="Notificar al Beneficiario" class="oe_highlight"/>
-				 	<button name="action_confirm" type="object" states="notified" string="Confirm" class="oe_highlight"/>
-				 	<button name="action_notified" type="object" states="notified" string="Volver a notificar" class="oe_highlight"/>
-				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight"/>
-				 	<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight"/>
+				 	<button name="action_notified" type="object" states="draft" string="Notificar al Beneficiario" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+				 	<button name="action_confirm" type="object" states="notified" string="Confirm" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+				 	<button name="action_notified" type="object" states="notified" string="Volver a notificar" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+				 	<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />
-					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary" attrs="{'invisible': ['|','|','|',('id','=', False),('state','=','rejected'),('state','=','cancel'),('state','=','done')]}"/>
+					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary" attrs="{'invisible': ['|','|','|',('id','=', False),('state','=','rejected'),('state','=','cancel'),('state','=','done')]}" groups="rvc.group_rvc_manager"/>
 				</header>			
 				<sheet>
                     <h1>Postulación a Beneficio RVC</h1>
