@@ -3,7 +3,7 @@
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError, UserError
 from dateutil.relativedelta import relativedelta
-from datetime import datetime
+from datetime import datetime, date
 import base64
 import time
 import locale
@@ -287,7 +287,7 @@ class BenefitApplication(models.Model):
                 result = response.json()
                 response.close()
 
-                if result.get('CodigosCompradosDisponibles') > 0:
+                if result.get('CodigosCompradosDisponibles') > 10:
                      raise ValidationError(\
                         _('¡Lo sentimos! La empresa %s tiene %s código(s) comprados disponibles.' % (str(self.partner_id.partner_id.vat) + '-' + str(self.partner_id.partner_id.name), str(result.get('CodigosCompradosDisponibles')))))
             else:
@@ -553,6 +553,21 @@ class BenefitApplication(models.Model):
                                         (True, company_id.parent_id.partner_id.id, company_id.partner_id.partner_id.id))
         return True
 
+    def _add_vinculation_partner(self):
+        try:
+            partner_id = self.partner_id.partner_id
+
+            if partner_id.x_active_vinculation == False:
+                vinculation_99_anos_id = self.env['logyca.vinculation_types'].search([('name','=','99 Años')],limit=1)
+                partner_id.x_type_vinculation = [(6,0, vinculation_99_anos_id.ids)]
+                partner_id.x_active_vinculation = True
+                partner_id.x_date_vinculation = date.today()
+                self.message_post(body=_(\
+                            'Se activó la vinculación: <strong>%s</strong>' % str(vinculation_99_anos_id.name)))
+        except Exception as e:
+            self.message_post(body=_(\
+                '<strong>¡Error!</strong> No se pudo activar la vinculación <strong>%s</strong>. Descripción: %s' % (str(vinculation_99_anos_id.name), str(e))))
+
     def _cron_send_welcome_kit(self):
         logging.warning("==> Iniciando cron de enviar kits de bienvenida ...")
 
@@ -581,6 +596,9 @@ class BenefitApplication(models.Model):
                         self.update_contact(postulation_id.partner_id)
                         if postulation_id.parent_id:
                             self.update_company(postulation_id)
+
+                        # Agregar tipo de vinculacion al tercero
+                        self._add_vinculation_partner()
 
                         postulation_id.write({'state': 'done'})
                         counter += 1
