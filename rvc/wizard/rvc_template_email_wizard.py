@@ -63,6 +63,9 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 if benefit_application.parent_id:
                     benefit_application.update_company(benefit_application)
 
+                # Agregar tipo de vinculacion al tercero
+                self._add_vinculation_partner()
+
                 benefit_application.write({'state': 'done'})
             else:
                 raise ValidationError(_('La empresa seleccionada no tiene email.'))

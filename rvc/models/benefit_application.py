@@ -617,6 +617,9 @@ class BenefitApplication(models.Model):
                         if postulation_id.parent_id:
                             self.update_company(postulation_id)
 
+                        # Agregar tipo de vinculacion al tercero
+                        self._add_vinculation_partner()
+
                         postulation_id.write({'state': 'done'})
                         counter += 1
                     else:
