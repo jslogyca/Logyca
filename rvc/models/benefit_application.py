@@ -3,7 +3,7 @@
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError, UserError
 from dateutil.relativedelta import relativedelta
-from datetime import datetime
+from datetime import datetime, date
 import base64
 import time
 import locale
@@ -313,7 +313,7 @@ class BenefitApplication(models.Model):
             result = response.json()
             response.close()
 
-            if result.get('CodigosCompradosDisponibles') > 0:
+            if result.get('CodigosCompradosDisponibles') > 10:
                  raise ValidationError(\
                     _('¡Lo sentimos! La empresa tiene %s código(s) comprados disponibles.') % str(result.get('CodigosCompradosDisponibles')))
         else:
@@ -552,6 +552,41 @@ class BenefitApplication(models.Model):
         self._cr.execute(''' UPDATE res_partner SET x_sponsored=%s, x_flagging_company=%s WHERE id=%s ''',
                                         (True, company_id.parent_id.partner_id.id, company_id.partner_id.partner_id.id))
         return True
+
+    def _add_vinculation_partner(self):
+        try:
+            partner_id = self.partner_id.partner_id
+            vinculation_99_anos_id = self.env['logyca.vinculation_types'].search([('name','=','99 Años')],limit=1)
+            # si el partner no tiene una vinculación activa entonces lo vinculamos como 99 anios
+            if partner_id.x_active_vinculation == False:
+                partner_id.x_type_vinculation = [(6,0, vinculation_99_anos_id.ids)]
+                partner_id.x_active_vinculation = True
+                partner_id.x_date_vinculation = date.today()
+                self.message_post(body=_(\
+                            'Se activó la vinculación: <strong>%s</strong>' % str(vinculation_99_anos_id.name)))
+            # si tiene una vinculacion activa entonces le adicionamos la 99 anios
+            else:
+                # si tiene al menos un tipo de vinculacion entonces revisamos cuáles son
+                if partner_id.x_type_vinculation:
+                    vinculated = True
+                    for vinculation in partner_id.x_type_vinculation:
+                        # tiene la vinculación 'no tiene vinculacion' o tiene la '99 anos'
+                        if vinculation.code in ('12', '10'):
+                            #reemplazamos la vinculacion por la '99 anos' y a fecha activacion sera hoy
+                            partner_id.x_type_vinculation = [(6,0, vinculation_99_anos_id.ids)]
+                            partner_id.x_date_vinculation = date.today()
+                            self.message_post(body=_(\
+                            'Se activó la vinculación: <strong>%s</strong>' % str(vinculation_99_anos_id.name)))
+                        else:
+                            #agregamos la vinculacion 99 anios y ponemos fecha activacion hoy
+                            partner_id.x_type_vinculation = [(4, vinculation_99_anos_id.ids)]
+                            partner_id.x_date_vinculation = date.today()
+                            self.message_post(body=_(\
+                                        'Se adicionó la vinculación: <strong>%s</strong>' % str(vinculation_99_anos_id.name)))
+        except Exception as e:
+            self.message_post(body=_(\
+                '<strong>¡Error!</strong> No se pudo activar la vinculación <strong>%s</strong>. Descripción: %s' % (str(vinculation_99_anos_id.name), str(e))))
+
 
     def _cron_send_welcome_kit(self):
         logging.warning("==> Iniciando cron de enviar kits de bienvenida ...")
