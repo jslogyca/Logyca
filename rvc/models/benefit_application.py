@@ -287,7 +287,7 @@ class BenefitApplication(models.Model):
                 result = response.json()
                 response.close()
 
-                if result.get('CodigosCompradosDisponibles') > 0:
+                if result.get('CodigosCompradosDisponibles') > 10:
                      raise ValidationError(\
                         _('¡Lo sentimos! La empresa %s tiene %s código(s) comprados disponibles.' % (str(self.partner_id.partner_id.vat) + '-' + str(self.partner_id.partner_id.name), str(result.get('CodigosCompradosDisponibles')))))
             else:
