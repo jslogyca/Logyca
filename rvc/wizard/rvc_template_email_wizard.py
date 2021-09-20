@@ -64,7 +64,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     benefit_application.update_company(benefit_application)
 
                 # Agregar tipo de vinculacion al tercero
-                self._add_vinculation_partner()
+                benefit_application.add_vinculation_partner()
 
                 benefit_application.write({'state': 'done'})
             else:

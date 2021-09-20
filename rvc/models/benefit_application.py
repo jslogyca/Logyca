@@ -554,7 +554,7 @@ class BenefitApplication(models.Model):
                                         (True, company_id.parent_id.partner_id.id, company_id.partner_id.partner_id.id))
         return True
 
-    def _add_vinculation_partner(self):
+    def add_vinculation_partner(self):
         for record in self:
             try:
                 partner_id = record.partner_id.partner_id
@@ -620,7 +620,7 @@ class BenefitApplication(models.Model):
                             self.update_company(postulation_id)
 
                         # Agregar tipo de vinculacion al tercero
-                        self._add_vinculation_partner()
+                        self.add_vinculation_partner()
 
                         postulation_id.write({'state': 'done'})
                         counter += 1
