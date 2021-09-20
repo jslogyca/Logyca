@@ -38,7 +38,7 @@ class BenefitApplication(models.Model):
     benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
                                     ('colabora', 'Colabora'),
                                     ('analitica', 'Analítica')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
-    sub_product_ids = fields.Many2one('sub.product.rvc', string='Sub-Productos', track_visibility='onchange')
+    colabora_level = fields.Char(string='Nivel', track_visibility="onchange")
     date_end = fields.Date(string='Date End', track_visibility='onchange')
     acceptance_date = fields.Datetime(string='Fecha/Hora Aceptación', track_visibility='onchange', readonly=True)
     notification_date = fields.Datetime(string='Fecha/Hora Notificación', track_visibility='onchange', readonly=True)
@@ -58,6 +58,15 @@ class BenefitApplication(models.Model):
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]    
+
+    @api.onchange('colabora_level')
+    def _onchange_colabora_level(self):
+        if self.colabora_level:
+            if self.colabora_level.isdigit():
+                if not (1 <= int(self.colabora_level) <= 10):
+                    raise UserError(_("El nivel de Colabora debe estar entre 1 y 10."))
+            else:
+                raise UserError(_("El nivel de Colabora debe ser un número entero entre 1 y 10."))
 
     def unlink(self):
         for benefit_application in self:
