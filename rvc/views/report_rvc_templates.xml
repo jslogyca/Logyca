@@ -1,17 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <template id="report_rvc_template">
         <t t-call="web.html_container">
             <t t-foreach="inside_foreach_docs or docs" t-as="o">
-                    <t t-set="o" t-value="o.with_context(lang=o.partner_id.partner_id.lang or o.env.lang)"/>
+                    <t t-set="o" t-value="o.with_context(lang=lang)"/>
                     <style>
                       p{
+                        font-size: 11px;
                         text-align: justify;
                         text-justify: inter-word;
                       }
+                      h2{
+                        font-size: 1.1em;
+                        }
                     </style>
                     <div class="header">
-                         <img src='https://saintegracionesvtex.blob.core.windows.net/mailimages/head-img.jpg'/>
+                         <img src='/rvc/static/img/banner-kit-bienv-codigos.png'/>
                     </div>
                     <div class="page">
                         <div class='content'>
@@ -38,10 +42,11 @@
                             <p><strong>PARÁGRAFO:</strong>En consecuencia, de la aceptación y legalización de la presente oferta mercantil, el acuerdo que se celebre se encuentra exento del impuesto de timbre
                                 de conformidad con el artículo 530 del estatuto tributario.</p>
                             <h2>TERCERA: OBLIGACIONES DEL CONCEDENTE: </h2>
+                            
                             <p><strong>3.1</strong> Asignar usuario y contraseña para que LA CONCESIONARIA ingrese a la plataforma de asignación de códigos y asigne uno a uno los códigos
                                 de los productos que este requiera y tenga disponibles. <strong>3.2</strong> Brindar a solicitud de LA CONCESIONARIA, la información técnica básica necesaria
                                 para la asignación e impresión del código de identificación GS1, a través de la guía de identificación, que se encuentra en el siguiente 
-                                <a target="new" href="https://www.gs1co.org/estándares/tipos-de-codigos-de-barras.aspx">enlace</a>. 
+                                <a target="new" href="https://bit.ly/3o54pEL">enlace</a>. 
                                 <strong>3.3</strong> Brindar el soporte técnico básico, que requiera el cliente, mediante correo electrónico (web@logyca.com) o llamada telefónica a las líneas de atención al cliente. 
                                 <strong>3.4</strong> Verificar la calidad de impresión del código o paquete de códigos, durante los 3 meses siguientes a la adquisición. GS1 Colombia emitirá dicha certificación 
                                 de calidad de la impresión de las etiquetas impresas siempre y cuando la empresa envíe las muestras físicas de las mismas a GS1 Colombia, en la ciudad de Bogotá, al área de Soporte 
@@ -90,7 +95,7 @@
                             <p>El incumplimiento o violación de cualquiera de las obligaciones del presente Contrato de Concesión por parte de la CONCESIONARIA, la constituirá en deudora de EL OFERENTE CONCEDENTE, 
                             por una suma ajustada en salarios mínimos legales mensuales vigentes (SMLMV), dependiendo del nivel de activos de cada compañía como se contempla en la siguiente tabla de rangos:
                                 <br/>
-                                <table border="1" style="margin: 0 auto; text-align:center;">
+                                <table border="1" style="margin: 0 auto; text-align:center; font-size:11px">
                                     <tr>
                                         <td colspan="2"><strong>RANGOS DE ACTIVOS EN MILLONES DE PESOS</strong></td>
                                         <td><strong>SLM POR RANGO DE ACTIVOS</strong></td>
@@ -178,19 +183,20 @@
                             a las mismas, con el fin de prevenir y evitar cualquier situación relacionada con el lavado de activos, captación ilegal, y demás actividades prohibidas en materia económica y de servicios.</p>
                             <p><strong>10.5</strong> Que, por la aceptación de la presente oferta mercantil, aceptan las políticas establecidas en el Manual de Políticas de autocontrol y gestión del riesgo de lavado de activos 
                             y financiación del terrorismo de LOGYCA / ASOCIACIÓN, el cual puede ser consultado en el siguiente 
-                            <a target="new" href="https://saintegracionesvtex.blob.core.windows.net/public/Manual%20y%20Politicas%20ASOCIACIÓN%20LOGYCA%20-%20SARLAFT.pdf">enlace</a>.</p>
+                            <a target="new" href="https://bit.ly/2XAjpPp">enlace</a>.</p>
                             <p><strong>10.6</strong> Que la información aportada verbalmente y por escrito a EL OFERENTE CONCEDENTE, relacionada con el sistema para la administración del riesgo del lavado de activos y financiación 
                             del terrorismo SARLAFT, es veraz y verificable, y se obligan a actualizarla cuando así se les solicite.</p>
 
                             <h2>DÉCIMA PRIMERA: NOTIFICACIONES:</h2>
                             <p>Para efectos de las notificaciones de que trata la presente oferta mercantil y el contrato de concesión que se celebra por la aceptación de la misma, EL OFERENTE CONCEDENTE recibirá notificaciones en 
-                            <a href="'mailto:web@logyca.com">web@logyca.com</a>.</p>
+                            <a href="mailto:web@logyca.com">web@logyca.com</a>.</p>
 
                             <h2>DÉCIMA SEGUNDA: VIGENCIA DE LA OFERTA MERCANTIL:</h2>
                             <p>La presente oferta mercantil tiene una vigencia de treinta (30) días hábiles, transcurridos los cuales sin que haya sido 
                                 ceptada en los términos previstos en el numeral segundo de la presente oferta se entenderá como rechazada.
                                 
                                 Para constancia se firma la presente el día <span t-esc="o.today_date_spanish()"></span>.</p>
+                            <br/><br/>
                             <div class='signature'>
                                 <div class="row">
                                     <p style='font-weight: bold; text-align: left'>
