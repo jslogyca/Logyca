@@ -29,8 +29,8 @@
                             <p>Para todos los efectos del contrato de Concesión que se celebra por la aceptación de la presente oferta, el Aceptante se denominará CONCESIONARIA.</p>
                             <h2>PRIMERA: OBJETO DE LA OFERTA.</h2>
                             <p>EL OFERENTE CONCEDENTE ofrece a <b><t class="text-uppercase" t-if="o.partner_id.partner_id.name" t-raw="o.partner_id.partner_id.name"></t>
-                                <t class="text-uppercase oe_inline" t-if="o.partner_id.partner_id.name == False" t-raw="o.partner_id.partner_id.x_first_name"> </t><t class="text-uppercase oe_inline" 
-                                t-else="o.partner_id.partner_id.name == False" t-raw="o.partner_id.partner_id.x_first_lastname"></t>
+                                <t class="text-uppercase oe_inline" t-if="!o.partner_id.partner_id.name" t-raw="o.partner_id.partner_id.x_first_name"> </t><t class="text-uppercase oe_inline" 
+                                t-else="!o.partner_id.partner_id.name" t-raw="o.partner_id.partner_id.x_first_lastname"></t>
                                 </b>
                                 , identificado(a) con CC/NIT <strong><span t-esc="o.partner_id.partner_id.vat"></span></strong> LA CONCESIÓN para la utilización del SISTEMA GS1 y el derecho al uso del código 
                                 de identificación de Productos (GTIN- GLOBAL TRADE ITEM NUMBER), Código de Localización (GLN) y/o códigos de recaudo.</p>
