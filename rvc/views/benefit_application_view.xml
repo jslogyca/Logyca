@@ -29,8 +29,8 @@
 							<field name="product_id" attrs="{'readonly': [('state','!=','draft')],'required': [('state','=','draft')]}"/>
 							<field name="benefit_type" invisible="1"/>						
 							<field name="codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
-							<field name="sub_product_ids" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
-							<field name="date_end" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','!=','draft')]}"/>
+							<field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
+							<field name="date_end" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
 							<field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos'))], 'readonly': [('state','=','done')]}" />
 						</group>
 					</group>
@@ -66,7 +66,7 @@
 				<field name="parent_id"/>
 				<field name="product_id"/>
 				<field name="benefit_type" invisible="1"/>
-				<field name="sub_product_ids" attrs="{'invisible': [('benefit_type','!=','colabora')]}"/>
+				<field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')]}"/>
 				<field name="state"/>
 			</tree>
 		</field>

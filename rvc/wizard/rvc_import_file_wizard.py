@@ -2,7 +2,6 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime, timedelta
-from psycopg2 import IntegrityError, Error
 import xlwt
 import base64
 import io
