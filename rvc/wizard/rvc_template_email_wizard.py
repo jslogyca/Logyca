@@ -20,10 +20,22 @@ class RVCTemplateEmailWizard(models.TransientModel):
         if benefit_application:
             partner=self.env['res.partner'].search([('id','=',benefit_application.partner_id.partner_id.id)])
             if partner and benefit_application.contact_email:
-                access_link = partner._notify_get_action_link('view')
-                template = self.env.ref('rvc.mail_template_deactivated_partner_benef')
-                template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
-                benefit_application.write({'state': 'notified', 'notification_date': datetime.now()})
+                
+                # notificar Derechos de Identificación
+                if benefit_application.product_id.code == '01':
+                    access_link = partner._notify_get_action_link('view')
+                    template = self.env.ref('rvc.mail_template_deactivated_partner_benef')
+                    subject = "Beneficio Derechos de Identificación"
+                    template.with_context(url=access_link).send_mail(benefit_application.id, force_send=False, email_values={'subject': subject})
+                    benefit_application.write({'state': 'notified', 'notification_date': datetime.now()})
+                
+                # notificar Logyca/colabora
+                elif benefit_application.product_id.code == '02':
+                    access_link = partner._notify_get_action_link('view')
+                    template = self.env.ref('rvc.mail_template_deactivated_partner_benef')
+                    subject = "Beneficio Plataforma LOGYCA / COLABORA"
+                    template.with_context(url=access_link).send_mail(benefit_application.id, force_send=False, email_values={'subject': subject})
+                    benefit_application.write({'state': 'notified', 'notification_date': datetime.now()})
         return {'type': 'ir.actions.act_window_close'}
 
 
