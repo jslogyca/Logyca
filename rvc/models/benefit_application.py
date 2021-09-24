@@ -59,14 +59,14 @@ class BenefitApplication(models.Model):
     ]
 
     #se usa para ocultar los campos técnicos de los filtros y agrupaciones
-    @api.model
-    def fields_get(self, allfields=None, attributes=None):
-        res = super(BenefitApplication, self).fields_get(allfields, attributes)
-        fields_to_hide = ['benefit_name']
-        for field in fields_to_hide:
-            res[field]['selectable'] = False  # disable field visible in filter
-            res[field]['sortable'] = False  # disable field visible in grouping
-        return res
+    # @api.model
+    # def fields_get(self, allfields=None, attributes=None):
+    #     res = super(BenefitApplication, self).fields_get(allfields, attributes)
+    #     fields_to_hide = ['benefit_name']
+    #     for field in fields_to_hide:
+    #         res[field]['selectable'] = False  # disable field visible in filter
+    #         res[field]['sortable'] = False  # disable field visible in grouping
+    #     return res
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]    
