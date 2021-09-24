@@ -51,6 +51,8 @@ class BenefitApplication(models.Model):
     contact_position = fields.Char('Cargo Contacto', related='partner_id.contact_position', track_visibility='onchange')
     vat = fields.Char('Número Documento', related='partner_id.vat', store=True, track_visibility='onchange')
     access_token = fields.Char('Token', default=_default_access_token, help="Token de acceso para aceptar beneficio desde el correo")
+    #technical fields
+    benefit_name = fields.Selection(related='product_id.benefit_type', store=True, help="Technical field used for easy quering")
 
     _sql_constraints = [
         ('benefits_partner_product_uniq', 'unique (partner_id, product_id)', '¡Error Guardando! La empresa seleccionada ya está aplicando para este beneficio.')
