@@ -49,7 +49,7 @@ class BenefitApplication(models.Model):
     contact_phone = fields.Char('Teléfono Contacto', related='partner_id.contact_phone', track_visibility='onchange')
     contact_email = fields.Char('Email Contacto', related='partner_id.contact_email', track_visibility='onchange')
     contact_position = fields.Char('Cargo Contacto', related='partner_id.contact_position', track_visibility='onchange')
-    vat = fields.Char('Número Documento', related='partner_id.vat', track_visibility='onchange')
+    vat = fields.Char('Número Documento', related='partner_id.vat', store=True, track_visibility='onchange')
     access_token = fields.Char('Token', default=_default_access_token, help="Token de acceso para aceptar beneficio desde el correo")
 
     _sql_constraints = [
