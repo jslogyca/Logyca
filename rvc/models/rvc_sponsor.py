@@ -6,13 +6,14 @@ from odoo.exceptions import ValidationError
 
 class RVCSponsored(models.Model):
     _name = 'rvc.sponsor'
-    _description = 'RVC Sponsored'
+    _description = 'RVC Sponsor'
     _rec_name = 'partner_id'
 
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company)
     partner_id = fields.Many2one('res.partner', string='Patrocinador')
-    vat = fields.Char('NIT', related='partner_id.vat')
-    phone = fields.Char('Phone', related='partner_id.phone')
+    name = fields.Char('Nombre', related='partner_id.name', store=True)
+    vat = fields.Char('NIT', related='partner_id.vat', store=True)
+    phone = fields.Char('Teléfono', related='partner_id.phone')
     email = fields.Char('Email', related='partner_id.email')
     x_sector_id = fields.Many2one('logyca.sectors', string='Sector', related='partner_id.x_sector_id', readonly=True, store=True)
     x_company_size = fields.Selection([('1', 'Mipyme'),
@@ -34,7 +35,17 @@ class RVCSponsored(models.Model):
 
     _sql_constraints = [
         ('partner_id_company_uniq', 'unique (vat,company_id)', 'La empresa halonadora ya esta creada')
-    ]    
+    ]
+
+    #se usa para ocultar los campos técnicos de los filtros y agrupaciones
+    @api.model
+    def fields_get(self, allfields=None, attributes=None):
+        res = super(RVCSponsored, self).fields_get(allfields, attributes)
+        fields_to_hide = ['vat']
+        for field in fields_to_hide:
+            res[field]['selectable'] = False  # disable field visible in filter
+            res[field]['sortable'] = False  # disable field visible in grouping
+        return res
 
     def name_get(self):
         return [(sponsored.id, '%s - %s' % (sponsored.partner_id.name, sponsored.vat)) for sponsored in self]
