@@ -49,7 +49,7 @@ class BenefitApplication(models.Model):
     contact_phone = fields.Char('Teléfono Contacto', related='partner_id.contact_phone', track_visibility='onchange')
     contact_email = fields.Char('Email Contacto', related='partner_id.contact_email', track_visibility='onchange')
     contact_position = fields.Char('Cargo Contacto', related='partner_id.contact_position', track_visibility='onchange')
-    vat = fields.Char('Número Documento', related='partner_id.vat', track_visibility='onchange')
+    vat = fields.Char('Número Documento', related='partner_id.vat', store=True, track_visibility='onchange')
     access_token = fields.Char('Token', default=_default_access_token, help="Token de acceso para aceptar beneficio desde el correo")
 
     _sql_constraints = [
@@ -172,24 +172,9 @@ class BenefitApplication(models.Model):
                         'domain': '[]'
                     }
                     self.write({'state': 'notified', 'notification_date': datetime.now()})
-            elif self.product_id.benefit_type == 'colabora':
-                if benefit_application.state in ('draft', 'notified'):
-                    view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id,
-                    return {
-                        'name':_("Are you sure?"),
-                        'view_mode': 'form',
-                        'view_id': view_id,
-                        'view_type': 'form',
-                        'res_model': 'rvc.template.email.wizard',
-                        'type': 'ir.actions.act_window',
-                        'nodestroy': True,
-                        'target': 'new',
-                        'domain': '[]'
-                    }
-                    self.write({'state': 'notified', 'notification_date': datetime.now()})
-            elif self.product_id.benefit_type == 'analitica':
-                raise ValidationError(_('Oops! Muy pronto podrás notificar el beneficio LOGYCA/ANALÍTICA.\n\n'\
-                    'Por el momento solo puedes notificar DERECHOS DE IDENTIFICACIÓN y LOGYCA / COLABORA.'))
+            elif self.product_id.benefit_type != 'codigos':
+                raise ValidationError(_('Oops! Muy pronto podrás notificar los beneficios LOGYCA/COLABORA y LOGYCA/ANALÍTICA.\n\n'\
+                    'Por el momento solo puedes notificar el beneficio DERECHOS DE IDENTIFICACIÓN.'))
             elif not self._validate_qty_codes():
                 logging.warning("===> _validate_qty_codes no pasó la validación")
             elif not self._validate_bought_products():
