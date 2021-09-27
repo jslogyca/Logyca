@@ -10,6 +10,9 @@
                     <xpath expr="//field[@name='x_not_contacted_again']" position="after">
                         <field name="x_not_contacted_again_partially"/>
                     </xpath>
+                    <xpath expr="//field[@name='bank_ids']/tree//field[@name='acc_number']" position="after">
+                        <field name="company_id"/>
+                    </xpath>
                 </data>
             </field>
         </record>
