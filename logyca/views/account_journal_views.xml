@@ -6,7 +6,7 @@
             <field name="model">account.journal</field>
             <field name="inherit_id" ref="account.view_account_journal_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='refund_sequence_number_next']" position="after">
+                <xpath expr="//field[@name='type']" position="after">
                     <field name="x_resolution_number"/>
                 </xpath>
             </field>

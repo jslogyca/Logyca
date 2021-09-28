@@ -34,7 +34,8 @@
         'views/logyca_survey.xml',
         'views/massive_invoicing_views.xml',
         'views/res_partner_views.xml',
-        'views/account_journal_views.xml'
+        'views/account_journal_views.xml',
+        'views/account_move_report_invoice.xml'
     ], 
     
 }
