@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="logyca_account_report_invoice_inherit" inherit_id="account.report_invoice_document">
-        <xpath expr="//payment_term" position="after">
+        <xpath expr="//p[@name='payment_term']" position="after">
             <p t-if="o.type == 'in_invoice' and o.x_journal_resolution_num">
                 Nro. Resolución: <b><span t-field="o.x_journal_resolution_num"/></b>
             </p>
