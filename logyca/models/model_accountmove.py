@@ -53,6 +53,7 @@ class AccountMove(models.Model):
     x_discount_payment = fields.Boolean(string='Pago con descuento', copy=False)
     #Recibo de pago - Campo temporal
     x_receipt_payment = fields.Char(string='N° Recibo de pago', copy=False)
+    x_journal_resolution_num = fields.Char(string='Number', related='journal_id.x_resolution_number')
     
     @api.depends('x_value_discounts')
     def _compute_amount_total_discounts(self):
