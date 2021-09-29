@@ -67,7 +67,8 @@
 				<field name="parent_id"/>
 				<field name="product_id"/>
 				<field name="benefit_type" invisible="1"/>
-				<field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')]}"/>
+				<field name="codes_quantity" string="# Códigos" attrs="{'invisible': [('benefit_type','!=','codigos')]}" optional="hide"/>
+				<field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')]}" optional="hide"/>
 				<field name="state"/>
 			</tree>
 		</field>
