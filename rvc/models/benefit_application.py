@@ -145,20 +145,12 @@ class BenefitApplication(models.Model):
 
     def action_rejected(self):
         for benefit_application in self:
-            view_id = self.env.ref('rvc.rvc_template_email_rejected_wizard_form').id,
-            return {
-                'name':_("Rechazar Beneficio"),
-                'view_mode': 'form',
-                'view_id': view_id,
-                'view_type': 'form',
-                'res_model': 'rvc.template.email.wizard',
-                'type': 'ir.actions.act_window',
-                'nodestroy': True,
-                'target': 'new',
-                'domain': '[]'
-            }
-            self.write({'state': 'rejected', 'rejection_date': datetime.now()})
+            benefit_application.write({'state': 'rejected', 'rejection_date': datetime.now()})
+            benefit_application.message_post(body=_('La postulación se marcó <b>manualmente</b> como rechazada'))
 
+    def action_reactivate(self):
+        for benefit_application in self:
+            benefit_application.write({'state': 'draft'})
 
     def action_re_done(self):
         self.write({'state': 'confirm', 'acceptance_date': datetime.now()})
