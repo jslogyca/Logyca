@@ -51,6 +51,8 @@ class BenefitApplication(models.Model):
     contact_position = fields.Char('Cargo Contacto', related='partner_id.contact_position', track_visibility='onchange')
     vat = fields.Char('Número Documento', related='partner_id.vat', store=True, track_visibility='onchange')
     access_token = fields.Char('Token', default=_default_access_token, help="Token de acceso para aceptar beneficio desde el correo")
+    historical_record = fields.Boolean('Registro histórico',
+                                       help="Si es verdadero, este registro es de cargue histórico, es decir, no se hizo en Odoo sino que se cargó tiempo después.")
     #technical fields
     benefit_name = fields.Selection(related='product_id.benefit_type', store=True, help="Technical field used for easy quering")
 
