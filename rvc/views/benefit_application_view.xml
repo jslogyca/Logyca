@@ -40,7 +40,8 @@
 							<field name="parent_id" attrs="{'readonly': [('state','!=','draft')],'required': [('state','=','draft')]}"/>
                             <field name="id" invisible="1"/>
 						</group>
-						<group>
+						<group string="Otra Información">
+                            <field name="historical_record"/>
 						</group>
 					</group>
 				</sheet>
