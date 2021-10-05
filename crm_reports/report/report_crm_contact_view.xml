@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Report CRM Contact -->
+    <!-- <record id="report_crm_contact_search" model="ir.ui.view">
+        <field name="name">report.crm.contact.search</field>
+        <field name="model">report.crm.contact</field>
+        <field name="arch" type="xml">
+            <search string="Report CRM Contact">
+                <field name="partner_id"/>
+                <field name="x_date_vinculation"/>
+                <separator/>
+                <group  string="Extended Filters">
+                    <filter string="Today" name="today_invoices" help="today invoices."
+                        domain="[('create', '=', context_today().strftime('%Y-%m-%d'))]"/>                       
+                </group>         
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="partner_id" string="Partner" context="{'group_by':'partner_id'}"/>
+                    <filter name="create" string="Date" context="{'group_by':'create'}"/>
+                </group>                    
+            </search>
+        </field>
+    </record> -->
+    <record id="report_crm_contact_tree" model="ir.ui.view">
+        <field name="name">report.crm.contact.tree</field>
+        <field name="model">report.crm.contact</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0" string="Report CRM Contact">
+                <field name="vat"/>
+                <field name="partner_id"/>
+                <field name="x_vinculation"/>
+                <field name="type_vinculacion_id"/>
+                <field name="sale_id"/>
+                <field name="x_date_vinculation"/>
+                <field name="x_cargo_directivo"/>
+                <field name="phone"/>
+                <field name="x_asset_range"/>
+                <field name="x_sector_id"/>
+                <field name="contact_id"/>
+                <field name="phone_contact"/>
+                <field name="type_contac"/>
+                <field name="create"/>
+                <field name="contact"/>
+                <field name="job_title"/>
+                <field name="email_contact"/>
+                <field name="movil_contacto"/>
+                <field name="x_not_contacted_again"/>
+                <field name="ubicacion_contact"/>
+                <field name="street"/>
+                <field name="macro_sector"/>
+                <field name="x_company_size"/>
+                <field name="revenue_memb_ids"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="report_crm_contact_pivot" model="ir.ui.view">
+        <field name="model">report.crm.contact</field>
+        <field name="arch" type="xml">
+            <pivot string="Report CRM Contact" disable_linking="True">
+                <field name="partner_id" />
+                <field name="type_vinculacion_id" />
+            </pivot>            
+        </field>
+    </record>
+
+    <record id="action_report_crm_contact" model="ir.actions.act_window">
+        <field name="name">Report CRM Contact</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">report.crm.contact</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="report_crm_contact_tree"/>
+    </record>
+
+    <menuitem
+        id="report_crm_contact_menu"
+        name="Report CRM Contact"
+        action="action_report_crm_contact"
+        parent="contacts.menu_contacts" 
+        sequence="20" />    
+</odoo>
