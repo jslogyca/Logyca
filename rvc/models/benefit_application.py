@@ -53,10 +53,12 @@ class BenefitApplication(models.Model):
     access_token = fields.Char('Token', default=_default_access_token, help="Token de acceso para aceptar beneficio desde el correo")
     historical_record = fields.Boolean('Registro histórico',
                                        help="Si es verdadero, este registro es de cargue histórico, es decir, no se hizo en Odoo sino que se cargó tiempo después.")
-    #technical fields
-    benefit_name = fields.Selection(related='product_id.benefit_type', store=True, help="Technical field used for easy quering")
     message_ids = fields.One2many(groups="rvc.group_rvc_manager")
     activity_ids = fields.One2many(groups="rvc.group_rvc_manager")
+
+    #technical fields
+    benefit_name = fields.Selection(related='product_id.benefit_type', store=True, help="Technical field used for easy quering")
+    
 
     _sql_constraints = [
         ('benefits_partner_product_uniq', 'unique (partner_id, product_id)', '¡Error Guardando! La empresa seleccionada ya está aplicando para este beneficio.')
