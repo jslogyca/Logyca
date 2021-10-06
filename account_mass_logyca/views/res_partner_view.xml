@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="view_res_partner_finan_disco" model="ir.ui.view">
+		<field name="name">res.partner.form.disco</field>
+		<field name="model">res.partner</field>
+		<field name="inherit_id" ref="account_move_extended.view_res_partner_finan"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='x_company_size']" position="after">
+				<field name="logycax_discount_id" force_save="1" readonly="1" />
+			</xpath>
+		</field>
+	</record>
+</odoo>
