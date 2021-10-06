@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+account_config_discount_logycaedx,config.discount.logycaedx,model_config_discount_logycaedx,group_technical_mass_invoice,1,1,1,1
+account_partner_logycaedx,partner.logycaedx,model_partner_logycaedx,group_technical_mass_invoice,1,1,1,1

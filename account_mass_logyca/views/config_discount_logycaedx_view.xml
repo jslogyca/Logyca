@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="config_discount_logycaedx_view_form" model="ir.ui.view">
+		<field name="name">config.discount.logycaedx.form</field>
+		<field name="model">config.discount.logycaedx</field>
+		<field name="arch" type="xml">
+			<form string="Config Discount Logyca EDX">
+				<sheet>
+					<group>
+						<group>
+							<field name="asset_range_id" />
+							<field name="company_size" />
+						</group>
+						<group>
+							<field name="amount_user" />
+							<field name="discount" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="config_discount_logycaedx_view_tree" model="ir.ui.view">
+		<field name="name">config.discount.logycaedx.tree</field>
+		<field name="model">config.discount.logycaedx</field>
+		<field name="arch" type="xml">
+			<tree string="Config Discount Logyca EDX" >
+				<field name="asset_range_id"/>
+				<field name="company_size"/>
+				<field name="amount_user"/>
+				<field name="discount"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_config_discount_logycaedx" model="ir.actions.act_window">
+		<field name="name">Config Discount Logyca EDX</field>
+		<field name="res_model">config.discount.logycaedx</field>
+		<field name="view_mode">tree,form</field>
+	</record>	
+
+	<menuitem
+		id="menu_config_discount_logycaedx"
+		name="Config Discount Logyca EDX"
+		action="action_config_discount_logycaedx"
+		parent="studio_customization.logyca_parametrizaci_ad8d64d2-1139-4184-9c30-5361f61a6ffd"
+		sequence="10"
+		groups="group_technical_mass_invoice"/>          
+</odoo>

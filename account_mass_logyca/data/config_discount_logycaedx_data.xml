@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="config_discount_logycaedx01" model="config.discount.logycaedx">
+            <field name="asset_range_id">1</field>
+            <field name="company_size">micro</field>
+            <field name="amount_user">2</field>
+            <field name="discount">50</field>
+        </record>
+        <record id="config_discount_logycaedx02" model="config.discount.logycaedx">
+            <field name="asset_range_id">2</field>
+            <field name="company_size">micro</field>
+            <field name="amount_user">3</field>
+            <field name="discount">50</field>
+        </record>
+        <record id="config_discount_logycaedx03" model="config.discount.logycaedx">
+            <field name="asset_range_id">3</field>
+            <field name="company_size">micro</field>
+            <field name="amount_user">4</field>
+            <field name="discount">50</field>
+        </record>
+        <record id="config_discount_logycaedx4" model="config.discount.logycaedx">
+            <field name="asset_range_id">4</field>
+            <field name="company_size">micro</field>
+            <field name="amount_user">5</field>
+            <field name="discount">50</field>
+        </record>
+        <record id="config_discount_logycaedx5" model="config.discount.logycaedx">
+            <field name="asset_range_id">6</field>
+            <field name="company_size">pequenas</field>
+            <field name="amount_user">10</field>
+            <field name="discount">35</field>
+        </record>
+        <record id="config_discount_logycaedx6" model="config.discount.logycaedx">
+            <field name="asset_range_id">7</field>
+            <field name="company_size">pequenas</field>
+            <field name="amount_user">20</field>
+            <field name="discount">30</field>
+        </record>
+        <record id="config_discount_logycaedx7" model="config.discount.logycaedx">
+            <field name="asset_range_id">8</field>
+            <field name="company_size">medianas</field>
+            <field name="amount_user">25</field>
+            <field name="discount">25</field>
+        </record>
+        <record id="config_discount_logycaedx8" model="config.discount.logycaedx">
+            <field name="asset_range_id">9</field>
+            <field name="company_size">medianas</field>
+            <field name="amount_user">30</field>
+            <field name="discount">15</field>
+        </record>
+        <record id="config_discount_logycaedx9" model="config.discount.logycaedx">
+            <field name="asset_range_id">14</field>
+            <field name="company_size">grandes</field>
+            <field name="amount_user">100</field>
+            <field name="discount">5</field>
+        </record>
+        <record id="config_discount_logycaedx10" model="config.discount.logycaedx">
+            <field name="asset_range_id">15</field>
+            <field name="company_size">grandes</field>
+            <field name="amount_user">150</field>
+            <field name="discount">5</field>
+        </record>
+        <record id="config_discount_logycaedx11" model="config.discount.logycaedx">
+            <field name="asset_range_id">16</field>
+            <field name="company_size">grandes</field>
+            <field name="amount_user">200</field>
+            <field name="discount">5</field>
+        </record>
+        <record id="config_discount_logycaedx12" model="config.discount.logycaedx">
+            <field name="asset_range_id">17</field>
+            <field name="company_size">grandes</field>
+            <field name="amount_user">250</field>
+            <field name="discount">5</field>
+        </record>
+    </data>
+</odoo>
