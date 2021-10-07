@@ -57,8 +57,10 @@ class BenefitApplication(models.Model):
     activity_ids = fields.One2many(groups="rvc.group_rvc_manager")
 
     #technical fields
-    benefit_name = fields.Selection(related='product_id.benefit_type', store=True, help="Technical field used for easy quering")
-    
+    benefit_name = fields.Selection(string="Nombre Beneficio", related='product_id.benefit_type', store=True, help="Technical field used for easy quering")
+    origin = fields.Selection([('odoo', 'Odoo'), 
+                                    ('tienda', 'Tienda Virtual'),
+                                    ('chatbot', 'ChatBot RVC')], related='product_id.benefit_type', store=True, string="Origen", track_visibility='onchange')
 
     _sql_constraints = [
         ('benefits_partner_product_uniq', 'unique (partner_id, product_id)', '¡Error Guardando! La empresa seleccionada ya está aplicando para este beneficio.')
