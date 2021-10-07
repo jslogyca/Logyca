@@ -42,6 +42,7 @@
 						</group>
 						<group string="Otra Información">
                             <field name="historical_record"/>
+							<field name="origin"/>
 						</group>
 					</group>
 				</sheet>
