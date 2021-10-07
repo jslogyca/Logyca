@@ -60,7 +60,7 @@ class BenefitApplication(models.Model):
     benefit_name = fields.Selection(string="Nombre Beneficio", related='product_id.benefit_type', store=True, help="Technical field used for easy quering")
     origin = fields.Selection([('odoo', 'Odoo'), 
                                     ('tienda', 'Tienda Virtual'),
-                                    ('chatbot', 'ChatBot RVC')], related='product_id.benefit_type', store=True, string="Origen", track_visibility='onchange')
+                                    ('chatbot', 'ChatBot RVC')], string="Origen", track_visibility='onchange', default='odoo', readonly=True)
 
     _sql_constraints = [
         ('benefits_partner_product_uniq', 'unique (partner_id, product_id)', '¡Error Guardando! La empresa seleccionada ya está aplicando para este beneficio.')
