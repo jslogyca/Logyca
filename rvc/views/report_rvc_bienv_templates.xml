@@ -23,7 +23,7 @@
                             <t t-if="o.partner_id">
                                 <span t-field="o.partner_id.partner_id.vat"/>
                             </t></p><br/>
-                            <p>Raciban un cordial saludo.</p>
+                            <p>Reciban un cordial saludo.</p>
                             <p>Desde el año 2015, LOGYCA dio inicio al programa Redes de Valor Colaborativas (RVC), iniciativa de 
                                 fortalecimiento empresarial liderada por nuestros miembros, que busca mejorar la eficiencia y competitividad 
                                 sostenible de las <strong>micro, pequeñas y medianas empresas.</strong></p>

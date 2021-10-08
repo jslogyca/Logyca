@@ -495,9 +495,20 @@ class BenefitApplication(models.Model):
             else:
                 url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
 
+            
+            #validando el nombre de contacto para asignar credenciales
+            # si no tiene contact_name le ponemos el nombre de la empresa
+            credentials_contact_name = ""
+            if self.contact_name:
+                credentials_contact_name = self.contact_name
+            elif self.partner_id.partner_id.name:
+                credentials_contact_name = self.partner_id.partner_id.name
+            elif self.partner_id.partner_id.x_first_name and self.partner_id.partner_id.x_first_lastname:
+                credentials_contact_name = self.partner_id.partner_id.x_first_name + " " + self.partner_id.partner_id.x_first_lastname
+            
             body_assignate = json.dumps({
                     "Nit": self.vat,
-                    "Name": self.contact_name,
+                    "Name": credentials_contact_name,
                     "UserMail": self.contact_email,
                     "InitialDate": today_date.strftime('%Y-%m-%d'),
                     "EndDate": today_one_year_later.strftime('%Y-%m-%d'),
