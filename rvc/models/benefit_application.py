@@ -30,9 +30,9 @@ class BenefitApplication(models.Model):
                                     ('rejected', 'Rechazado'),
                                     ('cancel', 'Cancelado'),
                                     ('done', 'Entregado')], string='State', default='draft', readonly=True, track_visibility='onchange')
-    partner_id = fields.Many2one('rvc.beneficiary', string='Empresa Beneficiaria', track_visibility='onchange')
-    parent_id = fields.Many2one('rvc.sponsor', string='Empresa Patrocinadora', track_visibility='onchange')
-    product_id = fields.Many2one('product.rvc', string='Producto', track_visibility='onchange')
+    partner_id = fields.Many2one('rvc.beneficiary', string='Empresa Beneficiaria', track_visibility='onchange', ondelete='restrict')
+    parent_id = fields.Many2one('rvc.sponsor', string='Empresa Patrocinadora', track_visibility='onchange', ondelete='restrict')
+    product_id = fields.Many2one('product.rvc', string='Producto', track_visibility='onchange', ondelete='restrict')
     name = fields.Char(string='Name', track_visibility='onchange')
     codes_quantity = fields.Integer('Cantidad de Códigos', track_visibility='onchange')
     benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
@@ -44,7 +44,7 @@ class BenefitApplication(models.Model):
     notification_date = fields.Datetime(string='Fecha/Hora Notificación', track_visibility='onchange', readonly=True)
     rejection_date = fields.Datetime(string='Fecha/Hora Rechazo', track_visibility='onchange', readonly=True)
     gln = fields.Char('Código GLN', track_visibility='onchange')
-    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, track_visibility='onchange')
+    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, track_visibility='onchange', ondelete='restrict')
     contact_name = fields.Char('Nombre Contacto', related='partner_id.contact_name', track_visibility='onchange')
     contact_phone = fields.Char('Teléfono Contacto', related='partner_id.contact_phone', track_visibility='onchange')
     contact_email = fields.Char('Email Contacto', related='partner_id.contact_email', track_visibility='onchange')
