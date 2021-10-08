@@ -67,10 +67,6 @@ class BenefitApplication(models.Model):
                                     readonly=True,
                                     help="Este campo permite diferenciar las postulaciones RVC que provienen de Odoo, Tienda Virtual y ChatBot.")
 
-    _sql_constraints = [
-        ('benefits_partner_product_uniq', 'unique (partner_id, product_id)', '¡Error Guardando! La empresa seleccionada ya está aplicando para este beneficio.')
-    ]
-
     #se usa para ocultar los campos técnicos de los filtros y agrupaciones
     # @api.model
     # def fields_get(self, allfields=None, attributes=None):
