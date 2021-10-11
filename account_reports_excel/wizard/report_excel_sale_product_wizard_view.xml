@@ -14,7 +14,8 @@
                         <group>
                             <field name="all_company" />
                             <field name="company_id" attrs="{'invisible': [('all_company','=',True)]}"/>
-                            <field name="product_id" />
+                            <field name="product_id" attrs="{'invisible': [('by_product_company','=',True)]}" />
+                            <field name="by_product_company" />
                         </group>
                     </group>
                 </sheet>
