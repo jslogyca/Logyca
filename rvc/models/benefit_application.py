@@ -673,6 +673,16 @@ class BenefitApplication(models.Model):
                     'más de 30 días desde su notificación y no fue aceptado el beneficio.'))
 
     def attach_OM_2_partner(self, postulation_id):
+        """ Ajunta la Oferta Mercantil en el tercero(Compañía o individual) que la acepta.
+
+            :param (obj,int) postulation_id: ID de benefit.application para generar el reporte
+            :return: True o False si se pudo o no adjuntar la OM
+        """
+
+        # si viene de la API de Odoo entrará por aquí puesto que manda el id
+        # de la postulación más no el objeto.
+        if isinstance(postulation_id, int):
+            postulation_id = self.browse(postulation_id)
 
         pdf = self.env.ref('rvc.action_report_rvc').render_qweb_pdf(postulation_id.id)
         b64_pdf = base64.b64encode(pdf[0])
