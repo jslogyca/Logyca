@@ -58,7 +58,7 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join account_move i on i.id=l.move_id
                                     inner join res_company c on c.id=m.company_id
                                     inner join res_partner p on p.id=i.partner_id
-                                    where l.exclude_from_invoice_tab is False and i.date between %s and %s
+                                    where l.exclude_from_invoice_tab is False and i.date between %s and %s and i.state='posted'
                                     order by p.id, m.id''', 
                                     (date_from, date_to))
         
