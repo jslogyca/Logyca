@@ -669,7 +669,7 @@ class BenefitApplication(models.Model):
             
             for postulation_id in self:
                 postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
-                postulation_id.message_post(body=_('La postulación se marcó como rechazada dado que pasaron'\
+                postulation_id.message_post(body=_('La postulación se marcó como rechazada dado que pasaron '\
                     'más de 30 días desde su notificación y no fue aceptado el beneficio.'))
 
     def attach_OM_2_partner(self, postulation_id):
