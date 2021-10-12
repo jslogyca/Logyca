@@ -127,7 +127,9 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_total
-                                    END AS price_total
+                                    END AS price_total,
+                                    date_part('month',m.invoice_date)as mes_fact,
+                                    date_part('year',m.invoice_date)as year_fact
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
                                     inner join res_partner p on p.id=m.partner_id
@@ -221,7 +223,9 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_total
-                                    END AS price_total
+                                    END AS price_total,
+                                    date_part('month',m.invoice_date)as mes_fact,
+                                    date_part('year',m.invoice_date)as year_fact                                    
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
                                     inner join res_partner p on p.id=m.partner_id
@@ -321,7 +325,9 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_total
-                                    END AS price_total
+                                    END AS price_total,
+                                    date_part('month',m.invoice_date)as mes_fact,
+                                    date_part('year',m.invoice_date)as year_fact
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
                                     inner join res_partner p on p.id=m.partner_id
@@ -414,7 +420,9 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_total
-                                    END AS price_total
+                                    END AS price_total,
+                                    date_part('month',m.invoice_date)as mes_fact,
+                                    date_part('year',m.invoice_date)as year_fact
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
                                     inner join res_partner p on p.id=m.partner_id
@@ -502,6 +510,8 @@ class ReportExcelSaleProductWizard(models.TransientModel):
         ws.write(fila_title, 24, 'Neto', subtitle_head)
         ws.write(fila_title, 25, 'Impuesto', subtitle_head)        
         ws.write(fila_title, 26, 'Total', subtitle_head)
+        ws.write(fila_title, 27, 'Mes Fact', subtitle_head)
+        ws.write(fila_title, 28, 'Año Fact', subtitle_head)
 
         fila=10
         for x in value:
