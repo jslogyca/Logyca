@@ -45,8 +45,12 @@ class ReportIncomeReportWizard(models.TransientModel):
         value = []
         self._cr.execute(''' select p.name,
                                     i.name,
+                                    pt.name,
+                                    red.name,
                                     i.amount_untaxed, 
                                     to_char(i.date,'DD/MM/YYYY'),
+                                    date_part('month',i.date)as mes_fact,
+                                    date_part('year',i.date)as year_fact,
                                     c.name as company_id,
                                     up.name,
                                     team.name,
@@ -63,7 +67,10 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join res_partner p on p.id=i.partner_id
                                     inner join res_users u on u.id=i.invoice_user_id
                                     inner join res_partner up on up.id=u.partner_id
-                                    inner join crm_team team on team.id=i.team_id                                    
+                                    inner join crm_team team on team.id=i.team_id
+                                    inner join product_product pp ON pp.id = l.product_id
+                                    inner join product_template pt on pp.product_tmpl_id = pt.id
+                                    left join account_analytic_account red on red.id = i.analytic_account_id                                    
                                     where l.exclude_from_invoice_tab is False and i.date between %s and %s and i.state='posted'
                                     order by p.id, m.id''', 
                                     (date_from, date_to))
@@ -110,17 +117,21 @@ class ReportIncomeReportWizard(models.TransientModel):
         fila_title=9
         ws.write(fila_title, 0, 'Cliente', subtitle_head)
         ws.write(fila_title, 1, 'Factura', subtitle_head)
-        ws.write(fila_title, 2, 'Total Fact.', subtitle_head)
-        ws.write(fila_title, 3, 'Fecha de la factura', subtitle_head)
-        ws.write(fila_title, 4, 'Compañía', subtitle_head)
-        ws.write(fila_title, 5, 'Vendedor', subtitle_head)
-        ws.write(fila_title, 6, 'Equipo de Venta', subtitle_head)
-        ws.write(fila_title, 7, 'Diferido', subtitle_head)
-        ws.write(fila_title, 8, 'Total Dif.', subtitle_head)
-        ws.write(fila_title, 9, 'Fecha Dif', subtitle_head)
-        ws.write(fila_title, 10, 'Mes', subtitle_head)
-        ws.write(fila_title, 11, 'Año', subtitle_head)
-        ws.write(fila_title, 12, 'Estado Dif', subtitle_head)   
+        ws.write(fila_title, 2, 'Producto', subtitle_head)
+        ws.write(fila_title, 3, 'Red de Valor', subtitle_head)
+        ws.write(fila_title, 4, 'Total Fact.', subtitle_head)
+        ws.write(fila_title, 5, 'Fecha de la factura', subtitle_head)
+        ws.write(fila_title, 6, 'Mes Fact', subtitle_head)
+        ws.write(fila_title, 7, 'Año Fact', subtitle_head)
+        ws.write(fila_title, 8, 'Compañía', subtitle_head)
+        ws.write(fila_title, 9, 'Vendedor', subtitle_head)
+        ws.write(fila_title, 10, 'Equipo de Venta', subtitle_head)
+        ws.write(fila_title, 11, 'Diferido', subtitle_head)
+        ws.write(fila_title, 12, 'Total Dif.', subtitle_head)
+        ws.write(fila_title, 13, 'Fecha Dif', subtitle_head)
+        ws.write(fila_title, 14, 'Mes Dif', subtitle_head)
+        ws.write(fila_title, 15, 'Año Dif', subtitle_head)
+        ws.write(fila_title, 16, 'Estado Dif', subtitle_head)
 
         fila=10
         invoice = None
@@ -134,16 +145,37 @@ class ReportIncomeReportWizard(models.TransientModel):
                 ws.write(fila,4,x[4],title_head)
                 ws.write(fila,5,x[5],title_head)
                 ws.write(fila,6,x[6],title_head)
+                ws.write(fila,7,x[7],title_head)
+                ws.write(fila,8,x[8],title_head)
+                ws.write(fila,9,x[9],title_head)
+                ws.write(fila,10,x[10],title_head)
+                ws.write(fila,11,'No Aplica',title_head)
+                ws.write(fila,12,'No Aplica',title_head)
+                ws.write(fila,13,'No Aplica',title_head)
+                ws.write(fila,14,'No Aplica',title_head)
+                ws.write(fila,15,'No Aplica',title_head)
+                ws.write(fila,16,'No Aplica',title_head)
                 reg_initial = False
                 invoice = x[1]
                 fila+=1
             if invoice == x[1]:
+                ws.write(fila,0,x[0])
+                ws.write(fila,1,x[1])
+                ws.write(fila,2,x[2])
+                ws.write(fila,3,x[3])
+                ws.write(fila,4,x[4])
+                ws.write(fila,5,x[5])
+                ws.write(fila,6,x[6])
                 ws.write(fila,7,x[7])
                 ws.write(fila,8,x[8])
                 ws.write(fila,9,x[9])
                 ws.write(fila,10,x[10])
                 ws.write(fila,11,x[11])
                 ws.write(fila,12,x[12])
+                ws.write(fila,13,x[13])
+                ws.write(fila,14,x[14])
+                ws.write(fila,15,x[15])
+                ws.write(fila,16,x[16])
             else:
                 ws.write(fila,0,x[0],title_head)
                 ws.write(fila,1,x[1],title_head)
@@ -151,14 +183,35 @@ class ReportIncomeReportWizard(models.TransientModel):
                 ws.write(fila,3,x[3],title_head)
                 ws.write(fila,4,x[4],title_head)
                 ws.write(fila,5,x[5],title_head)
-                ws.write(fila,6,x[6],title_head)                
+                ws.write(fila,6,x[6],title_head)
+                ws.write(fila,7,x[7],title_head)
+                ws.write(fila,8,x[8],title_head)
+                ws.write(fila,9,x[9],title_head)
+                ws.write(fila,10,x[10],title_head)
+                ws.write(fila,11,'No Aplica',title_head)
+                ws.write(fila,12,'No Aplica',title_head)
+                ws.write(fila,13,'No Aplica',title_head)
+                ws.write(fila,14,'No Aplica',title_head)
+                ws.write(fila,15,'No Aplica',title_head)
+                ws.write(fila,16,'No Aplica',title_head)
                 fila+=1
+                ws.write(fila,0,x[0])
+                ws.write(fila,1,x[1])
+                ws.write(fila,2,x[2])
+                ws.write(fila,3,x[3])
+                ws.write(fila,4,x[4])
+                ws.write(fila,5,x[5])
+                ws.write(fila,6,x[6])
                 ws.write(fila,7,x[7])
                 ws.write(fila,8,x[8])
                 ws.write(fila,9,x[9])
                 ws.write(fila,10,x[10])
                 ws.write(fila,11,x[11])
                 ws.write(fila,12,x[12])
+                ws.write(fila,13,x[13])
+                ws.write(fila,14,x[14])
+                ws.write(fila,15,x[15])
+                ws.write(fila,16,x[16])                
             fila+=1
             invoice = x[1]
         try:
