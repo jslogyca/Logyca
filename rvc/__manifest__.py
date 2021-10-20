@@ -24,7 +24,7 @@
     'data': [
         'security/security.xml',
         'report/rvc_report.xml',
-        'data/notify_benefit_template.xml',
+        'data/notify_codes_benefit_template.xml',
         'data/welcome_kit_codes_benefit_template.xml',
         'data/logyca_contact_types_data.xml',
         'data/cron_send_welcome_kit.xml',
