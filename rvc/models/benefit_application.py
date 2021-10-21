@@ -217,13 +217,18 @@ class BenefitApplication(models.Model):
             if 'product_id' in vals:
                 product_id = self.env['product.rvc'].browse(int(vals['product_id']))
 
-                #validar si es empresa mipyme
+                #este método es generico y permite saber si es apto por tamaño de empresa
                 self._validate_company_size()
 
                 #validar si producto rvc es codigos
                 if product_id.code == '01':
                     # validar si tiene códigos comprados
                     self._validate_bought_products_create(beneficiary.partner_id.vat)
+
+                #validar si producto rvc es colabora
+                if product_id.code == '02':
+                    # validar si ya tiene colabora activo
+                    self._validate_has_colabora(beneficiary.partner_id.vat)
 
         return super(BenefitApplication, self).create(vals)
 
@@ -280,7 +285,6 @@ class BenefitApplication(models.Model):
                         if len(result) >= 1:
                             self.gln = result[0].get('id')
                             return True
-
             else:
                 raise ValidationError(\
                     _('No se ha podido validar el Código GLN de la empresa seleccionada.\
@@ -493,7 +497,7 @@ class BenefitApplication(models.Model):
             self.message_post(body=_('Los Códigos de Identificación no pudieron ser entregados al beneficiario. <strong>Error:</strong> %s' % str(response_assignate)))
             return False
 
-    def get_token_assign_credentials(self):
+    def get_token_colabora_api(self):
         
         if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_get_token = "http://logycassoapi.azurewebsites.net/api/Token/Authenticate"
@@ -519,7 +523,7 @@ class BenefitApplication(models.Model):
         return False
 
     def assign_credentials_for_codes(self):
-        bearer_token = self.get_token_assign_credentials()
+        bearer_token = self.get_token_colabora_api()
 
         if bearer_token or bearer_token[0]:
             today_date = datetime.now()
@@ -752,3 +756,39 @@ class BenefitApplication(models.Model):
 
     def get_odoo_url(self):
         return self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+
+    def _validate_has_colabora(self, vat):
+        """ Valida si la empresa ya tiene colabora.
+        En caso de que si, no es apto para ser beneficiario RVC.
+
+        :param vat es el número de identificación de la empresa
+        :return True si NO tiene colabora, False si tiene colabora
+        """
+
+        bearer_token = self.get_token_colabora_api()
+
+        if bearer_token or bearer_token[0]:
+
+            if self.get_odoo_url() == 'https://logyca.odoo.com':
+                url = "https://logycacolaboraapiv1.azurewebsites.net/api/Validity/ValidityCount?nit=%s" % (str(vat))
+            else:
+                url = "https://logycacolaboratestapi.azurewebsites.net/api/Validity/ValidityCount?nit=%s" % (str(vat))
+
+            headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
+
+            #Making http get request
+            response = requests.get(url, headers=headers, verify=True)
+
+            if response.status_code == 200:
+                result = response.json()
+                response.close()
+            else:
+                logging.debug(f" Error en _validate_has_colabora código: =====> {response.status_code}")
+
+            if result.get('dataError') == False:
+                 raise ValidationError(\
+                    _('¡Error de Validación! La empresa %s ya tiene Logyca/Colabora activo.') % str(vat))
+        else:
+            raise ValidationError(\
+                    _('¡Error de comunicación! Odoo no pudo comunicarse con Logyca/Colabora para verificar si la empresa ya tiene el servicio activo.'))
+        return True
