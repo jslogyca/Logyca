@@ -737,6 +737,10 @@ class BenefitApplication(models.Model):
             return True 
         return False
 
+    def calculate_end_date_colabora(self):
+        next_year = fields.Date.today() + relativedelta(years=1)
+        self.date_end = next_year
+
     def send_notification_benefit(self):
         for benefit_admon in self:
             partner=self.env['res.partner'].search([('id','=',benefit_admon.partner_id.partner_id.id)])

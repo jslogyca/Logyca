@@ -47,7 +47,13 @@ class RVCTemplateEmailWizard(models.TransientModel):
         if benefit_application:
             benefit_application.message_post(body=_(\
                     '%s <u><strong>ACEPTÓ</strong></u> el beneficio.' % str(benefit_application.partner_id.partner_id.name)))
-            benefit_application.attach_OM_2_partner(benefit_application)
+
+            if benefit_application.product_id.benefit_type == 'codigos':
+                benefit_application.attach_OM_2_partner(benefit_application)
+
+            if benefit_application.product_id.benefit_type == 'colabora':
+                benefit_application.calculate_end_date_colabora()
+
             benefit_application.write({'state': 'confirm', 'acceptance_date': datetime.now()})
         return {'type': 'ir.actions.act_window_close'}
 
