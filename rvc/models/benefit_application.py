@@ -185,7 +185,7 @@ class BenefitApplication(models.Model):
                         'domain': '[]'
                     }
                     self.write({'state': 'notified', 'notification_date': datetime.now()})
-            elif self.product_id.benefit_type == 'colabora':
+            elif self.product_id.benefit_type == 'colabora' and self._validate_colabora_level():
                 if benefit_application.state in ('draft', 'notified'):
                     view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id,
                     return {
@@ -216,6 +216,9 @@ class BenefitApplication(models.Model):
 
             if 'product_id' in vals:
                 product_id = self.env['product.rvc'].browse(int(vals['product_id']))
+
+                #validar si es empresa mipyme
+                self._validate_company_size()
 
                 #validar si producto rvc es codigos
                 if product_id.code == '01':
@@ -363,7 +366,28 @@ class BenefitApplication(models.Model):
         for rec in self:
             if rec.codes_quantity == 0 and self.product_id.benefit_type == 'codigos':
                 raise ValidationError(\
-                    _('Por favor indique la -Cantidad de Códigos- que se entregará a la empresa beneficiaria.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
+                    _('Por favor indique la Cantidad de Códigos que se entregará a la empresa beneficiaria.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
+        return True
+
+    def _validate_colabora_level(self):
+        for rec in self:
+            if not rec.colabora_level  and self.product_id.benefit_type == 'colabora':
+                raise ValidationError(\
+                    _('Por favor indique el Nivel de LOGYCA/COLABORA que desea activar para la empresa beneficiaria.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
+        return True
+
+    def _validate_company_size(self):
+        for rec in self:
+
+            #validar que para D.I sean mipymes
+            if rec.partner_id.partner_id.x_company_size and rec.partner_id.partner_id.x_company_size == '4' and self.product_id.benefit_type == 'codigos':
+                raise ValidationError(\
+                    _('¡Error de Validación! La empresa es grande.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
+
+            #validar que para colabora sean mypes
+            if rec.partner_id.partner_id.x_company_size and rec.partner_id.partner_id.x_company_size in ['5','6'] and self.product_id.benefit_type == 'colabora':
+                raise ValidationError(\
+                    _('¡Error de Validación! La empresa NO es micro o pequeña.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
         return True
 
     def assignate_gln_code(self):
