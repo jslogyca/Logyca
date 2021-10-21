@@ -66,16 +66,22 @@ class RVCTemplateEmailWizard(models.TransientModel):
             partner=self.env['res.partner'].search([('id','=',benefit_application.partner_id.partner_id.id)])
             if partner.email:
                 access_link = partner._notify_get_action_link('view')
-                template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+
+                if benefit_application.product_id.benefit_type == 'codigos':
+                    template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                elif benefit_application.product_id.benefit_type == 'colabora':
+                    template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+
                 template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
 
                 if not benefit_application.gln:
                     # si no tiene GLN, asignamos uno.
                     benefit_application.assignate_gln_code()
 
-                # Asignar beneficio de códigos de identificación
-                if benefit_application.assign_identification_codes():
-                    benefit_application.assign_credentials_for_codes()
+                if benefit_application.product_id.benefit_type == 'codigos':
+                    # Asignar beneficio de códigos de identificación
+                    if benefit_application.assign_identification_codes():
+                        benefit_application.assign_credentials_for_codes()
 
                 # Actualizar Contacto y Empresa
                 benefit_application.update_contact(benefit_application.partner_id)

@@ -27,6 +27,7 @@
         'data/notify_codes_benefit_template.xml',
         'data/notify_colabora_benefit_template.xml',
         'data/welcome_kit_codes_benefit_template.xml',
+        'data/welcome_kit_colabora_benefit_template.xml',
         'data/logyca_contact_types_data.xml',
         'data/cron_send_welcome_kit.xml',
         'data/cron_mark_benefit_as_rejected.xml',

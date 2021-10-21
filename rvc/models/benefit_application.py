@@ -678,16 +678,22 @@ class BenefitApplication(models.Model):
                 if counter < 30:
                     if postulation_id.partner_id.contact_email:
                         access_link = postulation_id.partner_id.partner_id._notify_get_action_link('view')
-                        template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+
+                        if postulation_id.product_id.benefit_type == 'codigos':
+                            template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                        elif postulation_id.product_id.benefit_type == 'colabora':
+                            template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+
                         template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
 
                         if not postulation_id.gln:
                             # si no tiene GLN, asignamos uno.
                             postulation_id.assignate_gln_code()
 
-                        # Asignar beneficio de códigos de identificación
-                        if postulation_id.assign_identification_codes():
-                            postulation_id.assign_credentials_for_codes()
+                        if postulation_id.product_id.benefit_type == 'codigos':
+                            # Asignar beneficio de códigos de identificación
+                            if postulation_id.assign_identification_codes():
+                                postulation_id.assign_credentials_for_codes()
 
                         # Actualizar Contacto y Empresa
                         self.update_contact(postulation_id.partner_id)
