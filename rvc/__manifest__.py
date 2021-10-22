@@ -45,7 +45,8 @@
         'views/product_rvc_view.xml',
         'views/benefit_application_view.xml',
         'views/report_rvc_templates.xml',
-        'views/report_rvc_bienv_templates.xml',
+        'views/report_rvc_bienv_codes_template.xml',
+        'views/report_rvc_bienv_colabora_template.xml',
         'views/accept_benefit_template.xml'
     ],
     'qweb': [
