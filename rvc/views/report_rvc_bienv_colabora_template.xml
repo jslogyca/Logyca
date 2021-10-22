@@ -6,6 +6,7 @@
                     <t t-set="o" t-value="o.with_context(lang=o.partner_id.partner_id.lang or o.env.lang)"/>
                     <style>
                       p{
+                        font-size: 10pt;
                         text-align: justify;
                         text-justify: inter-word;
                       }
@@ -15,16 +16,16 @@
                     </div>
                     <div class="page">
                         <div class="content">
-                            <p align="left"> Bogotá D.C., <span t-esc="o.today_date_spanish()"/></p><br/><br/>
+                            <p align="left"> Bogotá D.C., <span t-esc="o.today_date_spanish()"/></p>
                             <p>Señores<br/>
                             <t t-if="o.partner_id">
                                 <span t-field="o.partner_id.partner_id.name"/>
                             </t><br/>
                             <t t-if="o.partner_id">
                                 <span t-field="o.partner_id.partner_id.vat"/>
-                            </t></p><br/>
+                            </t></p>
                             <p>Raciban un cordial saludo.</p><br/>
-                            <p>Desde el año 2015, LOGYCA dio inicio al programa de <strong>Redes de Valor Colaborativas – RVC</strong>, iniciativa de 
+                            <p>Desde el año 2015, LOGYCA dio inicio al programa de <strong>Redes de Valor Colaborativas - RVC</strong>, iniciativa de 
                                 fortalecimiento empresarial liderada por nuestros miembros, que busca mejorar la eficiencia y competitividad 
                                 sostenible de las <strong>micro y pequeñas empresas.</strong></p>
                             <p>Dicho esfuerzo nos ha permitido avanzar en el propósito de potenciar la competitividad de este segmento de empresas, 
@@ -47,8 +48,8 @@
                             <p>En caso de que requiera más información o tenga alguna pregunta no dude en contactarnos.<br/><br/>Atentamente,</p><br/>
                             <p style='font-weight: bold; text-align: left'>
                                 <td><img src="https://saintegracionesvtex.blob.core.windows.net/mailimages/RvcSoluciona/Leonel.png"
-                                        width="200" height="150" alt="" /><br/></td>
-                                _________________________________________ <br/>Leonel pava <br/>Director LOGYCA / ASOCIACIÓN
+                                        width="150" height="100" alt="" /><br/></td>
+                                ______________________ <br/><p>Leonel Pava</p><p>Director LOGYCA / ASOCIACIÓN</p>
                             </p>
                         </div>
                     </div>
