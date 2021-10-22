@@ -185,6 +185,8 @@ class BenefitApplication(models.Model):
                         'domain': '[]'
                     }
                     self.write({'state': 'notified', 'notification_date': datetime.now()})
+            #Antes de notificar al beneficiario validamos si el beneficio es colabora
+            # y si el nivel de colabora está entre 1 y 10
             elif self.product_id.benefit_type == 'colabora' and self._validate_colabora_level():
                 if benefit_application.state in ('draft', 'notified'):
                     view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id,
@@ -629,6 +631,22 @@ class BenefitApplication(models.Model):
                                         (True, company_id.parent_id.partner_id.id, company_id.partner_id.partner_id.id))
         return True
 
+    def is_99_anios(self, partner_id):
+        """ Comprueba si la empresa tiene vinculación 99 años o no
+
+        param: partner_id, es el tercero en Odoo
+        return: True o False, verdadero si tiene la vinculación 99 años, Falso si no. 
+        """
+
+        if partner_id.x_active_vinculation == False:
+            return False
+        else:
+            if partner_id.x_type_vinculation:
+                for vinculation in partner_id.x_type_vinculation:
+                    if vinculation.code == '10':
+                        return True
+        return False
+
     def add_vinculation_partner(self):
         for record in self:
             try:
@@ -645,7 +663,6 @@ class BenefitApplication(models.Model):
                 else:
                     # si tiene al menos un tipo de vinculacion entonces revisamos cuáles son
                     if partner_id.x_type_vinculation:
-                        vinculated = True
                         for vinculation in partner_id.x_type_vinculation:
                             # tiene la vinculación 'no tiene vinculacion' o tiene la '99 anos'
                             if vinculation.code in ('12', '10'):
