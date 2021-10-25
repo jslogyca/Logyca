@@ -247,7 +247,7 @@ class RVCImportFileWizard(models.TransientModel):
                                                         'parent_id': sponsored_id.id,
                                                         'product_id': product_id.id,
                                                         'sub_product_ids': sub_product_id[0],
-                                                        'date_end': '2022-01-31'})
+                                                        'end_date_colabora': '2022-01-31'})
                     cre.append(benefit_application.id)
                 else:
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo

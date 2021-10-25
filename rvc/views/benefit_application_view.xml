@@ -31,7 +31,7 @@
 							<field name="benefit_type" invisible="1"/>						
 							<field name="codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
 							<field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
-							<field name="date_end" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
+							<field name="end_date_colabora" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
 							<field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos'))], 'readonly': [('state','=','done')]}" />
 						</group>
 					</group>
@@ -41,7 +41,7 @@
                             <field name="id" invisible="1"/>
 						</group>
 						<group string="Otra Información">
-                            <field name="historical_record"/>
+                            <field name="historical_record" readonly="1"/>
 							<field name="origin"/>
 						</group>
 					</group>

@@ -39,7 +39,7 @@ class BenefitApplication(models.Model):
                                     ('colabora', 'Colabora'),
                                     ('analitica', 'Analítica')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
     colabora_level = fields.Char(string='Nivel', track_visibility="onchange")
-    date_end = fields.Date(string='Date End', track_visibility='onchange')
+    end_date_colabora = fields.Date(string='Date End', track_visibility='onchange')
     acceptance_date = fields.Datetime(string='Fecha/Hora Aceptación', track_visibility='onchange', readonly=True)
     notification_date = fields.Datetime(string='Fecha/Hora Notificación', track_visibility='onchange', readonly=True)
     rejection_date = fields.Datetime(string='Fecha/Hora Rechazo', track_visibility='onchange', readonly=True)
@@ -766,7 +766,7 @@ class BenefitApplication(models.Model):
 
     def calculate_end_date_colabora(self):
         next_year = fields.Date.today() + relativedelta(years=1)
-        self.date_end = next_year
+        self.end_date_colabora = next_year
 
     def send_notification_benefit(self):
         for benefit_admon in self:
