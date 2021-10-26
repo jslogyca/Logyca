@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
-from datetime import datetime, timedelta
+from datetime import datetime, date
+from dateutil.relativedelta import relativedelta
 import xlwt
 import base64
 import io
@@ -247,7 +248,7 @@ class RVCImportFileWizard(models.TransientModel):
                                                         'parent_id': sponsored_id.id,
                                                         'product_id': product_id.id,
                                                         'sub_product_ids': sub_product_id[0],
-                                                        'end_date_colabora': '2022-01-31'})
+                                                        'end_date_colabora': (date.today() + relativedelta(years=1))})
                     cre.append(benefit_application.id)
                 else:
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
