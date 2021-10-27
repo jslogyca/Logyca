@@ -95,6 +95,8 @@
                     <filter string="Estado" name="state" context="{'group_by':'state'}"/>
                     <filter string="Beneficio" name="benefit" context="{'group_by':'product_id','residual_visible':True}"/>
                     <filter string="Halonadora" name="sponsor" context="{'group_by':'parent_id','residual_visible':True}"/>
+                    <filter string="Empresa Beneficiaria" name="beneficiary" context="{'group_by':'partner_id'}"/>
+					<filter string="Origen" name="Origen" context="{'group_by':'origin'}"/>
                 </group>
             </search>
         </field>

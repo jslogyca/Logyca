@@ -117,12 +117,12 @@ class BenefitApplication(models.Model):
                 }
                 self.write({'state': 'confirm'})
 
-
     def action_done(self):
         for benefit_application in self:
             if benefit_application.state in ('confirm'):
-                # validamos que no hayan productos comprados disponibles
+
                 if self.product_id.benefit_type == 'codigos':
+                    # validamos que no hayan productos comprados disponibles
                     if self._validate_bought_products():
                         view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
                         return {
@@ -239,7 +239,7 @@ class BenefitApplication(models.Model):
         self._validate_gln_only_numbers()
         self._validate_gln()
 
-        if 'state' in vals and vals['state'] != 'done':
+        if 'state' in vals and vals['state'] in ('done', 'cancel'):
             self._validate_bought_products()
         return res
 
@@ -290,7 +290,7 @@ class BenefitApplication(models.Model):
             else:
                 raise ValidationError(\
                     _('No se ha podido validar el Código GLN de la empresa seleccionada.\
-                       Inténtelo nuevamente o comuníquese con soporte. <strong>Error:</strong> %s' % str(response)))
+                       Inténtelo nuevamente o comuníquese con soporte. Error: %s' % str(response)))
 
             #caso 3: usuario ingresa gln pero es incorrecto y se encuentra uno válido.
             if self.gln and gln_from_user_found == False and available_gln_codes != "No codes" and qty_codes_found == 1:
@@ -339,7 +339,7 @@ class BenefitApplication(models.Model):
             else:
                 raise ValidationError(\
                         _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
-                            Inténtelo nuevamente o comuníquese con soporte. <strong>Error:</strong> %s' % (str(response))))
+                            Inténtelo nuevamente o comuníquese con soporte. Error: %s' % (str(response))))
             return True
 
     # validacion para el create, ya que no tenemos self entonces en esta funcion no se usa self.
@@ -365,7 +365,7 @@ class BenefitApplication(models.Model):
         else:
             raise ValidationError(\
                     _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
-                        Inténtelo nuevamente o comuníquese con soporte. <strong>Error:</strong> %s' % (str(response))))
+                        Inténtelo nuevamente o comuníquese con soporte. Error: %s' % (str(response))))
         return True
 
     def _validate_qty_codes(self):
@@ -524,7 +524,7 @@ class BenefitApplication(models.Model):
 
         return False
 
-    def assign_credentials_for_codes(self):
+    def assign_credentials_colabora(self):
         bearer_token = self.get_token_colabora_api()
 
         if bearer_token or bearer_token[0]:
@@ -579,18 +579,91 @@ class BenefitApplication(models.Model):
                     self.message_post(body=_(\
                         'No pudieron asignarse las credenciales para acceder a la administración de códigos.'\
                             '\n<strong>Error:</strong> %s' % str(error_message)))
+                    return False
                 else:
                     self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
                     return True
             else:
                 #TODO: logging
-                logging.exception("====> assign_credentials_for_codes =>" + str(response_assignate))
-                logging.exception("====> assign_credentials_for_codes =>" + str(response_assignate.text))
+                logging.exception("====> assign_credentials_colabora =>" + str(response_assignate))
+                logging.exception("====> assign_credentials_colabora =>" + str(response_assignate.text))
                 self.message_post(body=_(\
                         'No pudieron asignarse las credenciales. <strong>Error:</strong> %s' % str(response_assignate)))
                 return False
         else:
             self.message_post(body=_("No pudo obtenerse el token para realizar la asignación de credenciales en Colabora."\
+                                     "Inténtelo nuevamente o comuníquese con soporte."))
+            return False
+
+    def assign_colabora(self):
+        bearer_token = self.get_token_colabora_api()
+
+        if bearer_token or bearer_token[0]:
+            today_date = datetime.now()
+            today_one_year_later = today_date + relativedelta(years=1)
+
+            if self.get_odoo_url() == 'https://logyca.odoo.com':
+                url_assignate= "https://logycacolaboraapiv1.azurewebsites.net/api/Company/AddCompanyEcommerce"
+            else:
+                url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
+
+            #validando el nombre de contacto para asignar credenciales
+            # si no tiene contact_name le ponemos el nombre de la empresa
+            credentials_contact_name = ""
+            if self.contact_name:
+                credentials_contact_name = self.contact_name
+            elif self.partner_id.partner_id.name:
+                credentials_contact_name = self.partner_id.partner_id.name
+            elif self.partner_id.partner_id.x_first_name and self.partner_id.partner_id.x_first_lastname:
+                credentials_contact_name = self.partner_id.partner_id.x_first_name + " " + self.partner_id.partner_id.x_first_lastname
+
+            body_assignate = json.dumps({
+                    "Nit": self.vat,
+                    "Name": credentials_contact_name,
+                    "UserMail": self.contact_email,
+                    "InitialDate": today_date.strftime('%Y-%m-%d'),
+                    "EndDate": today_one_year_later.strftime('%Y-%m-%d'),
+                    "level": int(self.colabora_level),
+                    "TypeService": 2,
+                    "NumberOverConsumption": 0,
+                    "IsOverconsumption": False
+                })
+            headers_assignate = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
+
+            #Making http post request
+            response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
+
+            logging.info("====> response_assignate_colabora =>" + str(response_assignate))
+
+            if response_assignate.status_code == 200:
+                #TODO: logging
+                result = response_assignate.json()
+                response_assignate.close()
+
+                #TODO: se requiere que la API de Colabora nos devuelva dataError=False cuando sea exitosa la asignacion de colabora
+                #la condición está al revés, es decir, se espera que en el caso ideal devuelva dataError=True. 
+                if result.get('dataError') == False:
+                    #TODO: logging
+                    error_message = result.get('apiException').get('message')
+                    if not error_message:
+                        error_message = result.get('resultMessage')
+                    self.message_post(body=_(\
+                        'No pudo activarse colabora.\n<strong>Error:</strong> %s' % str(error_message)))
+                    return False
+
+                #error al asignar colabora
+                else:
+                    self.message_post(body=_('Se ha <strong>activado</strong> Colabora <strong>nivel ' + str(self.colabora_level) + '</strong>'))
+                    return True
+            else:
+                #TODO: logging
+                logging.exception("====> assign_colabora =>" + str(response_assignate))
+                logging.exception("====> assign_colabora =>" + str(response_assignate.text))
+                self.message_post(body=_(\
+                        'No pudo activarse colabora.\n<strong>Error:</strong> %s' % str(response_assignate)))
+                return False
+        else:
+            self.message_post(body=_("No pudo obtenerse el token para realizar la activación de Colabora."\
                                      "Inténtelo nuevamente o comuníquese con soporte."))
             return False
 
@@ -683,8 +756,9 @@ class BenefitApplication(models.Model):
 
 
     def _cron_send_welcome_kit(self):
-        logging.warning("==> Iniciando cron de enviar kits de bienvenida ...")
+        """  Acción planificada que envía kits de bienvenida a las postulaciones Aceptadas. """
 
+        logging.warning("==> Iniciando cron de enviar kits de bienvenida ...")
         if not self:
             counter = 0
             self = self.search([('state', '=', 'confirm')])
@@ -710,7 +784,12 @@ class BenefitApplication(models.Model):
                         if postulation_id.product_id.benefit_type == 'codigos':
                             # Asignar beneficio de códigos de identificación
                             if postulation_id.assign_identification_codes():
-                                postulation_id.assign_credentials_for_codes()
+                                postulation_id.assign_credentials_colabora()
+
+                        elif postulation_id.product_id.benefit_type == 'colabora':
+                            # Activar colabora
+                            if postulation_id.assign_colabora():
+                                postulation_id.assign_credentials_colabora()
 
                         # Actualizar Contacto y Empresa
                         self.update_contact(postulation_id.partner_id)

@@ -90,7 +90,12 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 if benefit_application.product_id.benefit_type == 'codigos':
                     # Asignar beneficio de códigos de identificación
                     if benefit_application.assign_identification_codes():
-                        benefit_application.assign_credentials_for_codes()
+                        benefit_application.assign_credentials_colabora()
+
+                elif benefit_application.product_id.benefit_type == 'colabora':
+                    # Activar colabora
+                    if benefit_application.assign_colabora():
+                        benefit_application.assign_credentials_colabora()
 
                 # Actualizar Contacto y Empresa
                 benefit_application.update_contact(benefit_application.partner_id)
