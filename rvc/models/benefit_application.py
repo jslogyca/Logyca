@@ -305,6 +305,7 @@ class BenefitApplication(models.Model):
             #caso 8: no tiene gln registrado. Registrando uno para la empresa seleccionada.
             elif not self.gln and gln_from_user_found == False and available_gln_codes == "No codes":
                 logging.info(" ==> Se asignará GLN con el beneficio <===")
+                return False
 
             #caso 9: usuario ingresa GLN pero es incorrecto y no tiene GLN's.
             elif self.gln and gln_from_user_found == False and available_gln_codes == "No codes":
@@ -703,22 +704,6 @@ class BenefitApplication(models.Model):
         self._cr.execute(''' UPDATE res_partner SET x_sponsored=%s, x_flagging_company=%s WHERE id=%s ''',
                                         (True, company_id.parent_id.partner_id.id, company_id.partner_id.partner_id.id))
         return True
-
-    def is_99_anios(self, partner_id):
-        """ Comprueba si la empresa tiene vinculación 99 años o no
-
-        param: partner_id, es el tercero en Odoo
-        return: True o False, verdadero si tiene la vinculación 99 años, Falso si no. 
-        """
-
-        if partner_id.x_active_vinculation == False:
-            return False
-        else:
-            if partner_id.x_type_vinculation:
-                for vinculation in partner_id.x_type_vinculation:
-                    if vinculation.code == '10':
-                        return True
-        return False
 
     def add_vinculation_partner(self):
         for record in self:
