@@ -704,7 +704,8 @@ class BenefitApplication(models.Model):
             if partner and benefit_admon.partner_id.contact_email:
                 access_link = partner._notify_get_action_link('view')
                 template = self.env.ref('rvc.mail_template_deactivated_partner_benef')
-                template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False)
+                subject = "Beneficio Derechos de Identificación"
+                template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False, email_values={'subject': subject})
                 benefit_admon.write({'state': 'notified', 'notification_date': datetime.now()})
 
     def get_odoo_url(self):
