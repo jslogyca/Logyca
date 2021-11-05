@@ -98,7 +98,7 @@ class ResPartner(models.Model):
                                         ('5', 'Desvinculado por mal uso del sistema'),
                                         ('6', 'Desvinculado por migración 2020')
                                     ], string='Desvinculado por', track_visibility='onchange')
-    x_reason_desvinculation_text = fields.Text(string='Motivo desvinculación') 
+    x_reason_desvinculation_text = fields.Text(string='Observaciones desvinculación') 
     x_additional_codes  = fields.Boolean(string='¿Maneja Códigos Adicionales?', track_visibility='onchange')
     x_codes_gtin = fields.Boolean(string='¿Maneja Códigos GTIN-8?', track_visibility='onchange')
 
