@@ -224,6 +224,10 @@ class BenefitApplication(models.Model):
 
                 #validar si producto rvc es codigos
                 if product_id.code == '01':
+                    
+                    # validar si es miembro o cliente
+                    self._validate_member_or_client(beneficiary.partner_id)
+                    
                     # validar si tiene códigos comprados
                     self._validate_bought_products_create(beneficiary.partner_id.vat)
 
@@ -247,6 +251,16 @@ class BenefitApplication(models.Model):
     def _validate_gln_only_numbers(self):
         if self.gln and not re.match(r'^[0-9]+$', str(self.gln)):
             raise ValidationError(_('Código GLN "%s" es inválido.\n\nLos códigos GLN solo están compuestos de números.' % str(self.gln)))
+        return True
+    
+    def _validate_member_or_client(self, partner_id):
+        # Validar que el tipo de vinculación de la empresa beneficiaria no sea miembro, ni cliente CE
+        if partner_id.x_type_vinculation:
+            for vinculation in partner_id.x_type_vinculation:
+                if vinculation.code in ('01', '02'):
+                    validation = '%s no aplica para el beneficio. Es miembro o cliente CE' %\
+                            (partner_id.vat + '-' + str(partner_id.name.strip()))
+                    raise ValidationError(str(validation))
         return True
 
     def _validate_gln(self):

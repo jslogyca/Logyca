@@ -80,10 +80,6 @@ class RVCBeneficiary(models.Model):
             if partner_id:
                 if partner_id.active == False:
                     raise ValidationError('¡Error de validación! La empresa NO está activa.')
-                if partner_id.x_type_vinculation:
-                    for vinculation in partner_id.x_type_vinculation:
-                        if vinculation.code == '01':
-                            raise ValidationError('¡Error de validación! La empresa es miembro.')
         return super(RVCBeneficiary, self).create(vals)
 
     def write(self, vals):
