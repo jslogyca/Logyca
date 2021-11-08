@@ -791,12 +791,12 @@ class BenefitApplication(models.Model):
                                 postulation_id.assign_credentials_colabora()
 
                         # Actualizar Contacto y Empresa
-                        self.update_contact(postulation_id.partner_id)
+                        postulation_id.update_contact(postulation_id.partner_id)
                         if postulation_id.parent_id:
-                            self.update_company(postulation_id)
+                            postulation_id.update_company(postulation_id)
 
                         # Agregar tipo de vinculacion al tercero
-                        self.add_vinculation_partner()
+                        postulation_id.add_vinculation_partner()
 
                         postulation_id.write({'state': 'done'})
                         counter += 1
