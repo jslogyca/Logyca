@@ -785,6 +785,9 @@ class BenefitApplication(models.Model):
                             if postulation_id.assign_identification_codes():
                                 postulation_id.assign_credentials_colabora()
 
+                            # Agregar tipo de vinculacion al tercero
+                            postulation_id.add_vinculation_partner()
+
                         elif postulation_id.product_id.benefit_type == 'colabora':
                             # Activar colabora
                             if postulation_id.assign_colabora():
@@ -794,9 +797,6 @@ class BenefitApplication(models.Model):
                         postulation_id.update_contact(postulation_id.partner_id)
                         if postulation_id.parent_id:
                             postulation_id.update_company(postulation_id)
-
-                        # Agregar tipo de vinculacion al tercero
-                        postulation_id.add_vinculation_partner()
 
                         postulation_id.write({'state': 'done'})
                         counter += 1
@@ -850,11 +850,20 @@ class BenefitApplication(models.Model):
         for benefit_admon in self:
             partner=self.env['res.partner'].search([('id','=',benefit_admon.partner_id.partner_id.id)])
             if partner and benefit_admon.partner_id.contact_email:
-                access_link = partner._notify_get_action_link('view')
-                subject = "Beneficio Derechos de Identificación"
-                template = self.env.ref('rvc.mail_template_deactivated_partner_benef')
-                template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False, email_values={'subject': subject})
-                benefit_admon.write({'state': 'notified', 'notification_date': datetime.now()})
+                # notificar Derechos de Identificación
+                if benefit_admon.product_id.code == '01':
+                    access_link = partner._notify_get_action_link('view')
+                    subject = "Beneficio Derechos de Identificación"
+                    template = self.env.ref('rvc.mail_template_notify_benefit_codes')
+                    template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False, email_values={'subject': subject})
+                    benefit_admon.write({'state': 'notified', 'notification_date': datetime.now()})
+                # notificar Logyca / Colabora
+                if benefit_admon.product_id.code == '02':
+                    access_link = partner._notify_get_action_link('view')
+                    subject = "Beneficio Plataforma LOGYCA / COLABORA"
+                    template = self.env.ref('rvc.mail_template_notify_benefit_colabora')
+                    template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False, email_values={'subject': subject})
+                    benefit_admon.write({'state': 'notified', 'notification_date': datetime.now()})
 
     def get_odoo_url(self):
         return self.env['ir.config_parameter'].sudo().get_param('web.base.url')

@@ -92,6 +92,9 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     if benefit_application.assign_identification_codes():
                         benefit_application.assign_credentials_colabora()
 
+                    # Agregar tipo de vinculacion al tercero
+                    benefit_application.add_vinculation_partner()
+
                 elif benefit_application.product_id.benefit_type == 'colabora':
                     # Activar colabora
                     if benefit_application.assign_colabora():
@@ -102,8 +105,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 if benefit_application.parent_id:
                     benefit_application.update_company(benefit_application)
 
-                # Agregar tipo de vinculacion al tercero
-                benefit_application.add_vinculation_partner()
+
 
                 benefit_application.write({'state': 'done'})
             else:
