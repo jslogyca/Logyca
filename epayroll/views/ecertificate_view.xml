@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="ecertificate_view_form" model="ir.ui.view">
+		<field name="name">ecertificate.form</field>
+		<field name="model">ecertificate</field>
+		<field name="arch" type="xml">
+			<form string="Certificates">
+				<header>
+					<button string="Valid" name="action_valid_cert" type="object" states="draft" class="oe_highlight"/>
+					<button string="Draft" name="action_draft_cert" type="object" states="valid" class="oe_highlight"/>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet>
+					<div class="oe_title" name="title" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}">
+						<label for="name" class="oe_edit_only"/>
+						<h1>
+							<field name="name" placeholder="Certificate name" attrs="{'readonly':[('state','!=','draft')]}"/>
+						</h1>
+					</div>
+					<group>
+						<group>
+							<field name="cert_file" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+							<field name="pem_file" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+							<field name="cert_pass" password="True" required="1" attrs="{'readonly':[('state','!=','draft')]}" />
+							<field name="subject_c" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+							<field name="subject_title" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+							<field name="subject_common_name" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+							<field name="issuer_serial_number" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+							<field name="issuer_email_address" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+						</group>
+						<group>
+							<field name="date_start" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+							<field name="date_end" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}"/>
+							<field name="company_id" groups="base.group_multi_company"/>
+							<field name="issuer_organization" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+							<field name="subject_serial_number" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+							<field name="subject_email_address" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+							<field name="issuer_country" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+							<field name="cert_serial_number" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+							<field name="cert_signature_algor" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="ecertificate_view_tree" model="ir.ui.view">
+		<field name="name">ecertificate.tree</field>
+		<field name="model">ecertificate</field>
+		<field name="arch" type="xml">
+			<tree string="Certificates" >
+				<field name="name"/>
+				<field name="date_start"/>
+				<field name="date_end"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="ecertificate_view_filter" model="ir.ui.view">
+		<field name="name">ecertificate.filter</field>
+		<field name="model">ecertificate</field>
+		<field name="arch" type="xml">
+			<search string="Search Certificate">
+				<field name="name" string="Name" filter_domain="['|', ('name','ilike',self), ('description','ilike',self)]"/>
+				<separator/>
+				<field name="description" />
+		   </search>
+		</field>
+	</record>
+
+	<record id="action_ecertificate" model="ir.actions.act_window">
+		<field name="name">Certificates</field>
+		<field name="res_model">ecertificate</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem
+		id="account_menu_ecertificate"
+		name="Certificates"
+		action="action_ecertificate"
+		parent="epayroll.hr_menu_epayroll_setting"
+		sequence="2"
+		groups="epayroll.group_epayslip_manager"/>
+
+</odoo>

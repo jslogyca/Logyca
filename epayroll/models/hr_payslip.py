@@ -17,3 +17,4 @@ class HrPayslip(models.Model):
     pay_method_epayroll_id = fields.Many2one('payment.method.epayroll', string='Medios de Pago')
     pay_form_epayroll_id = fields.Many2one('payment.form.epayroll', string='Medios de Pago')
     type_epayroll_id = fields.Many2one('type.epayroll', string='Tipo')
+    epayslip_bach_id = fields.Many2one('epayslip.bach', string='EPayslip Bach')

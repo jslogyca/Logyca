@@ -1,0 +1,1473 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* epayroll
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0+e-20191227\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-11-09 03:11+0000\n"
+"PO-Revision-Date: 2021-11-09 03:11+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_needaction
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_needaction
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_needaction
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__connection_server__state__active
+#: model_terms:ir.ui.view,arch_db:epayroll.connection_server_view_form
+msgid "Active"
+msgstr "Activo"
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+msgid "Add an internal note..."
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__file_zip
+msgid "Archivo ZIP"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_attachment_count
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_attachment_count
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_attachment_count
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line__bach_run_id
+msgid "Bach Run"
+msgstr "Procesamiento Nómina Electrónica"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__code_cune
+msgid "CUNE"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__epayslip_bach__state__cancel
+#: model:ir.model.fields.selection,name:epayroll.selection__epayslip_bach_run__state__cancel
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_view_search
+msgid "Cancel"
+msgstr "Cancelado"
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__epayslip_bach__state__cancel_nota
+msgid "Cancel Nota"
+msgstr "Nota Ajuste"
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_epayslips_by_employees_form
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_epayslips_note_wizard_form
+msgid "Cancelar"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_contract__periodo_nomina__3
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_payroll_structure_type__period_epayroll__3
+msgid "Catorcenal"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__certificate_id
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__cert
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__certificate
+msgid "Certificate"
+msgstr "Certificado"
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.ecertificate_view_form
+msgid "Certificate name"
+msgstr "Nombre"
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_ecertificate
+#: model:ir.ui.menu,name:epayroll.account_menu_ecertificate
+#: model_terms:ir.ui.view,arch_db:epayroll.ecertificate_view_form
+#: model_terms:ir.ui.view,arch_db:epayroll.ecertificate_view_tree
+msgid "Certificates"
+msgstr "Cerificados"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_contract_etype__code
+#: model:ir.model.fields,field_description:epayroll.field_hr_sub_type_job__code
+#: model:ir.model.fields,field_description:epayroll.field_hr_type_ejob__code
+#: model:ir.model.fields,field_description:epayroll.field_payment_form_epayroll__code
+#: model:ir.model.fields,field_description:epayroll.field_payment_method_epayroll__code
+#: model:ir.model.fields,field_description:epayroll.field_type_epayroll__code
+#: model:ir.model.fields,field_description:epayroll.field_type_note_epayroll__code
+msgid "Code"
+msgstr "Código"
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__company_id
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__company_id
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__company_id
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_res_company__connection_payslip_id
+msgid "Connection Epayslip"
+msgstr "Conexión DIAN Nómina"
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_connection_server
+#: model:ir.model,name:epayroll.model_connection_server
+#: model:ir.ui.menu,name:epayroll.account_menu_einvoice_connect_server
+#: model_terms:ir.ui.view,arch_db:epayroll.connection_server_view_form
+#: model_terms:ir.ui.view,arch_db:epayroll.connection_server_view_tree
+msgid "Connection Server"
+msgstr "Conexión DIAN"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__connection_url
+msgid "Connection URL"
+msgstr "URL Conexión"
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__xml_document
+msgid "Contenido XML"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_hr_contract_type
+msgid "Contract Type"
+msgstr "Tipo Contrato"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_dian_epayslip_bug__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_hr_contract_etype__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_by_employees__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_note_wizard__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_hr_sub_type_job__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_hr_type_ejob__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_payment_form_epayroll__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_payment_method_epayroll__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_type_epayroll__create_uid
+#: model:ir.model.fields,field_description:epayroll.field_type_note_epayroll__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__create_date
+#: model:ir.model.fields,field_description:epayroll.field_dian_epayslip_bug__create_date
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__create_date
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__create_date
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__create_date
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line__create_date
+#: model:ir.model.fields,field_description:epayroll.field_hr_contract_etype__create_date
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__create_date
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_by_employees__create_date
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_note_wizard__create_date
+#: model:ir.model.fields,field_description:epayroll.field_hr_sub_type_job__create_date
+#: model:ir.model.fields,field_description:epayroll.field_hr_type_ejob__create_date
+#: model:ir.model.fields,field_description:epayroll.field_payment_form_epayroll__create_date
+#: model:ir.model.fields,field_description:epayroll.field_payment_method_epayroll__create_date
+#: model:ir.model.fields,field_description:epayroll.field_type_epayroll__create_date
+#: model:ir.model.fields,field_description:epayroll.field_type_note_epayroll__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__type_epayroll__document_type__credit_note
+msgid "Credit Notes"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_dian_epayslip_bug__code
+msgid "Código"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__qr_payslip
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__qr_payslip_img
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach__qr_payslip
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach__qr_payslip_img
+msgid "Código QR"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__dian_xml_response
+msgid "DIAN Respuesta"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__date_generate
+msgid "Date Generate"
+msgstr "Fecha Generación"
+
+#. module: epayroll
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach__signingtime
+msgid "Date of Invoice with Time Zone"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__type_epayroll__document_type__debit_note
+msgid "Debit Notes"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_contract__periodo_nomina__2
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_payroll_structure_type__period_epayroll__2
+msgid "Decenal"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_electronictag_structure__type__deducciones
+msgid "Deducciones"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+msgid "Descargar XML"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_dian_epayslip_bug__description
+msgid "Descripción"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_electronictag_structure__type__devengados
+msgid "Devengados"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_dian_epayslip_bug
+msgid "Dian Epayslip Bug"
+msgstr "Errores DIAN"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__display_name
+#: model:ir.model.fields,field_description:epayroll.field_dian_epayslip_bug__display_name
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__display_name
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__display_name
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__display_name
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line__display_name
+#: model:ir.model.fields,field_description:epayroll.field_hr_contract_etype__display_name
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__display_name
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_by_employees__display_name
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_note_wizard__display_name
+#: model:ir.model.fields,field_description:epayroll.field_hr_sub_type_job__display_name
+#: model:ir.model.fields,field_description:epayroll.field_hr_type_ejob__display_name
+#: model:ir.model.fields,field_description:epayroll.field_payment_form_epayroll__display_name
+#: model:ir.model.fields,field_description:epayroll.field_payment_method_epayroll__display_name
+#: model:ir.model.fields,field_description:epayroll.field_type_epayroll__display_name
+#: model:ir.model.fields,field_description:epayroll.field_type_note_epayroll__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_type_epayroll__code_prefix_file
+msgid "Document Code Prefix"
+msgstr "Prefijo"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__document_type
+#: model:ir.model.fields,field_description:epayroll.field_type_epayroll__document_type
+msgid "Document Type"
+msgstr "Tipo Documento Electrónico"
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__type_epayroll__type__epayroll
+msgid "Documento Soporte de Pago de Nómina Electrónica"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__epayslip_bach__state__done
+#: model:ir.model.fields.selection,name:epayroll.selection__epayslip_bach_run__state__done
+msgid "Done"
+msgstr "Aceptada"
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__connection_server__state__draft
+#: model:ir.model.fields.selection,name:epayroll.selection__ecertificate__state__draft
+#: model:ir.model.fields.selection,name:epayroll.selection__epayslip_bach__state__draft
+#: model:ir.model.fields.selection,name:epayroll.selection__epayslip_bach_run__state__draft
+#: model_terms:ir.ui.view,arch_db:epayroll.connection_server_view_form
+#: model_terms:ir.ui.view,arch_db:epayroll.ecertificate_view_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_view_search
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_ecertificate
+msgid "ECertificate"
+msgstr "Certificado Electrónico"
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_salary_rule_form_epayroll
+msgid "EPayroll"
+msgstr "Nómina Electrónica"
+
+#. module: epayroll
+#: model:ir.ui.menu,name:epayroll.hr_menu_epayroll_setting
+#: model:ir.ui.menu,name:epayroll.menu_epayroll_setting
+#: model_terms:ir.ui.view,arch_db:epayroll.view_company_form_epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.view_employee_form_epayroll
+msgid "EPayslip"
+msgstr "Nómina Electrónica"
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_epayslip_bach
+#: model:ir.model.fields,field_description:epayroll.field_hr_payslip__epayslip_bach_id
+msgid "EPayslip Bach"
+msgstr "Nómina Electrónica"
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_epayslip_bach_run
+msgid "EPayslip Bach Run"
+msgstr "Procesamiento Nómina Electrónica"
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_epayslip_line
+#: model:ir.model,name:epayroll.model_epayslip_line
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_line_tree
+msgid "EPayslip Line"
+msgstr "Líneas Electrónicas"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_contract_type__etype_id
+msgid "ETipo"
+msgstr "Tipo"
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_line_view_search
+msgid "Electronic Tag"
+msgstr "Etiqueta Electrónica"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line__electronictag_id
+#: model:ir.model.fields,field_description:epayroll.field_hr_salary_rule__electronictag_id
+msgid "Electronic Tags"
+msgstr "Etiqueta Electrónica"
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_hr_electronictag_structure
+#: model:ir.model,name:epayroll.model_hr_electronictag_structure
+#: model:ir.ui.menu,name:epayroll.menu_hr_electronictag_structure
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_electronictag_structure_view_form
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_electronictag_structure_view_search
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_electronictag_structure_view_tree
+msgid "Electronic tag Structure"
+msgstr "Etiqueta Electrónica"
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_hr_employee
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_line_view_search
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_electronictag_structure_view_search
+msgid "Employee"
+msgstr "Empleado"
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_hr_contract
+msgid "Employee Contract"
+msgstr "Contrato de empleado"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_by_employees__employee_ids
+msgid "Employees"
+msgstr "Empleados"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__date_end
+msgid "End Date"
+msgstr "Fecha Final"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__issuer_name
+msgid "Ente emisor del certificado"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__dian_epayslip_bug__type__sent
+msgid "Envíado"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_line_view_search
+msgid "Epayslip"
+msgstr "Nómina Electrónica"
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_epayslip_bach
+#: model:ir.ui.menu,name:epayroll.hr_menu_epayslip_bach
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_tree
+msgid "Epayslip Bach"
+msgstr "Nómina Electrónica"
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_epayslip_bach_run
+#: model:ir.ui.menu,name:epayroll.hr_menu_epayslip_bach_run
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_tree
+msgid "Epayslip Bach Run"
+msgstr "Procesamiento Nómina Electrónica"
+
+#. module: epayroll
+#: model:ir.ui.menu,name:epayroll.hr_menu_epayslip_line
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+msgid "Epayslip Line"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__type_note_epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__type_note_paysip
+msgid "Epayslip Note Type"
+msgstr "Líneas Electrónicas"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__epayslip_origin
+msgid "Epayslip Origin"
+msgstr "Nómina Electrónica Origen"
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_line_view_search
+msgid "Epayslip Run"
+msgstr "Procesamiento Nómina Electrónica"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_dian_epayslip_bug__epayslip_bach_id
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__epayslip_bach_ids
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line__epayslip_bach_id
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_form
+msgid "Epayslip bach"
+msgstr "Nómina Electrónica"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__epayslip_bach_run_id
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_view_search
+msgid "Epayslip bach run"
+msgstr "Procesamiento Nómina Electrónica"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__epayslip_line_ids
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_line_view_search
+msgid "Epayslip line"
+msgstr "Líneas Electrónicas"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__error_ids
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+msgid "Errores"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__ecertificate__state__expired
+msgid "Expired"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__signingtime
+msgid "Fecha y hora firmado"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__pem_file
+msgid "File PEM"
+msgstr "Archivo PEM"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__finish_date
+msgid "Finish Date"
+msgstr "Fecha Final"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__finish_date
+msgid "Finish date"
+msgstr "Fecha Final"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_follower_ids
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_follower_ids
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_follower_ids
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_channel_ids
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_channel_ids
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_channel_ids
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_channel_ids
+msgid "Followers (Channels)"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_partner_ids
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_partner_ids
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_partner_ids
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_hr_epayslips_by_employees
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_epayslips_by_employees_form
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_epayslips_note_wizard_form
+msgid "Generar"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+msgid "Generar Nota de Ajuste"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_hr_epayslips_note_wizard
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_epayslips_note_wizard_form
+msgid ""
+"Generar Nota de Ajuste de Documento Soporte de Pago de Nómina Electrónica"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_form
+msgid "Generar Nóminas Electrónicas"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_hr_epayslips_by_employees
+msgid "Generate epayslips for all selected employees"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_hr_epayslips_note_wizard
+msgid "Generate epayslips note "
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__epayslip_bach__state__generated
+#: model:ir.model.fields.selection,name:epayroll.selection__epayslip_bach_run__state__generated
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_view_search
+msgid "Generated"
+msgstr "Generada"
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_view_search
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_line_view_search
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_electronictag_structure_view_search
+msgid "Group By"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_hr_contract_etype
+msgid "HR Contract EType"
+msgstr "Tipo de Contrato"
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_hr_type_ejob
+msgid "HR Type EJob"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__contract_id
+msgid "HR contract"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__employee_id
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line__employee_id
+msgid "HR employee"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__payslip_ids
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+msgid "HR payslip"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__cert_hash
+msgid "Hash"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_electronictag_structure__type_extra__hora_extra
+msgid "Hora Extra o Recargo"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_hr_type_ejob
+#: model:ir.ui.menu,name:epayroll.hr_menu_hr_type_ejob
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_type_ejob_form
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_type_ejob_tree
+msgid "Hr Job"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__id
+#: model:ir.model.fields,field_description:epayroll.field_dian_epayslip_bug__id
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__id
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__id
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__id
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line__id
+#: model:ir.model.fields,field_description:epayroll.field_hr_contract_etype__id
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__id
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_by_employees__id
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_note_wizard__id
+#: model:ir.model.fields,field_description:epayroll.field_hr_sub_type_job__id
+#: model:ir.model.fields,field_description:epayroll.field_hr_type_ejob__id
+#: model:ir.model.fields,field_description:epayroll.field_payment_form_epayroll__id
+#: model:ir.model.fields,field_description:epayroll.field_payment_method_epayroll__id
+#: model:ir.model.fields,field_description:epayroll.field_type_epayroll__id
+#: model:ir.model.fields,field_description:epayroll.field_type_note_epayroll__id
+msgid "ID"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__test_set_id
+msgid "ID set de pruebas"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,help:epayroll.field_connection_server__message_needaction
+#: model:ir.model.fields,help:epayroll.field_connection_server__message_unread
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach__message_needaction
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach__message_unread
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach_run__message_needaction
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach_run__message_unread
+#: model:ir.model.fields,help:epayroll.field_hr_electronictag_structure__message_needaction
+#: model:ir.model.fields,help:epayroll.field_hr_electronictag_structure__message_unread
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,help:epayroll.field_connection_server__message_has_error
+#: model:ir.model.fields,help:epayroll.field_connection_server__message_has_sms_error
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach__message_has_error
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach__message_has_sms_error
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach_run__message_has_error
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach_run__message_has_sms_error
+#: model:ir.model.fields,help:epayroll.field_hr_electronictag_structure__message_has_error
+#: model:ir.model.fields,help:epayroll.field_hr_electronictag_structure__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__connection_server__state__inactive
+#: model_terms:ir.ui.view,arch_db:epayroll.connection_server_view_form
+msgid "Inactive"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_electronictag_structure__type_extra__incapacidad
+msgid "Incapacidad"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__type_epayroll__document_type__invoice
+msgid "Invoices"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_is_follower
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_is_follower
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_is_follower
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__issuer_country
+msgid "Issuer Country"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__issuer_email_address
+msgid "Issuer Email Address"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__issuer_organization
+msgid "Issuer Organization"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__issuer_serial_number
+msgid "Issuer Serial Number"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server____last_update
+#: model:ir.model.fields,field_description:epayroll.field_dian_epayslip_bug____last_update
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate____last_update
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach____last_update
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run____last_update
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line____last_update
+#: model:ir.model.fields,field_description:epayroll.field_hr_contract_etype____last_update
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure____last_update
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_by_employees____last_update
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_note_wizard____last_update
+#: model:ir.model.fields,field_description:epayroll.field_hr_sub_type_job____last_update
+#: model:ir.model.fields,field_description:epayroll.field_hr_type_ejob____last_update
+#: model:ir.model.fields,field_description:epayroll.field_payment_form_epayroll____last_update
+#: model:ir.model.fields,field_description:epayroll.field_payment_method_epayroll____last_update
+#: model:ir.model.fields,field_description:epayroll.field_type_epayroll____last_update
+#: model:ir.model.fields,field_description:epayroll.field_type_note_epayroll____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_dian_epayslip_bug__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_hr_contract_etype__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_by_employees__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_note_wizard__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_hr_sub_type_job__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_hr_type_ejob__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_payment_form_epayroll__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_payment_method_epayroll__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_type_epayroll__write_uid
+#: model:ir.model.fields,field_description:epayroll.field_type_note_epayroll__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__write_date
+#: model:ir.model.fields,field_description:epayroll.field_dian_epayslip_bug__write_date
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__write_date
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__write_date
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__write_date
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line__write_date
+#: model:ir.model.fields,field_description:epayroll.field_hr_contract_etype__write_date
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__write_date
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_by_employees__write_date
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_note_wizard__write_date
+#: model:ir.model.fields,field_description:epayroll.field_hr_sub_type_job__write_date
+#: model:ir.model.fields,field_description:epayroll.field_hr_type_ejob__write_date
+#: model:ir.model.fields,field_description:epayroll.field_payment_form_epayroll__write_date
+#: model:ir.model.fields,field_description:epayroll.field_payment_method_epayroll__write_date
+#: model:ir.model.fields,field_description:epayroll.field_type_epayroll__write_date
+#: model:ir.model.fields,field_description:epayroll.field_type_note_epayroll__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_main_attachment_id
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_main_attachment_id
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_main_attachment_id
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: epayroll
+#: model:res.groups,name:epayroll.group_epayslip_manager
+msgid "Manager EPayslip"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_payment_method_epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_payslip__pay_form_epayroll_id
+#: model:ir.model.fields,field_description:epayroll.field_hr_payslip__pay_method_epayroll_id
+#: model:ir.ui.menu,name:epayroll.hr_menu_payment_method_epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.payment_method_epayroll_form
+#: model_terms:ir.ui.view,arch_db:epayroll.payment_method_epayroll_tree
+msgid "Medios de Pago"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__dian_receipt
+msgid "Mensaje recepciÃ³n"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_contract__periodo_nomina__5
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_payroll_structure_type__period_epayroll__5
+msgid "Mensual"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_has_error
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_has_error
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_has_error
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_ids
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_ids
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_ids
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__res_partner__x_document_type__50
+msgid "NIT de otro país"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__res_partner__x_document_type__91
+msgid "NUIP *"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__name
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__name
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__name
+#: model:ir.model.fields,field_description:epayroll.field_hr_contract_etype__name
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__name
+#: model:ir.model.fields,field_description:epayroll.field_hr_sub_type_job__name
+#: model:ir.model.fields,field_description:epayroll.field_hr_type_ejob__name
+#: model:ir.model.fields,field_description:epayroll.field_payment_form_epayroll__name
+#: model:ir.model.fields,field_description:epayroll.field_payment_method_epayroll__name
+#: model:ir.model.fields,field_description:epayroll.field_type_epayroll__name
+#: model:ir.model.fields,field_description:epayroll.field_type_note_epayroll__name
+#: model_terms:ir.ui.view,arch_db:epayroll.ecertificate_view_filter
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_view_search
+msgid "Name"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__name
+#: model_terms:ir.ui.view,arch_db:epayroll.connection_server_view_form
+msgid "Name Connection"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_electronictag_structure__type__neto
+msgid "Neto"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,help:epayroll.field_type_epayroll__code_prefix_file
+msgid "Nombre del Archivo xml"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__filename
+msgid "Nombre del archivo"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__filenamexml
+msgid "Nombre del archivo XML"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__type_epayroll__document_type__payslip
+msgid "Nomina Individual"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__type_epayroll__document_type__payslip_ajuste
+msgid "Nomina Individual De Ajuste"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__epayslip_bach__state__no_send
+msgid "Not Send"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__type_epayroll__type__epayroll_ajus
+msgid "Nota de Ajuste de Documento Soporte de Pago de Nómina Electrónica"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__note
+msgid "Notes"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_epayslips_by_employees_form
+msgid "Notificar"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__number_seq
+msgid "Number Seq"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_needaction_counter
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_needaction_counter
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_needaction_counter
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_has_error_counter
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_has_error_counter
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_has_error_counter
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,help:epayroll.field_connection_server__message_needaction_counter
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach__message_needaction_counter
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach_run__message_needaction_counter
+#: model:ir.model.fields,help:epayroll.field_hr_electronictag_structure__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,help:epayroll.field_connection_server__message_has_error_counter
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach__message_has_error_counter
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach_run__message_has_error_counter
+#: model:ir.model.fields,help:epayroll.field_hr_electronictag_structure__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,help:epayroll.field_connection_server__message_unread_counter
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach__message_unread_counter
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach_run__message_unread_counter
+#: model:ir.model.fields,help:epayroll.field_hr_electronictag_structure__message_unread_counter
+msgid "Number of unread messages"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_contract__periodo_nomina__6
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_payroll_structure_type__period_epayroll__6
+msgid "Otro"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__res_partner__x_document_type__47
+msgid "PEP"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__cert_file
+msgid "PFX File"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__parent_id
+msgid "Padre"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_electronictag_structure_view_search
+msgid "Parent"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__cert_pass
+msgid "Password"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_hr_payslip
+msgid "Pay Slip"
+msgstr "Nómina"
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_payment_form_epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_employee__payment_form_id
+#: model:ir.ui.menu,name:epayroll.hr_menu_payment_form_epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.payment_form_epayroll_form
+#: model_terms:ir.ui.view,arch_db:epayroll.payment_form_epayroll_tree
+msgid "Payment Form"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_payment_form_epayroll
+msgid "Payment Form EPayroll"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_payment_method_epayroll
+msgid "Payment Method EPayroll"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+msgid "Payslip"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+msgid "Period"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_payroll_structure_type__period_epayroll
+msgid "Period Epayroll"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_form
+msgid "Periodo"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_contract__periodo_nomina
+msgid "Periodo de Nómina"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_salary_rule__porcentaje_hora_extra
+msgid "Porcentaje Hora Extra"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__priv_key
+msgid "Private Key"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__private_key_bits
+msgid "Private Key Bits"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__private_key_check
+msgid "Private Key Check"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__private_key_type
+msgid "Private Key Type"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__connection_server__type__1
+msgid "Production"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_contract__periodo_nomina__4
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_payroll_structure_type__period_epayroll__4
+msgid "Quincenal"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__ref
+msgid "Ref"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__number
+msgid "Reference"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__report
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_form
+msgid "Report"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__dian_epayslip_bug__type__response
+msgid "Respuesta"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__dian_message
+msgid "Respuesta envÃ­o"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_has_sms_error
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_has_sms_error
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_has_sms_error
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_line_view_search
+msgid "Salary"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_hr_salary_rule
+msgid "Salary Rule"
+msgstr "Regla de Salario"
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_hr_payroll_structure_type
+msgid "Salary Structure Type"
+msgstr "Tipo de Estructura Salarial"
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line__salary_rule_id
+msgid "Salary rule"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_epayslips_by_employees_form
+msgid "Se notificará al beneficiario:"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.ecertificate_view_filter
+msgid "Search Certificate"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__sequence_id
+#: model:ir.model.fields,field_description:epayroll.field_type_epayroll__sequence_id
+msgid "Secuencia nombre XML"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_contract__periodo_nomina__1
+#: model:ir.model.fields.selection,name:epayroll.selection__hr_payroll_structure_type__period_epayroll__1
+msgid "Semanal"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__epayslip_bach__state__sent
+#: model:ir.model.fields.selection,name:epayroll.selection__epayslip_bach_run__state__sent
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_view_search
+msgid "Sent"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__cert_serial_number
+msgid "Serial Number"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__serial_number
+msgid "Serial del certificado"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__cert_signature_algor
+msgid "Signature Algorithm"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__software_code
+msgid "Software Identification Code"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__pin_software
+msgid "Software PIN"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__software_password
+msgid "Software Password"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__date_start
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__start_date
+msgid "Start Date"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__start_date
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_view_search
+msgid "Start date"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__state
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__state
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_view_search
+msgid "States"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__state
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__state
+msgid "Status"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_hr_sub_type_job
+#: model:ir.ui.menu,name:epayroll.hr_menu_hr_sub_type_job
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_sub_type_job_form
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_sub_type_job_tree
+msgid "Sub Job"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_hr_sub_type_job
+msgid "Sub Type Job"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__subject_common_name
+msgid "Subject Common Name"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__subject_c
+msgid "Subject Country"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__subject_email_address
+msgid "Subject Email Address"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__subject_serial_number
+msgid "Subject Serial Number"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__subject_title
+msgid "Subject Title"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__connection_server__type__2
+msgid "Test"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__type
+#: model:ir.model.fields,field_description:epayroll.field_hr_employee__sub_job_id
+#: model:ir.model.fields,field_description:epayroll.field_hr_payslip__type_epayroll_id
+msgid "Tipo"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__type_extra
+#: model:ir.model.fields,field_description:epayroll.field_hr_salary_rule__type_extra
+msgid "Tipo Extra"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_salary_rule__type_incapacidad_id
+msgid "Tipo de Incapacidad"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_epayslips_note_wizard__type_note_id
+msgid "Tipo de Nota de Ajuste"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_type_epayroll
+#: model:ir.model.fields,field_description:epayroll.field_type_epayroll__type
+#: model:ir.ui.menu,name:epayroll.hr_menu_epayroll_type
+#: model_terms:ir.ui.view,arch_db:epayroll.type_epayroll_form
+#: model_terms:ir.ui.view,arch_db:epayroll.type_epayroll_tree
+msgid "Tipo de XML"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__type_epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__type_epayroll
+msgid "Tipo de XML utilizado"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_res_partner__x_document_type
+#: model:ir.model.fields,field_description:epayroll.field_res_users__x_document_type
+msgid "Tipo de documento"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__total_paid
+msgid "Total Comprobante"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__total_deducciones
+msgid "Total Deducciones"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__total_devengos
+msgid "Total Devengados"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__track_id
+msgid "Track ID"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__type
+#: model:ir.model.fields,field_description:epayroll.field_dian_epayslip_bug__type
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_electronictag_structure_view_search
+msgid "Type"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_hr_contract_etype
+#: model:ir.ui.menu,name:epayroll.hr_menu_hr_contract_etype
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_contract_etype_form
+#: model_terms:ir.ui.view,arch_db:epayroll.hr_contract_etype_tree
+msgid "Type EContract"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model,name:epayroll.model_type_epayroll
+msgid "Type EPayroll"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_employee__ejob_id
+msgid "Type Job"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.actions.act_window,name:epayroll.action_type_note_epayroll
+#: model:ir.model,name:epayroll.model_type_note_epayroll
+#: model:ir.ui.menu,name:epayroll.hr_menu_type_note_epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.type_note_epayroll_form
+#: model_terms:ir.ui.view,arch_db:epayroll.type_note_epayroll_tree
+msgid "Type Note EPayroll"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_unread
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_unread
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_unread
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_unread
+msgid "Unread Messages"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__message_unread_counter
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__message_unread_counter
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__message_unread_counter
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_form
+msgid "Update Data"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,help:epayroll.field_ecertificate__pem_file
+msgid "Upload the PEM File"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,help:epayroll.field_ecertificate__cert_file
+msgid "Upload the PFX File"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__user_id
+msgid "User"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__ecertificate__state__valid
+#: model_terms:ir.ui.view,arch_db:epayroll.ecertificate_view_form
+msgid "Valid"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_run_form
+msgid "Validar"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line__value
+msgid "Valor"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_ecertificate__cert_version
+msgid "Version"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_connection_server__website_message_ids
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__website_message_ids
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach_run__website_message_ids
+#: model:ir.model.fields,field_description:epayroll.field_hr_electronictag_structure__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,help:epayroll.field_connection_server__website_message_ids
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach__website_message_ids
+#: model:ir.model.fields,help:epayroll.field_epayslip_bach_run__website_message_ids
+#: model:ir.model.fields,help:epayroll.field_hr_electronictag_structure__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields.selection,name:epayroll.selection__epayslip_bach__state__error
+msgid "With Error"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_bach__xml_envio
+msgid "XML EnvÃ­o"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_hr_employee__method_payment_id
+msgid "method Payment"
+msgstr ""
+
+#. module: epayroll
+#: model:ir.model.fields,field_description:epayroll.field_epayslip_line__name
+msgid "name"
+msgstr ""
+
+#. module: epayroll
+#: model_terms:ir.ui.view,arch_db:epayroll.epayslip_bach_form
+msgid "xml"
+msgstr ""

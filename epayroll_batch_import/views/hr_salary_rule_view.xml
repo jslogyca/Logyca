@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<record id="view_hr_salary_rule_add_reference" model="ir.ui.view">
+		<field name="name">epayroll batch import reference</field>
+		<field name="model">hr.salary.rule</field>
+		<field name="inherit_id" ref="hr_payroll.hr_salary_rule_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='code']" position="after">
+				<field name="x_reference" />
+			</xpath>
+		</field>
+	</record>
+</odoo>

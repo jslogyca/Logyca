@@ -10,9 +10,12 @@
 						<group>
 							<field name="name" />
 							<field name="code" />
+							<field name="type" />
 						</group>
 						<group>
-							<field name="type" />
+							<field name="document_type" />
+							<field name="code_prefix_file" />
+							<field name="sequence_id" />
 						</group>
 					</group>
 				</sheet>

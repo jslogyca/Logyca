@@ -10,9 +10,11 @@
 					<group>
 						<group >
 							<field name="sub_job_id"/>
+							<field name="ejob_id"/>
 						</group>
 						<group >
-							<field name="ejob_id"/>
+							<field name="method_payment_id"/>
+							<field name="payment_form_id"/>
 						</group>
 					</group>
 				</page>

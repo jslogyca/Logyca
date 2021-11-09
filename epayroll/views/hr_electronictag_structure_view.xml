@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="hr_electronictag_structure_view_form" model="ir.ui.view">
+		<field name="name">hr.electronictag.structure.form</field>
+		<field name="model">hr.electronictag.structure</field>
+		<field name="arch" type="xml">
+			<form string="Electronic tag Structure">
+				<sheet>
+					<group>
+						<group>
+							<field name="name" required="1"/>
+							<field name="ref" required="1"/>
+							<field name="type" required="1"/>								
+						</group>
+						<group>
+							<field name="parent_id" />
+							<field name="type_extra" />
+							<field name="report" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="hr_electronictag_structure_view_tree" model="ir.ui.view">
+		<field name="name">hr.electronictag.structure.tree</field>
+		<field name="model">hr.electronictag.structure</field>
+		<field name="arch" type="xml">
+			<tree string="Electronic tag Structure" >
+				<field name="name"/>
+				<field name="type"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="hr_electronictag_structure_view_search" model="ir.ui.view">
+		<field name="name">hr.electronictag.structure.search</field>
+		<field name="model">hr.electronictag.structure</field>
+		<field name="arch" type="xml">
+			<search string="Electronic tag Structure">
+				<field name="name" string="Employee"/>
+				<separator/>
+				<group expand="0" string="Group By">
+					<filter name="type" string="Type" context="{'group_by':'type'}"/>
+					<filter name="parent_id" string="Parent" context="{'group_by':'parent_id'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_hr_electronictag_structure" model="ir.actions.act_window">
+		<field name="name">Electronic tag Structure</field>
+		<field name="res_model">hr.electronictag.structure</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem
+		id="menu_hr_electronictag_structure"
+		name="Electronic tag Structure"
+		action="action_hr_electronictag_structure"
+		parent="epayroll.hr_menu_epayroll_setting"
+		sequence="101"
+		groups="epayroll.group_epayslip_manager"/>
+
+</odoo>
