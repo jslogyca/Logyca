@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="hr_epayslips_note_wizard_form" model="ir.ui.view">
+            <field name="name">hr.epayslips.note.wizard.form</field>
+            <field name="model">hr.epayslips.note.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Generar Nota de Ajuste de Documento Soporte de Pago de Nómina Electrónica">
+                    <sheet>
+                        <h3>
+                            Generar Nota de Ajuste de Documento Soporte de Pago de Nómina Electrónica
+                        </h3>
+                        <group>
+                            <field name="type_note_id"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Generar" name="compute_sheet_epayslip_note" type="object" default_focus="1" class="oe_highlight"/>
+                        <button string="Cancelar" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_hr_epayslips_note_wizard" model="ir.actions.act_window">
+            <field name="name">Generar Nota de Ajuste de Documento Soporte de Pago de Nómina Electrónica</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.epayslips.note.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="hr_epayslips_note_wizard_form"/>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

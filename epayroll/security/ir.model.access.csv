@@ -6,3 +6,11 @@ account_payment_form_epayroll,payment.form.epayroll,model_payment_form_epayroll,
 account_hr_sub_type_job,hr.sub.type.job,model_hr_sub_type_job,epayroll.group_epayslip_manager,1,1,1,1
 account_hr_type_ejob,hr.type.ejob,model_hr_type_ejob,epayroll.group_epayslip_manager,1,1,1,1
 account_hr_contract_etype,hr.contract.etype,model_hr_contract_etype,epayroll.group_epayslip_manager,1,1,1,1
+account_epayslip_bach_run,epayslip.bach.run,model_epayslip_bach_run,epayroll.group_epayslip_manager,1,1,1,1
+account_dian_epayslip_bug,dian.epayslip.bug,model_dian_epayslip_bug,epayroll.group_epayslip_manager,1,1,1,1
+account_epayslip_bach,epayslip.bach,model_epayslip_bach,epayroll.group_epayslip_manager,1,1,1,1
+account_ecertificate,ecertificate,model_ecertificate,epayroll.group_epayslip_manager,1,1,1,1
+account_epayslip_line,epayslip.line,model_epayslip_line,epayroll.group_epayslip_manager,1,1,1,1
+account_connection_server,connection.server,model_connection_server,epayroll.group_epayslip_manager,1,1,1,1
+account_hr_electronictag_structure,hr.electronictag.structure,model_hr_electronictag_structure,epayroll.group_epayslip_manager,1,1,1,1
+account_hr_epayslips_note_wizard,hr.epayslips.note.wizard,model_hr_epayslips_note_wizard,epayroll.group_epayslip_manager,1,1,1,1

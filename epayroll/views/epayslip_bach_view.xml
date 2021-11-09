@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="epayslip_bach_form" model="ir.ui.view">
+		<field name="name">epayslip.bach.form</field>
+		<field name="model">epayslip.bach</field>
+		<field name="arch" type="xml">
+			<form string="Epayslip Bach">		
+				<header>
+						<button name="action_draft" id='action_draft_id' string='Draft' type="object" attrs='{"invisible":[("state", "!=", "cancel")]}'/>
+						
+						<button name="update_data" id='update_data' string='Update Data' type="object" attrs='{"invisible":[("state", "not in", ("draft"))]}' class="oe_highlight"/>  
+					
+						<button name="action_sent" id='action_sent_id' string='Sent' attrs='{"invisible":[("state", "!=", "generated")]}' 
+											type="object"  class="oe_highlight"/>  
+
+						<button name="action_generate_epayslip_note" id='action_generate_epayslip_note' string='Generar Nota de Ajuste' attrs='{"invisible":[("state", "!=", "done")]}' 
+											type="object"  class="oe_highlight"/>
+
+					<button name="action_cancel" 
+							id='action_cancel_id' 
+							string='Cancel' 
+							type="object" 
+							attrs="{'invisible':[('state', 'in', ['cancel', 'done', 'sent'])]}" />
+
+					<button string="Descargar XML" type="object"
+							name="get_xml_file"  
+							attrs="{'invisible':[('state', 'not in', ['sent', 'done', 'error'])]}"/>
+					
+					<button name="get_status_validation" id='get_status_validation_id' class="oe_highlight" string='Validar' type="object" attrs='{"invisible":[("state", "not in", ("sent", "error"))]}'/>
+					
+					<!-- <button name="send_xml" id='send_xml' string='Enviar' type="object" attrs='{"invisible":[("state", "not in", ("error", "sent"))]}'/> -->
+					
+					<field name = 'state'
+							widget='statusbar'
+							statusbar_visible='draft,generated,sent,cancel'
+							nolabel='1' />
+				</header>
+				<sheet>
+					<div class="oe_button_box" name="button_box"/>
+					<div class="oe_title">
+						<label for="employee_id" class="oe_edit_only"/>
+						<h1><field name="employee_id" placeholder="Employee"/></h1>
+						<field name='qr_payslip_img' widget="image" readonly="1" height="100" width="100" nolabel='1' class="oe_right"/>
+					</div>
+					<group col="4">
+						<label for="start_date" string="Period"/>
+						<div>
+							<field name="start_date" attrs='{"readonly":[("state", "!=", "draft")]}' class="oe_inline"/> - <field name="finish_date" attrs='{"readonly":[("state", "!=", "draft")]}' class="oe_inline"/>
+						</div>
+						<field name = 'contract_id' attrs='{"readonly":[("state", "!=", "draft")]}'/>
+						<field name = 'epayslip_bach_run_id' attrs='{"readonly":[("state", "!=", "draft")]}'/>
+						<field name = 'document_type' invisible="1"/>
+						<field name = 'epayslip_origin' force_save="1" readonly="1" attrs='{"invisible":[("document_type", "!=", "payslip_ajuste")]}'/>
+						<field name = 'type_note_epayroll' attrs='{"invisible":[("document_type", "!=", "payslip_ajuste")]}'/>
+						<field name = 'number' force_save="1" readonly="1"/>
+						<field name = 'sequence' force_save="1" readonly="1"/>
+						<field name = 'number_seq' force_save="1" readonly="1"/>						
+						<field name="type_epayroll"/>
+						<field name="date_generate" force_save="1" readonly="1"/>
+						<field name="code_cune"/>
+						<field name="track_id"/>
+						<field name="filenamexml"/>
+						<field name="dian_receipt"/>							
+					</group>
+					<group>
+						<group>
+							<field name="total_devengos" force_save="1" readonly="1"/>
+							<field name="total_deducciones" force_save="1" readonly="1"/>
+							<field name="total_paid" force_save="1" readonly="1"/>
+						</group> 
+					</group>
+					<notebook>
+						<page string = 'HR payslip'>
+						<separator string="Payslip"/> 
+							<field name = 'payslip_ids'
+									readonly='True' />
+						</page> 
+						<page string = 'Epayslip line'>
+						<separator string="Epayslip Line"/> 
+							<field name = 'epayslip_line_ids' 
+									readonly='True' />
+						</page>						
+						<page string="xml">
+							<group>
+								<field name='xml_document' readonly="0"/>
+							</group>
+						</page>
+						<page string="Errores">
+							<field name="error_ids" widget="one2many_list" readonly="1">
+								<tree editable="bottom">
+									<field name="description"/>
+									<field name="code"/>
+								</tree>
+							</field>
+						</page>
+					</notebook>
+					<field name="note" placeholder="Add an internal note..." nolabel="1" height="50"/>
+				</sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>				
+			</form>
+		</field>
+	</record>
+
+	<record id="epayslip_bach_tree" model="ir.ui.view">
+		<field name="name">epayslip.bach.tree</field>
+		<field name="model">epayslip.bach</field>
+		<field name="arch" type="xml">
+			<tree string="Epayslip Bach" >
+				<field name="number"/> 
+				<field name="employee_id"/> 
+				<field name="contract_id"/> 
+				<field name="start_date"/> 
+				<field name="finish_date"/> 
+				<field name="name"/> 
+				<field name="state" /> 
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_epayslip_bach" model="ir.actions.act_window">
+		<field name="name">Epayslip Bach</field>
+		<field name="res_model">epayslip.bach</field>
+		<field name="view_mode">tree,form</field>
+	</record>       
+
+	<menuitem
+		id="hr_menu_epayslip_bach"
+		name="Epayslip Bach"
+		action="action_epayslip_bach"
+		parent="epayroll.menu_epayroll_setting"
+		sequence="1"
+		groups="epayroll.group_epayslip_manager"/>    
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="hr_epayslips_by_employees_form" model="ir.ui.view">
+            <field name="name">hr.epayslips.by.employees.form</field>
+            <field name="model">hr.epayslips.by.employees</field>
+            <field name="arch" type="xml">
+                <form string="Notificar">
+                    <sheet>
+                        <h3>
+                            Se notificará al beneficiario:
+                        </h3>
+                        <group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Generar" name="compute_sheet_epayslip" type="object" default_focus="1" class="oe_highlight"/>
+                        <button string="Cancelar" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_hr_epayslips_by_employees" model="ir.actions.act_window">
+            <field name="name">Generar</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.epayslips.by.employees</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="hr_epayslips_by_employees_form"/>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

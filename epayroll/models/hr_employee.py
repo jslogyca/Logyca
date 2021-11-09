@@ -15,3 +15,5 @@ class HREmployee(models.Model):
 
     sub_job_id = fields.Many2one('hr.sub.type.job', string='Tipo')
     ejob_id = fields.Many2one('hr.type.ejob', string='Type Job')
+    payment_form_id = fields.Many2one('payment.form.epayroll', string='Payment Form')
+    method_payment_id = fields.Many2one('payment.method.epayroll', string='method Payment')

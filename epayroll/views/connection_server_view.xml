@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="connection_server_view_form" model="ir.ui.view">
+		<field name="name">connection.server.form</field>
+		<field name="model">connection.server</field>
+		<field name="arch" type="xml">
+			<form string="Connection Server">
+				<header>
+					<button string="Active" name="active_connect_server" type="object" states="draft" class="oe_highlight"/>
+					<button string="Inactive" name="inactive_connect_server" type="object" states="active" />
+					<button string="Draft" name="draft_connect_server" type="object" states="active" />
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet>
+					<div class="oe_title" name="title">
+						<label for="name" class="oe_edit_only"/>
+						<h1>
+							<field name="name" placeholder="Name Connection" attrs="{'readonly':[('state','!=','draft')]}" />
+						</h1>
+					</div>
+					<group>
+						<group>
+							<field name="type" attrs="{'readonly':[('state','!=','draft')]}"/>
+							<field name="software_code" attrs="{'readonly':[('state','!=','draft')]}"/>
+							<field name="company_id" groups="base.group_multi_company" attrs="{'readonly':[('state','!=','draft')]}"/>
+						</group>
+						<group>
+							<field name="pin_software" attrs="{'readonly':[('state','!=','draft')]}"  password="True" />
+							<field name="test_set_id" attrs="{'readonly':[('state','!=','draft')], 'invisible':[('type','=','1')]}"/>
+							<field name="certificate_id" domain="[('state', '=', 'valid')]" attrs="{'readonly':[('state','!=','draft')]}" />
+						</group>
+					</group>
+					<group>
+						<field name="connection_url" attrs="{'readonly':[('state','!=','draft')]}"/>
+						<field name="sequence_id" />
+					</group>
+				</sheet>
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+					<field name="message_ids" widget="mail_thread"/>
+				</div>
+			</form>
+		</field>
+	</record>
+
+	<record id="connection_server_view_tree" model="ir.ui.view">
+		<field name="name">connection.server.tree</field>
+		<field name="model">connection.server</field>
+		<field name="arch" type="xml">
+			<tree string="Connection Server" >
+				<field name="name"/>
+				<field name="type"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_connection_server" model="ir.actions.act_window">
+		<field name="name">Connection Server</field>
+		<field name="res_model">connection.server</field>
+		<field name="view_mode">tree,form</field>
+        <field name="view_id" ref="connection_server_view_tree"/>
+	</record>
+
+	<menuitem
+		id="account_menu_einvoice_connect_server"
+		name="Connection Server"
+		action="action_connection_server"
+		parent="epayroll.hr_menu_epayroll_setting"
+		sequence="1"
+		groups="account.group_account_user"/>
+	
+</odoo>
