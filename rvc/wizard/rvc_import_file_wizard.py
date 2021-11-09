@@ -155,9 +155,9 @@ class RVCImportFileWizard(models.TransientModel):
                     parent_id=self.env['res.partner'].search([('vat','=',str(fila[1])), ('is_company','=',True)], limit=1)
 
                     #patrocinadora como halonadora rvc
-                    sponsored_id=self.env['rvc.sponsor'].search([('partner_id','=',parent_id.id)])
+                    sponsor_id=self.env['rvc.sponsor'].search([('partner_id','=',parent_id.id)])
 
-                    if not sponsored_id:
+                    if not sponsor_id:
                         validation = 'Fila %s: La empresa Halonadora con NIT %s no existe' % (str(count), str(fila[1]))
                         errors.append(validation)
                         continue
@@ -167,7 +167,7 @@ class RVCImportFileWizard(models.TransientModel):
                         try:
                             vals = {
                                 'partner_id': rvc_beneficiary_id.id,
-                                'parent_id': sponsored_id.id,
+                                'parent_id': sponsor_id.id,
                                 'product_id': product_id.id,
                                 'codes_quantity': int(fila[2])
                             }
@@ -202,11 +202,7 @@ class RVCImportFileWizard(models.TransientModel):
                         # raise ValidationError('el tamaño de la empresa beneficiaria no es micro, pequeña o mediana (MIPY)')
                         validation = 'Por favor corrija el archivo, el tamaño de la empresa beneficiaria no es micro, pequeña o mediana (MIPY)' + ' - ' + str(fila[0])                      
                         raise ValidationError(validation)
-                    # Validar que el tipo de vinculación de la empresa beneficiaria no sea miembro, ni cliente CE
-                    if partner_id.x_type_vinculation and partner_id.x_type_vinculation.code in ('01', '02'):
-                        # raise ValidationError('El tipo de vinculación de la empresa beneficiaria es miembro o cliente CE')
-                        validation = 'Por favor corrija el archivo, El tipo de vinculación de la empresa beneficiaria es miembro o cliente CE' + ' - ' + str(fila[0])                      
-                        raise ValidationError(validation)
+
                     product_id=self.env['product.rvc'].search([('benefit_type','=',self.benefit_type)])
                     self._cr.execute(\
                         ''' SELECT id FROM sub_product_rvc WHERE product_id=%s AND %s between min_qty AND max_qty and state=%s''',
@@ -216,8 +212,8 @@ class RVCImportFileWizard(models.TransientModel):
                         validation = 'No existe un subnivel COLABORA configurado para ' + ' - ' + str(fila[2])
                         raise ValidationError(validation)                        
                     parent_id=self.env['res.partner'].search([('vat','=',str(fila[1])), ('is_company','=',True)], limit=1)
-                    sponsored_id=self.env['rvc.sponsor'].search([('partner_id','=',parent_id.id)])
-                    if not sponsored_id:
+                    sponsor_id=self.env['rvc.sponsor'].search([('partner_id','=',parent_id.id)])
+                    if not sponsor_id:
                         validation = 'La empresa Halonadora no existe' + ' - ' + str(fila[1])
                         raise ValidationError(validation)
                     rvc_beneficiary_id=self.env['rvc.beneficiary'].search([('partner_id','=',partner_id.id)])
@@ -245,7 +241,7 @@ class RVCImportFileWizard(models.TransientModel):
                     benefit_application = self.env['benefit.application'].create({
                                                         'name': partner_id.name + '-' + 'LOGYCA/COLABORA',
                                                         'partner_id': rvc_beneficiary_id.id,
-                                                        'parent_id': sponsored_id.id,
+                                                        'parent_id': sponsor_id.id,
                                                         'product_id': product_id.id,
                                                         'sub_product_ids': sub_product_id[0],
                                                         'end_date_colabora': (date.today() + relativedelta(years=1))})
@@ -291,8 +287,8 @@ class RVCImportFileWizard(models.TransientModel):
                         continue
                     # Validar que el Patrocinador exista
                     parent_id=self.env['res.partner'].search([('vat','=',str(fila[1])), ('is_company','=',True)], limit=1)
-                    sponsored_id=self.env['rvc.sponsor'].search([('partner_id','=',parent_id.id)])
-                    if not sponsored_id:
+                    sponsor_id=self.env['rvc.sponsor'].search([('partner_id','=',parent_id.id)])
+                    if not sponsor_id:
                         validation = 'La empresa Halonadora no existe' + ' - ' + str(fila[1])
                         self.env['log.import.rvc'].create({
                                                             'name': validation,
@@ -315,7 +311,7 @@ class RVCImportFileWizard(models.TransientModel):
                                                         'partner_id': partner_id.id,
                                                         'contact_name': str(fila[4]),
                                                         'codes_quantity': str(fila[2]),
-                                                        'parent_id' : sponsored_id.partner_id.id,
+                                                        'parent_id' : sponsor_id.partner_id.id,
                                                         'state': 'confirm',
                                                         'benefit_type' : self.benefit_type})
                     cre.append(rvc_benf.id)
