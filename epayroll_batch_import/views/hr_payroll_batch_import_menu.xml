@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<odoo>
+    <menuitem
+        id="hr_payroll_batch_import_menu"
+        name="Importar de Heinsohn"
+        action="action_epayroll_batch_import_wizard_view"
+        parent="hr_payroll.menu_hr_payroll_root"
+        sequence="70"/>
+
+</odoo>

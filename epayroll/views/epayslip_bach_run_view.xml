@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="epayslip_bach_run_form" model="ir.ui.view">
+		<field name="name">epayslip.bach.run.form</field>
+		<field name="model">epayslip.bach.run</field>
+		<field name="arch" type="xml">
+			<form string="Epayslip Bach Run">		
+				<header>
+					<button name="action_draft" id='action_draft_id' string='Draft' type="object" attrs='{"invisible":[("state", "not in", ("cancel"))]}'/>  
+					<button name="action_hr_epayslip_file" id='action_hr_epayslip_file' string='Report' type="object" 
+							attrs='{"invisible":[("state", "not in", ("generated"))]}' class="oe_highlight"/>
+					<button name="action_validate_generate_epayslip" id='action_validate_generate_epayslip' string='Generar Nóminas Electrónicas' type="object" attrs='{"invisible":[("state", "!=", "draft")]}' class="oe_highlight"/>  
+						<button name="update_data" id='update_data' string='Update Data' type="object" attrs='{"invisible":[("state", "!=", "draft")]}' class="oe_highlight"/>  
+					<!-- <button name="action_generated" id='action_generated_id' string='Generated' type="object" attrs='{"invisible":[("state", "!=", "draft")]}'/>   -->
+					<button name="action_sent" id='action_sent_id' string='Sent' type="object" attrs='{"invisible":[("state", "!=", "generated")]}' class="oe_highlight"/>
+					<button name="action_cancel" 
+							id='action_cancel_id' 
+							string='Cancel' 
+							type="object" 
+							attrs='{"invisible":[("state", "=", "cancel")]}'/>
+					<button name="get_status_validation" id='get_status_validation_id' string='Validar' type="object" attrs='{"invisible":[("state", "!=", "sent")]}' class="oe_highlight"/>
+					<field name = 'state'
+							widget='statusbar'
+							statusbar_visible='draft,generated,sent,cancel'
+							nolabel='1' />
+				</header>
+				<sheet> 
+					<label string='Name' for='name'/> 
+					<h1> 
+						<field name="name" attrs='{"readonly":[("state", "!=", "draft")]}' required='True'/>
+					</h1>
+					<group>													
+						<group>	
+							<label string='Periodo' for='start_date'/>
+							<div> 												
+								<field name = 'start_date' attrs='{"readonly":[("state", "!=", "draft")]}' class="oe_inline"  /> - <field name = 'finish_date' attrs='{"readonly":[("state", "!=", "draft")]}' class="oe_inline" />
+							</div>								 												
+						</group>
+						
+						<group>	
+							<field name="company_id" attrs='{"readonly":[("state", "!=", "draft")]}' default=''/> 												
+							<field name="type_epayroll" attrs='{"readonly":[("state", "!=", "draft")]}' required="1"/> 												
+						</group>
+					</group>
+					<notebook>
+						<page string='Epayslip bach'>
+							<separator string="Epayslip Bach"/> 		
+							<field name="epayslip_bach_ids" />
+						</page> 
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="epayslip_bach_run_tree" model="ir.ui.view">
+		<field name="name">epayslip.bach.run.tree</field>
+		<field name="model">epayslip.bach.run</field>
+		<field name="arch" type="xml">
+			<tree string="Epayslip Bach Run" >
+				<field name="name"/>
+				<field name="company_id"/>
+				<field name="start_date"/>
+				<field name="finish_date"/>
+				<field name="epayslip_bach_ids"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="epayslip_bach_run_view_search" model="ir.ui.view">
+		<field name="name">epayslip.bach.run.search</field>
+		<field name="model">epayslip.bach.run</field>
+		<field name="arch" type="xml">
+			<search string="Epayslip bach run">
+				<filter name='filter_state_draft'
+						string='Draft'
+						domain='[("state", "=", "draft")]'/>
+
+				<filter name='filter_state_generated'
+						string='Generated'
+						domain='[("state", "=", "generated")]'/>
+				<filter name='filter_state_sent'
+						string='Sent'
+						domain='[("state", "=", "sent")]'/>
+				<filter name='filter_state_cancel'
+						string='Cancel'
+						domain='[("state", "=", "cancel")]'/>
+				<!-- <separator/>
+
+				<filter name='filter_start_date'
+						string='Start date'
+						domain='[("start_date", "=", "" )]'/>
+				<filter name='filter_finish_date'
+						string='finish date'
+						domain='[("finish_date", "=", "" )]'/> -->
+				<separator/>
+
+				<filter name='filter_name'
+	
+						string='Name'
+						domain='[("name", "!=", "none" )]'/>
+				<group expand="0" string="Group By">
+					<filter name='group_state' string='States'
+							context='{"group_by": "state"}'  /> 
+
+					<filter name='group_start_date' string='Start date'
+							context='{"group_by": "start_date"}'  /> 
+				</group>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_epayslip_bach_run" model="ir.actions.act_window">
+		<field name="name">Epayslip Bach Run</field>
+		<field name="res_model">epayslip.bach.run</field>
+		<field name="view_mode">tree,form</field>
+	</record>	
+
+	<menuitem
+		id="menu_epayroll_setting"
+		name="EPayslip"
+		parent="hr_payroll.menu_hr_payroll_root"
+		sequence="100"
+		groups="epayroll.group_epayslip_manager"/>          
+
+	<menuitem
+		id="hr_menu_epayslip_bach_run"
+		name="Epayslip Bach Run"
+		action="action_epayslip_bach_run"
+		parent="epayroll.menu_epayroll_setting"
+		sequence="0"
+		groups="epayroll.group_epayslip_manager"/>          
+</odoo>

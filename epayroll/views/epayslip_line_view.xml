@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="epayslip_line_tree" model="ir.ui.view">
+		<field name="name">epayslip.line.tree</field>
+		<field name="model">epayslip.line</field>
+		<field name="arch" type="xml">
+			<tree string="EPayslip Line" >
+				<field name="salary_rule_id"/> 
+				<field name='electronictag_id'/>
+				<field name='value'/>
+				<field name='epayslip_bach_id'/>
+				<field name='employee_id'/>
+				<field name='name'/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="epayslip_line_view_search" model="ir.ui.view">
+		<field name="name">epayslip.line.search</field>
+		<field name="model">epayslip.line</field>
+		<field name="arch" type="xml">
+			<search string="Epayslip line">
+				<field name="employee_id" string="Employee"/>
+				<field name="epayslip_bach_id" string="Epayslip"/>
+				<field name="bach_run_id" string="Epayslip Run"/>
+				<separator/>
+				<group expand="0" string="Group By">
+					<filter name="employee_id" string="Employee" context="{'group_by':'employee_id'}"/>
+					<filter name="salary_rule_id" string="Salary" context="{'group_by':'salary_rule_id'}"/>
+					<filter name="epayslip_bach_id" string="Epayslip" context="{'group_by':'epayslip_bach_id'}"/>
+					<filter name="bach_run_id" string="Epayslip Run" context="{'group_by':'bach_run_id'}"/>
+					<filter name="electronictag_id" string="Electronic Tag" context="{'group_by':'electronictag_id'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_epayslip_line" model="ir.actions.act_window">
+		<field name="name">EPayslip Line</field>
+		<field name="res_model">epayslip.line</field>
+		<field name="view_mode">tree,form</field>
+	</record>	
+
+	<menuitem
+		id="hr_menu_epayslip_line"
+		name="Epayslip Line"
+		action="action_epayslip_line"
+		parent="epayroll.menu_epayroll_setting"
+		sequence="2"
+		groups="epayroll.group_epayslip_manager"/>
+
+</odoo>
