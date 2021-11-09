@@ -190,7 +190,7 @@ class RVCImportFileWizard(models.TransientModel):
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
                     partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
                     if not partner_id:
-                        validation = 'Por favor corrija el archivo, La empresa beneficiaria no exise en Odoo' + ' - ' + str(fila[0])
+                        validation = 'Por favor corrija el archivo, La empresa beneficiaria no existe en Odoo' + ' - ' + str(fila[0])
                         raise ValidationError(validation)
                     # Validar que la empresa beneficiaria esté activa
                     if not partner_id.active:
@@ -254,8 +254,8 @@ class RVCImportFileWizard(models.TransientModel):
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
                     partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
                     if not partner_id:
-                        # raise ValidationError('La empresa beneficiaria no exise en Odoo')
-                        validation = 'La empresa beneficiaria no exise en Odoo' + ' - ' + str(fila[0])
+                        # raise ValidationError('La empresa beneficiaria no existe en Odoo')
+                        validation = 'La empresa beneficiaria no existe en Odoo' + ' - ' + str(fila[0])
                         self.env['log.import.rvc'].create({
                                                             'name': validation,
                                                             'date_init': fields.Datetime.now(),
