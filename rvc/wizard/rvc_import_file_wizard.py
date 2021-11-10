@@ -187,65 +187,109 @@ class RVCImportFileWizard(models.TransientModel):
                         logging.warning("=================> no entra a la creacion de benefit.application")
 
                 elif self.benefit_type == 'colabora':
+                    logging.debug("<==== colabora ====>")
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
                     partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
+
+                    if len(partner_id) == 0:
+                        partner_id=self.env['res.partner'].search([('x_type_thirdparty','=',1),('vat','=', str(fila[0]))])
+
+                    if len(partner_id) > 1:
+                        partner_id=self.env['res.partner'].search([('vat','=',str(fila[0]))])[0]
+
                     if not partner_id:
-                        validation = 'Por favor corrija el archivo, La empresa beneficiaria no existe en Odoo' + ' - ' + str(fila[0])
-                        raise ValidationError(validation)
+                        validation = 'Fila %s: La empresa beneficiaria con NIT %s no existe en Odoo' % (str(count), str(fila[0]))
+                        errors.append(validation)
+                        continue
+                    
+                    logging.info(f"1. valida que la empresa es la {partner_id}")
+
                     # Validar que la empresa beneficiaria esté activa
                     if not partner_id.active:
                         # raise ValidationError('La empresa beneficiaria no esta activa')
-                        validation = 'Por favor corrija el archivo, La empresa beneficiaria no esta activa' + ' - ' + str(fila[0])
-                        raise ValidationError(validation)
-                    # Validar que el tamaño de la empresa beneficiaria sea micro, pequeña o mediana (MIPY)
-                    if partner_id.x_company_size not in ('6', '5'):
-                        # raise ValidationError('el tamaño de la empresa beneficiaria no es micro, pequeña o mediana (MIPY)')
-                        validation = 'Por favor corrija el archivo, el tamaño de la empresa beneficiaria no es micro, pequeña o mediana (MIPY)' + ' - ' + str(fila[0])                      
-                        raise ValidationError(validation)
-
+                        validation = 'Fila %s: La empresa beneficiaria %s con NIT %s no esta activa' % (str(count), str(partner_id.name).strip(), str(fila[0]))
+                        errors.append(validation)
+                        continue
+                    
+                    logging.info(f"2. valida que la empresa esté activa {partner_id.active}")
+                    
+                    # Validar que el tamaño de la empresa beneficiaria sea micro, pequeña o mediana (MIPYME)
+                    if partner_id.x_company_size and partner_id.x_company_size != '5' and partner_id.x_company_size != '6':
+                        validation = 'Fila %s: El tamaño de la empresa beneficiaria %s no es micro o pequeña empresa (MYPE).' %\
+                            (str(count), partner_id.vat + '-' + str(partner_id.name.strip()))
+                        errors.append(validation)
+                        continue
+                    
+                    logging.info(f"3. valida tamaño empresa {partner_id.x_company_size}")
+                    
                     product_id=self.env['product.rvc'].search([('benefit_type','=',self.benefit_type)])
-                    self._cr.execute(\
-                        ''' SELECT id FROM sub_product_rvc WHERE product_id=%s AND %s between min_qty AND max_qty and state=%s''',
-                            (product_id.id, int(fila[2]), 'activo'))
-                    sub_product_id = self._cr.fetchone()
-                    if not sub_product_id:
-                        validation = 'No existe un subnivel COLABORA configurado para ' + ' - ' + str(fila[2])
-                        raise ValidationError(validation)                        
                     parent_id=self.env['res.partner'].search([('vat','=',str(fila[1])), ('is_company','=',True)], limit=1)
                     sponsor_id=self.env['rvc.sponsor'].search([('partner_id','=',parent_id.id)])
                     if not sponsor_id:
-                        validation = 'La empresa Halonadora no existe' + ' - ' + str(fila[1])
-                        raise ValidationError(validation)
+                        validation = 'Fila %s: La empresa Halonadora con NIT %s no existe' % (str(count), str(fila[1]))
+                        errors.append(validation)
+                        continue
+                    
+                    logging.info(f"4. valida si tiene halonador {sponsor_id}")
+
+                    #buscando el registro de la empresa como beneficiaria
                     rvc_beneficiary_id=self.env['rvc.beneficiary'].search([('partner_id','=',partner_id.id)])
+
+                    if not rvc_beneficiary_id:
+                        try:
+                            with self._cr.savepoint():
+                                rvc_beneficiary_id = self.env['rvc.beneficiary'].create({
+                                                                    'partner_id': partner_id.id,
+                                                                    'vat': partner_id.vat,
+                                                                    'contact_name': str(fila[3]),
+                                                                    'contact_phone': str(fila[5]),
+                                                                    'contact_email': str(fila[4]).strip().lower(),
+                                                                    'contact_position': str(fila[6]),
+                                                                    'active': True})
+                        except Exception as e:
+                            validation = "Fila %s: %s no se pudo crear como empresa beneficiaria. %s" % (str(count), partner_id.vat + '-' + str(partner_id.name.strip()),str(e))
+                            errors.append(validation)
+                            continue
+                    else:
+                        #beneficiario existe entonces traemos el registro.
+                        rvc_beneficiary_id=self.env['rvc.beneficiary'].browse(rvc_beneficiary_id.id)
+
+                    logging.info(f"5. crea beneficiario si no lo hay, id = {rvc_beneficiary_id}")
+
+                    #beneficio
+                    product_id=self.env['product.rvc'].search([('benefit_type','=',self.benefit_type)])
+
                     # Validar que la empresa beneficiaria no tenga otra postulación o entrega activa de este beneficio
                     if rvc_beneficiary_id:
                         benefit_application_id=self.env['benefit.application'].search([('partner_id','=',rvc_beneficiary_id.id),('product_id','=',product_id.id)])
-                        if benefit_application_id:
-                            validation = 'La empresa Beneficiaria ya tiene una entrega de beneficio activa' + ' - ' + str(fila[0] + ' - ' + partner_id.name)
-                            raise ValidationError(validation)
-                    if not rvc_beneficiary_id:
-                        contact_id=self.env['res.partner'].search([('name','=',str(fila[4])), ('is_company','=',False), ('parent_id','=',partner_id.id)], limit=1)
-                        if not contact_id:
-                            validation = 'El contacto no existe' + ' - ' + str(fila[4])
-                            raise ValidationError(validation)
-                        rvc_beneficiary_id = self.env['rvc.beneficiary'].create({
-                                                            'name': partner_id.name + '-' + 'Derechos de Identificación',
-                                                            'partner_id': partner_id.id,
-                                                            'vat': partner_id.vat,
-                                                            'contact_name': contact_id.name,
-                                                            'contact_phone': contact_id.phone,
-                                                            'contact_email': contact_id.email,
-                                                            'contact_position': contact_id.x_contact_job_title.id,
-                                                            'active': True})
-                        self.env.cr.commit()
-                    benefit_application = self.env['benefit.application'].create({
-                                                        'name': partner_id.name + '-' + 'LOGYCA/COLABORA',
-                                                        'partner_id': rvc_beneficiary_id.id,
-                                                        'parent_id': sponsor_id.id,
-                                                        'product_id': product_id.id,
-                                                        'sub_product_ids': sub_product_id[0],
-                                                        'end_date_colabora': (date.today() + relativedelta(years=1))})
-                    cre.append(benefit_application.id)
+                        
+                        if len(benefit_application_id) > 0:
+                            validation = 'Fila %s:  %s ya tiene una entrega de beneficio activa'\
+                                    % (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper())
+                            errors.append(validation)
+                            continue
+
+                    logging.info(f"6. valida si tiene una postulación activa {benefit_application_id}")
+
+                    if rvc_beneficiary_id and rvc_beneficiary_id.id:
+                        try:
+                            benefit_application = self.env['benefit.application'].create({
+                                                                'partner_id': rvc_beneficiary_id.id,
+                                                                'parent_id': sponsor_id.id,
+                                                                'product_id': product_id.id,
+                                                                'colabora_level': int(fila[2])})
+                            if benefit_application:
+                                self.env.cr.commit()
+                                cre.append(benefit_application.id)
+                                validation = "Fila %s: %s postulación creada correctamente" % (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper())
+                                errors.append(validation)
+                        except Exception as e:
+                            validation = "Fila %s: %s no se puede crear. Error: %s" %\
+                                (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper(), str(e))
+                            errors.append(validation)
+                            continue
+                    else:
+                        logging.warning("=================> no entra a la creacion de benefit.application")
                 else:
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
                     partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
@@ -316,7 +360,8 @@ class RVCImportFileWizard(models.TransientModel):
                                                         'benefit_type' : self.benefit_type})
                     cre.append(rvc_benf.id)
                     self.env.cr.commit()
-        if len(errors)>1:
+
+        if len(errors)>=1:
             error.append(errors)
         if error:
             msj='El resultado de la importación es: \n\n'
