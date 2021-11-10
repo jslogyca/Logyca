@@ -505,9 +505,15 @@ class BenefitApplication(models.Model):
         logging.info("====> response_assignate_codes_to_beneficiary =>" + str(response_assignate))
 
         if response_assignate.status_code == 200:
-            #TODO: logging
+            #obteniendo el prefijo del código
+            json_res = response_assignate.json()
+            txt_response = json_res.get('MensajeUI')[0]
+            index_start = txt_response.index(":") + 2
+            prefix = txt_response[index_start:]
+
+            #cerrando request
             response_assignate.close()
-            self.message_post(body=_('Los %s Códigos de Identificación fueron entregados al beneficiario' % str(int(self.codes_quantity))))
+            self.message_post(body=_('Los %s Códigos de Identificación fueron entregados al beneficiario. Prefijo:' % (str(int(self.codes_quantity)), prefix)))
             return True
         else:
             #TODO: logging
