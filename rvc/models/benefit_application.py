@@ -513,7 +513,7 @@ class BenefitApplication(models.Model):
 
             #cerrando request
             response_assignate.close()
-            self.message_post(body=_('Los %s Códigos de Identificación fueron entregados al beneficiario. Prefijo:' % (str(int(self.codes_quantity)), prefix)))
+            self.message_post(body=_(f'Los {str(int(self.codes_quantity))} Códigos de Identificación fueron entregados al beneficiario. Prefijo: {str(prefix)}'))
             return True
         else:
             #TODO: logging
