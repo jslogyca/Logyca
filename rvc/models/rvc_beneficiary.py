@@ -8,7 +8,7 @@ import logging
 class RVCBeneficiary(models.Model):
     _name = 'rvc.beneficiary'
     _description = 'RVC Beneficiary'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _inherit = 'mail.thread'
     _rec_name = 'partner_id'
 
     partner_id = fields.Many2one('res.partner', string='Patrocinado')
