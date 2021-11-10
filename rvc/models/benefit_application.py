@@ -117,6 +117,22 @@ class BenefitApplication(models.Model):
                 }
                 self.write({'state': 'confirm'})
 
+    def action_new_credentials(self):
+        for benefit_application in self:
+            if benefit_application.state in ('done'):
+                view_id = self.env.ref('rvc.rvc_template_assignate_credentials_wizard_form').id,
+                return {
+                    'name':_("Re-Asignar Credenciales"),
+                    'view_mode': 'form',
+                    'view_id': view_id,
+                    'view_type': 'form',
+                    'res_model': 'rvc.template.email.wizard',
+                    'type': 'ir.actions.act_window',
+                    'nodestroy': True,
+                    'target': 'new',
+                    'domain': '[]'
+                }
+
     def action_done(self):
         for benefit_application in self:
             if benefit_application.state in ('confirm'):
@@ -552,7 +568,7 @@ class BenefitApplication(models.Model):
 
         return False
 
-    def assign_credentials_colabora(self):
+    def assign_credentials_colabora(self, re_assign=False, re_assign_email=None):
         bearer_token = self.get_token_colabora_api()
 
         if bearer_token or bearer_token[0]:
@@ -575,10 +591,14 @@ class BenefitApplication(models.Model):
             elif self.partner_id.partner_id.x_first_name and self.partner_id.partner_id.x_first_lastname:
                 credentials_contact_name = self.partner_id.partner_id.x_first_name + " " + self.partner_id.partner_id.x_first_lastname
             
+            # si viene de reasignar credenciales utiliza el correo nuevo ingresado y si no usa el 
+            # que tiene el contacto del beneficiario
+            contact_email = re_assign_email if re_assign_email != None else self.contact_email
+
             body_assignate = json.dumps({
                     "Nit": self.vat,
                     "Name": credentials_contact_name,
-                    "UserMail": self.contact_email,
+                    "UserMail": contact_email,
                     "InitialDate": today_date.strftime('%Y-%m-%d'),
                     "EndDate": today_one_year_later.strftime('%Y-%m-%d'),
                     "level": 0,
