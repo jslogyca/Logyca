@@ -438,7 +438,14 @@ class BenefitApplication(models.Model):
         response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
 
         if response_assignate.status_code == 200:
+            #obteniendo el prefijo del código
+            json_res = response_assignate.json()
+            txt_response = json_res.get('MensajeUI')[0]
+            index_start = txt_response.index(":") + 2
+            prefix = txt_response[index_start:]
+
             response_assignate.close()
+            
             #marcando código
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url_mark = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/mark/"
@@ -469,7 +476,7 @@ class BenefitApplication(models.Model):
                 result = response_mark.json()
 
                 self.write({'gln': str(result.get('IdCodigos')[0].get('Codigo'))})
-                self.message_post(body=_('El Código GLN fue creado y entregado con el beneficio.'))
+                self.message_post(body=_(f'El Código GLN fue creado y entregado con el beneficio. Prefijo: {str(prefix)}'))
                 logging.info(\
                     "Código GLN '%s' creado y marcado para la empresa %s"\
                         % (result.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.partner_id.name)))
