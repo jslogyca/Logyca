@@ -35,6 +35,22 @@ class RVCImportFileWizard(models.TransientModel):
     def import_file(self):
         if not self.file_data:
             raise ValidationError('No se encuentra un archivo, por favor cargue uno. \n\n Si no es posible cierre este asistente e intente de nuevo.')
+
+        # valida que el archivo cargado se llame igual que la plantilla .xlsx
+        if self.filename:
+            if self.benefit_type == 'codigos' and 'Plantilla_Beneficiarias_Identificacion' not in self.filename:
+                raise ValidationError('¡Error! ha seleccionado una plantilla equivocada. \n\n'\
+                    'Usted ha seleccionado beneficio Derechos de Identificación, pero su plantilla se llama "%s".\n\n'\
+                    'Por favor cargue la plantilla correspondiente.' % self.filename)
+            elif self.benefit_type == 'colabora' and 'Plantilla_Beneficiarias_Colabora' not in self.filename:
+                raise ValidationError('¡Error! ha seleccionado una plantilla equivocada. \n\n'\
+                    'Usted ha seleccionado beneficio Logyca Colabora, pero su plantilla se llama "%s".\n\n'\
+                    'Por favor cargue la plantilla correspondiente.' % self.filename)
+            elif self.benefit_type == 'analitica' and 'Plantilla_Beneficiarias_Analitica' not in self.filename:
+                raise ValidationError('¡Error! ha seleccionado una plantilla equivocada. \n\n'\
+                    'Usted ha seleccionado beneficio Logyca Analítica, pero su plantilla se llama "%s".\n\n'\
+                    'Por favor cargue la plantilla correspondiente.' % self.filename)
+
         try:
             tmp_file = tempfile.NamedTemporaryFile(delete = False)
             tmp_file.write(base64.b64decode(self and self.file_data or _('Invalid file')))
