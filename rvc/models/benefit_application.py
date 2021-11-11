@@ -39,7 +39,7 @@ class BenefitApplication(models.Model):
                                     ('colabora', 'Colabora'),
                                     ('analitica', 'Analítica')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
     colabora_level = fields.Char(string='Nivel', track_visibility="onchange")
-    date_end = fields.Date(string='Date End', track_visibility='onchange')
+    end_date_colabora = fields.Date(string='Fecha Fin Colabora', track_visibility='onchange')
     acceptance_date = fields.Datetime(string='Fecha/Hora Aceptación', track_visibility='onchange', readonly=True)
     notification_date = fields.Datetime(string='Fecha/Hora Notificación', track_visibility='onchange', readonly=True)
     rejection_date = fields.Datetime(string='Fecha/Hora Rechazo', track_visibility='onchange', readonly=True)
@@ -117,12 +117,28 @@ class BenefitApplication(models.Model):
                 }
                 self.write({'state': 'confirm'})
 
+    def action_new_credentials(self):
+        for benefit_application in self:
+            if benefit_application.state in ('done'):
+                view_id = self.env.ref('rvc.rvc_template_assignate_credentials_wizard_form').id,
+                return {
+                    'name':_("Re-Asignar Credenciales"),
+                    'view_mode': 'form',
+                    'view_id': view_id,
+                    'view_type': 'form',
+                    'res_model': 'rvc.template.email.wizard',
+                    'type': 'ir.actions.act_window',
+                    'nodestroy': True,
+                    'target': 'new',
+                    'domain': '[]'
+                }
 
     def action_done(self):
         for benefit_application in self:
             if benefit_application.state in ('confirm'):
-                # validamos que no hayan productos comprados disponibles
+
                 if self.product_id.benefit_type == 'codigos':
+                    # validamos que no hayan productos comprados disponibles
                     if self._validate_bought_products():
                         view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
                         return {
@@ -185,9 +201,26 @@ class BenefitApplication(models.Model):
                         'domain': '[]'
                     }
                     self.write({'state': 'notified', 'notification_date': datetime.now()})
-            elif self.product_id.benefit_type != 'codigos':
-                raise ValidationError(_('Oops! Muy pronto podrás notificar los beneficios LOGYCA/COLABORA y LOGYCA/ANALÍTICA.\n\n'\
-                    'Por el momento solo puedes notificar el beneficio DERECHOS DE IDENTIFICACIÓN.'))
+            #Antes de notificar al beneficiario validamos si el beneficio es colabora
+            # y si el nivel de colabora está entre 1 y 10
+            elif self.product_id.benefit_type == 'colabora' and self._validate_colabora_level():
+                if benefit_application.state in ('draft', 'notified'):
+                    view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id,
+                    return {
+                        'name':_("Are you sure?"),
+                        'view_mode': 'form',
+                        'view_id': view_id,
+                        'view_type': 'form',
+                        'res_model': 'rvc.template.email.wizard',
+                        'type': 'ir.actions.act_window',
+                        'nodestroy': True,
+                        'target': 'new',
+                        'domain': '[]'
+                    }
+                    self.write({'state': 'notified', 'notification_date': datetime.now()})
+            elif self.product_id.benefit_type == 'analitica':
+                raise ValidationError(_('Oops! Muy pronto podrás notificar el beneficio LOGYCA/ANALÍTICA.\n\n'\
+                    'Por el momento solo puedes notificar DERECHOS DE IDENTIFICACIÓN y LOGYCA/COLABORA.'))
             elif not self._validate_qty_codes():
                 logging.warning("===> _validate_qty_codes no pasó la validación")
             elif not self._validate_bought_products():
@@ -202,10 +235,22 @@ class BenefitApplication(models.Model):
             if 'product_id' in vals:
                 product_id = self.env['product.rvc'].browse(int(vals['product_id']))
 
+                #este método es generico y permite saber si es apto por tamaño de empresa
+                self._validate_company_size()
+
                 #validar si producto rvc es codigos
                 if product_id.code == '01':
+                    
+                    # validar si es miembro o cliente
+                    self._validate_member_or_client(beneficiary.partner_id)
+                    
                     # validar si tiene códigos comprados
                     self._validate_bought_products_create(beneficiary.partner_id.vat)
+
+                #validar si producto rvc es colabora
+                if product_id.code == '02':
+                    # validar si ya tiene colabora activo
+                    self._validate_has_colabora(beneficiary.partner_id.vat)
 
         return super(BenefitApplication, self).create(vals)
 
@@ -214,7 +259,7 @@ class BenefitApplication(models.Model):
         self._validate_gln_only_numbers()
         self._validate_gln()
 
-        if 'state' in vals and vals['state'] != 'done':
+        if 'state' in vals and vals['state'] in ('done', 'cancel'):
             self._validate_bought_products()
         return res
 
@@ -222,6 +267,16 @@ class BenefitApplication(models.Model):
     def _validate_gln_only_numbers(self):
         if self.gln and not re.match(r'^[0-9]+$', str(self.gln)):
             raise ValidationError(_('Código GLN "%s" es inválido.\n\nLos códigos GLN solo están compuestos de números.' % str(self.gln)))
+        return True
+    
+    def _validate_member_or_client(self, partner_id):
+        # Validar que el tipo de vinculación de la empresa beneficiaria no sea miembro, ni cliente CE
+        if partner_id.x_type_vinculation:
+            for vinculation in partner_id.x_type_vinculation:
+                if vinculation.code in ('01', '02'):
+                    validation = '%s no aplica para el beneficio. Es miembro o cliente CE' %\
+                            (partner_id.vat + '-' + str(partner_id.name.strip()))
+                    raise ValidationError(str(validation))
         return True
 
     def _validate_gln(self):
@@ -262,11 +317,10 @@ class BenefitApplication(models.Model):
                         if len(result) >= 1:
                             self.gln = result[0].get('id')
                             return True
-
             else:
                 raise ValidationError(\
                     _('No se ha podido validar el Código GLN de la empresa seleccionada.\
-                       Inténtelo nuevamente o comuníquese con soporte. <strong>Error:</strong> %s' % str(response)))
+                       Inténtelo nuevamente o comuníquese con soporte. Error: %s' % str(response)))
 
             #caso 3: usuario ingresa gln pero es incorrecto y se encuentra uno válido.
             if self.gln and gln_from_user_found == False and available_gln_codes != "No codes" and qty_codes_found == 1:
@@ -281,6 +335,7 @@ class BenefitApplication(models.Model):
             #caso 8: no tiene gln registrado. Registrando uno para la empresa seleccionada.
             elif not self.gln and gln_from_user_found == False and available_gln_codes == "No codes":
                 logging.info(" ==> Se asignará GLN con el beneficio <===")
+                return False
 
             #caso 9: usuario ingresa GLN pero es incorrecto y no tiene GLN's.
             elif self.gln and gln_from_user_found == False and available_gln_codes == "No codes":
@@ -315,7 +370,7 @@ class BenefitApplication(models.Model):
             else:
                 raise ValidationError(\
                         _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
-                            Inténtelo nuevamente o comuníquese con soporte. <strong>Error:</strong> %s' % (str(response))))
+                            Inténtelo nuevamente o comuníquese con soporte. Error: %s' % (str(response))))
             return True
 
     # validacion para el create, ya que no tenemos self entonces en esta funcion no se usa self.
@@ -341,14 +396,35 @@ class BenefitApplication(models.Model):
         else:
             raise ValidationError(\
                     _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
-                        Inténtelo nuevamente o comuníquese con soporte. <strong>Error:</strong> %s' % (str(response))))
+                        Inténtelo nuevamente o comuníquese con soporte. Error: %s' % (str(response))))
         return True
 
     def _validate_qty_codes(self):
         for rec in self:
             if rec.codes_quantity == 0 and self.product_id.benefit_type == 'codigos':
                 raise ValidationError(\
-                    _('Por favor indique la -Cantidad de Códigos- que se entregará a la empresa beneficiaria.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
+                    _('Por favor indique la Cantidad de Códigos que se entregará a la empresa beneficiaria.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
+        return True
+
+    def _validate_colabora_level(self):
+        for rec in self:
+            if not rec.colabora_level  and self.product_id.benefit_type == 'colabora':
+                raise ValidationError(\
+                    _('Por favor indique el Nivel de LOGYCA/COLABORA que desea activar para la empresa beneficiaria.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
+        return True
+
+    def _validate_company_size(self):
+        for rec in self:
+
+            #validar que para D.I sean mipymes
+            if rec.partner_id.partner_id.x_company_size and rec.partner_id.partner_id.x_company_size == '4' and self.product_id.benefit_type == 'codigos':
+                raise ValidationError(\
+                    _('¡Error de Validación! La empresa es grande.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
+
+            #validar que para colabora sean mypes
+            if rec.partner_id.partner_id.x_company_size and rec.partner_id.partner_id.x_company_size in ['5','6'] and self.product_id.benefit_type == 'colabora':
+                raise ValidationError(\
+                    _('¡Error de Validación! La empresa NO es micro o pequeña.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
         return True
 
     def assignate_gln_code(self):
@@ -378,7 +454,14 @@ class BenefitApplication(models.Model):
         response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
 
         if response_assignate.status_code == 200:
+            #obteniendo el prefijo del código
+            json_res = response_assignate.json()
+            txt_response = json_res.get('MensajeUI')[0]
+            index_start = txt_response.index(":") + 2
+            prefix = txt_response[index_start:]
+
             response_assignate.close()
+            
             #marcando código
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url_mark = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/mark/"
@@ -409,7 +492,7 @@ class BenefitApplication(models.Model):
                 result = response_mark.json()
 
                 self.write({'gln': str(result.get('IdCodigos')[0].get('Codigo'))})
-                self.message_post(body=_('El Código GLN fue creado y entregado con el beneficio.'))
+                self.message_post(body=_(f'El Código GLN fue creado y entregado con el beneficio. Prefijo: {str(prefix)}'))
                 logging.info(\
                     "Código GLN '%s' creado y marcado para la empresa %s"\
                         % (result.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.partner_id.name)))
@@ -445,16 +528,22 @@ class BenefitApplication(models.Model):
         logging.info("====> response_assignate_codes_to_beneficiary =>" + str(response_assignate))
 
         if response_assignate.status_code == 200:
-            #TODO: logging
+            #obteniendo el prefijo del código
+            json_res = response_assignate.json()
+            txt_response = json_res.get('MensajeUI')[0]
+            index_start = txt_response.index(":") + 2
+            prefix = txt_response[index_start:]
+
+            #cerrando request
             response_assignate.close()
-            self.message_post(body=_('Los %s Códigos de Identificación fueron entregados al beneficiario' % str(int(self.codes_quantity))))
+            self.message_post(body=_(f'Los {str(int(self.codes_quantity))} Códigos de Identificación fueron entregados al beneficiario. Prefijo: {str(prefix)}'))
             return True
         else:
             #TODO: logging
             self.message_post(body=_('Los Códigos de Identificación no pudieron ser entregados al beneficiario. <strong>Error:</strong> %s' % str(response_assignate)))
             return False
 
-    def get_token_assign_credentials(self):
+    def get_token_colabora_api(self):
         
         if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_get_token = "http://logycassoapi.azurewebsites.net/api/Token/Authenticate"
@@ -479,8 +568,8 @@ class BenefitApplication(models.Model):
 
         return False
 
-    def assign_credentials_for_codes(self):
-        bearer_token = self.get_token_assign_credentials()
+    def assign_credentials_colabora(self, re_assign=False, re_assign_email=None):
+        bearer_token = self.get_token_colabora_api()
 
         if bearer_token or bearer_token[0]:
             today_date = datetime.now()
@@ -502,10 +591,14 @@ class BenefitApplication(models.Model):
             elif self.partner_id.partner_id.x_first_name and self.partner_id.partner_id.x_first_lastname:
                 credentials_contact_name = self.partner_id.partner_id.x_first_name + " " + self.partner_id.partner_id.x_first_lastname
             
+            # si viene de reasignar credenciales utiliza el correo nuevo ingresado y si no usa el 
+            # que tiene el contacto del beneficiario
+            contact_email = re_assign_email if re_assign_email != None else self.contact_email
+
             body_assignate = json.dumps({
                     "Nit": self.vat,
                     "Name": credentials_contact_name,
-                    "UserMail": self.contact_email,
+                    "UserMail": contact_email,
                     "InitialDate": today_date.strftime('%Y-%m-%d'),
                     "EndDate": today_one_year_later.strftime('%Y-%m-%d'),
                     "level": 0,
@@ -534,18 +627,91 @@ class BenefitApplication(models.Model):
                     self.message_post(body=_(\
                         'No pudieron asignarse las credenciales para acceder a la administración de códigos.'\
                             '\n<strong>Error:</strong> %s' % str(error_message)))
+                    return False
                 else:
                     self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
                     return True
             else:
                 #TODO: logging
-                logging.exception("====> assign_credentials_for_codes =>" + str(response_assignate))
-                logging.exception("====> assign_credentials_for_codes =>" + str(response_assignate.text))
+                logging.exception("====> assign_credentials_colabora =>" + str(response_assignate))
+                logging.exception("====> assign_credentials_colabora =>" + str(response_assignate.text))
                 self.message_post(body=_(\
                         'No pudieron asignarse las credenciales. <strong>Error:</strong> %s' % str(response_assignate)))
                 return False
         else:
             self.message_post(body=_("No pudo obtenerse el token para realizar la asignación de credenciales en Colabora."\
+                                     "Inténtelo nuevamente o comuníquese con soporte."))
+            return False
+
+    def assign_colabora(self):
+        bearer_token = self.get_token_colabora_api()
+
+        if bearer_token or bearer_token[0]:
+            today_date = datetime.now()
+            today_one_year_later = today_date + relativedelta(years=1)
+
+            if self.get_odoo_url() == 'https://logyca.odoo.com':
+                url_assignate= "https://logycacolaboraapiv1.azurewebsites.net/api/Company/AddCompanyEcommerce"
+            else:
+                url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
+
+            #validando el nombre de contacto para asignar credenciales
+            # si no tiene contact_name le ponemos el nombre de la empresa
+            credentials_contact_name = ""
+            if self.contact_name:
+                credentials_contact_name = self.contact_name
+            elif self.partner_id.partner_id.name:
+                credentials_contact_name = self.partner_id.partner_id.name
+            elif self.partner_id.partner_id.x_first_name and self.partner_id.partner_id.x_first_lastname:
+                credentials_contact_name = self.partner_id.partner_id.x_first_name + " " + self.partner_id.partner_id.x_first_lastname
+
+            body_assignate = json.dumps({
+                    "Nit": self.vat,
+                    "Name": credentials_contact_name,
+                    "UserMail": self.contact_email,
+                    "InitialDate": today_date.strftime('%Y-%m-%d'),
+                    "EndDate": today_one_year_later.strftime('%Y-%m-%d'),
+                    "level": int(self.colabora_level),
+                    "TypeService": 2,
+                    "NumberOverConsumption": 0,
+                    "IsOverconsumption": False
+                })
+            headers_assignate = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
+
+            #Making http post request
+            response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
+
+            logging.info("====> response_assignate_colabora =>" + str(response_assignate))
+
+            if response_assignate.status_code == 200:
+                #TODO: logging
+                result = response_assignate.json()
+                response_assignate.close()
+
+                #TODO: se requiere que la API de Colabora nos devuelva dataError=False cuando sea exitosa la asignacion de colabora
+                #la condición está al revés, es decir, se espera que en el caso ideal devuelva dataError=True. 
+                if result.get('dataError') == False:
+                    #TODO: logging
+                    error_message = result.get('apiException').get('message')
+                    if not error_message:
+                        error_message = result.get('resultMessage')
+                    self.message_post(body=_(\
+                        'No pudo activarse colabora.\n<strong>Error:</strong> %s' % str(error_message)))
+                    return False
+
+                #error al asignar colabora
+                else:
+                    self.message_post(body=_('Se ha <strong>activado</strong> Colabora <strong>nivel ' + str(self.colabora_level) + '</strong>'))
+                    return True
+            else:
+                #TODO: logging
+                logging.exception("====> assign_colabora =>" + str(response_assignate))
+                logging.exception("====> assign_colabora =>" + str(response_assignate.text))
+                self.message_post(body=_(\
+                        'No pudo activarse colabora.\n<strong>Error:</strong> %s' % str(response_assignate)))
+                return False
+        else:
+            self.message_post(body=_("No pudo obtenerse el token para realizar la activación de Colabora."\
                                      "Inténtelo nuevamente o comuníquese con soporte."))
             return False
 
@@ -602,7 +768,6 @@ class BenefitApplication(models.Model):
                 else:
                     # si tiene al menos un tipo de vinculacion entonces revisamos cuáles son
                     if partner_id.x_type_vinculation:
-                        vinculated = True
                         for vinculation in partner_id.x_type_vinculation:
                             # tiene la vinculación 'no tiene vinculacion' o tiene la '99 anos'
                             if vinculation.code in ('12', '10'):
@@ -623,8 +788,9 @@ class BenefitApplication(models.Model):
 
 
     def _cron_send_welcome_kit(self):
-        logging.warning("==> Iniciando cron de enviar kits de bienvenida ...")
+        """  Acción planificada que envía kits de bienvenida a las postulaciones Aceptadas. """
 
+        logging.warning("==> Iniciando cron de enviar kits de bienvenida ...")
         if not self:
             counter = 0
             self = self.search([('state', '=', 'confirm')])
@@ -635,24 +801,35 @@ class BenefitApplication(models.Model):
                 if counter < 30:
                     if postulation_id.partner_id.contact_email:
                         access_link = postulation_id.partner_id.partner_id._notify_get_action_link('view')
-                        template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+
+                        if postulation_id.product_id.benefit_type == 'codigos':
+                            template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                        elif postulation_id.product_id.benefit_type == 'colabora':
+                            template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+
                         template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
 
                         if not postulation_id.gln:
                             # si no tiene GLN, asignamos uno.
                             postulation_id.assignate_gln_code()
 
-                        # Asignar beneficio de códigos de identificación
-                        if postulation_id.assign_identification_codes():
-                            postulation_id.assign_credentials_for_codes()
+                        if postulation_id.product_id.benefit_type == 'codigos':
+                            # Asignar beneficio de códigos de identificación
+                            if postulation_id.assign_identification_codes():
+                                postulation_id.assign_credentials_colabora()
+
+                            # Agregar tipo de vinculacion al tercero
+                            postulation_id.add_vinculation_partner()
+
+                        elif postulation_id.product_id.benefit_type == 'colabora':
+                            # Activar colabora
+                            if postulation_id.assign_colabora():
+                                postulation_id.assign_credentials_colabora()
 
                         # Actualizar Contacto y Empresa
-                        self.update_contact(postulation_id.partner_id)
+                        postulation_id.update_contact(postulation_id.partner_id)
                         if postulation_id.parent_id:
-                            self.update_company(postulation_id)
-
-                        # Agregar tipo de vinculacion al tercero
-                        self.add_vinculation_partner()
+                            postulation_id.update_company(postulation_id)
 
                         postulation_id.write({'state': 'done'})
                         counter += 1
@@ -698,15 +875,64 @@ class BenefitApplication(models.Model):
             return True 
         return False
 
+    def calculate_end_date_colabora(self):
+        next_year = fields.Date.today() + relativedelta(years=1)
+        self.end_date_colabora = next_year
+
     def send_notification_benefit(self):
         for benefit_admon in self:
             partner=self.env['res.partner'].search([('id','=',benefit_admon.partner_id.partner_id.id)])
             if partner and benefit_admon.partner_id.contact_email:
-                access_link = partner._notify_get_action_link('view')
-                template = self.env.ref('rvc.mail_template_deactivated_partner_benef')
-                subject = "Beneficio Derechos de Identificación"
-                template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False, email_values={'subject': subject})
-                benefit_admon.write({'state': 'notified', 'notification_date': datetime.now()})
+                # notificar Derechos de Identificación
+                if benefit_admon.product_id.code == '01':
+                    access_link = partner._notify_get_action_link('view')
+                    subject = "Beneficio Derechos de Identificación"
+                    template = self.env.ref('rvc.mail_template_notify_benefit_codes')
+                    template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False, email_values={'subject': subject})
+                    benefit_admon.write({'state': 'notified', 'notification_date': datetime.now()})
+                # notificar Logyca / Colabora
+                if benefit_admon.product_id.code == '02':
+                    access_link = partner._notify_get_action_link('view')
+                    subject = "Beneficio Plataforma LOGYCA / COLABORA"
+                    template = self.env.ref('rvc.mail_template_notify_benefit_colabora')
+                    template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False, email_values={'subject': subject})
+                    benefit_admon.write({'state': 'notified', 'notification_date': datetime.now()})
 
     def get_odoo_url(self):
         return self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+
+    def _validate_has_colabora(self, vat):
+        """ Valida si la empresa ya tiene colabora.
+        En caso de que si, no es apto para ser beneficiario RVC.
+
+        :param vat es el número de identificación de la empresa
+        :return True si NO tiene colabora, False si tiene colabora
+        """
+
+        bearer_token = self.get_token_colabora_api()
+
+        if bearer_token or bearer_token[0]:
+
+            if self.get_odoo_url() == 'https://logyca.odoo.com':
+                url = "https://logycacolaboraapiv1.azurewebsites.net/api/Validity/ValidityCount?nit=%s" % (str(vat))
+            else:
+                url = "https://logycacolaboratestapi.azurewebsites.net/api/Validity/ValidityCount?nit=%s" % (str(vat))
+
+            headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
+
+            #Making http get request
+            response = requests.get(url, headers=headers, verify=True)
+
+            if response.status_code == 200:
+                result = response.json()
+                response.close()
+            else:
+                logging.debug(f" Error en _validate_has_colabora código: =====> {response.status_code}")
+
+            if result.get('dataError') == False:
+                 raise ValidationError(\
+                    _('¡Error de Validación! La empresa %s ya tiene Logyca/Colabora activo.') % str(vat))
+        else:
+            raise ValidationError(\
+                    _('¡Error de comunicación! Odoo no pudo comunicarse con Logyca/Colabora para verificar si la empresa ya tiene el servicio activo.'))
+        return True

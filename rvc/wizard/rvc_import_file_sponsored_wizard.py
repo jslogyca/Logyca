@@ -46,8 +46,8 @@ class RVCImportFileSponsoredWizard(models.TransientModel):
                 # Validar con el nit de la empresa Patrocinadora que esté registrado en Odoo
                 partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
                 if not partner_id:
-                    # raise ValidationError('La empresa beneficiaria no exise en Odoo')
-                    validation = 'La empresa beneficiaria no exise en Odoo' + ' - ' + str(fila[0])
+                    # raise ValidationError('La empresa beneficiaria no existe en Odoo')
+                    validation = 'La empresa beneficiaria no existe en Odoo' + ' - ' + str(fila[0])
                     self.env['log.import.rvc'].create({
                                                         'name': validation,
                                                         'date_init': fields.Datetime.now(),

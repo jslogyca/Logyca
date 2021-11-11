@@ -11,7 +11,8 @@
 				 	<button name="action_notified" type="object" states="notified" string="Volver a notificar" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 				 	<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-                    <button name="action_reactivate" type="object" states="rejected,cancel" string="Re-activar Postulación" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+                    <button name="action_new_credentials" type="object" states="done" string="Re-Asignar Credenciales" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_reactivate" type="object" states="rejected,cancel" string="Re-activar Postulación" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />
 					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary" attrs="{'invisible': ['|','|','|',('id','=', False),('state','=','rejected'),('state','=','cancel'),('state','=','done')]}" groups="rvc.group_rvc_manager"/>
 				</header>			
@@ -31,7 +32,7 @@
 							<field name="benefit_type" invisible="1"/>						
 							<field name="codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
 							<field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
-							<field name="date_end" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
+							<field name="end_date_colabora" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
 							<field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos'))], 'readonly': [('state','=','done')]}" />
 						</group>
 					</group>
@@ -41,7 +42,7 @@
                             <field name="id" invisible="1"/>
 						</group>
 						<group string="Otra Información">
-                            <field name="historical_record"/>
+                            <field name="historical_record" readonly="1"/>
 							<field name="origin"/>
 						</group>
 					</group>
@@ -95,6 +96,8 @@
                     <filter string="Estado" name="state" context="{'group_by':'state'}"/>
                     <filter string="Beneficio" name="benefit" context="{'group_by':'product_id','residual_visible':True}"/>
                     <filter string="Halonadora" name="sponsor" context="{'group_by':'parent_id','residual_visible':True}"/>
+                    <filter string="Empresa Beneficiaria" name="beneficiary" context="{'group_by':'partner_id'}"/>
+					<filter string="Origen" name="Origen" context="{'group_by':'origin'}"/>
                 </group>
             </search>
         </field>

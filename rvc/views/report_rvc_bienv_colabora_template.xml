@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_rvc_bienv_colabora_template">
+        <t t-call="web.html_container">
+            <t t-foreach="inside_foreach_docs or docs" t-as="o">
+                    <t t-set="o" t-value="o.with_context(lang=o.partner_id.partner_id.lang or o.env.lang)"/>
+                    <style>
+                      p{
+                        font-size: 10pt;
+                        text-align: justify;
+                        text-justify: inter-word;
+                      }
+                    </style>
+                    <div class="header">
+                         <img src='https://saintegracionesvtex.blob.core.windows.net/mailimages/head-logyca.jpg' align="left"/>
+                    </div>
+                    <div class="page">
+                        <div class="content">
+                            <p align="left"> Bogotá D.C., <span t-esc="o.today_date_spanish()"/></p>
+                            <p>Señores<br/>
+                            <t t-if="o.partner_id">
+                                <span t-field="o.partner_id.partner_id.name"/>
+                            </t><br/>
+                            <t t-if="o.partner_id">
+                                <span t-field="o.partner_id.partner_id.vat"/>
+                            </t></p>
+                            <p>Raciban un cordial saludo.</p><br/>
+                            <p>Desde el año 2015, LOGYCA dio inicio al programa de <strong>Redes de Valor Colaborativas - RVC</strong>, iniciativa de 
+                                fortalecimiento empresarial liderada por nuestros miembros, que busca mejorar la eficiencia y competitividad 
+                                sostenible de las <strong>micro y pequeñas empresas.</strong></p>
+                            <p>Dicho esfuerzo nos ha permitido avanzar en el propósito de potenciar la competitividad de este segmento de empresas, 
+                                de forma tal que, logren responder de manera mucho más eficaz a los retos que demanda el mercado.</p>
+                            <p>Dentro de este programa, <strong>su empresa ha sido seleccionada para recibir el beneficio de LOGYCA / COLABORA
+                                </strong> el cual aplica para todas las micro y pequeñas empresas (Mypes).
+                            </p>
+                            <p><strong>Detalle del beneficio a entregar:</strong><br/><strong>LOGYCA / COLABORA</strong></p>
+                            <p>Plataforma colaborativa que garantiza una gestión oportuna eficiente y de calidad del portafolio de productos 
+                                entre socios comerciales. La plataforma está compuesta por siete procesos y módulos que se describen a continuación:
+                            </p>
+                            <p><strong>1.</strong>  Seguridad. – permite la administración de roles y usuarios para el acceso a la plataforma según los permisos otorgados por el usuario administrador responsable de la compañía.<br/>
+                                <strong>2.</strong>  Identificación. - Facilita la administración y el uso adecuado de los códigos GS1 asignados en Colombia por LOGYCA / ASOCIACIÓN (representante de GS1 en Colombia) a través de la visibilidad de los códigos utilizados y disponibles.<br/>
+                                <strong>3.</strong>  Librería de productos. - permite al cliente visualizar y administrar la información de su portafolio de productos correspondiente a las definiciones y convenciones establecidas con las empresas vinculadas a LOGYCA / COLABORA.<br/>
+                                <strong>4.</strong> Calidad de datos: Incluye el agendamiento de la cita para la respectiva captura de información y fotografía de los productos acorde al nivel adquirido y bajo el estándar en las instalaciones físicas definidas o aprobadas por LOGYCA para este fin.<br/>
+                                <strong>5.</strong> Negociación. - permite al cliente intercambiar información, para los procesos de codificación de productos con las cadenas comerciales vinculadas a LOGYCA / COLABORA, de sus productos disponibles en el módulo de Librería, e incorporar información relativa a las condiciones comerciales acordadas con su cliente.<br/>
+                                <strong>6.</strong>  Relaciones empresariales. – Aplica únicamente para empresas distribuidoras o comercializadoras. permite la autorización de las empresas anteriormente descritas a negociar los productos de un fabricante.<br/>
+                                <strong>7.</strong>  Administración. – Acceso a la administración de marcas y/o fabricantes autorizados para su comercialización.</p><br/>
+                            <p>Para conocer más sobre el uso de nuestra plataforma lo invitamos a ver el siguiente video: <a href="https://youtu.be/eYoJgj3ywCs" style="color: #00b398;">https://youtu.be/eYoJgj3ywCs</a></p>
+                            <p>En caso de que requiera más información o tenga alguna pregunta no dude en contactarnos.<br/><br/>Atentamente,</p><br/>
+                            <p style='font-weight: bold; text-align: left'>
+                                <td><img src="https://saintegracionesvtex.blob.core.windows.net/mailimages/RvcSoluciona/Leonel.png"
+                                        width="150" height="100" alt="" /><br/></td>
+                                ______________________ <br/><p>Leonel Pava</p><p>Director LOGYCA / ASOCIACIÓN</p>
+                            </p>
+                        </div>
+                    </div>
+                </t>
+        </t>
+    </template>
+
+    <template id="report_rvc_bienv_colabora">
+        <t t-foreach="docs" t-as="o">
+            <!-- <t t-set="inside_foreach_docs" t-value="o"/> -->
+            <t t-call="rvc.report_rvc_bienv_colabora_template" t-lang="o.partner_id.sudo().partner_id.lang"/>
+        </t>
+    </template>
+</odoo>
