@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_loan_line_view_tree" model="ir.ui.view">
+        <field name="name">hr.loan.line.tree</field>
+        <field name="model">hr.loan.line</field>
+        <field name="arch" type="xml">
+            <tree string="Installment Line" >
+                <field name="date" />
+                <field name="employee_id"/>
+                <field name="amount" />
+                <field name="paid" />
+                <field name="loan_id" />
+                <field name="payslip_id"/>
+                <field name="amount"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_loan_line" model="ir.actions.act_window">
+        <field name="name">Installment Line</field>
+        <field name="res_model">hr.loan.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hr_loan_line_view_tree"/>
+    </record>
+
+    <menuitem
+        id="account_menu_hr_loan_line"
+        name="Installment Line"
+        action="action_hr_loan_line"
+        parent="menu_base_hr_loan_request"
+        sequence="2" />
+</odoo>

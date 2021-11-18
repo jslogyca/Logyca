@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="hr_payslip_view_form_update" model="ir.ui.view">
+		<field name="name">hr.payslip.view.form.update</field>
+		<field name="model">hr.payslip</field>
+		<field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//button[@name='action_payslip_done']" position="after">
+				<button string="Update Input Employee" name="update_input_employee" type="object" states="draft" class="oe_highlight"/>
+				<button string="Cancel Payslip" name="action_payslip_cancel_done" type="object" states="done" class="oe_highlight"/>
+			</xpath>
+		</field>
+	</record>
+</odoo>
