@@ -3,6 +3,8 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime
+import re
+import logging
 
 class RVCTemplateEmailWizard(models.TransientModel):
     _name = "rvc.template.email.wizard"
@@ -10,7 +12,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
 
     note_deactive = fields.Text(string='Nota Adicional')
-
+    email_credentials = fields.Char(string="Email Credenciales")
 
     def action_reason_desactive(self):
         context = dict(self._context or {})
@@ -122,3 +124,20 @@ class RVCTemplateEmailWizard(models.TransientModel):
         if benefit_application:
             benefit_application.write({'state': 'rejected', 'rejection_date': datetime.now()})
         return {'type': 'ir.actions.act_window_close'}
+
+    def re_assign_credentials(self):
+        for rec in self:
+            if rec.email_credentials != False:
+                logging.info(rec.email_credentials)
+                match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', str(rec.email_credentials).lower())
+
+                if match == None:
+                    raise UserError(f"El email '{str(rec.email_credentials).lower()}' NO es válido. Por favor verifíquelo.")
+
+                context = dict(self._context or {})
+                active_ids = context.get('active_ids', []) or []
+                active_id = context.get('active_ids', False)
+                benefit_application = self.env['benefit.application'].browse(active_id)
+                if benefit_application:
+                    benefit_application.assign_credentials_colabora(re_assign=True, re_assign_email=rec.email_credentials)
+        return True

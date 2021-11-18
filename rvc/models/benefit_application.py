@@ -117,6 +117,22 @@ class BenefitApplication(models.Model):
                 }
                 self.write({'state': 'confirm'})
 
+    def action_new_credentials(self):
+        for benefit_application in self:
+            if benefit_application.state in ('done'):
+                view_id = self.env.ref('rvc.rvc_template_assignate_credentials_wizard_form').id,
+                return {
+                    'name':_("Re-Asignar Credenciales"),
+                    'view_mode': 'form',
+                    'view_id': view_id,
+                    'view_type': 'form',
+                    'res_model': 'rvc.template.email.wizard',
+                    'type': 'ir.actions.act_window',
+                    'nodestroy': True,
+                    'target': 'new',
+                    'domain': '[]'
+                }
+
     def action_done(self):
         for benefit_application in self:
             if benefit_application.state in ('confirm'):
@@ -243,7 +259,7 @@ class BenefitApplication(models.Model):
         self._validate_gln_only_numbers()
         self._validate_gln()
 
-        if 'state' in vals and vals['state'] in ('done', 'cancel'):
+        if 'state' in vals and vals['state'] not in ('done', 'cancel'):
             self._validate_bought_products()
         return res
 
@@ -438,7 +454,14 @@ class BenefitApplication(models.Model):
         response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
 
         if response_assignate.status_code == 200:
+            #obteniendo el prefijo del código
+            json_res = response_assignate.json()
+            txt_response = json_res.get('MensajeUI')[0]
+            index_start = txt_response.index(":") + 2
+            prefix = txt_response[index_start:]
+
             response_assignate.close()
+            
             #marcando código
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url_mark = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/mark/"
@@ -469,7 +492,7 @@ class BenefitApplication(models.Model):
                 result = response_mark.json()
 
                 self.write({'gln': str(result.get('IdCodigos')[0].get('Codigo'))})
-                self.message_post(body=_('El Código GLN fue creado y entregado con el beneficio.'))
+                self.message_post(body=_(f'El Código GLN fue creado y entregado con el beneficio. Prefijo: {str(prefix)}'))
                 logging.info(\
                     "Código GLN '%s' creado y marcado para la empresa %s"\
                         % (result.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.partner_id.name)))
@@ -505,9 +528,15 @@ class BenefitApplication(models.Model):
         logging.info("====> response_assignate_codes_to_beneficiary =>" + str(response_assignate))
 
         if response_assignate.status_code == 200:
-            #TODO: logging
+            #obteniendo el prefijo del código
+            json_res = response_assignate.json()
+            txt_response = json_res.get('MensajeUI')[0]
+            index_start = txt_response.index(":") + 2
+            prefix = txt_response[index_start:]
+
+            #cerrando request
             response_assignate.close()
-            self.message_post(body=_('Los %s Códigos de Identificación fueron entregados al beneficiario' % str(int(self.codes_quantity))))
+            self.message_post(body=_(f'Los {str(int(self.codes_quantity))} Códigos de Identificación fueron entregados al beneficiario. Prefijo: {str(prefix)}'))
             return True
         else:
             #TODO: logging
@@ -539,7 +568,7 @@ class BenefitApplication(models.Model):
 
         return False
 
-    def assign_credentials_colabora(self):
+    def assign_credentials_colabora(self, re_assign=False, re_assign_email=None):
         bearer_token = self.get_token_colabora_api()
 
         if bearer_token or bearer_token[0]:
@@ -562,10 +591,14 @@ class BenefitApplication(models.Model):
             elif self.partner_id.partner_id.x_first_name and self.partner_id.partner_id.x_first_lastname:
                 credentials_contact_name = self.partner_id.partner_id.x_first_name + " " + self.partner_id.partner_id.x_first_lastname
             
+            # si viene de reasignar credenciales utiliza el correo nuevo ingresado y si no usa el 
+            # que tiene el contacto del beneficiario
+            contact_email = re_assign_email if re_assign_email != None else self.contact_email
+
             body_assignate = json.dumps({
                     "Nit": self.vat,
                     "Name": credentials_contact_name,
-                    "UserMail": self.contact_email,
+                    "UserMail": contact_email,
                     "InitialDate": today_date.strftime('%Y-%m-%d'),
                     "EndDate": today_one_year_later.strftime('%Y-%m-%d'),
                     "level": 0,
