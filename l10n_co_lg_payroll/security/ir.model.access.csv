@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+account_hr_work_overtime,hr.work.overtime,model_hr_work_overtime,l10n_co_mc_work_overtime.group_manager_wovertime,1,1,1,1

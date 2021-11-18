@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="hr_payslip_input_type_view_form_lg" model="ir.ui.view">
+		<field name="name">hr.payslip.input.type.view.form.lg</field>
+		<field name="model">hr.payslip.input.type</field>
+		<field name="inherit_id" ref="hr_payroll.hr_payslip_input_type_view_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='code']" position="after">
+				<field name="type_input"/>
+				<field name="percentage"/>
+				<field name="input_id"/>
+				<field name="active"/>
+				<field name="sequence"/>
+			</xpath>
+		</field>
+	</record>
+</odoo>
