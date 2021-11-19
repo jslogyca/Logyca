@@ -87,7 +87,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
                 if not benefit_application.gln:
                     # si no tiene GLN, asignamos uno.
-                    benefit_application.assignate_gln_code()
+                    if benefit_application._validate_gln() == False:
+                        benefit_application.assignate_gln_code()
 
                 if benefit_application.product_id.benefit_type == 'codigos':
                     # Asignar beneficio de códigos de identificación
