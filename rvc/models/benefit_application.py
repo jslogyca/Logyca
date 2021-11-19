@@ -811,7 +811,8 @@ class BenefitApplication(models.Model):
 
                         if not postulation_id.gln:
                             # si no tiene GLN, asignamos uno.
-                            postulation_id.assignate_gln_code()
+                            if postulation_id._validate_gln() == False:
+                                postulation_id.assignate_gln_code()
 
                         if postulation_id.product_id.benefit_type == 'codigos':
                             # Asignar beneficio de códigos de identificación
