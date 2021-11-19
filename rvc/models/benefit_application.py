@@ -793,7 +793,10 @@ class BenefitApplication(models.Model):
         logging.warning("==> Iniciando cron de enviar kits de bienvenida ...")
         if not self:
             counter = 0
-            self = self.search([('state', '=', 'confirm'),('codes_quantity', '<', 100)])
+            self = self.search(['|',
+                                '&',('state', '=', 'confirm'),('origin', '=', 'odoo'),
+                                '&',('state', '=', 'confirm'),
+                                '&',('codes_quantity', '<', 100),('origin', '=', 'tienda')])
 
             for postulation_id in self:
                 if postulation_id._validate_bought_products():
