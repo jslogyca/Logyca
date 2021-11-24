@@ -75,7 +75,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
         benefit_application = self.env['benefit.application'].browse(active_id)
         if benefit_application:
             partner=self.env['res.partner'].search([('id','=',benefit_application.partner_id.partner_id.id)])
-            if partner.email:
+            if benefit_application.partner_id.contact_email:
                 access_link = partner._notify_get_action_link('view')
 
                 if benefit_application.product_id.benefit_type == 'codigos':
