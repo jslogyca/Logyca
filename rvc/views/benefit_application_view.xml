@@ -46,6 +46,13 @@
 							<field name="origin"/>
 						</group>
 					</group>
+					<group groups="group_rvc_superuser">
+						<group string="Opciones SuperUsuario" >
+							
+						</group>
+						<group>
+						</group>
+					</group>
 				</sheet>
 				<!-- Chatter -->
 				<div class="oe_chatter">
