@@ -75,7 +75,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
         benefit_application = self.env['benefit.application'].browse(active_id)
         if benefit_application:
             partner=self.env['res.partner'].search([('id','=',benefit_application.partner_id.partner_id.id)])
-            if partner.email:
+            if benefit_application.partner_id.contact_email:
                 access_link = partner._notify_get_action_link('view')
 
                 if benefit_application.product_id.benefit_type == 'codigos':
@@ -87,7 +87,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
                 if not benefit_application.gln:
                     # si no tiene GLN, asignamos uno.
-                    benefit_application.assignate_gln_code()
+                    if benefit_application._validate_gln() == False:
+                        benefit_application.assignate_gln_code()
 
                 if benefit_application.product_id.benefit_type == 'codigos':
                     # Asignar beneficio de códigos de identificación
