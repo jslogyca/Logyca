@@ -14,6 +14,8 @@
         'account',
         'purchase',
         'base',
+        'purchase_blanket_order',
+        'purchase_order_type',
         ],
     'description': '''
 
@@ -21,7 +23,7 @@
 
 ''',    
     'data': [
-        'views/purchase_order_views.xml',
+        'views/purchase_blanket_order_view.xml',
     ],
     'qweb': [
     ]
