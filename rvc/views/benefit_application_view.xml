@@ -29,12 +29,17 @@
 						</group>
 						<group string="Detalles del Beneficio">
 							<field name="product_id" attrs="{'readonly': [('state','!=','draft')],'required': [('state','=','draft')]}"/>
-							<field name="benefit_type" invisible="1"/>						
-							<field name="codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
-							<field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
+							<field name="benefit_type" invisible="1"/>
+                            <field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos'))], 'readonly': [('state','=','done')]}" />
+                            <field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
 							<field name="end_date_colabora" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
-							<field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos'))], 'readonly': [('state','=','done')]}" />
-						</group>
+                            <br/><br/>
+                            <h2 style="color:#666666" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}">Cantidad Códigos</h2>
+                            <br/>
+                            <field name="codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
+                            <field name="glns_codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
+                            <field name="invoice_codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
+                        </group>
 					</group>
 					<group>
 						<group string="Halonador">
