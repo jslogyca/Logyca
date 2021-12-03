@@ -59,9 +59,12 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     to_char(m.date,'DD/MM/YYYY'),
                                     date_part('month',m.date)as mes,
                                     date_part('year',m.date)as year,
-                                    m.state
+                                    m.state,
+                                    ca.name
                                     from account_move m
                                     inner join account_move_line l on l.asset_id=m.asset_id
+                                    inner join account_asset a on a.id=l.asset_id
+                                    inner join account_analytic_account ca on ca.id=a.account_analytic_id
                                     inner join account_move i on i.id=l.move_id
                                     inner join res_company c on c.id=m.company_id
                                     inner join res_partner p on p.id=i.partner_id
@@ -72,11 +75,57 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
                                     left join account_analytic_account red on red.id = i.analytic_account_id                                    
                                     where l.exclude_from_invoice_tab is False and i.date between %s and %s and i.state='posted'
+                                    and a.asset_type = 'sale'
                                     order by p.id, m.id''', 
                                     (date_from, date_to))
         
         lineas = self._cr.fetchall()
         return lineas
+
+    def get_values_suscrip(self, date_from, date_to):
+        value = []
+        self._cr.execute(''' SELECT 
+                                    p.name,
+                                    s.code,
+                                    pt.name,
+                                    red.name,
+                                    so.amount_untaxed,
+                                    to_char(so.date_order,'DD/MM/YYYY'),
+                                    date_part('month',so.date_order)as mes_fact,
+                                    date_part('year',so.date_order)as year_fact,
+                                    c.name as company_id,
+                                    up.name,
+                                    team.name,
+                                    m.name,
+                                    m.amount_total, 
+                                    to_char(m.date,'DD/MM/YYYY'),
+                                    date_part('month',m.date)as mes,
+                                    date_part('year',m.date)as year,
+                                    m.state,
+                                    ca.name
+                                    FROM sale_subscription s
+                                    INNER JOIN sale_subscription_line ls on ls.analytic_account_id=s.id
+                                    INNER JOIN sale_subscription_stage e on e.id=s.stage_id
+                                    inner join res_partner p on p.id=s.partner_id
+                                    inner join product_product pp ON pp.id = ls.product_id
+                                    inner join product_template pt on pp.product_tmpl_id = pt.id
+                                    inner join sale_order_line l on l.subscription_id=s.id
+                                    inner join sale_order so on so.id=l.order_id
+                                    inner join res_company c on c.id=so.company_id
+                                    inner join res_users u on u.id=so.user_id
+                                    inner join res_partner up on up.id=u.partner_id
+                                    inner join crm_team team on team.id=so.team_id
+                                    inner join account_move_line li on li.subscription_id = s.id
+                                    inner join account_move m on m.id=li.move_id
+                                    left join account_analytic_account red on red.id = so.analytic_account_id
+                                    left join account_analytic_account ca on ca.id=s.analytic_account_id
+                                    WHERE e.in_progress is True and m.state='posted' 
+                                    and so.date_order BETWEEN %s and %s
+                                    order by p.id, s.id ''', 
+                                    (date_from, date_to))
+        
+        lineas_suscrip = self._cr.fetchall()
+        return lineas_suscrip
 
     def make_file(self, value):
         buf = io.BytesIO()
@@ -132,6 +181,7 @@ class ReportIncomeReportWizard(models.TransientModel):
         ws.write(fila_title, 14, 'Mes Dif', subtitle_head)
         ws.write(fila_title, 15, 'Año Dif', subtitle_head)
         ws.write(fila_title, 16, 'Estado Dif', subtitle_head)
+        ws.write(fila_title, 17, 'Cuenta Analítica', subtitle_head)
 
         fila=10
         invoice = None
@@ -155,6 +205,7 @@ class ReportIncomeReportWizard(models.TransientModel):
                 ws.write(fila,14,'No Aplica',title_head)
                 ws.write(fila,15,'No Aplica',title_head)
                 ws.write(fila,16,'No Aplica',title_head)
+                ws.write(fila,17,x[17],title_head)
                 reg_initial = False
                 invoice = x[1]
                 fila+=1
@@ -176,6 +227,7 @@ class ReportIncomeReportWizard(models.TransientModel):
                 ws.write(fila,14,x[14])
                 ws.write(fila,15,x[15])
                 ws.write(fila,16,x[16])
+                ws.write(fila,17,x[17])
             else:
                 ws.write(fila,0,x[0],title_head)
                 ws.write(fila,1,x[1],title_head)
@@ -194,6 +246,7 @@ class ReportIncomeReportWizard(models.TransientModel):
                 ws.write(fila,14,'No Aplica',title_head)
                 ws.write(fila,15,'No Aplica',title_head)
                 ws.write(fila,16,'No Aplica',title_head)
+                ws.write(fila,17,x[17],title_head)
                 fila+=1
                 ws.write(fila,0,x[0])
                 ws.write(fila,1,x[1])
@@ -211,9 +264,98 @@ class ReportIncomeReportWizard(models.TransientModel):
                 ws.write(fila,13,x[13])
                 ws.write(fila,14,x[14])
                 ws.write(fila,15,x[15])
-                ws.write(fila,16,x[16])                
+                ws.write(fila,16,x[16])
+                ws.write(fila,17,x[17])
             fila+=1
             invoice = x[1]
+
+        # suscripciones
+        invoice = None
+        reg_initial = True
+        value_suscrip = self.get_values_suscrip(self.date_from, self.date_to)
+        for x in value_suscrip:
+            if reg_initial:
+                ws.write(fila,0,x[0],title_head)
+                ws.write(fila,1,x[1],title_head)
+                ws.write(fila,2,x[2],title_head)
+                ws.write(fila,3,x[3],title_head)
+                ws.write(fila,4,x[4],title_head)
+                ws.write(fila,5,x[5],title_head)
+                ws.write(fila,6,x[6],title_head)
+                ws.write(fila,7,x[7],title_head)
+                ws.write(fila,8,x[8],title_head)
+                ws.write(fila,9,x[9],title_head)
+                ws.write(fila,10,x[10],title_head)
+                ws.write(fila,11,'No Aplica',title_head)
+                ws.write(fila,12,'No Aplica',title_head)
+                ws.write(fila,13,'No Aplica',title_head)
+                ws.write(fila,14,'No Aplica',title_head)
+                ws.write(fila,15,'No Aplica',title_head)
+                ws.write(fila,16,'No Aplica',title_head)
+                ws.write(fila,17,x[17],title_head)
+                reg_initial = False
+                invoice = x[1]
+                fila+=1
+            if invoice == x[1]:
+                ws.write(fila,0,x[0])
+                ws.write(fila,1,x[1])
+                ws.write(fila,2,x[2])
+                ws.write(fila,3,x[3])
+                ws.write(fila,4,x[4])
+                ws.write(fila,5,x[5])
+                ws.write(fila,6,x[6])
+                ws.write(fila,7,x[7])
+                ws.write(fila,8,x[8])
+                ws.write(fila,9,x[9])
+                ws.write(fila,10,x[10])
+                ws.write(fila,11,x[11])
+                ws.write(fila,12,x[12])
+                ws.write(fila,13,x[13])
+                ws.write(fila,14,x[14])
+                ws.write(fila,15,x[15])
+                ws.write(fila,16,x[16])
+                ws.write(fila,17,x[17])
+            else:
+                ws.write(fila,0,x[0],title_head)
+                ws.write(fila,1,x[1],title_head)
+                ws.write(fila,2,x[2],title_head)
+                ws.write(fila,3,x[3],title_head)
+                ws.write(fila,4,x[4],title_head)
+                ws.write(fila,5,x[5],title_head)
+                ws.write(fila,6,x[6],title_head)
+                ws.write(fila,7,x[7],title_head)
+                ws.write(fila,8,x[8],title_head)
+                ws.write(fila,9,x[9],title_head)
+                ws.write(fila,10,x[10],title_head)
+                ws.write(fila,11,'No Aplica',title_head)
+                ws.write(fila,12,'No Aplica',title_head)
+                ws.write(fila,13,'No Aplica',title_head)
+                ws.write(fila,14,'No Aplica',title_head)
+                ws.write(fila,15,'No Aplica',title_head)
+                ws.write(fila,16,'No Aplica',title_head)
+                ws.write(fila,17,x[17],title_head)
+                fila+=1
+                ws.write(fila,0,x[0])
+                ws.write(fila,1,x[1])
+                ws.write(fila,2,x[2])
+                ws.write(fila,3,x[3])
+                ws.write(fila,4,x[4])
+                ws.write(fila,5,x[5])
+                ws.write(fila,6,x[6])
+                ws.write(fila,7,x[7])
+                ws.write(fila,8,x[8])
+                ws.write(fila,9,x[9])
+                ws.write(fila,10,x[10])
+                ws.write(fila,11,x[11])
+                ws.write(fila,12,x[12])
+                ws.write(fila,13,x[13])
+                ws.write(fila,14,x[14])
+                ws.write(fila,15,x[15])
+                ws.write(fila,16,x[16])
+                ws.write(fila,17,x[17])
+            fila+=1
+            invoice = x[1]
+
         try:
             wb.close()
             out = base64.encodestring(buf.getvalue())
