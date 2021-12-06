@@ -51,7 +51,7 @@
 							<field name="origin"/>
 						</group>
 					</group>
-					<group groups="group_rvc_superuser">
+					<group groups="rvc.group_rvc_superuser">
 						<group string="Opciones SuperUsuario" >
 							
 						</group>

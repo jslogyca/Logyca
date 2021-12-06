@@ -31,6 +31,7 @@
         'data/logyca_contact_types_data.xml',
         'data/cron_send_welcome_kit.xml',
         'data/cron_mark_benefit_as_rejected.xml',
+        'data/cron_benefit_expiration_reminder.xml',
         'security/ir.model.access.csv',
         'wizard/rvc_import_file_wizard_view.xml',
         'wizard/rvc_import_file_sponsored_wizard_view.xml',

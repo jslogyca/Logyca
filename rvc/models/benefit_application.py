@@ -3,7 +3,7 @@
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError, UserError
 from dateutil.relativedelta import relativedelta
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import base64
 import time
 import locale
@@ -917,6 +917,48 @@ class BenefitApplication(models.Model):
                 postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
                 postulation_id.message_post(body=_('La postulación se marcó como rechazada dado que pasaron '\
                     'más de 30 días desde su notificación y no fue aceptado el beneficio.'))
+
+    @api.model
+    def _cron_benefit_expiration_reminder(self):
+        """ This function allows you to notify by email if the application is non accepted."""
+
+        fiveDays = fields.datetime.now() - timedelta(days=5)
+        # Get all postulations with more than 5 days of notified
+        postulations_ids = self.search([
+            ('notification_date', '<=', fiveDays),
+            ('state', '=', 'notified')
+        ])
+
+        for postulation in postulations_ids:
+            if postulation.reminder_count == 3:
+                postulation.message_post(body=_('La postulación se marcó como rechazada dado que se notificó recordatorio '\
+                    'en tres (3) oportunidades y no se aceptó el beneficio por parte de la empresa.'))
+                postulation.state = 'rejected'
+                break
+            else:
+                self.send_reminder_benefit_expiration(postulations_ids[0])
+        #raise ValidationError(postulations_ids)
+        
+    def send_reminder_benefit_expiration(self,postulations_ids):
+        for postulation in postulations_ids:
+            try:
+                vals = {
+                    'subject': 'RECORDATORIO: Beneficio Derechos de Identificación',
+                    'body_html': '<p>Recibe un cordial saludo,<p><p><strong style="color:#00b398;">¡NO PIERDAS EL BENEFICIO DE TUS CÓDIGOS DE BARRRAS GS1 SIN COSTO!</strong></p> '\
+                        '<p>Estas a un paso de finalizar tu proceso. Para adquirir el beneficio por favor da clic en el botón ACEPTO EL BENEFICIO y llegará a '\
+                        'tu correo el Kit de bienvenida y las credenciales de la plataforma de asignación.</p></br>'\
+                        '<h3 style="color:#fc4c02;text-decoration: underline;">'\
+                        'Si no has sido notificado con anterioridad, escríbenos a <a href="mailto:alhernandez@logyca.com">alhernandez@logyca.com</a>.</h3></br></br><p>Atentamente,</p><p>LOGYCA.</p>',
+                    'email_to': postulation.contact_email
+                }
+                mail_id = self.env['mail.mail'].create(vals)
+                mail_id.sudo().send()
+                #sumar una unidad a la cantidad de recordatorios enviados
+                #sirve para enviar únicamente 3 recordatorios por postulación.
+                postulation.reminder_count += 1
+                break
+            except Exception as e:
+                raise ValidationError(e)
 
     def attach_OM_2_partner(self, postulation_id):
         """ Ajunta la Oferta Mercantil en el tercero(Compañía o individual) que la acepta.
