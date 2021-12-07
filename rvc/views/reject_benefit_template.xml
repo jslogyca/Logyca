@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="reject_rvc_benefit_page_view" name="Rechazar Beneficio RVC">
+        <t t-call="web.frontend_layout">
+            <div class="container">
+                <div clas="row">
+                    <h1 style="margin-top:30px;color:#fc4c02" class="text-center">Gracias por confirmar que RECHAZA su beneficio RVC: <b t-esc="benefit_application.product_id.name"/>.</h1>
+                    <h4 class="text-center text-muted" style="margin-top:30px;margin-bottom: 32px;">Esperamos poder contar con <b t-esc="benefit_application.partner_id.partner_id.name"></b>
+                        en una próxima oportunidad.</h4>
+                
+                    <div class="clearfix"></div>
+                    <p style="margin-top:32px;text-align: justify;">
+                        Si tiene alguna inquietud, puede escribirnos al correo web@logyca.com o comunicarse a nuestras líneas de soporte:
+                        (1) 4254704 ó (1) 4254711.
+                    </p>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -47,6 +47,7 @@
                             <field name="id" invisible="1"/>
 						</group>
 						<group string="Otra Información">
+                            <field name="reminder_count" readonly="1"/>
                             <field name="historical_record" readonly="1"/>
 							<field name="origin"/>
 						</group>
