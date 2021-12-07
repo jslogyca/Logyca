@@ -968,6 +968,10 @@ class BenefitApplication(models.Model):
                 #sirve para enviar únicamente 3 recordatorios por postulación.
                 postulation.reminder_count += 1
 
+                #actualizar fecha de notificación por la de hoy para que vuelva a 
+                #contar otros 5 días antes de notificar
+                postulation.write({'notification_date': datetime.now()})
+
         except Exception as e:
             raise ValidationError(e)
 
