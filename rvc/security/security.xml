@@ -11,5 +11,8 @@
             <field name="name">Soporte RVC</field>
         </record>
 
+        <record id="group_rvc_superuser" model="res.groups">
+            <field name="name">SuperUsuario RVC</field>
+        </record>
     </data>
 </odoo>

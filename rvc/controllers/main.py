@@ -31,3 +31,22 @@ class AcceptRvcBenefit(http.Controller):
                 return request.env['ir.ui.view'].with_context(lang=lang).render_template('rvc.accept_rvc_benefit_page_view', {
                     'benefit_application': postulation_id, 'token': token
                 })
+
+    @http.route('/rvc/reject_benefit/<string:token>', type='http', auth="public", website=True)
+    def accept_benefit(self, token, **kwargs):
+        postulation_ids = request.env['benefit.application'].sudo().search([('access_token', '=', token)])
+        if not postulation_ids:
+            return request.not_found()
+
+        for postulation_id in postulation_ids:
+
+            # Marcar la posituación como aceptada
+            if postulation_id.state == 'notified':
+                postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
+                postulation_id.message_post(body=_(\
+                    '%s <u><strong>RECHAZÓ</strong></u> el beneficio desde el correo electrónico.' % str(postulation_id.partner_id.partner_id.name)))
+
+                lang = postulation_id.partner_id.partner_id.lang
+                return request.env['ir.ui.view'].with_context(lang=lang).render_template('rvc.reject_rvc_benefit_page_view', {
+                    'benefit_application': postulation_id, 'token': token
+                })

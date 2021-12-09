@@ -3,7 +3,7 @@
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError, UserError
 from dateutil.relativedelta import relativedelta
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import base64
 import time
 import locale
@@ -34,7 +34,9 @@ class BenefitApplication(models.Model):
     parent_id = fields.Many2one('rvc.sponsor', string='Empresa Patrocinadora', track_visibility='onchange', ondelete='restrict')
     product_id = fields.Many2one('product.rvc', string='Producto', track_visibility='onchange', ondelete='restrict')
     name = fields.Char(string='Name', track_visibility='onchange')
-    codes_quantity = fields.Integer('Cantidad de Códigos', track_visibility='onchange')
+    codes_quantity = fields.Integer('Códigos Productos', track_visibility='onchange')
+    glns_codes_quantity = fields.Integer('Códigos GLN', track_visibility='onchange')
+    invoice_codes_quantity = fields.Integer('Códigos Recaudo', track_visibility='onchange')
     benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
                                     ('colabora', 'Colabora'),
                                     ('analitica', 'Analítica')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
@@ -53,6 +55,7 @@ class BenefitApplication(models.Model):
     access_token = fields.Char('Token', default=_default_access_token, help="Token de acceso para aceptar beneficio desde el correo")
     historical_record = fields.Boolean('Registro histórico',
                                        help="Si es verdadero, este registro es de cargue histórico, es decir, no se hizo en Odoo sino que se cargó tiempo después.")
+    reminder_count = fields.Integer('Recordatorios', track_visibility='onchange')
     message_ids = fields.One2many(groups="rvc.group_rvc_manager")
     activity_ids = fields.One2many(groups="rvc.group_rvc_manager")
 
@@ -134,11 +137,9 @@ class BenefitApplication(models.Model):
                 }
 
     def action_done(self):
-        for benefit_application in self:
-            if benefit_application.state in ('confirm'):
-
-                if self.product_id.benefit_type == 'codigos':
-                    # validamos que no hayan productos comprados disponibles
+            if self.state in ('confirm'):
+                if self.product_id.benefit_type == 'codigos' and self.codes_quantity > 0:
+                    # si son codigos de productos validamos que no hayan productos comprados disponibles
                     if self._validate_bought_products():
                         view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
                         return {
@@ -152,7 +153,6 @@ class BenefitApplication(models.Model):
                             'target': 'new',
                             'domain': '[]'
                         }
-                        self.write({'state': 'done'})
                 else:
                     view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
                     return {
@@ -166,7 +166,6 @@ class BenefitApplication(models.Model):
                         'target': 'new',
                         'domain': '[]'
                     }
-                    self.write({'state': 'done'})
 
     def action_rejected(self):
         for benefit_application in self:
@@ -401,7 +400,7 @@ class BenefitApplication(models.Model):
 
     def _validate_qty_codes(self):
         for rec in self:
-            if rec.codes_quantity == 0 and self.product_id.benefit_type == 'codigos':
+            if rec.codes_quantity == 0 and rec.glns_codes_quantity == 0 and rec.invoice_codes_quantity == 0 and self.product_id.benefit_type == 'codigos':
                 raise ValidationError(\
                     _('Por favor indique la Cantidad de Códigos que se entregará a la empresa beneficiaria.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
         return True
@@ -427,7 +426,7 @@ class BenefitApplication(models.Model):
                     _('¡Error de Validación! La empresa NO es micro o pequeña.\n\nEmpresa: %s' % (str(self.partner_id.partner_id.name))))
         return True
 
-    def assignate_gln_code(self):
+    def assignate_gln_code(self, qty=None):
         #creando código
         if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_assignate = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/assignate/"
@@ -438,7 +437,7 @@ class BenefitApplication(models.Model):
             "AgreementName":"",
             "IdAgreement":"1",
             "Request": [{
-                "Quantity": 1,
+                "Quantity": qty or 1,
                 "Nit": self.vat,
                 "PreferIndicatedPrefix": False,
                 "BusinessName": self.partner_id.partner_id.name,
@@ -491,13 +490,19 @@ class BenefitApplication(models.Model):
                 response_mark.close()
                 result = response_mark.json()
 
-                self.write({'gln': str(result.get('IdCodigos')[0].get('Codigo'))})
-                self.message_post(body=_(f'El Código GLN fue creado y entregado con el beneficio. Prefijo: {str(prefix)}'))
-                logging.info(\
-                    "Código GLN '%s' creado y marcado para la empresa %s"\
-                        % (result.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.partner_id.name)))
+                #si es un solo GLN entonces ...
+                if not qty or self.glns_codes_quantity == 1:
+                    self.write({'gln': str(result.get('IdCodigos')[0].get('Codigo'))})
+                    self.message_post(body=_(f'Código(s) GLN fue creado y entregado con el beneficio. Prefijo: {str(prefix)}'))
+                    logging.info(\
+                        "Código GLN '%s' creado y marcado para la empresa %s"\
+                            % (result.get('IdCodigos')[0].get('Codigo'), str(self.partner_id.partner_id.name)))
+
+                #de lo contrario, son varios gln
+                else:
+                    self.message_post(body=_(f'Los {int(self.glns_codes_quantity)} Códigos GLN fueron creados y entregados con el beneficio. Prefijo: {str(prefix)}'))
         else:
-            self.message_post(body=_('No se pudo asignar al beneficiario un Código GLN. El servidor respondió %s' % str(response_assignate)))
+            self.message_post(body=_('No se pudo asignar al beneficiario el/los Código(s) GLN. El servidor respondió %s' % str(response_assignate)))
 
     def assign_identification_codes(self):
 
@@ -541,6 +546,55 @@ class BenefitApplication(models.Model):
         else:
             #TODO: logging
             self.message_post(body=_('Los Códigos de Identificación no pudieron ser entregados al beneficiario. <strong>Error:</strong> %s' % str(response_assignate)))
+            return False
+
+
+    def assign_invoice_codes(self):
+        """
+            Función que asigna códigos de recaudo
+            TODO: esta función es la misma que la que se usa para asignar codigos de identificación y GLN's. Intentar reusar código.
+                  lo único que cambia es la variable type 55800=recaudo, 55600=codigos productos, 55603= gln's
+        """
+        if self.get_odoo_url() == 'https://logyca.odoo.com':
+            url_assignate = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/assignate/"
+        else:
+            url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
+
+        body_assignate = json.dumps({
+            "AgreementName":"",
+            "IdAgreement":"",
+            "Request": [{
+                "Quantity": int(self.invoice_codes_quantity),
+                "Nit": self.vat,
+                "PreferIndicatedPrefix": False,
+                "BusinessName": self.partner_id.partner_id.name,
+                "Schema": 2,
+                "ScalePrefixes": False,
+                "Type": 55800,
+                "PrefixType": "",
+                "VariedFixedUse": False}],
+                "UserName": "Admin"})
+        headers_assignate = {'Content-Type': 'application/json'}
+
+        #Making http post request
+        response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
+
+        logging.info("====> response_assignate_invoice_codes =>" + str(response_assignate))
+
+        if response_assignate.status_code == 200:
+            #obteniendo el prefijo del código
+            json_res = response_assignate.json()
+            txt_response = json_res.get('MensajeUI')[0]
+            index_start = txt_response.index(":") + 2
+            prefix = txt_response[index_start:]
+
+            #cerrando request
+            response_assignate.close()
+            self.message_post(body=_(f'Los {str(int(self.invoice_codes_quantity))} Códigos de Recaudo fueron entregados al beneficiario. Prefijo: {str(prefix)}'))
+            return True
+        else:
+            #TODO: logging
+            self.message_post(body=_('Los Códigos de Recaudo no pudieron ser entregados al beneficiario. <strong>Error:</strong> %s' % str(response_assignate)))
             return False
 
     def get_token_colabora_api(self):
@@ -815,13 +869,22 @@ class BenefitApplication(models.Model):
 
                             if not postulation_id.gln:
                                 # si no tiene GLN, asignamos uno.
-                                if postulation_id._validate_gln() == False:
+                                if postulation_id._validate_gln() == False and postulation_id.glns_codes_quantity == 0:
                                     postulation_id.assignate_gln_code()
 
                             if postulation_id.product_id.benefit_type == 'codigos':
+                                # codigos glns
+                                if postulation_id.glns_codes_quantity > 0:
+                                    postulation_id.assignate_gln_code(postulation_id.glns_codes_quantity)
+
+                                # codigos recaudo
+                                if postulation_id.invoice_codes_quantity > 0:
+                                    postulation_id.assign_invoice_codes()
+
                                 # Asignar beneficio de códigos de identificación
-                                if postulation_id.assign_identification_codes():
-                                    postulation_id.assign_credentials_colabora()
+                                if postulation_id.codes_quantity > 0:
+                                    if postulation_id.assign_identification_codes():
+                                        postulation_id.assign_credentials_colabora()
 
                                 # Agregar tipo de vinculacion al tercero
                                 postulation_id.add_vinculation_partner()
@@ -855,6 +918,59 @@ class BenefitApplication(models.Model):
                 postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
                 postulation_id.message_post(body=_('La postulación se marcó como rechazada dado que pasaron '\
                     'más de 30 días desde su notificación y no fue aceptado el beneficio.'))
+
+    @api.model
+    def _cron_benefit_expiration_reminder(self):
+        """ This function allows you to notify by email if the application is non accepted."""
+
+        fiveDays = fields.datetime.now() - timedelta(days=5)
+        # Get all postulations with more than 5 days of notified
+        postulations_ids = self.search([
+            ('notification_date', '<=', fiveDays),
+            ('state', '=', 'notified')
+        ])
+        
+        postulation_counter = 0
+        for postulation in postulations_ids:
+            if postulation.reminder_count == 3:
+                postulation.message_post(body=_('La postulación se marcó como rechazada dado que se notificó recordatorio '\
+                    'en tres (3) oportunidades y no se aceptó el beneficio por parte de la empresa.'))
+                postulation.state = 'rejected'
+            elif postulation_counter < 5:
+                self.send_reminder_benefit_expiration(postulation)
+                postulation_counter += 1
+
+    def send_reminder_benefit_expiration(self,postulation):
+        try:
+            vals = {
+                'subject': 'RECORDATORIO: Beneficio Derechos de Identificación',
+                'body_html': '<p>Recibe un cordial saludo,<p><p><strong style="color:#00b398;">¡NO PIERDAS EL BENEFICIO DE TUS CÓDIGOS DE BARRRAS GS1 SIN COSTO!</strong></p> '\
+                    '<p>Estas a un paso de finalizar tu proceso. Para adquirir el beneficio por favor da clic en el botón ACEPTO EL BENEFICIO y llegará a '\
+                    'tu correo el Kit de bienvenida y las credenciales de la plataforma de asignación.</p>'\
+                    '<p>Si no requieres los códigos o no deseas continuar con el proceso, por favor da clic en el botón RECHAZAR EL BENEFICIO.<p>'
+                    '<p style="margin-top: 0px; margin-bottom: 0px; overflow: hidden; text-align: left;"> <br/>'
+                '<div style="">'
+                    '<a style="margin: 16px 0px 16px 0px; background-color:#00b398; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:16px;" href="/rvc/accept_benefit/%s"><strong>ACEPTO EL BENEFICIO</strong></a>'
+                    '&#160;'
+                    '<a style="margin: 16px 0px 16px 0px; background-color:#fc4c02; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:16px;" href="/rvc/reject_benefit/%s"><strong>RECHAZAR EL BENEFICIO</strong></a>'
+                '</div></br>'
+                    '<h3 style="color:#fc4c02 !important;text-decoration: underline;">'\
+                    'Si no has sido notificado con anterioridad, escríbenos a <a href="mailto:alhernandez@logyca.com">alhernandez@logyca.com</a>.</h3></br></br><p>Atentamente,</p><p>LOGYCA.</p>' % (postulation.access_token,postulation.access_token),
+                'email_to': postulation.contact_email
+            }
+
+            mail_id = self.env['mail.mail'].create(vals)
+            mail_id.sudo().send()
+            #sumar una unidad a la cantidad de recordatorios enviados
+            #sirve para enviar únicamente 3 recordatorios por postulación.
+            postulation.reminder_count += 1
+
+            #actualizar fecha de notificación por la de hoy para que vuelva a 
+            #contar otros 5 días antes de notificar
+            postulation.write({'notification_date': datetime.now()})
+
+        except Exception as e:
+            raise ValidationError(e)
 
     def attach_OM_2_partner(self, postulation_id):
         """ Ajunta la Oferta Mercantil en el tercero(Compañía o individual) que la acepta.
