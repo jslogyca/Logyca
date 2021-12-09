@@ -47,11 +47,12 @@
                             <field name="id" invisible="1"/>
 						</group>
 						<group string="Otra Información">
+                            <field name="reminder_count" readonly="1"/>
                             <field name="historical_record" readonly="1"/>
 							<field name="origin"/>
 						</group>
 					</group>
-					<group groups="group_rvc_superuser">
+					<group groups="rvc.group_rvc_superuser">
 						<group string="Opciones SuperUsuario" >
 							
 						</group>
