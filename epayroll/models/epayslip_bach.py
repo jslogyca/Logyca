@@ -327,7 +327,10 @@ class EPayslipBach(models.Model):
             print('ValDev', ValDev)
             print('ValDed', ValDed)
             print('ValTol', ValTol)
-            texto = 'NumNIE:' + NumNIE + '                 FecNIE=' + FecNIE + '                 HorNIE=' + HorNIE + '                 NitNIE=' + NitNIE + '                 DocEmp=' + DocEmp + '                 ValDev=' + ValDev + '                 ValDed=' + ValDed +                  '                 ValTol=' + ValTol +    '                 CUNE=' + cune + '                 URL=https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey=' + cune
+            if epayslip.company_id.connection_payslip_id.type == '1':
+                texto = 'NumNIE:' + NumNIE + '                 FecNIE=' + FecNIE + '                 HorNIE=' + HorNIE + '                 NitNIE=' + NitNIE + '                 DocEmp=' + DocEmp + '                 ValDev=' + ValDev + '                 ValDed=' + ValDed +                  '                 ValTol=' + ValTol +    '                 CUNE=' + cune + '                 URL=https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey=' + cune
+            else:
+                texto = 'NumNIE:' + NumNIE + '                 FecNIE=' + FecNIE + '                 HorNIE=' + HorNIE + '                 NitNIE=' + NitNIE + '                 DocEmp=' + DocEmp + '                 ValDev=' + ValDev + '                 ValDed=' + ValDed +                  '                 ValTol=' + ValTol +    '                 CUNE=' + cune + '                 URL=https://catalogo-vpfe-hab.dian.gov.co/document/searchqr?documentkey=' + cune
             qr_code = pyqrcode.create(texto)
             epayslip.write({'qr_payslip': texto})
             print('BARCODE TEXTO', texto)
@@ -367,7 +370,10 @@ class EPayslipBach(models.Model):
 
             if cune == None:
                 cune = ''
-            texto = 'NumNIE:' + NumNIE + '                 FecNIE=' + FecNIE + '                 HorNIE=' + HorNIE + '                 TipoNota=' + TipoNota + '                 NitNIE=' + NitNIE + '                 DocEmp=' + DocEmp + '                 ValDev=' + ValDev + '                 ValDed=' + ValDed +                  '                 ValTol=' + ValTol +    '                 CUNE=' + cune + '                 URL=https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey=' + cune
+            if epayslip.company_id.connection_payslip_id.type == '1':
+                texto = 'NumNIE:' + NumNIE + '                 FecNIE=' + FecNIE + '                 HorNIE=' + HorNIE + '                 TipoNota=' + TipoNota + '                 NitNIE=' + NitNIE + '                 DocEmp=' + DocEmp + '                 ValDev=' + ValDev + '                 ValDed=' + ValDed +                  '                 ValTol=' + ValTol +    '                 CUNE=' + cune + '                 URL=https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey=' + cune
+            else:
+                texto = 'NumNIE:' + NumNIE + '                 FecNIE=' + FecNIE + '                 HorNIE=' + HorNIE + '                 TipoNota=' + TipoNota + '                 NitNIE=' + NitNIE + '                 DocEmp=' + DocEmp + '                 ValDev=' + ValDev + '                 ValDed=' + ValDed +                  '                 ValTol=' + ValTol +    '                 CUNE=' + cune + '                 URL=https://catalogo-vpfe-hab.dian.gov.co/document/searchqr?documentkey=' + cune
             qr_code = pyqrcode.create(texto)
             epayslip.write({'qr_payslip': texto})
             img_as_str = qr_code.png_as_base64_str(scale=5)
@@ -595,8 +601,11 @@ class EPayslipBach(models.Model):
 
         ProveedorXML = SubElement(NominaIndividual, 'ProveedorXML',  RazonSocial=self.company_id.partner_id.name, NIT=self.company_id.partner_id.vat, DV=str(self.company_id.partner_id.x_digit_verification),
                 SoftwareID=self.company_id.connection_payslip_id.software_code, SoftwareSC=str(self._ssc()))              
-
-        CodigoQR = SubElement(NominaIndividual, 'CodigoQR').text = 'https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey=' + self.code_cune or ''
+        
+        if self.company_id.connection_payslip_id.type == '1':
+            CodigoQR = SubElement(NominaIndividual, 'CodigoQR').text = 'https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey=' + self.code_cune or ''
+        else:
+            CodigoQR = SubElement(NominaIndividual, 'CodigoQR').text = 'https://catalogo-vpfe-hab.dian.gov.co/document/searchqr?documentkey=' + self.code_cune or ''
 
         InformacionGeneral = SubElement(NominaIndividual, 'InformacionGeneral',  Version=('V1.0: Documento Soporte de Pago de Nómina Electrónica'),
                                 Ambiente=self.company_id.connection_payslip_id.type, TipoXML=self.type_epayroll.code, CUNE=self.code_cune,
@@ -1051,7 +1060,10 @@ class EPayslipBach(models.Model):
         ProveedorXML = SubElement(Eliminar, 'ProveedorXML',  RazonSocial=self.company_id.partner_id.name, NIT=self.company_id.partner_id.vat, DV=str(self.company_id.partner_id.x_digit_verification),
                 SoftwareID=self.company_id.connection_payslip_id.software_code, SoftwareSC=str(self._ssc()))              
 
-        CodigoQR = SubElement(Eliminar, 'CodigoQR').text = 'https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey=' + self.code_cune or ''
+        if self.company_id.connection_payslip_id.type == '1':
+            CodigoQR = SubElement(Eliminar, 'CodigoQR').text = 'https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey=' + self.code_cune or ''
+        else:
+            CodigoQR = SubElement(Eliminar, 'CodigoQR').text = 'https://catalogo-vpfe-hab.dian.gov.co/document/searchqr?documentkey=' + self.code_cune or ''
 
         InformacionGeneral = SubElement(Eliminar, 'InformacionGeneral',  Version=('V1.0: Nota de Ajuste de Documento Soporte de Pago de Nómina Electrónica'),
                                 Ambiente=self.company_id.connection_payslip_id.type, TipoXML=self.type_epayroll.code, CUNE=self.code_cune,
