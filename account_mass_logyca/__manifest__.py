@@ -25,7 +25,7 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'views/config_discount_logycaedx_view.xml',
-        'views/res_partner_view.xml',
+#        'views/res_partner_view.xml',
         'views/partner_logycaedx_view.xml',
         'data/config_discount_logycaedx_data.xml',
     ],
