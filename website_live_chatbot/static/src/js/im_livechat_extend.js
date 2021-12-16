@@ -185,8 +185,8 @@ odoo.define('website_live_chatbot.im_livechat_extend', function (require) {
 				var html = '<div class="container" id="prechatform" >' +
 					'<div class="row" >' + ' <div class = "wrapper" > ' +
 					'<div class="contact-form-page show-profile" >' +
-					'<h5 class="info-chat">Estamos en línea! Por favor diligencia tu información y tu consulta. Te contactaremos lo antes posible para atender tu solicitud.' +
-					'<strong>Recuerda que nuestros horarios de atención son de lunes a viernes de 7:00am a 5:00pm.</strong></h5>' +
+					'<h5 class="info-chat">Estamos en línea! Por favor diligencia tu información y tu consulta. Te contactaremos lo antes posible para atender tu solicitud.</h5>' +
+					'<p style="text-align:center;color:white;margin:1em 1em">Recuerda que nuestros horarios de atención son de lunes a viernes de 7:00am a 5:00pm.</p>' +
 					'<form>' +
 					'<div class="form-group"> ' +
 					'<label for="exampleInputText">Nombre Completo</label>' +
