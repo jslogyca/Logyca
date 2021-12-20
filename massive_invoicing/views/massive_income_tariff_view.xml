@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="massive_income_tariff_tree" model="ir.ui.view">
+		<field name="name">massive.income.tariff.config.tree</field>
+		<field name="model">massive.income.tariff</field>
+		<field eval="20" name="priority"/>
+		<field name="arch" type="xml">
+			<tree string="Tarifario Ingresos" editable="top">
+			<!-- <tree string="Payroll Config"> -->
+				<field name="year"/>
+				<field name="type_vinculation"/>
+				<field name="revenue_range"/>
+				<field name="macro_sector" />
+				<field name="product_id" />
+				<field name="old_value" />
+				<field name="fee_value" />
+				<field name="unit_fee_value" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_massive_income_tariff" model="ir.actions.act_window">
+		<field name="name">Tarifario Ingresos</field>
+		<field name="res_model">massive.income.tariff</field>
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="massive_income_tariff_tree"/>			
+	</record>
+
+    <menuitem 
+		id="menu_massive_income_tariff" 
+		action="action_massive_income_tariff" 
+		parent="studio_customization.logyca_parametrizaci_ad8d64d2-1139-4184-9c30-5361f61a6ffd"
+		sequence="20"/>	
+</odoo>
