@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_massive_income_tariff,massive.income.tariff,model_massive_income_tariff,massive_invoicing.group_manager_massive_invoicing,1,1,1,1
