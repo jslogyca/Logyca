@@ -197,20 +197,30 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                 conditional_discount = 0
                 conditional_discount_deadline = False
                         
-                obj_tariff = self.env['massive.invoicing.tariff'].search([('year', '=', self.year),('type_vinculation','=',type_vinculation),('asset_range','=',partner.partner_id.x_asset_range.id),('product_id','=',product_id)])
+                # obj_tariff = self.env['massive.invoicing.tariff'].search([('year', '=', self.year),('type_vinculation','=',type_vinculation),('asset_range','=',partner.partner_id.x_asset_range.id),('product_id','=',product_id)])
+                if partner.partner_id.fact_annual == 'activos':
+                    obj_tariff = self.env['massive.invoicing.tariff'].search([('year', '=', self.year),('type_vinculation','=',type_vinculation),('asset_range','=',partner.partner_id.x_asset_range.id),('product_id','=',product_id)])
+                else:
+                    if partner.partner_id.fact_annual == 'ingresos':
+                        obj_tariff = self.env['massive.income.tariff'].search([('year', '=', self.year),('type_vinculation','=',type_vinculation),('revenue_range','=',partner.partner_id.x_income_range.id),('product_id','=',product_id)])
                 for tariff in obj_tariff:
                     fee_value = tariff.fee_value
                     unit_fee_value = tariff.unit_fee_value
-                    obj_tariff_discounts = self.env['massive.invoicing.tariff.discounts'].search([('tariff', '=', tariff.id)])
-                    for tariff_discounts in obj_tariff_discounts:
+                    partner_logycaedx = self.env['partner.logycaedx'].search([('partner_id', '=', partner.partner_id.id)])
+                    if partner_logycaedx:
                         #Logica descuento no condicionado
-                        if tariff_discounts.discount_percentage > 0:
-                            discount = tariff_discounts.discount_percentage
-                        #Logica descuento condicionado
-                        if tariff_discounts.discounts_one > 0:
-                            conditional_discount = tariff_discounts.discounts_one 
-                            conditional_discount_deadline = tariff_discounts.date_discounts_one 
-                        
+                        if partner_logycaedx.config_discount_id.discount > 0:
+                            discount = partner_logycaedx.config_discount_id.discount
+                    else:
+                        obj_tariff_discounts = self.env['massive.invoicing.tariff.discounts'].search([('tariff', '=', tariff.id)])
+                        for tariff_discounts in obj_tariff_discounts:
+                            #Logica descuento no condicionado
+                            if tariff_discounts.discount_percentage > 0:
+                                discount = tariff_discounts.discount_percentage
+                            #Logica descuento condicionado
+                            if tariff_discounts.discounts_one > 0:
+                                conditional_discount = tariff_discounts.discounts_one 
+                                conditional_discount_deadline = tariff_discounts.date_discounts_one
                 #Se obtiene el representante ante Logyca al cual quedara asociada la orden de venta
                 id_contactP = 0
                 for record in partner.partner_id.child_ids:   

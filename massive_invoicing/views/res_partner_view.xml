@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<record id="view_res_partner_fm" model="ir.ui.view">
+		<field name="name">res_partner_fm</field>
+		<field name="model">res.partner</field>
+		<field name="inherit_id" ref="studio_customization.odoo_studio_res_part_96c3b415-a333-436c-9b90-db13f23de750"/>
+		<field name="arch" type="xml">
+            <xpath expr="//field[@name='x_asset_range']" position="before">
+                <field name="fact_annual"/>
+			</xpath>
+		</field>
+	</record>
+</odoo>
