@@ -25,7 +25,9 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'views/config_discount_logycaedx_view.xml',
+        'views/config_discount_log_revenue_view.xml',
         'views/partner_logycaedx_view.xml',
+        'views/partner_logyca_revenue_view.xml',
         'data/config_discount_logycaedx_data.xml',
     ],
     'qweb': [

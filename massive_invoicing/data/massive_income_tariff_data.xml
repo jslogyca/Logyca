@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--
+             Precisions
+        -->
+        <record forcecreate="True" id="decimal_price_tariff" model="decimal.precision">
+            <field name="name">Tarifa Massive Income</field>
+            <field name="digits">4</field>
+        </record>
+    </data>
+</odoo>

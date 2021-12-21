@@ -38,5 +38,5 @@ class ConfigDiscountLogycaEDX(models.Model):
         if values.get('asset_range_id', False) and values.get('discount', False):
             asset_range_id = self.env['logyca.asset_range'].search([('id', '=', values.get('asset_range_id', False))])
             if asset_range_id:
-                values['name'] = asset_range_id.name + str(values.get('discount', False))
+                values['name'] = asset_range_id.name + str(values.get('discount', False))             
         return super(ConfigDiscountLogycaEDX, self).write(values)        
