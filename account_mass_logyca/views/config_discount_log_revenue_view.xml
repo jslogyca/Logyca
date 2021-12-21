@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="config_discount_log_revenue_view_form" model="ir.ui.view">
+		<field name="name">config.discount.log.revenue.form</field>
+		<field name="model">config.discount.log.revenue</field>
+		<field name="arch" type="xml">
+			<form string="Config Discount Revenue">
+				<sheet>
+					<group>
+						<group>
+							<field name="revenue_range" />
+							<field name="company_size" />
+						</group>
+						<group>
+							<field name="amount_user" />
+							<field name="discount" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="config_discount_log_revenue_view_tree" model="ir.ui.view">
+		<field name="name">config.discount.log.revenue.tree</field>
+		<field name="model">config.discount.log.revenue</field>
+		<field name="arch" type="xml">
+			<tree string="Config Discount Revenue" >
+				<field name="revenue_range" required="1"/>
+				<field name="company_size" required="1"/>
+				<field name="amount_user" required="1"/>
+				<field name="discount" required="1"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_config_discount_log_revenue" model="ir.actions.act_window">
+		<field name="name">Config Discount Revenue</field>
+		<field name="res_model">config.discount.log.revenue</field>
+		<field name="view_mode">tree,form</field>
+	</record>	
+
+	<menuitem
+		id="menu_config_discount_log_revenue"
+		name="Config Discount Revenue"
+		action="action_config_discount_log_revenue"
+		parent="studio_customization.logyca_parametrizaci_ad8d64d2-1139-4184-9c30-5361f61a6ffd"
+		sequence="11"
+		groups="group_technical_mass_invoice"/>          
+</odoo>

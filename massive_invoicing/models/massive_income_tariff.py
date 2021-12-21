@@ -16,7 +16,7 @@ class x_MassiveInvoicingTariff(models.Model):
     macro_sector = fields.Selection(related='revenue_range.macro_sector', string='Macrosector')
     product_id = fields.Many2one('product.product', string='Producto', required=True)
     old_value = fields.Float(string='Tarifa Anterior', required=True, default=0.0)
-    fee_value = fields.Float(string='Valor de la tarifa', required=True)
+    fee_value = fields.Float(string='Valor de la tarifa', required=True, digits='Tarifa Massive Income', default=0.0000)
     unit_fee_value = fields.Float(string='Tarifa unitaria', help='Cálculo de la tarifa UNITARIA redondeando a la milésima más cercana: ROUND(SMLV * Valor de la tarifa,-3).',compute='_compute_unit_fee_value', store=True, track_visibility='onchange')
     
     
@@ -28,27 +28,4 @@ class x_MassiveInvoicingTariff(models.Model):
     
     @api.depends('fee_value', 'old_value')
     def _compute_unit_fee_value(self):
-        #date = fields.Date.today()
-        #year = date.year
-        year = self.year
-        obj_smlv = self.env['massive.invoicing.smlv'].search([('year', '=', year)])
-        smlv = 0
-        for i in obj_smlv:
-            smlv = obj_smlv.smlv        
-        
-        self.unit_fee_value = round((smlv*self.fee_value)+self.old_value,-3)
-
-
-# Al tarifario adicionar los siguientes campos para que sean digitados o importados anualmente por el área encargada de facturación masiva
-# Para realizar esto se crea una tabla secundaria con esta información
-# class x_MassiveIncomeTariffDiscounts(models.Model):
-#     _name = 'massive.income.tariff.discounts'
-#     _description = 'Massive Income - Tariff Discounts'
-    
-#     _sql_constraints = [('tariff_discounts_presence_unique', 'unique(tariff)', 'Un tarifario solo puede estar asociado a un tarifario de descuento.')]
-    
-#     tariff = fields.Many2one('massive.income.tariff', string='Tarifario por Ingresos', ondelete='restrict', required=True)
-#     discount_percentage = fields.Integer(string='Descuento antes de IVA (%)', required=True)
-#     discounts_one = fields.Float(string='Valor descuento')
-#     date_discounts_one = fields.Date(string='Fecha descuento', help='Fecha hasta la cual aplica el descuento 1')    
-    #is_billed = fields.Boolean(string='¿Se factura?')
+        self.write({'unit_fee_value': round((self.old_value*self.fee_value)+self.old_value,0)})
