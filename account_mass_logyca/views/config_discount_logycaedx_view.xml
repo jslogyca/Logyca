@@ -8,12 +8,12 @@
 				<sheet>
 					<group>
 						<group>
-							<field name="asset_range_id" />
-							<field name="company_size" />
+							<field name="asset_range_id" required="1"/>
+							<field name="company_size" required="1"/>
 						</group>
 						<group>
-							<field name="amount_user" />
-							<field name="discount" />
+							<field name="amount_user" required="1"/>
+							<field name="discount" required="1"/>
 						</group>
 					</group>
 				</sheet>
