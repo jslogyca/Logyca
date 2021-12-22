@@ -6,6 +6,7 @@
 		<field name="model">partner.logyca.revenue</field>
 		<field name="arch" type="xml">
 			<tree string="Partner Logyca Revenue" editable="bottom">
+				<field name="year" required="1"/>
 				<field name="config_discount_id" required="1"/>
 				<field name="partner_id" required="1"/>
 			</tree>
