@@ -8,3 +8,4 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     logycax_discount_id = fields.Many2one('config.discount.logycaedx', string='LogycaX Discount', tracking=True)
+    revenue_discount_id = fields.Many2one('config.discount.log.revenue', string='Revenue Discount', tracking=True)
