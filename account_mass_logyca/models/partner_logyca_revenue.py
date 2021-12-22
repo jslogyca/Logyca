@@ -21,13 +21,12 @@ class PartnerLogycaRevenue(models.Model):
         if values.get('partner_id', False):
             partner_id = self.env['res.partner'].search([('id', '=', values.get('partner_id', False))])
             if partner_id:
-                partner_id.write({'logycax_discount_id': values.get('config_discount_id', False)})
+                partner_id.write({'revenue_discount_id': values.get('config_discount_id', False)})
         return super(PartnerLogycaRevenue, self).create(values)        
 
     def write(self, values):
         if values.get('partner_id', False):
             partner_id = self.env['res.partner'].search([('id', '=', values.get('partner_id', False))])
             if partner_id:
-                partner_id.write({'logycax_discount_id': self.config_discount_id.id})
-                self.partner_id.write({'logycax_discount_id': None})
+                partner_id.write({'revenue_discount_id': self.config_discount_id.id})
         return super(PartnerLogycaRevenue, self).write(values)
