@@ -6,6 +6,7 @@
 		<field name="model">partner.logycaedx</field>
 		<field name="arch" type="xml">
 			<tree string="Discount Logyca EDX" editable="bottom">
+				<field name="year" required="1"/>
 				<field name="config_discount_id" required="1"/>
 				<field name="partner_id" required="1"/>
 			</tree>
