@@ -92,7 +92,9 @@ class x_MassiveInvoicingInconsistenciesReport(models.TransientModel):
         inconsistencies = []
         for partner in self.invoicing_companies.thirdparties:            
             # 1.Empresa sin rango de Activos
-            if not partner.x_asset_range:
+            if not partner.x_asset_range and partner.fact_annual=='activos':
+                inconsistencies.append(['Rango de activos','La empresa NIT {}-{} no tienen rango de activos'.format(partner.vat,partner.name)])
+            if not partner.x_income_range and partner.fact_annual=='ingresos':
                 inconsistencies.append(['Rango de activos','La empresa NIT {}-{} no tienen rango de activos'.format(partner.vat,partner.name)])
             # 1.1. Empresa sin sector
             if not partner.x_sector_id:
