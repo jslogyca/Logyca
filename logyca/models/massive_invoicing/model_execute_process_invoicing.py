@@ -58,7 +58,6 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_gtin_massive_invoicing','=',True),('invoice_status','!=','invoiced'),('state','=','draft')])
         #,('state','not in',['sale','cancel'])
         cant = len(sales_order)
-        print('CANTIDAD COTIZACIONES', cant)
         #raise ValidationError(_(cant)) 
         for sale in sales_order:
             #Referencia
@@ -105,8 +104,6 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             #Actualizar campos de Fac Masiva
             id_factura.update(values_update)
             self.env.cr.commit()
-            print('CAMPOS DE LA FACTURA 3333333333', id_factura, sale)
-        print('CANTIDAD 2222 COTIZACIONES', cant)
         self.cant_invoices = cant
         self.state_process = 'Se crearon las facturas en estado borrador correctamente.'
         self.state_process_publish = ''
