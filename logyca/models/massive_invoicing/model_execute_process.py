@@ -274,7 +274,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                     fee_value = tariff.fee_value
                     unit_fee_value = tariff.unit_fee_value
                     partner_logycaedx = self.env['partner.logycaedx'].search([('partner_id', '=', partner.partner_id.id), ('year', '=', self.year)])
-                    partner_logyca_revenue = self.env['partner.logyca.revenue'].search([('partner_id', '=', partner.partner_id.id), ('year', '=', self.year)])                    
+                    partner_logyca_revenue = self.env['partner.logyca.revenue'].search([('partner_id', '=', partner.partner_id.id), ('year', '=', self.year)])
                     if partner_logycaedx:
                         #Logica descuento no condicionado
                         if partner_logycaedx.config_discount_id.discount > 0:
