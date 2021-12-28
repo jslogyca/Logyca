@@ -77,8 +77,8 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         # print('RESPONSE 656565656565', len(result.values()))
         # print('RESPONSE 656565656565', len(result.items()))
         for data in result["data"]:
-            # print('RESPONSE 656565656565', data)
-            # print('RESPONSE 656565656565', data['Info Prefijos'])
+            print('RESPONSE 656565656565', data)
+            print('RESPONSE 656565656565', data['Info Prefijos'])
             partner_vat = data['Nit']
             enpointcodeassignment_vals = data
             enpointcodeassignment_vals['process_id'] = self.id            

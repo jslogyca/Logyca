@@ -84,10 +84,10 @@ class x_MassiveInvoicingPrefixInconsistenciesReport(models.TransientModel):
         elems = []
 
         #Tabla
-        data = []
+        data1 = []
         #Encabezado Tabla
         result_columns = self.get_columns()
-        data.append(result_columns)        
+        data1.append(result_columns)        
         
         #Obtener tipo de proceso
         process_type = self.invoicing_companies.process_type
@@ -116,22 +116,26 @@ class x_MassiveInvoicingPrefixInconsistenciesReport(models.TransientModel):
                 thirdparties_textil.append(partner_textil.vat)
                     
         #Ejecutar API de asignación de codigos
-        body_api = json.dumps({'IsRefact': process, 'Nits': thirdparties})
+        # body_api = json.dumps({'IsRefact': process, 'Nits': thirdparties})
+        body_api = json.dumps({'nit': thirdparties, 'proceso': 'Facturación masiva'})
         headers_api = {'content-type': 'application/json'}
         url_api = self.invoicing_companies.url_enpoint_code_assignment
-        response = requests.get(url_api,data=body_api, headers=headers_api)
-        
+        payload = {'nit': thirdparties, 'proceso': 'Facturación masiva'}
+        response = requests.post(url_api, data=json.dumps(payload))
+        result = response.json()
         #raise ValidationError(_(thirdparties_textil))
         
         #Inconsistencias
         inconsistencies = []
         #Recorrer respuesta del api
         thirdparties_api = []
-        for api_partner in response.json():
-            partner_vat = api_partner['Nit']
-            partner_name = api_partner['RazonSocial']
-            partner_range = api_partner['Rango']
-            thirdparties_api.append(partner_vat)
+        for data in result["data"]:
+            if data['Info Prefijos']:
+                partner_vat = data['Nit']
+                partner_name = data['Razon social']                    
+                for prefijo in data['Info Prefijos']:
+                    partner_range = prefijo['Rango descripcion']
+                thirdparties_api.append(partner_vat)
             
             #Es textilero
             if partner_vat in thirdparties_textil:
@@ -164,10 +168,10 @@ class x_MassiveInvoicingPrefixInconsistenciesReport(models.TransientModel):
             for row in i: 
                 file.append(row)
             num_row = num_row + 1
-            data.append(file)
+            data1.append(file)
         
         
-        f = Table(data, repeatRows=1)
+        f = Table(data1, repeatRows=1)
         
         styles = TableStyle([
             ('FONTSIZE',(0,0),(-1,-1),7),
