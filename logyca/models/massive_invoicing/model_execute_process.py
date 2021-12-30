@@ -76,14 +76,15 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         response.close()
         # print('RESPONSE 656565656565', len(result.values()))
         # print('RESPONSE 656565656565', len(result.items()))
+        enpointcodeassignment_vals2=None
         for data in result["data"]:
-            print('RESPONSE 656565656565', data)
-            print('RESPONSE 656565656565', data['Info Prefijos'])
-            partner_vat = data['Nit']
-            enpointcodeassignment_vals = data
-            enpointcodeassignment_vals['process_id'] = self.id            
+            print('RESPONSE 656565656565', data)          
             if data['Info Prefijos']:
-                for prefijo in data['Info Prefijos']:
+                for prefijo in data['Info Prefijos']: 
+                    partner_vat = data['Nit']
+                    # enpointcodeassignment_vals2 = data
+                    # enpointcodeassignment_vals2['process_id'] = self.id                       
+                    print('PREFIJO 888888877777', prefijo)
                     enpointcodeassignment_vals2 = {
                         'process_id': self.id,
                         'Nit': data['Nit'],
@@ -101,6 +102,24 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                         enpointcodeassignment_vals2['IdEsquema'] = 1
                     if prefijo['Esquema']=='Renovación anual a 31 de diciembre GS1':
                         enpointcodeassignment_vals2['IdEsquema'] = 6
+                    self._cr.execute(''' select p.id
+                                            from massive_invoicing_companies_res_partner_rel r
+                                            inner join res_partner p on p.id=r.res_partner_id
+                                            where massive_invoicing_companies_id=%s and p.vat=%s ''', (self.invoicing_companies.id, partner_vat))
+                    partner_id = self._cr.fetchone()
+                    enpointcodeassignment_vals2['partner_id'] = partner_id[0]
+                    # for partner in self.invoicing_companies.thirdparties:
+                    #     if partner.vat == partner_vat:
+                    #         partner_id = partner.id
+                    #         # enpointcodeassignment_vals['partner_id'] = partner_id
+                    #         enpointcodeassignment_vals2['partner_id'] = partner_id
+
+                    enpointcodeassignment = self.env['massive.invoicing.enpointcodeassignment'].create(enpointcodeassignment_vals2)
+                    self.env.cr.commit()
+                if len(data['Info Prefijos'])>1:
+                    print('PREFIJO 752525252', enpointcodeassignment_vals2)
+                    print('RESPONSE 656565656565', data['Info Prefijos'])
+                    print('RESPONSE 656565656565', len(data['Info Prefijos']))                          
             else:
                 continue
                 # enpointcodeassignment_vals2 = {
@@ -123,12 +142,12 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             for partner in self.invoicing_companies.thirdparties:
                 if partner.vat == partner_vat:
                     partner_id = partner.id
-                    enpointcodeassignment_vals['partner_id'] = partner_id
+                    # enpointcodeassignment_vals['partner_id'] = partner_id
                     enpointcodeassignment_vals2['partner_id'] = partner_id
              
             #raise ValidationError(_(enpointcodeassignment_vals))
             # print('VALORES', enpointcodeassignment_vals2)
-            enpointcodeassignment = self.env['massive.invoicing.enpointcodeassignment'].create(enpointcodeassignment_vals2)
+            # enpointcodeassignment = self.env['massive.invoicing.enpointcodeassignment'].create(enpointcodeassignment_vals2)
             
         return response.json()
     
@@ -275,11 +294,11 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                     unit_fee_value = tariff.unit_fee_value
                     partner_logycaedx = self.env['partner.logycaedx'].search([('partner_id', '=', partner.partner_id.id), ('year', '=', self.year)])
                     partner_logyca_revenue = self.env['partner.logyca.revenue'].search([('partner_id', '=', partner.partner_id.id), ('year', '=', self.year)])
-                    if partner_logycaedx:
+                    if partner_logycaedx and type_process == '1':
                         #Logica descuento no condicionado
                         if partner_logycaedx.config_discount_id.discount > 0:
                             discount = partner_logycaedx.config_discount_id.discount
-                    elif partner_logyca_revenue:
+                    elif partner_logyca_revenue and type_process == '1':
                         #Logica descuento no condicionado
                         if partner_logyca_revenue.config_discount_id.discount > 0:
                             discount = partner_logyca_revenue.config_discount_id.discount

@@ -28,4 +28,4 @@ class x_MassiveInvoicingTariff(models.Model):
     
     @api.depends('fee_value', 'old_value')
     def _compute_unit_fee_value(self):
-        self.write({'unit_fee_value': round((self.old_value*self.fee_value)+self.old_value,0)})
+        self.write({'unit_fee_value': round((self.old_value*self.fee_value)+self.old_value,-3)})
