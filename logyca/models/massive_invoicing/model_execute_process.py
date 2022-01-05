@@ -40,28 +40,95 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             if partner.vat:
                 thirdparties.append(partner.vat)
         #Ejecutar API de asignación de codigos
-        process = False
-        body_api = json.dumps({'IsRefact': process, 'Nits': thirdparties})
+        # process = False
+        # process = 'Facturacion masiva'.'utf-8'
+        # process = str(process, 'utf-8')
+        # body_api = json.dumps({'IsRefact': process, 'Nits': thirdparties})
+        body_api = json.dumps({'nit': thirdparties, 'proceso': 'Facturación masiva'})
         headers_api = {'content-type': 'application/json'}
         url_api = self.invoicing_companies.url_enpoint_code_assignment
-        response = requests.get(url_api,data=body_api, headers=headers_api)
-        
+        # url_api = "https://asctestdocker.azurewebsites.net/codes/fr_masivo/"
+        # response = requests.get(url_api,data=body_api, headers=headers_api)
+
+        payload = {'nit': thirdparties, 'proceso': 'Facturación masiva'}
+
+        response = requests.post(url_api, data=json.dumps(payload))
+
+        # print('URL', url_api)
+        # print('BODY APIaaa', body_api)
+        # print('HEADERS', headers_api)
+        # print('RESPONSE', response)
+        # print('STATUS', response.status_code)
+        result = response.json()
+        # print('RESPONSE 2222', result)
+
         #Eliminar llamado si ya existe
         enpointcodeassignment_exists = self.env['massive.invoicing.enpointcodeassignment'].search([('process_id', '=', self.id)])
         enpointcodeassignment_exists.unlink()
-        
-        for data in response.json():
+
+        result = response.json()
+        # print('RESPONSE 935856565656', result.values())
+        # print('RESPONSE 935856565656', type(result.values()))
+        # print('RESPONSE 141414151515', result.items())
+        # print('RESPONSE 141414151515', type(result.items()))
+        # print('RESPONSE 161616161616', result["data"])
+
+        response.close()
+        # print('RESPONSE 656565656565', len(result.values()))
+        # print('RESPONSE 656565656565', len(result.items()))
+        for data in result["data"]:
+            print('RESPONSE 656565656565', data)
+            print('RESPONSE 656565656565', data['Info Prefijos'])
             partner_vat = data['Nit']
             enpointcodeassignment_vals = data
-            enpointcodeassignment_vals['process_id'] = self.id
-            
+            enpointcodeassignment_vals['process_id'] = self.id            
+            if data['Info Prefijos']:
+                for prefijo in data['Info Prefijos']:
+                    enpointcodeassignment_vals2 = {
+                        'process_id': self.id,
+                        'Nit': data['Nit'],
+                        'RazonSocial': data['Razon social'],
+                        'IdEstado': prefijo['Codigo estado'],
+                        'EstadoPrefijo': prefijo['Descripcion estado'],
+                        'IdRango': prefijo['Codigo rango'],
+                        'Rango': prefijo['Rango descripcion'],
+                        'Esquema': prefijo['Esquema'],
+                        'CapacidadPrefijo': prefijo['Capacidad'],
+                        'PrefixId': prefijo['Prefijo'],
+                        'FechaAsignacion': '2021-12-31',
+                    }
+                    if prefijo['Esquema']=='Renovación anual a 31 de diciembre':
+                        enpointcodeassignment_vals2['IdEsquema'] = 1
+                    if prefijo['Esquema']=='Renovación anual a 31 de diciembre GS1':
+                        enpointcodeassignment_vals2['IdEsquema'] = 6
+            else:
+                continue
+                # enpointcodeassignment_vals2 = {
+                #     'process_id': self.id,
+                #     'Nit': data['Nit'],
+                #     'RazonSocial': data['Razon social'],
+                #     'IdEstado': data['Info Prefijos']['Codigo estado'],
+                #     'EstadoPrefijo': data['Info Prefijos']['Descripcion estado'],
+                #     'IdRango': data['Info Prefijos']['Codigo rango'],
+                #     'Rango': data['Info Prefijos']['Rango descripcion'],
+                #     'IdEsquema': 2,
+                #     'Esquema': data['Info Prefijos']['Renovación anual a 31 de diciembre GS1'],
+                #     'CapacidadPrefijo': data['Info Prefijos']['Capacidad'],
+                #     'PrefixId': data['Info Prefijos']['PrefixId'],
+                #     'FechaAsignacion': '2021-12-31',
+                # }          
+    # {'Nit': '79278214', 'Razon social': 'EDUARDO GOMEZ  NEIRA', 'Info Prefijos': [{'Prefijo': 7707900648, 'Codigo estado': 2, 
+    # 'Descripcion estado': 'Asignado', 'Codigo rango': 5, 'Rango descripcion': '7D', 
+    # 'Esquema': 'Renovación anual a 31 de diciembre GS1', 'Capacidad': 100, 'PrefixId': 1587}]}, 
             for partner in self.invoicing_companies.thirdparties:
                 if partner.vat == partner_vat:
                     partner_id = partner.id
-                    enpointcodeassignment_vals['partner_id'] = partner_id                    
+                    enpointcodeassignment_vals['partner_id'] = partner_id
+                    enpointcodeassignment_vals2['partner_id'] = partner_id
              
-            #raise ValidationError(_(enpointcodeassignment_vals)) 
-            enpointcodeassignment = self.env['massive.invoicing.enpointcodeassignment'].create(enpointcodeassignment_vals)
+            #raise ValidationError(_(enpointcodeassignment_vals))
+            # print('VALORES', enpointcodeassignment_vals2)
+            enpointcodeassignment = self.env['massive.invoicing.enpointcodeassignment'].create(enpointcodeassignment_vals2)
             
         return response.json()
     
@@ -207,7 +274,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                     fee_value = tariff.fee_value
                     unit_fee_value = tariff.unit_fee_value
                     partner_logycaedx = self.env['partner.logycaedx'].search([('partner_id', '=', partner.partner_id.id), ('year', '=', self.year)])
-                    partner_logyca_revenue = self.env['partner.logyca.revenue'].search([('partner_id', '=', partner.partner_id.id), ('year', '=', self.year)])                    
+                    partner_logyca_revenue = self.env['partner.logyca.revenue'].search([('partner_id', '=', partner.partner_id.id), ('year', '=', self.year)])
                     if partner_logycaedx:
                         #Logica descuento no condicionado
                         if partner_logycaedx.config_discount_id.discount > 0:

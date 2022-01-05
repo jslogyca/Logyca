@@ -52,6 +52,8 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                 sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','=',code_textileros),('invoice_status','!=','invoiced'),('state','=','draft')])
             else:
                 sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_type_vinculation','in',type_vinculation),('partner_id.parent_id.x_sector_id.id','!=',code_textileros),('invoice_status','!=','invoiced'),('state','=','draft')])
+                if not sales_order:
+                    sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.x_type_vinculation','in',type_vinculation),('partner_id.x_sector_id.id','!=',code_textileros),('invoice_status','!=','invoiced'),('state','=','draft')])
         else:
             sales_order = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id.parent_id.x_gtin_massive_invoicing','=',True),('invoice_status','!=','invoiced'),('state','=','draft')])
         #,('state','not in',['sale','cancel'])
@@ -74,8 +76,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             ref = '.'
                     else:
                         if ref == '':
-                            ref = '.'
-            
+                            ref = '.'         
             #Plazo de pago
             id_payment_term = 0
             obj_account_payment_term = self.env['account.payment.term'].search([('x_is_mass_billing', '=', True)])            
@@ -94,6 +95,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                 'x_value_discounts' : sale.x_conditional_discount,
                 'x_discounts_deadline' : sale.x_conditional_discount_deadline
             }
+            print('CAMPOS DE LA FACTURA', values_update, sale)      
             #Confirmar orden de venta
             if sale.state != 'sale' and sale.state != 'cancel':
                 sale.action_confirm()
@@ -101,7 +103,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             id_factura = sale._create_invoices()
             #Actualizar campos de Fac Masiva
             id_factura.update(values_update)
-        
+            self.env.cr.commit()
         self.cant_invoices = cant
         self.state_process = 'Se crearon las facturas en estado borrador correctamente.'
         self.state_process_publish = ''
