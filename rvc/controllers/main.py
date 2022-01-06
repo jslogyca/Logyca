@@ -33,7 +33,7 @@ class AcceptRvcBenefit(http.Controller):
                 })
 
     @http.route('/rvc/reject_benefit/<string:token>', type='http', auth="public", website=True)
-    def accept_benefit(self, token, **kwargs):
+    def reject_benefit(self, token, **kwargs):
         postulation_ids = request.env['benefit.application'].sudo().search([('access_token', '=', token)])
         if not postulation_ids:
             return request.not_found()
