@@ -840,6 +840,18 @@ class BenefitApplication(models.Model):
                 record.message_post(body=_(\
                     '<strong>¡Error!</strong> No se pudo activar la vinculación <strong>%s</strong>. Descripción: %s' % (str(vinculation_99_anos_id.name), str(e))))
 
+    @api.model
+    def action_reminder(self):
+        """ This function allows you to notify by email if the application is non accepted."""
+        fiveDays = fields.datetime.now() - timedelta(days=5)
+        postulation = self
+
+        if postulation.reminder_count == 3:
+            postulation.message_post(body=_('La postulación se marcó como rechazada dado que se notificó recordatorio '\
+                    'en tres (3) oportunidades y no se aceptó el beneficio por parte de la empresa.'))
+        else:
+            postulation.state = 'rejected'
+            self.send_reminder_benefit_expiration(postulation)
 
     def _cron_send_welcome_kit(self):
         """  Acción planificada que envía kits de bienvenida a las postulaciones Aceptadas. """
