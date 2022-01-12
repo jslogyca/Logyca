@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="1">
+        <record id="CONFIG" model="hr.salary.rule.category">
+            <field name="name">Config</field>
+            <field name="code">CONFIG</field>
+            <field name="const_config">True</field>
+        </record>
+        <!-- Decimal Precision -->
+        <record forcecreate="True" id="decimal_payroll_fix" model="decimal.precision">
+            <field name="name">Payroll Fix</field>
+            <field name="digits">6</field>
+        </record>        
+    </data>
+</odoo>

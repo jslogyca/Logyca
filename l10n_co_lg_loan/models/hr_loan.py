@@ -120,8 +120,9 @@ class HrLoan(models.Model):
         return True
 
     def action_refuse(self):
-        self._compute_loan_amount()
-        return self.write({'state': 'refuse'})
+        if self.state in ('draft', 'waiting_approval_1'):
+            self._compute_loan_amount()
+            return self.write({'state': 'refuse'})
 
     def action_done(self):
         self._compute_loan_amount()
@@ -129,25 +130,29 @@ class HrLoan(models.Model):
         return self.write({'state': 'done'})
 
     def action_draft(self):
-        if self.type_compute != 'fijo' and self.loan_lines:
-            lines = self.loan_lines.filtered(lambda line: line.paid == False).unlink()
-        return self.write({'state': 'draft'})
+        if data.state == 'cancel':
+            if self.type_compute != 'fijo' and self.loan_lines:
+                lines = self.loan_lines.filtered(lambda line: line.paid == False).unlink()
+            return self.write({'state': 'draft'})
 
     def action_submit(self):
-        self._compute_loan_amount()
-        self.write({'state': 'waiting_approval_1'})
+        if self.state in ('draft'):
+            self._compute_loan_amount()
+            self.write({'state': 'waiting_approval_1'})
 
     def action_cancel(self):
-        self._compute_loan_amount()
-        self.write({'state': 'cancel'})
+        if self.state in ('draft'):
+            self._compute_loan_amount()
+            self.write({'state': 'cancel'})
 
     def action_approve(self):
         for data in self:
-            data._compute_loan_amount()
-            if not data.loan_lines and data.type_compute not in ('fijo', 'amount'):
-                raise ValidationError(_("Please Compute installment"))
-            else:
-                self.write({'state': 'approve'})
+            if data.state == 'waiting_approval_1':
+                data._compute_loan_amount()
+                if not data.loan_lines and data.type_compute not in ('fijo', 'amount'):
+                    raise ValidationError(_("Please Compute installment"))
+                else:
+                    self.write({'state': 'approve'})
 
     def unlink(self):
         for loan in self:
@@ -183,6 +188,15 @@ class HrEmployee(models.Model):
     def _compute_employee_loans(self):
         """This compute the loan amount and total loans count of an employee.
             """
-        self.loan_count = self.env['hr.loan'].search_count([('employee_id', '=', self.id)])
+        # self.loan_count = self.env['hr.loan'].search_count([('employee_id', '=', self.id)])
+        self.loan_count = len(self.loan_ids)
 
     loan_count = fields.Integer(string="Loan Count", compute='_compute_employee_loans')
+    loan_ids = fields.One2many('hr.loan', 'employee_id', string='Employee Loans', copy=False, domain=[('state','in',('done', 'approve'))])
+
+
+class HrContract(models.Model):
+    _inherit = "hr.contract"
+
+    loan_ids = fields.One2many('hr.loan', 'contract_id', string='Loan Request', copy=False, readonly=True, 
+                                        domain=[('type_compute', '=', 'fijo'), ('state','in',('done', 'approve'))], states={'draft': [('readonly', False)]})

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="hr_salary_rule_config_tree" model="ir.ui.view">
+		<field name="name">hr.salary.rule.config.tree</field>
+		<field name="model">hr.salary.rule</field>
+		<field eval="20" name="priority"/>
+		<field name="arch" type="xml">
+			<tree string="Payroll Config" editable="top">
+			<!-- <tree string="Payroll Config"> -->
+				<field name="name"/>
+				<field name="code"/>
+				<field name="amount_fix" string="Amount"/>
+				<field name="active" widget="boolean_toggle"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_salary_rule_config_form" model="ir.actions.act_window">
+		<field name="name">Payroll Config</field>
+		<field name="res_model">hr.salary.rule</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('constante_legal','=',True)]</field>
+		<field name="view_id" ref="hr_salary_rule_config_tree"/>
+		<field name="context">{'default_sequence': 1,
+			'default_appears_on_payslip': False,
+			'default_constante_legal': True}
+		</field>			
+	</record>
+
+    <menuitem 
+		id="menu_action_hr_salary_rule_config_form" 
+		action="action_salary_rule_config_form" 
+		parent="hr_payroll.menu_hr_payroll_configuration"
+		sequence="20"/>
+
+	<record id="hr_salary_rule_view_tree_children_seq" model="ir.ui.view">
+		<field name="name">hr.salary.rule.view.tree.seq</field>
+		<field name="model">hr.salary.rule</field>
+		<field name="inherit_id" ref="hr_payroll.hr_salary_rule_list"/>
+		<field name="arch" type="xml">
+            <xpath expr="//field[@name='sequence']" position="attributes">
+                <attribute name="invisible">False</attribute>
+            </xpath>
+		</field>
+	</record>
+
+	<record id="hr_salary_rule_view_form_group" model="ir.ui.view">
+		<field name="name">hr.salary.rule.view.form.group</field>
+		<field name="model">hr.salary.rule</field>
+		<field name="inherit_id" ref="hr_payroll.hr_salary_rule_form"/>
+		<field name="arch" type="xml">
+            <xpath expr="//field[@name='condition_select']" position="attributes">
+                <attribute name="groups">l10n_co_lg_payroll.group_manager_salary_rule</attribute>
+            </xpath>
+            <xpath expr="//field[@name='condition_python']" position="attributes">
+                <attribute name="groups">l10n_co_lg_payroll.group_manager_salary_rule</attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_select']" position="attributes">
+                <attribute name="groups">l10n_co_lg_payroll.group_manager_salary_rule</attribute>
+            </xpath>
+            <xpath expr="//field[@name='quantity']" position="attributes">
+                <attribute name="groups">l10n_co_lg_payroll.group_manager_salary_rule</attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_fix']" position="attributes">
+                <attribute name="groups">l10n_co_lg_payroll.group_manager_salary_rule</attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_python_compute']" position="attributes">
+                <attribute name="groups">l10n_co_lg_payroll.group_manager_salary_rule</attribute>
+            </xpath>
+            <xpath expr="//field[@name='appears_on_payslip']" position="after">
+                <field name="rule_salary" />
+            </xpath>
+		</field>
+	</record>
+</odoo>

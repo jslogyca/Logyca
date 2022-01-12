@@ -17,6 +17,7 @@
         'hr',
         'hr_payroll',
         'hr_payroll_account',
+        'hr_holidays',
     ],
     'description': '''
 
@@ -24,10 +25,18 @@
 
 ''',    
     'data': [
-        # 'security/security.xml',
-        # 'security/ir.model.access.csv',
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/hr_payroll_data.xml',        
         'views/hr_payslip_input_type_view.xml',
         'views/hr_payslip_view.xml',
+        'views/hr_salary_rule_view.xml',
+        'views/hr_payslip_line_view.xml',
+        'views/hr_contract_view.xml',
+        'views/hr_risk_view.xml',
+        'views/res_company_view.xml',
+        'views/resource_calendar_view.xml',
+        'views/hr_leave_type_view.xml',        
     ],
     'qweb': [
     ]
