@@ -102,7 +102,7 @@ class HrPayrollReportLG(models.TransientModel):
                         'fg_color': 'orange',
                         'valign': 'vcenter'})
         title_head.set_font_name('Arial')
-        title_head.set_font_size(10)
+        title_head.set_font_size(10)     
         
         user = self.env['res.users'].browse(self._uid)
         ws.write(0, 0, 'REPORTE GENERAL DE NOMINA', title_head)
@@ -116,7 +116,10 @@ class HrPayrollReportLG(models.TransientModel):
         
         fila=6
         for x in value:
-            ws.write_row(fila,0,x)
+            if fila==6:
+                ws.write_row(fila,0,x,subtitle_head)
+            else:
+                ws.write_row(fila,0,x)
             fila+=1
 
         try:
