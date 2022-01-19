@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+	<record id="hr_salary_rule_view_form_group" model="ir.ui.view">
+		<field name="name">hr.salary.rule.view.form.group</field>
+		<field name="model">hr.salary.rule</field>
+		<field name="inherit_id" ref="hr_payroll.hr_salary_rule_form"/>
+		<field name="arch" type="xml">
+            <xpath expr="//page[@name='general']" position="after">
+				<page name="report_payroll" string="Report Payroll">
+					<group name="general_conditions" col="4">
+						<separator colspan="4" string="Report Payroll"/>
+						<field name="prenomina"/>
+						<field name="sequence_report"/>
+					</group>
+				</page>
+            </xpath>
+		</field>
+	</record>
+	<record id="hr_salary_rule_view_tree_children_prenomina" model="ir.ui.view">
+		<field name="name">hr.salary.rule.view.tree.prenomina</field>
+		<field name="model">hr.salary.rule</field>
+		<field name="inherit_id" ref="hr_payroll.hr_salary_rule_list"/>
+		<field name="arch" type="xml">
+            <xpath expr="//field[@name='sequence']" position="after">
+                <field name="sequence_report"/>
+            </xpath>
+		</field>
+	</record>	
+</odoo>
