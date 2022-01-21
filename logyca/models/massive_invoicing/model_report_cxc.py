@@ -50,9 +50,15 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                     partner_id = move.partner_id
 
                 #Documento, año y número de factura
-                doc = move.name.split('/')[0]
-                year = move.name.split('/')[1]
-                num = move.name.split('/')[2]
+                if move.type == 'out_invoice':
+                    doc = move.name.split('/')[0]
+                    year = move.name.split('/')[1]
+                    num = move.name.split('/')[2]
+                elif move.type == 'out_refund':
+                    doc = move.name.split('/')[0]
+                    year = move.invoice_date.year
+                    num = move.name.split('/')[1]
+
                 #Fecha de factura
                 invoice_date = str(move.invoice_date)
                 #Cliente
