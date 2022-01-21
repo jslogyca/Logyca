@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+import traceback
 from datetime import datetime, timedelta
 
 import xlwt
@@ -42,7 +43,7 @@ class MassiveInvoicingCXC_report(models.TransientModel):
         #raise ValidationError(_(obj_account_moves))
         lst_account_moves = []
         for move in obj_account_moves:
-            #try:
+            try:
                 #Determinar el cliente de la factura
                 if move.partner_id.parent_id:
                     partner_id = move.partner_id.parent_id
@@ -56,7 +57,7 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                     num = move.name.split('/')[2]
                 elif move.type == 'out_refund':
                     doc = move.name.split('/')[0]
-                    year = move.invoice_date.year
+                    year = str(move.invoice_date.year)
                     num = move.name.split('/')[1]
 
                 #Fecha de factura
@@ -192,10 +193,10 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                     lst_move = [doc,year,num,invoice_date,nit,partner,classification,represent_logyca_name,city,street,phone,mobile,represent_logyca_email,contact_fe,vinculations,asset_range,account,date_due,payment_term,ref,origin,
                                 salesperson,product,quantity,price_unit,price_subtotal,tax,price_total,porcentage_discount,discount,collected_value,value_cxc,state,analytic_account,paid,document_paid,date_paid,value_paid]
                     lst_account_moves.append(lst_move)
-            #except Exception as e:
+            except:
                 #raise ValidationError(_(e))
-                #raise ValidationError(_('La factura '+move.name+' esta causando problemas al generar el reporte, Msg Error: '+str(e)))
-            
+                raise ValidationError(_('La factura '+move.name+' esta causando problemas al generar el reporte, Msg Error: '+ traceback.format_exc()))
+
         #raise ValidationError(_(lst_account_moves))        
         return lst_account_moves
     
