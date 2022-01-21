@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- HR employee inherit Loans -->
+    <record id="hr_contract_view_form_loan" model="ir.ui.view">
+        <field name="name">hr.contract.view.form.loan</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/notebook/page[@name='other']" position="after">
+                <page name="LoansContract" string="Loans Contract">
+                    <field string="Loans Contract" name="loan_ids" nolabel="1" widget="one2many_list">
+                        <tree string="Loans Contract" editable="bottom">
+                            <field name="name" force_save="1" readonly="1"/>
+                            <field name="date" force_save="1" readonly="1"/>
+                            <field name="input_id" force_save="1" readonly="1"/>
+                            <field name="analytic_account_id" force_save="1" readonly="1"/>
+                            <field name="loan_amount" force_save="1" readonly="1"/>
+                            <field name="state" force_save="1" readonly="1"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

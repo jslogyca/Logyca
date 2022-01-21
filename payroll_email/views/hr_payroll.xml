@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_payslip_my_form_inherit" model="ir.ui.view">
+            <field name="name">hr.payslip.form.inherit</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='credit_note']" position="after">
+                    <field name="flag" force_save="1" readonly="1"/>
+                    <field name="date_send" force_save="1" readonly="1"/>
+                </xpath>
+                <xpath expr="//button[@name='action_payslip_draft']" position="before">
+                    <button string="Send By Email" name="action_my_payslip_sent" type="object" class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record>
+        </data>
+        </odoo>

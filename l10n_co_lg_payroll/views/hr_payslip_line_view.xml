@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_payslip_line_tree" model="ir.ui.view">
+        <field name="name">hr.payslip.line.tree</field>
+        <field name="model">hr.payslip.line</field>
+        <field name="arch" type="xml">
+            <tree string="Payslip Line" >
+                <field name="code"/>
+                <field name="slip_id" />
+                <field name="salary_rule_id" />
+                <field name="employee_id" />                            
+                <field name="contract_id" />
+                <field name="quantity"/>
+                <field name="rate"/>
+                <field name="amount"/>
+                <field name="total"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_payslip_line" model="ir.actions.act_window">
+        <field name="name">Payslip Line</field>
+        <field name="res_model">hr.payslip.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hr_payslip_line_tree"/>
+        <field name="domain">[('appears_on_payslip', '=', True)]</field>
+        <field name="context">{'default_appears_on_payslip': True}</field>
+    </record>
+
+    <menuitem
+        id="menu_hr_payslip_line"
+        name="Payslip Line"
+        action="action_hr_payslip_line"
+        parent="hr_payroll.menu_hr_payroll_payslips"
+        sequence="9" />
+</odoo>

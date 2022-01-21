@@ -1,0 +1,169 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* payroll_email
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-12-23 02:42+0000\n"
+"PO-Revision-Date: 2021-12-23 02:42+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: payroll_email
+#: model:mail.template,subject:payroll_email.email_template_for_my_payroll
+msgid "${object.company_id.name}:  ${object.name})"
+msgstr ""
+
+#. module: payroll_email
+#: model:mail.template,body_html:payroll_email.email_template_for_my_payroll
+msgid ""
+"<div style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin:0px;padding: 0px;\">\n"
+"                    <p style=\"margin:0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;padding: 0px; font-size: 13px;\">\n"
+"                        Dear ${object.employee_id.name}\n"
+"                        <!-- % if object.employee_id.parent_id:\n"
+"                            (${object.employee_id.parent_id.name})\n"
+"                        % endif -->\n"
+"                        <br><br>\n"
+"                        Please find  ${object.name} attached with this mail.\n"
+"                        <br><br>\n"
+"                        Thank You \n"
+"                        <br><br>\n"
+"                        ${object.user_id.company_id.name}\n"
+"                    </p>\n"
+"                </div>\n"
+"            "
+msgstr ""
+
+#. module: payroll_email
+#: model_terms:ir.ui.view,arch_db:payroll_email.view_payroll_mass_mail
+msgid "Close"
+msgstr ""
+
+#. module: payroll_email
+#: model:ir.model.fields,field_description:payroll_email.field_payroll_mass_mail__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: payroll_email
+#: model:ir.model.fields,field_description:payroll_email.field_payroll_mass_mail__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: payroll_email
+#: model:ir.model.fields,field_description:payroll_email.field_hr_payslip__user_id
+#: model:ir.model.fields,field_description:payroll_email.field_hr_payslip_run__user_id
+msgid "Current User"
+msgstr ""
+
+#. module: payroll_email
+#: model:ir.model.fields,field_description:payroll_email.field_hr_employee__display_name
+#: model:ir.model.fields,field_description:payroll_email.field_hr_payslip__display_name
+#: model:ir.model.fields,field_description:payroll_email.field_hr_payslip_run__display_name
+#: model:ir.model.fields,field_description:payroll_email.field_payroll_mass_mail__display_name
+msgid "Display Name"
+msgstr "Nombre Público"
+
+#. module: payroll_email
+#: model:ir.model,name:payroll_email.model_hr_employee
+msgid "Employee"
+msgstr "Empleado"
+
+#. module: payroll_email
+#: model:ir.model.fields,field_description:payroll_email.field_hr_payslip__flag
+#: model:ir.model.fields,field_description:payroll_email.field_hr_payslip_run__flag
+msgid "Flag"
+msgstr "Enviado"
+
+#. module: payroll_email
+#: model:ir.model.fields,field_description:payroll_email.field_hr_employee__id
+#: model:ir.model.fields,field_description:payroll_email.field_hr_payslip__id
+#: model:ir.model.fields,field_description:payroll_email.field_hr_payslip_run__id
+#: model:ir.model.fields,field_description:payroll_email.field_payroll_mass_mail__id
+msgid "ID"
+msgstr ""
+
+#. module: payroll_email
+#: model:ir.model.fields,field_description:payroll_email.field_hr_employee____last_update
+#: model:ir.model.fields,field_description:payroll_email.field_hr_payslip____last_update
+#: model:ir.model.fields,field_description:payroll_email.field_hr_payslip_run____last_update
+#: model:ir.model.fields,field_description:payroll_email.field_payroll_mass_mail____last_update
+msgid "Last Modified on"
+msgstr "Última Modificación el"
+
+#. module: payroll_email
+#: model:ir.model.fields,field_description:payroll_email.field_payroll_mass_mail__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: payroll_email
+#: model:ir.model.fields,field_description:payroll_email.field_payroll_mass_mail__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: payroll_email
+#: model:ir.model,name:payroll_email.model_hr_payslip
+msgid "Pay Slip"
+msgstr "Nómina"
+
+#. module: payroll_email
+#: model:ir.model.fields,field_description:payroll_email.field_hr_employee__email_payroll
+msgid "Payroll Email"
+msgstr "Envio Email / Desprendible de Nómina"
+
+#. module: payroll_email
+#: model:ir.actions.act_window,name:payroll_email.action_payroll_mass_mail
+msgid "Payroll Mass Mail"
+msgstr "Envio Email Masivo"
+
+#. module: payroll_email
+#: model:ir.model,name:payroll_email.model_hr_payslip_run
+msgid "Payslip Batches"
+msgstr "Procesamientos de nóminas"
+
+#. module: payroll_email
+#: model:mail.template,report_name:payroll_email.email_template_for_my_payroll
+msgid "Payslip_${(object.name or '')}"
+msgstr ""
+
+#. module: payroll_email
+#: model:ir.model.fields,field_description:payroll_email.field_payroll_mass_mail__payslip_ids
+msgid "Payslips"
+msgstr "Nóminas"
+
+#. module: payroll_email
+#: model_terms:ir.ui.view,arch_db:payroll_email.hr_payslip_run_view_form_mail
+#: model_terms:ir.ui.view,arch_db:payroll_email.view_payslip_my_form_inherit
+msgid "Send By Email"
+msgstr "Enviar por Email"
+
+#. module: payroll_email
+#: model:ir.model.fields,field_description:payroll_email.field_hr_payslip__date_send
+#: model:ir.model.fields,field_description:payroll_email.field_hr_payslip_run__date_send
+msgid "Send Date"
+msgstr "Fecha de Envio"
+
+#. module: payroll_email
+#: model_terms:ir.ui.view,arch_db:payroll_email.view_payroll_mass_mail
+msgid "Send Mail"
+msgstr "Enviar Email"
+
+#. module: payroll_email
+#: model:ir.actions.server,name:payroll_email.payroll_action_mass_mail
+msgid "Send Payroll by Mail"
+msgstr "Enviar Nómina por correo electrónico"
+
+#. module: payroll_email
+#: model_terms:ir.ui.view,arch_db:payroll_email.view_payroll_mass_mail
+msgid "or"
+msgstr ""
+
+#. module: payroll_email
+#: model:ir.model,name:payroll_email.model_payroll_mass_mail
+msgid "payroll.mass.mail"
+msgstr "Envío Masivo"

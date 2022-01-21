@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data noupdate="1">
+        <!--Email template -->
+        <record id="email_template_for_my_payroll" model="mail.template">
+            <field name="name">Payslip: Send by email</field>
+            <field name="model_id" ref="hr_payroll.model_hr_payslip"/>
+            <field name="email_from">${object.user_id.email_formatted |safe}</field>
+            <field name="email_to">${object.employee_id.email_payroll}</field>
+            <field name="subject">${object.company_id.name}:  ${object.name})</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear ${object.employee_id.name}
+                        <br /><br />
+                        Please find  ${object.name} attached with this mail.
+                        <br /><br />
+                        Thank You 
+                        <br /><br />
+                        ${object.user_id.company_id.name}
+                    </p>
+                </div>
+            </field>
+            <field name="report_template" ref="hr_payroll.action_report_payslip"/>
+            <field name="report_name">Payslip_${(object.name or '')}</field>
+            <!-- <field name="lang">${object.user_id.partner_id.lang}</field> -->
+            <!-- <field name="user_signature" eval="False"/> -->
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

@@ -20,12 +20,13 @@
         'l10n_co_lg_payroll',
     ],
     'data': [
-        'security/ir.model.access.csv',
-        'security/security.xml',
         'views/hr_loan_seq.xml',
         'views/hr_loan_view.xml',
         'views/hr_loan_line_view.xml',
         'views/hr_employee_view.xml',
+        'wizard/hr_loan_mass_wizard_view.xml',
+        'security/ir.model.access.csv',
+        'security/security.xml',        
     ],
     'qweb': [
     ]

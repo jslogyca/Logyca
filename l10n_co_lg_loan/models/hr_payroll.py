@@ -15,6 +15,8 @@ class HrPayslipInput(models.Model):
 class HrPayslip(models.Model):
     _inherit = 'hr.payslip'
 
+    loan_ids = fields.One2many('hr.loan', "payslip_id", string="Loan Request", readonly=True)
+
     def get_inputs_amount_loan(self, contract_id, date_from, date_to, type_compute):
         self._cr.execute(''' SELECT h.loan_amount, h.payment_date, i.id, i.code, i.name, h.id
                                 FROM hr_loan h
@@ -128,3 +130,12 @@ class HrPayslip(models.Model):
                     line_ids = self.env['hr.loan.line'].search([('paid', '=', True), ('payslip_id', '=', self.id)]).unlink()
                 line.loan_id._compute_loan_amount()
         return super(HrPayslip, self).action_payslip_cancel_done()
+
+    def update_input_employee(self):
+        res = super(HrPayslip, self).update_input_employee()
+        for line in self.input_line_ids:
+            if line.loan_id:
+                line.loan_id.payslip_id = self.id
+            if line.loan_line_id:
+                line.loan_line_id.payslip_id = self.id
+        return res

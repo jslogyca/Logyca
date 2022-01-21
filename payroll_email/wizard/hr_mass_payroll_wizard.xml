@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+
+
+     <record id="payroll_action_mass_mail" model="ir.actions.server">
+          <field name="model_id" ref="hr_payroll.model_hr_payslip" />
+          <field name="name">Send Payroll by Mail</field>
+          <field name="binding_model_id" ref="hr_payroll.model_hr_payslip"/>
+          <field name="state">code</field>
+          <field name = "code">
+        if records:
+              action = records.view_mass_payroll_wizard()
+          </field>
+      </record>
+</odoo>

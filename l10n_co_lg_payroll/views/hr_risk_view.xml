@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_risk_form" model="ir.ui.view">
+        <field name="name">hr.risk.form</field>
+        <field name="model">hr.risk</field>
+        <field name="arch" type="xml">
+            <form string="Risk">       
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="code" required="1"/>                         
+                        </group>
+                        <group>
+                            <field name="company_id" required="True"/>
+                            <field name="percentage" required="True"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_risk_tree" model="ir.ui.view">
+        <field name="name">hr.risk.tree</field>
+        <field name="model">hr.risk</field>
+        <field name="arch" type="xml">
+            <tree string="Risk" >
+                <field name="name" />
+                <field name="code"/>
+                <field name="company_id" />
+                <field name="percentage" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_risk" model="ir.actions.act_window">
+        <field name="name">Risk</field>
+        <field name="res_model">hr.risk</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="hr_risk_tree"/>
+    </record>
+
+    <menuitem
+        id="menu_hr_risk"
+        name="Risk"
+        action="action_hr_risk"
+        parent="hr_payroll.menu_hr_payroll_configuration"
+        sequence="52" />
+</odoo>
