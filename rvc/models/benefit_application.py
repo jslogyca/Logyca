@@ -1059,13 +1059,15 @@ class BenefitApplication(models.Model):
 
             if response.status_code == 200:
                 result = response.json()
+                if 'resultObject' in result:
+                    for i in result.get('resultObject'):
+                        if i.get('moduleName') == 'Negociación' and i.get('moduleName') == 'Captura':
+                            raise ValidationError(\
+                                _('¡Error de Validación! La empresa %s ya tiene Logyca/Colabora activo.') % str(vat))
+
                 response.close()
             else:
                 logging.debug(f" Error en _validate_has_colabora código: =====> {response.status_code}")
-
-            if result.get('dataError') == False:
-                 raise ValidationError(\
-                    _('¡Error de Validación! La empresa %s ya tiene Logyca/Colabora activo.') % str(vat))
         else:
             raise ValidationError(\
                     _('¡Error de comunicación! Odoo no pudo comunicarse con Logyca/Colabora para verificar si la empresa ya tiene el servicio activo.'))
