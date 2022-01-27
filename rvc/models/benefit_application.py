@@ -1061,7 +1061,7 @@ class BenefitApplication(models.Model):
                 result = response.json()
                 if 'resultObject' in result:
                     for i in result.get('resultObject'):
-                        if i.get('moduleName') == 'Negociación' and i.get('moduleName') == 'Captura':
+                        if i.get('moduleName') == 'Negociación' and i.get('moduleName') == 'Calidad de datos':
                             raise ValidationError(\
                                 _('¡Error de Validación! La empresa %s ya tiene Logyca/Colabora activo.') % str(vat))
 
