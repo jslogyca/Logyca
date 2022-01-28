@@ -487,12 +487,15 @@ class AccountInvoiceReport(models.Model):
     x_account_analytic_group = fields.Many2one('account.analytic.group', string='Grupo Analítico / Familia', readonly=True)
     x_account_analytic_group_two = fields.Many2one('account.analytic.group', string='Grupo Analítico / Línea', readonly=True)
     #Categoria de producto
-    product_categ_id_fam = fields.Many2one('product.category', string='Categoría de Prodcuto / Familia', readonly=True)
-    product_categ_id_lin = fields.Many2one('product.category', string='Categoría de Prodcuto / Línea', readonly=True)
+    product_categ_id_fam = fields.Many2one('product.category', string='Categoría de Producto / Familia', readonly=True)
+    product_categ_id_lin = fields.Many2one('product.category', string='Categoría de Producto / Línea', readonly=True)
+    #Red de valor
+    x_analytic_account_id = fields.Many2one('account.analytic.account', string='Red de Valor', readonly=True)
         
     def _select(self):
         add_select = '''
-            , partner.vat as x_vat, 
+            , move.analytic_account_id as x_analytic_account_id,
+            partner.vat as x_vat,
             analytic.group_id as x_account_analytic_group, 
             analytic_group.parent_id as x_account_analytic_group_two,
             category_fam.id as product_categ_id_fam,
@@ -513,7 +516,7 @@ class AccountInvoiceReport(models.Model):
     
     def _group_by(self):
         add_group = '''
-            , partner.vat,analytic.group_id,analytic_group.parent_id,category_fam.id,category_lin.id
+            , move.analytic_account_id,partner.vat,analytic.group_id,analytic_group.parent_id,category_fam.id,category_lin.id
         '''
         return super(AccountInvoiceReport, self)._group_by() + add_group
     
