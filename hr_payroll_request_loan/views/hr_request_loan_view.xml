@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_request_loan_form" model="ir.ui.view">
+        <field name="name">hr.request.loan.form</field>
+        <field name="model">hr.request.loan</field>
+        <field name="arch" type="xml">
+            <form string="Request Loan">
+                <header>
+                    <button name="action_open" type="object" string="Done" states="draft" class="oe_highlight" groups="hr_payroll.group_hr_payroll_manager"/>
+                    <button name="action_draft" type="object" string="Draft" states="open" class="oe_highlight" groups="hr_payroll.group_hr_payroll_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open" />
+                </header>            
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="company_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                        </group>
+                        <group>
+                            <field name="date_from" required="True" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="date_to" required="True" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Request Loan Line">
+                            <field name="lines_ids" attrs="{'readonly': [('state', '!=', 'draft')]}" >
+                                <tree string="Request Loan Line" editable="bottom">
+                                    <field name="request" required="1" />
+                                    <field name="loan_id" attrs="{'invisible': [('request', '=', 'new')], 'required': [('request', '=', 'shift')]}" />
+                                    <field name="date_request" required="1" />
+                                    <field name="employee_id" required="1" />
+                                    <field name="input_id" attrs="{'invisible': [('request', '=', 'shift')], 'required': [('request', '=', 'new')]}"/>
+                                    <field name="type_compute" attrs="{'invisible': [('request', '=', 'shift')], 'required': [('request', '=', 'new')]}"/>
+                                    <field name="date_from" attrs="{'invisible': [('request', '=', 'shift')], 'required': [('request', '=', 'new')]}"/>
+                                    <field name="loan_amount" required="1"/>
+                                </tree>
+                            </field>
+                            <div class="oe_clear"/>
+                        </page>
+                    </notebook>                    
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_request_loan_tree" model="ir.ui.view">
+        <field name="name">hr.request.loan.tree</field>
+        <field name="model">hr.request.loan</field>
+        <field name="arch" type="xml">
+            <tree string="Request Loan" >
+                <field name="name" />
+                <field name="company_id" />
+                <field name="date_from" />
+                <field name="date_to" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_request_loan" model="ir.actions.act_window">
+        <field name="name">Request Loan</field>
+        <field name="res_model">hr.request.loan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="hr_request_loan_tree"/>
+    </record>
+
+    <menuitem
+        id="menu_hr_request_loan"
+        name="Request Loan"
+        action="action_hr_request_loan"
+        parent="hr_payroll.menu_hr_payroll_root"
+        sequence="15" />
+</odoo>
