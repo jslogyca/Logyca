@@ -107,11 +107,12 @@ class RVCImportFileWizard(models.TransientModel):
                             continue
 
                     #si se ingresa correo electrónico del contacto
-                    if fila[4]:
+                    contact_email = fila[6] or False 
+                    if contact_email:
                         #si no es un email válido
-                        if self.validate_mail(str(fila[4])) == False:
+                        if self.validate_mail(str(contact_email)) == False:
                             validation = 'Fila %s: %s tiene un email de contacto no válido (%s)' %\
-                                (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper(), str(fila[4]))
+                                (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper(), str(contact_email))
                             errors.append(validation)
                             continue
                     else:
@@ -129,10 +130,10 @@ class RVCImportFileWizard(models.TransientModel):
                                 rvc_beneficiary_id = self.env['rvc.beneficiary'].create({
                                                                     'partner_id': partner_id.id,
                                                                     'vat': partner_id.vat,
-                                                                    'contact_name': str(fila[3]),
-                                                                    'contact_phone': str(fila[5]),
-                                                                    'contact_email': str(fila[4]).strip().lower(),
-                                                                    'contact_position': str(fila[6]),
+                                                                    'contact_name': str(fila[5]),
+                                                                    'contact_phone': str(fila[7]),
+                                                                    'contact_email': str(fila[6]).strip().lower(),
+                                                                    'contact_position': str(fila[8]),
                                                                     'active': True})
                         except Exception as e:
                             validation = "Fila %s: %s no se pudo crear como empresa beneficiaria. %s" % (str(count), partner_id.vat + '-' + str(partner_id.name.strip()),str(e))
@@ -185,7 +186,9 @@ class RVCImportFileWizard(models.TransientModel):
                                 'partner_id': rvc_beneficiary_id.id,
                                 'parent_id': sponsor_id.id,
                                 'product_id': product_id.id,
-                                'codes_quantity': int(fila[2])
+                                'codes_quantity': int(fila[2]) or 0,
+                                'glns_codes_quantity': int(fila[3]) or 0,
+                                'invoice_codes_quantity': int(fila[4]) or 0
                             }
                             benefit_application = self.env['benefit.application'].sudo().create(vals)
                             
