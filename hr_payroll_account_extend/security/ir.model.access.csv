@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_payroll_account_config,hr.payroll.account.config,model_hr_payroll_account_config,hr_payroll.group_hr_payroll_manager,1,1,1,1
+access_hr_payroll_account_line,hr.payroll.account.line,model_hr_payroll_account_line,hr_payroll.group_hr_payroll_manager,1,1,1,1
+access_hr_payroll_account_ss,hr.payroll.account.ss,model_hr_payroll_account_ss,hr_payroll.group_hr_payroll_manager,1,1,1,1
+access_hr_payroll_account_ss_line,hr.payroll.account.ss.line,model_hr_payroll_account_ss_line,hr_payroll.group_hr_payroll_manager,1,1,1,1

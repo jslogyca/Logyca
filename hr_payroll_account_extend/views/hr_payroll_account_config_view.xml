@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_payroll_account_config_form" model="ir.ui.view">
+        <field name="name">hr.payroll.account.config.form</field>
+        <field name="model">hr.payroll.account.config</field>
+        <field name="arch" type="xml">
+            <form string="Payroll Account Config">       
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="ref" required="1"/>
+                            <field name="description" required="1"/>
+                            <field name="date" required="True"/>
+                        </group>
+                        <group>
+                            <field name="company_id" required="True"/>
+                            <field name="journal_id" required="True"/>
+                            <field name="account_id" required="True"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids" >
+                                <tree string="Lines" editable="bottom">
+                                    <field name="account_id" required="1" />
+                                    <field name="partner_id" required="1" />
+                                    <field name="nature" required="1" />
+                                    <field name="by_partner"  />
+                                    <field name="by_entity" />
+                                    <field name="by_cc" />
+                                    <field name="rule_ids" widget="many2many_tags" />
+                                    <field name="item_id" />
+                                </tree>
+                            </field>
+                            <div class="oe_clear"/>
+                        </page>
+                        <page string="Lines SS">
+                            <field name="journal_ss_id" required="True"/>
+                            <field name="line_ss_ids" >                                
+                                <tree string="Lines SS" editable="bottom">
+                                    <field name="account_id" required="1" />
+                                    <field name="partner_id" required="1" />
+                                    <field name="nature" required="1" />
+                                    <field name="by_partner"  />
+                                    <field name="by_entity" />
+                                    <field name="by_cc" />
+                                    <field name="rule_ids" widget="many2many_tags" />
+                                    <field name="item_id" />
+                                </tree>
+                            </field>
+                            <div class="oe_clear"/>
+                        </page>
+                        <page string="Lines Prov">
+                            <field name="journal_prov_id" />
+                            <field name="line_prov_ids" >
+                                <tree string="Lines Prov" editable="bottom">
+                                    <field name="account_id" required="1" />
+                                    <field name="partner_id" required="1" />
+                                    <field name="nature" required="1" />
+                                    <field name="by_partner"  />
+                                    <field name="by_entity" />
+                                    <field name="by_cc" />
+                                    <field name="rule_ids" widget="many2many_tags" />
+                                    <field name="item_id" />
+                                </tree>
+                            </field>
+                            <div class="oe_clear"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_payroll_account_config_tree" model="ir.ui.view">
+        <field name="name">hr.payroll.account.config.tree</field>
+        <field name="model">hr.payroll.account.config</field>
+        <field name="arch" type="xml">
+            <tree string="Payroll Account Config" >
+                <field name="ref" />
+                <field name="description"/>
+                <field name="company_id" />
+                <field name="date" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_payroll_account_config" model="ir.actions.act_window">
+        <field name="name">Payroll Account Config</field>
+        <field name="res_model">hr.payroll.account.config</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="hr_payroll_account_config_tree"/>
+    </record>
+
+    <menuitem
+        id="menu_hr_payroll_account_config"
+        name="Payroll Account Config"
+        action="action_hr_payroll_account_config"
+        parent="hr_payroll.menu_hr_payroll_configuration"
+        sequence="53" />
+</odoo>
