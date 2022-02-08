@@ -363,9 +363,9 @@ class BenefitApplication(models.Model):
                 result = response.json()
                 response.close()
 
-                if result.get('CodigosCompradosDisponibles') > 50:
+                if result.get('CodigosCompradosDisponiblesNPV') > 50:
                      raise ValidationError(\
-                        _('¡Lo sentimos! La empresa %s tiene %s código(s) comprados disponibles.' % (str(self.partner_id.partner_id.vat) + '-' + str(self.partner_id.partner_id.name), str(result.get('CodigosCompradosDisponibles')))))
+                        _('¡Lo sentimos! La empresa %s tiene %s código(s) comprados disponibles.' % (str(self.partner_id.partner_id.vat) + '-' + str(self.partner_id.partner_id.name), str(result.get('CodigosCompradosDisponiblesNPV')))))
             else:
                 raise ValidationError(\
                         _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
@@ -389,9 +389,9 @@ class BenefitApplication(models.Model):
             result = response.json()
             response.close()
 
-            if result.get('CodigosCompradosDisponibles') > 50:
+            if result.get('CodigosCompradosDisponiblesNPV') > 50:
                  raise ValidationError(\
-                    _('¡Lo sentimos! La empresa tiene %s código(s) comprados disponibles.') % str(result.get('CodigosCompradosDisponibles')))
+                    _('¡Lo sentimos! La empresa tiene %s código(s) comprados disponibles.') % str(result.get('CodigosCompradosDisponiblesNPV')))
         else:
             raise ValidationError(\
                     _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
