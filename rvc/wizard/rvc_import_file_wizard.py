@@ -145,15 +145,6 @@ class RVCImportFileWizard(models.TransientModel):
                     #beneficio
                     product_id=self.env['product.rvc'].search([('benefit_type','=',self.benefit_type)])
 
-                    # Validar que la empresa beneficiaria no tenga otra postulación o entrega activa de este beneficio
-                    if rvc_beneficiary_id:
-                        benefit_application_id=self.env['benefit.application'].search([('partner_id','=',rvc_beneficiary_id.id),('product_id','=',product_id.id)])
-                        if benefit_application_id:
-                            validation = 'Fila %s:  %s ya tiene una entrega de beneficio activa'\
-                                    % (str(count), str(partner_id.vat + '-' + partner_id.name.strip()).upper())
-                            errors.append(validation)
-                            continue
-
                     # Validar que la empresa beneficiaria esté activa
                     if not partner_id.active:
                         validation = 'Fila %s: La empresa beneficiaria %s con NIT %s no esta activa' % (str(count), str(partner_id.name).strip(), str(fila[0]))
