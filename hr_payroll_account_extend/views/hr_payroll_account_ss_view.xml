@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_payroll_account_ss_form" model="ir.ui.view">
+        <field name="name">hr.payroll.account.ss.form</field>
+        <field name="model">hr.payroll.account.ss</field>
+        <field name="arch" type="xml">
+            <form string="Payroll Account SS">       
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="description" required="1"/>
+                            <field name="date" required="True"/>
+                        </group>
+                        <group>
+                            <field name="company_id" required="True"/>
+                            <field name="type_afp" required="True"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="item_ids" >
+                                <tree string="Lines" editable="bottom">
+                                    <field name="partner_id" required="1" />
+                                    <field name="code" required="1" />
+                                    <field name="amount" required="1" />
+                                    <field name="amount_employee" force_save="1" readonly="1" />
+                                </tree>
+                            </field>
+                            <div class="oe_clear"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_payroll_account_ss_tree" model="ir.ui.view">
+        <field name="name">hr.payroll.account.ss.tree</field>
+        <field name="model">hr.payroll.account.ss</field>
+        <field name="arch" type="xml">
+            <tree string="Payroll Account SS" >
+                <field name="description"/>
+                <field name="company_id" />
+                <field name="date" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_payroll_account_ss" model="ir.actions.act_window">
+        <field name="name">Payroll Account SS</field>
+        <field name="res_model">hr.payroll.account.ss</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="hr_payroll_account_ss_tree"/>
+    </record>
+
+    <menuitem
+        id="menu_hr_payroll_account_ss"
+        name="Payroll Account SS"
+        action="action_hr_payroll_account_ss"
+        parent="hr_payroll.menu_hr_payroll_configuration"
+        sequence="54" />
+</odoo>
