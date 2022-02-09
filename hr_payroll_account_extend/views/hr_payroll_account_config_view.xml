@@ -46,6 +46,7 @@
                                     <field name="by_cc" />
                                     <field name="rule_ids" widget="many2many_tags" />
                                     <field name="item_id" />
+                                    <field name="amount" />
                                 </tree>
                             </field>
                             <div class="oe_clear"/>

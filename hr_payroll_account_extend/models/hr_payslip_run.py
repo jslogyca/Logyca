@@ -94,7 +94,7 @@ class HrPayslipRun(models.Model):
                     else:
                         if line.item_id:
                             for line_ss in line.item_id.item_ids:
-                                total = line_ss.amount_employee
+                                total = line_ss.amount
                                 total_credit += total
                                 lines.append((0, 0, {
                                     'name': self.name,
@@ -170,7 +170,7 @@ class HrPayslipRun(models.Model):
                     else:
                         if line.item_id:
                             for line_ss in line.item_id.item_ids:
-                                total = line_ss.amount_employee
+                                total = line_ss.amount
                                 total_debit += total
                                 lines.append((0, 0, {
                                     'name': self.name,
@@ -204,7 +204,7 @@ class HrPayslipRun(models.Model):
             lines.append((0, 0, {
                 'name': self.name,
                 'date': self.date_account,
-                'account_id': 350,
+                'account_id': config_account.account_id.id,
                 'credit': abs(total_debit-total_credit),
                 'amount_currency': abs((total_debit-total_credit)) * -1,
                 'ref': self.name,
@@ -217,7 +217,7 @@ class HrPayslipRun(models.Model):
             lines.append((0, 0, {
                 'name': self.name,
                 'date': self.date_account,
-                'account_id': 350,
+                'account_id': config_account.account_id.id,
                 'debit': abs(total_debit-total_credit),
                 'amount_currency': abs(total_debit-total_credit),
                 'ref': self.name,
@@ -296,7 +296,7 @@ class HrPayslipRun(models.Model):
                     else:
                         if line.item_id:
                             for line_ss in line.item_id.item_ids:
-                                total = line_ss.amount_employee
+                                total = line_ss.amount
                                 total_credit += total
                                 lines.append((0, 0, {
                                     'name': self.name,
@@ -327,23 +327,40 @@ class HrPayslipRun(models.Model):
                             }))
             else:
                 if line.by_cc:
-                    self._cr.execute(''' select sum(l.total), g.name, e.budget_group_id, l.salary_rule_id
-                                                from hr_payslip_line l
-                                                inner join hr_payslip n on n.id=l.slip_id
-                                                inner join hr_employee e on e.id=n.employee_id
-                                                left join logyca_budget_group g on g.id=e.budget_group_id
-                                                where l.salary_rule_id in %s and n.payslip_run_id=%s
-                                                group by g.name, e.budget_group_id, l.salary_rule_id ''', (tuple(line.rule_ids.ids), self.id))
+                    if line.amount:
+                        self._cr.execute(''' select count(e.id), g.name, e.budget_group_id
+                                                    from hr_payslip n
+                                                    inner join hr_employee e on e.id=n.employee_id
+                                                    left join logyca_budget_group g on g.id=e.budget_group_id
+                                                    where n.payslip_run_id=%s
+                                                    group by g.name, e.budget_group_id ''', (self.id,))
+                    else:
+                        self._cr.execute(''' select sum(l.total), g.name, e.budget_group_id, l.salary_rule_id
+                                                    from hr_payslip_line l
+                                                    inner join hr_payslip n on n.id=l.slip_id
+                                                    inner join hr_employee e on e.id=n.employee_id
+                                                    left join logyca_budget_group g on g.id=e.budget_group_id
+                                                    where l.salary_rule_id in %s and n.payslip_run_id=%s
+                                                    group by g.name, e.budget_group_id, l.salary_rule_id ''', (tuple(line.rule_ids.ids), self.id))
                     budget_line_ids = self._cr.fetchall()
                     if budget_line_ids:
                         for budget_line_id in budget_line_ids:
-                            total_debit += budget_line_id[0]
+                            print('12121212121212121', budget_line_id, total_debit)
+                            if line.amount > 0.0:
+                                self._cr.execute(''' select count(*)
+                                                            from hr_payslip
+                                                            where payslip_run_id=%s ''', (self.id,))
+                                total_payslip = self._cr.fetchone()
+                                total_line = round(((line.amount*budget_line_id[0])/total_payslip[0]),2)
+                            else:
+                                total_line = budget_line_id[0]
+                            total_debit += total_line
                             lines.append((0, 0, {
                                 'name': self.name,
                                 'date': self.date_account,
                                 'account_id': line.account_id.id,
-                                'debit': budget_line_id[0],
-                                'amount_currency': budget_line_id[0],                                
+                                'debit': total_line,
+                                'amount_currency': total_line,
                                 'ref': self.name,
                                 'partner_id': line.partner_id.id,
                                 'company_id': self.company_id.id,
@@ -372,7 +389,7 @@ class HrPayslipRun(models.Model):
                     else:
                         if line.item_id:
                             for line_ss in line.item_id.item_ids:
-                                total = line_ss.amount_employee
+                                total = line_ss.amount
                                 total_debit += total
                                 lines.append((0, 0, {
                                     'name': self.name,
@@ -403,11 +420,12 @@ class HrPayslipRun(models.Model):
                             }))
         print('111111111', total_debit, total_credit)
         if total_debit > total_credit:
+            print('44444444', total_debit, total_credit, abs((total_debit-total_credit)))
             lines.append((0, 0, {
                 'name': self.name,
                 'date': self.date_account,
                 'account_id': config_account.account_id.id,
-                'credit': abs(total_debit-total_credit),
+                'credit': abs(round(total_debit-total_credit,2)),
                 'amount_currency': abs((total_debit-total_credit)) * -1,
                 'ref': self.name,
                 'partner_id': 9882,
@@ -420,7 +438,7 @@ class HrPayslipRun(models.Model):
                 'name': self.name,
                 'date': self.date_account,
                 'account_id': config_account.account_id.id,
-                'debit': abs(total_debit-total_credit),
+                'debit': abs(round(total_debit-total_credit,2)),
                 'amount_currency': abs(total_debit-total_credit),
                 'ref': self.name,
                 'partner_id': 9882,
@@ -498,7 +516,7 @@ class HrPayslipRun(models.Model):
                     else:
                         if line.item_id:
                             for line_ss in line.item_id.item_ids:
-                                total = line_ss.amount_employee
+                                total = line_ss.amount
                                 total_credit += total
                                 lines.append((0, 0, {
                                     'name': self.name,
@@ -574,7 +592,7 @@ class HrPayslipRun(models.Model):
                     else:
                         if line.item_id:
                             for line_ss in line.item_id.item_ids:
-                                total = line_ss.amount_employee
+                                total = line_ss.amount
                                 total_debit += total
                                 lines.append((0, 0, {
                                     'name': self.name,
