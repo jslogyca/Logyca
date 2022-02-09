@@ -25,10 +25,10 @@ class HRPayrollAccountSS(models.Model):
     def get_item_ids(self):
         if self.type_afp=='eps':
             for line in self.item_ids:
-                line.amount_employee = ((line.amount)/0.125)*0.04
+                line.amount_employee = line.amount
         else:
             for line in self.item_ids:
-                line.amount_employee = ((line.amount)/0.16)*0.04
+                line.amount_employee = line.amount
 
 class HRPayrollAccountSSLine(models.Model):
     _name = 'hr.payroll.account.ss.line'
@@ -45,6 +45,6 @@ class HRPayrollAccountSSLine(models.Model):
     @api.onchange('amount')
     def get_amount(self):
         if self.item_id.type_afp=='eps':
-            self.amount_employee = ((self.amount)/0.125)*0.04
+            self.amount_employee = self.amount
         else:
-            self.amount_employee = ((self.amount)/0.16)*0.04
+            self.amount_employee = self.amount

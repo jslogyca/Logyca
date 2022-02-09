@@ -22,4 +22,4 @@ class HRPayrollAccountLine(models.Model):
     config_ss_id = fields.Many2one('hr.payroll.account.config', string='Config SS')
     config_prov_id = fields.Many2one('hr.payroll.account.config', string='Config Prov')
     item_id = fields.Many2one('hr.payroll.account.ss', string='Item')
-    amount = fields.Float('Amount')
+    amount = fields.Float('Amount', default=0.0)
