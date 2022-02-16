@@ -56,6 +56,7 @@ class BenefitApplication(models.Model):
     historical_record = fields.Boolean('Registro histórico',
                                        help="Si es verdadero, este registro es de cargue histórico, es decir, no se hizo en Odoo sino que se cargó tiempo después.")
     reminder_count = fields.Integer('Recordatorios', track_visibility='onchange')
+    codes_count = fields.Integer(string='Contador Códigos', compute="_compute_codes_count")
     message_ids = fields.One2many(groups="rvc.group_rvc_manager")
     activity_ids = fields.One2many(groups="rvc.group_rvc_manager")
 
@@ -81,7 +82,12 @@ class BenefitApplication(models.Model):
     #     return res
 
     def name_get(self):
-        return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]    
+        return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]
+
+    @api.depends('codes_quantity', 'glns_codes_quantity', 'invoice_codes_quantity')
+    def _compute_codes_count(self):
+        for record in self:
+            record.codes_count = record.codes_quantity + record.glns_codes_quantity + record.invoice_codes_quantity
 
     @api.onchange('colabora_level')
     def _onchange_colabora_level(self):
