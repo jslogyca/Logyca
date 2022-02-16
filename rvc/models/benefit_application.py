@@ -264,8 +264,8 @@ class BenefitApplication(models.Model):
         self._validate_gln_only_numbers()
         self._validate_gln()
 
-        if 'state' in vals and vals['state'] not in ('done', 'cancel'):
-            self._validate_bought_products()
+        # if 'state' in vals and vals['state'] not in ('done', 'cancel'):
+        #     self._validate_bought_products()
         return res
 
     @api.constrains('gln')
