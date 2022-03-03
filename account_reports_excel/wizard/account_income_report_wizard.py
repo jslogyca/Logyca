@@ -43,7 +43,8 @@ class ReportIncomeReportWizard(models.TransientModel):
 
     def get_values(self, date_from, date_to):
         value = []
-        self._cr.execute(''' select p.name,
+        self._cr.execute(''' select p.vat,
+                                    p.name,
                                     i.name,
                                     pt.name,
                                     red.name,
@@ -84,7 +85,7 @@ class ReportIncomeReportWizard(models.TransientModel):
 
     def get_values_suscrip(self, date_from, date_to):
         value = []
-        self._cr.execute(''' SELECT 
+        self._cr.execute(''' SELECT p.vat,
                                     p.name,
                                     s.code,
                                     pt.name,
@@ -164,24 +165,25 @@ class ReportIncomeReportWizard(models.TransientModel):
         ws.write(6, 1, str(date_file))
 
         fila_title=9
-        ws.write(fila_title, 0, 'Cliente', subtitle_head)
-        ws.write(fila_title, 1, 'Factura', subtitle_head)
-        ws.write(fila_title, 2, 'Producto', subtitle_head)
-        ws.write(fila_title, 3, 'Red de Valor', subtitle_head)
-        ws.write(fila_title, 4, 'Total Fact.', subtitle_head)
-        ws.write(fila_title, 5, 'Fecha de la factura', subtitle_head)
-        ws.write(fila_title, 6, 'Mes Fact', subtitle_head)
-        ws.write(fila_title, 7, 'Año Fact', subtitle_head)
-        ws.write(fila_title, 8, 'Compañía', subtitle_head)
-        ws.write(fila_title, 9, 'Vendedor', subtitle_head)
-        ws.write(fila_title, 10, 'Equipo de Venta', subtitle_head)
-        ws.write(fila_title, 11, 'Diferido', subtitle_head)
-        ws.write(fila_title, 12, 'Total Dif.', subtitle_head)
-        ws.write(fila_title, 13, 'Fecha Dif', subtitle_head)
-        ws.write(fila_title, 14, 'Mes Dif', subtitle_head)
-        ws.write(fila_title, 15, 'Año Dif', subtitle_head)
-        ws.write(fila_title, 16, 'Estado Dif', subtitle_head)
-        ws.write(fila_title, 17, 'Cuenta Analítica', subtitle_head)
+        ws.write(fila_title, 0, 'NIT', subtitle_head)
+        ws.write(fila_title, 1, 'Cliente', subtitle_head)
+        ws.write(fila_title, 2, 'Factura', subtitle_head)
+        ws.write(fila_title, 3, 'Producto', subtitle_head)
+        ws.write(fila_title, 4, 'Red de Valor', subtitle_head)
+        ws.write(fila_title, 5, 'Total Fact.', subtitle_head)
+        ws.write(fila_title, 6, 'Fecha de la factura', subtitle_head)
+        ws.write(fila_title, 7, 'Mes Fact', subtitle_head)
+        ws.write(fila_title, 8, 'Año Fact', subtitle_head)
+        ws.write(fila_title, 9, 'Compañía', subtitle_head)
+        ws.write(fila_title, 10, 'Vendedor', subtitle_head)
+        ws.write(fila_title, 11, 'Equipo de Venta', subtitle_head)
+        ws.write(fila_title, 12, 'Diferido', subtitle_head)
+        ws.write(fila_title, 13, 'Total Dif.', subtitle_head)
+        ws.write(fila_title, 14, 'Fecha Dif', subtitle_head)
+        ws.write(fila_title, 15, 'Mes Dif', subtitle_head)
+        ws.write(fila_title, 16, 'Año Dif', subtitle_head)
+        ws.write(fila_title, 17, 'Estado Dif', subtitle_head)
+        ws.write(fila_title, 18, 'Cuenta Analítica', subtitle_head)
 
         fila=10
         invoice = None
