@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_analytic_type_list" model="ir.ui.view">
+        <field name="name">account.analytic.type.list</field>
+        <field name="model">account.analytic.type</field>
+        <field name="arch" type="xml">
+            <tree string="Analytic type" editable="top" decoration-muted="(not active)">
+                <field name="name" required="1"/>
+                <field name="code" required="1"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="account_analytic_type_action" model="ir.actions.act_window">
+        <field name="name">Analytic type</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.analytic.type</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Add a account analytic types.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="account_analytic_type_menu"
+        name="Analytic type"
+        parent="account.menu_finance_configuration"
+        action="account_analytic_type_action"
+        sequence="5"
+    />
+
+</odoo>

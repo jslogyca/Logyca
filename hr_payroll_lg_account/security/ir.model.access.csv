@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_analytic_type_line,hr.analytic.type.line,model_hr_analytic_type_line,hr_payroll.group_hr_payroll_manager,1,1,1,1
+access_account_analytic_type,account.analytic.type,model_account_analytic_type,hr_payroll.group_hr_payroll_manager,1,1,1,1
+access_hr_contribution_register,hr.contribution.register,model_hr_contribution_register,hr_payroll.group_hr_payroll_manager,1,1,1,1
