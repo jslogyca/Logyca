@@ -92,43 +92,45 @@ class HrPayslip(models.Model):
             return [(5, False, False)]
 
     def action_payslip_done(self):
-        for line in self.input_line_ids:
-            if line.loan_line_id:
-                line.loan_line_id.paid = True
-                line.loan_line_id.payslip_id = self.id
-                line.loan_line_id.loan_id._compute_loan_amount()
-                line.loan_line_id.loan_id._compute_line_done()
-            if line.loan_id:
-                line.loan_id.payslip_id = self.id
-                if line.loan_id.type_compute == 'amount':
-                     line.loan_id.state = 'done'
-                if line.loan_id.type_compute == 'fijo':
-                    move_obj = self.env['hr.loan.line'].create({
-                        'date': self.date_to,
-                        'employee_id': self.employee_id.id,
-                        'amount': line.loan_id.loan_amount,
-                        'paid': True,
-                        'loan_id': line.loan_id.id,
-                        'payslip_id': self.id,
+        for payslip in self:
+            for line in payslip.input_line_ids:
+                if line.loan_line_id:
+                    line.loan_line_id.paid = True
+                    line.loan_line_id.payslip_id = payslip.id
+                    line.loan_line_id.loan_id._compute_loan_amount()
+                    line.loan_line_id.loan_id._compute_line_done()
+                if line.loan_id:
+                    line.loan_id.payslip_id = payslip.id
+                    if line.loan_id.type_compute == 'amount':
+                        line.loan_id.state = 'done'
+                    if line.loan_id.type_compute == 'fijo':
+                        move_obj = payslip.env['hr.loan.line'].create({
+                            'date': payslip.date_to,
+                            'employee_id': payslip.employee_id.id,
+                            'amount': line.loan_id.loan_amount,
+                            'paid': True,
+                            'loan_id': line.loan_id.id,
+                            'payslip_id': payslip.id,
 
-                    })                    
-                line.loan_id._compute_loan_amount()
+                        })                    
+                    line.loan_id._compute_loan_amount()
         return super(HrPayslip, self).action_payslip_done()
 
     def action_payslip_cancel_done(self):
-        for line in self.input_line_ids:
-            if line.loan_line_id:
-                line.loan_line_id.paid = False
-                line.loan_line_id.payslip_id = None
-                line.loan_line_id.loan_id._compute_loan_amount()
-                line.loan_line_id.loan_id._compute_line_done()
-            if line.loan_id:
-                if line.loan_id.type_compute == 'amount':
-                    line.loan_id.payslip_id = None
-                    line.loan_id.state = 'approve'
-                if line.loan_id.type_compute == 'fijo':
-                    line_ids = self.env['hr.loan.line'].search([('paid', '=', True), ('payslip_id', '=', self.id)]).unlink()
-                line.loan_id._compute_loan_amount()
+        for payslip in self:
+            for line in payslip.input_line_ids:
+                if line.loan_line_id:
+                    line.loan_line_id.paid = False
+                    line.loan_line_id.payslip_id = None
+                    line.loan_line_id.loan_id._compute_loan_amount()
+                    line.loan_line_id.loan_id._compute_line_done()
+                if line.loan_id:
+                    if line.loan_id.type_compute == 'amount':
+                        line.loan_id.payslip_id = None
+                        line.loan_id.state = 'approve'
+                    if line.loan_id.type_compute == 'fijo':
+                        line_ids = self.env['hr.loan.line'].search([('paid', '=', True), ('payslip_id', '=', payslip.id)]).unlink()
+                    line.loan_id._compute_loan_amount()
         return super(HrPayslip, self).action_payslip_cancel_done()
 
     def update_input_employee(self):
