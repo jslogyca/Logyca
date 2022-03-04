@@ -51,11 +51,11 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                     partner_id = move.partner_id
 
                 #Documento, año y número de factura
-                if move.type == 'out_invoice':
+                try:
                     doc = move.name.split('/')[0]
                     year = move.name.split('/')[1]
                     num = move.name.split('/')[2]
-                elif move.type == 'out_refund':
+                except:
                     doc = move.name.split('/')[0]
                     year = str(move.invoice_date.year)
                     num = move.name.split('/')[1]
