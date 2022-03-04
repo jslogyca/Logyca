@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_employee_form_entities">
+        <field name="name">hr.employee.form.entities</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='hr_settings']" position="after">
+				<page name="hr_entities" string="Entities" >
+                    <group>
+                        <group>
+                            <field name="partner_eps"/>
+                            <field name="partner_fond_pens"/>
+                            <field name="partner_fond_censa"/>
+                        </group>
+                        <group>
+                            <field name="partner_arl"/>
+                            <field name="partner_caja"/>
+                        </group>
+                    </group>
+				</page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

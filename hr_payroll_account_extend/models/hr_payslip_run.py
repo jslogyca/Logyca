@@ -204,7 +204,7 @@ class HrPayslipRun(models.Model):
             lines.append((0, 0, {
                 'name': self.name,
                 'date': self.date_account,
-                'account_id': 350,
+                'account_id': config_account.account_id.id,
                 'credit': abs(total_debit-total_credit),
                 'amount_currency': abs((total_debit-total_credit)) * -1,
                 'ref': self.name,
@@ -217,7 +217,7 @@ class HrPayslipRun(models.Model):
             lines.append((0, 0, {
                 'name': self.name,
                 'date': self.date_account,
-                'account_id': 350,
+                'account_id': config_account.account_id.id,
                 'debit': abs(total_debit-total_credit),
                 'amount_currency': abs(total_debit-total_credit),
                 'ref': self.name,
