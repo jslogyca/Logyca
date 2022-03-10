@@ -173,6 +173,20 @@ class BenefitApplication(models.Model):
                         'domain': '[]'
                     }
 
+    def action_forward_done(self):
+        view_id = self.env.ref('rvc.rvc_template_email_re_done_wizard_form').id,
+        return {
+            'name':_("Enviar Kit de Bienvenida"),
+            'view_mode': 'form',
+            'view_id': view_id,
+            'view_type': 'form',
+            'res_model': 'rvc.template.email.wizard',
+            'type': 'ir.actions.act_window',
+            'nodestroy': True,
+            'target': 'new',
+            'domain': '[]'
+        }
+
     def action_rejected(self):
         for benefit_application in self:
             benefit_application.write({'state': 'rejected', 'rejection_date': datetime.now()})
