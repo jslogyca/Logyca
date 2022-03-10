@@ -38,6 +38,7 @@
         'wizard/rvc_template_email_wizard_view.xml',
         'wizard/rvc_template_email_confirm_wizard_view.xml',
         'wizard/rvc_template_email_done_wizard_view.xml',
+        'wizard/rvc_template_email_re_done_wizard_view.xml',
         'wizard/send_notification_beneficiary_view.xml',
         'wizard/rvc_template_assignate_credentials.xml',
         'views/rvc_beneficiary_view.xml',

@@ -11,7 +11,8 @@
 				 	<button name="action_notified" type="object" states="notified" string="Volver a notificar" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 					<button name="action_reminder" type="object" states="notified" string="Enviar Recortadorio" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-				 	<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+				 	<button name="action_forward_done" type="object" states="done" string="Enviar Kit Nuevamente" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight" groups="rvc.group_rvc_manager"/>
                     <button name="action_new_credentials" type="object" states="done" string="Re-Asignar Credenciales" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 					<button name="action_reactivate" type="object" states="rejected,cancel" string="Re-activar Postulación" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />

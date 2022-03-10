@@ -125,6 +125,36 @@ class RVCTemplateEmailWizard(models.TransientModel):
             
         return {'type': 'ir.actions.act_window_close'}
 
+    def action_re_done(self):
+        """
+        forward email kit notification
+        <important> this function don't assign codes, colabora or analytica.</important>
+        """
+        context = dict(self._context or {})
+        active_ids = context.get('active_ids', []) or []
+        active_id = context.get('active_ids', False)
+        benefit_application = self.env['benefit.application'].browse(active_id)
+        if benefit_application:
+            partner=self.env['res.partner'].search([('id','=',benefit_application.partner_id.partner_id.id)])
+            if benefit_application.partner_id.contact_email:
+                access_link = partner._notify_get_action_link('view')
+
+                if benefit_application.product_id.benefit_type == 'codigos':
+                    template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                elif benefit_application.product_id.benefit_type == 'colabora':
+                    template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+
+                try:
+                    template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
+                    benefit_application.message_post(body=_(\
+                    'Se <strong>REENVIÓ</strong></u> el kit de bienvenida del beneficio.'))
+                except:
+                    benefit_application.message_post(body=_(\
+                    'No se pudo <strong>REENVIAR</strong></u> el kit de bienvenida del beneficio %s.' % str(benefit_application.product_id.benefit_type)))
+            else:
+                raise ValidationError(_('La empresa seleccionada no tiene email.'))
+
+        return {'type': 'ir.actions.act_window_close'}
 
     def action_rejected(self):
         context = dict(self._context or {})
