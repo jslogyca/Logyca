@@ -764,7 +764,7 @@ class BenefitApplication(models.Model):
 
                 #TODO: se requiere que la API de Colabora nos devuelva dataError=False cuando sea exitosa la asignacion de colabora
                 #la condición está al revés, es decir, se espera que en el caso ideal devuelva dataError=True. 
-                if result.get('dataError') == False:
+                if result.get('dataError') == True:
                     #TODO: logging
                     error_message = result.get('apiException').get('message')
                     if not error_message:
