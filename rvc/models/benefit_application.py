@@ -1079,7 +1079,7 @@ class BenefitApplication(models.Model):
             if response.status_code == 200:
                 result = response.json()
                 if 'resultObject' in result:
-                    if any(result.get('resultObject')):
+                    if hasattr(result.get('resultObject'), '__iter__'):
                         for i in result.get('resultObject'):
                             if i.get('moduleName') == 'Negociación' and i.get('moduleName') == 'Calidad de datos':
                                 raise ValidationError(\
