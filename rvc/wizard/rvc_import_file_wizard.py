@@ -79,8 +79,8 @@ class RVCImportFileWizard(models.TransientModel):
             #validar si están los NIT de las empresas (benef y halonadora)
             if fila[0] and fila[1]:
                 
-                beneficiary_nit = fila[0]
-                sponsor_nit = fila[1]
+                beneficiary_nit = str(fila[0])
+                sponsor_nit = str(fila[1])
 
                 #tratamiento para los nits que a veces aparecen con .0 al final cuando se cargan
                 suffix = ".0"
