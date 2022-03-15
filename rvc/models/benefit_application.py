@@ -1079,10 +1079,11 @@ class BenefitApplication(models.Model):
             if response.status_code == 200:
                 result = response.json()
                 if 'resultObject' in result:
-                    for i in result.get('resultObject'):
-                        if i.get('moduleName') == 'Negociación' and i.get('moduleName') == 'Calidad de datos':
-                            raise ValidationError(\
-                                _('¡Error de Validación! La empresa %s ya tiene Logyca/Colabora activo.') % str(vat))
+                    if result.get('resultObject') == any():
+                        for i in result.get('resultObject'):
+                            if i.get('moduleName') == 'Negociación' and i.get('moduleName') == 'Calidad de datos':
+                                raise ValidationError(\
+                                    _('¡Error de Validación! La empresa %s ya tiene Logyca/Colabora activo.') % str(vat))
 
                 response.close()
             else:
