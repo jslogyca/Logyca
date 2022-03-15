@@ -79,18 +79,28 @@ class RVCImportFileWizard(models.TransientModel):
             #validar si están los NIT de las empresas (benef y halonadora)
             if fila[0] and fila[1]:
                 
+                beneficiary_nit = fila[0]
+                sponsor_nit = fila[1]
+
+                #tratamiento para los nits que a veces aparecen con .0 al final cuando se cargan
+                suffix = ".0"
+                if beneficiary_nit.endswith(suffix):
+                    beneficiary_nit = beneficiary_nit[:-len(suffix)]
+                if sponsor_nit.endswith(suffix):
+                    sponsor_nit = sponsor_nit[:-len(suffix)]
+
                 if self.benefit_type == 'codigos':
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
-                    partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
+                    partner_id=self.env['res.partner'].search([('vat','=',str(beneficiary_nit)), ('is_company','=',True)])
 
                     if len(partner_id) == 0:
-                        partner_id=self.env['res.partner'].search([('x_type_thirdparty','=',1),('vat','=', str(fila[0]))])
+                        partner_id=self.env['res.partner'].search([('x_type_thirdparty','=',1),('vat','=', str(beneficiary_nit))])
 
                     if len(partner_id) > 1:
-                        partner_id=self.env['res.partner'].search([('vat','=',str(fila[0]))])[0]
+                        partner_id=self.env['res.partner'].search([('vat','=',str(beneficiary_nit))])[0]
 
                     if not partner_id:
-                        validation = 'Fila %s: La empresa beneficiaria con NIT %s no existe en Odoo' % (str(count), str(fila[0]))
+                        validation = 'Fila %s: La empresa beneficiaria con NIT %s no existe en Odoo' % (str(count), str(beneficiary_nit))
                         errors.append(validation)
                         continue
 
@@ -157,7 +167,7 @@ class RVCImportFileWizard(models.TransientModel):
 
                     # Validar que la empresa beneficiaria esté activa
                     if not partner_id.active:
-                        validation = 'Fila %s: La empresa beneficiaria %s con NIT %s no esta activa' % (str(count), str(partner_id.name).strip(), str(fila[0]))
+                        validation = 'Fila %s: La empresa beneficiaria %s con NIT %s no esta activa' % (str(count), str(partner_id.name).strip(), str(beneficiary_nit))
                         errors.append(validation)
                         continue
 
@@ -169,13 +179,13 @@ class RVCImportFileWizard(models.TransientModel):
                         continue
 
                     #empresa patrocinadora
-                    parent_id=self.env['res.partner'].search([('vat','=',str(fila[1])), ('is_company','=',True)], limit=1)
+                    parent_id=self.env['res.partner'].search([('vat','=',str(sponsor_nit)), ('is_company','=',True)], limit=1)
 
                     #patrocinadora como halonadora rvc
                     sponsor_id=self.env['rvc.sponsor'].search([('partner_id','=',parent_id.id)])
 
                     if not sponsor_id:
-                        validation = 'Fila %s: La empresa Halonadora con NIT %s no existe' % (str(count), str(fila[1]))
+                        validation = 'Fila %s: La empresa Halonadora con NIT %s no existe' % (str(count), str(sponsor_nit))
                         errors.append(validation)
                         continue
                     
@@ -208,16 +218,16 @@ class RVCImportFileWizard(models.TransientModel):
                 elif self.benefit_type == 'colabora':
                     logging.debug("<==== colabora ====>")
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
-                    partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
+                    partner_id=self.env['res.partner'].search([('vat','=',str(beneficiary_nit)), ('is_company','=',True)])
 
                     if len(partner_id) == 0:
-                        partner_id=self.env['res.partner'].search([('x_type_thirdparty','=',1),('vat','=', str(fila[0]))])
+                        partner_id=self.env['res.partner'].search([('x_type_thirdparty','=',1),('vat','=', str(beneficiary_nit))])
 
                     if len(partner_id) > 1:
-                        partner_id=self.env['res.partner'].search([('vat','=',str(fila[0]))])[0]
+                        partner_id=self.env['res.partner'].search([('vat','=',str(beneficiary_nit))])[0]
 
                     if not partner_id:
-                        validation = 'Fila %s: La empresa beneficiaria con NIT %s no existe en Odoo' % (str(count), str(fila[0]))
+                        validation = 'Fila %s: La empresa beneficiaria con NIT %s no existe en Odoo' % (str(count), str(beneficiary_nit))
                         errors.append(validation)
                         continue
                     
@@ -226,7 +236,7 @@ class RVCImportFileWizard(models.TransientModel):
                     # Validar que la empresa beneficiaria esté activa
                     if not partner_id.active:
                         # raise ValidationError('La empresa beneficiaria no esta activa')
-                        validation = 'Fila %s: La empresa beneficiaria %s con NIT %s no esta activa' % (str(count), str(partner_id.name).strip(), str(fila[0]))
+                        validation = 'Fila %s: La empresa beneficiaria %s con NIT %s no esta activa' % (str(count), str(partner_id.name).strip(), str(beneficiary_nit))
                         errors.append(validation)
                         continue
                     
@@ -243,10 +253,10 @@ class RVCImportFileWizard(models.TransientModel):
                     logging.info(f"3. valida tamaño empresa {partner_id.x_company_size}")
                     
                     product_id=self.env['product.rvc'].search([('benefit_type','=',self.benefit_type)])
-                    parent_id=self.env['res.partner'].search([('vat','=',str(fila[1])), ('is_company','=',True)], limit=1)
+                    parent_id=self.env['res.partner'].search([('vat','=',str(sponsor_nit)), ('is_company','=',True)], limit=1)
                     sponsor_id=self.env['rvc.sponsor'].search([('partner_id','=',parent_id.id)])
                     if not sponsor_id:
-                        validation = 'Fila %s: La empresa Halonadora con NIT %s no existe' % (str(count), str(fila[1]))
+                        validation = 'Fila %s: La empresa Halonadora con NIT %s no existe' % (str(count), str(sponsor_nit))
                         errors.append(validation)
                         continue
                     
@@ -312,10 +322,10 @@ class RVCImportFileWizard(models.TransientModel):
                         logging.warning("=================> no entra a la creacion de benefit.application")
                 else:
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
-                    partner_id=self.env['res.partner'].search([('vat','=',str(fila[0])), ('is_company','=',True)])
+                    partner_id=self.env['res.partner'].search([('vat','=',str(beneficiary_nit)), ('is_company','=',True)])
                     if not partner_id:
                         # raise ValidationError('La empresa beneficiaria no existe en Odoo')
-                        validation = 'La empresa beneficiaria no existe en Odoo' + ' - ' + str(fila[0])
+                        validation = 'La empresa beneficiaria no existe en Odoo' + ' - ' + str(beneficiary_nit)
                         self.env['log.import.rvc'].create({
                                                             'name': validation,
                                                             'date_init': fields.Datetime.now(),
@@ -324,7 +334,7 @@ class RVCImportFileWizard(models.TransientModel):
                     # Validar que la empresa beneficiaria esté activa
                     if not partner_id.active:
                         # raise ValidationError('La empresa beneficiaria no esta activa')
-                        validation = 'La empresa beneficiaria no esta activa' + ' - ' + str(fila[0])
+                        validation = 'La empresa beneficiaria no esta activa' + ' - ' + str(beneficiary_nit)
                         self.env['log.import.rvc'].create({
                                                             'name': validation,
                                                             'date_init': fields.Date.today(),
@@ -333,7 +343,7 @@ class RVCImportFileWizard(models.TransientModel):
                     # Validar que el tamaño de la empresa beneficiaria sea micro, pequeña o mediana (MIPYME)
                     if partner_id.x_company_size not in ('6', '5'):
                         # raise ValidationError('el tamaño de la empresa beneficiaria no es micro, pequeña o mediana (MIPYME)')
-                        validation = 'el tamaño de la empresa beneficiaria no es micro o pequeña (MIPY)' + ' - ' + str(fila[0])
+                        validation = 'el tamaño de la empresa beneficiaria no es micro o pequeña (MIPY)' + ' - ' + str(beneficiary_nit)
                         self.env['log.import.rvc'].create({
                                                             'name': validation,
                                                             'date_init': fields.Datetime.now(),
@@ -343,17 +353,17 @@ class RVCImportFileWizard(models.TransientModel):
                     benf_id=self.env['rvc.beneficiary'].search([('partner_id','=',partner_id.id),('benefit_type','=',self.benefit_type)])
                     if benf_id:
                         # raise ValidationError('La empresa beneficiaria tiene otra postulación o entrega activa de este beneficio)')
-                        validation = 'La empresa beneficiaria tiene otra postulación o entrega activa de este beneficio' + ' - ' + str(fila[0])
+                        validation = 'La empresa beneficiaria tiene otra postulación o entrega activa de este beneficio' + ' - ' + str(beneficiary_nit)
                         self.env['log.import.rvc'].create({
                                                             'name': validation,
                                                             'date_init': fields.Datetime.now(),
                                                             'user_id' : self.env.user.id})
                         continue
                     # Validar que el Patrocinador exista
-                    parent_id=self.env['res.partner'].search([('vat','=',str(fila[1])), ('is_company','=',True)], limit=1)
+                    parent_id=self.env['res.partner'].search([('vat','=',str(sponsor_nit)), ('is_company','=',True)], limit=1)
                     sponsor_id=self.env['rvc.sponsor'].search([('partner_id','=',parent_id.id)])
                     if not sponsor_id:
-                        validation = 'La empresa Halonadora no existe' + ' - ' + str(fila[1])
+                        validation = 'La empresa Halonadora no existe' + ' - ' + str(sponsor_nit)
                         self.env['log.import.rvc'].create({
                                                             'name': validation,
                                                             'date_init': fields.Datetime.now(),
@@ -363,7 +373,7 @@ class RVCImportFileWizard(models.TransientModel):
                     benf_patro_id=self.env['rvc.beneficiary'].search([('parent_id','=',parent_id.id),('benefit_type','=',self.benefit_type)])
                     if not benf_patro_id:
                         validation = 'El patrocinador tiene otra postulación o entrega activa de este beneficio'\
-                            'para otra empresa beneficiaria' + ' - ' + str(fila[1])
+                            'para otra empresa beneficiaria' + ' - ' + str(sponsor_nit)
                         self.env['log.import.rvc'].create({
                                                             'name': validation,
                                                             'date_init': fields.Datetime.now(),
