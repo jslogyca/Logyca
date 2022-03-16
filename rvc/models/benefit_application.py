@@ -878,10 +878,7 @@ class BenefitApplication(models.Model):
         logging.warning("==> Iniciando cron de enviar kits de bienvenida ...")
         if not self:
             counter = 0
-            self = self.search(['|',
-                                '&',('state', '=', 'confirm'),('origin', '=', 'odoo'),
-                                '&',('state', '=', 'confirm'),
-                                '&',('codes_quantity', '<', 100),('origin', '=', 'tienda')])
+            self = self.search(['&',('product_id.benefit_type', '=', 'colabora'),('status', '!=', 'done')])
 
             for postulation_id in self:
                 counter =+ 1
@@ -922,8 +919,8 @@ class BenefitApplication(models.Model):
 
                         elif postulation_id.product_id.benefit_type == 'colabora':
                             # Activar colabora
-                            if postulation_id.assign_colabora():
-                                postulation_id.assign_credentials_colabora()
+                            #if postulation_id.assign_colabora():
+                            postulation_id.assign_credentials_colabora()
 
                         # Actualizar Contacto y Empresa
                         postulation_id.update_contact(postulation_id.partner_id)
