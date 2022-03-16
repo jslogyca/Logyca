@@ -884,60 +884,59 @@ class BenefitApplication(models.Model):
                                 '&',('codes_quantity', '<', 100),('origin', '=', 'tienda')])
 
             for postulation_id in self:
-                if postulation_id._validate_bought_products():
-                    counter =+ 1
-                    # limitamos el envío de kits para no saturar el servidor.
-                    if counter < 30:
-                        if postulation_id.partner_id.contact_email:
-                            access_link = postulation_id.partner_id.partner_id._notify_get_action_link('view')
+                counter =+ 1
+                # limitamos el envío de kits para no saturar el servidor.
+                if counter < 30:
+                    if postulation_id.partner_id.contact_email:
+                        access_link = postulation_id.partner_id.partner_id._notify_get_action_link('view')
 
-                            if postulation_id.product_id.benefit_type == 'codigos':
+                        if postulation_id.product_id.benefit_type == 'codigos':
+                            if postulation_id._validate_bought_products():
                                 template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
-                            elif postulation_id.product_id.benefit_type == 'colabora':
-                                template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+                        elif postulation_id.product_id.benefit_type == 'colabora':
+                            template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
 
-                            template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
+                        template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
 
-                            if not postulation_id.gln:
-                                # si no tiene GLN, asignamos uno.
-                                if postulation_id._validate_gln() == False and postulation_id.glns_codes_quantity == 0:
-                                    postulation_id.assignate_gln_code()
+                        if not postulation_id.gln:
+                            # si no tiene GLN, asignamos uno.
+                            if postulation_id._validate_gln() == False and postulation_id.glns_codes_quantity == 0:
+                                postulation_id.assignate_gln_code()
 
-                            if postulation_id.product_id.benefit_type == 'codigos':
-                                # codigos glns
-                                if postulation_id.glns_codes_quantity > 0:
-                                    postulation_id.assignate_gln_code(postulation_id.glns_codes_quantity)
+                        if postulation_id.product_id.benefit_type == 'codigos':
+                            # codigos glns
+                            if postulation_id.glns_codes_quantity > 0:
+                                postulation_id.assignate_gln_code(postulation_id.glns_codes_quantity)
 
-                                # codigos recaudo
-                                if postulation_id.invoice_codes_quantity > 0:
-                                    postulation_id.assign_invoice_codes()
+                            # codigos recaudo
+                            if postulation_id.invoice_codes_quantity > 0:
+                                postulation_id.assign_invoice_codes()
 
-                                # Asignar beneficio de códigos de identificación
-                                if postulation_id.codes_quantity > 0:
-                                    if postulation_id.assign_identification_codes():
-                                        postulation_id.assign_credentials_colabora()
-
-                                # Agregar tipo de vinculacion al tercero
-                                postulation_id.add_vinculation_partner()
-
-                            elif postulation_id.product_id.benefit_type == 'colabora':
-                                # Activar colabora
-                                if postulation_id.assign_colabora():
+                            # Asignar beneficio de códigos de identificación
+                            if postulation_id.codes_quantity > 0:
+                                if postulation_id.assign_identification_codes():
                                     postulation_id.assign_credentials_colabora()
 
-                            # Actualizar Contacto y Empresa
-                            postulation_id.update_contact(postulation_id.partner_id)
-                            if postulation_id.parent_id:
-                                postulation_id.update_company(postulation_id)
+                            # Agregar tipo de vinculacion al tercero
+                            postulation_id.add_vinculation_partner()
 
-                            postulation_id.write({'state': 'done'})
-                            counter += 1
-                        else:
-                            raise ValidationError(_('La empresa seleccionada no tiene email.'))
+                        elif postulation_id.product_id.benefit_type == 'colabora':
+                            # Activar colabora
+                            if postulation_id.assign_colabora():
+                                postulation_id.assign_credentials_colabora()
+
+                        # Actualizar Contacto y Empresa
+                        postulation_id.update_contact(postulation_id.partner_id)
+                        if postulation_id.parent_id:
+                            postulation_id.update_company(postulation_id)
+
+                        postulation_id.write({'state': 'done'})
+                        counter += 1
                     else:
-                        logging.exception("====> Cron alcanzó el límite de kits a enviar, esperando la próxima ejecución para enviar más...")
+                        raise ValidationError(_('La empresa seleccionada no tiene email.'))
                 else:
-                    continue
+                    logging.exception("====> Cron alcanzó el límite de kits a enviar, esperando la próxima ejecución para enviar más...")
+
 
     def _cron_mark_as_rejected(self):
         logging.warning("==> Iniciando cron de marcar postulaciones como rechazadas ...")
@@ -1080,10 +1079,11 @@ class BenefitApplication(models.Model):
             if response.status_code == 200:
                 result = response.json()
                 if 'resultObject' in result:
-                    for i in result.get('resultObject'):
-                        if i.get('moduleName') == 'Negociación' and i.get('moduleName') == 'Calidad de datos':
-                            raise ValidationError(\
-                                _('¡Error de Validación! La empresa %s ya tiene Logyca/Colabora activo.') % str(vat))
+                    if hasattr(result.get('resultObject'), '__iter__'):
+                        for i in result.get('resultObject'):
+                            if i.get('moduleName') == 'Negociación' and i.get('moduleName') == 'Calidad de datos':
+                                raise ValidationError(\
+                                    _('¡Error de Validación! La empresa %s ya tiene Logyca/Colabora activo.') % str(vat))
 
                 response.close()
             else:
