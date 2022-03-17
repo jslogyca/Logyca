@@ -852,7 +852,7 @@ class BenefitApplication(models.Model):
                                 'Se activó la vinculación: <strong>%s</strong>' % str(vinculation_99_anos_id.name)))
                             else:
                                 #agregamos la vinculacion 99 anios y ponemos fecha activacion hoy
-                                partner_id.x_type_vinculation = [(4, vinculation_99_anos_id.ids)]
+                                partner_id.x_type_vinculation = [(4, vinculation_99_anos_id.id)]
                                 partner_id.x_date_vinculation = date.today()
                                 record.message_post(body=_(\
                                             'Se adicionó la vinculación: <strong>%s</strong>' % str(vinculation_99_anos_id.name)))
