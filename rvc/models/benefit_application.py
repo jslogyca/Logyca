@@ -948,7 +948,9 @@ class BenefitApplication(models.Model):
 
     @api.model
     def _cron_benefit_expiration_reminder(self):
-        """ This function allows you to notify by email if the application is non accepted."""
+        """ 
+            This function allows you to notify by email if the application is non accepted.
+        """
 
         fiveDays = fields.datetime.now() - timedelta(days=5)
         # Get all postulations with more than 5 days of notified
@@ -963,18 +965,17 @@ class BenefitApplication(models.Model):
                 postulation.message_post(body=_('La postulación se marcó como rechazada dado que se notificó recordatorio '\
                     'en tres (3) oportunidades y no se aceptó el beneficio por parte de la empresa.'))
                 postulation.state = 'rejected'
-            elif postulation_counter < 5:
-                self.send_reminder_benefit_expiration(postulation)
-                postulation_counter += 1
+
+            self.send_reminder_benefit_expiration(postulation)
 
     def send_reminder_benefit_expiration(self,postulation):
         try:
             vals = {
-                'subject': 'RECORDATORIO: Beneficio Derechos de Identificación',
-                'body_html': '<p>Recibe un cordial saludo,<p><p><strong style="color:#00b398;">¡NO PIERDAS EL BENEFICIO DE TUS CÓDIGOS DE BARRRAS GS1 SIN COSTO!</strong></p> '\
+                'subject': '[LOGYCA] RECORDATORIO: Beneficio ' + postulation._get_benefit_name(),
+                'body_html': '<p>Recibe un cordial saludo,<p><p><strong style="color:#00b398;">¡NO PIERDAS EL BENEFICIO DE ' + postulation._get_benefit_name().upper() + ' SIN COSTO!</strong></p> '\
                     '<p>Estas a un paso de finalizar tu proceso. Para adquirir el beneficio por favor da clic en el botón ACEPTO EL BENEFICIO y llegará a '\
                     'tu correo el Kit de bienvenida y las credenciales de la plataforma de asignación.</p>'\
-                    '<p>Si no requieres los códigos o no deseas continuar con el proceso, por favor da clic en el botón RECHAZAR EL BENEFICIO.<p>'
+                    '<p>Si no requieres este beneficio o no deseas continuar con el proceso, por favor da clic en el botón RECHAZAR EL BENEFICIO.<p>'
                     '<p style="margin-top: 0px; margin-bottom: 0px; overflow: hidden; text-align: left;"> <br/>'
                 '<div style="">'
                     '<a style="margin: 16px 0px 16px 0px; background-color:#00b398; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:16px;" href="/rvc/accept_benefit/%s"><strong>ACEPTO EL BENEFICIO</strong></a>'
@@ -1089,3 +1090,13 @@ class BenefitApplication(models.Model):
             raise ValidationError(\
                     _('¡Error de comunicación! Odoo no pudo comunicarse con Logyca/Colabora para verificar si la empresa ya tiene el servicio activo.'))
         return True
+
+    def _get_benefit_name(self):
+        benefit_name = ""
+        if self.benefit_type == 'codigos':
+            benefit_name = "Códigos de Barras"
+        elif self.benefit_type == 'colabora':
+            benefit_name = "LOGYCA / COLABORA"
+        elif self.benefit_type == 'analitica':
+            benefit_name = "LOGYCA / ANALÍTICA"    
+        return benefit_name
