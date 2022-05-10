@@ -533,6 +533,7 @@ class EPayslipBach(models.Model):
         cert_password = self.company_id.connection_payslip_id.certificate_id.cert_pass
         invoice_root = _sign_file(cert, cert_password, xml_facturae)
         invoice_signed = etree.tostring(invoice_root, xml_declaration=False, encoding='UTF-8').decode('utf8')
+        invoice_signed = invoice_signed.replace('xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividual"', 'xmlns="dian:gov:co:facturaelectronica:NominaIndividual"')
         signature = xmlstr = invoice_signed[invoice_signed.find('<ds:Signature'):invoice_signed.find('</ds:Signature>') + 15]
         invoice_signed = invoice_signed.replace(signature, '')
         invoice_signed = invoice_signed.replace('<ext:ExtensionContent/>', '<ext:ExtensionContent>' + signature + '</ext:ExtensionContent>')
@@ -574,7 +575,7 @@ class EPayslipBach(models.Model):
         FecNIE = FecNE[0:10]
         HorNIE = FecNE[10:24]
         NominaIndividual = Element('NominaIndividual', 
-            attrib={'xmlns': 'urn:oasis:names:specification:ubl:schema:xsd:Invoice-2',
+            attrib={'xmlns': 'urn:dian:gov:co:facturaelectronica:NominaIndividual',
             'SchemaLocation': '',
             'xsi__schemaLocation': 'dian:gov:co:facturaelectronica:NominaIndividual NominaIndividualElectronicaXSD.xsd',
             'xmlns__ds': 'http://www.w3.org/2000/09/xmldsig#',
