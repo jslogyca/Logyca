@@ -15,7 +15,7 @@
             </field>
         </record>
 
-        <record id="action_send_notification_beneficiary" model="ir.actions.act_window">
+        <record id="action_delivery_colabora_massively" model="ir.actions.act_window">
             <field name="name">Activar Logyca/Colabora Masivamente</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">deliver.colabora.massively</field>
