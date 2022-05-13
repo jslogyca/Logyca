@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="delivery_colabora_massively_form_view" model="ir.ui.view">
+            <field name="name">Delivery Logyca/Colabora Massively</field>
+            <field name="model">deliver.colabora.massively</field>
+            <field name="arch" type="xml">
+                <form string="Send Notification To Beneficiaries">
+                    <span class="o_form_label">Se activará el beneficio LOGYCA/COLABORA para todas las postulaciones seleccionadas.</span>
+                    <footer>
+                        <button string="Empezar" name="deliverColabora" type="object" default_focus="1" class="btn-primary"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_send_notification_beneficiary" model="ir.actions.act_window">
+            <field name="name">Activar Logyca/Colabora Masivamente</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">deliver.colabora.massively</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="delivery_colabora_massively_form_view"/>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+            <field name="help">Se activará el beneficio LOGYCA/COLABORA para todas las postulaciones seleccionadas.</field>
+            <field name="binding_model_id" ref="rvc.model_benefit_application"/>
+            <field name="binding_view_types">list</field>
+        </record>
+
+    </data>
+</odoo>
