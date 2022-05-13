@@ -1,6 +1,6 @@
 from odoo import models, api, _
 from odoo.exceptions import UserError, ValidationError
-
+from datetime import datetime
 
 class deliveringColaboraMassively(models.TransientModel):
     _name = "deliver.colabora.massively"
@@ -23,6 +23,9 @@ class deliveringColaboraMassively(models.TransientModel):
                 access_link = partner._notify_get_action_link('view')
                 template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
                 template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
+
+                # agregando fecha de aceptación
+                benefit_application.write({'acceptance_date': datetime.now()})
 
                 if not benefit_application.gln:
                     # si no tiene GLN, asignamos uno.
