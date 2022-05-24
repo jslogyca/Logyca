@@ -207,7 +207,8 @@ class BenefitApplication(models.Model):
             # y si no tiene productos comprados disponibles
             if self.product_id.benefit_type == 'codigos' and self._validate_qty_codes() and self._validate_bought_products():
                 if benefit_application.state in ('draft', 'notified'):
-                    view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id,
+                    view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id
+                    self.write({'state': 'notified', 'notification_date': datetime.now()})
                     return {
                         'name':_("Are you sure?"),
                         'view_mode': 'form',
@@ -219,12 +220,12 @@ class BenefitApplication(models.Model):
                         'target': 'new',
                         'domain': '[]'
                     }
-                    self.write({'state': 'notified', 'notification_date': datetime.now()})
             #Antes de notificar al beneficiario validamos si el beneficio es colabora
             # y si el nivel de colabora está entre 1 y 10
             elif self.product_id.benefit_type == 'colabora' and self._validate_colabora_level():
                 if benefit_application.state in ('draft', 'notified'):
-                    view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id,
+                    view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id
+                    self.write({'state': 'notified', 'notification_date': datetime.now()})
                     return {
                         'name':_("Are you sure?"),
                         'view_mode': 'form',
@@ -236,7 +237,6 @@ class BenefitApplication(models.Model):
                         'target': 'new',
                         'domain': '[]'
                     }
-                    self.write({'state': 'notified', 'notification_date': datetime.now()})
             elif self.product_id.benefit_type == 'analitica':
                 raise ValidationError(_('Oops! Muy pronto podrás notificar el beneficio LOGYCA/ANALÍTICA.\n\n'\
                     'Por el momento solo puedes notificar DERECHOS DE IDENTIFICACIÓN y LOGYCA/COLABORA.'))
