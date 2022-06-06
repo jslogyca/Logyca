@@ -146,19 +146,19 @@ class BenefitApplication(models.Model):
             if self.state in ('confirm'):
                 if self.product_id.benefit_type == 'codigos' and self.codes_quantity > 0:
                     # si son codigos de productos validamos que no hayan productos comprados disponibles
-                    #if self._validate_bought_products():
-                    view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
-                    return {
-                        'name':_("Enviar Kit de Bienvenida"),
-                        'view_mode': 'form',
-                        'view_id': view_id,
-                        'view_type': 'form',
-                        'res_model': 'rvc.template.email.wizard',
-                        'type': 'ir.actions.act_window',
-                        'nodestroy': True,
-                        'target': 'new',
-                        'domain': '[]'
-                    }
+                    if self._validate_bought_products():
+                        view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
+                        return {
+                            'name':_("Enviar Kit de Bienvenida"),
+                            'view_mode': 'form',
+                            'view_id': view_id,
+                            'view_type': 'form',
+                            'res_model': 'rvc.template.email.wizard',
+                            'type': 'ir.actions.act_window',
+                            'nodestroy': True,
+                            'target': 'new',
+                            'domain': '[]'
+                        }
                 else:
                     view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
                     return {

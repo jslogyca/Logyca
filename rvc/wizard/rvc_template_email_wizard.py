@@ -101,8 +101,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
                     # Asignar beneficio de códigos de identificación
                     if benefit_application.codes_quantity > 0:
-                        #if benefit_application.assign_identification_codes():
-                        benefit_application.assign_credentials_colabora()
+                        if benefit_application.assign_identification_codes():
+                            benefit_application.assign_credentials_colabora()
 
                     # Agregar tipo de vinculacion al tercero
                     benefit_application.add_vinculation_partner()
