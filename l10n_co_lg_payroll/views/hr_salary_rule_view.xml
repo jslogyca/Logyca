@@ -69,7 +69,21 @@
             </xpath>
             <xpath expr="//field[@name='appears_on_payslip']" position="after">
                 <field name="rule_salary" />
+                <field name="aux_transp" />
             </xpath>
+            <xpath expr="//page[@name='description']" position="after">
+				<page name="parafiscales" string="Prestaciones Sociales">
+					<separator string="Prima"/>
+					<group>
+						<group>
+							<field name="base_prima"/>
+						</group>
+						<group>
+							<field name="base_cesantias"/>
+						</group>
+					</group>
+				</page>
+            </xpath>			
 		</field>
 	</record>
 </odoo>

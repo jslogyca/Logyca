@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_reason_end_contract_form" model="ir.ui.view">
+        <field name="name">hr.reason.end.contract</field>
+        <field name="model">hr.reason.end.contract</field>
+        <field name="arch" type="xml">
+            <form string="Risk">       
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group>
+                            <field name="code" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_reason_end_contract_tree" model="ir.ui.view">
+        <field name="name">hr.reason.end.contract.tree</field>
+        <field name="model">hr.reason.end.contract</field>
+        <field name="arch" type="xml">
+            <tree string="Risk" >
+                <field name="name" />
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_reason_end_contract" model="ir.actions.act_window">
+        <field name="name">Risk</field>
+        <field name="res_model">hr.reason.end.contract</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="hr_reason_end_contract_tree"/>
+    </record>
+
+    <menuitem
+        id="menu_hr_reason_end_contract"
+        name="Reason End Contract"
+        action="action_hr_reason_end_contract"
+        parent="hr_payroll.menu_hr_payroll_configuration"
+        sequence="53" />
+</odoo>

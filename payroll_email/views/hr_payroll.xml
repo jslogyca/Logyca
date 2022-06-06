@@ -11,7 +11,8 @@
                     <field name="date_send" force_save="1" readonly="1"/>
                 </xpath>
                 <xpath expr="//button[@name='action_payslip_draft']" position="before">
-                    <button string="Send By Email" name="action_my_payslip_sent" type="object" class="oe_highlight"/>
+                    <button string="Send By Email" name="action_my_payslip_sent" type="object" class="oe_highlight"
+                                    attrs="{'invisible': [('state', 'not in', 'done')]}"/>
                 </xpath>
             </field>
         </record>
