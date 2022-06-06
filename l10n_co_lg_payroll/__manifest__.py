@@ -36,7 +36,10 @@
         'views/hr_risk_view.xml',
         'views/res_company_view.xml',
         'views/resource_calendar_view.xml',
-        'views/hr_leave_type_view.xml',        
+        'views/hr_leave_type_view.xml',
+        'views/hr_prima_report.xml',
+        'views/hr_reason_end_contract_view.xml',
+        'views/hr_payroll_structure_view.xml',
     ],
     'qweb': [
     ]

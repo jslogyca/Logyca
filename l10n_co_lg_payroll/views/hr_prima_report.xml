@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_prima_report_tree" model="ir.ui.view">
+        <field name="name">hr.prima.report.tree</field>
+        <field name="model">hr.prima.report</field>
+        <field name="arch" type="xml">
+            <tree string="Prima de Servicios Report" >
+                <field name="payslip_run_id" />
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="employee_id"/>
+                <field name="identification_id" />
+                <field name="total_days" />
+                <field name="total_leave_days" />
+                <field name="total_days_prima" />
+                <field name="salary_now" />
+                <field name="salary_var_prom" />
+                <field name="salary_prom" />
+                <field name="aux_transp_prom" />
+                <field name="base_prima" />
+                <field name="prima" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_prima_report_search" model="ir.ui.view">
+        <field name="name">hr.prima.report.search</field>
+        <field name="model">hr.prima.report</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <search string="Search Prima de Servicios Report">
+                <field name="employee_id" string="Employee" filter_domain="[
+                    '|',  ('employee_id', 'ilike', self), ('identification_id', 'ilike', self)]"/>
+                <field name="payslip_id"/>
+                <field name="payslip_run_id"/>
+                <separator/>
+                <group  string="Extended Filters">
+                    <filter string="Today" name="today_invoices" help="today invoices."
+                        domain="[('date_from', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="This Month" name="this_month_invoices" help="this month invoices."
+                        domain="[('date_from', '&lt;', (context_today()+relativedelta(months=1)).strftime('%Y-%m-01')), 
+                        ('date_from','&gt;=',context_today().strftime('%Y-%m-01'))]"/>
+						<filter string="This Year" name="this_year_invoices" help="this year invoices."
+							domain="[('date_from','&lt;=', time.strftime('%Y-12-31')),('date_from','&gt;=',time.strftime('%Y-01-01'))]"/>
+                </group>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Payslip Run" name="payslip_run_id" domain="[]" context="{'group_by': 'payslip_run_id'}"/>
+                    <filter string="Structure" name="structure_id" domain="[]" context="{'group_by': 'structure_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hr_prima_report" model="ir.actions.act_window">
+        <field name="name">Prima de Servicios Report</field>
+        <field name="res_model">hr.prima.report</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="view_id" ref="hr_prima_report_tree"/>
+        <field name="search_view_id" ref="hr_prima_report_search"/>
+        <field name="context">
+            {
+                'search_default_this_year_invoices': 1,
+            }
+        </field>        
+    </record>
+
+    <menuitem
+        id="menu_hr_prima_report"
+        name="Prima de Servicios Report"
+        action="action_hr_prima_report"
+        parent="hr_payroll_report.menu_hr_payroll_report_root"
+        sequence="4" />
+</odoo>

@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_hr_risk,hr.risk,model_hr_risk,hr_payroll.group_hr_payroll_manager,1,1,1,1
+access_hr_prima_report,hr.prima.report,model_hr_prima_report,hr_payroll.group_hr_payroll_manager,1,1,1,1
+access_hr_reason_end_contract,hr.reason.end.contract,model_hr_reason_end_contract,hr_payroll.group_hr_payroll_manager,1,1,1,1

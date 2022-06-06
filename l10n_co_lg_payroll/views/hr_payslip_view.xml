@@ -9,6 +9,51 @@
 				<button string="Update Input Employee" name="update_input_employee" type="object" states="draft" class="oe_highlight"/>
 				<button string="Cancel Payslip" name="action_payslip_cancel_done" type="object" states="done" class="oe_highlight"/>
 			</xpath>
+			<xpath expr="//field[@name='credit_note']" position="after">
+				<field name="payroll_liquid" invisible="1"/>
+				<field name="reason_id" attrs="{'invisible': [('payroll_liquid','=',False)], 'required': [('payroll_liquid','=',True)], 
+														'readonly': [('state','!=','draft')]}"/>
+			</xpath>
+			<xpath expr="//page[@name='account_info']" position="before">
+				<page string="General By Salary Rule">
+					<field name="general_line_ids" >
+						<tree string="Payslip Lines" decoration-info="total == 0">
+							<field name="sequence"/>
+							<field name="category_id"/>
+							<field name="name"/>
+							<field name="code"/>
+							<field name="quantity"/>
+							<field name="rate"/>
+							<field name="amount"/>							
+							<field name="total"/>
+						</tree>
+						<form string="Payslip Line">
+							<group col="4">
+								<field name="name"/>
+								<field name="code"/>
+								<field name="category_id"/>
+								<field name="sequence"/>
+								<field name="quantity"/>
+								<field name="rate"/>
+								<field name="amount"/>
+								<field name="total"/>
+								<field name="salary_rule_id"/>
+							</group>
+						</form>						
+					</field>
+				</page>
+			</xpath>
+		</field>
+	</record>
+	<record id="hr_payslip_view_form_up_account" model="ir.ui.view">
+		<field name="name">hr.payslip.view.form.up.account</field>
+		<field name="model">hr.payslip</field>
+		<field name="inherit_id" ref="hr_payroll_account.hr_payslip_view_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//button[@name='action_payslip_done']" position="replace">
+				<button string="Create Draft Entry" name="action_payslip_done" type="object" 
+								attrs="{'invisible': [('state', 'not in', 'draft')]}" class="oe_highlight" context="{'payslip_generate_pdf': True}"/>
+			</xpath>
 		</field>
 	</record>
 </odoo>

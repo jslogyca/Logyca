@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
 
+
 from odoo import api, fields, models, tools, _
 
 
 class HrPayslip(models.Model):
     _inherit = 'hr.payslip'
+
+    payroll_liquid = fields.Boolean(related='struct_id.payroll_liquid')
+    reason_id= fields.Many2one('hr.reason.end.contract', string='Reason')
+    general_line_ids = fields.One2many('hr.payslip.line', 'slip_id', string="Payslip Lines", readonly=True,
+        domain=[('appears_on_payslip', '=', True),('total','!=',0.0)],
+        states={"draft": [("readonly", False)]},
+    )
 
     def update_input_employee(self):
         if not self.contract_id:
@@ -40,3 +48,92 @@ class HrPayslip(models.Model):
             }
             res.append(input_line)
         return res
+
+    def _get_base_local_dict(self):
+        res = super()._get_base_local_dict()
+        res.update({
+            'average_salary_prima': average_salary_prima,
+            'aux_transp_prima': aux_transp_prima,
+            'variable_salary_prima': variable_salary_prima,
+            'days_leave_prima': days_leave_prima,
+        })
+        return res
+
+    def _get_lines_base_salayr_prima(self, from_date, to_date):
+        self.ensure_one()
+        self.env.cr.execute(
+            """
+                SELECT coalesce(SUM(l.total),0.0)
+                FROM hr_payslip_line l
+                INNER JOIN hr_payslip n on n.id=l.slip_id
+                INNER JOIN hr_employee e on e.id=n.employee_id
+                INNER JOIN hr_salary_rule r on r.id=l.salary_rule_id
+                WHERE r.base_prima = 'base_salary'
+                AND n.employee_id=%s and n.state='done'
+                and n.date_from BETWEEN %s and %s """, (self.employee_id.id, from_date, to_date),
+        )
+        res = self.env.cr.fetchone()
+        return res and res[0] or 0.0
+
+    def _get_lines_aux_transp_prima(self, from_date, to_date):
+        self.ensure_one()
+        self.env.cr.execute(
+            """
+                SELECT coalesce(SUM(l.total),0.0)
+                FROM hr_payslip_line l
+                INNER JOIN hr_payslip n on n.id=l.slip_id
+                INNER JOIN hr_employee e on e.id=n.employee_id
+                INNER JOIN hr_salary_rule r on r.id=l.salary_rule_id
+                WHERE r.aux_transp IS True
+                AND n.employee_id=%s and n.state='done'
+                and n.date_from BETWEEN %s and %s """, (self.employee_id.id, from_date, to_date),
+        )
+        res = self.env.cr.fetchone()
+        return res and res[0] or 0.0
+
+    def _get_lines_variable_prima(self, from_date, to_date):
+        self.ensure_one()
+        self.env.cr.execute(
+            """
+                SELECT coalesce(SUM(l.total),0.0)
+                FROM hr_payslip_line l
+                INNER JOIN hr_payslip n on n.id=l.slip_id
+                INNER JOIN hr_employee e on e.id=n.employee_id
+                INNER JOIN hr_salary_rule r on r.id=l.salary_rule_id
+                WHERE r.base_prima = 'variable_salary'
+                AND n.employee_id=%s and n.state='done'
+                and n.date_from BETWEEN %s and %s """, (self.employee_id.id, from_date, to_date),
+        )
+        res = self.env.cr.fetchone()
+        return res and res[0] or 0.0
+
+    def _get_days_leave_prima(self, from_date, to_date):
+        self.ensure_one()
+        if to_date is None:
+            to_date = fields.Date.today()
+        self.env.cr.execute(
+            """
+                SELECT coalesce(sum(number_of_days),'0.0')
+                FROM hr_leave h
+                INNER JOIN hr_leave_type t on t.id=h.holiday_status_id
+                WHERE employee_id=%s AND date_from between %s AND %s
+                AND leave_prima is True""", (self.employee_id.id, from_date, to_date),
+        )
+        res = self.env.cr.fetchone()
+        return res and res[0] or 0.0
+
+def average_salary_prima(payslip, categories, worked_days, inputs, from_date, to_date):
+    base_prima = payslip.dict._get_lines_base_salayr_prima(from_date, to_date)
+    return base_prima
+
+def aux_transp_prima(payslip, categories, worked_days, inputs, from_date, to_date):
+    base_prima = payslip.dict._get_lines_aux_transp_prima(from_date, to_date)
+    return base_prima
+
+def variable_salary_prima(payslip, categories, worked_days, inputs, from_date, to_date):
+    base_prima = payslip.dict._get_lines_variable_prima(from_date, to_date)
+    return base_prima
+
+def days_leave_prima(payslip, categories, worked_days, inputs, from_date, to_date):
+    days_leave = payslip.dict._get_days_leave_prima(from_date, to_date)
+    return days_leave

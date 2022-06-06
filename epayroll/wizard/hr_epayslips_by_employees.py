@@ -39,6 +39,7 @@ class HrEPayslipsEmployees(models.TransientModel):
         # for employee in self.env['hr.employee'].browse(data['employee_ids']):
         for employee in self.env['hr.employee'].search([('id', 'in', employee_all), ('id', 'not in', employee_inv)]):
             contract_id = self.env['hr.contract'].search([('employee_id','=',employee.id)], limit=1)
+            print('CONTRATO ///', contract_id, employee)
             if not contract_id:
                 raise ValidationError('No existe un contrato!')
         #     slip_data = self.env['hr.payslip'].onchange_employee_id(from_date, to_date, employee.id, contract_id=False)

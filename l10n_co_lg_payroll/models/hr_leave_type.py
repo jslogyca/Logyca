@@ -7,3 +7,4 @@ class HRLeaveType(models.Model):
     _inherit = 'hr.leave.type'
 
     salary_id = fields.Many2one('hr.salary.rule', string="Salary Rule", help="Salary Rule")
+    leave_prima = fields.Boolean('Afecta Prima', default=False)
