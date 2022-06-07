@@ -895,7 +895,8 @@ class BenefitApplication(models.Model):
                                 template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
                         elif postulation_id.product_id.benefit_type == 'colabora':
                             template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
-
+                        
+                        self.create_OM_attachment(template)
                         template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
 
                         if not postulation_id.gln:
@@ -1103,3 +1104,17 @@ class BenefitApplication(models.Model):
         elif self.benefit_type == 'analitica':
             benefit_name = "LOGYCA / ANALÍTICA"    
         return benefit_name
+
+    def create_OM_attachment(self, template):
+        report_template_id = self.env.ref(
+            'rvc.action_report_rvc').render_qweb_pdf(self.id)
+        data_record = base64.b64encode(report_template_id[0])
+        ir_values = {
+            'name': "Oferta Mercantil RVC",
+            'type': 'binary',
+            'datas': data_record,
+            'store_fname': data_record,
+            'mimetype': 'application/x-pdf',
+        }
+        data_id = self.env['ir.attachment'].create(ir_values)
+        template.attachment_ids = [(0, 0, [data_id.id])]
