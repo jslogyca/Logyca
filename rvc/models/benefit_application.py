@@ -896,7 +896,10 @@ class BenefitApplication(models.Model):
                         elif postulation_id.product_id.benefit_type == 'colabora':
                             template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
                         
-                        self.create_OM_attachment(template)
+                        # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
+                        if self.origin != 'odoo':
+                            self.create_OM_attachment(template)
+
                         template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
 
                         if not postulation_id.gln:
