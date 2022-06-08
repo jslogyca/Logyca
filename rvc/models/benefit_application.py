@@ -308,7 +308,7 @@ class BenefitApplication(models.Model):
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/EmpresaGln/"
             else:
-                url = "https://asctestdocker.azurewebsites.net/codes/EmpresaGln/"
+                url = "https://app-asc-dev.azurewebsites.net/codes/EmpresaGln/"
 
             payload = {'nit': str(self.vat)}
 
@@ -376,7 +376,7 @@ class BenefitApplication(models.Model):
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
             else:
-                url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+                url = "https://app-asc-dev.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
 
             response = requests.get(url)
             if response.status_code == 200:
@@ -401,7 +401,7 @@ class BenefitApplication(models.Model):
         if query_result['value'] == 'https://logyca.odoo.com':
             url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(vat))
         else:
-            url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(vat))
+            url = "https://app-asc-dev.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(vat))
 
         response = requests.get(url)
 
@@ -451,7 +451,7 @@ class BenefitApplication(models.Model):
         if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_assignate = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/assignate/"
         else:
-            url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
+            url_assignate = "https://app-asc-dev.azurewebsites.net/codes/assignate/"
 
         body_assignate = json.dumps({
             "AgreementName":"",
@@ -485,7 +485,7 @@ class BenefitApplication(models.Model):
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url_mark = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/mark/"
             else:
-                url_mark = "https://asctestdocker.azurewebsites.net/codes/mark/"            
+                url_mark = "https://app-asc-dev.azurewebsites.net/codes/mark/"
 
             body_mark = json.dumps({
                 "Nit": self.vat,
@@ -529,7 +529,7 @@ class BenefitApplication(models.Model):
         if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_assignate = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/assignate/"
         else:
-            url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"        
+            url_assignate = "https://app-asc-dev.azurewebsites.net/codes/assignate/"
 
         body_assignate = json.dumps({
             "AgreementName":"",
@@ -578,7 +578,7 @@ class BenefitApplication(models.Model):
         if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_assignate = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/assignate/"
         else:
-            url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
+            url_assignate = "https://app-asc-dev.azurewebsites.net/codes/assignate/"
 
         body_assignate = json.dumps({
             "AgreementName":"",

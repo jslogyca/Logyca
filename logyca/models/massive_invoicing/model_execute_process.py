@@ -47,7 +47,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         body_api = json.dumps({'nit': thirdparties, 'proceso': 'Facturación masiva'})
         headers_api = {'content-type': 'application/json'}
         url_api = self.invoicing_companies.url_enpoint_code_assignment
-        # url_api = "https://asctestdocker.azurewebsites.net/codes/fr_masivo/"
+        # url_api = "https://app-asc-dev.azurewebsites.net/codes/fr_masivo/"
         # response = requests.get(url_api,data=body_api, headers=headers_api)
 
         payload = {'nit': thirdparties, 'proceso': 'Facturación masiva'}
