@@ -16,6 +16,7 @@ class HRPrimaReport(models.Model):
     structure_id = fields.Many2one('hr.payroll.structure', string='Structure')
     payslip_run_id = fields.Many2one('hr.payslip.run', string='Slip Run')
     identification_id = fields.Char('Identification')
+    date_init = fields.Date('Date Init')
     date_from = fields.Date('Date From')
     date_to = fields.Date('Date To Prima')
     total_days = fields.Float('Total días')
@@ -42,6 +43,7 @@ class HRPrimaReport(models.Model):
         SELECT
             n.id as payslip_id,
             n.id as id,
+            c.date_start as date_init,
             n.date_from as date_from,
             n.date_from as date_to,
             e.id as employee_id,
