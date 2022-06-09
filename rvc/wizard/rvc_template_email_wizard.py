@@ -147,6 +147,10 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 elif benefit_application.product_id.benefit_type == 'colabora':
                     template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
 
+                # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
+                if benefit_application.origin != 'odoo':
+                    benefit_application.create_OM_attachment(template)
+
                 try:
                     template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
                     benefit_application.message_post(body=_(\
