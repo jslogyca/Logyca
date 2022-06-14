@@ -1116,7 +1116,7 @@ class BenefitApplication(models.Model):
             'rvc.action_report_rvc').render_qweb_pdf(self.id)
         data_record = base64.b64encode(report_template_id[0])
         ir_values = {
-            'name': "Oferta Mercantil RVC",
+            'name': "Oferta_Mercantil_RVC.pdf",
             'type': 'binary',
             'datas': data_record,
             'store_fname': data_record,
