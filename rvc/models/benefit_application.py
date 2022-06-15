@@ -895,10 +895,10 @@ class BenefitApplication(models.Model):
                                 template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
                         elif postulation_id.product_id.benefit_type == 'colabora':
                             template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
-                        
+
                         # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
-                        if self.origin != 'odoo':
-                            self.create_OM_attachment(template)
+                        if postulation_id.origin != 'odoo':
+                            template= postulation_id.create_OM_attachment(template)
 
                         template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
 
@@ -1111,16 +1111,17 @@ class BenefitApplication(models.Model):
     def create_OM_attachment(self, template):
         ''' This attaches the merchant offer to the welcome kit
             when the RVC application is not done in Odoo.'''
-
         report_template_id = self.env.ref(
             'rvc.action_report_rvc').render_qweb_pdf(self.id)
         data_record = base64.b64encode(report_template_id[0])
         ir_values = {
-            'name': "Oferta_Mercantil_RVC.pdf",
+            'name': "Oferta Mercantil RVC.pdf",
             'type': 'binary',
             'datas': data_record,
-            'store_fname': data_record,
+            'store_fname': "Oferta_Mercantil_RVC.pdf",
             'mimetype': 'application/pdf',
         }
         data_id = self.env['ir.attachment'].create(ir_values)
-        template.attachment_ids = [(0, 0, data_id.ids)]
+        logging.info(f"==> create_OM_attachment 5 {data_id.ids}")
+        template.attachment_ids = [(6, 0, [data_id.id])]
+        return template

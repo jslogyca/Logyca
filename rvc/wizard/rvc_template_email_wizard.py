@@ -85,7 +85,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
                 # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
                 if benefit_application.origin != 'odoo':
-                    benefit_application.create_OM_attachment(template)
+                    template= benefit_application.create_OM_attachment(template)
+
                 template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
 
                 if not benefit_application.gln:
@@ -149,7 +150,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
                 # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
                 if benefit_application.origin != 'odoo':
-                    benefit_application.create_OM_attachment(template)
+                    template= benefit_application.create_OM_attachment(template)
 
                 try:
                     template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
