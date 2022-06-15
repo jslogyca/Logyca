@@ -101,36 +101,6 @@ class HrPayslip(models.Model):
 
     def _get_lines_base_salayr_prima(self, from_date, to_date):
         self.ensure_one()
-        if self.get_change_salary(self.employee_id, from_date, to_date):
-            self.env.cr.execute(
-                """
-                    SELECT coalesce(SUM(l.total),0.0)
-                    FROM hr_payslip_line l
-                    INNER JOIN hr_payslip n on n.id=l.slip_id
-                    INNER JOIN hr_employee e on e.id=n.employee_id
-                    INNER JOIN hr_salary_rule r on r.id=l.salary_rule_id
-                    WHERE r.base_prima = 'base_salary'
-                    AND n.employee_id=%s and n.state='done'
-                    and n.date_from BETWEEN %s and %s """, (self.employee_id.id, from_date, to_date),
-            )
-        else:
-            self.env.cr.execute(
-                """
-                    SELECT c.wage*5
-                    FROM hr_payslip_line l
-                    INNER JOIN hr_payslip n on n.id=l.slip_id
-                    INNER JOIN hr_employee e on e.id=n.employee_id
-                    INNER JOIN hr_contract c on c.id=n.contract_id
-                    INNER JOIN hr_salary_rule r on r.id=l.salary_rule_id
-                    WHERE r.base_prima = 'base_salary'
-                    AND n.employee_id=%s and n.state='done'
-                    and n.date_from BETWEEN %s and %s limit 1 """, (self.employee_id.id, from_date, to_date),
-            )            
-        res = self.env.cr.fetchone()
-        return res and res[0] or 0.0
-
-    def _get_lines_aux_transp_prima(self, from_date, to_date):
-        self.ensure_one()
         self.env.cr.execute(
             """
                 SELECT coalesce(SUM(l.total),0.0)
@@ -138,11 +108,49 @@ class HrPayslip(models.Model):
                 INNER JOIN hr_payslip n on n.id=l.slip_id
                 INNER JOIN hr_employee e on e.id=n.employee_id
                 INNER JOIN hr_salary_rule r on r.id=l.salary_rule_id
-                WHERE r.aux_transp IS True
+                WHERE r.base_prima = 'base_salary'
                 AND n.employee_id=%s and n.state='done'
                 and n.date_from BETWEEN %s and %s """, (self.employee_id.id, from_date, to_date),
         )
+        # else:
+        #     self.env.cr.execute(
+        #         """
+        #             SELECT c.wage*5
+        #             FROM hr_payslip_line l
+        #             INNER JOIN hr_payslip n on n.id=l.slip_id
+        #             INNER JOIN hr_employee e on e.id=n.employee_id
+        #             INNER JOIN hr_contract c on c.id=n.contract_id
+        #             INNER JOIN hr_salary_rule r on r.id=l.salary_rule_id
+        #             WHERE r.base_prima = 'base_salary'
+        #             AND n.employee_id=%s and n.state='done'
+        #             and n.date_from BETWEEN %s and %s limit 1 """, (self.employee_id.id, from_date, to_date),
+        #     )            
         res = self.env.cr.fetchone()
+        return res and res[0] or 0.0
+
+    def _get_lines_aux_transp_prima(self, from_date, to_date):
+        self.ensure_one()
+        if self.contract_id.aux_transp_full:
+            self.env.cr.execute(
+                """
+                    SELECT amount_fix*5
+                    FROM hr_salary_rule
+                    WHERE code=%s """,('F_AUXTRANSPVALOR',)
+            )
+        else:
+            self.env.cr.execute(
+                """
+                    SELECT coalesce(SUM(l.total),0.0)
+                    FROM hr_payslip_line l
+                    INNER JOIN hr_payslip n on n.id=l.slip_id
+                    INNER JOIN hr_employee e on e.id=n.employee_id
+                    INNER JOIN hr_salary_rule r on r.id=l.salary_rule_id
+                    WHERE r.aux_transp IS True
+                    AND n.employee_id=%s and n.state='done'
+                    and n.date_from BETWEEN %s and %s """, (self.employee_id.id, from_date, to_date),
+            )
+        res = self.env.cr.fetchone()
+        print('AUX TRANSPO', res)
         return res and res[0] or 0.0
 
     def _get_lines_variable_prima(self, from_date, to_date):
