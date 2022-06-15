@@ -9,6 +9,7 @@
                 <field name="contract_integral"/>
                 <field name="pensionado"/>
                 <field name="risk_id" required="1"/>
+                <field name="aux_transp_full" />
 			</xpath>
 		</field>
 	</record>
