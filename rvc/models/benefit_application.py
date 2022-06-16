@@ -899,6 +899,8 @@ class BenefitApplication(models.Model):
                         # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
                         if postulation_id.origin != 'odoo':
                             template= postulation_id.create_OM_attachment(template)
+                        else:
+                            template.attachment_ids = False
 
                         template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
 
