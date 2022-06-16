@@ -87,6 +87,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 if benefit_application.origin != 'odoo':
                     logging.info(f"==> origen es: {benefit_application.origin}")
                     template= benefit_application.create_OM_attachment(template)
+                else:
+                    template.attachment_ids = False
 
                 template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
 
