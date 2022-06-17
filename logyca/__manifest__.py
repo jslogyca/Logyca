@@ -27,13 +27,14 @@
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
+        #'views/res_partner_views.xml',
+        'views/collaborative_group_views.xml',
         'views/parameterization_views.xml',
         'views/ciiu_view.xml',
         'views/reports.xml',
         'views/menus.xml',     
         'views/logyca_survey.xml',
         'views/massive_invoicing_views.xml',
-        #'views/res_partner_views.xml',
         'views/account_journal_views.xml',
         'views/account_move_report_invoice.xml'
     ], 
