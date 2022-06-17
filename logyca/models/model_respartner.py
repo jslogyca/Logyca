@@ -52,6 +52,8 @@ class ResPartner(models.Model):
     x_second_lastname = fields.Char(string='Segundo apellido', track_visibility='onchange')
     #x_is_main_contact = fields.Boolean(string='¿Es contacto principal?', track_visibility='onchange')
     x_is_member_directive = fields.Boolean(string='¿Es miembro del Consejo Directivo?', track_visibility='onchange')
+    x_is_on_board_of_directors = fields.Boolean(string='¿Pertenece a la junta directiva?', track_visibility='onchange')
+    x_collaborative_group_ids = fields.Many2many(comodel_name='collaborative.group', string='Grupos Colaborativos')
 
     #UBICACIÓN PRINCIPAL
     x_city = fields.Many2one('logyca.city', string='Ciudad', track_visibility='onchange', ondelete='restrict')
