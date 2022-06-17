@@ -22,7 +22,7 @@
 ''',    
     'data': [
         'views/account_sector_red_view.xml',
-        'views/res_partner_view.xml',
+        #'views/res_partner_view.xml',
         'views/revenue_macro_sector_view.xml',
         'views/product_template_view.xml',
         'views/res_users_view.xml',
