@@ -12,3 +12,4 @@ from . import product_template
 from . import sale_order_line
 from . import res_users
 from . import account_sector_macro
+from . import debtor_portfolio_status

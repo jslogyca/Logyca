@@ -31,7 +31,8 @@
         'wizard/update_revenue_wizard_view.xml',
         'security/ir.model.access.csv',
         'security/account_move_extended_security.xml',
-        'data/data.xml',
+        'data/macrosectors_data.xml',
+        'data/debtor_portfolio_status_data.xml'
     ],
     'qweb': [
     ]
