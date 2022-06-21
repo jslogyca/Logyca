@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="debtor_portfolio_status_01" model="debtor.portfolio.status">
+            <field name="name">Nota Crédito</field>
+            <field name="code"></field>
+        </record>
+        <record id="debtor_portfolio_status_02" model="debtor.portfolio.status">
+            <field name="name">Programación de Pago</field>
+            <field name="code"></field>
+        </record>
+        <record id="debtor_portfolio_status_03" model="debtor.portfolio.status">
+            <field name="name">Sin Gestión</field>
+            <field name="code"></field>
+        </record>
+        <record id="debtor_portfolio_status_04" model="debtor.portfolio.status">
+            <field name="name">Pdte Contestación Correo y / Página</field>
+            <field name="code"></field>
+        </record>
+        <record id="debtor_portfolio_status_05" model="debtor.portfolio.status">
+            <field name="name">Confirmación de Radicación</field>
+            <field name="code"></field>
+        </record>
+    </data>
+</odoo>
+
+<!--debtor.portfolio.status-->

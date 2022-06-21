@@ -55,9 +55,24 @@ class AccountMoveLine(models.Model):
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
+    x_debt_portfolio_monitoring = fields.Text('Seguimiento Cartera')
+    x_last_contact_debtor = fields.Date('Fecha Último Contacto', help="La fecha en la que nos contactamos por última vez con el deudor")
+    x_debtor_portfolio_status_id = fields.Many2one('debtor.portfolio.status', string="Estado Cartera")
+    x_debtor_portfolio_status_str = fields.Char(compute="debtor_portfolio_status_as_char", string="Estado Cartera")
+    x_estimated_payment_date = fields.Date('Fecha Estimada Pago')
 
     analytic_account_id = fields.Many2one('account.analytic.account', string='Red de Valor')
     reviewed_by = fields.Many2one('res.users', string='Revisado Por', help="Este campo aparece en el reporte de Soporte de Factura", readonly="1")
+
+    @api.depends('x_debtor_portfolio_status_id')
+    def debtor_portfolio_status_as_char(self):
+        for rec in self:
+            rec.x_debtor_portfolio_status_str = rec.x_debtor_portfolio_status_id.name
+
+    @api.onchange('x_debtor_portfolio_status_id')
+    def onchange_debtor_portfolio_status(self):
+        if self.x_debtor_portfolio_status_str != 'Programación de Pago':
+            self.x_estimated_payment_date = None
 
     """
     This method is overwritten because an error was found in the original code when making a

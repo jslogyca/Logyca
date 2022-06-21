@@ -16,6 +16,25 @@
 			<xpath expr="//field[@name='ref']" position="before">
                 <field name="create_uid" string="Creado por"/>
 			</xpath>
+
+            <xpath expr="//page[last()]" position="after">
+                <page string="Seguimiento Cartera"
+                   attrs="{'invisible': [('type', '!=', 'out_invoice')]}">
+                    <group cols="12">
+                        <field name="x_debtor_portfolio_status_str" invisible="1"/>
+                        <group cols="6">
+                            <field name="x_debt_portfolio_monitoring"/>
+                            <field name="x_last_contact_debtor"/>
+                            <field name="x_debtor_portfolio_status_id"/>
+                            <field name="x_estimated_payment_date"
+                                   attrs="{'required': [('x_debtor_portfolio_status_str', '=', 'Programación de Pago')],
+                                          'invisible': [('x_debtor_portfolio_status_str', '!=', 'Programación de Pago')]}"/>
+                        </group>
+                        <group cols="6">
+                        </group>
+                    </group>
+                </page>
+            </xpath>
 		</field>
 	</record>
 </odoo>
