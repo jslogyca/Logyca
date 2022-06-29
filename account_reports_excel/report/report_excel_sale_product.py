@@ -20,6 +20,7 @@ class ReportExcelSaleProduct(models.Model):
     company_id = fields.Many2one('res.company','Compañía')
     invoice_origin = fields.Char('Origin')
     product_id = fields.Many2one('product.product', 'Product', readonly=True)
+    product_template_id = fields.Many2one('product.template', 'Product', readonly=True)
     analytic_account_id = fields.Many2one('account.analytic.account', 'Analytic', readonly=True)
     analytic_account_red = fields.Many2one('account.analytic.account', 'Red', readonly=True)
     analytic_group_id = fields.Many2one('account.analytic.group', 'Group', readonly=True)
@@ -41,50 +42,46 @@ class ReportExcelSaleProduct(models.Model):
     neto = fields.Float('Neto')
     tax = fields.Float('Tax')
     price_total = fields.Float('Price Total')
+    mes_fact = fields.Char('Mes Fact')
+    year_fact = fields.Char('Year Fact')
 
 
     def _select(self):
         select_str = """
-        SELECT 
-            m.id as id,
-            m.id as move_id,
+        SELECT
+            m.id as id, 
+            p.vat,
             CASE WHEN p.parent_id IS NULL 
             THEN p.id 
             ELSE pp.id
-            END AS partner_id,
-            p.vat,
-            m.invoice_date AS invoice_date,
-            m.invoice_date_due AS invoice_date_due,
-            m.invoice_origin AS invoice_origin,
+            END AS partner_id,                                    
+            m.id as move_id,
+            to_char(m.invoice_date,'YYYY/MM/DD') as invoice_date,
+            to_char(m.invoice_date_due,'YYYY/MM/DD') as invoice_date_due,
+            date_part('month',m.invoice_date)as mes_fact,
+            date_part('year',m.invoice_date)as year_fact,
+            m.invoice_origin as invoice_origin,
+            pt.id as product_template_id,
             ppt.id as product_id,
             c.id as company_id,
-            cta.id as analytic_account_id,
-            ctal.id as analytic_account_red,
+            cta.id as analytic_account_red,
+            ctal.id as analytic_account_id,
             gf.id as analytic_group_id,
-            gl.id as analytic_group_two_id,                                    
-            CASE WHEN m.state='posted'
-            THEN 'Publicada'
-            ELSE 'Borrador'
-            END AS state,
-            pu.id as vendedor_id,
-            t.id as team_id,
-            m.x_send_dian as x_send_dian,
-            m.x_date_send_dian as x_date_send_dian,
-            m.x_cufe_dian as x_cufe_dian,
+            gl.id as analytic_group_two_id,
             mc.id as currency_id,
             CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
             THEN (l.price_unit*-1)
             WHEN m.type = 'out_refund' and l.amount_currency<>0.0
-            THEN l.debit
+            THEN l.debit*-1
             WHEN l.amount_currency<>0.0
             THEN l.credit
             ELSE l.price_unit
             END AS price_unit_by_product,
-            l.quantity,   
+            l.quantity as quantity,   
             CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
             THEN ((l.price_unit*l.quantity)*-1)
             WHEN m.type = 'out_refund' and l.amount_currency<>0.0
-            THEN l.debit
+            THEN l.debit*-1
             WHEN l.amount_currency<>0.0
             THEN l.credit
             ELSE (l.price_unit*l.quantity)
@@ -97,7 +94,7 @@ class ReportExcelSaleProduct(models.Model):
             CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
             THEN (((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))*-1)
             WHEN m.type = 'out_refund' and l.amount_currency<>0.0
-            THEN l.debit
+            THEN l.debit*-1
             WHEN l.amount_currency<>0.0
             THEN l.credit
             ELSE ((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))
@@ -115,11 +112,20 @@ class ReportExcelSaleProduct(models.Model):
             CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
             THEN (l.price_total*-1)
             WHEN m.type = 'out_refund' and l.amount_currency<>0.0
-            THEN l.debit
+            THEN l.debit*-1
             WHEN l.amount_currency<>0.0
             THEN l.credit
             ELSE l.price_total
-            END AS price_total
+            END AS price_total,
+            CASE WHEN m.state='posted'
+            THEN 'Publicada'
+            ELSE 'Borrador'
+            END AS state,                                    
+            pu.id as vendedor_id,
+            t.id as team_id,                                    
+            m.x_send_dian as x_send_dian,
+            m.x_date_send_dian as x_date_send_dian,
+            m.x_cufe_dian as x_cufe_dian 
 		"""
         return select_str
 

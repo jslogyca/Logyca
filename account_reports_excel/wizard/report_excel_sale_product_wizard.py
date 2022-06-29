@@ -55,30 +55,23 @@ class ReportExcelSaleProductWizard(models.TransientModel):
         value = []
         if self.product_id:
             self._cr.execute(''' select 
-                                    m.name as factura,
+                                    p.vat,
                                     CASE WHEN p.parent_id IS NULL 
                                     THEN p.name 
                                     ELSE pp.name
-                                    END AS asociado,
-                                    p.vat,
+                                    END AS asociado,                                    
+                                    m.name as factura,
                                     to_char(m.invoice_date,'YYYY/MM/DD'),
                                     to_char(m.invoice_date_due,'YYYY/MM/DD'),
+                                    date_part('month',m.invoice_date)as mes_fact,
+                                    date_part('year',m.invoice_date)as year_fact,
                                     m.invoice_origin,
                                     pt.name,
                                     c.name as company,
                                     cta.name,
                                     ctal.name,
                                     gf.complete_name,
-                                    gl.complete_name,                                    
-                                    CASE WHEN m.state='posted'
-                                    THEN 'Publicada'
-                                    ELSE 'Borrador'
-                                    END AS estado,
-                                    pu.name as vendedor,
-                                    t.name as equipodeventa,
-                                    m.x_send_dian,
-                                    m.x_date_send_dian,
-                                    m.x_cufe_dian,
+                                    gl.complete_name,
                                     mc.name,
                                     CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_unit*-1)
@@ -128,8 +121,15 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     THEN l.credit
                                     ELSE l.price_total
                                     END AS price_total,
-                                    date_part('month',m.invoice_date)as mes_fact,
-                                    date_part('year',m.invoice_date)as year_fact
+                                    CASE WHEN m.state='posted'
+                                    THEN 'Publicada'
+                                    ELSE 'Borrador'
+                                    END AS estado,                                    
+                                    pu.name as vendedor,
+                                    t.name as equipodeventa,                                    
+                                    m.x_send_dian,
+                                    m.x_date_send_dian,
+                                    m.x_cufe_dian
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
                                     inner join res_partner p on p.id=m.partner_id
@@ -151,30 +151,23 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     (date_from, date_to, self.product_id.id))
         else:
             self._cr.execute(''' select 
-                                    m.name as factura,
+                                    p.vat,
                                     CASE WHEN p.parent_id IS NULL 
                                     THEN p.name 
                                     ELSE pp.name
-                                    END AS asociado,
-                                    p.vat,
+                                    END AS asociado,                                    
+                                    m.name as factura,
                                     to_char(m.invoice_date,'YYYY/MM/DD'),
                                     to_char(m.invoice_date_due,'YYYY/MM/DD'),
+                                    date_part('month',m.invoice_date)as mes_fact,
+                                    date_part('year',m.invoice_date)as year_fact,
                                     m.invoice_origin,
                                     pt.name,
                                     c.name as company,
                                     cta.name,
                                     ctal.name,
                                     gf.complete_name,
-                                    gl.complete_name,                                    
-                                    CASE WHEN m.state='posted'
-                                    THEN 'Publicada'
-                                    ELSE 'Borrador'
-                                    END AS estado,
-                                    pu.name as vendedor,
-                                    t.name as equipodeventa,
-                                    m.x_send_dian,
-                                    m.x_date_send_dian,
-                                    m.x_cufe_dian,
+                                    gl.complete_name,
                                     mc.name,
                                     CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_unit*-1)
@@ -224,8 +217,15 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     THEN l.credit
                                     ELSE l.price_total
                                     END AS price_total,
-                                    date_part('month',m.invoice_date)as mes_fact,
-                                    date_part('year',m.invoice_date)as year_fact                                    
+                                    CASE WHEN m.state='posted'
+                                    THEN 'Publicada'
+                                    ELSE 'Borrador'
+                                    END AS estado,                                    
+                                    pu.name as vendedor,
+                                    t.name as equipodeventa,                                    
+                                    m.x_send_dian,
+                                    m.x_date_send_dian,
+                                    m.x_cufe_dian                               
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
                                     inner join res_partner p on p.id=m.partner_id
@@ -253,30 +253,23 @@ class ReportExcelSaleProductWizard(models.TransientModel):
         value = []
         if self.product_id:
             self._cr.execute(''' select 
-                                    m.name as factura,
+                                    p.vat,
                                     CASE WHEN p.parent_id IS NULL 
                                     THEN p.name 
                                     ELSE pp.name
-                                    END AS asociado,
-                                    p.vat,
+                                    END AS asociado,                                    
+                                    m.name as factura,
                                     to_char(m.invoice_date,'YYYY/MM/DD'),
                                     to_char(m.invoice_date_due,'YYYY/MM/DD'),
+                                    date_part('month',m.invoice_date)as mes_fact,
+                                    date_part('year',m.invoice_date)as year_fact,
                                     m.invoice_origin,
                                     pt.name,
                                     c.name as company,
                                     cta.name,
                                     ctal.name,
                                     gf.complete_name,
-                                    gl.complete_name,                                    
-                                    CASE WHEN m.state='posted'
-                                    THEN 'Publicada'
-                                    ELSE 'Borrador'
-                                    END AS estado,
-                                    pu.name as vendedor,
-                                    t.name as equipodeventa,
-                                    m.x_send_dian,
-                                    m.x_date_send_dian,
-                                    m.x_cufe_dian,
+                                    gl.complete_name,
                                     mc.name,
                                     CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_unit*-1)
@@ -326,8 +319,15 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     THEN l.credit
                                     ELSE l.price_total
                                     END AS price_total,
-                                    date_part('month',m.invoice_date)as mes_fact,
-                                    date_part('year',m.invoice_date)as year_fact
+                                    CASE WHEN m.state='posted'
+                                    THEN 'Publicada'
+                                    ELSE 'Borrador'
+                                    END AS estado,                                    
+                                    pu.name as vendedor,
+                                    t.name as equipodeventa,                                    
+                                    m.x_send_dian,
+                                    m.x_date_send_dian,
+                                    m.x_cufe_dian
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
                                     inner join res_partner p on p.id=m.partner_id
@@ -348,30 +348,23 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     (date_from, date_to, company_id.id, self.product_id.id))
         else:
             self._cr.execute(''' select 
-                                    m.name as factura,
+                                    p.vat,
                                     CASE WHEN p.parent_id IS NULL 
                                     THEN p.name 
                                     ELSE pp.name
-                                    END AS asociado,
-                                    p.vat,
+                                    END AS asociado,                                    
+                                    m.name as factura,
                                     to_char(m.invoice_date,'YYYY/MM/DD'),
                                     to_char(m.invoice_date_due,'YYYY/MM/DD'),
+                                    date_part('month',m.invoice_date)as mes_fact,
+                                    date_part('year',m.invoice_date)as year_fact,
                                     m.invoice_origin,
                                     pt.name,
                                     c.name as company,
                                     cta.name,
                                     ctal.name,
                                     gf.complete_name,
-                                    gl.complete_name,                                    
-                                    CASE WHEN m.state='posted'
-                                    THEN 'Publicada'
-                                    ELSE 'Borrador'
-                                    END AS estado,
-                                    pu.name as vendedor,
-                                    t.name as equipodeventa,
-                                    m.x_send_dian,
-                                    m.x_date_send_dian,
-                                    m.x_cufe_dian,
+                                    gl.complete_name,
                                     mc.name,
                                     CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_unit*-1)
@@ -381,7 +374,7 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     THEN l.credit
                                     ELSE l.price_unit
                                     END AS price_unit_by_product,
-                                                                        l.quantity,   
+                                    l.quantity,   
                                     CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
                                     THEN ((l.price_unit*l.quantity)*-1)
                                     WHEN m.type = 'out_refund' and l.amount_currency<>0.0
@@ -421,8 +414,15 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     THEN l.credit
                                     ELSE l.price_total
                                     END AS price_total,
-                                    date_part('month',m.invoice_date)as mes_fact,
-                                    date_part('year',m.invoice_date)as year_fact
+                                    CASE WHEN m.state='posted'
+                                    THEN 'Publicada'
+                                    ELSE 'Borrador'
+                                    END AS estado,                                    
+                                    pu.name as vendedor,
+                                    t.name as equipodeventa,                                    
+                                    m.x_send_dian,
+                                    m.x_date_send_dian,
+                                    m.x_cufe_dian
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
                                     inner join res_partner p on p.id=m.partner_id
