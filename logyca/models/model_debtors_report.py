@@ -39,7 +39,8 @@ class comercial_report(models.TransientModel):
     
     #Retonar columnas
     def get_columns(self):
-        columns = 'DOC,FECHA EMISIÓN FACTURA,AÑO,FACTURA,DOC. IDENTIFICACIÓN,RAZON SOCIAL,CONTACTO FACTURA,NOMBRE DE PRODUCTO,VALOR ANTES DE IVA,IVA,TOTAL FACTURA,SALDO FACTURA,FECHA VENCIMIENTO,DÍAS CARTERA VENCIDA,MES VENCIMIENTO,RESPONSABLE,TIPO CARTERA,RED DE VALOR'
+        # columns = 'DOC,FECHA EMISIÓN FACTURA,AÑO,FACTURA,DOC. IDENTIFICACIÓN,RAZON SOCIAL,CONTACTO FACTURA,NOMBRE DE PRODUCTO,VALOR ANTES DE IVA,IVA,TOTAL FACTURA,SALDO FACTURA,FECHA VENCIMIENTO,DÍAS CARTERA VENCIDA,MES VENCIMIENTO,RESPONSABLE,TIPO CARTERA,RED DE VALOR'
+        columns = 'FECHA,AÑO,DOC,NRO,NIT,RAZON SOCIAL,PRODUCTO,VALOR,T. IVA,T. FACTURA,SALDO FACTURA,FECHA VENCIMIENTO,ACUERDO DE PAGO,DÍAS CARTERA VENCIDA,MES VENCIMIENTO,TIPO CARTERA,RESPONSABLE,EQUIPO DE VENTA,SEGUIMIENTO DE CARTERA, FECHA DE SEGUIMIENTO ULTIMO CONTACTO, ESTADO DE CARTERA, FECHA PROGRAMACIÓN PAGO'
         _columns = columns.split(",")
         return _columns
     
@@ -58,7 +59,7 @@ class comercial_report(models.TransientModel):
         if self.report_type == '1':
             additional_query += ' AND aml.id = (select id from account_move_line where move_id= am.id limit 1)'
         
-        additional_query += ' ORDER BY "FACTURA" ASC;'
+        additional_query += ' ORDER BY "NRO" ASC;'
         
         return additional_query
     
@@ -69,39 +70,49 @@ class comercial_report(models.TransientModel):
         
         #Consulta
         query = '''
-            SELECT  LEFT(am.name,3) AS "DOC", 
-                    am.date AS "FECHA EMISIÓN FACT",
-                    LEFT(TO_CHAR(am.date, 'YYYY-MM-DD'),4) AS "AÑO",
-                    RIGHT(am.name,6) AS "FACTURA",
-                    rpp.vat AS "DOC. IDENTIFICACIÓN",
-                    rpp.name AS "RAZÓN SOCIAL",
-                    rp.vat || ' - ' || rp.name AS "CONTACTO FACTURA",
-                    pt.name AS "NOMBRE DE PRODUCTO",
-                    am.amount_untaxed as "VALOR ANTES DE IVA",
-                    am.amount_tax AS "IVA",
-                    am.amount_total AS "TOTAL FACTURA",
-                    am.amount_residual AS "SALDO FACTURA",
-                    am.invoice_date_due AS "FECHA VENCIMIENTO",
-                    CASE WHEN now() > am.invoice_date_due THEN DATE_PART('day', now() - am.invoice_date_due) ELSE 0 END AS "DÍAS CARTERA VENCIDA",
-                    SUBSTRING(TO_CHAR(am.invoice_date_due,'YYYY-MM-DD'),6,2) AS "MES VENCIMIENTO",
-                    rppp.name AS "RESPONSABLE",
-                    CASE WHEN now() > am.invoice_date_due then 'VENCIDA ' || LEFT(TO_CHAR(am.date, 'YYYY-MM-DD'),4)  else 'NO VENCIDA' END AS "TIPO CARTERA",
-                    aaa.name AS "RED DE VALOR"
+            SELECT  to_char(am.date,'YYYY/MM/DD') as "FECHA",
+                LEFT(TO_CHAR(am.date, 'YYYY-MM-DD'),4) AS "AÑO",
+                LEFT(am.name,3) AS "DOC", 
+                RIGHT(am.name,6) AS "NRO",
+                rp.vat AS "NIT",
+                CASE WHEN rp.parent_id IS NULL 
+                THEN rp.name 
+                ELSE rpp.name
+                END AS "RAZÓN SOCIAL",
+                pt.name AS "PRODUCTO",
+                am.amount_untaxed as "VALOR",
+                am.amount_tax AS "T. IVA",
+                am.amount_total AS "T. FACTURA",
+                am.amount_residual AS "SALDO FACTURA",
+                to_char(am.invoice_date_due,'YYYY/MM/DD') AS "FECHA VENCIMIENTO",
+                apt.name AS "ACUERDO DE PAGO",
+                CASE WHEN now() > am.invoice_date_due THEN DATE_PART('day', now() - am.invoice_date_due) ELSE 0 END AS "DÍAS CARTERA VENCIDA",
+                SUBSTRING(TO_CHAR(am.invoice_date_due,'YYYY-MM-DD'),6,2) AS "MES VENCIMIENTO",
+                CASE WHEN now() > am.invoice_date_due then 'VENCIDA ' || LEFT(TO_CHAR(am.date, 'YYYY-MM-DD'),4)  else 'NO VENCIDA' END AS "TIPO CARTERA",
+                rppp.name AS "RESPONSABLE",
+                t.name AS "EQUIPO DE VENTA",
+                am.x_debt_portfolio_monitoring AS "SEGUIMIENTO DE CARTERA",
+                to_char(am.x_last_contact_debtor,'YYYY/MM/DD') AS "FECHA DE SEGUIMIENTO ULTIMO CONTACTO",
+                dps.name AS "ESTADO DE CARTERA",
+                to_char(am.x_estimated_payment_date,'YYYY/MM/DD') AS "FECHA PROGRAMACIÓN PAGO"
             FROM   account_move am
-                    LEFT JOIN account_analytic_account aaa ON aaa.id = am.analytic_account_id 
-                    LEFT JOIN res_partner rp ON rp.id = am.partner_id
-                    LEFT JOIN res_partner rpp ON rpp.id = rp.parent_id
-                    LEFT JOIN res_users ru ON ru.id = am.invoice_user_id
-                    LEFT JOIN res_partner rppp ON ru.partner_id = rppp.id,
-                    account_move_line aml, product_product pp, product_template pt 
+                LEFT JOIN account_analytic_account aaa ON aaa.id = am.analytic_account_id 
+                INNER JOIN account_payment_term apt on apt.id = am.invoice_payment_term_id
+                inner join crm_team t on t.id=am.team_id
+                LEFT JOIN debtor_portfolio_status dps on dps.id=am.x_debtor_portfolio_status_id
+                LEFT JOIN res_partner rp ON rp.id = am.partner_id
+                LEFT JOIN res_partner rpp ON rpp.id = rp.parent_id
+                LEFT JOIN res_users ru ON ru.id = am.invoice_user_id
+                LEFT JOIN res_partner rppp ON ru.partner_id = rppp.id,
+                account_move_line aml, product_product pp, product_template pt 
             WHERE 
-                  pp.product_tmpl_id = pt.id
-                  and aml.product_id= pp.id
-                  and am.id = aml.move_id  
-                  and am.state='posted' 
-                  and am.type='out_invoice'
-                  and (am.invoice_payment_state='not_paid' or am.invoice_payment_state='in_payment')
-                  and (am.name LIKE 'FEC%' or am.name LIKE 'FAC%' or am.name LIKE 'FAM%')
+                pp.product_tmpl_id = pt.id
+                and aml.product_id= pp.id
+                and am.id = aml.move_id  
+                and am.state='posted' 
+                and am.type='out_invoice'
+                and (am.invoice_payment_state='not_paid' or am.invoice_payment_state='in_payment')
+                and (am.name LIKE 'FEC%' or am.name LIKE 'FAC%' or am.name LIKE 'FAM%')
         '''  + str(self.where())
         
         logging.info(query)
