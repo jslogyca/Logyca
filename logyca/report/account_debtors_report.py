@@ -33,7 +33,8 @@ class AccountDebtorsReport(models.Model):
     x_debt_portfolio_monitoring = fields.Text('Seg Debtors')
     x_last_contact_debtor = fields.Date('Last Contact Debtor')
     x_estimated_payment_date = fields.Date('Estimated Payment Date')
-    x_debtor_portfolio_status_id = fields.Many2one('debtor.portfolio.status', 'Status', readonly=True)
+    # x_debtor_portfolio_status_id = fields.Many2one('debtor.portfolio.status', 'Status', readonly=True)
+    x_debtor_portfolio_status_id = fields.Char('Status')
     company_id = fields.Many2one('res.company','Compañía')
 
     def _select(self):
@@ -63,7 +64,7 @@ class AccountDebtorsReport(models.Model):
             t.id AS team_id,
             am.x_debt_portfolio_monitoring AS x_debt_portfolio_monitoring,
             to_char(am.x_last_contact_debtor,'YYYY/MM/DD') AS x_last_contact_debtor,
-            dps.id AS x_debtor_portfolio_status_id,
+            dps.name AS x_debtor_portfolio_status_id,
             to_char(am.x_estimated_payment_date,'YYYY/MM/DD') AS x_estimated_payment_date
 		"""
         return select_str
