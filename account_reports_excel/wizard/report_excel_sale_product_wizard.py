@@ -128,7 +128,7 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     pu.name as vendedor,
                                     t.name as equipodeventa,                                    
                                     m.x_send_dian,
-                                    m.x_date_send_dian,
+                                    to_char(m.x_date_send_dian,'YYYY/MM/DD'),
                                     m.x_cufe_dian
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
@@ -224,7 +224,7 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     pu.name as vendedor,
                                     t.name as equipodeventa,                                    
                                     m.x_send_dian,
-                                    m.x_date_send_dian,
+                                    to_char(m.x_date_send_dian,'YYYY/MM/DD'),
                                     m.x_cufe_dian                               
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
@@ -326,7 +326,7 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     pu.name as vendedor,
                                     t.name as equipodeventa,                                    
                                     m.x_send_dian,
-                                    m.x_date_send_dian,
+                                    to_char(m.x_date_send_dian,'YYYY/MM/DD'),
                                     m.x_cufe_dian
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
@@ -421,7 +421,7 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     pu.name as vendedor,
                                     t.name as equipodeventa,                                    
                                     m.x_send_dian,
-                                    m.x_date_send_dian,
+                                    to_char(m.x_date_send_dian,'YYYY/MM/DD'),
                                     m.x_cufe_dian
                                     from account_move m
                                     inner join account_move_line l on m.id=l.move_id
@@ -483,35 +483,35 @@ class ReportExcelSaleProductWizard(models.TransientModel):
         ws.write(6, 1, str(date_file))
 
         fila_title=9
-        ws.write(fila_title, 0, 'Factura', subtitle_head)
+        ws.write(fila_title, 0, 'NIT', subtitle_head)
         ws.write(fila_title, 1, 'Cliente', subtitle_head)
-        ws.write(fila_title, 2, 'NIT', subtitle_head)
+        ws.write(fila_title, 2, 'Factura', subtitle_head)
         ws.write(fila_title, 3, 'Fecha de la factura', subtitle_head)
         ws.write(fila_title, 4, 'Fecha de Vencimiento', subtitle_head)
-        ws.write(fila_title, 5, 'Documento Origen', subtitle_head)
-        ws.write(fila_title, 6, 'Producto', subtitle_head)
-        ws.write(fila_title, 7, 'Company', subtitle_head)
-        ws.write(fila_title, 8, 'Red de Valor', subtitle_head)        
-        ws.write(fila_title, 9, 'Cuenta Analitica', subtitle_head)   
-        ws.write(fila_title, 10, 'Grupo Analitico Linea', subtitle_head)
-        ws.write(fila_title, 11, 'Grupo Analitica Familia', subtitle_head)
-        ws.write(fila_title, 12, 'Estado', subtitle_head)
-        ws.write(fila_title, 13, 'Vendedor', subtitle_head)
-        ws.write(fila_title, 14, 'Equipo de Venta', subtitle_head)
-        ws.write(fila_title, 15, 'Enviado a la DIAN', subtitle_head)
-        ws.write(fila_title, 16, 'Fecha de Envio a la DIAN', subtitle_head)        
-        ws.write(fila_title, 17, 'CUFE', subtitle_head)
-        ws.write(fila_title, 18, 'Moneda', subtitle_head)
-        ws.write(fila_title, 19, 'Precio Unitario', subtitle_head)
-        ws.write(fila_title, 20, 'Cantidad', subtitle_head)        
-        ws.write(fila_title, 21, 'SubTotal', subtitle_head)        
-        ws.write(fila_title, 22, 'Descuento', subtitle_head)
-        ws.write(fila_title, 23, '% Descuento', subtitle_head)
-        ws.write(fila_title, 24, 'Neto', subtitle_head)
-        ws.write(fila_title, 25, 'Impuesto', subtitle_head)        
-        ws.write(fila_title, 26, 'Total', subtitle_head)
-        ws.write(fila_title, 27, 'Mes Fact', subtitle_head)
-        ws.write(fila_title, 28, 'Año Fact', subtitle_head)
+        ws.write(fila_title, 5, 'Mes Fact', subtitle_head)
+        ws.write(fila_title, 6, 'Año Fact', subtitle_head)
+        ws.write(fila_title, 7, 'Documento Origen', subtitle_head)
+        ws.write(fila_title, 8, 'Producto', subtitle_head)
+        ws.write(fila_title, 9, 'Company', subtitle_head)
+        ws.write(fila_title, 10, 'Red de Valor', subtitle_head)        
+        ws.write(fila_title, 11, 'Cuenta Analitica', subtitle_head)   
+        ws.write(fila_title, 12, 'Grupo Analitico Linea', subtitle_head)
+        ws.write(fila_title, 13, 'Grupo Analitica Familia', subtitle_head)
+        ws.write(fila_title, 14, 'Moneda', subtitle_head)
+        ws.write(fila_title, 15, 'Precio Unitario', subtitle_head)
+        ws.write(fila_title, 16, 'Cantidad', subtitle_head)        
+        ws.write(fila_title, 17, 'SubTotal', subtitle_head)        
+        ws.write(fila_title, 18, 'Descuento', subtitle_head)
+        ws.write(fila_title, 19, '% Descuento', subtitle_head)
+        ws.write(fila_title, 20, 'Neto', subtitle_head)
+        ws.write(fila_title, 21, 'Impuesto', subtitle_head)        
+        ws.write(fila_title, 22, 'Total', subtitle_head)
+        ws.write(fila_title, 23, 'Estado', subtitle_head)
+        ws.write(fila_title, 24, 'Vendedor', subtitle_head)
+        ws.write(fila_title, 25, 'Equipo de Venta', subtitle_head)
+        ws.write(fila_title, 26, 'Enviado a la DIAN', subtitle_head)
+        ws.write(fila_title, 27, 'Fecha de Envio a la DIAN', subtitle_head)        
+        ws.write(fila_title, 28, 'CUFE', subtitle_head)
 
         fila=10
         for x in value:
