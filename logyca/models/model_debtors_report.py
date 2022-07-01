@@ -40,7 +40,7 @@ class comercial_report(models.TransientModel):
     #Retonar columnas
     def get_columns(self):
         # columns = 'DOC,FECHA EMISIÓN FACTURA,AÑO,FACTURA,DOC. IDENTIFICACIÓN,RAZON SOCIAL,CONTACTO FACTURA,NOMBRE DE PRODUCTO,VALOR ANTES DE IVA,IVA,TOTAL FACTURA,SALDO FACTURA,FECHA VENCIMIENTO,DÍAS CARTERA VENCIDA,MES VENCIMIENTO,RESPONSABLE,TIPO CARTERA,RED DE VALOR'
-        columns = 'FECHA,AÑO,DOC,NRO,NIT,RAZON SOCIAL,PRODUCTO,VALOR,T. IVA,T. FACTURA,SALDO FACTURA,FECHA VENCIMIENTO,ACUERDO DE PAGO,DÍAS CARTERA VENCIDA,MES VENCIMIENTO,TIPO CARTERA,RESPONSABLE,EQUIPO DE VENTA,SEGUIMIENTO DE CARTERA, FECHA DE SEGUIMIENTO ULTIMO CONTACTO, ESTADO DE CARTERA, FECHA PROGRAMACIÓN PAGO'
+        columns = 'COMPAÑÍA,FECHA,AÑO,DOC,NRO,NIT,RAZON SOCIAL,PRODUCTO,VALOR,T. IVA,T. FACTURA,SALDO FACTURA,FECHA VENCIMIENTO,ACUERDO DE PAGO,DÍAS CARTERA VENCIDA,MES VENCIMIENTO,TIPO CARTERA,RESPONSABLE,EQUIPO DE VENTA,SEGUIMIENTO DE CARTERA, FECHA DE SEGUIMIENTO ULTIMO CONTACTO, ESTADO DE CARTERA, FECHA PROGRAMACIÓN PAGO'
         _columns = columns.split(",")
         return _columns
     
@@ -70,7 +70,8 @@ class comercial_report(models.TransientModel):
         
         #Consulta
         query = '''
-            SELECT  to_char(am.date,'YYYY/MM/DD') as "FECHA",
+            SELECT cc.name as "COMPAÑÍA",
+                to_char(am.date,'YYYY/MM/DD') as "FECHA",
                 LEFT(TO_CHAR(am.date, 'YYYY-MM-DD'),4) AS "AÑO",
                 LEFT(am.name,3) AS "DOC", 
                 RIGHT(am.name,6) AS "NRO",
@@ -96,6 +97,7 @@ class comercial_report(models.TransientModel):
                 dps.name AS "ESTADO DE CARTERA",
                 to_char(am.x_estimated_payment_date,'YYYY/MM/DD') AS "FECHA PROGRAMACIÓN PAGO"
             FROM   account_move am
+                INNER JOIN res_company cc on cc.id=am.company_id
                 LEFT JOIN account_analytic_account aaa ON aaa.id = am.analytic_account_id 
                 INNER JOIN account_payment_term apt on apt.id = am.invoice_payment_term_id
                 inner join crm_team t on t.id=am.team_id
