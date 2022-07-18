@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="helpdesk_ticket_view_form_logyca" model="ir.ui.view">
+		<field name="name">helpdesk.ticket.view.form.logyca</field>
+		<field name="model">helpdesk.ticket</field>
+		<field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+		<field name="arch" type="xml">
+            <xpath expr="//field[@name='email_cc']" position="after">
+				<field name="ticket_interno" invisible="1"/>
+				<field name="vat_partner" attrs="{'invisible': [('partner_id', '=', False)]}"/>
+				<field name="station_id" attrs="{'invisible': [('ticket_interno', '=', False)]}" />
+				<field name="colabor_id" attrs="{'invisible': [('ticket_interno', '=', False)]}"/>
+            </xpath>
+		</field>
+	</record>
+</odoo>

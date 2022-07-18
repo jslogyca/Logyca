@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">  
+        <record id="helpdesk_station1" model="helpdesk.station">
+            <field name="name">Grupo Éxito</field>
+            <field name="code">1</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_station2" model="helpdesk.station">
+            <field name="name">Cencosud</field>
+            <field name="code">2</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_station3" model="helpdesk.station">
+            <field name="name">Olímpica</field>
+            <field name="code">3</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_station4" model="helpdesk.station">
+            <field name="name">Alkosto</field>
+            <field name="code">4</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_station5" model="helpdesk.station">
+            <field name="name">Independientes </field>
+            <field name="code">5</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>    
