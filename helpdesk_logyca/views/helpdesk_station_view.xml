@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_station_view_form" model="ir.ui.view">
+        <field name="name">helpdesk.station.form</field>
+        <field name="model">helpdesk.station</field>
+        <field name="arch" type="xml">
+            <form string="Helpdesk Station">
+                <header>
+                </header>
+                <sheet>
+                    <group name="station">
+                        <group >
+                            <field name="name" />
+                            <field name="code" />
+                        </group>
+                        <group >
+                            <field name="active" widget="toggle_button" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="helpdesk_station_view_tree" model="ir.ui.view">
+        <field name="name">helpdesk.station.tree</field>
+        <field name="model">helpdesk.station</field>
+        <field name="arch" type="xml">
+            <tree string="Helpdesk Station" >
+                <field name="name" />
+                <field name="code"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_helpdesk_station" model="ir.actions.act_window">
+        <field name="name">Helpdesk Station</field>
+        <field name="res_model">helpdesk.station</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="helpdesk_station_view_tree"/>
+    </record>
+
+    <menuitem
+        id="account_menu_helpdesk_station"
+        name="Helpdesk Station"
+        action="action_helpdesk_station"
+        parent="helpdesk.helpdesk_menu_config"
+        sequence="22"/>
+</odoo>
