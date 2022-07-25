@@ -1,3 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 account_helpdesk_station,helpdesk.station,model_helpdesk_station,helpdesk.group_helpdesk_user,1,1,1,1
 access_helpdesk_station,helpdesk.station,model_helpdesk_station,,1,1,1,1
+account_helpdesk_service,helpdesk.service,model_helpdesk_service,helpdesk.group_helpdesk_user,1,1,1,1
+access_helpdesk_service,helpdesk.service,model_helpdesk_service,,1,1,1,1
+account_helpdesk_ticket_sub_type,helpdesk.ticket.sub.type,model_helpdesk_ticket_sub_type,helpdesk.group_helpdesk_user,1,1,1,1
+access_helpdesk_ticket_sub_type,helpdesk.ticket.sub.type,model_helpdesk_ticket_sub_type,,1,1,1,1

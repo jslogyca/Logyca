@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">  
+        <record id="helpdesk_ticket_sub_type1" model="helpdesk.ticket.sub.type">
+            <field name="name">Acceso a la plataforma</field>
+            <field name="code">1</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_ticket_sub_type2" model="helpdesk.ticket.sub.type">
+            <field name="name">Acceso al excel de datos</field>
+            <field name="code">2</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_ticket_sub_type3" model="helpdesk.ticket.sub.type">
+            <field name="name">Falla General</field>
+            <field name="code">3</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_ticket_sub_type4" model="helpdesk.ticket.sub.type">
+            <field name="name">Falla Específica</field>
+            <field name="code">4</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_ticket_sub_type5" model="helpdesk.ticket.sub.type">
+            <field name="name">Regular</field>
+            <field name="code">5</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_ticket_sub_type6" model="helpdesk.ticket.sub.type">
+            <field name="name">Amarres</field>
+            <field name="code">6</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_ticket_sub_type7" model="helpdesk.ticket.sub.type">
+            <field name="name">Regular y amarres </field>
+            <field name="code">7</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

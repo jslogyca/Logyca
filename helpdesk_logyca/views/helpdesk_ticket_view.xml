@@ -9,6 +9,8 @@
 				<field name="ticket_interno" invisible="1"/>
 				<field name="vat_partner" attrs="{'invisible': [('partner_id', '=', False)]}"/>
 				<field name="station_id" attrs="{'invisible': [('ticket_interno', '=', False)]}" />
+				<field name="service_id" attrs="{'invisible': [('ticket_interno', '=', False)]}" />
+				<field name="subtype_id" attrs="{'invisible': [('ticket_interno', '=', False)]}" />
 				<field name="colabor_id" attrs="{'invisible': [('ticket_interno', '=', False)]}"/>
             </xpath>
 		</field>

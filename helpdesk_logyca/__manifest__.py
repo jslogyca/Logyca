@@ -21,9 +21,13 @@
     'data': [
         'security/ir.model.access.csv',
         'data/helpdesk_station_data.xml',
+        'data/helpdesk_service_data.xml',
+        'data/helpdesk_ticket_subtype_data.xml',
         'views/helpdesk_team_view.xml',
         'views/helpdesk_station_view.xml',
         'views/helpdesk_ticket_view.xml',
+        'views/helpdesk_service_view.xml',
+        'views/helpdesk_ticket_subtype_view.xml',
     ],
     'qweb': [
     ]
