@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0+e-20191227\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-18 19:14+0000\n"
-"PO-Revision-Date: 2022-07-18 14:16-0500\n"
+"POT-Creation-Date: 2022-07-25 19:25+0000\n"
+"PO-Revision-Date: 2022-07-25 14:29-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: co\n"
@@ -18,12 +18,16 @@ msgstr ""
 "X-Generator: Poedit 3.0.1\n"
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__active
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station__active
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_sub_type__active
 msgid "Active"
 msgstr "Activo"
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__code
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station__code
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_sub_type__code
 msgid "Code"
 msgstr "Código"
 
@@ -33,19 +37,34 @@ msgid "Colaborator"
 msgstr "Colaborador"
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__create_uid
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station__create_uid
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_sub_type__create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__create_date
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station__create_date
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_sub_type__create_date
 msgid "Created on"
 msgstr ""
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__display_name
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station__display_name
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_sub_type__display_name
 msgid "Display Name"
 msgstr ""
+
+#. module: helpdesk_logyca
+#: model:ir.actions.act_window,name:helpdesk_logyca.action_helpdesk_service
+#: model:ir.model,name:helpdesk_logyca.model_helpdesk_service
+#: model:ir.ui.menu,name:helpdesk_logyca.account_menu_helpdesk_service
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.helpdesk_service_view_form
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.helpdesk_service_view_tree
+msgid "Helpdesk Service"
+msgstr "Servicios"
 
 #. module: helpdesk_logyca
 #: model:ir.actions.act_window,name:helpdesk_logyca.action_helpdesk_station
@@ -67,7 +86,18 @@ msgid "Helpdesk Ticket"
 msgstr "Tiquete del Servicio de Asistencia"
 
 #. module: helpdesk_logyca
+#: model:ir.actions.act_window,name:helpdesk_logyca.action_helpdesk_ticket_sub_type
+#: model:ir.model,name:helpdesk_logyca.model_helpdesk_ticket_sub_type
+#: model:ir.ui.menu,name:helpdesk_logyca.account_menu_helpdesk_ticket_sub_type
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.helpdesk_ticket_sub_type_view_form
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.helpdesk_ticket_sub_type_view_tree
+msgid "Helpdesk Ticket Sub Type"
+msgstr "Subcategoría"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__id
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station__id
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_sub_type__id
 msgid "ID"
 msgstr ""
 
@@ -78,29 +108,47 @@ msgid "Interno"
 msgstr ""
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service____last_update
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station____last_update
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_sub_type____last_update
 msgid "Last Modified on"
 msgstr ""
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__write_uid
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station__write_uid
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_sub_type__write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__write_date
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station__write_date
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_sub_type__write_date
 msgid "Last Updated on"
 msgstr ""
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__name
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station__name
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_sub_type__name
 msgid "Name"
 msgstr "Nombre"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket__service_id
+msgid "Service"
+msgstr "Servicio"
 
 #. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket__station_id
 msgid "Station"
 msgstr "Cadena"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket__subtype_id
+msgid "Sub Type"
+msgstr "Subcategoría"
 
 #. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket__vat_partner

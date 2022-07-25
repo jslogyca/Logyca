@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_ticket_sub_type_view_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.sub.type.form</field>
+        <field name="model">helpdesk.ticket.sub.type</field>
+        <field name="arch" type="xml">
+            <form string="Helpdesk Ticket Sub Type">
+                <header>
+                </header>
+                <sheet>
+                    <group name="Helpdesk Ticket Sub Type">
+                        <group >
+                            <field name="name" />
+                            <field name="code" />
+                        </group>
+                        <group >
+                            <field name="active" widget="toggle_button" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="helpdesk_ticket_sub_type_view_tree" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.sub.type.tree</field>
+        <field name="model">helpdesk.ticket.sub.type</field>
+        <field name="arch" type="xml">
+            <tree string="Helpdesk Ticket Sub Type" >
+                <field name="name" />
+                <field name="code"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_helpdesk_ticket_sub_type" model="ir.actions.act_window">
+        <field name="name">Helpdesk Ticket Sub Type</field>
+        <field name="res_model">helpdesk.ticket.sub.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="helpdesk_ticket_sub_type_view_tree"/>
+    </record>
+
+    <menuitem
+        id="account_menu_helpdesk_ticket_sub_type"
+        name="Helpdesk Ticket Sub Type"
+        action="action_helpdesk_ticket_sub_type"
+        parent="helpdesk.helpdesk_menu_config"
+        sequence="24"/>
+</odoo>

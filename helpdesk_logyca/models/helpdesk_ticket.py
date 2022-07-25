@@ -11,3 +11,5 @@ class HelpdeskTicket(models.Model):
     station_id = fields.Many2one('helpdesk.station', string='Station')
     colabor_id = fields.Many2one('res.partner', string='Colaborator')
     ticket_interno = fields.Boolean(related='team_id.ticket_interno')
+    service_id = fields.Many2one('helpdesk.service', string='Service')
+    subtype_id = fields.Many2one('helpdesk.ticket.sub.type', string='Sub Type')
