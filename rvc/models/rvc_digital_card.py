@@ -5,8 +5,8 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-class rvc_digital_card_offered_services(models.Model):
-    _name = 'rvc.digital.card.offered.services'
+class rvc_digital_card_offered_service(models.Model):
+    _name = 'rvc.digital.card.offered.service'
 
     _description = """
         Servicios ofrecidos por la empresa
@@ -32,7 +32,7 @@ class rvc_digital_card(models.Model):
     contact_name = fields.Char('Nombre Contacto')
     contact_email = fields.Char('Email Contacto')
     contact_mobile = fields.Char('contact_mobile') #TODO: poner widget: phone
-    offered_service_id = fields.Many2one('rvc.dc.offered.services', string='Servicio que Ofrece')
+    offered_service_id = fields.Many2one('rvc.digital.card.offered.service', string='Servicio que Ofrece')
     city_id = fields.Many2one('logyca.city', string='Ciudad')
     street = fields.Char('Dirección')
     url_website = fields.Char('Página Web') # TODO: poner widget: url

@@ -7,8 +7,8 @@ account_config_rvc,config.rvc,model_config_rvc,rvc.group_rvc_manager,1,1,1,1
 account_log_import_rvc,log.import.rvc,model_log_import_rvc,rvc.group_rvc_manager,1,1,1,1
 account_product_rvc,product.rvc,model_product_rvc,rvc.group_rvc_manager,1,1,1,1
 account_benefit_application,benefit.application,model_benefit_application,rvc.group_rvc_manager,1,1,1,1
-access_rvc_digital_card,rvc.digital.card,model_digital_card,rvc,group_rvc_manager,1,1,1,1
-access_rvc_digital_card_off_services,rvc.digital.card.off.services,model_digital_card_offered_services,rvc,group_rvc_manager,1,1,1,1
+access_rvc_digital_card,access_rvc_digital_card,model_rvc_digital_card,rvc.group_rvc_manager,1,1,1,1
+access_rvc_digital_card_off_service,access_rvc_digital_card_off_service,model_rvc_digital_card_offered_service,rvc.group_rvc_manager,1,1,1,1
 
 access_sup_rvc_import_file_wizard,rvc.import.file.wizard,model_rvc_import_file_wizard,rvc.group_rvc_support,0,0,0,0
 access_sup_rvc_sponsor,rvc.sponsor,model_rvc_sponsor,rvc.group_rvc_support,1,0,0,0
