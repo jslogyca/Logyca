@@ -38,6 +38,7 @@ class rvc_digital_card(models.Model):
     url_website = fields.Char('Página Web') # TODO: poner widget: url
     url_facebook = fields.Char('Facebook') # TODO: poner widget: url
     url_instagram = fields.Char('Instagram') # TODO: poner widget: url
+    digital_card_img = fields.Binary('Tarjeta Digital')
 
     @api.depends('postulation_id')
     def _partner_name(self):

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="rvc_digital_card_view_form" model="ir.ui.view">
+            <field name="name">rvc_digital_card.view.form</field>
+            <field name="model">rvc_digital_card</field>
+            <field name="arch" type="xml">
+                <form string="Tarjeta Digital">
+                    <sheet>
+                        <div>
+                            <h2><field name="partner_name"/></h2>
+                        </div>
+                        <group col="12">
+                            <group col="6" string="Info. Básica">
+                                <field name="partner_vat"/>
+                                <field name="contact_name"/>
+                                <field name="contact_email"/>
+                                <field name="contact_mobile" widget="phone"/>
+                                <field name="offered_service_id"/>
+                                <field name="city_id"/>
+                                <field name="street"/>
+                            </group>
+                            <group col="6" string="Info. Detallada">
+                                <field name="url_website" widget="url"/>
+                                <field name="url_facebook" widget="url"/>
+                                <field name="url_website" widget="url"/>
+                                <field name="url_instagram" widget="url"/>
+                                <field name="qr_code" widget="image"/>
+                            </group>
+                            <group string="Descargar Tarjeta Digital">
+                                <field name="digital_card_img" widget="download" nolabel="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
