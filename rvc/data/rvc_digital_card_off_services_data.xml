@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">  
+        <record id="offered_service_1" model="rvc.digital.card.offered.service">
+            <field name="name">Alimentos y bebidas</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_2" model="rvc.digital.card.offered.service">
+            <field name="name">Animales vivos y productos para mascotas</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_3" model="rvc.digital.card.offered.service">
+            <field name="name">Arte y manualidades, instrumentos musicales y entretenimiento</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_4" model="rvc.digital.card.offered.service">
+            <field name="name">Articulos de oficina y escolares, empaque y equipo de servicios</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_5" model="rvc.digital.card.offered.service">
+            <field name="name">Articulos deportivos</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_6" model="rvc.digital.card.offered.service">
+            <field name="name">Bienes raíces,alquiler y arrendamiento</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_7" model="rvc.digital.card.offered.service">
+            <field name="name">Calzado, maletas, bolsos y estuches</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_8" model="rvc.digital.card.offered.service">
+            <field name="name">Construcción y servicios relacionados</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_9" model="rvc.digital.card.offered.service">
+            <field name="name">Electrónicos</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_10" model="rvc.digital.card.offered.service">
+            <field name="name">Equipos eléctricos e iluminación</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_11" model="rvc.digital.card.offered.service">
+            <field name="name">Hospitalaria y farmacéutica</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_12" model="rvc.digital.card.offered.service">
+            <field name="name">Indumentaria, textiles y accesorios</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_13" model="rvc.digital.card.offered.service">
+            <field name="name">Juegos y juguetes</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_14" model="rvc.digital.card.offered.service">
+            <field name="name">Maquinaria, herramientas y equipos industriales</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_15" model="rvc.digital.card.offered.service">
+            <field name="name">Metalurgia, quimicos, caucho y plásticos</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_16" model="rvc.digital.card.offered.service">
+            <field name="name">Muebles y mobiliario</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_17" model="rvc.digital.card.offered.service">
+            <field name="name">Piezas de vehículos y transportes</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_18" model="rvc.digital.card.offered.service">
+            <field name="name">Salud y belleza</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_19" model="rvc.digital.card.offered.service">
+            <field name="name">Servicios comerciales y profesionales</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_20" model="rvc.digital.card.offered.service">
+            <field name="name">Servicios de arte, entretenimiento y recreación</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_21" model="rvc.digital.card.offered.service">
+            <field name="name">Servicios de educación y capacitación</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_22" model="rvc.digital.card.offered.service">
+            <field name="name">Servicios de informática y comunicación</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_23" model="rvc.digital.card.offered.service">
+            <field name="name">Servicios de transporte y logística</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_24" model="rvc.digital.card.offered.service">
+            <field name="name">Servicios financieros</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_25" model="rvc.digital.card.offered.service">
+            <field name="name">Servicios públicos y de gestión ambiental</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_26" model="rvc.digital.card.offered.service">
+            <field name="name">Servicios relacionados con el turismo y los viajes</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_27" model="rvc.digital.card.offered.service">
+            <field name="name">Servicios sociales y relacionados con la salud</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_28" model="rvc.digital.card.offered.service">
+            <field name="name">Suministros para el hogar, jardín y materiales de construcción</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_29" model="rvc.digital.card.offered.service">
+            <field name="name">Tecnologías de información y comunicación</field>
+            <field name="active">1</field>
+        </record>
+        <record id="offered_service_30" model="rvc.digital.card.offered.service">
+            <field name="name">Otras</field>
+            <field name="active">1</field>
+        </record>
+    </data>
+</odoo>

@@ -12,7 +12,8 @@ class ProductRVC(models.Model):
     code = fields.Char(string='Code')
     benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
                                     ('colabora', 'Colabora'),
-                                    ('analitica', 'Analítica')], string="Beneficio")
+                                    ('analitica', 'Analítica'),
+                                    ('tarjeta_digital', 'Tarjeta Digital')], string="Beneficio")
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company)
     state = fields.Selection([('activo', 'Activo'), 
                             ('inactivo', 'Inactivo')], string="State", default='activo')
