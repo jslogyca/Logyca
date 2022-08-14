@@ -29,9 +29,9 @@ class rvc_digital_card(models.Model):
     qr_code = fields.Binary('QR')
     partner_name = fields.Char(compute="_partner_name",string='Empresa')
     partner_vat = fields.Char(related="postulation_id.vat",string='Num. Identificación')
-    contact_name = fields.Char('Nombre Contacto')
-    contact_email = fields.Char('Email Contacto')
-    contact_mobile = fields.Char('contact_mobile') #TODO: poner widget: phone
+    contact_name = fields.Char('Nombre')
+    contact_email = fields.Char('Email')
+    contact_mobile = fields.Char('Teléfono/Móvil') #TODO: poner widget: phone
     offered_service_id = fields.Many2one('rvc.digital.card.offered.service', string='Servicio que Ofrece')
     city_id = fields.Many2one('logyca.city', string='Ciudad')
     street = fields.Char('Dirección')
