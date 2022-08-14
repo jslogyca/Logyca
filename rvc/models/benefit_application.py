@@ -39,7 +39,8 @@ class BenefitApplication(models.Model):
     invoice_codes_quantity = fields.Integer('Códigos Recaudo', track_visibility='onchange')
     benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
                                     ('colabora', 'Colabora'),
-                                    ('analitica', 'Analítica')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
+                                    ('analitica', 'Analítica'),
+                                    ('tarjeta_digital', 'Tarjeta Digital')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
     colabora_level = fields.Char(string='Nivel', track_visibility="onchange")
     end_date_colabora = fields.Date(string='Fecha Fin Colabora', track_visibility='onchange')
     acceptance_date = fields.Datetime(string='Fecha/Hora Aceptación', track_visibility='onchange', readonly=True)
@@ -59,6 +60,8 @@ class BenefitApplication(models.Model):
     codes_count = fields.Integer(string='Contador Códigos', compute="_compute_codes_count")
     message_ids = fields.One2many(groups="rvc.group_rvc_manager")
     activity_ids = fields.One2many(groups="rvc.group_rvc_manager")
+    digital_card_ids = fields.One2many('rvc.digital.card', 'postulation_id', string='Tarjetas Digitales')
+
 
     #technical fields
     benefit_name = fields.Selection(string="Nombre Beneficio", related='product_id.benefit_type', store=True, help="Technical field used for easy quering")
@@ -71,15 +74,6 @@ class BenefitApplication(models.Model):
                                     readonly=True,
                                     help="Este campo permite diferenciar las postulaciones RVC que provienen de Odoo, Tienda Virtual y ChatBot.")
 
-    #se usa para ocultar los campos técnicos de los filtros y agrupaciones
-    # @api.model
-    # def fields_get(self, allfields=None, attributes=None):
-    #     res = super(BenefitApplication, self).fields_get(allfields, attributes)
-    #     fields_to_hide = ['benefit_name']
-    #     for field in fields_to_hide:
-    #         res[field]['selectable'] = False  # disable field visible in filter
-    #         res[field]['sortable'] = False  # disable field visible in grouping
-    #     return res
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]
