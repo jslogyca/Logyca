@@ -43,21 +43,19 @@
                             <field name="invoice_codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
                         </group>
 					</group>
-					<group name="digital_cards" string="Tarjetas Digitales" attrs="{'invisible': [('benefit_type','!=','tarjeta_digital')]}">
-						<field name="digital_card_ids" nolabel="1">
-							<tree>
+					<group name="digital_cards" string="Tarjetas Digitales" attrs="{'invisible': [('benefit_type','!=','tarjeta_digital')]}" col="1" colspan="12">
+                        <div class="small">
+                            Haga clic sobre la tarjeta para ver su información completa.
+                        </div><br/>
+                        <field name="digital_card_ids" nolabel="1">
+                            <tree>
                                 <field name="contact_name"/>
-								<field name="contact_email"/>
-								<field name="contact_mobile"/>
-								<field name="offered_service_id"/>
-								<field name="city_id"/>
-								<field name="street"/>
-								<field name="url_website" widget="url"/>
-								<field name="url_facebook" widget="url"/>
-								<field name="url_instagram" widget="url"/>
-								<field name="digital_card_img" widget="download"/>
+                                <field name="contact_email"/>
+                                <field name="contact_mobile"/>
+                                <field name="offered_service_id"/>
+                                <field name="digital_card_img" readonly="1" widget="download"/>
                             </tree>
-						</field>
+                        </field>
 					</group>
 					<group>
 						<group string="Halonador">

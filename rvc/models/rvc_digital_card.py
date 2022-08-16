@@ -31,17 +31,18 @@ class rvc_digital_card(models.Model):
     partner_vat = fields.Char(related="postulation_id.vat",string='Num. Identificación')
     contact_name = fields.Char('Nombre')
     contact_email = fields.Char('Email')
-    contact_mobile = fields.Char('Teléfono/Móvil') #TODO: poner widget: phone
-    offered_service_id = fields.Many2one('rvc.digital.card.offered.service', string='Servicio que Ofrece')
+    contact_mobile = fields.Char('Teléfono') #TODO: poner widget: phone
+    offered_service_id = fields.Many2one('rvc.digital.card.offered.service',
+        string='Servicio', help="Servicio que ofrece la empresa")
     city_id = fields.Many2one('logyca.city', string='Ciudad')
     street = fields.Char('Dirección')
     url_website = fields.Char('Página Web') # TODO: poner widget: url
     url_facebook = fields.Char('Facebook') # TODO: poner widget: url
     url_instagram = fields.Char('Instagram') # TODO: poner widget: url
-    digital_card_img = fields.Binary('Tarjeta Digital')
+    digital_card_img = fields.Binary('Tarjeta Digital Generada')
 
     @api.depends('postulation_id')
     def _partner_name(self):
         for digital_card in self:
             #TODO: probar la linea siguiente
-            digital_card.partner_name = self.postulation_id.split('-')[0].strip()
+            digital_card.partner_name = self.postulation_id.name.split('-')[0].strip()
