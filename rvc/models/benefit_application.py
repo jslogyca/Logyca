@@ -875,7 +875,7 @@ class BenefitApplication(models.Model):
             self = self.search(['|',
                                 '&',('state', '=', 'confirm'),('origin', '=', 'odoo'),
                                 '&',('state', '=', 'confirm'),
-                                '&',('codes_quantity', '<', 100),('origin', '=', 'tienda')])
+                                '&',('codes_quantity', '<', 100),('origin', 'in', ['tienda','chatbot'])])
 
             for postulation_id in self:
                 counter =+ 1
