@@ -60,6 +60,9 @@ class BenefitApplication(models.Model):
     codes_count = fields.Integer(string='Contador Códigos', compute="_compute_codes_count")
     message_ids = fields.One2many(groups="rvc.group_rvc_manager")
     activity_ids = fields.One2many(groups="rvc.group_rvc_manager")
+    offered_service_id = fields.Many2one('rvc.digital.card.offered.service',
+        string='Servicio Ofrecido', help="Servicio que ofrece la empresa")
+    partner_address = fields.Char('Dirección Empresa')
     digital_card_ids = fields.One2many('rvc.digital.card', 'postulation_id', string='Tarjetas Digitales')
 
 
@@ -1121,3 +1124,24 @@ class BenefitApplication(models.Model):
         logging.info(f"==> create_OM_attachment 5 {data_id.ids}")
         template.attachment_ids = [(6, 0, [data_id.id])]
         return template
+    
+    def action_generate_digital_cards(self):
+        logging.info("== digital card ==")
+        logging.info("generate qr for digital cards")
+        
+        name="Juan Sebastián Ocampo Ospina"
+        home_phone="3103826667"
+        work_phone="3173559301"
+        email = "jsocampo@logyca.com"
+        enterprise = "LOGYCA"
+        url = "www.logyca.com"
+        
+#         url = "https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3aJuan+Se%0d%0aTEL%3bHOME%3bVOICE%3a3103826667%0d%0aTEL%3bWORK%3bVOICE%3a3103826667%0d%0aEMAIL%3ajsocampo.com%0d%0aORG%3aLOGYCA%0d%0aURL%3awww.logyca.com%0d%0aEND%3aVCARD"
+        
+        url = f"https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3a{name}%0d%0aTEL%3bHOME%3bVOICE%3a{home_phone}%0d%0aTEL%3bWORK%3bVOICE%3a{work_phone}%0d%0aEMAIL%3a{email}%0d%0aORG%3a{enterprise}%0d%0aURL%3a{url}%0d%0aEND%3aVCARD"
+        
+        img = base64.b64encode(requests.get(url).content)
+        
+        
+        for card in self.digital_card_ids:
+            card.qr_code = img            

@@ -6,10 +6,9 @@
         <field name="arch" type="xml">
             <form string="Tarjeta Digital">
                 <sheet>
-                    <div>
-                        <h2>Tarjeta Digital</h2>
+                    <group col="1" string="Tarjeta Digital">
                         <h2><field name="partner_name" attrs="{'invisible':[('partner_name','=',False)]}"/></h2>
-                    </div>
+                    </group>
                     <group>
                         <group string="Info. Básica">
                             <field name="partner_vat"/>
@@ -23,12 +22,11 @@
                         <group string="Info. Detallada">
                             <field name="url_website" widget="url"/>
                             <field name="url_facebook" widget="url"/>
-                            <field name="url_website" widget="url"/>
                             <field name="url_instagram" widget="url"/>
-                            <field name="qr_code" widget="image"  options='{"preview_image": "image", "size": [80, 80]}'/>
+                            <field name="qr_code" widget="image" width="30%"/>
                         </group>
                     </group>
-                    <group string="Descargar Tarjeta Digital">
+                    <group string="Descargar Tarjeta Digital" attrs="{'invisible':[('digital_card_img','=',False)]}">
                         <field name="digital_card_img" widget="download" nolabel="1"/>
                     </group>
                 </sheet>

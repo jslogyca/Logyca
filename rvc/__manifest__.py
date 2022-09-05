@@ -57,5 +57,7 @@
         'views/rvc_digital_card_views.xml',
     ],
     'qweb': [
-    ]
+    ],
+    'external_dependencies': {"python" : ["PIL"]}
+
 }
