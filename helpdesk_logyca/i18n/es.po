@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0+e-20191227\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 03:03+0000\n"
-"PO-Revision-Date: 2022-09-05 22:04-0500\n"
+"POT-Creation-Date: 2022-09-06 14:24+0000\n"
+"PO-Revision-Date: 2022-09-06 10:22-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: es_CO\n"
+"Language: co\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -27,6 +27,21 @@ msgid "Active"
 msgstr "Activo"
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields.selection,name:helpdesk_logyca.selection__sla_helpdesk_report__priority__0
+msgid "All"
+msgstr ""
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__user_id
+msgid "Assigned To"
+msgstr "Asignada a"
+
+#. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "Closed Ticket"
+msgstr "Ticket Cerrado"
+
+#. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_platform__code
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__code
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station__code
@@ -38,6 +53,11 @@ msgstr "Código"
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket__colabor_id
 msgid "Colaborator"
 msgstr "Colaborador"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__company_id
+msgid "Company"
+msgstr "Compañía"
 
 #. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_platform__create_uid
@@ -56,7 +76,31 @@ msgid "Created on"
 msgstr ""
 
 #. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "Creation Date"
+msgstr "Fecha de Creación"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__partner_id
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__sla_exceeded_days
+msgid "Day to reach SLA"
+msgstr "Día para llegar a SLA"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,help:helpdesk_logyca.field_sla_helpdesk_report__sla_exceeded_days
+msgid ""
+"Day to reach the stage of the SLA, without taking the working calendar into "
+"account"
+msgstr ""
+
+#. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket__type_desk
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__type_desk
 msgid "Desk Type"
 msgstr "Tipo Ticket"
 
@@ -65,8 +109,24 @@ msgstr "Tipo Ticket"
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__display_name
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station__display_name
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_sub_type__display_name
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__display_name
 msgid "Display Name"
 msgstr ""
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields.selection,name:helpdesk_logyca.selection__sla_helpdesk_report__sla_status__failed
+msgid "Failed"
+msgstr "Fallido"
+
+#. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "Failed Ticket"
+msgstr "Ticket Fallido"
+
+#. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "Group By"
+msgstr "Agrupar por"
 
 #. module: helpdesk_logyca
 #: model:ir.actions.act_window,name:helpdesk_logyca.action_helpdesk_platform
@@ -75,7 +135,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:helpdesk_logyca.helpdesk_platform_view_form
 #: model_terms:ir.ui.view,arch_db:helpdesk_logyca.helpdesk_platform_view_tree
 msgid "Helpdesk Platform"
-msgstr ""
+msgstr "Plataformas Colaborativas"
 
 #. module: helpdesk_logyca
 #: model:ir.actions.act_window,name:helpdesk_logyca.action_helpdesk_service
@@ -124,10 +184,16 @@ msgid "Helpdesk Ticket Type"
 msgstr "Tipo de Ticket del Servicio de asistencia técnica"
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields.selection,name:helpdesk_logyca.selection__sla_helpdesk_report__priority__2
+msgid "High priority"
+msgstr ""
+
+#. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_platform__id
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__id
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station__id
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_sub_type__id
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__id
 msgid "ID"
 msgstr ""
 
@@ -138,10 +204,21 @@ msgid "Interno"
 msgstr ""
 
 #. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "Last 30 days"
+msgstr ""
+
+#. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "Last 7 days"
+msgstr ""
+
+#. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_platform____last_update
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service____last_update
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station____last_update
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_sub_type____last_update
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report____last_update
 msgid "Last Modified on"
 msgstr ""
 
@@ -162,6 +239,21 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields.selection,name:helpdesk_logyca.selection__sla_helpdesk_report__priority__1
+msgid "Low priority"
+msgstr ""
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__priority
+msgid "Minimum Priority"
+msgstr ""
+
+#. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "My Ticket"
+msgstr "Mis Tickets"
+
+#. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_platform__name
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__name
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_station__name
@@ -170,24 +262,90 @@ msgid "Name"
 msgstr "Nombre"
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields.selection,name:helpdesk_logyca.selection__sla_helpdesk_report__sla_status__ongoing
+msgid "Ongoing"
+msgstr "En Proceso"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__ticket_open_hours
+msgid "Open Time (hours)"
+msgstr ""
+
+#. module: helpdesk_logyca
 #: model:ir.model.fields.selection,name:helpdesk_logyca.selection__helpdesk_ticket__type_desk__pqrs
+#: model:ir.model.fields.selection,name:helpdesk_logyca.selection__sla_helpdesk_report__type_desk__pqrs
 msgid "PQRS (Peticiones, Quejas, Reclamo, Solucitudes y Felicitaciones)"
 msgstr ""
 
 #. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_service__platform_id
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket__platform_id
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__platform_id
 msgid "Platform"
 msgstr "Plataforma Colaborativa"
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields.selection,name:helpdesk_logyca.selection__sla_helpdesk_report__sla_status__reached
+msgid "Reached"
+msgstr "Resuelto"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__sla_id
+msgid "SLA"
+msgstr "SLA"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__sla_deadline
+msgid "SLA Deadline"
+msgstr ""
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__sla_reached_datetime
+msgid "SLA Reached Date"
+msgstr ""
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__sla_stage_id
+msgid "SLA Stage"
+msgstr "SLA Estado"
+
+#. module: helpdesk_logyca
+#: model:ir.model,name:helpdesk_logyca.model_sla_helpdesk_report
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__sla_status_id
+#: model:ir.ui.menu,name:helpdesk_logyca.helpdesk_report_menu_sla
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_graph
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_pivot
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_tree
+msgid "SLA Status"
+msgstr "Reporte Casos Atención al Cliente"
+
+#. module: helpdesk_logyca
+#: model:ir.actions.act_window,name:helpdesk_logyca.sla_helpdesk_report_action
+msgid "SLA Status Analysis"
+msgstr "Reporte Tickets"
+
+#. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "SLA Status Deadline"
+msgstr ""
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__sla_status_failed
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "SLA Status Failed"
+msgstr ""
+
+#. module: helpdesk_logyca
 #: model:ir.model.fields.selection,name:helpdesk_logyca.selection__helpdesk_ticket__type_desk__sale
+#: model:ir.model.fields.selection,name:helpdesk_logyca.selection__sla_helpdesk_report__type_desk__sale
 msgid "Sale"
 msgstr "Ventas"
 
 #. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket__service_id
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket_type__service_id
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__service_id
 msgid "Service"
 msgstr "Servicio"
 
@@ -197,33 +355,133 @@ msgid "Station"
 msgstr "Cadena"
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__sla_status
+msgid "Status"
+msgstr "Estado"
+
+#. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket__subtype_id
 msgid "Sub Type"
 msgstr "Subcategoría"
 
 #. module: helpdesk_logyca
 #: model:ir.model.fields.selection,name:helpdesk_logyca.selection__helpdesk_ticket__type_desk__support
+#: model:ir.model.fields.selection,name:helpdesk_logyca.selection__sla_helpdesk_report__type_desk__support
 msgid "Support"
 msgstr "Soporte"
 
 #. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket__vat_partner
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__vat_partner
 msgid "Tax ID"
 msgstr "Número de Identificación"
 
 #. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__team_id
+msgid "Team"
+msgstr "Equipo"
+
+#. module: helpdesk_logyca
 #: model:ir.model.fields,help:helpdesk_logyca.field_helpdesk_ticket__vat_partner
+#: model:ir.model.fields,help:helpdesk_logyca.field_sla_helpdesk_report__vat_partner
 msgid ""
 "The Tax Identification Number. Complete it if the contact is subjected to "
 "government taxes. Used in some legal statements."
 msgstr ""
 
 #. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "This Month"
+msgstr "Este Mes"
+
+#. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "This Year"
+msgstr "Este Año"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__ticket_id
+msgid "Ticket"
+msgstr "Casos"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__ticket_closed
+msgid "Ticket Closed"
+msgstr "Caso cerrado"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__create_date
+msgid "Ticket Create Date"
+msgstr "Fecha de creación Caso"
+
+#. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "Ticket Creation Date"
+msgstr ""
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__ticket_deadline
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "Ticket Deadline"
+msgstr ""
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__ticket_failed
+msgid "Ticket Failed"
+msgstr "Caso Fallido"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__ticket_stage_id
+msgid "Ticket Stage"
+msgstr "Etapa"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__ticket_type_id
+msgid "Ticket Type"
+msgstr "Tipo de Ticket"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__ticket_close_hours
+msgid "Time to close (hours)"
+msgstr ""
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__ticket_assignation_hours
+msgid "Time to first assignation (hours)"
+msgstr ""
+
+#. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket__x_type_vinculation
+#: model:ir.model.fields,field_description:helpdesk_logyca.field_sla_helpdesk_report__x_type_vinculation
 msgid "Tipo de vinculación"
-msgstr "Tipo de vinculación"
+msgstr ""
+
+#. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "Today"
+msgstr "Hoy"
+
+#. module: helpdesk_logyca
+#: model:ir.model.fields.selection,name:helpdesk_logyca.selection__sla_helpdesk_report__priority__3
+msgid "Urgent"
+msgstr ""
 
 #. module: helpdesk_logyca
 #: model:ir.model.fields,field_description:helpdesk_logyca.field_helpdesk_ticket__vinculation
 msgid "Vinculation"
 msgstr "Vinculación"
+
+#. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "this month ticket."
+msgstr ""
+
+#. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "this year ticket."
+msgstr ""
+
+#. module: helpdesk_logyca
+#: model_terms:ir.ui.view,arch_db:helpdesk_logyca.sla_helpdesk_report_view_search
+msgid "today ticket."
+msgstr "Hoy"

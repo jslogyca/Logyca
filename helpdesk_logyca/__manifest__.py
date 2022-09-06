@@ -12,6 +12,7 @@
     'installable': True,
     'depends': [
         'helpdesk',
+        'logyca',
         ],
     'description': '''
 
@@ -31,6 +32,7 @@
         'views/helpdesk_ticket_subtype_view.xml',
         'views/helpdesk_platform_view.xml',
         'views/helpdesk_ticket_type_view.xml',
+        'views/sla_helpdesk_report_view.xml',
     ],
     'qweb': [
     ]
