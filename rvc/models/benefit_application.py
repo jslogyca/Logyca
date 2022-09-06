@@ -4,6 +4,8 @@ from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError, UserError
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, date, timedelta
+from odoo.modules.module import get_module_resource
+
 import base64
 import time
 import locale
@@ -1126,22 +1128,33 @@ class BenefitApplication(models.Model):
         return template
     
     def action_generate_digital_cards(self):
-        logging.info("== digital card ==")
-        logging.info("generate qr for digital cards")
+        self.qr_generation()
+        self.image_generation()
         
-        name="Juan Sebastián Ocampo Ospina"
-        home_phone="3103826667"
-        work_phone="3173559301"
-        email = "jsocampo@logyca.com"
-        enterprise = "LOGYCA"
-        url = "www.logyca.com"
+    
+    def image_generation(self):
+        from PIL import Image,ImageFont, ImageDraw
         
-#         url = "https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3aJuan+Se%0d%0aTEL%3bHOME%3bVOICE%3a3103826667%0d%0aTEL%3bWORK%3bVOICE%3a3103826667%0d%0aEMAIL%3ajsocampo.com%0d%0aORG%3aLOGYCA%0d%0aURL%3awww.logyca.com%0d%0aEND%3aVCARD"
-        
-        url = f"https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3a{name}%0d%0aTEL%3bHOME%3bVOICE%3a{home_phone}%0d%0aTEL%3bWORK%3bVOICE%3a{work_phone}%0d%0aEMAIL%3a{email}%0d%0aORG%3a{enterprise}%0d%0aURL%3a{url}%0d%0aEND%3aVCARD"
-        
+        base_image = get_module_resource('rvc', 'static/img/digital_cards_tmpl/1.jpg')
+        font = ImageFont.truetype("Arial", 15)
+
+        base_image.text((10, 25), "world", font=font)
         img = base64.b64encode(requests.get(url).content)
-        
-        
+        self.digital_card_ids[0].digital_card_img = img 
+
+    def qr_generation(self):
+
         for card in self.digital_card_ids:
-            card.qr_code = img            
+                  
+            name = card.contact_name
+            home_phone = card.contact_mobile
+            work_phone = card.contact_mobile
+            email = card.contact_email
+            enterprise = card.partner_name
+            url = card.url_website
+        
+            # url = "https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3aJuan+Se%0d%0aTEL%3bHOME%3bVOICE%3a3103826667%0d%0aTEL%3bWORK%3bVOICE%3a3103826667%0d%0aEMAIL%3ajsocampo.com%0d%0aORG%3aLOGYCA%0d%0aURL%3awww.logyca.com%0d%0aEND%3aVCARD"
+        
+            url = f"https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3a{name}%0d%0aTEL%3bHOME%3bVOICE%3a{home_phone}%0d%0aTEL%3bWORK%3bVOICE%3a{work_phone}%0d%0aEMAIL%3a{email}%0d%0aORG%3a{enterprise}%0d%0aURL%3a{url}%0d%0aEND%3aVCARD"
+            img = base64.b64encode(requests.get(url).content)
+            card.qr_code = img 
