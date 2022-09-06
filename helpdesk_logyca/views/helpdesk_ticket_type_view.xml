@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_ticket_type_view_form_lg" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.type.form.lg</field>
+        <field name="model">helpdesk.ticket.type</field>
+        <field name="arch" type="xml">
+            <form string="Helpdesk Ticket Type">
+                <header>
+                </header>
+                <sheet>
+                    <group name="Helpdesk Ticket Type">
+                        <group >
+                            <field name="name" />
+                            <field name="sequence" />
+                        </group>
+                        <group >
+                            <field name="active" widget="toggle_button" />
+                            <field name="service_id" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="helpdesk_ticket_type_view_tree_lg" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.type.tree.lg</field>
+        <field name="model">helpdesk.ticket.type</field>
+        <field name="arch" type="xml">
+            <tree string="Helpdesk Ticket Type" >
+                <field name="name" />
+                <field name="sequence" />
+                <field name="active"/>
+                <field name="service_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_helpdesk_ticket_type_logyca" model="ir.actions.act_window">
+        <field name="name">Helpdesk Ticket Type</field>
+        <field name="res_model">helpdesk.ticket.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="helpdesk_ticket_type_view_tree_lg"/>
+    </record>
+
+    <menuitem
+        id="menu_helpdesk_ticket_type_lg"
+        name="Helpdesk Ticket Type"
+        action="action_helpdesk_ticket_type_logyca"
+        parent="helpdesk.helpdesk_menu_config"
+        sequence="26"/>
+</odoo>

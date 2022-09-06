@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="helpdesk_service_view_form" model="ir.ui.view">
-        <field name="name">helpdesk.service.form</field>
-        <field name="model">helpdesk.service</field>
+    <record id="helpdesk_platform_view_form" model="ir.ui.view">
+        <field name="name">helpdesk.platform.form</field>
+        <field name="model">helpdesk.platform</field>
         <field name="arch" type="xml">
-            <form string="Helpdesk Service">
+            <form string="Helpdesk Platform">
                 <header>
                 </header>
                 <sheet>
@@ -15,7 +15,6 @@
                         </group>
                         <group >
                             <field name="active" widget="toggle_button" />
-                            <field name="platform_id" />
                         </group>
                     </group>
                 </sheet>
@@ -23,11 +22,11 @@
         </field>
     </record>
 
-    <record id="helpdesk_service_view_tree" model="ir.ui.view">
-        <field name="name">helpdesk.service.tree</field>
-        <field name="model">helpdesk.service</field>
+    <record id="helpdesk_platform_view_tree" model="ir.ui.view">
+        <field name="name">helpdesk.platform.tree</field>
+        <field name="model">helpdesk.platform</field>
         <field name="arch" type="xml">
-            <tree string="Helpdesk Service" >
+            <tree string="Helpdesk Platform" >
                 <field name="name" />
                 <field name="code"/>
                 <field name="active"/>
@@ -35,17 +34,17 @@
         </field>
     </record>
 
-    <record id="action_helpdesk_service" model="ir.actions.act_window">
-        <field name="name">Helpdesk Service</field>
-        <field name="res_model">helpdesk.service</field>
+    <record id="action_helpdesk_platform" model="ir.actions.act_window">
+        <field name="name">Helpdesk Platform</field>
+        <field name="res_model">helpdesk.platform</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="helpdesk_service_view_tree"/>
+        <field name="view_id" ref="helpdesk_platform_view_tree"/>
     </record>
 
     <menuitem
-        id="account_menu_helpdesk_service"
-        name="Helpdesk Service"
-        action="action_helpdesk_service"
+        id="account_menu_helpdesk_platform"
+        name="Helpdesk Platform"
+        action="action_helpdesk_platform"
         parent="helpdesk.helpdesk_menu_config"
-        sequence="23"/>
+        sequence="24"/>
 </odoo>

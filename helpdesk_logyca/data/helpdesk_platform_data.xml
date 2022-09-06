@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">  
+        <record id="helpdesk_platform1" model="helpdesk.platform">
+            <field name="name">LOGYCA / COLABORA</field>
+            <field name="code">1</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_platform2" model="helpdesk.platform">
+            <field name="name">LOGYCA / ANALÍTICA</field>
+            <field name="code">2</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_platform3" model="helpdesk.platform">
+            <field name="name">LOGYCA / COLDEX</field>
+            <field name="code">3</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_platform4" model="helpdesk.platform">
+            <field name="name">LOGYCA / INVESTIGACIÓN</field>
+            <field name="code">4</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_platform5" model="helpdesk.platform">
+            <field name="name">LOGYCA / EDUCACIÓN</field>
+            <field name="code">5</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_platform6" model="helpdesk.platform">
+            <field name="name">LOGYCA / ESTÁNDARES</field>
+            <field name="code">6</field>
+            <field name="active">True</field>
+        </record>
+        <record id="helpdesk_platform7" model="helpdesk.platform">
+            <field name="name">LOGYCA / MEMBRESÍAS</field>
+            <field name="code">7</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>
