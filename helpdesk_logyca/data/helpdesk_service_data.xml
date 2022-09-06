@@ -10,6 +10,67 @@
             <field name="name">Agotados</field>
             <field name="code">2</field>
             <field name="active">True</field>
+            <field name="platform_id" ref="helpdesk_logyca.helpdesk_platform2"/>
+        </record>
+        <record id="helpdesk_service3" model="helpdesk.service">
+            <field name="name">Identificación</field>
+            <field name="code">3</field>
+            <field name="active">True</field>
+            <field name="platform_id" ref="helpdesk_logyca.helpdesk_platform1"/>
+        </record>
+        <record id="helpdesk_service4" model="helpdesk.service">
+            <field name="name">Librería</field>
+            <field name="code">4</field>
+            <field name="active">True</field>
+            <field name="platform_id" ref="helpdesk_logyca.helpdesk_platform1"/>
+        </record>
+        <record id="helpdesk_service5" model="helpdesk.service">
+            <field name="name">Captura de Datos</field>
+            <field name="code">5</field>
+            <field name="active">True</field>
+            <field name="platform_id" ref="helpdesk_logyca.helpdesk_platform1"/>
+        </record>
+        <record id="helpdesk_service6" model="helpdesk.service">
+            <field name="name">Negociación</field>
+            <field name="code">6</field>
+            <field name="active">True</field>
+            <field name="platform_id" ref="helpdesk_logyca.helpdesk_platform1"/>
+        </record>
+        <record id="helpdesk_service7" model="helpdesk.service">
+            <field name="name">Trazabilidad</field>
+            <field name="code">7</field>
+            <field name="active">True</field>
+            <field name="platform_id" ref="helpdesk_logyca.helpdesk_platform1"/>
+        </record>
+        <record id="helpdesk_service8" model="helpdesk.service">
+            <field name="name">Excelencia Calidad de Datos</field>
+            <field name="code">8</field>
+            <field name="active">True</field>
+            <field name="platform_id" ref="helpdesk_logyca.helpdesk_platform1"/>
+        </record>
+        <record id="helpdesk_service9" model="helpdesk.service">
+            <field name="name">Visual Proveedores</field>
+            <field name="code">9</field>
+            <field name="active">True</field>
+            <field name="platform_id" ref="helpdesk_logyca.helpdesk_platform2"/>
+        </record>
+        <record id="helpdesk_service10" model="helpdesk.service">
+            <field name="name">Visual Cadenas</field>
+            <field name="code">10</field>
+            <field name="active">True</field>
+            <field name="platform_id" ref="helpdesk_logyca.helpdesk_platform2"/>
+        </record>
+        <record id="helpdesk_service11" model="helpdesk.service">
+            <field name="name">Nivel de Servicio</field>
+            <field name="code">11</field>
+            <field name="active">True</field>
+            <field name="platform_id" ref="helpdesk_logyca.helpdesk_platform2"/>
+        </record>
+        <record id="helpdesk_service12" model="helpdesk.service">
+            <field name="name">Proyectos Personalizados</field>
+            <field name="code">12</field>
+            <field name="active">True</field>
+            <field name="platform_id" ref="helpdesk_logyca.helpdesk_platform2"/>
         </record>
     </data>
 </odoo>

@@ -4,11 +4,10 @@ from odoo import api, fields, models, tools, _
 from odoo.exceptions import UserError, AccessError, ValidationError
 
 
-class HelpdeskService(models.Model):
-    _name = 'helpdesk.service'
-    _description = 'Helpdesk Service'
+class HelpdeskPlatform(models.Model):
+    _name = 'helpdesk.platform'
+    _description = 'Helpdesk Platform'
 
     name = fields.Char('Name')
     code = fields.Char('Code')
     active = fields.Boolean('Active', default=True)
-    platform_id = fields.Many2one('helpdesk.platform', string='Platform')
