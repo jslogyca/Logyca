@@ -97,24 +97,22 @@ class comercial_report(models.TransientModel):
                 dps.name AS "ESTADO DE CARTERA",
                 to_char(am.x_estimated_payment_date,'YYYY/MM/DD') AS "FECHA PROGRAMACIÓN PAGO"
             FROM   account_move am
+                INNER JOIN account_move_line aml on aml.move_id = am.id
                 INNER JOIN res_company cc on cc.id=am.company_id
                 LEFT JOIN account_analytic_account aaa ON aaa.id = am.analytic_account_id 
-                INNER JOIN account_payment_term apt on apt.id = am.invoice_payment_term_id
-                inner join crm_team t on t.id=am.team_id
+                LEFT JOIN account_payment_term apt on apt.id = am.invoice_payment_term_id
+                LEFT join crm_team t on t.id=am.team_id
                 LEFT JOIN debtor_portfolio_status dps on dps.id=am.x_debtor_portfolio_status_id
                 LEFT JOIN res_partner rp ON rp.id = am.partner_id
                 LEFT JOIN res_partner rpp ON rpp.id = rp.parent_id
                 LEFT JOIN res_users ru ON ru.id = am.invoice_user_id
-                LEFT JOIN res_partner rppp ON ru.partner_id = rppp.id,
-                account_move_line aml, product_product pp, product_template pt 
-            WHERE 
-                pp.product_tmpl_id = pt.id
-                and aml.product_id= pp.id
-                and am.id = aml.move_id  
-                and am.state='posted' 
-                and am.type='out_invoice'
+                LEFT JOIN res_partner rppp ON ru.partner_id = rppp.id
+                LEFT JOIN product_product pp ON pp.id=aml.product_id
+                LEFT JOIN product_template pt ON pp.product_tmpl_id = pt.id
+            WHERE am.state='posted' 
+                and am.type in ('out_invoice', 'entry')
                 and (am.invoice_payment_state='not_paid' or am.invoice_payment_state='in_payment')
-                and (am.name LIKE 'FEC%' or am.name LIKE 'FAC%' or am.name LIKE 'FAM%')
+                and (am.name LIKE 'FEC%' or am.name LIKE 'FAC%' or am.name LIKE 'FAM%' or am.name LIKE 'CXC%')
         '''  + str(self.where())
         
         logging.info(query)
