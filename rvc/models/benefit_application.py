@@ -1128,33 +1128,48 @@ class BenefitApplication(models.Model):
         return template
     
     def action_generate_digital_cards(self):
-        self.qr_generation()
-        self.image_generation()
+        for i,card in enumerate(self.digital_card_ids, start=0):
+            self.image_generation(card,i)
         
-    
-    def image_generation(self):
+
+    def image_generation(self, card, i):
         from PIL import Image,ImageFont, ImageDraw
-        
-        base_image = get_module_resource('rvc', 'static/img/digital_cards_tmpl/1.jpg')
-        font = ImageFont.truetype("Arial", 15)
+        from io import BytesIO
 
-        base_image.text((10, 25), "world", font=font)
+        #TODO: hacer un switch para cada tipo de servicio 
+        base_image_path = get_module_resource('rvc', 'static/img/digital_cards_tmpl/3.jpg')
+
+        image = Image.open(base_image_path)
+        font = ImageFont.truetype(get_module_resource('rvc', 'static/font/arial.ttf'), 16)
+
+        image2 = Image.open((BytesIO(self.qr_generation(card))))
+        (width, height) = (160, 160)
+        im_resized = image2.resize((width, height), Image.ANTIALIAS)
+
+        image.paste(im_resized, (166,134))
+
+        image_editable = ImageDraw.Draw(image)
+        image_editable.text((130, 366), str.upper(card.partner_name), font=font, fill="#0000")
+        image_editable.text((130, 446), str.upper(card.contact_name), font=font, fill="#0000")
+        image_editable.text((130, 526), str.upper(card.contact_mobile), font=font, fill="#0000")
+        image_editable.text((130, 606), str.upper(card.street), font=font, fill="#0000")
+        image_editable.text((130, 686), str.upper(card.offered_service_id.name), font=font, fill="#0000")
+        edited = image.save(f'tmp{i}.JPEG')
+
+        buffered = BytesIO(edited)
+        image.save(buffered, format="JPEG", quality=100, optimize=True, progressive=True)
+        img_str = base64.b64encode(buffered.getvalue())
+        self.digital_card_ids[i].digital_card_img = img_str
+
+    def qr_generation(self, card):
+        name = card.contact_name
+        home_phone = card.contact_mobile
+        work_phone = card.contact_mobile
+        email = card.contact_email
+        enterprise = card.partner_name
+        url = card.url_website
+
+        url = f"https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3a{name}%0d%0aTEL%3bHOME%3bVOICE%3a{home_phone}%0d%0aTEL%3bWORK%3bVOICE%3a{work_phone}%0d%0aEMAIL%3a{email}%0d%0aORG%3a{enterprise}%0d%0aURL%3a{url}%0d%0aEND%3aVCARD"
         img = base64.b64encode(requests.get(url).content)
-        self.digital_card_ids[0].digital_card_img = img 
-
-    def qr_generation(self):
-
-        for card in self.digital_card_ids:
-                  
-            name = card.contact_name
-            home_phone = card.contact_mobile
-            work_phone = card.contact_mobile
-            email = card.contact_email
-            enterprise = card.partner_name
-            url = card.url_website
-        
-            # url = "https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3aJuan+Se%0d%0aTEL%3bHOME%3bVOICE%3a3103826667%0d%0aTEL%3bWORK%3bVOICE%3a3103826667%0d%0aEMAIL%3ajsocampo.com%0d%0aORG%3aLOGYCA%0d%0aURL%3awww.logyca.com%0d%0aEND%3aVCARD"
-        
-            url = f"https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3a{name}%0d%0aTEL%3bHOME%3bVOICE%3a{home_phone}%0d%0aTEL%3bWORK%3bVOICE%3a{work_phone}%0d%0aEMAIL%3a{email}%0d%0aORG%3a{enterprise}%0d%0aURL%3a{url}%0d%0aEND%3aVCARD"
-            img = base64.b64encode(requests.get(url).content)
-            card.qr_code = img 
+        card.qr_code = img
+        return requests.get(url).content
