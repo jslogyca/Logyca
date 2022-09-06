@@ -7,3 +7,4 @@ from . import helpdesk_service
 from . import helpdesk_ticket_subtype
 from . import helpdesk_ticket
 from . import helpdesk_ticket_type
+from . import sla_helpdesk_report

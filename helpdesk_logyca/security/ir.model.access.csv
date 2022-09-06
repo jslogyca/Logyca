@@ -6,3 +6,4 @@ access_helpdesk_service,helpdesk.service,model_helpdesk_service,,1,1,1,1
 account_helpdesk_ticket_sub_type,helpdesk.ticket.sub.type,model_helpdesk_ticket_sub_type,helpdesk.group_helpdesk_user,1,1,1,1
 access_helpdesk_ticket_sub_type,helpdesk.ticket.sub.type,model_helpdesk_ticket_sub_type,,1,1,1,1
 access_helpdesk_platform,helpdesk.platform,model_helpdesk_platform,,1,1,1,1
+access_sla_helpdesk_report,sla.helpdesk.report,model_sla_helpdesk_report,,1,1,1,1

@@ -11,10 +11,13 @@ class HelpdeskTicket(models.Model):
     def _get_vinculation(self):
         for help in self:
             if help.partner_id:
-                for vinculation_id in help.partner_id.x_type_vinculation:
-                    print('VINCULACIO', vinculation_id)
-                    help.x_type_vinculation = vinculation_id.id
-                help.vinculation = True
+                if help.partner_id.x_type_vinculation:
+                    for vinculation_id in help.partner_id.x_type_vinculation:
+                        help.x_type_vinculation = vinculation_id.id
+                    help.vinculation = True
+                else:
+                    help.x_type_vinculation = 12
+                    help.vinculation = True
             else:
                 help.vinculation = True
 
@@ -30,3 +33,16 @@ class HelpdeskTicket(models.Model):
                                     ("sale","Sale")], string='Desk Type', default='support')    
     x_type_vinculation = fields.Many2one('logyca.vinculation_types', string='Tipo de vinculación')
     vinculation = fields.Boolean(compute='_get_vinculation', string='Vinculation')
+
+    def _get_vinculation_by_ticket(self, ticket):
+        if ticket:
+            if ticket.partner_id:
+                if ticket.partner_id.x_type_vinculation:
+                    for vinculation_id in ticket.partner_id.x_type_vinculation:
+                        ticket.x_type_vinculation = vinculation_id.id
+                    ticket.vinculation = True
+                else:
+                    ticket.x_type_vinculation = 12
+                    ticket.vinculation = True
+            else:
+                ticket.vinculation = True
