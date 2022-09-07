@@ -1134,14 +1134,12 @@ class BenefitApplication(models.Model):
             self.image_generation(card,i)
 
     def image_generation(self, card, i):
-        from PIL import Image,ImageFont, ImageDraw
+        from PIL import Image, ImageDraw
         from io import BytesIO
 
-        service_offered_str =  self.get_banner_digital_card(card.offered_service_id.name)
-        logging.info("service_offered_str --->" + str(service_offered_str))
+        service_offered_banner =  self.get_banner_digital_card(card.offered_service_id.name)
         service_len = len(card.offered_service_id.name)
-        base_image_path = get_module_resource('rvc', f'static/img/digital_cards_tmpl/{service_offered_str}.jpg')
-        logging.info("card ==>" + str(base_image_path))
+        base_image_path = get_module_resource('rvc', f'static/img/digital_cards_tmpl/{service_offered_banner}.jpg')
         image = Image.open(base_image_path)
 
         image2 = Image.open((BytesIO(self.qr_generation(card))))
@@ -1151,26 +1149,19 @@ class BenefitApplication(models.Model):
         # pasting barcode image over digital card
         image.paste(im_resized, (166,134))
         
-        if service_len >= 60:
-            wrapped = textwrap.wrap(str.upper(card.offered_service_id.name), width=36, max_lines=2) 
-        elif service_len >= 40:
-            wrapped = textwrap.wrap(str.upper(card.offered_service_id.name), width=26, max_lines=2)
-        else:
-            wrapped = textwrap.wrap(str.upper(card.offered_service_id.name), width=28, max_lines=2)  
-
-        font = ImageFont.truetype(get_module_resource('rvc', 'static/font/arial.ttf'), 17)
-        if len(wrapped) >= 2:
-            font_a = ImageFont.truetype(get_module_resource('rvc', 'static/font/arial.ttf'), 14)
-        else:
-            font_a = font
-        result = '\n'.join(wrapped)
+        enterprise_name, enterprise_font, ent_txt_padding = self.get_text_style(card.partner_name)
+        contact_name, contact_name_font, name_txt_padding = self.get_text_style(str.upper(card.contact_name))
+        contact_mobile, contact_mobile_font, mob_txt_padding = self.get_text_style(str.upper(card.contact_mobile))
+        contact_mobile, contact_mobile_font, mob_txt_padding = self.get_text_style(str.upper(card.contact_mobile))
+        contact_street, contact_street_font, st_txt_padding = self.get_text_style(str.upper(card.street))
+        service_offered, service_offered_font, srv_txt_padding = self.get_text_style(str.upper(card.offered_service_id.name))
         
         image_editable = ImageDraw.Draw(image)
-        image_editable.text((130, 366), str.upper(card.partner_name), font=font, fill="#0000")
-        image_editable.text((130, 446), str.upper(card.contact_name), font=font, fill="#0000")
-        image_editable.text((130, 526), str.upper(card.contact_mobile), font=font, fill="#0000")
-        image_editable.text((130, 606), str.upper(card.street), font=font, fill="#0000")
-        image_editable.text((130, 673), result, font=font_a, fill="#0000")
+        image_editable.text((125, 366-ent_txt_padding), enterprise_name, font=enterprise_font, fill="#0000")
+        image_editable.text((125, 446-name_txt_padding), contact_name, font=contact_name_font, fill="#0000")
+        image_editable.text((125, 526-mob_txt_padding), contact_mobile, font=contact_mobile_font, fill="#0000")
+        image_editable.text((125, 606-st_txt_padding), contact_street, font=contact_street_font, fill="#0000")
+        image_editable.text((125, 686-srv_txt_padding), service_offered, font=service_offered_font, fill="#0000")
         edited = image.save(f'tmp{i}.JPEG')
 
         buffered = BytesIO(edited)
@@ -1192,11 +1183,10 @@ class BenefitApplication(models.Model):
         img = base64.b64encode(requests.get(url).content)
         card.qr_code = img
         return requests.get(url).content
-    
+
     def get_banner_digital_card(self, service):
-        logging.info("service ==> " + str(service))
         food = ['Alimentos y bebidas']
-        health = ['Hospitalaria y farmaceutica','Salud y belleza']
+        health = ['Hospitalaria y farmacéutica','Salud y belleza']
         clothes = ['Calzado, maletas, bolsos y estuches','Indumentaria, textiles y accesorios']
         tools = ['Construcción y servicios relacionados','Equipos electricos e iluminación',
                  'Maquinaria, herramientas y equipos industriales','Metalurgia, quimicos , caucho y plasticos',
@@ -1226,3 +1216,24 @@ class BenefitApplication(models.Model):
         if service in services:
             return 6
         return 0 #others
+
+    def get_text_style(self, text):
+        from PIL import ImageFont
+        txt_padding = 0
+
+        if len(text) >= 60:
+            wrapped = textwrap.wrap(str.upper(text), width=33, max_lines=2)
+        elif len(text) >= 40 or len(text) >= 30:
+            wrapped = textwrap.wrap(str.upper(text), width=26, max_lines=2)
+        else:
+            wrapped = textwrap.wrap(str.upper(text), width=33, max_lines=2)
+
+        font = ImageFont.truetype(get_module_resource('rvc', 'static/font/arial.ttf'), 17)
+
+        if len(wrapped) >= 2:
+            font = ImageFont.truetype(get_module_resource('rvc', 'static/font/arial.ttf'), 15)
+            txt_padding = 8
+
+        text = '\n'.join(wrapped)
+
+        return text, font, txt_padding
