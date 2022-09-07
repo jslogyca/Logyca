@@ -14,6 +14,7 @@ import re
 import requests
 import logging
 import uuid
+import textwrap
 
 _logger = logging.getLogger(__name__)
 
@@ -1128,32 +1129,48 @@ class BenefitApplication(models.Model):
         return template
     
     def action_generate_digital_cards(self):
+        
         for i,card in enumerate(self.digital_card_ids, start=0):
             self.image_generation(card,i)
-        
 
     def image_generation(self, card, i):
         from PIL import Image,ImageFont, ImageDraw
         from io import BytesIO
 
-        #TODO: hacer un switch para cada tipo de servicio 
-        base_image_path = get_module_resource('rvc', 'static/img/digital_cards_tmpl/3.jpg')
-
+        service_offered_str =  self.get_banner_digital_card(card.offered_service_id.name)
+        logging.info("service_offered_str --->" + str(service_offered_str))
+        service_len = len(card.offered_service_id.name)
+        base_image_path = get_module_resource('rvc', f'static/img/digital_cards_tmpl/{service_offered_str}.jpg')
+        logging.info("card ==>" + str(base_image_path))
         image = Image.open(base_image_path)
-        font = ImageFont.truetype(get_module_resource('rvc', 'static/font/arial.ttf'), 16)
 
         image2 = Image.open((BytesIO(self.qr_generation(card))))
         (width, height) = (160, 160)
         im_resized = image2.resize((width, height), Image.ANTIALIAS)
 
+        # pasting barcode image over digital card
         image.paste(im_resized, (166,134))
+        
+        if service_len >= 60:
+            wrapped = textwrap.wrap(str.upper(card.offered_service_id.name), width=36, max_lines=2) 
+        elif service_len >= 40:
+            wrapped = textwrap.wrap(str.upper(card.offered_service_id.name), width=26, max_lines=2)
+        else:
+            wrapped = textwrap.wrap(str.upper(card.offered_service_id.name), width=28, max_lines=2)  
 
+        font = ImageFont.truetype(get_module_resource('rvc', 'static/font/arial.ttf'), 17)
+        if len(wrapped) >= 2:
+            font_a = ImageFont.truetype(get_module_resource('rvc', 'static/font/arial.ttf'), 14)
+        else:
+            font_a = font
+        result = '\n'.join(wrapped)
+        
         image_editable = ImageDraw.Draw(image)
         image_editable.text((130, 366), str.upper(card.partner_name), font=font, fill="#0000")
         image_editable.text((130, 446), str.upper(card.contact_name), font=font, fill="#0000")
         image_editable.text((130, 526), str.upper(card.contact_mobile), font=font, fill="#0000")
         image_editable.text((130, 606), str.upper(card.street), font=font, fill="#0000")
-        image_editable.text((130, 686), str.upper(card.offered_service_id.name), font=font, fill="#0000")
+        image_editable.text((130, 673), result, font=font_a, fill="#0000")
         edited = image.save(f'tmp{i}.JPEG')
 
         buffered = BytesIO(edited)
@@ -1162,7 +1179,8 @@ class BenefitApplication(models.Model):
         self.digital_card_ids[i].digital_card_img = img_str
 
     def qr_generation(self, card):
-        name = card.contact_name
+        import unidecode
+        name = unidecode.unidecode(card.contact_name)
         home_phone = card.contact_mobile
         work_phone = card.contact_mobile
         email = card.contact_email
@@ -1170,6 +1188,41 @@ class BenefitApplication(models.Model):
         url = card.url_website
 
         url = f"https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3a{name}%0d%0aTEL%3bHOME%3bVOICE%3a{home_phone}%0d%0aTEL%3bWORK%3bVOICE%3a{work_phone}%0d%0aEMAIL%3a{email}%0d%0aORG%3a{enterprise}%0d%0aURL%3a{url}%0d%0aEND%3aVCARD"
+        url = url.encode('utf-8')
         img = base64.b64encode(requests.get(url).content)
         card.qr_code = img
         return requests.get(url).content
+    
+    def get_banner_digital_card(self, service):
+        logging.info("service ==> " + str(service))
+        food = ['Alimentos y bebidas']
+        health = ['Hospitalaria y farmaceutica','Salud y belleza']
+        clothes = ['Calzado, maletas, bolsos y estuches','Indumentaria, textiles y accesorios']
+        tools = ['Construcción y servicios relacionados','Equipos electricos e iluminación',
+                 'Maquinaria, herramientas y equipos industriales','Metalurgia, quimicos , caucho y plasticos',
+                 'Muebles y mobiliario','Piezas de vehículos y transportes']
+        stores = ['Animales vivos y productos para mascotas',
+                  'Arte y manualidades, instrumentos musicales y entretenimiento',
+                  'Artículos de oficina y escolares, empaque y equipos de servicios',
+                  'Artículos deportivos','Electronicos','Juegos y juguetes',
+                  'Suministros para el hogar, jardín y materiales de construcción']
+        services = ['Bienes raíces, alquiler y arrendamiento','Servicios comerciales y profesionales',
+                    'Servicios de arte, entretenimiento y recreación','Servicios de educación Y capacitación',
+                    'Servicios de informática y comunicación','Servicios de transporte y logística',
+                    'Servicios financieros','Servicios públicos y de gestión ambiental',
+                    'Servicios relacionados con el turismo y los viajes','Tecnologías de información y comunicación',
+                    'Servicios sociales y relacionados con la salud'
+                    ]
+        if service in food:
+            return 4
+        if service in health:
+            return 5
+        if service in clothes:
+            return 2
+        if service in tools:
+            return 3
+        if service in stores:
+            return 1
+        if service in services:
+            return 6
+        return 0 #others

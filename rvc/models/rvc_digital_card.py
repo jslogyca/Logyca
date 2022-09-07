@@ -44,5 +44,4 @@ class rvc_digital_card(models.Model):
     @api.depends('postulation_id')
     def _partner_name(self):
         for digital_card in self:
-            #TODO: probar la linea siguiente
-            digital_card.partner_name = self.postulation_id.name.split('-')[0].strip()
+            digital_card.partner_name = self.postulation_id.partner_id.partner_id.name

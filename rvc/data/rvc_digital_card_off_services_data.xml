@@ -14,15 +14,15 @@
             <field name="active">1</field>
         </record>
         <record id="offered_service_4" model="rvc.digital.card.offered.service">
-            <field name="name">Articulos de oficina y escolares, empaque y equipo de servicios</field>
+            <field name="name">Artículos de oficina y escolares, empaque y equipos de servicios</field>
             <field name="active">1</field>
         </record>
         <record id="offered_service_5" model="rvc.digital.card.offered.service">
-            <field name="name">Articulos deportivos</field>
+            <field name="name">Artículos deportivos</field>
             <field name="active">1</field>
         </record>
         <record id="offered_service_6" model="rvc.digital.card.offered.service">
-            <field name="name">Bienes raíces,alquiler y arrendamiento</field>
+            <field name="name">Bienes raíces, alquiler y arrendamiento</field>
             <field name="active">1</field>
         </record>
         <record id="offered_service_7" model="rvc.digital.card.offered.service">
