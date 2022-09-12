@@ -1127,11 +1127,36 @@ class BenefitApplication(models.Model):
         logging.info(f"==> create_OM_attachment 5 {data_id.ids}")
         template.attachment_ids = [(6, 0, [data_id.id])]
         return template
-    
+
     def action_generate_digital_cards(self):
-        
+        cards_list = []
+
         for i,card in enumerate(self.digital_card_ids, start=0):
-            self.image_generation(card,i)
+            digital_card = self.image_generation(card,i)
+            cards_list.append(digital_card)
+
+        return cards_list
+
+    def send_digital_cards_bearer(self, template):
+        if self.digital_card_ids:
+            counter = 0
+            cards = self.action_generate_digital_cards()
+
+            for i,digital_card in enumerate(self.digital_card_ids, start=1):
+                ir_values = {
+                    'name': f"Tarjeta_digital_{i}.JPEG",
+                    'type': 'binary',
+                    'datas': cards[counter],
+                    'store_fname': f"Tarjeta_digital_{i}.JPEG",
+                    'mimetype': 'image/jpeg',
+                }
+                attach_id = self.env['ir.attachment'].create(ir_values)
+                logging.info(" Attachment ===> "+ str(attach_id.name))
+                counter += 1
+                template.attachment_ids = [(6, 0, [attach_id.id])]
+                template.auto_delete = True
+                template.send_mail(self.id, force_send=True)
+                attach_id.unlink()
 
     def image_generation(self, card, i):
         from PIL import Image, ImageDraw
@@ -1142,20 +1167,21 @@ class BenefitApplication(models.Model):
         base_image_path = get_module_resource('rvc', f'static/img/digital_cards_tmpl/{service_offered_banner}.jpg')
         image = Image.open(base_image_path)
 
+        # generating QR image
         image2 = Image.open((BytesIO(self.qr_generation(card))))
         (width, height) = (160, 160)
         im_resized = image2.resize((width, height), Image.ANTIALIAS)
 
-        # pasting barcode image over digital card
+        # pasting QR barcode image over digital card
         image.paste(im_resized, (166,134))
-        
+
         enterprise_name, enterprise_font, ent_txt_padding = self.get_text_style(card.partner_name)
         contact_name, contact_name_font, name_txt_padding = self.get_text_style(str.upper(card.contact_name))
         contact_mobile, contact_mobile_font, mob_txt_padding = self.get_text_style(str.upper(card.contact_mobile))
         contact_mobile, contact_mobile_font, mob_txt_padding = self.get_text_style(str.upper(card.contact_mobile))
         contact_street, contact_street_font, st_txt_padding = self.get_text_style(str.upper(card.street))
         service_offered, service_offered_font, srv_txt_padding = self.get_text_style(str.upper(card.offered_service_id.name))
-        
+
         image_editable = ImageDraw.Draw(image)
         image_editable.text((125, 366-ent_txt_padding), enterprise_name, font=enterprise_font, fill="#0000")
         image_editable.text((125, 446-name_txt_padding), contact_name, font=contact_name_font, fill="#0000")
@@ -1168,6 +1194,9 @@ class BenefitApplication(models.Model):
         image.save(buffered, format="JPEG", quality=100, optimize=True, progressive=True)
         img_str = base64.b64encode(buffered.getvalue())
         self.digital_card_ids[i].digital_card_img = img_str
+        image.close()
+        image2.close()
+        return img_str
 
     def qr_generation(self, card):
         import unidecode

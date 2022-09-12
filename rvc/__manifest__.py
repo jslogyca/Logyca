@@ -28,6 +28,7 @@
         'data/notify_colabora_benefit_template.xml',
         'data/welcome_kit_codes_benefit_template.xml',
         'data/welcome_kit_colabora_benefit_template.xml',
+        'data/welcome_kit_digital_card_benefit_template.xml',
         'data/logyca_contact_types_data.xml',
         'data/cron_send_welcome_kit.xml',
         'data/cron_mark_benefit_as_rejected.xml',
@@ -57,7 +58,5 @@
         'views/rvc_digital_card_views.xml',
     ],
     'qweb': [
-    ],
-    'external_dependencies': {"python" : ["PIL"]}
-
+    ]
 }
