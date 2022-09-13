@@ -8,8 +8,7 @@ from odoo.addons.helpdesk.models.helpdesk_ticket import TICKET_PRIORITY
 class SLAHelpdeskReport(models.Model):
     _name = 'sla.helpdesk.report'
     _description = "SLA Status"
-    _auto = False
-    _order = 'create_date DESC'
+    order = 'create_date DESC'
 
     id = fields.Integer('ID')
     ticket_id = fields.Many2one('helpdesk.ticket', string='Ticket', readonly=True)
