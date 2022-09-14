@@ -28,10 +28,12 @@
         'data/notify_colabora_benefit_template.xml',
         'data/welcome_kit_codes_benefit_template.xml',
         'data/welcome_kit_colabora_benefit_template.xml',
+        'data/welcome_kit_digital_card_benefit_template.xml',
         'data/logyca_contact_types_data.xml',
         'data/cron_send_welcome_kit.xml',
         'data/cron_mark_benefit_as_rejected.xml',
         'data/cron_benefit_expiration_reminder.xml',
+        'data/rvc_digital_card_off_services_data.xml',
         'security/ir.model.access.csv',
         'wizard/rvc_import_file_wizard_view.xml',
         'wizard/rvc_import_file_sponsored_wizard_view.xml',
@@ -52,7 +54,8 @@
         'views/report_rvc_bienv_codes_template.xml',
         'views/report_rvc_bienv_colabora_template.xml',
         'views/accept_benefit_template.xml',
-        'views/reject_benefit_template.xml'
+        'views/reject_benefit_template.xml',
+        'views/rvc_digital_card_views.xml',
     ],
     'qweb': [
     ]

@@ -22,7 +22,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
         if benefit_application:
             partner=self.env['res.partner'].search([('id','=',benefit_application.partner_id.partner_id.id)])
             if partner and benefit_application.contact_email:
-                
+
                 # notificar Derechos de Identificación
                 if benefit_application.product_id.code == '01':
                     access_link = partner._notify_get_action_link('view')
@@ -30,7 +30,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     subject = "Beneficio Derechos de Identificación"
                     template.with_context(url=access_link).send_mail(benefit_application.id, force_send=False, email_values={'subject': subject})
                     benefit_application.write({'state': 'notified', 'notification_date': datetime.now()})
-                
+
                 # notificar Logyca/colabora para los que tienen GLN
                 elif benefit_application.product_id.code == '02' and benefit_application._validate_gln():
                     access_link = partner._notify_get_action_link('view')
@@ -82,10 +82,11 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
                 elif benefit_application.product_id.benefit_type == 'colabora':
                     template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+                elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
+                    template = self.env.ref('rvc.mail_template_welcome_kit_digital_card_rvc')
 
                 # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
                 if benefit_application.origin != 'odoo':
-                    logging.info(f"==> origen es: {benefit_application.origin}")
                     template= benefit_application.create_OM_attachment(template)
                 else:
                     template.attachment_ids = False
@@ -119,17 +120,18 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     if benefit_application.assign_colabora():
                         benefit_application.assign_credentials_colabora()
 
-                # Actualizar Contacto y Empresa
+                elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
+                    benefit_application.send_digital_cards_bearer(template)
+
+                #Actualizar Contacto y Empresa
                 benefit_application.update_contact(benefit_application.partner_id)
                 if benefit_application.parent_id:
                     benefit_application.update_company(benefit_application)
 
-
-
                 benefit_application.write({'state': 'done'})
             else:
                 raise ValidationError(_('La empresa seleccionada no tiene email.'))
-            
+
         return {'type': 'ir.actions.act_window_close'}
 
     def action_re_done(self):
@@ -150,8 +152,10 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
                 elif benefit_application.product_id.benefit_type == 'colabora':
                     template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+                elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
+                    template = self.env.ref('rvc.mail_template_welcome_kit_digital_card_rvc')
 
-                # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
+                # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo
                 if benefit_application.origin != 'odoo':
                     template= benefit_application.create_OM_attachment(template)
                 else:
@@ -164,6 +168,10 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 except:
                     benefit_application.message_post(body=_(\
                     'No se pudo <strong>REENVIAR</strong></u> el kit de bienvenida del beneficio %s.' % str(benefit_application.product_id.benefit_type)))
+
+                #Enviando tarjetas
+                if benefit_application.product_id.benefit_type == 'tarjeta_digital':
+                    benefit_application.send_digital_cards_bearer(template)
             else:
                 raise ValidationError(_('La empresa seleccionada no tiene email.'))
 

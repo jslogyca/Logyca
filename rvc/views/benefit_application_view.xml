@@ -13,10 +13,14 @@
 				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 				 	<button name="action_forward_done" type="object" states="done" string="Enviar Kit Nuevamente" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 					<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-                    <button name="action_new_credentials" type="object" states="done" string="Re-Asignar Credenciales" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+                    <button name="action_generate_digital_cards" type="object" states="confirm" string="Generar Tarjetas Digitales" class="oe_highlight"
+                        groups="rvc.group_rvc_manager" attrs="{'invisible': [('benefit_type','!=','tarjeta_digital')]}"/>
+                    <button name="action_new_credentials" type="object" string="Re-Asignar Credenciales" class="oe_highlight" groups="rvc.group_rvc_manager"
+                        attrs="{'invisible': ['|',['benefit_type','not in',('colabora','codigos')],['state','!=','done']]}"/>
 					<button name="action_reactivate" type="object" states="rejected,cancel" string="Re-activar Postulación" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />
-					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary" attrs="{'invisible': ['|','|','|',('id','=', False),('state','=','rejected'),('state','=','cancel'),('state','=','done')]}" groups="rvc.group_rvc_manager"/>
+					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary"
+                     attrs="{'invisible': ['|','|','|',('id','=', False),('state','=','rejected'),('state','=','cancel'),('state','=','done')]}" groups="rvc.group_rvc_manager"/>
 				</header>			
 				<sheet>
                     <h1>Postulación a Beneficio RVC</h1>
@@ -35,6 +39,8 @@
                             <field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos'))], 'readonly': [('state','=','done')]}" />
                             <field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
 							<field name="end_date_colabora" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
+                            <field name="offered_service_id" attrs="{'invisible': [('benefit_type','!=','tarjeta_digital')], 'readonly': [('state','=','done')]}"/>
+                            <field name="partner_address" attrs="{'invisible': [('benefit_type','!=','tarjeta_digital')], 'readonly': [('state','=','done')]}"/>
                             <br/><br/>
                             <h2 style="color:#666666" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}">Cantidad Códigos</h2>
                             <br/>
@@ -42,6 +48,22 @@
                             <field name="glns_codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
                             <field name="invoice_codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
                         </group>
+					</group>
+					<group name="digital_cards" string="Tarjetas Digitales" attrs="{'invisible': [('benefit_type','!=','tarjeta_digital')]}" 
+                    col="1" colspan="12">
+                        <div class="small">
+                            Haga clic sobre la tarjeta para ver su información completa.
+                        </div><br/>
+                        <field name="digital_card_ids" nolabel="1"
+                            context="{'default_offered_service_id': offered_service_id, 'default_street': partner_address, 'default_partner_vat': vat}">
+                            <tree>
+                                <field name="contact_name"/>
+                                <field name="contact_email"/>
+                                <field name="contact_mobile"/>
+                                <field name="offered_service_id"/>
+                                <field name="digital_card_img" readonly="1" widget="download"/>
+                            </tree>
+                        </field>
 					</group>
 					<group>
 						<group string="Halonador">

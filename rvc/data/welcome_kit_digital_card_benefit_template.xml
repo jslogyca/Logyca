@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="mail_template_welcome_kit_digital_card_rvc" model="mail.template">
+            <field name="name">TARJETA DE PRESENTACIÓN DIGITAL LOGYCA- COLOMBIA PRODUCTIVA</field>
+            <field name="model_id" ref="rvc.model_benefit_application"/>
+            <field name="subject">TARJETA DE PRESENTACIÓN DIGITAL LOGYCA- COLOMBIA PRODUCTIVA</field>
+            <field name="email_from">${(object.company_id.email or '')}</field>
+            <field name="email_to">${(object.contact_email|safe)}</field>
+            <field name="body_html" type="html">
+               <p>Estimado/a usuario,</p>
+               <p>El equipo LOGYCA le hace entrega de la Tarjeta de presentación digital 
+                  que solicitó a través de COLOMBIA PRODUCTIVA. Desde ya puede empezar
+                   a compartirla con sus clientes y aliados.</p>
+               <p>Recuerde que esta tarjeta contiene los datos de contacto suministrados 
+                  en el formulario. Al escanear el QR la persona podrá guardar su número 
+                  de contacto y ver la información del nombre de la empresa, nombre de 
+                  contacto y el enlaces que lo direccionan a las redes sociales de su empresa.
+               </p><br></br>
+               <p>Cordial saludo.</p>
+            </field>
+            <field name="lang">${object.lang}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+    </data>
+</odoo>

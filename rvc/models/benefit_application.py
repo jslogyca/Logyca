@@ -4,6 +4,8 @@ from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError, UserError
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, date, timedelta
+from odoo.modules.module import get_module_resource
+
 import base64
 import time
 import locale
@@ -12,6 +14,7 @@ import re
 import requests
 import logging
 import uuid
+import textwrap
 
 _logger = logging.getLogger(__name__)
 
@@ -39,7 +42,8 @@ class BenefitApplication(models.Model):
     invoice_codes_quantity = fields.Integer('Códigos Recaudo', track_visibility='onchange')
     benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
                                     ('colabora', 'Colabora'),
-                                    ('analitica', 'Analítica')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
+                                    ('analitica', 'Analítica'),
+                                    ('tarjeta_digital', 'Tarjeta Digital')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
     colabora_level = fields.Char(string='Nivel', track_visibility="onchange")
     end_date_colabora = fields.Date(string='Fecha Fin Colabora', track_visibility='onchange')
     acceptance_date = fields.Datetime(string='Fecha/Hora Aceptación', track_visibility='onchange', readonly=True)
@@ -59,6 +63,11 @@ class BenefitApplication(models.Model):
     codes_count = fields.Integer(string='Contador Códigos', compute="_compute_codes_count")
     message_ids = fields.One2many(groups="rvc.group_rvc_manager")
     activity_ids = fields.One2many(groups="rvc.group_rvc_manager")
+    offered_service_id = fields.Many2one('rvc.digital.card.offered.service',
+        string='Servicio Ofrecido', help="Servicio que ofrece la empresa")
+    partner_address = fields.Char('Dirección Empresa')
+    digital_card_ids = fields.One2many('rvc.digital.card', 'postulation_id', string='Tarjetas Digitales')
+
 
     #technical fields
     benefit_name = fields.Selection(string="Nombre Beneficio", related='product_id.benefit_type', store=True, help="Technical field used for easy quering")
@@ -71,15 +80,6 @@ class BenefitApplication(models.Model):
                                     readonly=True,
                                     help="Este campo permite diferenciar las postulaciones RVC que provienen de Odoo, Tienda Virtual y ChatBot.")
 
-    #se usa para ocultar los campos técnicos de los filtros y agrupaciones
-    # @api.model
-    # def fields_get(self, allfields=None, attributes=None):
-    #     res = super(BenefitApplication, self).fields_get(allfields, attributes)
-    #     fields_to_hide = ['benefit_name']
-    #     for field in fields_to_hide:
-    #         res[field]['selectable'] = False  # disable field visible in filter
-    #         res[field]['sortable'] = False  # disable field visible in grouping
-    #     return res
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]
@@ -308,7 +308,7 @@ class BenefitApplication(models.Model):
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/EmpresaGln/"
             else:
-                url = "https://asctestdocker.azurewebsites.net/codes/EmpresaGln/"
+                url = "https://app-asc-dev.azurewebsites.net/codes/EmpresaGln/"
 
             payload = {'nit': str(self.vat)}
 
@@ -376,7 +376,7 @@ class BenefitApplication(models.Model):
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
             else:
-                url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+                url = "https://app-asc-dev.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
 
             response = requests.get(url)
             if response.status_code == 200:
@@ -401,7 +401,7 @@ class BenefitApplication(models.Model):
         if query_result['value'] == 'https://logyca.odoo.com':
             url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(vat))
         else:
-            url = "https://asctestdocker.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(vat))
+            url = "https://app-asc-dev.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(vat))
 
         response = requests.get(url)
 
@@ -451,7 +451,7 @@ class BenefitApplication(models.Model):
         if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_assignate = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/assignate/"
         else:
-            url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
+            url_assignate = "https://app-asc-dev.azurewebsites.net/codes/assignate/"
 
         body_assignate = json.dumps({
             "AgreementName":"",
@@ -485,7 +485,7 @@ class BenefitApplication(models.Model):
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url_mark = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/mark/"
             else:
-                url_mark = "https://asctestdocker.azurewebsites.net/codes/mark/"            
+                url_mark = "https://app-asc-dev.azurewebsites.net/codes/mark/"
 
             body_mark = json.dumps({
                 "Nit": self.vat,
@@ -529,7 +529,7 @@ class BenefitApplication(models.Model):
         if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_assignate = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/assignate/"
         else:
-            url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"        
+            url_assignate = "https://app-asc-dev.azurewebsites.net/codes/assignate/"
 
         body_assignate = json.dumps({
             "AgreementName":"",
@@ -578,7 +578,7 @@ class BenefitApplication(models.Model):
         if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_assignate = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/assignate/"
         else:
-            url_assignate = "https://asctestdocker.azurewebsites.net/codes/assignate/"
+            url_assignate = "https://app-asc-dev.azurewebsites.net/codes/assignate/"
 
         body_assignate = json.dumps({
             "AgreementName":"",
@@ -1127,3 +1127,141 @@ class BenefitApplication(models.Model):
         logging.info(f"==> create_OM_attachment 5 {data_id.ids}")
         template.attachment_ids = [(6, 0, [data_id.id])]
         return template
+
+    def action_generate_digital_cards(self):
+        cards_list = []
+
+        for i,card in enumerate(self.digital_card_ids, start=0):
+            digital_card = self.image_generation(card,i)
+            cards_list.append(digital_card)
+
+        return cards_list
+
+    def send_digital_cards_bearer(self, template):
+        if self.digital_card_ids:
+            counter = 0
+            cards = self.action_generate_digital_cards()
+
+            for i,digital_card in enumerate(self.digital_card_ids, start=1):
+                ir_values = {
+                    'name': f"Tarjeta_digital_{i}.JPEG",
+                    'type': 'binary',
+                    'datas': cards[counter],
+                    'store_fname': f"Tarjeta_digital_{i}.JPEG",
+                    'mimetype': 'image/jpeg',
+                }
+                attach_id = self.env['ir.attachment'].create(ir_values)
+                logging.info(" Attachment ===> "+ str(attach_id.name))
+                counter += 1
+                template.attachment_ids = [(6, 0, [attach_id.id])]
+                template.auto_delete = True
+                template.send_mail(self.id, force_send=True)
+                attach_id.unlink()
+
+    def image_generation(self, card, i):
+        from PIL import Image, ImageDraw
+        from io import BytesIO
+
+        service_offered = card.offered_service_id.name if card.offered_service_id else self.offered_service_id.name
+        service_offered_banner =  self.get_banner_digital_card(service_offered)
+        service_len =  len(service_offered)
+        base_image_path = get_module_resource('rvc', f'static/img/digital_cards_tmpl/{service_offered_banner}.jpg')
+        image = Image.open(base_image_path)
+
+        # generating QR image
+        image2 = Image.open((BytesIO(self.qr_generation(card))))
+        (width, height) = (160, 160)
+        im_resized = image2.resize((width, height), Image.ANTIALIAS)
+
+        # pasting QR barcode image over digital card
+        image.paste(im_resized, (166,134))
+
+        enterprise_name, enterprise_font, ent_txt_padding = self.get_text_style(card.partner_name)
+        contact_name, contact_name_font, name_txt_padding = self.get_text_style(str.upper(card.contact_name))
+        contact_mobile, contact_mobile_font, mob_txt_padding = self.get_text_style(str.upper(card.contact_mobile))
+        contact_mobile, contact_mobile_font, mob_txt_padding = self.get_text_style(str.upper(card.contact_mobile))
+        contact_street, contact_street_font, st_txt_padding = self.get_text_style(str.upper(card.street))
+        service_offered, service_offered_font, srv_txt_padding = self.get_text_style(str.upper(service_offered))
+
+        image_editable = ImageDraw.Draw(image)
+        image_editable.text((125, 366-ent_txt_padding), enterprise_name, font=enterprise_font, fill="#0000")
+        image_editable.text((125, 446-name_txt_padding), contact_name, font=contact_name_font, fill="#0000")
+        image_editable.text((125, 526-mob_txt_padding), contact_mobile, font=contact_mobile_font, fill="#0000")
+        image_editable.text((125, 606-st_txt_padding), contact_street, font=contact_street_font, fill="#0000")
+        image_editable.text((125, 686-srv_txt_padding), service_offered, font=service_offered_font, fill="#0000")
+        edited = image.save(f'tmp{i}.JPEG')
+
+        buffered = BytesIO(edited)
+        image.save(buffered, format="JPEG", quality=100, optimize=True, progressive=True)
+        img_str = base64.b64encode(buffered.getvalue())
+        self.digital_card_ids[i].digital_card_img = img_str
+        image.close()
+        image2.close()
+        return img_str
+
+    def qr_generation(self, card):
+        import unidecode
+        name = unidecode.unidecode(card.contact_name)
+        home_phone = card.contact_mobile
+        work_phone = card.contact_mobile
+        email = card.contact_email
+        enterprise = card.partner_name
+        url = card.url_website
+
+        url = f"https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3a{name}%0d%0aTEL%3bHOME%3bVOICE%3a{home_phone}%0d%0aTEL%3bWORK%3bVOICE%3a{work_phone}%0d%0aEMAIL%3a{email}%0d%0aORG%3a{enterprise}%0d%0aURL%3a{url}%0d%0aEND%3aVCARD"
+        url = url.encode('utf-8')
+        img = base64.b64encode(requests.get(url).content)
+        card.qr_code = img
+        return requests.get(url).content
+
+    def get_banner_digital_card(self, service):
+        food = ['Alimentos y bebidas']
+        health = ['Hospitalaria y farmacéutica','Salud y belleza']
+        clothes = ['Calzado, maletas, bolsos y estuches','Indumentaria, textiles y accesorios']
+        tools = ['Construcción y servicios relacionados','Equipos electricos e iluminación',
+                 'Maquinaria, herramientas y equipos industriales','Metalurgia, quimicos , caucho y plasticos',
+                 'Muebles y mobiliario','Piezas de vehículos y transportes']
+        stores = ['Animales vivos y productos para mascotas',
+                  'Arte y manualidades, instrumentos musicales y entretenimiento',
+                  'Artículos de oficina y escolares, empaque y equipos de servicios',
+                  'Artículos deportivos','Electronicos','Juegos y juguetes',
+                  'Suministros para el hogar, jardín y materiales de construcción']
+        services = ['Bienes raíces, alquiler y arrendamiento','Servicios comerciales y profesionales',
+                    'Servicios de arte, entretenimiento y recreación','Servicios de educación Y capacitación',
+                    'Servicios de informática y comunicación','Servicios de transporte y logística',
+                    'Servicios financieros','Servicios públicos y de gestión ambiental',
+                    'Servicios relacionados con el turismo y los viajes','Tecnologías de información y comunicación',
+                    'Servicios sociales y relacionados con la salud'
+                    ]
+        if service in food:
+            return 4
+        if service in health:
+            return 5
+        if service in clothes:
+            return 2
+        if service in tools:
+            return 3
+        if service in stores:
+            return 1
+        if service in services:
+            return 6
+        return 0 #others
+
+    def get_text_style(self, text):
+        from PIL import ImageFont
+        txt_padding = 0
+
+        if len(text) >= 60:
+            wrapped = textwrap.wrap(str.upper(text), width=33, max_lines=2)
+        else:
+            wrapped = textwrap.wrap(str.upper(text), width=28, max_lines=2)
+
+        font = ImageFont.truetype(get_module_resource('rvc', 'static/font/arial.ttf'), 17)
+
+        if len(wrapped) >= 2:
+            font = ImageFont.truetype(get_module_resource('rvc', 'static/font/arial.ttf'), 15)
+            txt_padding = 8
+
+        text = '\n'.join(wrapped)
+
+        return text, font, txt_padding
