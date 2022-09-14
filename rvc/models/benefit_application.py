@@ -1162,8 +1162,9 @@ class BenefitApplication(models.Model):
         from PIL import Image, ImageDraw
         from io import BytesIO
 
-        service_offered_banner =  self.get_banner_digital_card(card.offered_service_id.name)
-        service_len = len(card.offered_service_id.name)
+        service_offered = card.offered_service_id.name if card.offered_service_id else self.offered_service_id.name
+        service_offered_banner =  self.get_banner_digital_card(service_offered)
+        service_len =  len(service_offered)
         base_image_path = get_module_resource('rvc', f'static/img/digital_cards_tmpl/{service_offered_banner}.jpg')
         image = Image.open(base_image_path)
 
@@ -1180,7 +1181,7 @@ class BenefitApplication(models.Model):
         contact_mobile, contact_mobile_font, mob_txt_padding = self.get_text_style(str.upper(card.contact_mobile))
         contact_mobile, contact_mobile_font, mob_txt_padding = self.get_text_style(str.upper(card.contact_mobile))
         contact_street, contact_street_font, st_txt_padding = self.get_text_style(str.upper(card.street))
-        service_offered, service_offered_font, srv_txt_padding = self.get_text_style(str.upper(card.offered_service_id.name))
+        service_offered, service_offered_font, srv_txt_padding = self.get_text_style(str.upper(service_offered))
 
         image_editable = ImageDraw.Draw(image)
         image_editable.text((125, 366-ent_txt_padding), enterprise_name, font=enterprise_font, fill="#0000")
@@ -1252,10 +1253,8 @@ class BenefitApplication(models.Model):
 
         if len(text) >= 60:
             wrapped = textwrap.wrap(str.upper(text), width=33, max_lines=2)
-        elif len(text) >= 40 or len(text) >= 30:
-            wrapped = textwrap.wrap(str.upper(text), width=26, max_lines=2)
         else:
-            wrapped = textwrap.wrap(str.upper(text), width=33, max_lines=2)
+            wrapped = textwrap.wrap(str.upper(text), width=28, max_lines=2)
 
         font = ImageFont.truetype(get_module_resource('rvc', 'static/font/arial.ttf'), 17)
 

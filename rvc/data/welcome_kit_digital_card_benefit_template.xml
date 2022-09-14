@@ -8,10 +8,10 @@
             <field name="email_from">${(object.company_id.email or '')}</field>
             <field name="email_to">${(object.contact_email|safe)}</field>
             <field name="body_html" type="html">
-               <p>Estimado/a usuario,</p><br></br>
+               <p>Estimado/a usuario,</p>
                <p>El equipo LOGYCA le hace entrega de la Tarjeta de presentación digital 
                   que solicitó a través de COLOMBIA PRODUCTIVA. Desde ya puede empezar
-                   a compartirla con sus clientes y aliados.</p><br></br>
+                   a compartirla con sus clientes y aliados.</p>
                <p>Recuerde que esta tarjeta contiene los datos de contacto suministrados 
                   en el formulario. Al escanear el QR la persona podrá guardar su número 
                   de contacto y ver la información del nombre de la empresa, nombre de 
