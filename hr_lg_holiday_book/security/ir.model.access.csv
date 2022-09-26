@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_holiday_book_employee,hr.holiday.book.employee,model_hr_holiday_book_employee,hr_lg_holiday_book.group_manager_technical_holidays,1,1,1,1
+access_hr_holiday_book_ajust,hr.holiday.book.ajust,model_hr_holiday_book_ajust,hr_lg_holiday_book.group_manager_technical_holidays,1,1,1,1
+access_hr_holiday_book_report_wizard,hr.holiday.book.report.wizard,model_hr_holiday_book_report_wizard,hr_lg_holiday_book.group_manager_technical_holidays,1,1,1,1

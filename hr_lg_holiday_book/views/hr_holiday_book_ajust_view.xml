@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_holiday_book_ajust_form" model="ir.ui.view">
+        <field name="name">hr.holiday.book.ajust.form</field>
+        <field name="model">hr.holiday.book.ajust</field>
+        <field name="arch" type="xml">
+            <form string="Holiday Book Ajust" edit="false" create="false">
+                <sheet>
+                    <group col="4">
+                        <field name="name" required="1"/>
+                        <field name="days_ajust" required="1"/>
+                        <field name="date" required="1"/>
+                        <field name="book_id" required="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_holiday_book_ajust_tree" model="ir.ui.view">
+        <field name="name">hr.holiday.book.ajust.tree</field>
+        <field name="model">hr.holiday.book.ajust</field>
+        <field name="arch" type="xml">
+            <tree string="Holiday Book Ajust" >
+                <field name="name" />
+                <field name="days_ajust" />
+                <field name="date" />
+                <field name="book_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_holiday_book_ajust" model="ir.actions.act_window">
+        <field name="name">Holiday Book Ajust</field>
+        <field name="res_model">hr.holiday.book.ajust</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="hr_holiday_book_ajust_tree"/>
+    </record>
+
+    <menuitem
+        id="account_menu_holiday_book_ajust"
+        name="Holiday Book Ajust"
+        action="action_hr_holiday_book_ajust"
+        parent="hr_lg_holiday_book.menu_holiday_book_employee_parent"
+        sequence="3" />
+</odoo>

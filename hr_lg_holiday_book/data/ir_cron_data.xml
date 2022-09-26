@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<odoo>
+    <record id="hr_holiday_book_employee_cron" model="ir.cron">
+        <field name="name">Create Book Holidays</field>
+        <field name="model_id" ref="model_hr_contract"/>
+        <field name="state">code</field>
+        <field name="code">model.create_book_holidays('2022-02-16')</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="True"/>
+    </record>
+    <record id="hr_holiday_book_update_cron" model="ir.cron">
+        <field name="name">Update Book Holidays</field>
+        <field name="model_id" ref="model_hr_holiday_book_employee"/>
+        <field name="state">code</field>
+        <field name="code">model.update_book_holidays(False)</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="True"/>
+    </record>
+</odoo>

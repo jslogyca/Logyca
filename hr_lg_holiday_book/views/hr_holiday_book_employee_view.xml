@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_holiday_book_employee_form" model="ir.ui.view">
+        <field name="name">hr.holiday.book.employee.form</field>
+        <field name="model">hr.holiday.book.employee</field>
+        <field name="arch" type="xml">
+            <form string="Holiday Book" create="false" edit="false"> 
+            <header>
+                <button name="update_book_holidays_byid" type="object" string="Calcular" class="oe_highlight"/>
+            </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <span>Book Holiday</span>
+                        </h1>
+                        <h1 class="mt0" >
+                            <field name="name" force_save="1" readonly="1" placeholder="JRNL/2016/00001"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id" force_save="1" readonly="1"/>
+                            <field name="contract_id" force_save="1" readonly="1"/>
+                            <field name="date_start" />
+                            <field name="date_end" />
+                        </group>
+                        <group>
+                            <field name="holiday_pending" force_save="1" readonly="1"/>
+                            <field name="holiday_done" force_save="1" readonly="1"/>
+                            <field name="active"/>
+                            <field name="company_id" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Holidays Done">
+                            <h4><label for="leave_done_ids"/></h4>
+                            <field name="leave_done_ids"  nolabel="1" />
+                            <h4><label for="leave_na_ids"/></h4>
+                            <field name="leave_na_ids" nolabel="1"/>
+                            <h4><label for="leave_ajust_ids"/></h4>
+                            <field name="leave_ajust_ids" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_holiday_book_employee_tree" model="ir.ui.view">
+        <field name="name">hr.holiday.book.employee.tree</field>
+        <field name="model">hr.holiday.book.employee</field>
+        <field name="arch" type="xml">
+            <tree string="Holiday Book" create="false" edit="false">
+                <field name="name" />
+                <field name="employee_id"/>
+                <field name="date_start"/>
+                <field name="holiday_pending" sum="Total Pend"/>
+                <field name="holiday_done" sum="Total Done"/>
+                <field name="active" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="holiday_book_employee_pivot" model="ir.ui.view">
+        <field name="name">hr.holiday.book.employee.tree.pivot</field>
+        <field name="model">hr.holiday.book.employee</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <pivot string="Book Employee Holiday">
+                <field name="employee_id" type="row"/>
+                <field name="contract_id" type="row"/>
+                <field name="holiday_pending" type="measure"/>
+                <field name="holiday_done" type="measure"/>
+            </pivot>
+        </field>
+    </record>    
+
+    <record id="action_holiday_book_employee" model="ir.actions.act_window">
+        <field name="name">Holiday Book</field>
+        <field name="res_model">hr.holiday.book.employee</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="context">{
+            'search_default_contract_id': [active_id],
+            'default_contract_id': active_id,
+        }</field>
+    </record>    
+
+    <record id="action_hr_holiday_book_employee" model="ir.actions.act_window">
+        <field name="name">Holiday Book</field>
+        <field name="res_model">hr.holiday.book.employee</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="view_id" ref="hr_holiday_book_employee_tree"/>
+    </record>
+
+    <menuitem
+        id="menu_holiday_book_employee_parent"
+        name="Holiday Book"
+        parent="hr_holidays.menu_hr_holidays_report"
+        sequence="11"/>
+
+    <menuitem
+        id="menu_holiday_book_employee"
+        name="Holiday Book Employee"
+        action="action_hr_holiday_book_employee"
+        parent="hr_lg_holiday_book.menu_holiday_book_employee_parent"
+        sequence="30"/>
+</odoo>
