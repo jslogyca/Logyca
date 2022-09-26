@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_holiday_book_report_wizard_view" model="ir.ui.view">
+        <field name="name">hr.holiday.book.report.wizard.form</field>
+        <field name="model">hr.holiday.book.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date_to" required="1"/>
+                            <field name="company_id" required="1"/>
+                        </group>
+                        <group>
+                            <field name="employee_ids" 
+                            widget="many2many_tags"
+                            />
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Generar" name="do_report" type="object" default_focus="1" class="oe_highlight"/>
+                    <button string="Cancelar" special="cancel" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_holiday_book_report_wizard_view" model="ir.actions.act_window">
+        <field name="name">Reporte Vacaciones</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.holiday.book.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="hr_holiday_book_report_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_hr_holiday_book_report_wizard"
+        name="Reporte Vacaciones"
+        parent="hr_lg_holiday_book.menu_holiday_book_employee_parent"
+        action="action_hr_holiday_book_report_wizard_view"
+        sequence="32" />
+</odoo>

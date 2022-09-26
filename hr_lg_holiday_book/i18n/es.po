@@ -1,0 +1,377 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_co_mc_holiday_book
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-26 20:14+0000\n"
+"PO-Revision-Date: 2022-05-26 15:16-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: co\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. module: l10n_co_mc_holiday_book
+#: model_terms:ir.ui.view,arch_db:l10n_co_mc_holiday_book.hr_holiday_book_employee_form
+msgid "<span>Book Holiday</span>"
+msgstr "Libro de Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_ajust__book_id
+msgid "Book"
+msgstr "Libro de Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model_terms:ir.ui.view,arch_db:l10n_co_mc_holiday_book.holiday_book_employee_pivot
+msgid "Book Employee Holiday"
+msgstr "Libro de Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_leave_type__book_holiday
+msgid "Book Holiday"
+msgstr "Libro de Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__contract_id
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_leave__contract_id
+msgid "Contract"
+msgstr "Contrato"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.actions.server,name:l10n_co_mc_holiday_book.hr_holiday_book_employee_cron_ir_actions_server
+#: model:ir.cron,cron_name:l10n_co_mc_holiday_book.hr_holiday_book_employee_cron
+#: model:ir.cron,name:l10n_co_mc_holiday_book.hr_holiday_book_employee_cron
+msgid "Create Book Holidays"
+msgstr "Crear Libro de Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_ajust__create_uid
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_ajust__create_date
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_ajust__date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_contract__display_name
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_ajust__display_name
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__display_name
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_leave__display_name
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_leave_type__display_name
+msgid "Display Name"
+msgstr "Nombre Público"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__employee_id
+msgid "Employee"
+msgstr "Empleado"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model,name:l10n_co_mc_holiday_book.model_hr_contract
+msgid "Employee Contract"
+msgstr "Contrato del Empleado"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__date_end
+msgid "End Date"
+msgstr "Fecha de Finalización"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,help:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__date_end
+msgid "End date of the contract (if it's a fixed-term contract)."
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_channel_ids
+msgid "Followers (Channels)"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields.selection,name:l10n_co_mc_holiday_book.selection__hr_leave_type__book_holiday__holiday
+msgid "Holiday"
+msgstr "Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.actions.act_window,name:l10n_co_mc_holiday_book.action_holiday_book_employee
+#: model:ir.actions.act_window,name:l10n_co_mc_holiday_book.action_hr_holiday_book_employee
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_contract__holiday_book_id
+#: model:ir.ui.menu,name:l10n_co_mc_holiday_book.menu_holiday_book_employee_parent
+#: model_terms:ir.ui.view,arch_db:l10n_co_mc_holiday_book.hr_contract_view_form_book
+#: model_terms:ir.ui.view,arch_db:l10n_co_mc_holiday_book.hr_holiday_book_employee_form
+#: model_terms:ir.ui.view,arch_db:l10n_co_mc_holiday_book.hr_holiday_book_employee_tree
+msgid "Holiday Book"
+msgstr "Libro de Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.actions.act_window,name:l10n_co_mc_holiday_book.action_hr_holiday_book_ajust
+#: model:ir.model,name:l10n_co_mc_holiday_book.model_hr_holiday_book_ajust
+#: model:ir.ui.menu,name:l10n_co_mc_holiday_book.account_menu_holiday_book_ajust
+#: model_terms:ir.ui.view,arch_db:l10n_co_mc_holiday_book.hr_holiday_book_ajust_form
+#: model_terms:ir.ui.view,arch_db:l10n_co_mc_holiday_book.hr_holiday_book_ajust_tree
+msgid "Holiday Book Ajust"
+msgstr "Ajustes Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_contract__holiday_book_count
+msgid "Holiday Book Count"
+msgstr "Libro de Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model,name:l10n_co_mc_holiday_book.model_hr_holiday_book_employee
+#: model:ir.ui.menu,name:l10n_co_mc_holiday_book.menu_holiday_book_employee
+msgid "Holiday Book Employee"
+msgstr "Libro de Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields.selection,name:l10n_co_mc_holiday_book.selection__hr_leave_type__book_holiday__other_holiday
+msgid "Holiday Other"
+msgstr "Otros Ausencias"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields.selection,name:l10n_co_mc_holiday_book.selection__hr_leave_type__book_holiday__holiday_pay
+msgid "Holiday Pay"
+msgstr "Vacaciones Pagas"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_ajust__days_ajust
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__leave_ajust_ids
+msgid "Holidays Ajust"
+msgstr "Ajustes Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__holiday_done
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__leave_done_ids
+#: model_terms:ir.ui.view,arch_db:l10n_co_mc_holiday_book.hr_holiday_book_employee_form
+msgid "Holidays Done"
+msgstr "Vacaciones Disfrutadas"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__leave_na_ids
+msgid "Holidays Na"
+msgstr "No Aplica para Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__holiday_pending
+msgid "Holidays Pending"
+msgstr "Vacaciones Pendientes"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_contract__id
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_ajust__id
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__id
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_leave__id
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_leave_type__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,help:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_needaction
+#: model:ir.model.fields,help:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_unread
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,help:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_has_error
+#: model:ir.model.fields,help:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model_terms:ir.ui.view,arch_db:l10n_co_mc_holiday_book.hr_holiday_book_employee_form
+msgid "JRNL/2016/00001"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_contract____last_update
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_ajust____last_update
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee____last_update
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_leave____last_update
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_leave_type____last_update
+msgid "Last Modified on"
+msgstr "Última Modificación el"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_ajust__write_uid
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_ajust__write_date
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:res.groups,name:l10n_co_mc_holiday_book.group_manager_technical_holidays
+msgid "Manager Technical Holidays"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_ajust__name
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields.selection,name:l10n_co_mc_holiday_book.selection__hr_leave_type__book_holiday__na
+msgid "No Apply"
+msgstr "No Aplica"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields.selection,name:l10n_co_mc_holiday_book.selection__hr_leave_type__book_holiday__na_holidays
+msgid "Not Holiday"
+msgstr "No Aplica para Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,help:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,help:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,help:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_unread_counter
+msgid "Number of unread messages"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__date_start
+msgid "Start Date"
+msgstr "Fecha de Incio"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,help:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__date_start
+msgid "Start date of the contract."
+msgstr "Fecha de Incio"
+
+#. module: l10n_co_mc_holiday_book
+#: code:addons/l10n_co_mc_holiday_book/models/hr_leave.py:0
+#, python-format
+msgid "The employee %s is not contract active"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model,name:l10n_co_mc_holiday_book.model_hr_leave
+msgid "Time Off"
+msgstr "Ausencias"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model,name:l10n_co_mc_holiday_book.model_hr_leave_type
+msgid "Time Off Type"
+msgstr "Tipo de ausencia"
+
+#. module: l10n_co_mc_holiday_book
+#: model_terms:ir.ui.view,arch_db:l10n_co_mc_holiday_book.hr_holiday_book_employee_tree
+msgid "Total Done"
+msgstr "Total de Días"
+
+#. module: l10n_co_mc_holiday_book
+#: model_terms:ir.ui.view,arch_db:l10n_co_mc_holiday_book.hr_holiday_book_employee_tree
+msgid "Total Pend"
+msgstr "Vacaciones Pendientes"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_unread
+msgid "Unread Messages"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.actions.server,name:l10n_co_mc_holiday_book.hr_holiday_book_update_cron_ir_actions_server
+#: model:ir.cron,cron_name:l10n_co_mc_holiday_book.hr_holiday_book_update_cron
+#: model:ir.cron,name:l10n_co_mc_holiday_book.hr_holiday_book_update_cron
+msgid "Update Book Holidays"
+msgstr "Actualizar Libro de Vacaciones"
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,field_description:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: l10n_co_mc_holiday_book
+#: model:ir.model.fields,help:l10n_co_mc_holiday_book.field_hr_holiday_book_employee__website_message_ids
+msgid "Website communication history"
+msgstr ""
