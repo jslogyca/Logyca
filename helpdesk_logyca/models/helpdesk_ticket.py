@@ -11,15 +11,25 @@ class HelpdeskTicket(models.Model):
     def _get_vinculation(self):
         for help in self:
             if help.partner_id:
-                if help.partner_id.x_type_vinculation:
-                    for vinculation_id in help.partner_id.x_type_vinculation:
-                        help.x_type_vinculation = vinculation_id.id
-                    help.vinculation = True
-                else:
-                    help.x_type_vinculation = 12
-                    help.vinculation = True
+                if help.partner_id.parent_id:
+                    if help.partner_id.parent_id.x_type_vinculation:
+                        for vinculation_id in help.partner_id.parent_id.x_type_vinculation:
+                            help.write({'x_type_vinculation': 10})
+                        help.write({'vinculation': True})
+                    else:
+                        help.write({'x_type_vinculation': 1})
+                        help.write({'vinculation': True})
+                else:                
+                    if help.partner_id.x_type_vinculation:
+                        for vinculation_id in help.partner_id.x_type_vinculation:
+                            help.x_type_vinculation = vinculation_id.id
+                        help.vinculation = True
+                    else:
+                        help.x_type_vinculation = 12
+                        help.vinculation = True
             else:
                 help.vinculation = True
+            self.env.cr.commit()
 
     vat_partner = fields.Char(related='partner_id.vat')
     station_id = fields.Many2one('helpdesk.station', string='Station')
@@ -28,7 +38,7 @@ class HelpdeskTicket(models.Model):
     service_id = fields.Many2one('helpdesk.service', string='Service')
     platform_id = fields.Many2one('helpdesk.platform', string='Platform')
     subtype_id = fields.Many2one('helpdesk.ticket.sub.type', string='Sub Type')
-    type_desk = fields.Selection([("pqrs","PQRS (Peticiones, Quejas, Reclamo, Solucitudes y Felicitaciones)"),
+    type_desk = fields.Selection([("pqrs","PQRSF (Peticiones, Quejas, Reclamo, Solucitudes y Felicitaciones)"),
                                     ("support","Support"),
                                     ("sale","Sale")], string='Desk Type', default='support')    
     x_type_vinculation = fields.Many2one('logyca.vinculation_types', string='Tipo de vinculación')
@@ -37,12 +47,24 @@ class HelpdeskTicket(models.Model):
     def _get_vinculation_by_ticket(self, ticket):
         if ticket:
             if ticket.partner_id:
-                if ticket.partner_id.x_type_vinculation:
-                    for vinculation_id in ticket.partner_id.x_type_vinculation:
-                        ticket.x_type_vinculation = vinculation_id.id
-                    ticket.vinculation = True
-                else:
-                    ticket.x_type_vinculation = 12
-                    ticket.vinculation = True
+                if ticket.partner_id.parent_id:
+                    if ticket.partner_id.parent_id.x_type_vinculation:
+                        for vinculation_id in ticket.partner_id.parent_id.x_type_vinculation:
+                            ticket.write({'x_type_vinculation': 10})
+                            self.env.cr.commit()
+                        ticket.write({'vinculation': True})
+                    else:
+                        ticket.write({'x_type_vinculation': 1})
+                        ticket.write({'vinculation': True})
+                        self.env.cr.commit()
+                else:                
+                    if ticket.partner_id.x_type_vinculation:
+                        for vinculation_id in ticket.partner_id.x_type_vinculation:
+                            ticket.x_type_vinculation = vinculation_id.id
+                        ticket.vinculation = True
+                        self.env.cr.commit()
+                    else:
+                        ticket.x_type_vinculation = 12
+                        ticket.vinculation = True
             else:
                 ticket.vinculation = True
