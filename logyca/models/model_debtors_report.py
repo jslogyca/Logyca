@@ -112,7 +112,7 @@ class comercial_report(models.TransientModel):
             WHERE am.state='posted' 
                 and am.type in ('out_invoice', 'entry')
                 and (am.invoice_payment_state='not_paid' or am.invoice_payment_state='in_payment')
-                and (am.name LIKE 'FEC%' or am.name LIKE 'FAC%' or am.name LIKE 'FAM%' or am.name LIKE 'CXC%')
+                and (am.name LIKE 'FEC%' or am.name LIKE 'FAC%' or am.name LIKE 'FAM%' or am.name LIKE 'CXC%' or am.name LIKE 'FSIV%')
         '''  + str(self.where())
         
         logging.info(query)
