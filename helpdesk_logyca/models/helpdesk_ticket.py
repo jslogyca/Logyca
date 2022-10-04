@@ -12,23 +12,33 @@ class HelpdeskTicket(models.Model):
         for help in self:
             if help.partner_id:
                 if help.partner_id.parent_id:
+                    miembro = False
                     if help.partner_id.parent_id.x_type_vinculation:
                         for vinculation_id in help.partner_id.parent_id.x_type_vinculation:
-                            help.x_type_vinculation = 10
-                        help.vinculation = True
+                            if miembro:
+                                continue
+                            help.write({'x_type_vinculation': vinculation_id.id})
+                            if vinculation_id.id == 1:
+                                miembro = True
+                        help.write({'vinculation': True})
                     else:
-                        help.x_type_vinculation = 1
-                        help.vinculation = True
-                else:                
+                        help.write({'x_type_vinculation': 12})
+                        help.write({'vinculation': True})
+                else:
                     if help.partner_id.x_type_vinculation:
+                        miembro = False
                         for vinculation_id in help.partner_id.x_type_vinculation:
-                            help.x_type_vinculation = vinculation_id.id
-                        help.vinculation = True
+                            if miembro:
+                                continue
+                            help.write({'x_type_vinculation': vinculation_id.id})
+                            if vinculation_id.id == 1:
+                                miembro = True
+                        help.write({'vinculation': True})
                     else:
-                        help.x_type_vinculation = 12
-                        help.vinculation = True
+                        help.write({'x_type_vinculation': 12})
+                        help.write({'vinculation': True})
             else:
-                help.vinculation = True
+                help.write({'vinculation': True})
 
     vat_partner = fields.Char(related='partner_id.vat')
     station_id = fields.Many2one('helpdesk.station', string='Station')
@@ -47,20 +57,30 @@ class HelpdeskTicket(models.Model):
         if ticket:
             if ticket.partner_id:
                 if ticket.partner_id.parent_id:
+                    miembro = False
                     if ticket.partner_id.parent_id.x_type_vinculation:
                         for vinculation_id in ticket.partner_id.parent_id.x_type_vinculation:
-                            ticket.write({'x_type_vinculation': 10})
+                            if miembro:
+                                continue
+                            ticket.write({'x_type_vinculation': vinculation_id.id})
+                            if vinculation_id.id == 1:
+                                miembro = True                            
                         ticket.write({'vinculation': True})
                     else:
-                        ticket.write({'x_type_vinculation': 1})
+                        ticket.write({'x_type_vinculation': 12})
                         ticket.write({'vinculation': True})
                 else:                
                     if ticket.partner_id.x_type_vinculation:
+                        miembro = False
                         for vinculation_id in ticket.partner_id.x_type_vinculation:
-                            ticket.x_type_vinculation = vinculation_id.id
-                        ticket.vinculation = True
+                            if miembro:
+                                continue                            
+                            ticket.write({'x_type_vinculation': vinculation_id.id})
+                            if vinculation_id.id == 1:
+                                miembro = True                            
+                        ticket.write({'vinculation': True})
                     else:
-                        ticket.x_type_vinculation = 12
-                        ticket.vinculation = True
+                        ticket.write({'x_type_vinculation': 12})
+                        ticket.write({'vinculation': True})
             else:
-                ticket.vinculation = True
+                ticket.write({'vinculation': True})
