@@ -7,7 +7,7 @@ from odoo.exceptions import UserError, AccessError, ValidationError
 class HelpdeskTicket(models.Model):
     _inherit = 'helpdesk.ticket'
 
-    @api.depends('vinculation', 'x_type_vinculation', 'company_id',)
+    @api.depends('vinculation', 'x_type_vinculation', 'company_id')
     def _get_vinculation(self):
         for help in self:
             if help.partner_id:
@@ -17,28 +17,28 @@ class HelpdeskTicket(models.Model):
                         for vinculation_id in help.partner_id.parent_id.x_type_vinculation:
                             if miembro:
                                 continue
-                            help.write({'x_type_vinculation': vinculation_id.id})
+                            help.x_type_vinculation = vinculation_id.id
                             if vinculation_id.id == 1:
                                 miembro = True
-                        help.write({'vinculation': True})
+                        help.vinculation = True
                     else:
-                        help.write({'x_type_vinculation': 12})
-                        help.write({'vinculation': True})
+                        help.x_type_vinculation = 12
+                        help.vinculation = True
                 else:
                     if help.partner_id.x_type_vinculation:
                         miembro = False
                         for vinculation_id in help.partner_id.x_type_vinculation:
                             if miembro:
                                 continue
-                            help.write({'x_type_vinculation': vinculation_id.id})
+                            help.x_type_vinculation = vinculation_id.id
                             if vinculation_id.id == 1:
                                 miembro = True
-                        help.write({'vinculation': True})
+                        help.vinculation = True
                     else:
-                        help.write({'x_type_vinculation': 12})
-                        help.write({'vinculation': True})
+                        help.x_type_vinculation = 12
+                        help.vinculation = True
             else:
-                help.write({'vinculation': True})
+                help.vinculation = True
 
     vat_partner = fields.Char(related='partner_id.vat')
     station_id = fields.Many2one('helpdesk.station', string='Station')
