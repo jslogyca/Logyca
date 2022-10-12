@@ -59,7 +59,7 @@ class BenefitApplication(models.Model):
     access_token = fields.Char('Token', default=_default_access_token, help="Token de acceso para aceptar beneficio desde el correo")
     historical_record = fields.Boolean('Registro histórico',
                                        help="Si es verdadero, este registro es de cargue histórico, es decir, no se hizo en Odoo sino que se cargó tiempo después.")
-    send_kit_with_no_benefit = fields.Boolean('Enviar kit sin activar beneficio', "En el caso en que el beneficio haya sido activado manualmente, esta opción \
+    send_kit_with_no_benefit = fields.Boolean('Enviar kit sin activar beneficio', help="En el caso en que el beneficio haya sido activado manualmente, esta opción \
         cuando está checkeada permite enviar el kit de bienvenida sin activar el beneficio RVC.")
     reminder_count = fields.Integer('Recordatorios', track_visibility='onchange')
     codes_count = fields.Integer(string='Contador Códigos', compute="_compute_codes_count")
