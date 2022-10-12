@@ -9,7 +9,7 @@ class SLAHelpdeskReport(models.Model):
     _name = 'sla.helpdesk.report'
     _description = "SLA Status"
     _auto = False
-    order = 'create_date DESC'
+    _order = 'create_date DESC'
 
     id = fields.Integer('ID')
     ticket_id = fields.Many2one('helpdesk.ticket', string='Ticket', readonly=True)
