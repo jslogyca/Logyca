@@ -59,6 +59,8 @@ class BenefitApplication(models.Model):
     access_token = fields.Char('Token', default=_default_access_token, help="Token de acceso para aceptar beneficio desde el correo")
     historical_record = fields.Boolean('Registro histórico',
                                        help="Si es verdadero, este registro es de cargue histórico, es decir, no se hizo en Odoo sino que se cargó tiempo después.")
+    send_kit_with_no_benefit = fields.Boolean('Enviar kit sin activar beneficio', "En el caso en que el beneficio haya sido activado manualmente, esta opción \
+        cuando está checkeada permite enviar el kit de bienvenida sin activar el beneficio RVC.")
     reminder_count = fields.Integer('Recordatorios', track_visibility='onchange')
     codes_count = fields.Integer(string='Contador Códigos', compute="_compute_codes_count")
     message_ids = fields.One2many(groups="rvc.group_rvc_manager")
@@ -143,35 +145,20 @@ class BenefitApplication(models.Model):
                 }
 
     def action_done(self):
-            if self.state in ('confirm'):
-                if self.product_id.benefit_type == 'codigos' and self.codes_quantity > 0:
-                    # si son codigos de productos validamos que no hayan productos comprados disponibles
+        if self.state in ('confirm'):
+            view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id
+            result ={'name':_("Enviar Kit de Bienvenida"),'view_mode': 'form',
+                                'view_id': view_id, 'view_type': 'form', 'res_model': 'rvc.template.email.wizard',
+                                'type': 'ir.actions.act_window','nodestroy': True,'target': 'new'}
+
+            # si son codigos de productos validamos que no hayan productos comprados disponibles
+            if self.product_id.benefit_type == 'codigos' and self.codes_quantity > 0:
+
+                #requiere activar beneficio con el envío del kit?
+                if self.send_kit_with_no_benefit == False:
                     if self._validate_bought_products():
-                        view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
-                        return {
-                            'name':_("Enviar Kit de Bienvenida"),
-                            'view_mode': 'form',
-                            'view_id': view_id,
-                            'view_type': 'form',
-                            'res_model': 'rvc.template.email.wizard',
-                            'type': 'ir.actions.act_window',
-                            'nodestroy': True,
-                            'target': 'new',
-                            'domain': '[]'
-                        }
-                else:
-                    view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id,
-                    return {
-                        'name':_("Enviar Kit de Bienvenida"),
-                        'view_mode': 'form',
-                        'view_id': view_id,
-                        'view_type': 'form',
-                        'res_model': 'rvc.template.email.wizard',
-                        'type': 'ir.actions.act_window',
-                        'nodestroy': True,
-                        'target': 'new',
-                        'domain': '[]'
-                    }
+                        return result
+            return result
 
     def action_forward_done(self):
         view_id = self.env.ref('rvc.rvc_template_email_re_done_wizard_form').id,
