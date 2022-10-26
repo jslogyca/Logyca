@@ -979,7 +979,7 @@ class BenefitApplication(models.Model):
                     '<a style="margin: 16px 0px 16px 0px; background-color:#fc4c02; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:16px;" href="/rvc/reject_benefit/%s"><strong>RECHAZAR EL BENEFICIO</strong></a>'
                 '</div></br>'
                     '<h3 style="color:#fc4c02 !important;text-decoration: underline;">'\
-                    'Si no has sido notificado con anterioridad, escríbenos a <a href="mailto:alhernandez@logyca.com">alhernandez@logyca.com</a>.</h3></br></br><p>Atentamente,</p><p>LOGYCA.</p>' % (postulation.access_token,postulation.access_token),
+                    'Si no has sido notificado con anterioridad, escríbenos a <a href="mailto:fsalamanca@logyca.com">fsalamanca@logyca.com</a>.</h3></br></br><p>Atentamente,</p><p>LOGYCA.</p>' % (postulation.access_token,postulation.access_token),
                 'email_to': postulation.contact_email
             }
 
