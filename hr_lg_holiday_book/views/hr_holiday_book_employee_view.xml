@@ -21,15 +21,17 @@
                         <group>
                             <field name="employee_id" force_save="1" readonly="1"/>
                             <field name="contract_id" force_save="1" readonly="1"/>
-                            <field name="date_start" />
-                            <field name="date_end" />
                         </group>
                         <group>
-                            <field name="holiday_pending" force_save="1" readonly="1"/>
-                            <field name="holiday_done" force_save="1" readonly="1"/>
+                            <field name="date_start" />
+                            <field name="date_end" />
                             <field name="active"/>
-                            <field name="company_id" />
                         </group>
+                    </group>
+                    <group col="3">
+                        <field name="holiday_pending" force_save="1" readonly="1"/>
+                        <field name="holiday_done" force_save="1" readonly="1"/>
+                        <field name="holiday_total" force_save="1" readonly="1"/>
                     </group>
                     <notebook>
                         <page string="Holidays Done">

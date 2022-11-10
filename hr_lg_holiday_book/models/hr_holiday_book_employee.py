@@ -38,6 +38,7 @@ class HRHolidayBookEmployee(models.Model):
     name = fields.Char('Name')
     holiday_pending = fields.Float('Holidays Pending', default=0.0)
     holiday_done = fields.Float('Holidays Done', default=0.0)
+    holiday_total = fields.Float('Total', default=0.0)
     employee_id = fields.Many2one('hr.employee', string='Employee')
     contract_id = fields.Many2one('hr.contract', string='Contract')
     leave_done_ids = fields.One2many('hr.leave', compute="_compute_holidays_done", string="Holidays Done", tracking=True)
@@ -97,7 +98,7 @@ class HRHolidayBookEmployee(models.Model):
                 holiday_total = holiday_total + holiday_ajust
                 holiday_done = self.calcula_holidays_done(book_id)
                 holiday_pend = holiday_total - holiday_done                
-                book_id.write({'holiday_pending': holiday_pend, 'holiday_done':holiday_done})
+                book_id.write({'holiday_pending': holiday_pend, 'holiday_done':holiday_done, 'holiday_total': holiday_total})
                 self.env.cr.commit()
         return
 
@@ -122,7 +123,7 @@ class HRHolidayBookEmployee(models.Model):
                 holiday_total = holiday_total + holiday_ajust
                 holiday_done = self.calcula_holidays_done(book_id)
                 holiday_pend = holiday_total - holiday_done
-        return round(holiday_pend,2)
+        return round(holiday_pend,2), round(holiday_total,2), round(holiday_done,2)
 
     def update_book_holidays_byid(self):
         day_to = fields.Datetime.now()
@@ -144,6 +145,6 @@ class HRHolidayBookEmployee(models.Model):
             holiday_total = holiday_total + holiday_ajust
             holiday_done = self.calcula_holidays_done(book_id)
             holiday_pend = holiday_total - holiday_done
-            book_id.write({'holiday_pending': holiday_pend, 'holiday_done':holiday_done})
+            book_id.write({'holiday_pending': holiday_pend, 'holiday_done':holiday_done, 'holiday_total': holiday_total})
             self.env.cr.commit()
         return
