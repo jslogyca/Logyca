@@ -106,10 +106,14 @@ class hr_holiday_book_report_wizard(models.TransientModel):
         ws.write(6, 1, str(date_file))
 
         fila_title=9
+        fila_title=9
         ws.write(fila_title, 0, 'Número Documento', subtitle_head)
         ws.write(fila_title, 1, 'Nombre Empleado', subtitle_head)
         ws.write(fila_title, 2, 'Fecha Ingreso', subtitle_head)
-        ws.write(fila_title, 3, 'Vacaciones Pendientes', subtitle_head)
+        ws.write(fila_title, 3, 'Total Días', subtitle_head)
+        ws.write(fila_title, 4, 'Días Tomados', subtitle_head)
+        ws.write(fila_title, 5, 'Días Pendientes', subtitle_head)
+        ws.write(fila_title, 6, 'Valor Proyectado', subtitle_head)
 
         fila=10
         for x in value:
@@ -117,8 +121,12 @@ class hr_holiday_book_report_wizard(models.TransientModel):
             ws.write(fila,1,x[1],title_head)
             ws.write(fila,2,x[2],title_head)
             book_id = self.env['hr.holiday.book.employee'].search([('id', '=', x[3])], limit=1)
-            total_days = book_id.get_book_contract(book_id, self.date_to)
-            ws.write(fila,3,total_days,title_head)
+            holiday_pend, holiday_total, holiday_done = book_id.get_book_contract(book_id, self.date_to)
+            amount = self.get_amount_holiday(book_id.contract_id, holiday_pend)
+            ws.write(fila,3,holiday_total,title_head)
+            ws.write(fila,4,holiday_done,title_head)
+            ws.write(fila,5,holiday_pend,title_head)
+            ws.write(fila,6,round(amount,2),title_head)
             fila+=1
 
         try:
@@ -130,3 +138,6 @@ class hr_holiday_book_report_wizard(models.TransientModel):
             self.data_name = 'ReporteVacaciones' + '-' + str(date_file)
         except ValueError:
             raise Warning('No se pudo generar el archivo')
+
+    def get_amount_holiday(self, contract_id, total_days):
+        return (contract_id.wage/30) * total_days
