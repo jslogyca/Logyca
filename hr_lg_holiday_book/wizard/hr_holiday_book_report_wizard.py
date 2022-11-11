@@ -53,8 +53,8 @@ class hr_holiday_book_report_wizard(models.TransientModel):
                                     INNER JOIN hr_contract c on c.id=h.contract_id
                                     WHERE h.active IS True 
                                     AND h.company_id=%s
-                                    AND c.state = %s and e.id in %s ''', 
-                                        (self.company_id.id, 'open', tuple(self.employee_ids.ids)))
+                                    AND (c.date_end <= %s OR c.state=%s) and e.id in %s ''', 
+                                        (self.company_id.id, self.date_to, 'open', tuple(self.employee_ids.ids)))
         else:
             self._cr.execute(''' SELECT 
                                     e.identification_id, 
@@ -66,8 +66,8 @@ class hr_holiday_book_report_wizard(models.TransientModel):
                                     INNER JOIN hr_contract c on c.id=h.contract_id
                                     WHERE h.active IS True 
                                     AND h.company_id=%s
-                                    AND c.state = %s ''', 
-                                        (self.company_id.id, 'open'))
+                                    AND (c.date_end <= %s OR c.state=%s) ''', 
+                                        (self.company_id.id, self.date_to, 'open'))
         lineas = self._cr.fetchall()
         return lineas
 

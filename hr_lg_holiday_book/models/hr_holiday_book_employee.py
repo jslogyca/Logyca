@@ -67,6 +67,16 @@ class HRHolidayBookEmployee(models.Model):
                     total+=leave.number_of_days_calendar
             return total
 
+    def calcula_holidays_done_bydate(self, book_id, date):
+        if book_id:
+            total=0.0
+            for leave in book_id.leave_done_ids:
+                if leave.holiday_status_id.book_holiday == 'holiday' and leave.request_date_from<=date:
+                    total+=leave.number_of_days
+                if leave.holiday_status_id.book_holiday in ('holiday_pay', 'other_holiday') and leave.request_date_from<=date:
+                    total+=leave.number_of_days_calendar
+            return total
+
     def calcula_holidays_na(self, book_id):
         if book_id:
             total=0.0
@@ -121,7 +131,7 @@ class HRHolidayBookEmployee(models.Model):
                 holiday_ajust = self.calcula_holidays_ajust(book_id)
                 holiday_total = ((days_between(date_start, day_to)-holiday_na)*15)/360
                 holiday_total = holiday_total + holiday_ajust
-                holiday_done = self.calcula_holidays_done(book_id)
+                holiday_done = self.calcula_holidays_done_bydate(book_id, date_to)
                 holiday_pend = holiday_total - holiday_done
         return round(holiday_pend,2), round(holiday_total,2), round(holiday_done,2)
 
