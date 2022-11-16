@@ -72,7 +72,11 @@ class HRHolidayBookEmployee(models.Model):
             total=0.0
             for leave in book_id.leave_done_ids:
                 if leave.holiday_status_id.book_holiday == 'holiday' and leave.request_date_from<=date:
-                    total+=leave.number_of_days
+                    if leave.request_date_to > date:
+                        total_day = days_between(leave.request_date_from, date)
+                        total+=total_day
+                    else:
+                        total+=leave.number_of_days
                 if leave.holiday_status_id.book_holiday in ('holiday_pay', 'other_holiday') and leave.request_date_from<=date:
                     total+=leave.number_of_days_calendar
             return total
