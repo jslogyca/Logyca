@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="report_excel_enforcement_tree" model="ir.ui.view">
+        <field name="name">report.excel.enforcement.tree</field>
+        <field name="model">report.excel.enforcement</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0" delete="0" string="Report Enforcement">
+                <field name="id"/>
+                <field name="move_id"/>
+                <field name="date"/>
+                <field name="year_fact"/>
+                <field name="mes_fact"/>
+                <field name="analytic_group_id"/>
+                <field name="analytic_group_two_id"/>
+                <field name="ref"/>
+                <field name="company_id"/>
+                <field name="partner_id"/>
+                <field name="x_studio_clase"/>
+                <field name="cuenta_analitica"/>
+                <field name="descripcion"/>
+                <field name="tipo_cuenta"/>
+                <field name="product_id"/>
+                <field name="quantity"/>
+                <field name="importe"/>
+                <field name="credit"/>
+                <field name="debit"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_report_excel_enforcement" model="ir.actions.act_window">
+        <field name="name">Report Enforcement</field>
+        <field name="res_model">report.excel.enforcement</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="report_excel_enforcement_tree"/>
+    </record>  
+
+    <menuitem
+        id="report_excel_enforcement_menu"
+        name="Report Enforcement"
+        action="action_report_excel_enforcement"
+        parent="account_reports_excel.menu_report_excel_sale_product_root" 
+        sequence="2" />
+</odoo>

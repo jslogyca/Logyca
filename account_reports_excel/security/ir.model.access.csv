@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 account_report_excel_sale_product_wizard,report.excel.sale.product.wizard,model_report_excel_sale_product_wizard,account_reports_excel.group_report_invoice_manager,1,1,1,1
 account_report_excel_sale_product,report.excel.sale.product,model_report_excel_sale_product,account_reports_excel.group_report_invoice_manager,1,1,1,1
 account_report_income_report_wizard,report.income.report.wizard,model_report_income_report_wizard,account_reports_excel.group_report_invoice_manager,1,1,1,1
+account_report_excel_enforcement,report.excel.enforcement,model_report_excel_enforcement,account_reports_excel.group_report_invoice_manager,1,1,1,1
