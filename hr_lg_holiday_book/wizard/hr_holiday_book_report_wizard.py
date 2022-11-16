@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, Warning
 
 import xlwt
 import base64
@@ -47,26 +47,44 @@ class hr_holiday_book_report_wizard(models.TransientModel):
                                     e.identification_id, 
                                     e.name, 
                                     to_char(c.date_start,'YYYY/MM/DD'),
-                                    h.id
+                                    h.id,
+                                    CASE WHEN g.code is not null
+                                    THEN g.code
+                                    ELSE 'No existe'
+                                    END as group_code,
+                                    CASE WHEN g.name is not null
+                                    THEN g.name
+                                    ELSE 'No existe'
+                                    END as group_name
                                     FROM hr_holiday_book_employee h
                                     INNER JOIN hr_employee e ON e.id=h.employee_id
                                     INNER JOIN hr_contract c on c.id=h.contract_id
+                                    LEFT JOIN logyca_budget_group g on g.id=e.budget_group_id
                                     WHERE h.active IS True 
                                     AND h.company_id=%s
-                                    AND (c.date_end <= %s OR c.state=%s) and e.id in %s ''', 
+                                    AND (c.date_end >= %s OR c.state=%s) and e.id in %s ''', 
                                         (self.company_id.id, self.date_to, 'open', tuple(self.employee_ids.ids)))
         else:
             self._cr.execute(''' SELECT 
                                     e.identification_id, 
                                     e.name, 
                                     to_char(c.date_start,'YYYY/MM/DD'),
-                                    h.id
+                                    h.id,
+                                    CASE WHEN g.code is not null
+                                    THEN g.code
+                                    ELSE 'No existe'
+                                    END as group_code,
+                                    CASE WHEN g.name is not null
+                                    THEN g.name
+                                    ELSE 'No existe'
+                                    END as group_name
                                     FROM hr_holiday_book_employee h
                                     INNER JOIN hr_employee e ON e.id=h.employee_id
                                     INNER JOIN hr_contract c on c.id=h.contract_id
+                                    LEFT JOIN logyca_budget_group g on g.id=e.budget_group_id
                                     WHERE h.active IS True 
                                     AND h.company_id=%s
-                                    AND (c.date_end <= %s OR c.state=%s) ''', 
+                                    AND (c.date_end >= %s OR c.state=%s) ''', 
                                         (self.company_id.id, self.date_to, 'open'))
         lineas = self._cr.fetchall()
         return lineas
@@ -109,24 +127,28 @@ class hr_holiday_book_report_wizard(models.TransientModel):
         fila_title=9
         ws.write(fila_title, 0, 'Número Documento', subtitle_head)
         ws.write(fila_title, 1, 'Nombre Empleado', subtitle_head)
-        ws.write(fila_title, 2, 'Fecha Ingreso', subtitle_head)
-        ws.write(fila_title, 3, 'Total Días', subtitle_head)
-        ws.write(fila_title, 4, 'Días Tomados', subtitle_head)
-        ws.write(fila_title, 5, 'Días Pendientes', subtitle_head)
-        ws.write(fila_title, 6, 'Valor Proyectado', subtitle_head)
+        ws.write(fila_title, 2, 'Fecha Ingreso', subtitle_head)        
+        ws.write(fila_title, 3, 'Código Grupo presupuestal', subtitle_head)
+        ws.write(fila_title, 4, 'Nombre Grupo presupuestal', subtitle_head)
+        ws.write(fila_title, 5, 'Total Días', subtitle_head)
+        ws.write(fila_title, 6, 'Días Tomados', subtitle_head)
+        ws.write(fila_title, 7, 'Días Pendientes', subtitle_head)
+        ws.write(fila_title, 8, 'Valor Proyectado', subtitle_head)
 
         fila=10
         for x in value:
             ws.write(fila,0,x[0],title_head)
             ws.write(fila,1,x[1],title_head)
             ws.write(fila,2,x[2],title_head)
+            ws.write(fila,3,x[4],title_head)
+            ws.write(fila,4,x[5],title_head)
             book_id = self.env['hr.holiday.book.employee'].search([('id', '=', x[3])], limit=1)
             holiday_pend, holiday_total, holiday_done = book_id.get_book_contract(book_id, self.date_to)
             amount = self.get_amount_holiday(book_id.contract_id, holiday_pend)
-            ws.write(fila,3,holiday_total,title_head)
-            ws.write(fila,4,holiday_done,title_head)
-            ws.write(fila,5,holiday_pend,title_head)
-            ws.write(fila,6,round(amount,2),title_head)
+            ws.write(fila,5,holiday_total,title_head)
+            ws.write(fila,6,holiday_done,title_head)
+            ws.write(fila,7,holiday_pend,title_head)
+            ws.write(fila,8,round(amount,2),title_head)
             fila+=1
 
         try:
