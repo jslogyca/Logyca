@@ -130,7 +130,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
                         raise ValidationError(_('¡Error! No hay tarjetas digitales para generar 😔.\n\nPara solicitarlas: \n'\
                                                 '1. Active el modo edición yendo al botón EDITAR del lado superior izquierdo.\n'\
                                                 '2. Vaya a la sección de Tarjetas Digitales.\n'\
-                                                '3. Pulse la opción "Agregar línea"'))
+                                                '3. Pulse la opción "Agregar línea."'))
 
                 #Actualizar Contacto y Empresa
                 benefit_application.update_contact(benefit_application.partner_id)

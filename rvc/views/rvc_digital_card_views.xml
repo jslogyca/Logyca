@@ -15,9 +15,9 @@
                             <field name="contact_name" required="True"/>
                             <field name="contact_email" required="True"/>
                             <field name="contact_mobile" widget="phone" required="True"/>
-                            <field name="offered_service_id"/>
+                            <field name="offered_service_id" required="True"/>
                             <field name="city_id"/>
-                            <field name="street"/>
+                            <field name="street" required="True"/>
                         </group>
                         <group string="Info. Detallada">
                             <field name="url_website" widget="url"/>
