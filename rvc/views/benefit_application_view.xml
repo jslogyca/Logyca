@@ -6,15 +6,16 @@
 		<field name="arch" type="xml">
 			<form string="Postulación a Beneficios">
 				<header>
-				 	<button name="action_notified" type="object" states="draft" string="Notificar al Beneficiario" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-				 	<button name="action_confirm" type="object" states="notified" string="Confirm" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-				 	<button name="action_notified" type="object" states="notified" string="Volver a notificar" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+				 	<button name="action_notified" type="object" attrs="{'invisible': ['|',('benefit_type','=','tarjeta_digital'), ('state','!=','draft')]}"
+                        string="Notificar al Beneficiario" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_confirm" type="object" states="draft,notified" string="Confirm" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_notified" type="object" states="notified" string="Volver a notificar" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 					<button name="action_reminder" type="object" states="notified" string="Enviar Recortadorio" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 				 	<button name="action_forward_done" type="object" states="done" string="Enviar Kit Nuevamente" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 					<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-                    <button name="action_generate_digital_cards" type="object" states="confirm" string="Generar Tarjetas Digitales" class="oe_highlight"
-                        groups="rvc.group_rvc_manager" attrs="{'invisible': [('benefit_type','!=','tarjeta_digital')]}"/>
+                    <button name="action_generate_digital_cards" type="object" string="Generar Tarjetas Digitales" class="oe_highlight"
+                        groups="rvc.group_rvc_manager" attrs="{'invisible': ['|',('benefit_type','!=','tarjeta_digital'),('state','not in',['confirm','done'])]}"/>
                     <button name="action_new_credentials" type="object" string="Re-Asignar Credenciales" class="oe_highlight" groups="rvc.group_rvc_manager"
                         attrs="{'invisible': ['|',['benefit_type','not in',('colabora','codigos')],['state','!=','done']]}"/>
 					<button name="action_reactivate" type="object" states="rejected,cancel" string="Re-activar Postulación" class="oe_highlight" groups="rvc.group_rvc_manager"/>
@@ -36,7 +37,7 @@
 						<group string="Detalles del Beneficio">
 							<field name="product_id" attrs="{'readonly': [('state','!=','draft')],'required': [('state','=','draft')]}"/>
 							<field name="benefit_type" invisible="1"/>
-                            <field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos'))], 'readonly': [('state','=','done')]}" />
+                            <field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos','tarjeta_digital'))], 'readonly': [('state','=','done')]}" />
                             <field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
 							<field name="end_date_colabora" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
                             <field name="offered_service_id" attrs="{'invisible': [('benefit_type','!=','tarjeta_digital')], 'readonly': [('state','=','done')]}"/>
