@@ -12,9 +12,9 @@
                     <group>
                         <group string="Info. Básica">
                             <field name="partner_vat"/>
-                            <field name="contact_name"/>
-                            <field name="contact_email"/>
-                            <field name="contact_mobile" widget="phone"/>
+                            <field name="contact_name" required="True"/>
+                            <field name="contact_email" required="True"/>
+                            <field name="contact_mobile" widget="phone" required="True"/>
                             <field name="offered_service_id"/>
                             <field name="city_id"/>
                             <field name="street"/>

@@ -113,7 +113,7 @@ class BenefitApplication(models.Model):
 
     def action_confirm(self):
         for benefit_application in self:
-            if benefit_application.state in ('notified'):
+            if benefit_application.state in ('draft','notified'):
                 view_id = self.env.ref('rvc.rvc_template_email_confirm_wizard_form').id,
                 return {
                     'name':_("Enviar Aceptación"),
@@ -229,8 +229,6 @@ class BenefitApplication(models.Model):
                     'Por el momento solo puedes notificar DERECHOS DE IDENTIFICACIÓN y LOGYCA/COLABORA.'))
             elif not self._validate_qty_codes():
                 logging.warning("===> _validate_qty_codes no pasó la validación")
-            elif not self._validate_bought_products():
-                logging.warning("===> _validate_bought_products no pasó la validación")
 
     @api.model
     def create(self, vals):
@@ -290,7 +288,9 @@ class BenefitApplication(models.Model):
         gln_from_user_found = False
         qty_codes_found = 0
 
-        if self.partner_id and (self.product_id.benefit_type == 'codigos' or self.product_id.benefit_type == 'colabora'):
+        if self.partner_id and (self.product_id.benefit_type == 'codigos' or \
+            self.product_id.benefit_type == 'colabora' or \
+            self.product_id.benefit_type == 'tarjeta_digital'):
             
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/EmpresaGln/"
@@ -300,6 +300,8 @@ class BenefitApplication(models.Model):
             payload = {'nit': str(self.vat)}
 
             response = requests.get(url, data=json.dumps(payload))
+            logging.info(f"_Validate_gln() response: {response}")
+
             if response.status_code == 200:
                 result = response.json()
                 response.close()
