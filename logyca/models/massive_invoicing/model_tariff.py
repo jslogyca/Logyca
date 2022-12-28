@@ -70,7 +70,8 @@ class x_MassiveInvoicingTariffDiscounts(models.Model):
     _sql_constraints = [('tariff_discounts_presence_unique', 'unique(tariff)', 'Un tarifario solo puede estar asociado a un tarifario de descuento.')]
     
     tariff = fields.Many2one('massive.invoicing.tariff', string='Tarifario', ondelete='restrict', required=True)
-    discount_percentage = fields.Integer(string='Descuento antes de IVA (%)', required=True)
+    # discount_percentage = fields.Integer(string='Descuento antes de IVA (%)', required=True)
+    discount_percentage = fields.Float(string='Descuento antes de IVA (%)', required=True)
     discounts_one = fields.Float(string='Valor descuento')
     date_discounts_one = fields.Date(string='Fecha descuento', help='Fecha hasta la cual aplica el descuento 1')    
     #is_billed = fields.Boolean(string='¿Se factura?')

@@ -312,6 +312,16 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             if tariff_discounts.discounts_one > 0:
                                 conditional_discount = tariff_discounts.discounts_one 
                                 conditional_discount_deadline = tariff_discounts.date_discounts_one
+                        # DESCUENTO INGRESOS
+                        obj_tariff_in_discounts = self.env['massive.income.tariff.discounts'].search([('tariff', '=', tariff.id)])
+                        for tariff_discounts in obj_tariff_in_discounts:
+                            #Logica descuento no condicionado
+                            if tariff_discounts.discount_percentage > 0:
+                                discount = tariff_discounts.discount_percentage
+                            #Logica descuento condicionado
+                            if tariff_discounts.discounts_one > 0:
+                                conditional_discount = tariff_discounts.discounts_one 
+                                conditional_discount_deadline = tariff_discounts.date_discounts_one                                
                 #Se obtiene el representante ante Logyca al cual quedara asociada la orden de venta
                 id_contactP = 0
                 for record in partner.partner_id.child_ids:   

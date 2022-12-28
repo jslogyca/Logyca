@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="massive_income_tariff_discounts_tree" model="ir.ui.view">
+		<field name="name">massive.income.tariff.discounts.config.tree</field>
+		<field name="model">massive.income.tariff.discounts</field>
+		<field eval="20" name="priority"/>
+		<field name="arch" type="xml">
+			<tree string="Tarifario Descuentos Ingresos" editable="top">
+				<field name="tariff"/>
+				<field name="discount_percentage"/>
+				<field name="discounts_one"/>
+				<field name="date_discounts_one" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_massive_income_tariff_discounts" model="ir.actions.act_window">
+		<field name="name">Tarifario Descuentos Ingresos</field>
+		<field name="res_model">massive.income.tariff.discounts</field>
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="massive_income_tariff_discounts_tree"/>			
+	</record>
+
+    <menuitem 
+		id="menu_massive_income_tariff_discounts" 
+		action="action_massive_income_tariff_discounts" 
+		parent="studio_customization.logyca_parametrizaci_ad8d64d2-1139-4184-9c30-5361f61a6ffd"
+		sequence="21"/>	
+</odoo>
