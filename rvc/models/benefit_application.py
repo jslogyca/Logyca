@@ -785,7 +785,7 @@ class BenefitApplication(models.Model):
     def update_contact(self, company_id):
         type_id = self.env.ref('rvc.contact_types_rvc').id,
         self._cr.execute(''' SELECT id FROM res_partner WHERE email=%s AND is_company IS False
-                                AND parent_id=(SELECT id FROM res_partner WHERE vat=%s AND is_company IS True) ''',
+                                AND parent_id=(SELECT id FROM res_partner WHERE vat=%s AND is_company IS True AND active IS TRUE) ''',
                                             (company_id.contact_email, company_id.vat))
         contact_id= self._cr.fetchone()
         if contact_id and contact_id[0]:
