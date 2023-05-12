@@ -1177,7 +1177,6 @@ class BenefitApplication(models.Model):
                 attachments.append(attach_id)
                 counter += 1
                 
-            template.auto_delete = True
             partner=self.env['res.partner'].search([('id','=',self.partner_id.partner_id.id)])
             access_link = partner._notify_get_action_link('view')
             logging.info(f"Access link => {access_link}")
