@@ -77,6 +77,10 @@
                             margin: 0;
                         }
 
+                        #text_benefits a {
+                            color: #fff;
+                        }
+
                         #text_promo {
                             margin-top: 30px;
                             text-align: center;
@@ -122,7 +126,7 @@
                         <img id="img_two_cols" src="/rvc/static/img/digital_cards_mail_template/two_cols_image.png"/>
                         <img id="img_centered" src="/rvc/static/img/digital_cards_mail_template/centered_image.png"/>
                         <div id="text_footer">
-                            <p><strong>Si requieres soporte sobre este beneficio escríbenos a web@gs1co.org o a través de nuestro WhatsApp 3009982929</strong></p>
+                            <p id="text_benefits"><strong>Si requieres soporte sobre este beneficio escríbenos a <a href="mailto:web@gs1co.org">web@gs1co.org</a> o a través de nuestro WhatsApp 3009982929</strong></p>
                         </div>
                         <p id="text_promo">Conoce más beneficios <strong>SIN COSTO</strong> para tu negocio <a href="https://logyca.com/wp-content/uploads/2021/10/RVC-2021.pdf">aquí</a></p>
                         <hr></hr>
