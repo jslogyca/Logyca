@@ -8,12 +8,8 @@
             <field name="email_from">${(object.company_id.email or '')}</field>
             <field name="email_to">${(object.contact_email|safe)}</field>
             <field name="body_html" type="html">
-                <!DOCTYPE html>
-                <html lang="es">
                 <head>
-                    <meta charset="UTF-8">
-                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <meta charset="UTF-8"/>
                     <title>Tu Tarjeta Digital</title>
                     <style>
                         body {
@@ -116,15 +112,15 @@
                 </head>
                 <body>
                     <div id="container">
-                        <img id="brands" src="static/img/digital_card_mail_template/brands.png" alt="">
+                        <img id="brands" src="/rvc/static/img/digital_cards_mail_template/brands.png" alt=""/>
                         <div id="header_text">
                             <h2>¡Tú Tarjeta Digital ya está lista!</h2>
                         </div>
-                        <img id="banner" src="static/img/digital_card_mail_template/banner.png">
+                        <img id="banner" src="/rvc/static/img/digital_cards_mail_template/banner.png"/>
                         <p id="greetings"><strong>Estimado cliente,</strong></p>
                         <p id="description">Adjunto encontrarás la <strong>tarjeta de presentación digital</strong> de tu negocio para que la puedas empezar a compartir con tus aliados. Sigue estos pasos:</p>
-                        <img id="img_two_cols" src="static/img/digital_card_mail_template/two_cols_image.png">
-                        <img id="img_centered" src="static/img/digital_card_mail_template/centered_image.png">
+                        <img id="img_two_cols" src="/rvc/static/img/digital_cards_mail_template/two_cols_image.png"/>
+                        <img id="img_centered" src="/rvc/static/img/digital_cards_mail_template/centered_image.png"/>
                         <div id="text_footer">
                             <p><strong>Si requieres soporte sobre este beneficio escríbenos a web@gs1co.org o a través de nuestro WhatsApp 3009982929</strong></p>
                         </div>
@@ -133,7 +129,6 @@
                         <h2 id="site"><a href="https://www.logyca.org/">www.logyca.org</a></h2>
                     </div>    
                 </body>
-                </html>
             </field>
             <field name="lang">${object.lang}</field>
             <field name="auto_delete" eval="False"/>
