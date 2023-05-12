@@ -2,22 +2,138 @@
 <odoo>
     <data noupdate="0">
         <record id="mail_template_welcome_kit_digital_card_rvc" model="mail.template">
-            <field name="name">TARJETA DE PRESENTACIÓN DIGITAL LOGYCA- COLOMBIA PRODUCTIVA</field>
+            <field name="name">TARJETA DE PRESENTACIÓN DIGITAL GS1 | LOGYCA ASOCIACIÓN</field>
             <field name="model_id" ref="rvc.model_benefit_application"/>
-            <field name="subject">TARJETA DE PRESENTACIÓN DIGITAL LOGYCA- COLOMBIA PRODUCTIVA</field>
+            <field name="subject">TARJETA DE PRESENTACIÓN DIGITAL GS1 | LOGYCA ASOCIACIÓN</field>
             <field name="email_from">${(object.company_id.email or '')}</field>
             <field name="email_to">${(object.contact_email|safe)}</field>
             <field name="body_html" type="html">
-               <p>Estimad@ Usuari@,</p>
-               <p>El equipo LOGYCA le hace entrega de la Tarjeta de presentación digital 
-                  que solicitó a través de COLOMBIA PRODUCTIVA. Desde ya puede empezar
-                   a compartirla con sus clientes y aliados.</p>
-               <p>Recuerde que esta tarjeta contiene los datos de contacto suministrados 
-                  en el formulario. Al escanear el QR la persona podrá guardar su número 
-                  de contacto y ver la información del nombre de la empresa, nombre de 
-                  contacto y el enlaces que lo direccionan a las redes sociales de su empresa.
-               </p><br></br>
-               <p>Cordial saludo.</p>
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Tu Tarjeta Digital</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            color: #333;
+                        }
+
+                        #container {
+                            width: 600px;
+                            margin: 30px auto;
+                            border: 0;
+                        }
+
+                        #brands {
+                            display: block;
+                            margin: 0 auto;
+                        }
+
+                        #header_text {
+                            background: rgb(242, 99, 52);
+                            padding: 3px;
+                            box-sizing: border-box;
+                            border: 1px solid rgb(242, 99, 52);
+                        }
+
+                        #header_text h2 {
+                            text-align: center;
+                            color: #fff;
+                            margin: 0;
+                        }
+
+                        #banner {
+                            width: 100%;
+                            box-sizing: border-box;
+                            margin-top: 15px;
+                        }
+
+                        p {
+                            margin-top: 30px;
+                        }
+
+                        #description strong {
+                            color:rgb(242, 99, 52);
+                        }
+
+                        #img_two_cols,
+                        #img_centered {
+                            width: 100%;
+                            box-sizing: border-box;
+                            margin-top: 15px;
+                        }
+
+                        #text_footer {
+                            background: rgb(0, 44, 108);
+                            padding: 15px;
+                            box-sizing: border-box;
+                            border: 1px solid rgb(0, 44, 108);
+                            text-align: center;
+                            margin-top: 20px;
+                        }
+
+                        #text_footer p {
+                            text-align: center;
+                            color: #fff;
+                            margin: 0;
+                        }
+
+                        #text_promo {
+                            margin-top: 30px;
+                            text-align: center;
+                            font-size: 14pt;
+                        }
+
+                        #texto_prom strong {
+                            color: #000;
+                        }
+
+                        #text_promo a {
+                            color: #00ef;
+                        }
+
+                        hr {
+                            background: rgb(242, 99, 52);
+                            width: 100%;
+                            height: 1px;
+                            margin-top: 15px;
+                            border: none;
+                        }
+
+                        #site {
+                            text-align: center;
+                            color: rgb(0, 44, 108);
+                            margin-top: 15px;
+                        }
+
+                        #site a {
+                            color: rgb(0, 44, 108);
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div id="container">
+                        <img id="brands" src="static/img/digital_card_mail_template/brands.png" alt="">
+                        <div id="header_text">
+                            <h2>¡Tú Tarjeta Digital ya está lista!</h2>
+                        </div>
+                        <img id="banner" src="static/img/digital_card_mail_template/banner.png">
+                        <p id="greetings"><strong>Estimado cliente,</strong></p>
+                        <p id="description">Adjunto encontrarás la <strong>tarjeta de presentación digital</strong> de tu negocio para que la puedas empezar a compartir con tus aliados. Sigue estos pasos:</p>
+                        <img id="img_two_cols" src="static/img/digital_card_mail_template/two_cols_image.png">
+                        <img id="img_centered" src="static/img/digital_card_mail_template/centered_image.png">
+                        <div id="text_footer">
+                            <p><strong>Si requieres soporte sobre este beneficio escríbenos a web@gs1co.org o a través de nuestro WhatsApp 3009982929</strong></p>
+                        </div>
+                        <p id="text_promo">Conoce más beneficios <strong>SIN COSTO</strong> para tu negocio <a href="https://logyca.com/wp-content/uploads/2021/10/RVC-2021.pdf">aquí</a></p>
+                        <hr></hr>
+                        <h2 id="site"><a href="https://www.logyca.org/">www.logyca.org</a></h2>
+                    </div>    
+                </body>
+                </html>
             </field>
             <field name="lang">${object.lang}</field>
             <field name="auto_delete" eval="False"/>

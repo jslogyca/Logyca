@@ -91,7 +91,15 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 else:
                     template.attachment_ids = False
 
-                template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
+                # Se envía kit de bienvenida
+                # excepto si es tarjeta digital, en ese caso el beneficio se activa primero y DESPUÉS enviamos kit con 
+                # la funcion send_digital_cards_bearer()
+                try:
+                    if benefit_application.product_id.benefit_type != 'tarjeta_digital':
+                        template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
+                except:
+                    benefit_application.message_post(body=_(\
+                    'No se pudo <strong>Enviar</strong></u> el kit de bienvenida del beneficio %s.' % str(benefit_application.product_id.benefit_type)))
 
                 if not benefit_application.gln:
                     # si no tiene GLN, asignamos uno.
@@ -171,7 +179,11 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     template.attachment_ids = False
 
                 try:
-                    template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
+                    # Se envía kit de bienvenida
+                    # excepto si es tarjeta digital, en ese caso el beneficio se activa primero y luego enviamos kit con 
+                    # la funcion send_digital_cards_bearer()
+                    if benefit_application.product_id.benefit_type != 'tarjeta_digital':
+                        template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
                     benefit_application.message_post(body=_(\
                     'Se <strong>REENVIÓ</strong></u> el kit de bienvenida del beneficio.'))
                 except:

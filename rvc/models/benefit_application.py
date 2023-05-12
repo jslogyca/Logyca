@@ -867,10 +867,17 @@ class BenefitApplication(models.Model):
         logging.warning("==> Iniciando cron de enviar kits de bienvenida ...")
         if not self:
             counter = 0
-            self = self.search(['|',
-                                '&',('state', '=', 'confirm'),('origin', '=', 'odoo'),
-                                '&',('state', '=', 'confirm'),
-                                '&',('codes_quantity', '<', 100),('origin', 'in', ['tienda','chatbot'])])
+            self = self.search([
+                '|',
+                '&',
+                    ('state', '=', 'confirm'),
+                    ('origin', '=', 'odoo'),
+                '&',
+                    ('state', '=', 'confirm'),
+                    '&',
+                        ('codes_quantity', '<', 100),
+                        ('origin', 'in', ['tienda', 'chatbot']),
+            ])
 
             for postulation_id in self:
                 counter =+ 1
@@ -884,6 +891,8 @@ class BenefitApplication(models.Model):
                                 template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
                         elif postulation_id.product_id.benefit_type == 'colabora':
                             template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+                        elif postulation_id.product_id.benefit_type == 'tarjeta_digital':
+                            template = self.env.ref('rvc.mail_template_welcome_kit_digital_card_rvc')
 
                         # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
                         if postulation_id.origin != 'odoo':
@@ -891,7 +900,15 @@ class BenefitApplication(models.Model):
                         else:
                             template.attachment_ids = False
 
-                        template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
+                        # Se envía kit de bienvenida
+                        # excepto si es tarjeta digital, en ese caso el beneficio se activa primero y DESPUÉS enviamos kit con 
+                        # la funcion send_digital_cards_bearer()
+                        try:
+                            if postulation_id.product_id.benefit_type != 'tarjeta_digital':
+                                template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
+                        except:
+                            postulation_id.message_post(body=_(\
+                            'No se pudo <strong>Enviar</strong></u> el kit de bienvenida del beneficio %s.' % str(postulation_id.product_id.benefit_type)))
 
                         if not postulation_id.gln:
                             # si no tiene GLN, asignamos uno.
@@ -919,6 +936,15 @@ class BenefitApplication(models.Model):
                             # Activar colabora
                             if postulation_id.assign_colabora():
                                 postulation_id.assign_credentials_colabora()
+                        
+                        elif postulation_id.product_id.benefit_type == 'tarjeta_digital':
+                            if postulation_id.digital_card_ids:
+                                postulation_id.send_digital_cards_bearer(template)
+                            else:
+                                raise ValidationError(_('¡Error! No hay tarjetas digitales para generar 😔.\n\nPara solicitarlas: \n'\
+                                                        '1. Active el modo edición yendo al botón EDITAR del lado superior izquierdo.\n'\
+                                                        '2. Vaya a la sección de Tarjetas Digitales.\n'\
+                                                        '3. Pulse la opción "Agregar línea."'))
 
                         # Actualizar Contacto y Empresa
                         postulation_id.update_contact(postulation_id.partner_id)
@@ -1114,7 +1140,8 @@ class BenefitApplication(models.Model):
         }
         data_id = self.env['ir.attachment'].create(ir_values)
         logging.info(f"==> create_OM_attachment 5 {data_id.ids}")
-        template.attachment_ids = [(6, 0, [data_id.id])]
+        template.attachment_ids = [(4, data_id.id, 0)]
+        logging.info(f"===> {template.attachment_ids}")
         return template
 
     def action_generate_digital_cards(self):
@@ -1128,10 +1155,13 @@ class BenefitApplication(models.Model):
 
     def send_digital_cards_bearer(self, template):
         if self.digital_card_ids:
-            counter = 0
             cards = self.action_generate_digital_cards()
+            counter = 0
+            attachments = []
+            attachments.append(template.attachment_ids)
+            template.write({'attachment_ids': []})
 
-            for i,digital_card in enumerate(self.digital_card_ids, start=1):
+            for i in self.digital_card_ids:
                 ir_values = {
                     'name': f"Tarjeta_digital_{i}.JPEG",
                     'type': 'binary',
@@ -1141,10 +1171,19 @@ class BenefitApplication(models.Model):
                 }
                 attach_id = self.env['ir.attachment'].create(ir_values)
                 logging.info(" Attachment ===> "+ str(attach_id.name))
+                template.write({
+                    'attachment_ids': [(4, attach_id.id, 0)]
+                })
+                attachments.append(attach_id)
                 counter += 1
-                template.attachment_ids = [(6, 0, [attach_id.id])]
-                template.auto_delete = True
-                template.send_mail(self.id, force_send=True)
+                
+            template.auto_delete = True
+            partner=self.env['res.partner'].search([('id','=',self.partner_id.partner_id.id)])
+            access_link = partner._notify_get_action_link('view')
+            logging.info(f"Access link => {access_link}")
+            template.with_context(url=access_link).send_mail(self.id, force_send=True)
+
+            for attach_id in attachments:
                 attach_id.unlink()
 
     def image_generation(self, card, i):
@@ -1191,50 +1230,51 @@ class BenefitApplication(models.Model):
     def qr_generation(self, card):
         import unidecode
         name = unidecode.unidecode(card.contact_name)
-        home_phone = card.contact_mobile
+        #home_phone = card.contact_mobile
         work_phone = card.contact_mobile
         email = card.contact_email
         enterprise = card.partner_name
         url = card.url_website
 
-        url = f"https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3a{name}%0d%0aTEL%3bHOME%3bVOICE%3a{home_phone}%0d%0aTEL%3bWORK%3bVOICE%3a{work_phone}%0d%0aEMAIL%3a{email}%0d%0aORG%3a{enterprise}%0d%0aURL%3a{url}%0d%0aEND%3aVCARD"
+        url = f"https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3a{name}%0d%0aTEL%3bWORK%3bVOICE%3a{work_phone}%0d%0aEMAIL%3a{email}%0d%0aORG%3a{enterprise}%0d%0aURL%3a{url}%0d%0aEND%3aVCARD"
         url = url.encode('utf-8')
         img = base64.b64encode(requests.get(url).content)
         card.qr_code = img
         return requests.get(url).content
 
     def get_banner_digital_card(self, service):
-        food = ['Alimentos y bebidas']
-        health = ['Hospitalaria y farmacéutica','Salud y belleza']
-        clothes = ['Calzado, maletas, bolsos y estuches','Indumentaria, textiles y accesorios']
-        tools = ['Construcción y servicios relacionados','Equipos electricos e iluminación',
-                 'Maquinaria, herramientas y equipos industriales','Metalurgia, quimicos , caucho y plasticos',
-                 'Muebles y mobiliario','Piezas de vehículos y transportes']
-        stores = ['Animales vivos y productos para mascotas',
-                  'Arte y manualidades, instrumentos musicales y entretenimiento',
-                  'Artículos de oficina y escolares, empaque y equipos de servicios',
-                  'Artículos deportivos','Electronicos','Juegos y juguetes',
-                  'Suministros para el hogar, jardín y materiales de construcción']
-        services = ['Bienes raíces, alquiler y arrendamiento','Servicios comerciales y profesionales',
-                    'Servicios de arte, entretenimiento y recreación','Servicios de educación Y capacitación',
-                    'Servicios de informática y comunicación','Servicios de transporte y logística',
-                    'Servicios financieros','Servicios públicos y de gestión ambiental',
-                    'Servicios relacionados con el turismo y los viajes','Tecnologías de información y comunicación',
-                    'Servicios sociales y relacionados con la salud'
-                    ]
-        if service in food:
-            return 4
-        if service in health:
-            return 5
-        if service in clothes:
-            return 2
-        if service in tools:
-            return 3
-        if service in stores:
-            return 1
-        if service in services:
-            return 6
-        return 0 #others
+        CATEGORIES = {
+            'Alimentos y bebidas': 4,
+            'Hospitalaria y farmacéutica': 5,
+            'Salud y belleza': 5,
+            'Calzado, maletas, bolsos y estuches': 2,
+            'Indumentaria, textiles y accesorios': 2,
+            'Construcción y servicios relacionados': 3,
+            'Equipos electricos e iluminación': 3,
+            'Maquinaria, herramientas y equipos industriales': 3,
+            'Metalurgia, quimicos , caucho y plasticos': 3,
+            'Muebles y mobiliario': 3,
+            'Piezas de vehículos y transportes': 3,
+            'Animales vivos y productos para mascotas': 1,
+            'Arte y manualidades, instrumentos musicales y entretenimiento': 1,
+            'Artículos de oficina y escolares, empaque y equipos de servicios': 1,
+            'Artículos deportivos': 1,
+            'Electronicos': 1,
+            'Juegos y juguetes': 1,
+            'Suministros para el hogar, jardín y materiales de construcción': 1,
+            'Bienes raíces, alquiler y arrendamiento': 6,
+            'Servicios comerciales y profesionales': 6,
+            'Servicios de arte, entretenimiento y recreación': 6,
+            'Servicios de educación Y capacitación': 6,
+            'Servicios de informática y comunicación': 6,
+            'Servicios de transporte y logística': 6,
+            'Servicios financieros': 6,
+            'Servicios públicos y de gestión ambiental': 6,
+            'Servicios relacionados con el turismo y los viajes': 6,
+            'Tecnologías de información y comunicación': 6,
+            'Servicios sociales y relacionados con la salud': 6
+        }
+        return CATEGORIES.get(service, 0) # el valor por defecto es 0 para Categoría OTROS.
 
     def get_text_style(self, text):
         from PIL import ImageFont
