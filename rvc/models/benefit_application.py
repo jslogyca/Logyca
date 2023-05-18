@@ -1192,8 +1192,9 @@ class BenefitApplication(models.Model):
         service_offered = card.offered_service_id.name if card.offered_service_id else self.offered_service_id.name
         service_offered_banner =  self.get_banner_digital_card(service_offered)
         service_len =  len(service_offered)
-        base_image_path = get_module_resource('rvc', f'static/img/digital_cards_tmpl/{service_offered_banner}.jpg')
+        base_image_path = get_module_resource('rvc', f'static/img/digital_cards_tmpl/{service_offered_banner}.png')
         image = Image.open(base_image_path)
+
 
         # generating QR image
         image2 = Image.open((BytesIO(self.qr_generation(card))))
@@ -1211,15 +1212,16 @@ class BenefitApplication(models.Model):
         service_offered, service_offered_font, srv_txt_padding = self.get_text_style(str.upper(service_offered))
 
         image_editable = ImageDraw.Draw(image)
-        image_editable.text((125, 366-ent_txt_padding), enterprise_name, font=enterprise_font, fill="#0000")
-        image_editable.text((125, 446-name_txt_padding), contact_name, font=contact_name_font, fill="#0000")
-        image_editable.text((125, 526-mob_txt_padding), contact_mobile, font=contact_mobile_font, fill="#0000")
-        image_editable.text((125, 606-st_txt_padding), contact_street, font=contact_street_font, fill="#0000")
-        image_editable.text((125, 686-srv_txt_padding), service_offered, font=service_offered_font, fill="#0000")
-        edited = image.save(f'tmp{i}.JPEG')
+        image_editable.text((125, 392-ent_txt_padding), enterprise_name, font=enterprise_font, fill=(0,0,0,255))
+        image_editable.text((125, 472-name_txt_padding), contact_name, font=contact_name_font, fill=(0,0,0,255))
+        image_editable.text((125, 552-mob_txt_padding), contact_mobile, font=contact_mobile_font, fill=(0,0,0,255))
+        image_editable.text((125, 632-st_txt_padding), contact_street, font=contact_street_font, fill=(0,0,0,255))
+        image_editable.text((125, 712-srv_txt_padding), service_offered, font=service_offered_font, fill=(0,0,0,255))
+        edited = image.save(f'tmp{i}.png')
 
         buffered = BytesIO(edited)
-        image.save(buffered, format="JPEG", quality=100, optimize=True, progressive=True)
+        image.save(buffered, format="PNG", optimize=True, progressive=True)
+        
         img_str = base64.b64encode(buffered.getvalue())
         self.digital_card_ids[i].digital_card_img = img_str
         image.close()
