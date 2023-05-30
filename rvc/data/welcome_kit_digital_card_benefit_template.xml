@@ -49,17 +49,23 @@
 
                         p {
                             margin-top: 30px;
+                            font-size: 16pt;
                         }
 
                         #description strong {
-                            color:rgb(242, 99, 52);
+                            color: rgb(242, 99, 52);
                         }
 
-                        #img_two_cols,
-                        #img_centered {
-                            width: 100%;
+                        #img_two_cols {
+                            width: 90%;
                             box-sizing: border-box;
                             margin-top: 15px;
+                        }
+
+                        #img_centered {
+                            width: 65%;
+                            box-sizing: border-box;
+                            margin-top: 40px;
                         }
 
                         #text_footer {
