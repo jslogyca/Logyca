@@ -44,4 +44,4 @@ class rvc_digital_card(models.Model):
     @api.depends('postulation_id')
     def _partner_name(self):
         for digital_card in self:
-            digital_card.partner_name = self.postulation_id.partner_id.partner_id.name
+            digital_card.partner_name = digital_card.postulation_id.partner_id.partner_id.name

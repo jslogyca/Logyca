@@ -1229,17 +1229,40 @@ class BenefitApplication(models.Model):
         return img_str
 
     def qr_generation(self, card):
-        import unidecode
-        name = unidecode.unidecode(card.contact_name)
-        #home_phone = card.contact_mobile
-        work_phone = card.contact_mobile
-        email = card.contact_email
-        enterprise = card.partner_name
-        url = card.url_website
+        import urllib
 
-        url = f"https://qrcode.tec-it.com/API/QRCode?data=BEGIN%3aVCARD%0d%0aVERSION%3a2.1%0d%0aN%3a{name}%0d%0aTEL%3bWORK%3bVOICE%3a{work_phone}%0d%0aEMAIL%3a{email}%0d%0aORG%3a{enterprise}%0d%0aURL%3a{url}%0d%0aEND%3aVCARD"
-        url = url.encode('utf-8')
-        img = base64.b64encode(requests.get(url).content)
+        # Construir la URL
+        data = {
+            'name': card.contact_name,
+            'work_phone': card.contact_mobile,
+            'email': card.contact_email,
+            'enterprise': card.partner_name,
+            'url': card.url_website,
+            'address': card.street,
+            'city' : card.city_id.name
+        }
+
+        base_url = "https://qrcode.tec-it.com/API/QRCode"
+
+        params = {
+            'data': "BEGIN:VCARD\n"
+                    "VERSION:3.0\n"
+                    "N;CHARSET=UTF-8:{name}\n"
+                    "TEL;TYPE=WORK,VOICE:{work_phone}\n"
+                    "EMAIL;type=INTERNET;type=WORK;type=pref:{email}\n"
+                    "ORG;CHARSET=UTF-8:{enterprise}\n"
+                    "URL:{url}\n"
+                    "ADR;TYPE=DOM,HOME,POSTAL,PARCEL;CHARSET=UTF-8:;;{address};{city}\n"
+                    "LABEL;TYPE=WORK:{address}\n"
+                    "END:VCARD".format(**data)
+        }
+
+        url = f"{base_url}?{urllib.parse.urlencode(params)}"
+
+        # Codificar la URL en UTF-8
+        encoded_url = url.encode('utf-8')
+
+        img = base64.b64encode(requests.get(encoded_url).content)
         card.qr_code = img
         return requests.get(url).content
 
