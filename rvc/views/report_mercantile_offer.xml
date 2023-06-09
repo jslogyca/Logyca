@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <template id="report_rvc_template">
+    <template id="report_rvc_mercantile_offer">
         <t t-call="web.html_container">
             <style>
               p{
@@ -245,7 +245,7 @@
 
 <template id="report_rvc_lang">
 <t t-foreach="docs" t-as="o">
-<t t-call="rvc.report_rvc_template" t-lang="o.partner_id.sudo().partner_id.lang"/>
+<t t-call="rvc.report_rvc_mercantile_offer" t-lang="o.partner_id.sudo().partner_id.lang"/>
 </t>
 </template>
 </odoo>
