@@ -498,6 +498,7 @@ class BenefitApplication(models.Model):
             if response_mark.status_code == 200:
                 response_mark.close()
                 result = response_mark.json()
+                logging.info("====> response al marcar GLN =>\n" + str(response_mark))
 
                 #si es un solo GLN entonces ...
                 if not qty or self.glns_codes_quantity == 1:
