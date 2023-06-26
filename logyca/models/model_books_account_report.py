@@ -439,7 +439,13 @@ class libro_mayor_report(models.TransientModel):
         x_ano = self.ano_filter
         x_month = self.month_filter
         
-        date_filter = str(x_ano)+'-'+str(x_month)+'-01'    
+        date_filter = str(x_ano)+'-'+str(x_month)+'-01'
+
+        if x_month == '1':
+            x_ano_inic = x_ano + 1
+            date_filter_inic = str(x_ano_inic)+'-01'+'-01'
+        else:
+            date_filter_inic = str(x_ano)+'-01'+'-01'
             
         if x_month == '12':
             x_ano = x_ano + 1 
@@ -448,7 +454,6 @@ class libro_mayor_report(models.TransientModel):
             x_month = str(int(x_month) + 1)
 
         date_filter_next = str(x_ano)+'-'+str(x_month)+'-01'
-        
         
         
         query_account_levelone = '''
@@ -479,18 +484,53 @@ class libro_mayor_report(models.TransientModel):
                 INNER JOIN account_account A on A.code like LevelAccount.LevelOne || '%s' 
                 INNER JOIN account_move_line B on A.id = B.account_id 
                 INNER JOIN account_move C on B.move_id = C.id and C.company_id = %s
+
+
                 LEFT JOIN (
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
-                            FROM account_move_line
-                            WHERE "date" < '%s' and parent_state = 'posted' group by account_id
+                            FROM account_move_line l
+                            INNER JOIN account_account c on c.id=l.account_id
+                            WHERE 
+                                CASE
+                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 1 THEN "date" < '%s'
+                                    WHEN user_type_id = 2 THEN "date" < '%s'
+                                    WHEN user_type_id = 3 THEN "date" < '%s'
+                                    WHEN user_type_id = 5 THEN "date" < '%s'
+                                    WHEN user_type_id = 8 THEN "date" < '%s'
+                                    WHEN user_type_id = 9 THEN "date" < '%s'
+                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    ELSE "date" < '%s'
+                                END
+                            and parent_state = 'posted' group by account_id
                       ) as D on B.account_id = D.account_id
+
+
+
                 WHERE  B.parent_state = 'posted' and B."date" < '%s' 
                 GROUP by A.code,LevelAccount.LevelOne,D.saldo_ant
                 ) as a
             Group by code_cuenta,name_cuenta
-        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,date_filter,date_filter_next)
-        
+        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
+                date_filter_inic, date_filter_next, 
+                date_filter_inic, date_filter_next, 
+                date_filter_inic, date_filter_next, 
+                date_filter_inic, date_filter_next, 
+                date_filter_inic, date_filter_next,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,date_filter_next)
+
         query_account_leveltwo = '''
             SELECT code_cuenta,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
@@ -513,14 +553,44 @@ class libro_mayor_report(models.TransientModel):
                 LEFT JOIN (
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
-                            FROM account_move_line
-                            WHERE "date" < '%s' and parent_state = 'posted' group by account_id
+                            FROM account_move_line l
+                            INNER JOIN account_account c on c.id=l.account_id
+                            WHERE 
+                                CASE
+                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 1 THEN "date" < '%s'
+                                    WHEN user_type_id = 2 THEN "date" < '%s'
+                                    WHEN user_type_id = 3 THEN "date" < '%s'
+                                    WHEN user_type_id = 5 THEN "date" < '%s'
+                                    WHEN user_type_id = 8 THEN "date" < '%s'
+                                    WHEN user_type_id = 9 THEN "date" < '%s'
+                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    ELSE "date" < '%s'
+                                END
+                            and parent_state = 'posted' group by account_id
                       ) as D on B.account_id = D.account_id
                 WHERE  B.parent_state = 'posted' and B."date" < '%s' 
                 GROUP by A.code,LevelAccount.LevelTwo,LevelAccount.LevelTwoName,D.saldo_ant
                 ) as a
             Group by code_cuenta,name_cuenta
-        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,date_filter,date_filter_next)
+        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
+                date_filter_inic, date_filter_next, 
+                date_filter_inic, date_filter_next, 
+                date_filter_inic, date_filter_next, 
+                date_filter_inic, date_filter_next, 
+                date_filter_inic, date_filter_next,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,            
+                date_filter,date_filter_next)
         
         query_account_levelthree = '''
             SELECT code_cuenta,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
@@ -544,15 +614,45 @@ class libro_mayor_report(models.TransientModel):
                 LEFT JOIN (
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
-                            FROM account_move_line
-                            WHERE "date" < '%s' and parent_state = 'posted' group by account_id
+                            FROM account_move_line l
+                            INNER JOIN account_account c on c.id=l.account_id
+                            WHERE 
+                                CASE
+                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 1 THEN "date" < '%s'
+                                    WHEN user_type_id = 2 THEN "date" < '%s'
+                                    WHEN user_type_id = 3 THEN "date" < '%s'
+                                    WHEN user_type_id = 5 THEN "date" < '%s'
+                                    WHEN user_type_id = 8 THEN "date" < '%s'
+                                    WHEN user_type_id = 9 THEN "date" < '%s'
+                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    ELSE "date" < '%s'
+                                END
+                            and parent_state = 'posted' group by account_id
                       ) as D on B.account_id = D.account_id
                 WHERE  B.parent_state = 'posted' and B."date" < '%s' 
                 GROUP by A.code,LevelAccount.LevelThree,LevelAccount.LevelThreeName,D.saldo_ant
                 ) as a
             Where code_cuenta != ''
             Group by code_cuenta,name_cuenta
-        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,date_filter,date_filter_next)
+        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
+                date_filter_inic, date_filter_next, 
+                date_filter_inic, date_filter_next, 
+                date_filter_inic, date_filter_next, 
+                date_filter_inic, date_filter_next, 
+                date_filter_inic, date_filter_next, 
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,date_filter_next)
         
          #Consulta final
         query = '''
