@@ -11,6 +11,7 @@
     'application': True,
     'installable': True,
     'depends': [
+        'base',
         'account',
         'analytic',
         'logyca',
@@ -56,6 +57,7 @@
         'views/accept_benefit_template.xml',
         'views/reject_benefit_template.xml',
         'views/rvc_digital_card_views.xml',
+        'views/res_partner_view.xml',
     ],
     'qweb': [
     ]
