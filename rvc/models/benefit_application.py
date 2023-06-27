@@ -610,41 +610,66 @@ class BenefitApplication(models.Model):
     def get_token_colabora_api(self):
         
         if self.get_odoo_url() == 'https://logyca.odoo.com':
-            url_get_token = "http://logycassoapi.azurewebsites.net/api/Token/Authenticate"
+            url_get_token = "https://app-loginrocp-prod.azurewebsites.net/api/Login"
         else:
             url_get_token = "http://apiauthenticationssodev.azurewebsites.net/api/Token/Authenticate"
-        
 
         body_get_token = json.dumps({
-            "email": "tiendavirtualapi@yopmail.com",
-            "password": "Logyca2020"
-            })
-        headers_get_token = {'Content-Type': 'application/json'}
+            "email": "tiendavirtual@logycaplataformas.onmicrosoft.com",
+            "password": "Logyca2023"
+        })
 
+        headers_get_token = {'Content-Type': 'application/json'}
         response_get_token = requests.post(url_get_token, headers=headers_get_token, data=body_get_token, verify=True)
 
         if response_get_token.status_code == 200:
             result = response_get_token.json()
             response_get_token.close()
-
             token = str(result.get('resultToken').get('token'))
             return token
 
         return False
 
-    def assign_credentials_colabora(self, re_assign=False, re_assign_email=None):
-        bearer_token = self.get_token_colabora_api()
+    def get_token_gs1_co_api(self):
+        """ token auth in gs1coidentificat****.org
+
+        Returns:
+            [str]: token for api access or False
+        """
+        
+        if self.get_odoo_url() == 'https://logyca.odoo.com':
+            url_get_token = "http://logycassoapi.azurewebsites.net/api/Token/Authenticate"
+        else:
+            url_get_token = "http://apiauthenticationssodev.azurewebsites.net/api/Token/Authenticate"
+
+        body_get_token = json.dumps({
+            "email": "tiendavirtual@yopmail.com",
+            "password": "Logyca2020"
+        })
+
+        headers_get_token = {'Content-Type': 'application/json'}
+        response_get_token = requests.post(url_get_token, headers=headers_get_token, data=body_get_token, verify=True)
+
+        if response_get_token.status_code == 200:
+            result = response_get_token.json()
+            response_get_token.close()
+            token = str(result.get('resultToken').get('token'))
+            return token
+
+        return False
+
+    def assign_credentials_gs1codes(self, re_assign=False, re_assign_email=None):
+        bearer_token = self.get_token_gs1_co_api()
 
         if bearer_token or bearer_token[0]:
             today_date = datetime.now()
             today_one_year_later = today_date + relativedelta(years=1)
 
             if self.get_odoo_url() == 'https://logyca.odoo.com':
-                url_assignate= "https://logycacolaboraapiv1.azurewebsites.net/api/Company/AddCompanyEcommerce"            
+                url_assignate= "https://app-colaborags1api-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
             else:
                 url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
 
-            
             #validando el nombre de contacto para asignar credenciales
             # si no tiene contact_name le ponemos el nombre de la empresa
             credentials_contact_name = ""
@@ -654,8 +679,8 @@ class BenefitApplication(models.Model):
                 credentials_contact_name = self.partner_id.partner_id.name
             elif self.partner_id.partner_id.x_first_name and self.partner_id.partner_id.x_first_lastname:
                 credentials_contact_name = self.partner_id.partner_id.x_first_name + " " + self.partner_id.partner_id.x_first_lastname
-            
-            # si viene de reasignar credenciales utiliza el correo nuevo ingresado y si no usa el 
+
+            # si viene de reasignar credenciales utiliza el correo nuevo ingresado y si no usa el
             # que tiene el contacto del beneficiario
             contact_email = re_assign_email if re_assign_email != None else self.contact_email
 
@@ -697,8 +722,83 @@ class BenefitApplication(models.Model):
                     return True
             else:
                 #TODO: logging
-                logging.exception("====> assign_credentials_colabora =>" + str(response_assignate))
-                logging.exception("====> assign_credentials_colabora =>" + str(response_assignate.text))
+                logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate))
+                logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate.text))
+                self.message_post(body=_(\
+                        'No pudieron asignarse las credenciales. <strong>Error:</strong> %s' % str(response_assignate)))
+                return False
+        else:
+            self.message_post(body=_("No pudo obtenerse el token para realizar la asignación de credenciales en Colabora."\
+                                     "Inténtelo nuevamente o comuníquese con soporte."))
+            return False
+
+    def assign_credentials_colabora(self, re_assign=False, re_assign_email=None):
+        bearer_token = self.get_token_colabora_api()
+
+        if bearer_token or bearer_token[0]:
+            today_date = datetime.now()
+            today_one_year_later = today_date + relativedelta(years=1)
+
+            if self.get_odoo_url() == 'https://logyca.odoo.com':
+                url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/"
+            else:
+                url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
+
+            
+            #validando el nombre de contacto para asignar credenciales
+            # si no tiene contact_name le ponemos el nombre de la empresa
+            credentials_contact_name = ""
+            if self.contact_name:
+                credentials_contact_name = self.contact_name
+            elif self.partner_id.partner_id.name:
+                credentials_contact_name = self.partner_id.partner_id.name
+            elif self.partner_id.partner_id.x_first_name and self.partner_id.partner_id.x_first_lastname:
+                credentials_contact_name = self.partner_id.partner_id.x_first_name + " " + self.partner_id.partner_id.x_first_lastname
+            
+            # si viene de reasignar credenciales utiliza el correo nuevo ingresado y si no usa el 
+            # que tiene el contacto del beneficiario
+            contact_email = re_assign_email if re_assign_email != None else self.contact_email
+
+            body_assignate = json.dumps({
+                    "Nit": self.vat,
+                    "Name": credentials_contact_name,
+                    "UserMail": contact_email,
+                    "InitialDate": today_date.strftime('%Y-%m-%d'),
+                    "EndDate": today_one_year_later.strftime('%Y-%m-%d'),
+                    "level": 0,
+                    "TypeService": 2,
+                    "NumberOverConsumption": 0,
+                    "IsOverconsumption": False
+                })
+            headers_assignate = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
+
+            #Making http post request
+            response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
+
+            logging.info("====> response_assignate_credentials =>" + str(response_assignate))
+
+            if response_assignate.status_code == 200:
+                #TODO: logging
+                result = response_assignate.json()
+                response_assignate.close()
+
+                #error al crear credenciales
+                if result.get('dataError') == True:
+                    #TODO: logging
+                    error_message = result.get('apiException').get('message')
+                    if not error_message:
+                        error_message = result.get('resultMessage')
+                    self.message_post(body=_(\
+                        'No pudieron asignarse las credenciales para acceder a la administración de códigos.'\
+                            '\n<strong>Error:</strong> %s' % str(error_message)))
+                    return False
+                else:
+                    self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
+                    return True
+            else:
+                #TODO: logging
+                logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate))
+                logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate.text))
                 self.message_post(body=_(\
                         'No pudieron asignarse las credenciales. <strong>Error:</strong> %s' % str(response_assignate)))
                 return False
@@ -928,7 +1028,7 @@ class BenefitApplication(models.Model):
                             # Asignar beneficio de códigos de identificación
                             if postulation_id.codes_quantity > 0:
                                 if postulation_id.assign_identification_codes():
-                                    postulation_id.assign_credentials_colabora()
+                                    postulation_id.assign_credentials_gs1codes()
 
                             # Agregar tipo de vinculacion al tercero
                             postulation_id.add_vinculation_partner()

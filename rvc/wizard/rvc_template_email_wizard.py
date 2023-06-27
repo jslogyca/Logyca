@@ -119,9 +119,9 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     if benefit_application.codes_quantity > 0:
                         if benefit_application.send_kit_with_no_benefit == False:
                             if benefit_application.assign_identification_codes():
-                                benefit_application.assign_credentials_colabora()
+                                benefit_application.assign_credentials_gs1codes()
                         else:
-                            benefit_application.assign_credentials_colabora()
+                            benefit_application.assign_credentials_gs1codes()
 
                     # Agregar tipo de vinculacion al tercero
                     benefit_application.add_vinculation_partner()
@@ -221,5 +221,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 active_id = context.get('active_ids', False)
                 benefit_application = self.env['benefit.application'].browse(active_id)
                 if benefit_application:
-                    benefit_application.assign_credentials_colabora(re_assign=True, re_assign_email=rec.email_credentials)
+                    if benefit_application.product_id.benefit_type == 'codigos':
+                        benefit_application.assign_credentials_gs1codes(re_assign=True, re_assign_email=rec.email_credentials)
+                    if benefit_application.product_id.benefit_type == 'colabora':
+                        benefit_application.assign_credentials_colabora(re_assign=True, re_assign_email=rec.email_credentials)
         return True
