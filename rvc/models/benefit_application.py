@@ -615,8 +615,8 @@ class BenefitApplication(models.Model):
             url_get_token = "http://apiauthenticationssodev.azurewebsites.net/api/Token/Authenticate"
 
         body_get_token = json.dumps({
-            "email": "tiendavirtual@logycaplataformas.onmicrosoft.com",
-            "password": "Logyca2023"
+            "email": "odoorvc@yopmail.com",
+            "password": "Logyca09062829"
         })
 
         headers_get_token = {'Content-Type': 'application/json'}
@@ -643,8 +643,8 @@ class BenefitApplication(models.Model):
             url_get_token = "http://apiauthenticationssodev.azurewebsites.net/api/Token/Authenticate"
 
         body_get_token = json.dumps({
-            "email": "tiendavirtual@yopmail.com",
-            "password": "Logyca2020"
+            "email": "odoorvc@yopmail.com",
+            "password": "Logyca09062829"
         })
 
         headers_get_token = {'Content-Type': 'application/json'}
