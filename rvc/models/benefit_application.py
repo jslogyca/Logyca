@@ -81,7 +81,7 @@ class BenefitApplication(models.Model):
                                     default='odoo',
                                     readonly=True,
                                     help="Este campo permite diferenciar las postulaciones RVC que provienen de Odoo, Tienda Virtual y ChatBot.")
-    seller = fields.Boolean('Seller', default=False, tracking=True)
+    is_seller = fields.Boolean('Seller', default=False, tracking=True, help="La empresa vende en el marketplace del éxito?")
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]

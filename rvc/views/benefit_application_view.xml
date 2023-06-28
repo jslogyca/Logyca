@@ -74,9 +74,11 @@
 						<group string="Otra Información">
                             <field name="reminder_count" readonly="1"/>
                             <field name="historical_record" readonly="1"/>
+							<field name="is_seller" group="base.group_system" force_save="1" readonly="1"/>
 							<field name="origin"/>
+
+
 							<field name="send_kit_with_no_benefit" group="base.group_system"/>
-							<field name="seller" group="base.group_system" force_save="1" readonly="1"/>
 						</group>
 					</group>
 					<group groups="rvc.group_rvc_superuser">

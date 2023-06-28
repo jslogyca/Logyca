@@ -7,4 +7,4 @@ from odoo.exceptions import ValidationError
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    seller = fields.Boolean('Seller', default=False, tracking=True)
+    x_is_seller = fields.Boolean('Seller', default=False, tracking=True, help="La empresa vende en el marketplace del éxito?")
