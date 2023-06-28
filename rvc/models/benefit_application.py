@@ -612,7 +612,7 @@ class BenefitApplication(models.Model):
         if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_get_token = "https://app-loginrocp-prod.azurewebsites.net/api/Login"
         else:
-            url_get_token = "http://apiauthenticationssodev.azurewebsites.net/api/Token/Authenticate"
+            url_get_token = "https://app-loginrocp-dev.azurewebsites.net/api/Login"
 
         body_get_token = json.dumps({
             "email": "odoorvc@yopmail.com",
