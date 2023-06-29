@@ -988,8 +988,13 @@ class BenefitApplication(models.Model):
                         access_link = postulation_id.partner_id.partner_id._notify_get_action_link('view')
 
                         if postulation_id.product_id.benefit_type == 'codigos':
-                            if postulation_id._validate_bought_products():
-                                template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                            #para sellers éxito se envía otro kit de bienvenida
+                            if postulation_id.is_seller:
+                                if postulation_id._validate_bought_products():
+                                    template = self.env.ref('rvc.mail_template_welcome_kit_rvc_seller')
+                            else:
+                                if postulation_id._validate_bought_products():
+                                    template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
                         elif postulation_id.product_id.benefit_type == 'colabora':
                             template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
                         elif postulation_id.product_id.benefit_type == 'tarjeta_digital':
