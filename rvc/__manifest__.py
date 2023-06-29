@@ -35,6 +35,7 @@
         'data/cron_mark_benefit_as_rejected.xml',
         'data/cron_benefit_expiration_reminder.xml',
         'data/rvc_digital_card_off_services_data.xml',
+        'data/welcome_kit_code_benefit_seller_template.xml',
         'security/ir.model.access.csv',
         'wizard/rvc_import_file_wizard_view.xml',
         'wizard/rvc_import_file_sponsored_wizard_view.xml',
