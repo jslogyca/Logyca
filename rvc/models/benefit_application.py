@@ -668,7 +668,7 @@ class BenefitApplication(models.Model):
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url_assignate= "https://app-colaborags1api-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
             else:
-                url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                url_assignate= "https://app-colaborags1api-dev.azurewebsites.net/api/Company/AddCompanyEcommerce"
 
             #validando el nombre de contacto para asignar credenciales
             # si no tiene contact_name le ponemos el nombre de la empresa
