@@ -39,7 +39,7 @@
                             background-color: #fc4c02;
                             color: white;
                             padding:10px;
-                            border-radius: 10px 15px;
+                            border-radius: 10px;
                             text-decoration: none;
                         }
 
@@ -66,23 +66,23 @@
                     <div class="box">
                     <img class="banner" src="https://logyca.odoo.com/web/image/652534/image001.png?access_token=aa32dde7-82ff-41f7-8568-556364294613" alt="Banner"/>
 
-                    <h1 class="bienvenida"><strong>¡Bienvenido al programa RVC!</strong></h1>
+                    <h1 class="welcome"><strong>¡Bienvenido al programa RVC!</strong></h1>
                     
                     <img class="banner" src="https://logyca.odoo.com/rvc/static/img/estimado_cliente.png" alt="Banner Image"/>
                     
                     <h2>${object.partner_id.partner_id.name}</h2>
                     
-                    <p><strong>Te damos la bienvenida al programa Redes de valor colaborativas – RVC a través del cual podrás potencializar la logística de tu negocio.</strong></p>
+                    <p><strong>Te damos la bienvenida al programa Redes de valor colaborativas – RVC a través del cual podrás potencializar la logística de tu negocio.</strong></p><br/>
                     
-                    <p>Te informamos que se realizó la activación de sus códigos de barras, los cuales podrás asignar desde nuestro <a href="https://api.whatsapp.com/send?phone=573009982929%26amp;text=%C2%A1Hola!%20Necesito%20soporte%20de%20LOGYCA%20/%20COLABORA%20" target="_blank">WhatsApp</a> marcando la opción 4 "Sellers ÉXITO".</p>
+                    <p>Te informamos que se realizó la activación de tus códigos de barras, los cuales podrás asignar desde nuestro <a href="https://api.whatsapp.com/send?phone=573009982929%26amp;text=%C2%A1Hola!%20Necesito%20soporte%20de%20LOGYCA%20/%20COLABORA%20" target="_blank">WhatsApp</a> marcando la opción 4 "Sellers ÉXITO".</p><br/>
                     
-                    <p>Cualquier duda que tengas, te ayudaremos a resolverla en el mismo canal, marcando la opción 2 "atención a cliente" en un horario de 7:00 a.m. a 4:30 p.m.</p>
+                    <p>Cualquier duda que tengas, te ayudaremos a resolverla en el mismo canal, marcando la opción 2 "atención a cliente" en un horario de 7:00 a.m. a 4:30 p.m.</p><br/>
                     
                     <div id="container">
                         <p>Es importante hacer buen uso del sistema GS1 y evitar cláusulas penales. Para esto debes capacitarte y realizar el curso gratuito de Identificación de producto con códigos de barras.</p>
                         <p id="button"><a id="btn-suscribe" href="https://www.gs1costore.org/" target="_blank">Inscríbete AQUÍ</a></p>
                     </div>
-                    
+                    <br/>
                     <div class="column">
                         <p>Conoce más beneficios SIN COSTO para tu negocio en: <a href="https://www.gs1costore.org/" target="_blank" style="color: #008784;">https://www.gs1costore.org/</a></p>
                     </div>
