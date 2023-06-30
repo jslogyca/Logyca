@@ -179,7 +179,13 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 access_link = partner._notify_get_action_link('view')
 
                 if benefit_application.product_id.benefit_type == 'codigos':
-                    template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                    #para sellers éxito se envía otro kit de bienvenida
+                    if benefit_application.is_seller:
+                        if benefit_application._validate_bought_products():
+                            template = self.env.ref('rvc.mail_template_welcome_kit_rvc_seller')
+                    else:
+                        if benefit_application._validate_bought_products():
+                            template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
                 elif benefit_application.product_id.benefit_type == 'colabora':
                     template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
                 elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
