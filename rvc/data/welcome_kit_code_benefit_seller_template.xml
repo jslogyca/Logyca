@@ -13,7 +13,7 @@
                         .box {
                             margin: 20px 200px;
                             font-family: 'Roboto', sans-serif;
-                            font-size: 13pt;
+                            font-size: 15pt;
                         }
 
                         .banner {
@@ -23,12 +23,12 @@
                         
                         .welcome {
                             background-color: #fc4c02;
-                            color: rgb(255, 255, 255);
+                            color: #ffffff;
                             text-align: center;
                         }
                         
                         #container {
-                            background-color: rgb(0, 44, 108);
+                            background-color: #002b6c;
                             text-align: center;
                             padding: 20px;
                             font-weight: bold;
@@ -66,7 +66,7 @@
                     <div class="box">
                     <img class="banner" src="https://logyca.odoo.com/web/image/652534/image001.png?access_token=aa32dde7-82ff-41f7-8568-556364294613" alt="Banner"/>
 
-                    <h1 class="welcome"><strong>¡Bienvenido al programa RVC!</strong></h1>
+                    <h2 class="welcome"><strong>¡Bienvenido al programa RVC!</strong></h2>
                     
                     <img class="banner" src="https://logyca.odoo.com/rvc/static/img/estimado_cliente.png" alt="Banner Image"/><br/>
                     
