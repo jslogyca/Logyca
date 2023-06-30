@@ -13,7 +13,7 @@
                         .box {
                             margin: 20px 200px;
                             font-family: 'Roboto', sans-serif;
-                            font-size: 15pt;
+                            font-size: 2rem;
                         }
 
                         .banner {
@@ -90,10 +90,11 @@
                     <div class="column" style="text-align: right;">
                         <p>Interactúa con nosotros:</p>
                         <a href="https://logyca.com/blog/"><img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-04.png" alt="Blog"/></a>
-                        <a href="https://www.facebook.com/OrganizacionLOGYCA/"><img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-06.png" alt="Twitter"/></a>
-                        <a href="https://twitter.com/LOGYCA_Org"><img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-07.png" alt="LinkedIn"/></a>
-                        <a href="https://www.linkedin.com/company/logyca/?originalSubdomain=co"><img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-08.png" alt="LinkedIn"/></a>
-                        <a href="https://www.instagram.com/logyca_org/?hl=es"><img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-05.png" alt="Facebook"/></a>
+                        <a href="https://www.facebook.com/OrganizacionLOGYCA/"><img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-05.png" alt="Facebook"/></a>
+                        <a href="https://twitter.com/LOGYCA_Org"><img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-06.png" alt="Twitter"/></a>
+                        <a href="https://www.linkedin.com/company/logyca/?originalSubdomain=co"><img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-07.png" alt="LinkedIn"/></a>
+                        <a href="https://www.instagram.com/logyca_org/?hl=es"><img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-08.png" alt="Instagram"/></a>
+                        
                     </div>
                 </div>
                 </body>
