@@ -68,9 +68,9 @@
 
                     <h1 class="welcome"><strong>¡Bienvenido al programa RVC!</strong></h1>
                     
-                    <img class="banner" src="https://logyca.odoo.com/rvc/static/img/estimado_cliente.png" alt="Banner Image"/>
+                    <img class="banner" src="https://logyca.odoo.com/rvc/static/img/estimado_cliente.png" alt="Banner Image"/><br/>
                     
-                    <h2>${object.partner_id.partner_id.name}</h2>
+                    <h2>${object.partner_id.partner_id.name}</h2><br/>
                     
                     <p><strong>Te damos la bienvenida al programa Redes de valor colaborativas – RVC a través del cual podrás potencializar la logística de tu negocio.</strong></p><br/>
                     
