@@ -15,6 +15,7 @@ import requests
 import logging
 import uuid
 import textwrap
+import time
 
 _logger = logging.getLogger(__name__)
 
@@ -647,14 +648,23 @@ class BenefitApplication(models.Model):
             "password": "Logyca09062829"
         })
 
-        headers_get_token = {'Content-Type': 'application/json'}
-        response_get_token = requests.post(url_get_token, headers=headers_get_token, data=body_get_token, verify=True)
+        headers_get_token = {'Content-Type': 'application/json', 'Connection': 'keep-alive'}
 
-        if response_get_token.status_code == 200:
-            result = response_get_token.json()
-            response_get_token.close()
-            token = str(result.get('resultToken').get('token'))
-            return token
+        max_retries = 3
+        retry_delay = 2
+
+        for retry in range(max_retries):
+            try:
+                response_get_token = requests.post(url_get_token, headers=headers_get_token, data=body_get_token, verify=False)
+                if response_get_token.status_code == 200:
+                    result = response_get_token.json()
+                    response_get_token.close()
+                    token = str(result.get('resultToken').get('token'))
+                    return token
+            except requests.exceptions.RequestException:
+                pass
+
+            time.sleep(retry_delay)
 
         return False
 
