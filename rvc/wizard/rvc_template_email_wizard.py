@@ -190,6 +190,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
                 # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo
                 if benefit_application.origin != 'odoo':
+                    #se usa para eliminar los adjuntos de la plantilla de correo
+                    template.attachment_ids = [(5,)]
                     template= benefit_application.create_OM_attachment(template)
                 else:
                     template.attachment_ids = False
@@ -200,6 +202,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     # la funcion send_digital_cards_bearer()
                     if benefit_application.product_id.benefit_type != 'tarjeta_digital':
                         template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
+                        #se usa para eliminar los adjuntos de la plantilla de correo
+                        template.attachment_ids = [(5,)]
                     benefit_application.message_post(body=_(\
                     'Se <strong>REENVIÓ</strong></u> el kit de bienvenida del beneficio.'))
                 except:

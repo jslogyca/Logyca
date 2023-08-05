@@ -1012,6 +1012,8 @@ class BenefitApplication(models.Model):
 
                         # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
                         if postulation_id.origin != 'odoo':
+                            #se usa para eliminar los adjuntos de la plantilla de correo
+                            template.attachment_ids = [(5,)]
                             template= postulation_id.create_OM_attachment(template)
                         else:
                             template.attachment_ids = False
@@ -1022,6 +1024,8 @@ class BenefitApplication(models.Model):
                         try:
                             if postulation_id.product_id.benefit_type != 'tarjeta_digital':
                                 template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
+                                #se usa para eliminar los adjuntos de la plantilla de correo
+                                template.attachment_ids = [(5,)]
                         except:
                             postulation_id.message_post(body=_(\
                             'No se pudo <strong>Enviar</strong></u> el kit de bienvenida del beneficio %s.' % str(postulation_id.product_id.benefit_type)))
