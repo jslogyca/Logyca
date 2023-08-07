@@ -395,16 +395,18 @@ class EPayslipBach(models.Model):
         if len(self.payslip_ids) == 0:
             return
         consulta=""" 
-                SELECT ep.id, sum(abs(l.total)) as total, """+str(epayslip.id)+""" as batch_id, l.employee_id, """+str(epayslip.epayslip_bach_run_id.id)+""" as batch_run_id, ep.name
+                SELECT r.id as rule, ep.id, sum(abs(l.total)) as total, """+str(epayslip.id)+""" as batch_id, 
+                l.employee_id, 
+                """+str(epayslip.epayslip_bach_run_id.id)+""" as batch_run_id, ep.name
                 from hr_payslip_line l
                 inner join hr_salary_rule r on r.id=l.salary_rule_id
                 inner join hr_electronictag_structure ep on ep.id=r.electronictag_id
-                where slip_id in %s and total <> 0.0  group by ep.id, 3, l.employee_id, 5, 6""" 
+                where slip_id in %s and total <> 0.0  group by r.id, ep.id, l.employee_id""" 
         self.env.cr.execute(consulta,(tuple(epayslip.payslip_ids.ids),))
         datos = self.env.cr.dictfetchall()
         for d in datos:
             dic = {}
-            dic['salary_rule_id'] = False
+            dic['salary_rule_id'] = d['rule']
             dic['electronictag_id'] = d['id']
             dic['value'] = d['total']
             dic['epayslip_bach_id'] = d['batch_id']
@@ -416,6 +418,34 @@ class EPayslipBach(models.Model):
             epayslip.epayslip_line_ids.unlink()
             epayslip.epayslip_line_ids = lista
         return True
+
+    # def update_tabla(self, epayslip):
+    #     lista = []
+    #     if len(self.payslip_ids) == 0:
+    #         return
+    #     consulta=""" 
+    #             SELECT ep.id, sum(abs(l.total)) as total, """+str(epayslip.id)+""" as batch_id, l.employee_id, """+str(epayslip.epayslip_bach_run_id.id)+""" as batch_run_id, ep.name,
+
+    #             from hr_payslip_line l
+    #             inner join hr_salary_rule r on r.id=l.salary_rule_id
+    #             inner join hr_electronictag_structure ep on ep.id=r.electronictag_id
+    #             where slip_id in %s and total <> 0.0  group by ep.id, 3, l.employee_id, 5, 6""" 
+    #     self.env.cr.execute(consulta,(tuple(epayslip.payslip_ids.ids),))
+    #     datos = self.env.cr.dictfetchall()
+    #     for d in datos:
+    #         dic = {}
+    #         dic['salary_rule_id'] = False
+    #         dic['electronictag_id'] = d['id']
+    #         dic['value'] = d['total']
+    #         dic['epayslip_bach_id'] = d['batch_id']
+    #         dic['employee_id'] = d['employee_id']
+    #         dic['bach_run_id'] = d['batch_run_id']
+    #         dic['name'] = d['name']
+    #         lista.append((0,0,dic))
+    #     if len(lista)>0:
+    #         epayslip.epayslip_line_ids.unlink()
+    #         epayslip.epayslip_line_ids = lista
+    #     return True
 
     def get_epayslip_line(self, epayslip):
         self.update_tabla(epayslip)
@@ -429,6 +459,11 @@ class EPayslipBach(models.Model):
         ComprobanteTotal = DevengadosTotal - DeduccionesTotal
         self.total_paid = round(ComprobanteTotal, 2)
         self.note = self.number + ' - ' + self.employee_id.name
+        for line in self.epayslip_line_ids:
+            if line.electronictag_id.id == 33:
+                line.value = DevengadosTotal
+            else:
+                continue
 
     def update_data(self):
         for epayslip in self:
@@ -676,9 +711,20 @@ class EPayslipBach(models.Model):
         HRNDF = SubElement(HRNDFs, 'HRNDF', HoraInicio=str(self.start_date) + 'T00:00:00', HoraFin=str(self.finish_date) + 'T00:00:00', Cantidad='1', Porcentaje='110.00',
                                          Pago=str('%.2f' % round(self.get_value_reg('HRNDF', self), 2)))
 
-        Vacaciones = SubElement(Devengados, 'Vacaciones').text = ' '
-        Cesantias = SubElement(Devengados, 'Cesantias',  Pago='0', Porcentaje='0.00', PagoIntereses='0.00')
-        Incapacidades = SubElement(Devengados, 'Incapacidades').text = ' '
+        Vacaciones = SubElement(Devengados, 'Vacaciones')
+        VacacionesComunes = SubElement(Vacaciones, 'VacacionesComunes',  FechaInicio=str(self.finish_date), FechaFin=str(self.finish_date),
+                                                    Pago=str('%.2f' % round(self.get_value_reg('VacacionesComunes', self), 2)), Cantidad='0')
+        VacacionesCompensadas = SubElement(Vacaciones, 'VacacionesCompensadas', Pago=str('%.2f' % round(self.get_value_reg('VacacionesCompensadas', self), 2)), Cantidad='0')
+
+        Primas = SubElement(Devengados, 'Primas', Pago=str('%.2f' % round(self.get_value_reg('Primas', self), 2)),
+                                                PagoNS='0.00', Cantidad='0')
+        Cesantias = SubElement(Devengados, 'Cesantias',  Pago=str('%.2f' % round(self.get_value_reg('Cesantias', self), 2)), 
+                                            Porcentaje='0.00', PagoIntereses=str('%.2f' % round(self.get_value_reg('PagoIntereses', self), 2)))
+        Incapacidades = SubElement(Devengados, 'Incapacidades')
+        if self.get_value_reg('Incapacidad', self) > 0:
+            Incapacidad = SubElement(Incapacidades, 'Incapacidad',  FechaInicio=str(self.finish_date), FechaFin=str(self.finish_date),
+                                                        Pago=str('%.2f' % round(self.get_value_reg('Incapacidad', self), 2)), Cantidad=str(int(self.get_number_days('INCAPACIDAD', self))), 
+                                                        Tipo="1")
         Licencias = SubElement(Devengados, 'Licencias')
         if self.get_value_reg('LicenciaMP', self) > 0:
             LicenciaMP = SubElement(Licencias, 'LicenciaMP',  FechaInicio=str(self.finish_date), FechaFin=str(self.finish_date),
