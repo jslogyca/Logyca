@@ -509,19 +509,16 @@ class libro_mayor_report(models.TransientModel):
                                 END
                             and parent_state = 'posted' group by account_id
                       ) as D on B.account_id = D.account_id
-
-
-
                 WHERE  B.parent_state = 'posted' and B."date" < '%s' 
                 GROUP by A.code,LevelAccount.LevelOne,D.saldo_ant
                 ) as a
             Group by code_cuenta,name_cuenta
         ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
-                date_filter_inic, date_filter_next, 
-                date_filter_inic, date_filter_next, 
-                date_filter_inic, date_filter_next, 
-                date_filter_inic, date_filter_next, 
-                date_filter_inic, date_filter_next,
+                date_filter_inic, date_filter, 
+                date_filter_inic, date_filter, 
+                date_filter_inic, date_filter, 
+                date_filter_inic, date_filter, 
+                date_filter_inic, date_filter,
                 date_filter,
                 date_filter,
                 date_filter,
@@ -578,11 +575,11 @@ class libro_mayor_report(models.TransientModel):
                 ) as a
             Group by code_cuenta,name_cuenta
         ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
-                date_filter_inic, date_filter_next, 
-                date_filter_inic, date_filter_next, 
-                date_filter_inic, date_filter_next, 
-                date_filter_inic, date_filter_next, 
-                date_filter_inic, date_filter_next,
+                date_filter_inic, date_filter, 
+                date_filter_inic, date_filter, 
+                date_filter_inic, date_filter, 
+                date_filter_inic, date_filter, 
+                date_filter_inic, date_filter,
                 date_filter,
                 date_filter,
                 date_filter,
@@ -640,11 +637,11 @@ class libro_mayor_report(models.TransientModel):
             Where code_cuenta != ''
             Group by code_cuenta,name_cuenta
         ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
-                date_filter_inic, date_filter_next, 
-                date_filter_inic, date_filter_next, 
-                date_filter_inic, date_filter_next, 
-                date_filter_inic, date_filter_next, 
-                date_filter_inic, date_filter_next, 
+                date_filter_inic, date_filter, 
+                date_filter_inic, date_filter, 
+                date_filter_inic, date_filter, 
+                date_filter_inic, date_filter, 
+                date_filter_inic, date_filter, 
                 date_filter,
                 date_filter,
                 date_filter,
@@ -668,8 +665,7 @@ class libro_mayor_report(models.TransientModel):
             Order By Code_Cuenta
         ''' % (query_account_levelone,query_account_leveltwo,query_account_levelthree)
         
-        #raise ValidationError(_(query))       
-        
+        #raise ValidationError(_(query))
         self._cr.execute(query)
         _res = self._cr.dictfetchall()
         return _res
