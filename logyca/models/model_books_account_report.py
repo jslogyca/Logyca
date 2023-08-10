@@ -24,7 +24,7 @@ styles = getSampleStyleSheet()
 styleN = styles['Normal']
 styleH = styles['Heading1']
 
-#---------------------------Modelo para generar LIBROS CONTABLES-------------------------------#
+#----------------------------Modelo para generar LIBROS CONTABLES-------------------------------#
 
 #---------------------------------- LIBRO DIARIO CONTABLE
 class libro_diario_report(models.TransientModel):
