@@ -793,4 +793,3 @@ class libro_mayor_report(models.TransientModel):
                     'target': 'self',
                 }
         return action
-        
