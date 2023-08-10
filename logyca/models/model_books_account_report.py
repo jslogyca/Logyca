@@ -26,7 +26,7 @@ styleH = styles['Heading1']
 
 #---------------------------Modelo para generar LIBROS CONTABLES-------------------------------#
 
-#---------------------------------- LIBRO DIARIO
+#---------------------------------- LIBRO DIARIO CONTABLE
 class libro_diario_report(models.TransientModel):
     _name = 'logyca.libro_diario.report'
     _description = 'Reporte Libro Diario LOGYCA'
