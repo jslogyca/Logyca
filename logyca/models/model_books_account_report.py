@@ -424,7 +424,7 @@ class libro_diario_report(models.TransientModel):
                                 WHEN user_type_id = 11 THEN "date" < '%s'
                                 ELSE "date" < '%s'
                             END
-                        and parent_state = 'posted' group by account_id
+                        and parent_state = 'posted' group by journal_id,account_id
                   ) as E on b.journal_id = E.journal_id and b.account_id = E.account_id      
             WHERE  B.parent_state = 'posted' and a.company_id = %s and B."date" < '%s'
             GROUP by D.code,D."name",C.code,C."name",E.saldo_ant            
