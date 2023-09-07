@@ -117,6 +117,7 @@ class libro_diario_report(models.TransientModel):
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
                             FROM account_move_line
+                            INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
                                     WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
@@ -178,6 +179,7 @@ class libro_diario_report(models.TransientModel):
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
                             FROM account_move_line
+                            INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
                                     WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
@@ -238,6 +240,7 @@ class libro_diario_report(models.TransientModel):
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
                             FROM account_move_line
+                            INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
                                     WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
@@ -299,6 +302,7 @@ class libro_diario_report(models.TransientModel):
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
                             FROM account_move_line
+                            INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
                                     WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
@@ -350,7 +354,8 @@ class libro_diario_report(models.TransientModel):
             LEFT JOIN (
                         SELECT account_id,
                                 SUM(debit - credit) as saldo_ant 
-                        FROM account_move_line 
+                        FROM account_move_line
+                        INNER JOIN account_account c on c.id=l.account_id
                         WHERE
                             CASE
                                 WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
@@ -401,7 +406,8 @@ class libro_diario_report(models.TransientModel):
             LEFT JOIN (
                         SELECT journal_id,account_id,
                                 SUM(debit - credit) as saldo_ant 
-                        FROM account_move_line 
+                        FROM account_move_line
+                        INNER JOIN account_account c on c.id=l.account_id
                         WHERE
                             CASE
                                 WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
