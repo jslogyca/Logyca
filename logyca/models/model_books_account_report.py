@@ -371,7 +371,7 @@ class libro_diario_report(models.TransientModel):
                   ) as E on b.account_id = E.account_id  
             WHERE  B.parent_state = 'posted' and a.company_id = %s and B."date" < '%s'
             GROUP by D.code,D."name",E.saldo_ant
-        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
+        ''' % (date_filter,date_filter,date_filter,date_filter,
                 date_filter_inic, date_filter,
                 date_filter_inic, date_filter,
                 date_filter_inic, date_filter,
@@ -384,7 +384,7 @@ class libro_diario_report(models.TransientModel):
                 date_filter,
                 date_filter,
                 date_filter,
-                date_filter,date_filter_next)
+                date_filter,self.company_id.id,date_filter_next)
         
         query_journal = '''
             SELECT
@@ -422,7 +422,7 @@ class libro_diario_report(models.TransientModel):
                   ) as E on b.journal_id = E.journal_id and b.account_id = E.account_id      
             WHERE  B.parent_state = 'posted' and a.company_id = %s and B."date" < '%s'
             GROUP by D.code,D."name",C.code,C."name",E.saldo_ant            
-        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
+        ''' % (date_filter,date_filter,date_filter,date_filter,
                 date_filter_inic, date_filter,
                 date_filter_inic, date_filter,
                 date_filter_inic, date_filter,
@@ -435,7 +435,7 @@ class libro_diario_report(models.TransientModel):
                 date_filter,
                 date_filter,
                 date_filter,
-                date_filter,date_filter_next)
+                date_filter,self.company_id.id,date_filter_next)
         
          #Consulta final
         query = '''
