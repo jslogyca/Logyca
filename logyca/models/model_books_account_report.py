@@ -116,7 +116,7 @@ class libro_diario_report(models.TransientModel):
                 LEFT JOIN (
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
-                            FROM account_move_line
+                            FROM account_move_line l
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
@@ -178,7 +178,7 @@ class libro_diario_report(models.TransientModel):
                 LEFT JOIN (
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
-                            FROM account_move_line
+                            FROM account_move_line l
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
@@ -239,7 +239,7 @@ class libro_diario_report(models.TransientModel):
                 LEFT JOIN (
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
-                            FROM account_move_line
+                            FROM account_move_line l
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
@@ -301,7 +301,7 @@ class libro_diario_report(models.TransientModel):
                 LEFT JOIN (
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
-                            FROM account_move_line
+                            FROM account_move_line l
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
@@ -354,7 +354,7 @@ class libro_diario_report(models.TransientModel):
             LEFT JOIN (
                         SELECT account_id,
                                 SUM(debit - credit) as saldo_ant 
-                        FROM account_move_line
+                        FROM account_move_line l
                         INNER JOIN account_account c on c.id=l.account_id
                         WHERE
                             CASE
@@ -406,7 +406,7 @@ class libro_diario_report(models.TransientModel):
             LEFT JOIN (
                         SELECT journal_id,account_id,
                                 SUM(debit - credit) as saldo_ant 
-                        FROM account_move_line
+                        FROM account_move_line l
                         INNER JOIN account_account c on c.id=l.account_id
                         WHERE
                             CASE
