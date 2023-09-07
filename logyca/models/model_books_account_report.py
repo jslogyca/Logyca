@@ -69,7 +69,13 @@ class libro_diario_report(models.TransientModel):
         x_ano = self.ano_filter
         x_month = self.month_filter
         
-        date_filter = str(x_ano)+'-'+str(x_month)+'-01'    
+        date_filter = str(x_ano)+'-'+str(x_month)+'-01'
+
+        if x_month == '1':
+            x_ano_inic = x_ano + 1
+            date_filter_inic = str(x_ano_inic)+'-01'+'-01'
+        else:
+            date_filter_inic = str(x_ano)+'-01'+'-01'
             
         if x_month == '12':
             x_ano = x_ano + 1 
@@ -111,13 +117,43 @@ class libro_diario_report(models.TransientModel):
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
                             FROM account_move_line
-                            WHERE "date" < '%s' and parent_state = 'posted' group by account_id
+                            WHERE
+                                CASE
+                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 1 THEN "date" < '%s'
+                                    WHEN user_type_id = 2 THEN "date" < '%s'
+                                    WHEN user_type_id = 3 THEN "date" < '%s'
+                                    WHEN user_type_id = 5 THEN "date" < '%s'
+                                    WHEN user_type_id = 8 THEN "date" < '%s'
+                                    WHEN user_type_id = 9 THEN "date" < '%s'
+                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    ELSE "date" < '%s'
+                                END
+                            and parent_state = 'posted' group by account_id
                       ) as D on B.account_id = D.account_id
                 WHERE  B.parent_state = 'posted' and B."date" < '%s' 
                 GROUP by A.code,LevelAccount.LevelOne,D.saldo_ant
                 ) as a
             Group by code_cuenta,name_cuenta
-        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,date_filter,date_filter_next)
+        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,date_filter_next)
+
         
         query_account_leveltwo = '''
             SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
@@ -142,13 +178,42 @@ class libro_diario_report(models.TransientModel):
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
                             FROM account_move_line
-                            WHERE "date" < '%s' and parent_state = 'posted' group by account_id
+                            WHERE
+                                CASE
+                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 1 THEN "date" < '%s'
+                                    WHEN user_type_id = 2 THEN "date" < '%s'
+                                    WHEN user_type_id = 3 THEN "date" < '%s'
+                                    WHEN user_type_id = 5 THEN "date" < '%s'
+                                    WHEN user_type_id = 8 THEN "date" < '%s'
+                                    WHEN user_type_id = 9 THEN "date" < '%s'
+                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    ELSE "date" < '%s'
+                                END
+                            and parent_state = 'posted' group by account_id
                       ) as D on B.account_id = D.account_id
                 WHERE  B.parent_state = 'posted' and B."date" < '%s' 
                 GROUP by A.code,LevelAccount.LevelTwo,LevelAccount.LevelTwoName,D.saldo_ant
                 ) as a
             Group by code_cuenta,name_cuenta
-        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,date_filter,date_filter_next)
+        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,date_filter_next)
         
         query_account_levelthree = '''
             SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
@@ -173,14 +238,43 @@ class libro_diario_report(models.TransientModel):
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
                             FROM account_move_line
-                            WHERE "date" < '%s' and parent_state = 'posted' group by account_id
+                            WHERE
+                                CASE
+                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 1 THEN "date" < '%s'
+                                    WHEN user_type_id = 2 THEN "date" < '%s'
+                                    WHEN user_type_id = 3 THEN "date" < '%s'
+                                    WHEN user_type_id = 5 THEN "date" < '%s'
+                                    WHEN user_type_id = 8 THEN "date" < '%s'
+                                    WHEN user_type_id = 9 THEN "date" < '%s'
+                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    ELSE "date" < '%s'
+                                END
+                            and parent_state = 'posted' group by account_id
                       ) as D on B.account_id = D.account_id
                 WHERE  B.parent_state = 'posted' and B."date" < '%s' 
                 GROUP by A.code,LevelAccount.LevelThree,LevelAccount.LevelThreeName,D.saldo_ant
                 ) as a
             Where code_cuenta != ''
             Group by code_cuenta,name_cuenta
-        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,date_filter,date_filter_next)
+        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,date_filter_next)
         
         query_account_levelfour = '''
             SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
@@ -205,14 +299,43 @@ class libro_diario_report(models.TransientModel):
                             SELECT account_id,
                                     SUM(debit - credit) as saldo_ant 
                             FROM account_move_line
-                            WHERE "date" < '%s' and parent_state = 'posted' group by account_id
+                            WHERE
+                                CASE
+                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN user_type_id = 1 THEN "date" < '%s'
+                                    WHEN user_type_id = 2 THEN "date" < '%s'
+                                    WHEN user_type_id = 3 THEN "date" < '%s'
+                                    WHEN user_type_id = 5 THEN "date" < '%s'
+                                    WHEN user_type_id = 8 THEN "date" < '%s'
+                                    WHEN user_type_id = 9 THEN "date" < '%s'
+                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    ELSE "date" < '%s'
+                                END
+                            and parent_state = 'posted' group by account_id
                       ) as D on B.account_id = D.account_id
                 WHERE  B.parent_state = 'posted' and B."date" < '%s' 
                 GROUP by A.code,LevelAccount.LevelFour,LevelAccount.LevelFourName,D.saldo_ant
                 ) as a
             Where code_cuenta != ''
             Group by code_cuenta,name_cuenta
-        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,date_filter,date_filter_next)
+        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,date_filter_next)
         
         query_account = '''
             SELECT
@@ -228,11 +351,40 @@ class libro_diario_report(models.TransientModel):
                         SELECT account_id,
                                 SUM(debit - credit) as saldo_ant 
                         FROM account_move_line 
-                        WHERE "date" < '%s' and parent_state = 'posted' group by account_id
+                        WHERE
+                            CASE
+                                WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
+                                WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
+                                WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
+                                WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
+                                WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
+                                WHEN user_type_id = 1 THEN "date" < '%s'
+                                WHEN user_type_id = 2 THEN "date" < '%s'
+                                WHEN user_type_id = 3 THEN "date" < '%s'
+                                WHEN user_type_id = 5 THEN "date" < '%s'
+                                WHEN user_type_id = 8 THEN "date" < '%s'
+                                WHEN user_type_id = 9 THEN "date" < '%s'
+                                WHEN user_type_id = 11 THEN "date" < '%s'
+                                ELSE "date" < '%s'
+                            END
+                        and parent_state = 'posted' group by account_id
                   ) as E on b.account_id = E.account_id  
             WHERE  B.parent_state = 'posted' and a.company_id = %s and B."date" < '%s'
             GROUP by D.code,D."name",E.saldo_ant
-        ''' % (date_filter,date_filter,date_filter,date_filter,date_filter,self.company_id.id,date_filter_next)
+        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,date_filter_next)
         
         query_journal = '''
             SELECT
@@ -250,11 +402,40 @@ class libro_diario_report(models.TransientModel):
                         SELECT journal_id,account_id,
                                 SUM(debit - credit) as saldo_ant 
                         FROM account_move_line 
-                        WHERE "date" < '%s' and parent_state = 'posted' group by journal_id,account_id
+                        WHERE
+                            CASE
+                                WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
+                                WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
+                                WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
+                                WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
+                                WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
+                                WHEN user_type_id = 1 THEN "date" < '%s'
+                                WHEN user_type_id = 2 THEN "date" < '%s'
+                                WHEN user_type_id = 3 THEN "date" < '%s'
+                                WHEN user_type_id = 5 THEN "date" < '%s'
+                                WHEN user_type_id = 8 THEN "date" < '%s'
+                                WHEN user_type_id = 9 THEN "date" < '%s'
+                                WHEN user_type_id = 11 THEN "date" < '%s'
+                                ELSE "date" < '%s'
+                            END
+                        and parent_state = 'posted' group by account_id
                   ) as E on b.journal_id = E.journal_id and b.account_id = E.account_id      
             WHERE  B.parent_state = 'posted' and a.company_id = %s and B."date" < '%s'
             GROUP by D.code,D."name",C.code,C."name",E.saldo_ant            
-        ''' % (date_filter,date_filter,date_filter,date_filter,date_filter,self.company_id.id,date_filter_next)
+        ''' % (date_filter,date_filter,date_filter,date_filter,'%',self.company_id.id,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter_inic, date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,
+                date_filter,date_filter_next)
         
          #Consulta final
         query = '''
