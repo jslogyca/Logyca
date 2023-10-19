@@ -11,20 +11,20 @@
                 <head>
                     <style>
                         .box {
-                            margin: 20px 0 20px 20px;
+                            margin: auto;
                             width: 600px;
                             font-family: 'Roboto', sans-serif;
                         }
-
-                        .banner {
+                
+                        .banner-brands {
                             display: block;
                             margin: 0 auto;
+                            width: 50%;
                         }
-                        
-                        .welcome {
-                            background-color: #fc4c02;
-                            color: #ffffff;
-                            text-align: center;
+                
+                        .banner-greet {
+                            display: block;
+                            margin: 0 auto;
                         }
                         
                         #container {
@@ -42,7 +42,7 @@
                             border-radius: 10px;
                             text-decoration: none;
                         }
-
+                
                         #button{
                             margin-top:30px;
                             text-align:center;
@@ -55,64 +55,86 @@
                         }
                         
                         a {
-                            color: #008784;
+                            color: #002b6c;
                         }
-
+                
                         icons{
                             margin-right: 4px;
                         }
-
-                        p{
-                            font-size: 16px;
+                
+                        p, li {
+                            font-size: 14px;   
+                            line-height: 1.5;
                         }
 
+                
                         #justified{
                             text-align: justify;
                         }
-
+                
                     </style>
                 </head>
                 <body>
                     <div class="box">
-                    <img class="banner" src="https://logyca.odoo.com/web/image/652534/image001.png?access_token=aa32dde7-82ff-41f7-8568-556364294613" alt="Banner"/>
+                        <img class="banner-brands" src="https://ci5.googleusercontent.com/proxy/xlXynKNjNqZquWfF_1hslqmQ2lX9oUKsru8uHPvbXBhkZjUSrseJe2wKECjcyum7hCt3AmQSW9uPOeUGyB6dr3rlE_jUB8AEmJnUkmi4J_5JK3xgTbhVYkkuL2vFFBSR54CNrEGaVfjcP3mIla8BjaOI1lCLCOxq=s0-d-e1-ft#https://files.escala.com/public/53c5445e-cfd0-11ed-80e4-0e9807857d8a/logo-gs1-y-logyca-asociacion.png" alt="Banner"/>
 
-                    <h2 class="welcome"><strong>¡Bienvenido al programa RVC!</strong></h2>
-                    
-                    <img class="banner" src="https://logyca.odoo.com/rvc/static/img/estimado_cliente.png" alt="Banner Image"/><br/>
-                    
-                    <br/><h2>${object.partner_id.partner_id.name}</h2><br/>
-                    
-                    <p class="justified"><strong>Te damos la bienvenida al programa Redes de valor colaborativas – RVC a través del cual podrás potencializar la logística de tu negocio.</strong></p>
-                    
-                    <p class="justified">Te informamos que se realizó la activación de tus códigos de barras, los cuales podrás asignar desde nuestro <a href="https://wa.link/0phvnj" target="_blank">WhatsApp</a> marcando la opción "4 - Marcación de códigos / SELLERS Exito".</p>
-                    
+                        <img class="banner-greet" src="https://ci4.googleusercontent.com/proxy/iReu1QYZ-uWoGIxMqqC_XfvRscOxecxhBM3idJqk8wio6Z-gFhUnBgNF3f4WsV-Hmk2Naq730LbsAQByHA6Rpdv3fIKkDEriX-9L-eEJUIw9czoULiYXy3elXQbPDOtMiSIeOG07QJwJN3ZiHhDZYWe-5ggtGwOG=s0-d-e1-ft#https://files.escala.com/public/4b65466c-3d29-11ee-99cc-f6d3ae86907a/banner-html-oferta-mercantil.png" alt="Banner Image"/>
+                        <br/>
+
+                        <br/>
+                        <h2>${object.partner_id.partner_id.name}</h2>
+
+                        <p class="justified">
+                            <strong>Te damos la bienvenida al programa RVC (Redes de valor colaborativas), a través del cual podrás potencializar la logística de tu negocio.</strong>
+                        </p>
+
+                        <p class="justified ">¡Ya tienes disponibles los códigos de barras que solicitaste! <br/>
+                            Para asignarlos a tus artículos comerciales sigue estos 3 simples pasos:
+                        <ul>
+                            <li>1. Da clic <a href="https://wa.link/0phvnj" target="_blank">AQUÍ</a> para ingresar al chat de WhatsApp de GS1 Colombia. Envíanos un mensaje, por ejemplo "hola", para indicarnos que ingresaste.</li>
+                            <li>2. Responderemos tú saludo con una cálida bienvenida y una lista de opciones disponibles. Selecciona la opción <strong>4 - Marcación de códigos / SELLERS Exito</strong>.
+                            </li>
+                            <li>3. Sigue los pasos atentamente para asignar uno a uno tús códigos a tus artículos comerciales.</li>
+                        </ul>
+                    </p>
+
                     <p class="justified">Cualquier duda que tengas, te ayudaremos a resolverla en el mismo canal, marcando la opción 2 "atención a cliente" en un horario de 7:00 a.m. a 4:30 p.m.</p>
-                    
+
                     <div id="container">
                         <p class="justified">Es importante hacer buen uso del sistema GS1 y evitar cláusulas penales. Para esto debes capacitarte y realizar el curso gratuito de Identificación de producto con códigos de barras.</p>
-                        <p id="button"><a id="btn-suscribe" href="https://logyca.com/educacion/educacion-e-learning" target="_blank">Inscríbete AQUÍ</a></p>
+                        <p id="button">
+                            <a id="btn-suscribe" href="https://logyca.com/educacion/educacion-e-learning" target="_blank">Inscríbete AQUÍ</a>
+                        </p>
                     </div>
                     <br/>
                     <div class="column">
-                        <p>Conoce más beneficios SIN COSTO para tu negocio en: <a href="https://www.gs1costore.org/" target="_blank" style="color: #008784;">https://www.gs1costore.org/</a></p>
+                        <p>Conoce más beneficios SIN COSTO para tu negocio en: <a href="https://www.gs1costore.org/" target="_blank" style="color: #008784;">https://www.gs1costore.org/</a>
+                        </p>
                     </div>
-                    
+
                     <div class="column" style="text-align: right;">
                         <p>Interactúa con nosotros:</p>
-                        <a href="https://gs1co.org/blog"><img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-04.png" alt="Blog"/></a>
-                        <a href="https://www.facebook.com/GS1Colombia"><img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-05.png" alt="Facebook"/></a>
-                        <a href="https://www.linkedin.com/company/gs1-colombia"><img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-07.png" alt="LinkedIn"/></a>
-                        <a href="https://www.facebook.com/GS1Colombia"><img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-08.png" alt="Instagram"/></a>
-                        
+                        <a href="https://gs1co.org/blog">
+                            <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-04.png" alt="Blog"/>
+                        </a>
+                        <a href="https://www.facebook.com/GS1Colombia">
+                            <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-05.png" alt="Facebook"/>
+                        </a>
+                        <a href="https://www.linkedin.com/company/gs1-colombia">
+                            <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-07.png" alt="LinkedIn"/>
+                        </a>
+                        <a href="https://www.facebook.com/GS1Colombia">
+                            <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-08.png" alt="Instagram"/>
+                        </a>
+
                     </div>
                 </div>
-                </body>
-
-            </field>
-            <field name="report_template" ref="action_carta_bienv_codes_rvc"/>
-            <field name="report_name">Carta de Bienvenida RVC</field>
-            <field name="lang">${object.lang}</field>
-            <field name="auto_delete" eval="False"/>
-        </record>
-    </data>
+            </body>
+        </field>
+        <field name="report_template" ref="action_carta_bienv_codes_rvc"/>
+        <field name="report_name">Carta de Bienvenida RVC</field>
+        <field name="lang">${object.lang}</field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+</data>
 </odoo>
