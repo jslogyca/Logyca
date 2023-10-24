@@ -750,7 +750,7 @@ class BenefitApplication(models.Model):
                 logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate))
                 logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate.text))
                 self.message_post(body=_(\
-                        'No pudieron asignarse las credenciales. <strong>Error:</strong> %s. %s' % (str(response_assignate),str(response_assignate))))
+                        'No pudieron asignarse las credenciales. <strong>Error:</strong> %s. %s' % (str(response_assignate),str(log))))
                 return False
         else:
             self.message_post(body=_("No pudo obtenerse el token para realizar la asignación de credenciales en www.gs1coidentificacion.org."\
