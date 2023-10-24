@@ -12,5 +12,5 @@ class ConfigRVC(models.Model):
     product_id = fields.Many2one('product.product', string='Beneficio')
     benefit_type = fields.Selection([('codigos', 'Identificación de Productos'), 
                                     ('colabora', 'Colabora'),
-                                    ('analitica', 'Analítica')], string="Beneficio")
+                                    ('analitica', 'Analítica')], string="Tipo Beneficio")
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company)

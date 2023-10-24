@@ -1145,9 +1145,15 @@ class BenefitApplication(models.Model):
                     'Si no has sido notificado con anterioridad, escríbenos a <a href="mailto:fsalamanca@logyca.com">fsalamanca@logyca.com</a>.</h3></br></br><p>Atentamente,</p><p>LOGYCA.</p>' % (postulation.access_token,postulation.access_token),
                 'email_to': postulation.contact_email
             }
+            partner=self.env['res.partner'].search([('id','=',postulation.partner_id.partner_id.id)])
+            # mail_id = self.env['mail.mail'].create(vals)
+            # mail_id.sudo().send()
 
-            mail_id = self.env['mail.mail'].create(vals)
-            mail_id.sudo().send()
+            access_link = partner._notify_get_action_link('view')
+            subject = "Tienes pendiente aceptar tus codigos de barras sin costo"
+            template = self.env.ref('rvc.mail_template_notify_reminder_code_benefit')
+            template.with_context(url=access_link).send_mail(postulation.id, force_send=False, email_values={'subject': subject})
+
             #sumar una unidad a la cantidad de recordatorios enviados
             #sirve para enviar únicamente 3 recordatorios por postulación.
             postulation.reminder_count += 1
