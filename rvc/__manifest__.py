@@ -25,6 +25,7 @@
     'data': [
         'security/security.xml',
         'report/rvc_report.xml',
+        'data/notify_reminder_code_benefit_template.xml',
         'data/notify_codes_benefit_template.xml',
         'data/notify_colabora_benefit_template.xml',
         'data/welcome_kit_codes_benefit_template.xml',

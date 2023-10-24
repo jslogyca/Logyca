@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="mail_template_notify_reminder_code_benefit" model="mail.template">
+            <field name="name">Tienes pendiente aceptar tus codigos de barras sin costo</field>
+            <field name="model_id" ref="rvc.model_benefit_application"/>
+            <field name="subject">Tienes pendiente aceptar tus codigos de barras sin costo</field>
+            <field name="email_from">${(object.company_id.email or '')}</field>
+            <field name="email_to">${(object.contact_email|safe)}</field>
+            <field name="body_html" type="html">
+                <head>
+                    <style>
+                    .box {
+                    margin: auto;
+                    width: 600px;
+                    font-family: 'Roboto', sans-serif;
+                    }
+                    .banner-brands {
+                    display: block;
+                    margin: 0 auto;
+                    width: 50%;
+                    }
+                    .banner-greet {
+                    display: block;
+                    margin: 0 auto;
+                    }
+                    #container {
+                    background-color: #002b6c;
+                    text-align: center;
+                    padding: 20px;
+                    font-weight: bold;
+                    color: white;
+                    }
+                    #btn-suscribe {
+                    background-color: #fc4c02;
+                    color: white;
+                    padding:10px;
+                    border-radius: 10px;
+                    text-decoration: none;
+                    }
+                    #button{
+                    margin-top:30px;
+                    text-align:center;
+                    }
+                    .column {
+                    display: inline-block;
+                    width: 48%;
+                    vertical-align: top;
+                    }
+                    a {
+                    color: #002b6c;
+                    }
+                    icons{
+                    margin-right: 4px;
+                    }
+                    p, li {
+                    font-size: 14px;   
+                    line-height: 1.5;
+                    }
+                    #justified{
+                    text-align: justify;
+                    }
+                    </style>
+                </head>
+                <div style="caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); margin: 0px auto; max-width: 550px;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                    <tbody>
+                        <tr>
+                            <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px; text-align: center;">
+                            <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                    <tbody>
+                                        <tr>
+                                        <td align="center" style="border-collapse:collapse;padding: 0px; word-break: break-word;">
+                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-spacing: 0px;">
+                                                <tbody>
+                                                    <tr>
+                                                    <td style="border-collapse:collapse;width: 369px;"><img alt="LOGO GS1 Y LOGYCA ASOCIACION .png" height="auto" src="https://files.escala.com/public/53c5445e-cfd0-11ed-80e4-0e9807857d8a/logo-gs1-y-logyca-asociacion.png" width="369" style="border: 0px; height: auto; line-height: 13px; outline: currentcolor; display: block; width: 369px; font-size: 13px;"/></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div style="caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); margin: 0px auto; max-width: 550px;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                    <tbody>
+                        <tr>
+                            <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px; text-align: center;">
+                            <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                    <tbody>
+                                        <tr>
+                                        <td align="center" style="border-collapse:collapse;padding: 0px; word-break: break-word;">
+                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-spacing: 0px;">
+                                                <tbody>
+                                                    <tr>
+                                                    <td style="border-collapse:collapse;width: 550px;"><img alt="Banner-html-oferta-mercantil.png" height="auto" src="https://files.escala.com/public/4b65466c-3d29-11ee-99cc-f6d3ae86907a/banner-html-oferta-mercantil.png" width="550" style="border: 0px; height: auto; line-height: 13px; outline: currentcolor; display: block; width: 550px; font-size: 13px;"/></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div style="caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); margin: 0px auto; max-width: 550px;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                    <tbody>
+                        <tr>
+                            <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px; text-align: center;">
+                            <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="background-color: rgb(242, 99, 52); vertical-align: top;">
+                                    <tbody>
+                                        <tr>
+                                        <td align="left" style="border-collapse:collapse;padding: 10px 25px; word-break: break-word;">
+                                            <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; color: rgb(112, 107, 109);">
+                                                <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5;"><span style="font-family:Verdana, Geneva, sans-serif;font-size: 18px; color: rgb(255, 255, 255);">Estás a un paso de finalizar el proceso para adquirir el <strong>beneficio de códigos de barras sin costo.</strong></span></div>
+                                            </div>
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div style="caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); margin: 0px auto; max-width: 550px;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                    <tbody>
+                        <tr>
+                            <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px; text-align: center;">
+                            <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                    <tbody>
+                                        <tr>
+                                        <td align="left" style="border-collapse:collapse;padding: 10px 25px; word-break: break-word;">
+                                            <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; color: rgb(112, 107, 109);">
+                                                <div style="text-align: justify;"><span style="font-family:Verdana, Geneva, sans-serif;font-size: 18px; color: rgb(69, 69, 69);">A continuación, da clic en el botón <span style="color:rgb(242, 99, 52);"><strong>"ACEPTAR"</strong></span>. </span></div>
+                                                <div style="text-align: justify;"><span style="font-family:Verdana, Geneva, sans-serif;font-size: 18px; color: rgb(69, 69, 69);">Posteriomente te llegará un correo con el kit de bienvenida y las credenciales de la plataforma de asignación. </span></div>
+                                                <div style="text-align: justify;"> </div>
+                                                <div style="text-align: justify;"><span style="font-family:Verdana, Geneva, sans-serif;font-size: 18px; color: rgb(69, 69, 69);">Si no requieres el beneficio o no deseas continuar el proceso, por favor da clic en el botón <span style="color:rgb(0, 44, 108);"><strong>"RECHAZAR"</strong></span>.</span></div>
+                                            </div>
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div style="caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); margin: 0px auto; max-width: 550px;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                    <tbody>
+                        <tr>
+                            <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px; text-align: center;">
+                            <div class="mj-column-per-50 mj-outlook-group-fix" style="max-width: 50%; width: 275px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                    <tbody>
+                                        <tr>
+                                        <td align="center" vertical-align="middle" style="border-collapse:collapse;padding: 5px; word-break: break-word;">
+                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height: 0px;">
+                                                <tbody>
+                                                    <tr>
+                                                    <td align="center" bgcolor="#f26334" role="presentation" valign="middle" style="border-collapse:collapse;border: medium; border-radius: 3px; cursor: auto; background-color: rgb(242, 99, 52);">
+                                                        <p style="display: inline-block; color: rgb(255, 255, 255); font-family: Verdana, Geneva, sans-serif; font-size: 18px; font-weight: 700; line-height: 21.6px; padding: 10px 25px; border-radius: 3px;"><a href="/rvc/accept_benefit/${object.access_token}">ACEPTAR </a></p>
+                                                    </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                              
+                            <div class="mj-column-per-50 mj-outlook-group-fix" style="max-width: 50%; width: 275px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                    <tbody>
+                                        <tr>
+                                        <td align="center" vertical-align="middle" style="border-collapse:collapse;padding: 5px; word-break: break-word;">
+                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height: 0px;">
+                                                <tbody>
+                                                    <tr>
+                                                    <td align="center" bgcolor="#002c6c" role="presentation" valign="middle" style="border-collapse:collapse;border: medium; border-radius: 3px; cursor: auto; background-color: rgb(0, 44, 108);">
+                                                        <p style="display: inline-block; color: rgb(255, 255, 255); font-family: Verdana, Geneva, sans-serif; font-size: 18px; font-weight: 700; line-height: 21.6px; padding: 10px 25px; border-radius: 3px;"><a href="/rvc/reject_benefit/${object.access_token}">RECHAZAR </a></p>
+                                                    </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div style="caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); margin: 0px auto; max-width: 550px;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                    <tbody>
+                        <tr>
+                            <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px; text-align: center;">
+                            <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="background-color: rgb(0, 44, 108); vertical-align: top;">
+                                    <tbody>
+                                        <tr>
+                                        <td align="left" style="border-collapse:collapse;padding: 10px 25px; word-break: break-word;">
+                                            <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; color: rgb(112, 107, 109);">
+                                                <div style="text-align: center;"><span style="color:rgb(255, 255, 255);font-family: Verdana, Geneva, sans-serif;"><span style="font-size:18px;">Si no has sido notificado con anterioridad</span></span></div>
+                                                <div style="text-align: center;"><strong><span style="color:rgb(255, 255, 255);font-family: Verdana, Geneva, sans-serif;"><span style="font-size:18px;">escríbenos a: <a href="mailto:web@gs1co.org">web@gs1co.org</a></span></span></strong></div>
+                                            </div>
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div style="caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); margin: 0px auto; max-width: 550px;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                    <tbody>
+                        <tr>
+                            <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px; text-align: center;">
+                            <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                    <tbody>
+                                        <tr>
+                                        <td align="center" style="border-collapse:collapse;padding: 0px 25px; word-break: break-word;">
+                                            <p style="margin-right: auto; margin-left: auto; border-top-width: 2px; border-top-style: dashed; border-top-color: rgb(0, 44, 108); font-size: 1px; width: 500px;"></p>
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div style="caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); background-color: rgb(2, 21, 39); margin: 0px auto; max-width: 550px;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                    <tbody>
+                        <tr>
+                            <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 0px; text-align: center;"> </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div style="caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); margin: 0px auto; max-width: 550px;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                    <tbody>
+                        <tr>
+                            <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 0px; text-align: center;">
+                            <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                    <tbody>
+                                        <tr>
+                                        <td align="left" style="border-collapse:collapse;padding: 10px 25px; word-break: break-word;">
+                                            <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; color: rgb(112, 107, 109);">
+                                                <div style="text-align: center;"><span style="color:rgb(0, 44, 108);"><a href="https://u28913144.ct.sendgrid.net/ls/click?upn=DpB653v2JP6ACm7-2BPX1kufpexWvcyR3lOxb7zXnN6pHTEkpHg5s-2BjKUW6bwMc1Xa1CFt_5fL-2BdZKd8ocMNHc9SFg5eqsO-2BMHVebYvBnrzfYFUZu0LelKHtBpB17eRL74j8LffMEZjYcUHHM4eY7M3k2RFrHOstU8LrHHR9hWY-2Facrx9C5n-2BKjcmmCdQ-2ByNlHbzyj7H5KxLk6RLuDUhqNebL-2FqkMBms2GzQIAZdkp3B6xMcBSypmXYYJtVh9ymwXvak26RFqcB8ZqmXJriOwIk-2FAK6RKAFC1CaLeJbS1PCqPkXtj3dVbpScwontkOtkA-2FTO5lf18twDBwFRNm6YSAM-2BPxivjr1A9ux8wnwQ3uytSX1zDCieImG5vY9kkMatUyp9xkjGq-2FGRq2wkLGMj4-2FMIYdnq-2FuEQCP9Tppi3q3VTA1xBUp2QQ7TA-2BKYLrd24w-2BfkTmDMYwlZRm2QCNdLYwXIlkdRFPZ5EP7UelHII8D1rrzYaJDOInE4U4D2DI85cTrIHlr-2BeW8NcHgUoB8n7a8fDyV-2FCRQXFleoNXK289FTT67H-2Bds1yNguedouYcQbfLJUYUK" target="_blank" rel="noopener" style="color: rgb(0, 44, 108);"><span style="font-family:Verdana, Geneva, sans-serif;font-size: 20px;"><strong>www.gs1costore.org</strong></span></a></span></div>
+                                            </div>
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div style="caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); margin: 0px auto; max-width: 550px;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                    <tbody>
+                        <tr>
+                            <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px; text-align: center;">
+                            <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                    <tbody>
+                                        <tr>
+                                        <td align="center" style="border-collapse:collapse;padding: 0px 25px; word-break: break-word;"> </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <br/>
+                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="caret-color:rgb(0, 0, 0);color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; text-indent: 0px; width: 550px;"></table>
+                <div class="column" style="text-align: right;">
+                    <p>Interactúa con nosotros:</p>
+                    <a href="https://gs1co.org/blog">
+                        <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-04.png" alt="Blog"/>
+                    </a>
+                    <a href="https://www.facebook.com/GS1Colombia">
+                        <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-05.png" alt="Facebook"/>
+                    </a>
+                    <a href="https://www.linkedin.com/company/gs1-colombia">
+                        <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-07.png" alt="LinkedIn"/>
+                    </a>
+                    <a href="https://www.facebook.com/GS1Colombia">
+                        <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-08.png" alt="Instagram"/>
+                    </a>
+
+                </div>
+                <div class="box">
+                </div>
+            </field>
+        <field name="lang">${object.lang}</field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+</data>
+</odoo>
