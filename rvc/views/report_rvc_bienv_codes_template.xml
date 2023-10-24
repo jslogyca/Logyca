@@ -11,7 +11,7 @@
                       }
                     </style>
                     <div class="header">
-                         <img src='/rvc/static/img/banner-kit-bienv-codigos.png' align="left"/>
+                         <img src='/rvc/static/img/banner-kit-bienv-codigosgs1aso.png' align="left" height="87" width="auto"/>
                     </div>
                     <div class="page">
                         <div class="content">
@@ -30,13 +30,17 @@
                             <p>Dicho esfuerzo nos ha permitido avanzar en el propósito de potenciar la competitividad de este segmento de
                                 empresas, de forma tal que, logren responder de manera mucho más eficaz a los retos que demanda el mercado.</p>
                             <p>Dentro de este programa, <strong>su empresa ha sido seleccionada para recibir el beneficio del Acceso al Sistema 
-                                GS1</strong> el cual aplica para todas las micro, pequeñas y medianas empresas (Mipymes).Este beneficio incluye
-                                el derecho al uso de los códigos de barras que requieran, para identificar su portafolio de productos, servicios
-                                y localizaciones sin costo. En caso de que su compañía pueda acceder a este beneficio y ya es usuario del sistema
-                                GS1 con nuestra organización, esta definición no altera las condiciones contractuales vigentes. Así mismo, este
-                                beneficio aplicará únicamente para los servicios, productos y localizaciones nuevas.
-                                </p><br/>
-                            <p>Consulte la <a href="https://www.gs1co.org/Portals/0/infografia%20uso%20inadecuado%20del%20codigo.pdf" style="color: #00b398;">Guía de uso del codigo</a></p><br/>
+                                GS1</strong> el cual aplica para todas las micro, pequeñas y medianas empresas (Mipymes) e incluye:</p><br/>
+                                <tr>
+                                    <td>1. Derecho al uso de los códigos de barras entregados por GS1 Colombia | LOGYCA / ASOCIACIÓN.</td><br/>
+                                    <td>2. Los códigos de barras que requieras para identificar tu portafolio de productos (de peso fijo), servicios y localizaciones.</td>
+                                </tr>
+                            <p>Si tu compañía ya es usuario del sistema GS1 con LOGYCA / ASOCIACIÓN y deseas acceder a este beneficio sin 
+                                costo porque cumples con los requisitos, esta definición no altera las condiciones contractuales vigentes. 
+                                En este caso este beneficio aplicará únicamente para los servicios, productos 
+                                (de peso fijo) y localizaciones nuevas que requieras.  </p>                           
+                                
+                            <p>Te invitamos a consultar la <a href="https://www.gs1co.org/Portals/0/infografia%20uso%20inadecuado%20del%20codigo.pdf" style="color: #00b398;">Guía de identificación para el buen uso del código de barras</a> con el fin de garantizar el correcto uso del estándar y no incurrir en clausulas penales.</p><br/>
                             <p>En caso de que requiera más información o tenga alguna pregunta no dude en contactarnos.</p><br/>
                             <p style="font-weight: bold; text-align: left">
                                 <td><img src="https://saintegracionesvtex.blob.core.windows.net/mailimages/RvcSoluciona/Leonel.png" width="250" height="150" alt=""/><br/></td>
