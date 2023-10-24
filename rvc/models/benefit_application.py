@@ -734,17 +734,17 @@ class BenefitApplication(models.Model):
                     return True
             else:
                 vals = {
-                    'method': 'gs1 credentials',
+                    'method': 'gs1_assign_credentials',
                     'send_date': InitialDate,
                     'send_json': body_assignate,
                     'x_return': str(result),
-                    'cant_attempts': self.amount,
+                    'cant_attempts': 1,
                 }
                 create_log = self.env['logyca.api_gateway'].create(vals)
                 if create_log:
-                    log = "No se pudo crear un registro de log de errores."
-                else:
                     log = "Se creó un registro en el log de errores."
+                else:
+                    log = "No se pudo crear un registro de log de errores."
 
                 #TODO: logging
                 logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate))
