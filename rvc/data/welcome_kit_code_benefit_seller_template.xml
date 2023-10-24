@@ -10,127 +10,312 @@
             <field name="body_html" type="html">
                 <head>
                     <style>
-                        .box {
-                            margin: auto;
-                            width: 600px;
-                            font-family: 'Roboto', sans-serif;
-                        }
-                
-                        .banner-brands {
-                            display: block;
-                            margin: 0 auto;
-                            width: 50%;
-                        }
-                
-                        .banner-greet {
-                            display: block;
-                            margin: 0 auto;
-                        }
-                        
-                        #container {
-                            background-color: #002b6c;
-                            text-align: center;
-                            padding: 20px;
-                            font-weight: bold;
-                            color: white;
-                        }
-                        
-                        #btn-suscribe {
-                            background-color: #fc4c02;
-                            color: white;
-                            padding:10px;
-                            border-radius: 10px;
-                            text-decoration: none;
-                        }
-                
-                        #button{
-                            margin-top:30px;
-                            text-align:center;
-                        }
-                        
-                        .column {
-                            display: inline-block;
-                            width: 48%;
-                            vertical-align: top;
-                        }
-                        
-                        a {
-                            color: #002b6c;
-                        }
-                
-                        icons{
-                            margin-right: 4px;
-                        }
-                
-                        p, li {
-                            font-size: 14px;   
-                            line-height: 1.5;
-                        }
-
-                
-                        #justified{
-                            text-align: justify;
-                        }
-                
+                    .box {
+                    margin: auto;
+                    width: 600px;
+                    font-family: 'Roboto', sans-serif;
+                    }
+                    .banner-brands {
+                    display: block;
+                    margin: 0 auto;
+                    width: 50%;
+                    }
+                    .banner-greet {
+                    display: block;
+                    margin: 0 auto;
+                    }
+                    #container {
+                    background-color: #002b6c;
+                    text-align: center;
+                    padding: 20px;
+                    font-weight: bold;
+                    color: white;
+                    }
+                    #btn-suscribe {
+                    background-color: #fc4c02;
+                    color: white;
+                    padding:10px;
+                    border-radius: 10px;
+                    text-decoration: none;
+                    }
+                    #button{
+                    margin-top:30px;
+                    text-align:center;
+                    }
+                    .column {
+                    display: inline-block;
+                    width: 48%;
+                    vertical-align: top;
+                    }
+                    a {
+                    color: #002b6c;
+                    }
+                    icons{
+                    margin-right: 4px;
+                    }
+                    p, li {
+                    font-size: 14px;   
+                    line-height: 1.5;
+                    }
+                    #justified{
+                    text-align: justify;
+                    }
                     </style>
                 </head>
-                <body>
-                    <div class="box">
-                        <img class="banner-brands" src="https://ci5.googleusercontent.com/proxy/xlXynKNjNqZquWfF_1hslqmQ2lX9oUKsru8uHPvbXBhkZjUSrseJe2wKECjcyum7hCt3AmQSW9uPOeUGyB6dr3rlE_jUB8AEmJnUkmi4J_5JK3xgTbhVYkkuL2vFFBSR54CNrEGaVfjcP3mIla8BjaOI1lCLCOxq=s0-d-e1-ft#https://files.escala.com/public/53c5445e-cfd0-11ed-80e4-0e9807857d8a/logo-gs1-y-logyca-asociacion.png" alt="Banner"/>
+                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; text-indent: 0px; width: 550px;">
+                <tbody>
+                    <tr>
+                        <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 0px; text-align: center;">
+                            <div style="margin: 0px auto; max-width: 550px;">
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px;">
+                                        <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                                <tbody>
+                                                    <tr>
+                                                    <td align="center" style="border-collapse:collapse;padding: 0px; word-break: break-word;">
+                                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-spacing: 0px;">
+                                                            <tbody>
+                                                                <tr>
+                                                                <td style="border-collapse:collapse;width: 270px;"><img alt="Logo_GS1_LOGYCA_ASOCIACIÓN.png" src="https://files.escala.com/public/ba7c5d62-ebbf-11ed-b7b0-422e8ade7167/logo-gs1-logyca-asociacion.png" style="border: 0px; height: auto; line-height: 13px; outline: currentcolor; display: block; width: 270px; font-size: 13px;"/></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <div style="margin: 0px auto; max-width: 550px;">
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px;">
+                                        <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                                <tbody>
+                                                    <tr>
+                                                    <td align="center" style="border-collapse:collapse;padding: 0px; word-break: break-word;">
+                                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-spacing: 0px;">
+                                                            <tbody>
+                                                                <tr>
+                                                                <td style="border-collapse:collapse;width: 550px;"><img alt="Banner-html-oferta-mercantil.png" src="https://files.escala.com/public/4b65466c-3d29-11ee-99cc-f6d3ae86907a/banner-html-oferta-mercantil.png" style="border: 0px; height: auto; line-height: 13px; outline: currentcolor; display: block; width: 550px; font-size: 13px;"/></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <div style="margin: 0px auto; max-width: 550px;">
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px;">
+                                        <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                                <tbody>
+                                                    <tr>
+                                                    <td align="left" style="border-collapse:collapse;padding: 10px 25px; word-break: break-word;">
+                                                        <div style="line-height: 1.5;">
+                                                            <div style="text-align: justify;"><span style="text-align:left;"><font color="#f26334" face="Verdana, Geneva, sans-serif" size="4"><b>${object.partner_id.partner_id.name}</b></font></span><strong style="color: rgb(242, 99, 52); font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-style: inherit; font-variant-caps: inherit;"><span style="font-family:Verdana, Geneva, sans-serif;font-size: 18px;">,</span></strong></div>
+                                                            <div style="color: rgb(112, 107, 109); font-family: Arial, Helvetica, sans-serif; font-size: 14px; text-align: justify;"></div>
+                                                            <div style="color: rgb(112, 107, 109); font-family: Arial, Helvetica, sans-serif; font-size: 14px; text-align: justify;"><span style="font-family:Verdana, Geneva, sans-serif;font-size: 18px; color: rgb(69, 69, 69);">Te damos la bienvenida al Programa <strong>Redes de Valor Colaborativas (RVC).</strong></span></div>
+                                                            <div style="color: rgb(112, 107, 109); font-family: Arial, Helvetica, sans-serif; font-size: 14px; text-align: justify;"></div>
+                                                            <div style="color: rgb(112, 107, 109); font-family: Arial, Helvetica, sans-serif; font-size: 14px; text-align: justify;"><span style="font-family:Verdana, Geneva, sans-serif;font-size: 18px; color: rgb(69, 69, 69);">Te informamos que se realizó la <strong>activación de tus códigos de barras</strong>, los cuales podrás asignar desde nuestra línea de <span style="color:rgb(242, 99, 52);"><strong><a href="https://u28913144.ct.sendgrid.net/ls/click?upn=DpB653v2JP6ACm7-2BPX1kuY4dFNelSIUDpGty-2FPegNXFd4SrnL9cRwQN-2BVya-2Fw08qUtnxVKz9l5t9VeiSldw5kGWLNyLSlX-2BKoeYo-2BUkklZQrfqFokSJcHYrLQFYsHIDVgzMvg47n9BVMmxwJFaOettbntyg1vhFBTp1jGPzOgU03PzTiLF5QTF59ceFKJfJ3utoT_5fL-2BdZKd8ocMNHc9SFg5eqsO-2BMHVebYvBnrzfYFUZu0LelKHtBpB17eRL74j8LffMEZjYcUHHM4eY7M3k2RFrHOstU8LrHHR9hWY-2Facrx9C5n-2BKjcmmCdQ-2ByNlHbzyj7H5KxLk6RLuDUhqNebL-2FqkBE-2B-2B8hHPSXTrTsp4A4Ws9frSTcIxENTjEXuPse4qJ1Z4cxiUWRWUdx30Bk58pRx-2FBiKCWwgvNVssmisj6o9dadbpT4dXozU1kvkK9q-2BnPPdYO9o6fmN5izo5wTkRA3gofsm1UjNE5IMMU-2FGrbNKk5YxqyG3Nb5CX6hyZ4ibypAjw8r-2FNFT0jTY7seLAIXmqQy-2BazGpq-2BaCyP1KsBqKbuXiWpPB1LS0KiM7chJ8MZ-2FWRzJ5YN6qqNSUO808C9rruwlsRpgdJlk6iEWFWO2RnwdRo1cvWeXx3i8XCZxvS1nBZVRlhO6Ke6PpGK53OrYeXXoj0GaFFJnB6-2BdYtkhIRh5Wk9VgMMixiypIlPLxSbmzX" target="_blank" rel="noopener" style="color: rgb(242, 99, 52);"><u>WhatsApp</u></a></strong> marcando la <strong>opción 4 </strong>(Marcación de códigos / SELLERS Éxito)</span>.</span></div>
+                                                        </div>
+                                                    </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <div style="margin: 0px auto; max-width: 550px;">
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px;">
+                                        <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="background-color: rgb(250, 250, 250); vertical-align: top;">
+                                                <tbody>
+                                                    <tr>
+                                                    <td align="left" style="border-collapse:collapse;padding: 10px 25px; word-break: break-word;">
+                                                        <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; color: rgb(112, 107, 109);">
+                                                            <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; text-align: justify;"></div>
+                                                            <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; text-align: justify;"><span style="font-family:Verdana, Geneva, sans-serif;font-size: 16px; color: rgb(69, 69, 69);">Si tienes dudas o necesitas ayuda, contáctanos a nuestro canal de<span style="color:rgb(0, 44, 108);"><strong><a href="https://u28913144.ct.sendgrid.net/ls/click?upn=DpB653v2JP6ACm7-2BPX1kuY4dFNelSIUDpGty-2FPegNXFd4SrnL9cRwQN-2BVya-2Fw08qUtnxVKz9l5t9VeiSldw5kGWLNyLSlX-2BKoeYo-2BUkklZQrfqFokSJcHYrLQFYsHIDVgzMvg47n9BVMmxwJFaOettbntyg1vhFBTp1jGPzOgU03PzTiLF5QTF59ceFKJfJ3CeB6_5fL-2BdZKd8ocMNHc9SFg5eqsO-2BMHVebYvBnrzfYFUZu0LelKHtBpB17eRL74j8LffMEZjYcUHHM4eY7M3k2RFrHOstU8LrHHR9hWY-2Facrx9C5n-2BKjcmmCdQ-2ByNlHbzyj7H5KxLk6RLuDUhqNebL-2FqkBE-2B-2B8hHPSXTrTsp4A4Ws9frSTcIxENTjEXuPse4qJ1Z4cxiUWRWUdx30Bk58pRx-2FBiKCWwgvNVssmisj6o9dadbpT4dXozU1kvkK9q-2BnPPdYO9o6fmN5izo5wTkRA3gofsm1UjNE5IMMU-2FGrbNKk5YxqyG3Nb5CX6hyZ4ibypAjHbedvKvYmEoVAZTwXMRh-2BILWxdS7wDGrTlwqMxufUukoedtT40KW2xIvO0D44I1nsCxN1f1zfQ7hPPIkAemfp8lf3bAejNJcKkFLs3CnAeAENl34mSNUxwsilTYEC-2BVmE6rC6Nlpw7ic8hutg-2FK6czHSeDmdc-2FdTzpVLRsBmZ2H1epu7JAAnqEyTV-2BnECQhO" target="_blank" rel="noopener"><u> WhatsApp</u></a></strong>, marcando la <strong>Opción 2 (Atención al cliente)</strong>, de lunes a viernes de 7:00 a.m a 4:30 p.m</span>.</span></div>
+                                                            <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; text-align: justify;"></div>
+                                                        </div>
+                                                    </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <div style="margin: 0px auto; max-width: 550px;">
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px;">
+                                        <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="background-color: rgb(0, 44, 108); vertical-align: top;">
+                                                <tbody>
+                                                    <tr>
+                                                    <td align="left" style="border-collapse:collapse;padding: 10px 25px; word-break: break-word;">
+                                                        <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; color: rgb(112, 107, 109);">
+                                                            <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; text-align: justify;"></div>
+                                                            <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; text-align: justify;"><span style="color:rgb(255, 255, 255);font-family: Verdana, Geneva, sans-serif; font-size: 18px;">Es importante hacer buen uso del Sistema GS1 y evitar cláusulas penales.</span></div>
+                                                            <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; text-align: justify;"><span style="color:rgb(255, 255, 255);font-family: Verdana, Geneva, sans-serif; font-size: 18px;">Para esto debes capacitarte y realizar el <strong>curso sin costo </strong>"Identificación de producto con códigos de barras".</span></div>
+                                                            <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; text-align: justify;"></div>
+                                                        </div>
+                                                    </td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td align="center" vertical-align="middle" style="border-collapse:collapse;padding: 5px; word-break: break-word;">
+                                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height: 0px;">
+                                                            <tbody>
+                                                                <tr>
+                                                                <td align="center" bgcolor="#f26334" role="presentation" valign="middle" style="border-collapse:collapse;border: medium; border-radius: 3px; cursor: auto; background-color: rgb(242, 99, 52);"><a href="https://u28913144.ct.sendgrid.net/ls/click?upn=DpB653v2JP6ACm7-2BPX1kuUnSV92s-2BvkzY-2BQULL8EZBPariyVk-2BZTqcODGKWbGKpCbgDADeEUPz2jFmCK4MW2Lgr-2BEnnmcWUlp3dyyla2SYnczk3JP0Jg6bZgu1D6ABx0psTQDWm5oVsEWiUuna8uENd49RtyV2nfMl0Qxi5cmGWic5VjmusilVHNFHxSp1JK5Te96pHWsDjjj9f0IgQWwMXOh7noAPmp9kixx2FyC-2B8eRhmJWARSEHvLdkC0RFKcbfUgk-2ByCFBL0YNh-2F4McZlbjQTX5PPXcwjM9IM8MFJohfbmxiL993joPs-2BTA3vkfOWOdCaT4-2BEQdzbDVtZ7t9zrzOE0jmg4u7fzTqOIRGEZDyOgnfDlWSYH72T6AZTML9n8fj6Ga-2B0yjHdusvHO915w-3D-3DAM3j_5fL-2BdZKd8ocMNHc9SFg5eqsO-2BMHVebYvBnrzfYFUZu0LelKHtBpB17eRL74j8LffMEZjYcUHHM4eY7M3k2RFrHOstU8LrHHR9hWY-2Facrx9C5n-2BKjcmmCdQ-2ByNlHbzyj7H5KxLk6RLuDUhqNebL-2FqkBE-2B-2B8hHPSXTrTsp4A4Ws9frSTcIxENTjEXuPse4qJ1Z4cxiUWRWUdx30Bk58pRx-2FBiKCWwgvNVssmisj6o9dadbpT4dXozU1kvkK9q-2BnPPdYO9o6fmN5izo5wTkRA3gofsm1UjNE5IMMU-2FGrbNKk5YxqyG3Nb5CX6hyZ4ibypAjInttKrcXWGmtCE-2BlaPn00I11ikdPlVr-2BWRRLFCc5vPGVZs0w-2B-2FPzI3DE1LXkgPW2Gx7ygjG0lfUTDrGpGRQfOZbcfxedqcT8UgoB810p1bbRtwoDdWHRIbEI0bIMjMW-2BTy1keX944SNrE6yve1tg-2Br4szyd28j7rXQ2VvZCvjmo1VY2b9f9T63h9SAMXXQWh" target="_blank" style="display: inline-block; background-color: rgb(242, 99, 52); color: rgb(255, 255, 255); font-family: Verdana, Geneva, sans-serif; font-size: 18px; font-weight: 700; line-height: 21.6px; margin: 0px; padding: 10px 25px; border-radius: 3px;">Inscríbete aquí</a></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td style="border-collapse:collapse;word-break: break-word;">
+                                                        <div style="height: 20px; line-height: 20px;"> </div>
+                                                    </td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td style="border-collapse:collapse;word-break: break-word;">
+                                                        <div style="height: 20px; line-height: 20px;"> </div>
+                                                    </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <div style="margin: 0px auto; max-width: 550px;">
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px;">
+                                        <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                                <tbody>
+                                                    <tr>
+                                                    <td align="center" style="border-collapse:collapse;padding: 0px 25px; word-break: break-word;">
+                                                        <p style="margin-right: auto; margin-left: auto; border-top-width: 2px; border-top-style: dashed; border-top-color: rgb(0, 44, 108); font-size: 1px; width: 500px;"></p>
+                                                    </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <div style="background-color: rgb(2, 21, 39); margin: 0px auto; max-width: 550px;">
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 0px;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <div style="margin: 0px auto; max-width: 550px;">
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 0px;">
+                                        <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                                <tbody>
+                                                    <tr>
+                                                    <td align="left" style="border-collapse:collapse;padding: 10px 25px; word-break: break-word;">
+                                                        <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; color: rgb(112, 107, 109);">
+                                                            <div style="text-align: center;"><span style="color:rgb(0, 44, 108);"><a href="https://u28913144.ct.sendgrid.net/ls/click?upn=DpB653v2JP6ACm7-2BPX1kufpexWvcyR3lOxb7zXnN6pHTEkpHg5s-2BjKUW6bwMc1Xag4Ou_5fL-2BdZKd8ocMNHc9SFg5eqsO-2BMHVebYvBnrzfYFUZu0LelKHtBpB17eRL74j8LffMEZjYcUHHM4eY7M3k2RFrHOstU8LrHHR9hWY-2Facrx9C5n-2BKjcmmCdQ-2ByNlHbzyj7H5KxLk6RLuDUhqNebL-2FqkBE-2B-2B8hHPSXTrTsp4A4Ws9frSTcIxENTjEXuPse4qJ1Z4cxiUWRWUdx30Bk58pRx-2FBiKCWwgvNVssmisj6o9dadbpT4dXozU1kvkK9q-2BnPPdYO9o6fmN5izo5wTkRA3gofsm1UjNE5IMMU-2FGrbNKk5YxqyG3Nb5CX6hyZ4ibypAj7JojyOY7X9Or7n-2Bnxr4oAmIzMBWBa8GsPgQTznf9vv2ckG163eUimHykZ4LOuauM2Pzu-2FprgzjfX6PmMMUh3j4xcASKN9sMUSf2Mtrw3HOGQIOr1p4bLBvZ5Fr1rShvMnMjRZ8-2BArki0cihNXEj8CmPDKSj-2B-2BQSxs78-2Fl2XaSR-2BqpyfQf65rK7W8JTxfcFdy" target="_blank" rel="noopener" style="color: rgb(0, 44, 108);"><span style="font-family:Verdana, Geneva, sans-serif;font-size: 20px;"><strong>www.gs1costore.org</strong></span></a></span></div>
+                                                        </div>
+                                                    </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <div style="margin: 0px auto; max-width: 550px;">
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 550px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border-collapse:collapse;direction: ltr; font-size: 0px; padding: 20px 0px;">
+                                        <div class="mj-column-per-100 mj-outlook-group-fix" style="max-width: 100%; width: 550px; font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top;">
+                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="vertical-align: top;">
+                                                <tbody>
+                                                    <tr>
+                                                    <td align="center" style="border-collapse:collapse;padding: 0px 25px; word-break: break-word;"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+                <div class="column" style="text-align: right;">
+                    <p>Interactúa con nosotros:</p>
+                    <a href="https://gs1co.org/blog">
+                        <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-04.png" alt="Blog"/>
+                    </a>
+                    <a href="https://www.facebook.com/GS1Colombia">
+                        <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-05.png" alt="Facebook"/>
+                    </a>
+                    <a href="https://www.linkedin.com/company/gs1-colombia">
+                        <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-07.png" alt="LinkedIn"/>
+                    </a>
+                    <a href="https://www.facebook.com/GS1Colombia">
+                        <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-08.png" alt="Instagram"/>
+                    </a>
 
-                        <img class="banner-greet" src="https://ci4.googleusercontent.com/proxy/iReu1QYZ-uWoGIxMqqC_XfvRscOxecxhBM3idJqk8wio6Z-gFhUnBgNF3f4WsV-Hmk2Naq730LbsAQByHA6Rpdv3fIKkDEriX-9L-eEJUIw9czoULiYXy3elXQbPDOtMiSIeOG07QJwJN3ZiHhDZYWe-5ggtGwOG=s0-d-e1-ft#https://files.escala.com/public/4b65466c-3d29-11ee-99cc-f6d3ae86907a/banner-html-oferta-mercantil.png" alt="Banner Image"/>
-                        <br/>
-
-                        <br/>
-                        <h2>${object.partner_id.partner_id.name}</h2>
-
-                        <p class="justified">
-                            <strong>Te damos la bienvenida al programa RVC (Redes de valor colaborativas), a través del cual podrás potencializar la logística de tu negocio.</strong>
-                        </p>
-
-                        <p class="justified ">¡Ya tienes disponibles los códigos de barras que solicitaste! <br/>
-                            Para asignarlos a tus artículos comerciales sigue estos 3 simples pasos:
-                        <ul>
-                            <li>1. Da clic <a href="https://wa.link/0phvnj" target="_blank">AQUÍ</a> para ingresar al chat de WhatsApp de GS1 Colombia. Envíanos un mensaje, por ejemplo "hola", para indicarnos que ingresaste.</li>
-                            <li>2. Responderemos tú saludo con una cálida bienvenida y una lista de opciones disponibles. Selecciona la opción <strong>4 - Marcación de códigos / SELLERS Exito</strong>.
-                            </li>
-                            <li>3. Sigue los pasos atentamente para asignar uno a uno tús códigos a tus artículos comerciales.</li>
-                        </ul>
-                    </p>
-
-                    <p class="justified">Cualquier duda que tengas, te ayudaremos a resolverla en el mismo canal, marcando la opción 2 "atención a cliente" en un horario de 7:00 a.m. a 4:30 p.m.</p>
-
-                    <div id="container">
-                        <p class="justified">Es importante hacer buen uso del sistema GS1 y evitar cláusulas penales. Para esto debes capacitarte y realizar el curso gratuito de Identificación de producto con códigos de barras.</p>
-                        <p id="button">
-                            <a id="btn-suscribe" href="https://logyca.com/educacion/educacion-e-learning" target="_blank">Inscríbete AQUÍ</a>
-                        </p>
-                    </div>
-                    <br/>
-                    <div class="column">
-                        <p>Conoce más beneficios SIN COSTO para tu negocio en: <a href="https://www.gs1costore.org/" target="_blank" style="color: #008784;">https://www.gs1costore.org/</a>
-                        </p>
-                    </div>
-
-                    <div class="column" style="text-align: right;">
-                        <p>Interactúa con nosotros:</p>
-                        <a href="https://gs1co.org/blog">
-                            <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-04.png" alt="Blog"/>
-                        </a>
-                        <a href="https://www.facebook.com/GS1Colombia">
-                            <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-05.png" alt="Facebook"/>
-                        </a>
-                        <a href="https://www.linkedin.com/company/gs1-colombia">
-                            <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-07.png" alt="LinkedIn"/>
-                        </a>
-                        <a href="https://www.facebook.com/GS1Colombia">
-                            <img class="icons" src="https://logyca.odoo.com/rvc/static/img/redes-08.png" alt="Instagram"/>
-                        </a>
-
-                    </div>
                 </div>
-            </body>
-        </field>
+                <div class="box">
+                </div>
+
+
+            </field>
         <field name="report_template" ref="action_carta_bienv_codes_rvc"/>
         <field name="report_name">Carta de Bienvenida RVC</field>
         <field name="lang">${object.lang}</field>
