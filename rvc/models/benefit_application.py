@@ -694,13 +694,15 @@ class BenefitApplication(models.Model):
             # que tiene el contacto del beneficiario
             contact_email = re_assign_email if re_assign_email != None else self.contact_email
 
+            InitialDate = today_date.strftime('%Y-%m-%d')
+
             body_assignate = json.dumps({
                     "Nit": self.vat,
                     "Name": credentials_contact_name,
                     "UserMail": contact_email,
-                    "InitialDate": today_date.strftime('%Y-%m-%d'),
+                    "InitialDate": InitialDate,
                     "EndDate": today_one_year_later.strftime('%Y-%m-%d'),
-                    "level": 0,
+                    "level": 1,
                     "TypeService": 1,
                     "NumberOverConsumption": 0,
                     "IsOverconsumption": False
@@ -731,14 +733,27 @@ class BenefitApplication(models.Model):
                     self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
                     return True
             else:
+                vals = {
+                    'method': 'gs1 credentials',
+                    'send_date': InitialDate,
+                    'send_json': body_assignate,
+                    'x_return': str(result),
+                    'cant_attempts': self.amount,
+                }
+                create_log = self.env['logyca.api_gateway'].create(vals)
+                if create_log:
+                    log = "No se pudo crear un registro de log de errores."
+                else:
+                    log = "Se creó un registro en el log de errores."
+
                 #TODO: logging
                 logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate))
                 logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate.text))
                 self.message_post(body=_(\
-                        'No pudieron asignarse las credenciales. <strong>Error:</strong> %s' % str(response_assignate)))
+                        'No pudieron asignarse las credenciales. <strong>Error:</strong> %s. %s' % (str(response_assignate),str(response_assignate))))
                 return False
         else:
-            self.message_post(body=_("No pudo obtenerse el token para realizar la asignación de credenciales en Colabora."\
+            self.message_post(body=_("No pudo obtenerse el token para realizar la asignación de credenciales en www.gs1coidentificacion.org."\
                                      "Inténtelo nuevamente o comuníquese con soporte."))
             return False
 
