@@ -2,223 +2,224 @@
 <odoo>
     <template id="accept_rvc_benefit_page_view" name="Aceptar Beneficio RVC">
         <!-- <t t-call="web.frontend_layout"> -->
-            <div class="container">
-                <div>
-                <table border="0" cellspacing="0" cellpadding="0" align="center">
-                    <tbody>
-                        <tr>
-                            <td>
-                            <div>
-                                <table border="0" cellspacing="0" cellpadding="0" align="center">
-                                    <tbody>
-                                        <tr>
-                                        <td>
-                                            <div class="mj-column-per-100 mj-outlook-group-fix">
-                                                <table border="0" width="100%" cellspacing="0" cellpadding="0">
-                                                    <tbody>
-                                                    <tr>
-                                                        <td align="center">
-                                                            <table border="0" cellspacing="0" cellpadding="0">
-                                                                <tbody>
-                                                                <tr>
-                                                                    <td><img src="/rvc/static/img/banner-kit-bienv-codigosgs1aso.png" alt="Logo_GS1-Colombia_RGB.png" width="270" height="auto" /></td>
-                                                                </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <br/>
-                            <br/>
-                            <div>
-                                <table border="0" cellspacing="0" cellpadding="0" align="center">
-                                    <tbody>
-                                        <tr>
-                                        <td>
-                                            <div class="mj-column-per-100 mj-outlook-group-fix">
-                                                <table border="0" width="100%" cellspacing="0" cellpadding="0">
-                                                    <tbody>
-                                                    <tr>
-                                                        <td align="center">
-                                                            <table border="0" cellspacing="0" cellpadding="0">
-                                                                <tbody>
-                                                                <tr>
-                                                                    <td><img src="/rvc/static/img/estimado_cliente.png" alt="Banner-html-oferta-mercantil.png" width="550" height="auto" /></td>
-                                                                </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </td>
-                                                    </tr>                                                    
-                                                    <tr>
-                                                        <td align="center">
-                                                            <div>
-                                                                <div style="font-family:Verdana;font-size: 18px; color: rgb(242, 99, 52);"><strong>Gracias por aceptar tu beneficio RVC: Derechos de identificación</strong></div>
-                                                                <div> </div>
-                                                                <br/>
-                                                                <div style="font-family:Verdana;font-size: 18px; color: rgb(69, 69, 69);">Es un placer informarte que tu empresa <strong><b t-esc="benefit_application.partner_id.partner_id.name"></b></strong> ya hace parte de las Redes de Valor Colaborativas.</div>
-                                                                <div> </div>
-                                                                <div style="font-family:Verdana;font-size: 18px; color: rgb(69, 69, 69);">Pronto recibirás va correo electrónico el KIT de bienvenida con toda la información de los beneficios que tu empresa ha recibido, junto con las credenciales de acceso a la plataforma y los manuales respectivos para que puedas empezar a utilizarlos.</div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <br/>
-                            <br/>
-                            <div>
-                                <table border="0" cellspacing="0" cellpadding="0" align="center" background="#FAFAFA">
-                                    <tbody>
-                                        <tr>
-                                        <td>
-                                            <div class="mj-column-per-100 mj-outlook-group-fix">
-                                                <table border="0" width="100%" cellspacing="0" cellpadding="0" background="#FAFAFA">
-                                                    <tbody>
-                                                    <tr>
-                                                        <td align="center">
-                                                            <div>
-                                                                <div> </div>
-                                                                <div><span style="font-family:Verdana;font-size: 16px; color: rgb(69, 69, 69);background:#FAFAFA;">Si tienes dudas o necesitas ayuda, contáctanos a </span><span style="font-family:Verdana;font-size: 16px; color: rgb(219, 151, 255);"><strong><a href="mailto:web@gs1co.org">web@gs1co.org</a></strong></span> <span style="font-family:Verdana;font-size: 16px; color: rgb(69, 69, 69);background:#FAFAFA;">o por medio de nuestro canal de </span> <span style="font-family:Verdana;font-size: 16px; color: rgb(219, 151, 255);"><strong><a href="https://u28913144.ct.sendgrid.net/ls/click?upn=DpB653v2JP6ACm7-2BPX1kuY4dFNelSIUDpGty-2FPegNXFd4SrnL9cRwQN-2BVya-2Fw08qUtnxVKz9l5t9VeiSldw5kGWLNyLSlX-2BKoeYo-2BUkklZQrfqFokSJcHYrLQFYsHIDVgzMvg47n9BVMmxwJFaOettbntyg1vhFBTp1jGPzOgU03PzTiLF5QTF59ceFKJfJ3OYXW_DDjqUzwYHI5u3AHxtPuHgRQGERVjmeur-2BhZE-2BdZZZmPMu1Ymd8joX8FvTuTa3rxVFGN-2FQrJWn-2BpV-2BP4TDL1RqZgTOxP6jYqV5o-2F4QQTc-2FnUBcO91gUOI4Q-2FrZw2yWuY71FUDpUjFJ3TI4lwahkDBkaHYKSAf-2Bp4U7SWb2quAV0YGZV-2BACxDQ8KOHlhjKNsBAwdf2mWP7hPO8JrdklLQDDXLW3eZ6Eespzujg7JjNAukEYRFFXOsZ2NSaqlKo-2FIlInq-2Fn8rVH-2BfTSBvw7N-2Bs0rdK-2F8M5p0Lb0qFLw3b7ObCgMgtJQ2JnXrB5Gh5PBmHFT1JByXYBEPWJn-2B6CYgyjZAQgiCE9sKiOXbEO5e4IMwF7uOalE1vkGB4cmwvW1iZVcGxoUJQ5TXIk6V352gWQXs8mUI-2Fd68TpsSL0zdwqbIrbU8mODPOjbWZHQBOlQce2wWBh0egT0WdKuDhqF3Qfte8HWUFaK0ypJbpcoXClOXZw-3D" target="_blank" rel="noopener">WhatsApp</a></strong></span>, <span style="font-family:Verdana;font-size: 16px; color: rgb(69, 69, 69);background:#FAFAFA;">marcando la </span><span style="font-family:Verdana;font-size: 16px; color: rgb(0, 44, 108);"><strong>Opción 2 (Atención al cliente)</strong></span>, <span style="font-family:Verdana;font-size: 16px; color: rgb(69, 69, 69);background:#FAFAFA;">de lunes a viernes de 7:00 a.m a 4:30 p.m. </span></div>
-                                                                <div> </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div>
-                                <table border="0" cellspacing="0" cellpadding="0" align="center">
-                                    <tbody>
-                                        <tr>
-                                        <td>
-                                            <div class="mj-column-per-100 mj-outlook-group-fix">
-                                                <table border="0" width="100%" cellspacing="0" cellpadding="0">
-                                                    <tbody>
-                                                    <tr>
-                                                        <td align="center"> </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div>
-                                <table border="0" cellspacing="0" cellpadding="0" align="center">
-                                    <tbody>
-                                        <tr>
-                                        <td> </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <br/>
-                            <br/>
-                            <div>
-                                <table border="0" cellspacing="0" cellpadding="0" align="center">
-                                    <tbody>
-                                        <tr>
-                                        <td>
-                                            <div class="mj-column-per-100 mj-outlook-group-fix">
-                                                <table border="0" width="100%" cellspacing="0" cellpadding="0">
-                                                    <tbody>
-                                                    <tr>
-                                                        <td align="center">
-                                                            <div style="font-family:Verdana;font-size: 20px; color: rgb(0, 44, 108);text-decoration-color: #002C6C;">
-                                                                <div><a href="https://u28913144.ct.sendgrid.net/ls/click?upn=DpB653v2JP6ACm7-2BPX1kufpexWvcyR3lOxb7zXnN6pHTEkpHg5s-2BjKUW6bwMc1XaJKV1_DDjqUzwYHI5u3AHxtPuHgRQGERVjmeur-2BhZE-2BdZZZmPMu1Ymd8joX8FvTuTa3rxVFGN-2FQrJWn-2BpV-2BP4TDL1RqZgTOxP6jYqV5o-2F4QQTc-2FnUBcO91gUOI4Q-2FrZw2yWuY71FUDpUjFJ3TI4lwahkDBkaHYKSAf-2Bp4U7SWb2quAV0YGZV-2BACxDQ8KOHlhjKNsBAwdf2mWP7hPO8JrdklLQDDXLW3eZ6Eespzujg7JjNAukEYRFFXOsZ2NSaqlKo-2FIlInq-2Fn8rVH-2BfTSBvw7N-2Bs0rdK-2F8M5p0Lb0qFLw3b7ObCgMgtJQ2JnXrB5Gh5PBmHFT3WprK70g0MBI1WK-2B8LowKPAUFKlTUZ0VG5TMRtuiIcNMmGLFFuBbG3RpNo8crY-2FB-2FRQA3pq2aXiPCYCYhvS7fKwMCoSxgkoZfDog-2FAPHco9ynq0-2FtbQpkr7V1TIeScwk-2BuO9x4pfOwkd70zdPNWSsdqjYvQdcvSQUUwcNUHeN60-3D" target="_blank" rel="noopener"><span style="font-family:Verdana;font-size: 16px; color: rgb(0, 44, 108);text-decoration-color: #002C6C;"><strong>www.gs1costore.org</strong></span></a></div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div>
-                                <table border="0" cellspacing="0" cellpadding="0" align="center">
-                                    <tbody>
-                                        <tr>
-                                        <td>
-                                            <div class="mj-column-per-100 mj-outlook-group-fix">
-                                                <table border="0" width="100%" cellspacing="0" cellpadding="0">
-                                                    <tbody>
-                                                    <tr>
-                                                        <td align="center"> </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                </div>
-                <div>
-                <br/>
-                <br/>
-                <table border="0" cellspacing="0" cellpadding="0" align="center">
-                    <tbody>
-                        <tr>
-                            <td>
-                            <div>
-                                <table border="0" cellspacing="0" cellpadding="0" align="center">
-                                    <tbody>
-                                        <tr>
-                                        <td>
-                                            <div class="mj-column-per-100 mj-outlook-group-fix" style="font-family:Verdana;font-size: 12px; color: rgb(177, 177, 177);">
-                                                <table border="0" width="100%" cellspacing="0" cellpadding="0">
-                                                    <tbody>
-                                                    <tr>
-                                                        <td align="center">
-                                                            <div>Copyright  <span class="escala-element-custom-field" data-field="year">2023</span> Todos los derechos reservados</div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="center">
-                                                            <div><span class="escala-element-custom-field" data-field="company_data">GS1, Avenida El Dorado N 92 -32 Mdulo G5 Piso 5, Bogot, CO_110 , CO, +57 3009982929</span></div>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                </div>
-            </div>
+            <div class="container" style="width: 550px; margin: 0 auto;">
+        <div>
+        <table border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr>
+                    <td>
+                    <div>
+                        <table border="0" cellspacing="0" cellpadding="0" align="center">
+                            <tbody>
+                                <tr>
+                                <td>
+                                    <div class="mj-column-per-100 mj-outlook-group-fix">
+                                        <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr>
+                                                <td align="center">
+                                                    <table border="0" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td><img src="/rvc/static/img/banner-kit-bienv-codigosgs1aso.png" alt="Logo_GS1-Colombia_RGB.png" width="270" height="auto" /></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div>
+                        <table border="0" cellspacing="0" cellpadding="0" align="center">
+                            <tbody>
+                                <tr>
+                                <td>
+                                    <div class="mj-column-per-100 mj-outlook-group-fix">
+                                        <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr>
+                                                <td align="center">
+                                                    <table border="0" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td><img src="/rvc/static/img/bannerestimadoclientegs1.png" alt="Banner-html-oferta-mercantil.png" width="550" height="auto" /></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>                                                    
+                                            <tr>
+                                                <td>
+                                                    <div style="margin-top: 20px;">
+                                                        <div style="font-family:Verdana;font-size: 18px; color: #F26334; text-align: center;"><strong>Gracias por aceptar tu beneficio RVC: Derechos de identificación</strong></div>
+                                                        <div> </div>
+                                                        <br/>
+                                                        <div style="font-family:Verdana;font-size: 18px; color: #454545; text-align: justify;">Es un placer informarte que tu empresa <strong><b t-esc="benefit_application.partner_id.partner_id.name"></b></strong> ya hace parte de las Redes de Valor Colaborativas.</div>
+                                                        <div> </div>
+                                                        <br/>
+                                                        <div style="font-family:Verdana;font-size: 18px; color: #454545; text-align: justify;">Pronto recibirás vía correo electrónico el KIT de bienvenida con toda la información de los beneficios que tu empresa ha recibido, junto con las credenciales de acceso a la plataforma y los manuales respectivos para que puedas empezar a utilizarlos.</div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div>
+                        <table border="0" cellspacing="0" cellpadding="0" align="center" background="#FAFAFA">
+                            <tbody>
+                                <tr>
+                                <td>
+                                    <div class="mj-column-per-100 mj-outlook-group-fix">
+                                        <table border="0" width="100%" cellspacing="0" cellpadding="0" background="#FAFAFA">
+                                            <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <div> </div>
+                                                        <div style="text-align: justify;"><span style="font-family:Verdana;font-size: 16px; color: #454545;background:#FAFAFA;">Si tienes dudas o necesitas ayuda, contáctanos a </span><span style="font-family:Verdana;font-size: 16px;"><strong><a href="mailto:web@gs1co.org" style="color: #002C6C;">web@gs1co.org</a></strong></span> <span style="font-family:Verdana;font-size: 16px; color: #454545;background:#FAFAFA;">o por medio de nuestro canal de </span> <span style="font-family:Verdana;font-size: 16px;"><strong><a href="https://u28913144.ct.sendgrid.net/ls/click?upn=DpB653v2JP6ACm7-2BPX1kuY4dFNelSIUDpGty-2FPegNXFd4SrnL9cRwQN-2BVya-2Fw08qUtnxVKz9l5t9VeiSldw5kGWLNyLSlX-2BKoeYo-2BUkklZQrfqFokSJcHYrLQFYsHIDVgzMvg47n9BVMmxwJFaOettbntyg1vhFBTp1jGPzOgU03PzTiLF5QTF59ceFKJfJ3OYXW_DDjqUzwYHI5u3AHxtPuHgRQGERVjmeur-2BhZE-2BdZZZmPMu1Ymd8joX8FvTuTa3rxVFGN-2FQrJWn-2BpV-2BP4TDL1RqZgTOxP6jYqV5o-2F4QQTc-2FnUBcO91gUOI4Q-2FrZw2yWuY71FUDpUjFJ3TI4lwahkDBkaHYKSAf-2Bp4U7SWb2quAV0YGZV-2BACxDQ8KOHlhjKNsBAwdf2mWP7hPO8JrdklLQDDXLW3eZ6Eespzujg7JjNAukEYRFFXOsZ2NSaqlKo-2FIlInq-2Fn8rVH-2BfTSBvw7N-2Bs0rdK-2F8M5p0Lb0qFLw3b7ObCgMgtJQ2JnXrB5Gh5PBmHFT1JByXYBEPWJn-2B6CYgyjZAQgiCE9sKiOXbEO5e4IMwF7uOalE1vkGB4cmwvW1iZVcGxoUJQ5TXIk6V352gWQXs8mUI-2Fd68TpsSL0zdwqbIrbU8mODPOjbWZHQBOlQce2wWBh0egT0WdKuDhqF3Qfte8HWUFaK0ypJbpcoXClOXZw-3D" target="_blank" rel="noopener" style="color: #002C6C;" >WhatsApp</a></strong></span>, <span style="font-family:Verdana;font-size: 16px; color: #454545;background:#FAFAFA;">marcando la </span><span style="font-family:Verdana;font-size: 16px; color: #F26334"><strong>Opción 2 (Atención al cliente)</strong></span>, <span style="font-family:Verdana;font-size: 16px; color: rgb(69, 69, 69);background:#FAFAFA;">de lunes a viernes de 7:00 a.m a 4:30 p.m. </span></div>
+                                                        <div> </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <table border="0" cellspacing="0" cellpadding="0" align="center">
+                            <tbody>
+                                <tr>
+                                <td>
+                                    <div class="mj-column-per-100 mj-outlook-group-fix">
+                                        <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr>
+                                                <td align="center"> </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <table border="0" cellspacing="0" cellpadding="0" align="center">
+                            <tbody>
+                                <tr>
+                                <td> </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div>
+                        <table border="0" cellspacing="0" cellpadding="0" align="center">
+                            <tbody>
+                                <tr>
+                                <td>
+                                    <div class="mj-column-per-100 mj-outlook-group-fix">
+                                        <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr>
+                                                <td align="center">
+                                                    <div style="font-family:Verdana;font-size: 20px; color: rgb(0, 44, 108);text-decoration-color: #002C6C;">
+                                                        <div><a href="https://u28913144.ct.sendgrid.net/ls/click?upn=DpB653v2JP6ACm7-2BPX1kufpexWvcyR3lOxb7zXnN6pHTEkpHg5s-2BjKUW6bwMc1XaJKV1_DDjqUzwYHI5u3AHxtPuHgRQGERVjmeur-2BhZE-2BdZZZmPMu1Ymd8joX8FvTuTa3rxVFGN-2FQrJWn-2BpV-2BP4TDL1RqZgTOxP6jYqV5o-2F4QQTc-2FnUBcO91gUOI4Q-2FrZw2yWuY71FUDpUjFJ3TI4lwahkDBkaHYKSAf-2Bp4U7SWb2quAV0YGZV-2BACxDQ8KOHlhjKNsBAwdf2mWP7hPO8JrdklLQDDXLW3eZ6Eespzujg7JjNAukEYRFFXOsZ2NSaqlKo-2FIlInq-2Fn8rVH-2BfTSBvw7N-2Bs0rdK-2F8M5p0Lb0qFLw3b7ObCgMgtJQ2JnXrB5Gh5PBmHFT3WprK70g0MBI1WK-2B8LowKPAUFKlTUZ0VG5TMRtuiIcNMmGLFFuBbG3RpNo8crY-2FB-2FRQA3pq2aXiPCYCYhvS7fKwMCoSxgkoZfDog-2FAPHco9ynq0-2FtbQpkr7V1TIeScwk-2BuO9x4pfOwkd70zdPNWSsdqjYvQdcvSQUUwcNUHeN60-3D" target="_blank" rel="noopener"><span style="font-family:Verdana;font-size: 16px; color: rgb(0, 44, 108);text-decoration-color: #002C6C;"><strong>www.gs1costore.org</strong></span></a></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <table border="0" cellspacing="0" cellpadding="0" align="center">
+                            <tbody>
+                                <tr>
+                                <td>
+                                    <div class="mj-column-per-100 mj-outlook-group-fix">
+                                        <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr>
+                                                <td align="center"> </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <div>
+        <br/>
+        <br/>
+        <table border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr>
+                    <td>
+                    <div>
+                        <table border="0" cellspacing="0" cellpadding="0" align="center">
+                            <tbody>
+                                <tr>
+                                <td>
+                                    <div class="mj-column-per-100 mj-outlook-group-fix" style="font-family:Verdana;font-size: 12px; color: rgb(177, 177, 177);">
+                                        <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr>
+                                                <td align="center">
+                                                    <div>Copyright  <span class="escala-element-custom-field" data-field="year">2023</span> Todos los derechos reservados</div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">
+                                                    <div><span class="escala-element-custom-field" data-field="company_data">GS1, Avenida El Dorado N 92 -32 Modulo G5 Piso 5, Bogotá, CO_110 , CO, +57 3009982929</span></div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
         <!-- </t> -->
     </template>
 </odoo>
