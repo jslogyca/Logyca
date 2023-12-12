@@ -29,7 +29,7 @@ class ResPartner(models.Model):
                                         ('grande4', 'Grande 4'),
                                     ('grande5', 'Grande 5')], string='Tamaño Empresa Interno')
     fact_annual = fields.Selection([('activos', 'Por Activos'), 
-                                    ('ingresos', 'Por Ingresos')], string='Facturación Anual', default='activos')
+                                    ('ingresos', 'Por Ingresos')], string='Facturación Anual', default='activos', track_visibility='onchange')
     amount_revenue_membre = fields.Float('Ingresos Memebresía', default=0.0)
     revenue_memb_ids = fields.Many2one('revenue.macro.sector', string='Rango de Ingresos Membresía')
 
