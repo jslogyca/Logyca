@@ -255,20 +255,29 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         process_partnersaleorder_exists.unlink()
         #Tipos de vinculación Miembro y CLiente
         type_vinculation_miembro = 0
+        type_vinculation_miembro_c = 0
+        type_vinculation_miembro_i = 0
+        type_vinculation_miembro_f = 0
         type_vinculation_cliente = 0
         type_vinculation_prefijo = 0
         obj_type_vinculation_miembros = self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro')])
-        obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro por convenio')])
-        obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembros Internacionales')])
-        obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro Filial')])        
+        obj_type_vinculation_miembros_c = self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro por convenio')])
+        obj_type_vinculation_miembros_i = self.env['logyca.vinculation_types'].search([('name', '=', 'Miembros Internacionales')])
+        obj_type_vinculation_miembros_f = self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro Filial')])        
         obj_type_vinculation_cliente = self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente')])
         obj_type_vinculation_prefijo = self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente Prefijo')])
         for m in obj_type_vinculation_miembros:
             type_vinculation_miembro = m.id
+        for mc in obj_type_vinculation_miembros_c:
+            type_vinculation_miembro_c = mc.id
+        for mi in obj_type_vinculation_miembros_i:
+            type_vinculation_miembro_i = mi.id
+        for mf in obj_type_vinculation_miembros_f:
+            type_vinculation_miembro_f = mf.id
         for c in obj_type_vinculation_cliente:
             type_vinculation_cliente = c.id
         for p in obj_type_vinculation_prefijo:
-            type_vinculation_prefijo.append(p.id)
+            type_vinculation_prefijo = p.id
         #Traer el sector de textileros
         sector_id_textil = 10 #Id definido, en caso de camviar revisar la tabla de sectores de Logyca
         #Traer los productos y sus tipos de proceso
@@ -341,7 +350,8 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                     id_contactP = partner.partner_id.id
                     
                 #Clientes / Miembros.
-                if type_vinculation == type_vinculation_miembro or type_vinculation == type_vinculation_cliente:
+                if type_vinculation == type_vinculation_miembro or type_vinculation == type_vinculation_cliente \
+                            or type_vinculation == type_vinculation_miembro_c or type_vinculation == type_vinculation_miembro_i or type_vinculation == type_vinculation_miembro_f:
                     #Renovación Vinculación
                     if type_process == '1':
                         #Si es textilero validar capacidad de prefijos
