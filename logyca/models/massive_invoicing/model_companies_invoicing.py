@@ -8,6 +8,7 @@ from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 class x_MassiveInvoicingCompanies(models.Model):
     _name = 'massive.invoicing.companies'
     _description = 'Massive Invoicing - Companies for invoicing'
+    _order = 'id desc, expiration_date desc'
     
     name = fields.Char(string='Descripción', required=True)
     process_type = fields.Selection([
@@ -40,7 +41,11 @@ class x_MassiveInvoicingCompanies(models.Model):
         id_miembros = 0
         id_clientes = 0
         obj_type_vinculation_miembros = self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro')])
+        obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro por convenio')])
+        obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembros Internacionales')])
+        obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro Filial')])
         obj_type_vinculation_cliente = self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente')])
+        obj_type_vinculation_prefijo = self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente Prefijo')])
         types_vinculation = []
         for m in obj_type_vinculation_miembros:
             types_vinculation.append(m.id)
@@ -48,6 +53,8 @@ class x_MassiveInvoicingCompanies(models.Model):
         for c in obj_type_vinculation_cliente:
             types_vinculation.append(c.id)  
             id_clientes = c.id
+        for p in obj_type_vinculation_prefijo:
+            types_vinculation.append(p.id)
         #Crear objeto res_partner que traiga la información correspondiente - Compañías catalogadas como miembros y clientes activos
         thirdparties = self.env['res.partner'].search([('x_excluded_massive_invoicing','=',False),('x_active_vinculation', '=', True),('x_type_vinculation','in',types_vinculation)])
         #Cargar las compañias para mostrar en pantalla

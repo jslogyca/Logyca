@@ -37,6 +37,7 @@
         'views/massive_invoicing_views.xml',
         'views/account_journal_views.xml',
         'views/account_move_report_invoice.xml',
+        'views/model_tariff_prefix_view.xml',
         'report/account_debtors_report_view.xml',
     ], 
     

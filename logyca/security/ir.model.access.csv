@@ -41,3 +41,4 @@ access_massive_invoicing_products,massive.invoicing.products,model_massive_invoi
 access_accounting_info_powerbi,accounting.info.powerbi,model_accounting_info_powerbi,,1,0,0,0
 access_collaborative_group,partner.collaborative.group,model_collaborative_group,,1,1,1,0
 access_account_debtors_report,account.debtors.report,model_logyca_reports,,1,1,1,1
+access_massive_tariff_prefix,massive.tariff.prefix,model_massive_tariff_prefix,,1,1,1,1
