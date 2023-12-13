@@ -575,7 +575,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
 
                 #Tipos de vinculados Cliente Prefijo
                 if type_vinculation != type_vinculation_miembro and type_vinculation != type_vinculation_cliente and type_vinculation_prefijo:
-                    cant_prefixes = partner.total_capacity_prefixes    
+                    cant_prefixes = (partner.cant_prefixes_ds+partner.cant_prefixes_fixed_weight+partner.cant_prefixes_variable_weight+partner.cant_prefixes_mixed+partner.cant_prefixes_gl)
                     if cant_prefixes > 0:
                         #Factura 1
                         sale_order_values = {
