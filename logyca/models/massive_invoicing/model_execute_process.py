@@ -256,12 +256,19 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         #Tipos de vinculación Miembro y CLiente
         type_vinculation_miembro = 0
         type_vinculation_cliente = 0
+        type_vinculation_prefijo = 0
         obj_type_vinculation_miembros = self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro')])
+        obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro por convenio')])
+        obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembros Internacionales')])
+        obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro Filial')])        
         obj_type_vinculation_cliente = self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente')])
+        obj_type_vinculation_prefijo = self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente Prefijo')])
         for m in obj_type_vinculation_miembros:
             type_vinculation_miembro = m.id
         for c in obj_type_vinculation_cliente:
             type_vinculation_cliente = c.id
+        for p in obj_type_vinculation_prefijo:
+            type_vinculation_prefijo.append(p.id)
         #Traer el sector de textileros
         sector_id_textil = 10 #Id definido, en caso de camviar revisar la tabla de sectores de Logyca
         #Traer los productos y sus tipos de proceso
@@ -554,7 +561,34 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                 'discount' : discount                            
                             }
 
-                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)            
+                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+
+                #Tipos de vinculados Cliente Prefijo
+                if type_vinculation != type_vinculation_miembro and type_vinculation != type_vinculation_cliente and type_vinculation_prefijo:
+                    cant_prefixes = partner.total_capacity_prefixes    
+                    if cant_prefixes > 0:
+                        #Factura 1
+                        sale_order_values = {
+                            'partner_id' : id_contactP,
+                            'partner_invoice_id' : id_contactP,
+                            'x_origen': 'FM {}'.format(self.year),
+                            'x_type_sale': 'Renovación',
+                            'x_conditional_discount': conditional_discount,
+                            'x_conditional_discount_deadline': conditional_discount_deadline,
+                            'validity_date' : self.invoicing_companies.expiration_date                            
+                        }
+
+                        sale_order = self.env['sale.order'].create(sale_order_values)                            
+                        
+                        sale_order_line_values = {
+                            'order_id' : sale_order.id,
+                            'product_id' : product_id,
+                            'product_uom_qty' : cant_prefixes, #Cantidad
+                            'price_unit' : unit_fee_value,
+                            'discount' : discount                            
+                        }
+
+                        sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)            
                                     
 class x_MassiveInvoicingEnpointCodeAssignment(models.TransientModel):
     _name = 'massive.invoicing.enpointcodeassignment'
