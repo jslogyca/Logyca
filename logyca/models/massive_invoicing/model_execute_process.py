@@ -576,29 +576,65 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                 #Tipos de vinculados Cliente Prefijo
                 if type_vinculation != type_vinculation_miembro and type_vinculation != type_vinculation_cliente and type_vinculation_prefijo:
                     cant_prefixes = (partner.cant_prefixes_ds+partner.cant_prefixes_fixed_weight+partner.cant_prefixes_variable_weight+partner.cant_prefixes_mixed+partner.cant_prefixes_gl)
-                    if cant_prefixes > 0:
-                        #Factura 1
-                        sale_order_values = {
-                            'partner_id' : id_contactP,
-                            'partner_invoice_id' : id_contactP,
-                            'x_origen': 'FM {}'.format(self.year),
-                            'x_type_sale': 'Renovación',
-                            'x_conditional_discount': conditional_discount,
-                            'x_conditional_discount_deadline': conditional_discount_deadline,
-                            'validity_date' : self.invoicing_companies.expiration_date                            
-                        }
+                    if cant_prefixes == 1:
+                        prefix_id = self.env['massive.invoicing.enpointcodeassignment'].search([('process_id', '=', partner.process_id.id),
+                                                                                                ('partner_id', '=', partner.partner_id.id)], order="id asc", limit=1)
+                        tariff_prefix_id = self.env['massive.tariff.prefix'].search([('year', '=', partner.process_id.year),
+                                                                                        ('type_prefix', '=', prefix_id.Rango)], order="id asc", limit=1)
+                        if tariff_prefix_id:                                                                               
+                            #Factura 1
+                            sale_order_values = {
+                                'partner_id' : id_contactP,
+                                'partner_invoice_id' : id_contactP,
+                                'x_origen': 'FM {}'.format(self.year),
+                                'x_type_sale': 'Renovación',
+                                'x_conditional_discount': conditional_discount,
+                                'x_conditional_discount_deadline': conditional_discount_deadline,
+                                'validity_date' : self.invoicing_companies.expiration_date                            
+                            }
 
-                        sale_order = self.env['sale.order'].create(sale_order_values)                            
-                        
-                        sale_order_line_values = {
-                            'order_id' : sale_order.id,
-                            'product_id' : product_id,
-                            'product_uom_qty' : cant_prefixes, #Cantidad
-                            'price_unit' : unit_fee_value,
-                            'discount' : discount                            
-                        }
+                            sale_order = self.env['sale.order'].create(sale_order_values)                            
+                            
+                            sale_order_line_values = {
+                                'order_id' : sale_order.id,
+                                'product_id' : product_id,
+                                'name' : process.product_id.name + ' ' + prefix_id.Rango,
+                                'product_uom_qty' : cant_prefixes, #Cantidad
+                                'price_unit' : tariff_prefix_id.fee_value,
+                                'discount' : discount                            
+                            }
 
-                        sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)            
+                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                    if cant_prefixes > 1:
+                        prefix_id = self.env['massive.invoicing.enpointcodeassignment'].search([('process_id', '=', partner.process_id.id),
+                                                                                                ('partner_id', '=', partner.partner_id.id)], order="id asc")
+                        for pre in prefix_id:
+                            tariff_prefix_id = self.env['massive.tariff.prefix'].search([('year', '=', partner.process_id.year),
+                                                                                            ('type_prefix', '=', pre.Rango)], order="id asc", limit=1)
+                            if tariff_prefix_id:                                                                               
+                                #Factura 1
+                                sale_order_values = {
+                                    'partner_id' : id_contactP,
+                                    'partner_invoice_id' : id_contactP,
+                                    'x_origen': 'FM {}'.format(self.year),
+                                    'x_type_sale': 'Renovación',
+                                    'x_conditional_discount': conditional_discount,
+                                    'x_conditional_discount_deadline': conditional_discount_deadline,
+                                    'validity_date' : self.invoicing_companies.expiration_date                            
+                                }
+
+                                sale_order = self.env['sale.order'].create(sale_order_values)                            
+                                
+                                sale_order_line_values = {
+                                    'order_id' : sale_order.id,
+                                    'product_id' : product_id,
+                                    'name' : process.product_id.name + ' ' + pre.Rango,
+                                    'product_uom_qty' : cant_prefixes, #Cantidad
+                                    'price_unit' : tariff_prefix_id.fee_value,
+                                    'discount' : discount                            
+                                }
+
+                                sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)                        
                                     
 class x_MassiveInvoicingEnpointCodeAssignment(models.TransientModel):
     _name = 'massive.invoicing.enpointcodeassignment'
