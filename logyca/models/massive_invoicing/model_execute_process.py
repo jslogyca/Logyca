@@ -605,6 +605,14 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             }
 
                             sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                            values_save_process = {
+                                'process_id' : self.id,
+                                'partner_id' : partner.partner_id.id,
+                                'vat' : partner.partner_id.vat,
+                                'invoice_one' : sale_order.id
+                            }
+                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+
                     if cant_prefixes > 1:
                         prefix_id = self.env['massive.invoicing.enpointcodeassignment'].search([('process_id', '=', partner.process_id.id),
                                                                                                 ('partner_id', '=', partner.partner_id.id)], order="id asc")
@@ -634,7 +642,14 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                     'discount' : discount                            
                                 }
 
-                                sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)                        
+                                sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                                values_save_process = {
+                                    'process_id' : self.id,
+                                    'partner_id' : partner.partner_id.id,
+                                    'vat' : partner.partner_id.vat,
+                                    'invoice_one' : sale_order.id
+                                }
+                                process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)                                
                                     
 class x_MassiveInvoicingEnpointCodeAssignment(models.TransientModel):
     _name = 'massive.invoicing.enpointcodeassignment'
