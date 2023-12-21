@@ -60,7 +60,7 @@ class AccountMove(models.Model):
     x_debtor_portfolio_status_id = fields.Many2one('debtor.portfolio.status', string="Estado Cartera")
     x_debtor_portfolio_status_str = fields.Char(compute="debtor_portfolio_status_as_char", string="Estado Cartera")
     x_estimated_payment_date = fields.Date('Fecha Estimada Pago')
-
+    x_payment_portal_theme = fields.Selection([('logyca', 'LOGYCA'), ('gs1', 'GS1')], string='Portal de Pagos',help="Indica en qué portal de pagos debe pagarse la factura")
     analytic_account_id = fields.Many2one('account.analytic.account', string='Red de Valor')
     reviewed_by = fields.Many2one('res.users', string='Revisado Por', help="Este campo aparece en el reporte de Soporte de Factura", readonly="1")
 
