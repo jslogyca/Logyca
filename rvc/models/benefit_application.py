@@ -357,9 +357,9 @@ class BenefitApplication(models.Model):
                     partner_id = self.partner_id.partner_id
                 tmp_code = str(self.gln)
 
-                raise ValidationError(\
-                    _('El Código GLN "%s" es inválido. La empresa "%s" no tiene código(s) GLN registrados.'\
-                    '\n\nPor favor deje el campo Código GLN vacío, le asignaremos uno en la entrega del beneficio.' % (tmp_code, str(partner_id.name))))
+                # raise ValidationError(\
+                #     _('El Código GLN "%s" es inválido. La empresa "%s" no tiene código(s) GLN registrados.'\
+                #     '\n\nPor favor deje el campo Código GLN vacío, le asignaremos uno en la entrega del beneficio.' % (tmp_code, str(partner_id.name))))
                 
     def _validate_bought_products(self):
         for benefit_application in self:
