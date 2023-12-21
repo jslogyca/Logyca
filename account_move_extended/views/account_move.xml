@@ -17,6 +17,10 @@
                 <field name="create_uid" string="Creado por"/>
 			</xpath>
 
+            <xpath expr="//field[@name='invoice_partner_bank_id']" position="after">
+                <field name="x_payment_portal_theme" readonly="1"/>
+			</xpath>
+
             <xpath expr="//page[last()]" position="after">
                 <page string="Seguimiento Cartera"
                    attrs="{'invisible': [('type', '!=', 'out_invoice')]}">
