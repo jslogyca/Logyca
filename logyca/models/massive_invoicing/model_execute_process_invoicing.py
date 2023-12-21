@@ -38,11 +38,15 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         #Obtener tipos de vinculación
         type_vinculation = []
         if self.type_vinculation == '1':
-            obj_type_vinculation_miembros = self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro')])            
+            obj_type_vinculation_miembros = self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro')])
+            obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro por convenio')])
+            obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembros Internacionales')])
+            obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro Filial')])        
             for m in obj_type_vinculation_miembros:
                 type_vinculation.append(m.id)
         if self.type_vinculation == '2':
             obj_type_vinculation_cliente = self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente')])
+            obj_type_vinculation_cliente += self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente Prefijo')])
             for c in obj_type_vinculation_cliente:
                 type_vinculation.append(c.id)  
         #Obtener todas las ordenes de venta para confirmarlas y convertirlas en facturas

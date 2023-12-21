@@ -11,7 +11,8 @@ class x_MassiveInvoicingProducts(models.Model):
     type_process = fields.Selection([
                                         ('1', 'Renovación Vinculación'),
                                         ('2', 'Renovación Prefijos Adicionales'),                                        
-                                        ('3', 'Renovación Prefijos GTIN8'),                                        
+                                        ('3', 'Renovación Prefijos GTIN8'),
+                                        ('4', 'Renovación Prefijos'),
                                     ], string='Tipo de Proceso', required=True)
     product_id = fields.Many2one('product.product', string='Producto', required=True)
     
