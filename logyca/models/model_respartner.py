@@ -155,7 +155,6 @@ class ResPartner(models.Model):
     x_history_partner_emails = fields.One2many('logyca.history_partner_emails', 'partner_id', string = 'Emails')
     x_history_partner_opportunity = fields.One2many('logyca.history_partner_opportunity', 'partner_id', string = 'Oportunidades')
     x_history_partner_case = fields.One2many('logyca.history_partner_case', 'partner_id', string = 'Casos')
-    member_out_prefix = fields.Boolean('Membresía sin Prefijo', default=False)
 
     @api.depends('x_asset_range')
     def _date_update_asset(self):
