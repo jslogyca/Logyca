@@ -16,7 +16,6 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
     def action_reason_desactive(self):
         context = dict(self._context or {})
-        active_ids = context.get('active_ids', []) or []
         active_id = context.get('active_ids', False)
         benefit_application = self.env['benefit.application'].browse(active_id)
         if benefit_application:
@@ -40,7 +39,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     benefit_application.write({'state': 'notified', 'notification_date': datetime.now()})
 
                  # notificar Logyca/colabora para los que NO tienen GLN
-                elif benefit_application.product_id.code == '02' and benefit_application._validate_gln() == False:
+                elif benefit_application.product_id.code == '02' and benefit_application._validate_gln() is False:
                     access_link = partner._notify_get_action_link('view')
                     template = self.env.ref('rvc.mail_template_notify_benefit_codes')
                     subject = "Beneficio Plataforma LOGYCA / COLABORA"
@@ -52,7 +51,6 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
     def action_confirm(self):
         context = dict(self._context or {})
-        active_ids = context.get('active_ids', []) or []
         active_id = context.get('active_ids', False)
         benefit_application = self.env['benefit.application'].browse(active_id)
         if benefit_application:
@@ -70,7 +68,6 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
     def action_done(self):
         context = dict(self._context or {})
-        active_ids = context.get('active_ids', []) or []
         active_id = context.get('active_ids', False)
         benefit_application = self.env['benefit.application'].browse(active_id)
         if benefit_application:
@@ -104,13 +101,13 @@ class RVCTemplateEmailWizard(models.TransientModel):
                         template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
                         #se usa para eliminar los adjuntos de la plantilla de correo
                         template.attachment_ids = [(5,)]
-                except:
+                except Exception as e:
                     benefit_application.message_post(body=_(\
-                    'No se pudo <strong>Enviar</strong></u> el kit de bienvenida del beneficio %s.' % str(benefit_application.product_id.benefit_type)))
+                    'No se pudo <strong>Enviar</strong></u> el kit de bienvenida del beneficio %s. Error: %s' % (str(benefit_application.product_id.benefit_type), str(e))))
 
                 if not benefit_application.gln:
                     # si no tiene GLN, asignamos uno.
-                    if benefit_application._validate_gln() == False and benefit_application.glns_codes_quantity == 0:
+                    if benefit_application._validate_gln() is False and benefit_application.glns_codes_quantity == 0:
                         benefit_application.assignate_gln_code()
 
                 if benefit_application.product_id.benefit_type == 'codigos':
@@ -124,7 +121,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
                     # Asignar beneficio de códigos de identificación
                     if benefit_application.codes_quantity > 0:
-                        if benefit_application.send_kit_with_no_benefit == False:
+                        if benefit_application.send_kit_with_no_benefit is False:
                             if benefit_application.assign_identification_codes():
                                 benefit_application.assign_credentials_gs1codes()
                         else:
@@ -164,7 +161,6 @@ class RVCTemplateEmailWizard(models.TransientModel):
         <important> this function don't assign codes, colabora or analytica.</important>
         """
         context = dict(self._context or {})
-        active_ids = context.get('active_ids', []) or []
         active_id = context.get('active_ids', False)
         benefit_application = self.env['benefit.application'].browse(active_id)
         if benefit_application:
@@ -175,11 +171,9 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 if benefit_application.product_id.benefit_type == 'codigos':
                     #para sellers éxito se envía otro kit de bienvenida
                     if benefit_application.is_seller:
-                        if benefit_application._validate_bought_products():
-                            template = self.env.ref('rvc.mail_template_welcome_kit_rvc_seller')
+                        template = self.env.ref('rvc.mail_template_welcome_kit_rvc_seller')
                     else:
-                        if benefit_application._validate_bought_products():
-                            template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                        template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
                 elif benefit_application.product_id.benefit_type == 'colabora':
                     template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
                 elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
@@ -203,9 +197,10 @@ class RVCTemplateEmailWizard(models.TransientModel):
                         template.attachment_ids = [(5,)]
                     benefit_application.message_post(body=_(\
                     'Se <strong>REENVIÓ</strong></u> el kit de bienvenida del beneficio.'))
-                except:
+                except Exception as e:
                     benefit_application.message_post(body=_(\
-                    'No se pudo <strong>REENVIAR</strong></u> el kit de bienvenida del beneficio %s.' % str(benefit_application.product_id.benefit_type)))
+                        'No se pudo <strong>REENVIAR</strong></u> el kit de bienvenida del beneficio %s. Error: %s' % str(benefit_application.product_id.benefit_type), str(e)))
+                    
 
                 #Enviando tarjetas
                 if benefit_application.product_id.benefit_type == 'tarjeta_digital':
@@ -217,7 +212,6 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
     def action_rejected(self):
         context = dict(self._context or {})
-        active_ids = context.get('active_ids', []) or []
         active_id = context.get('active_ids', False)
         benefit_application = self.env['benefit.application'].browse(active_id)
         if benefit_application:
@@ -226,15 +220,14 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
     def re_assign_credentials(self):
         for rec in self:
-            if rec.email_credentials != False:
+            if rec.email_credentials is not False:
                 logging.info(rec.email_credentials)
                 match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', str(rec.email_credentials).lower())
 
-                if match == None:
+                if match is None:
                     raise UserError(f"El email '{str(rec.email_credentials).lower()}' NO es válido. Por favor verifíquelo.")
 
                 context = dict(self._context or {})
-                active_ids = context.get('active_ids', []) or []
                 active_id = context.get('active_ids', False)
                 benefit_application = self.env['benefit.application'].browse(active_id)
                 if benefit_application:
