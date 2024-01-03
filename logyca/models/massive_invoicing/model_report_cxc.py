@@ -93,7 +93,7 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                 #Activos
                 asset_range = partner_id.x_asset_range.name
                 #Ingresos
-                income_range = partner_id.x_income_range.name
+                income_range = partner_id.x_income_range.amount
                 #Tipo de Facturación
                 type_invoice = partner_id.fact_annual
                 #Cuenta
