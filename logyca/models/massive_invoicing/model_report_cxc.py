@@ -29,7 +29,7 @@ class MassiveInvoicingCXC_report(models.TransientModel):
     
     #Retonar columnas
     def get_columns(self):
-        columns = 'DOCUMENTO,AÑO,NÚMERO,FECHA DE FACTURA,NIT,RAZÓN SOCIAL,SECTOR,REPRESENTANTE ANTE LOGYCA,CIUDAD,DIRECCIÓN,TELEFONO,MOVIL,EMAIL REPRESENTATE ANTE LOGYCA, EMAIL FACTURA ELECTRONICA,TIPO VINCULACIÓN,ACTIVOS,CUENTA POR PAGAR,FECHA VENCIMIENTO,PLAZOS DE PAGO,REFERENCIA,ORIGEN,VENDEDOR,PRODUCTO,CANTIDAD,PRECIO UNITARIO,SUBTOTAL,IMPUESTOS,TOTAL,DESCUENTO (%),DCTO CONDICIONADO,RECAUDADO ANTES DE IVA,CXC ANTES DE IVA,ESTADO,CUENTA ANALÍTICA,PAGOS,DOCUMENTO PAGO,FECHA DEL PAGO, VALOR PAGADO'
+        columns = 'DOCUMENTO,AÑO,NÚMERO,FECHA DE FACTURA,NIT,RAZÓN SOCIAL,SECTOR,REPRESENTANTE ANTE LOGYCA,CIUDAD,DIRECCIÓN,TELEFONO,MOVIL,EMAIL REPRESENTATE ANTE LOGYCA, EMAIL FACTURA ELECTRONICA,TIPO VINCULACIÓN,ACTIVOS,INGRESOS,TIPO FACTURACION,MONEDA,CUENTA POR PAGAR,FECHA VENCIMIENTO,PLAZOS DE PAGO,REFERENCIA,ORIGEN,VENDEDOR,PRODUCTO,CANTIDAD,PRECIO UNITARIO,SUBTOTAL,IMPUESTOS,TOTAL,DESCUENTO (%),DCTO CONDICIONADO,RECAUDADO ANTES DE IVA,CXC ANTES DE IVA,ESTADO,CUENTA ANALÍTICA,PAGOS,DOCUMENTO PAGO,FECHA DEL PAGO, VALOR PAGADO'
         #CANTIDAD SIN IMPUESTOS,IMPUESTO,TOTAL,MONDO ADEUDADO,% ABONADO,DESCUENTO CONDICIONADO,TOTAL CON DESCUENTO,SIN IVA,
         _columns = columns.split(",")
         return _columns
@@ -92,6 +92,12 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                             vinculations = vinculations +', ' + vinculation.name
                 #Activos
                 asset_range = partner_id.x_asset_range.name
+                #Ingresos
+                income_range = partner_id.x_income_range.amount
+                #Tipo de Facturación
+                type_invoice = partner_id.fact_annual
+                #Moneda
+                currency = move.currency_id.name
                 #Cuenta
                 for line in move.line_ids:
                     if line.debit > 0:
@@ -190,7 +196,7 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                     analytic_account = items.analytic_account_id.display_name
 
                     #------Insertar datos obtenidos
-                    lst_move = [doc,year,num,invoice_date,nit,partner,classification,represent_logyca_name,city,street,phone,mobile,represent_logyca_email,contact_fe,vinculations,asset_range,account,date_due,payment_term,ref,origin,
+                    lst_move = [doc,year,num,invoice_date,nit,partner,classification,represent_logyca_name,city,street,phone,mobile,represent_logyca_email,contact_fe,vinculations,asset_range,income_range,type_invoice,currency,account,date_due,payment_term,ref,origin,
                                 salesperson,product,quantity,price_unit,price_subtotal,tax,price_total,porcentage_discount,discount,collected_value,value_cxc,state,analytic_account,paid,document_paid,date_paid,value_paid]
                     lst_account_moves.append(lst_move)
             except:
