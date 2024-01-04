@@ -5,6 +5,7 @@ from odoo.addons.base.models.res_bank import sanitize_account_number
 import requests
 import datetime
 import base64
+import json
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -38,6 +39,7 @@ class AccountMove(models.Model):
     x_send_dian = fields.Boolean(string='Enviado a la DIAN', copy=False)
     x_cufe_dian = fields.Char(string='CUFE - Código único de facturación electrónica', copy=False)
     x_motive_error = fields.Text(string='Motivo de error', copy=False)
+    x_status_dian = fields.Char(string='Estado en la DIAN', copy=False)
     #Tiene Nota Credito
     x_have_out_invoice = fields.Boolean(string='Tiene NC', compute='_have_nc')    
     #Tiene Aprobaciones
@@ -54,7 +56,52 @@ class AccountMove(models.Model):
     #Recibo de pago - Campo temporal
     x_receipt_payment = fields.Char(string='N° Recibo de pago', copy=False)
     x_journal_resolution_num = fields.Char(string='Number', related='journal_id.x_resolution_number')
+
+    @api.onchange('state')
+    def _compute_x_status_dian(self):
+        if self.state == 'posted' and self.x_cufe_dian:
+            self._get_status_dian()
+
+    def _get_status_dian(self):
+        token = self._get_token()
+        if token:
+            status_dian = self._get_status_dian_by_cufe(token, self.x_cufe_dian)
+            if status_dian:
+                self._update_status_dian(status_dian)
     
+    def _get_token(self) -> str:
+        url = "https://api-factura-electronica-co.saphety.com/v2/auth/gettoken"
+
+        payload = {
+            "username": 'ktoscano@gs1co.org',
+            "password": 'kT43=gt29',
+            "virtual_operator": 'saphety'
+        }
+
+        headers = {'Content-Type': 'application/json'}
+        response = requests.request("POST", url, headers=headers, json=payload)
+        response_data = json.loads(response.text)
+        token = response_data['ResultData']['access_token']
+
+        return token
+
+    def _get_status_dian_by_cufe(self, token: str, cufe: str) -> str:
+        url = f"https://api-factura-electronica-co.saphety.com/v2/saphety/outbounddocuments/{cufe}"
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+
+        response = requests.request("GET", url, headers=headers)
+        response_data = json.loads(response.text)
+        status_dian = response_data['ResultData']['status']
+
+        return status_dian
+
+    def _update_status_dian(self, status_dian):
+        self.x_status_dian = status_dian
+
     @api.depends('x_value_discounts')
     def _compute_amount_total_discounts(self):
         amount_total_discounts = 0
