@@ -9,7 +9,7 @@
 		<field eval="False" name="doall"/>
 		<field eval="True" name="active"/>
 		<field name="model_id" ref="account.model_account_move"/>
-		<field name="code">model.update_invoice_status()</field>
+		<field name="code">model.cron_update_invoice_status()</field>
 		<field name="priority">1001</field>
 	</record>
 </odoo>
