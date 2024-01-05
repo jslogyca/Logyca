@@ -61,6 +61,7 @@ class AccountMove(models.Model):
     def _compute_x_status_dian(self):
         if self.state == 'posted' and self.x_cufe_dian:
             self._get_status_dian()
+            self._get_url_invoice_dian(self.x_cufe_dian)
 
     def get_status_dian(self):
         token = self._get_token()
@@ -69,6 +70,14 @@ class AccountMove(models.Model):
             if status_dian:
                 self._update_status_dian(status_dian)
     
+    def get_url_invoice_dian(self, cufe):
+        return {
+            'type': 'ir.actions.act_url',
+            'url': 'https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey=' + cufe,
+            'target': 'new',
+        }
+
+
     def _get_token(self) -> str:
         url = "https://api-factura-electronica-co.saphety.com/v2/auth/gettoken"
 
