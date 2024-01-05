@@ -62,7 +62,7 @@ class AccountMove(models.Model):
         if self.state == 'posted' and self.x_cufe_dian:
             self._get_status_dian()
 
-    def _get_status_dian(self):
+    def get_status_dian(self):
         token = self._get_token()
         if token:
             status_dian = self._get_status_dian_by_cufe(token, self.x_cufe_dian)
