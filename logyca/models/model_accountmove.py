@@ -70,10 +70,10 @@ class AccountMove(models.Model):
             if status_dian:
                 self._update_status_dian(status_dian)
     
-    def get_url_invoice_dian(self, cufe):
+    def get_url_invoice_dian(self):
         return {
             'type': 'ir.actions.act_url',
-            'url': 'https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey=' + cufe,
+            'url': 'https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey=' + self.x_cufe_dian,
             'target': 'new',
         }
 
