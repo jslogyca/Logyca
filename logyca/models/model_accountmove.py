@@ -108,6 +108,21 @@ class AccountMove(models.Model):
 
         return status_dian
 
+    def update_invoice_status(self):
+        invoices = self.env['account.move'].search([
+            ('create_date', '>=', '2024-01-01'),
+            ('state', '=', 'posted'),
+            ('x_status_dian', '=', False),
+            ('name', 'like', 'FEC%')
+        ], limit=20)
+        
+        token = self._get_token()
+        if token:
+            for invoice in invoices:
+                status_dian = self._get_status_dian_by_cufe(token, invoice.x_cufe_dian)
+                if status_dian:
+                    self._update_status_dian(invoice, status_dian)
+    
     def _update_status_dian(self, status_dian):
         self.x_status_dian = status_dian
 

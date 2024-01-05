@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="ir_cron_get_invoice_dian_status" model="ir.cron">
+		<field name="name">Obtener estado de la factura en la DIAN</field>
+		<field name="user_id" ref="base.user_root"/>
+		<field name="interval_number">1</field>
+		<field name="interval_type">days</field>
+		<field name="numbercall">-1</field>
+		<field eval="False" name="doall"/>
+		<field eval="True" name="active"/>
+		<field name="model_id" ref="account.model_account_move"/>
+		<field name="code">model.update_invoice_status()</field>
+		<field name="priority">1001</field>
+	</record>
+</odoo>
