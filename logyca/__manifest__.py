@@ -39,7 +39,7 @@
         'views/account_move_report_invoice.xml',
         'views/model_tariff_prefix_view.xml',
         'report/account_debtors_report_view.xml',
-        'data/cron_get_ invoice_dian_status.xml'
+        'data/cron_get_invoice_dian_status.xml'
     ], 
     
 }

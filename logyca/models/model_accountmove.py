@@ -68,7 +68,7 @@ class AccountMove(models.Model):
         if token:
             status_dian = self._get_status_dian_by_cufe(token, self.x_cufe_dian)
             if status_dian:
-                self._update_status_dian(status_dian)
+                self._update_status_dian(self, status_dian)
     
     def get_url_invoice_dian(self):
         return {
@@ -108,7 +108,7 @@ class AccountMove(models.Model):
 
         return status_dian
 
-    def update_invoice_status(self):
+    def cron_update_invoice_status(self):
         invoices = self.env['account.move'].search([
             ('create_date', '>=', '2024-01-01'),
             ('state', '=', 'posted'),
@@ -123,8 +123,8 @@ class AccountMove(models.Model):
                 if status_dian:
                     self._update_status_dian(invoice, status_dian)
     
-    def _update_status_dian(self, status_dian):
-        self.x_status_dian = status_dian
+    def _update_status_dian(self, invoice, status_dian):
+        invoice.x_status_dian = status_dian
 
     @api.depends('x_value_discounts')
     def _compute_amount_total_discounts(self):
