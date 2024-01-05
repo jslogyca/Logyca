@@ -95,7 +95,7 @@ class AccountMove(models.Model):
 
         response = requests.request("GET", url, headers=headers)
         response_data = json.loads(response.text)
-        status_dian = response_data['ResultData']['status']
+        status_dian = response_data['ResultData']['DocumentStatus']
 
         return status_dian
 
