@@ -191,7 +191,7 @@ class x_budget_group(models.Model):
     def name_get(self):
         result = []
         for record in self:
-            result.append((record.id, "{}".format(record.name)))
+            result.append((record.id, "{} | {}".format(record.code, record.name)))
         return result
 
 class x_api_gateway(models.Model):
