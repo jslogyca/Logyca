@@ -34,4 +34,6 @@ class HRLoanMassWizard(models.TransientModel):
                 loan.action_refuse()
             elif self.state=='cancel':
                 loan.action_cancel()
+            elif self.state=='done':
+                loan.action_done()
         return {'type': 'ir.actions.act_window_close'}
