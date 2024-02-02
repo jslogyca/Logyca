@@ -70,8 +70,9 @@ class BenefitApplication(models.Model):
         string='Servicio Ofrecido', help="Servicio que ofrece la empresa")
     partner_address = fields.Char('Dirección Empresa')
     digital_card_ids = fields.One2many('rvc.digital.card', 'postulation_id', string='Tarjetas Digitales')
-
-
+    # GS1 audit fields
+    whatsapp_number_trail = fields.Char('Número WhatsApp', help="Número de WhatsApp que creó la postulación")
+    acceptance_date_trail = fields.Datetime('Fecha/Hora Aceptación', help="Fecha y hora en que se aceptó la postulación")
     #technical fields
     benefit_name = fields.Selection(string="Nombre Beneficio", related='product_id.benefit_type', store=True, help="Technical field used for easy quering")
     origin = fields.Selection([('odoo', 'Odoo'), 
