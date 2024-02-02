@@ -81,9 +81,10 @@
 							<field name="send_kit_with_no_benefit" group="base.group_system"/>
 						</group>
 					</group>
-					<group groups="rvc.group_rvc_superuser">
-						<group string="Opciones SuperUsuario" >
-							
+					<group>
+						<group string="Auditoría GS1" >
+							<field name="whatsapp_number_trail" readonly="1"/>
+							<field name="acceptance_date_trail" readonly="1"/>
 						</group>
 						<group>
 						</group>
