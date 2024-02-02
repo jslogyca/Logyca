@@ -73,7 +73,7 @@
 						</group>
 						<group string="Auditoría GS1" >
 							<field name="whatsapp_number_trail" readonly="1"/>
-							<field name="acceptance_date_trail" readonly="1"/>
+							<field name="acceptance_date" readonly="1"/>
 						</group>
 					</group>
 					<group>
