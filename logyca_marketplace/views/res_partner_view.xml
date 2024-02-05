@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_partner_form_marketplace">
+        <field name="name">res.partner.form.marketplace</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="rvc.view_partner_form_seller"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='x_is_seller']" position="after">
+                <field name="marketplace_ids" >
+                    <tree create="true" delete="true" edit="true" editable="bottom">
+                        <field name="marketplace_id" />
+                    </tree>
+                </field>
+            </xpath>
+        </field>
+    </record>
+</odoo>
