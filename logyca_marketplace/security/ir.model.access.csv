@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+account_res_partner_marketplace,res.partner.marketplace,model_res_partner_marketplace,logyca_marketplace.group_marketplace_manager,1,1,1,1
+account_rel_res_partner_marketplace,rel.res.partner.marketplace,model_rel_res_partner_marketplace,logyca_marketplace.group_marketplace_manager,1,1,1,1

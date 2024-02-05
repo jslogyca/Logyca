@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="res_partner_marketplace_form" model="ir.ui.view">
+		<field name="name">res.partner.marketplace.form</field>
+		<field name="model">res.partner.marketplace</field>
+		<field name="arch" type="xml">
+			<form string="MarketPlace">
+				<sheet>
+                    <h1>MarketPlace</h1>
+					<group name='marketplace'>
+						<group name='marketplace2'>
+							<field name="name" />
+							<field name="partner_id" />
+							<field name="active" widget="boolean_button" />
+							<field name="seller_ids" >
+								<tree create="true" delete="true" edit="true" editable="bottom">
+									<field name="partner_id" />
+								</tree>
+							</field>							
+                        </group>
+					</group>
+				</sheet>
+				<!-- Chatter -->
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+					<field name="activity_ids" widget="mail_activity"/>
+					<field name="message_ids" widget="mail_thread"/>
+				</div>				
+			</form>
+		</field>
+	</record>
+
+	<record id="res_partner_marketplace_tree" model="ir.ui.view">
+		<field name="name">res.partner.marketplace.tree</field>
+		<field name="model">res.partner.marketplace</field>
+		<field name="arch" type="xml">
+			<tree string="MarketPlace" default_order="create_date desc" >
+				<field name="name"/>
+				<field name="partner_id"/>
+				<field name="active" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_res_partner_marketplace" model="ir.actions.act_window">
+		<field name="name">MarketPlace</field>
+		<field name="res_model">res.partner.marketplace</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem
+		id="hr_menu_res_partner_marketplace"
+		name="MarketPlace"
+		action="action_res_partner_marketplace"
+		parent="rvc.menu_config_rvc_parent"
+		sequence="5"
+		groups="logyca_marketplace.group_marketplace_manager"/>
+
+</odoo>
