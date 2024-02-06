@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="rel_res_partner_marketplace_form" model="ir.ui.view">
+		<field name="name">rel.res.partner.marketplace.form</field>
+		<field name="model">rel.res.partner.marketplace</field>
+		<field name="arch" type="xml">
+			<form string="Sellers">
+				<sheet>
+                    <h1>Sellers</h1>
+					<group name='sellet'>
+						<group name='sellet2'>
+							<field name="name" />
+							<field name="partner_id" />
+							<field name="marketplace_id" />
+                        </group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="rel_res_partner_marketplace_tree" model="ir.ui.view">
+		<field name="name">rel.res.partner.marketplace.tree</field>
+		<field name="model">rel.res.partner.marketplace</field>
+		<field name="arch" type="xml">
+			<tree string="Sellers" default_order="create_date desc" >
+				<field name="name"/>
+				<field name="partner_id"/>
+				<field name="marketplace_id" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_rel_res_partner_marketplace" model="ir.actions.act_window">
+		<field name="name">Sellers</field>
+		<field name="res_model">rel.res.partner.marketplace</field>
+		<field name="view_mode">tree,form,pivot</field>
+	</record>
+
+	<menuitem
+		id="hr_menu_rel_res_partner_marketplace"
+		name="Sellers"
+		action="action_rel_res_partner_marketplace"
+		parent="rvc.menu_config_rvc_parent"
+		sequence="5"
+		groups="logyca_marketplace.group_marketplace_manager"/>
+
+</odoo>

@@ -24,6 +24,7 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'views/res_partner_marketplace_view.xml',
+        'views/rel_res_partner_marketplace_view.xml',
         'views/res_partner_view.xml',
     ],
     'qweb': [
