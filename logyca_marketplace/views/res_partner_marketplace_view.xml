@@ -4,9 +4,9 @@
 		<field name="name">res.partner.marketplace.form</field>
 		<field name="model">res.partner.marketplace</field>
 		<field name="arch" type="xml">
-			<form string="MarketPlace">
+			<form string="MarketPlaces">
 				<sheet>
-                    <h1>MarketPlace</h1>
+                    <h1>MarketPlaces</h1>
 					<group name='marketplace'>
 						<group name='marketplace2'>
 							<field name="name" />
@@ -34,7 +34,7 @@
 		<field name="name">res.partner.marketplace.tree</field>
 		<field name="model">res.partner.marketplace</field>
 		<field name="arch" type="xml">
-			<tree string="MarketPlace" default_order="create_date desc" >
+			<tree string="MarketPlaces" default_order="create_date desc" >
 				<field name="name"/>
 				<field name="partner_id"/>
 				<field name="active" />
@@ -50,7 +50,7 @@
 
 	<menuitem
 		id="hr_menu_res_partner_marketplace"
-		name="MarketPlace"
+		name="MarketPlaces"
 		action="action_res_partner_marketplace"
 		parent="rvc.menu_config_rvc_parent"
 		sequence="5"
