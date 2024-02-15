@@ -52,7 +52,7 @@
 		<field name="arch" type="xml">
 			<xpath expr="//button[@name='action_payslip_done']" position="replace">
 				<button string="Create Draft Entry" name="action_payslip_done" type="object" 
-								attrs="{'invisible': [('state', 'not in', 'draft')]}" class="oe_highlight" context="{'payslip_generate_pdf': True}"/>
+								attrs="{'invisible': [('state', 'not in', ('draft','verify'))]}" class="oe_highlight" context="{'payslip_generate_pdf': True}"/>
 			</xpath>
 		</field>
 	</record>

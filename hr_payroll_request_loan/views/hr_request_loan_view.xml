@@ -7,7 +7,7 @@
             <form string="Request Loan">
                 <header>
                     <button name="action_open" type="object" string="Done" states="draft" class="oe_highlight" groups="hr_payroll.group_hr_payroll_manager"/>
-                    <button name="action_draft" type="object" string="Draft" states="open" class="oe_highlight" groups="hr_payroll.group_hr_payroll_manager"/>
+                    <button name="action_draft" type="object" string="Draft" states="done" class="oe_highlight" groups="hr_payroll.group_hr_payroll_manager"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,open" />
                 </header>            
                 <sheet>
