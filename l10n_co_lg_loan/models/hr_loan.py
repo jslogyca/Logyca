@@ -130,7 +130,7 @@ class HrLoan(models.Model):
         return self.write({'state': 'done'})
 
     def action_draft(self):
-        if data.state == 'cancel':
+        if self.state == 'done':
             if self.type_compute != 'fijo' and self.loan_lines:
                 lines = self.loan_lines.filtered(lambda line: line.paid == False).unlink()
             return self.write({'state': 'draft'})
