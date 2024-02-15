@@ -253,9 +253,9 @@ class BenefitApplication(models.Model):
                     self._validate_bought_products_create(beneficiary.partner_id.vat)
 
                 #validar si producto rvc es colabora
-                if product_id.code == '02':
-                    # validar si ya tiene colabora activo
-                    self._validate_has_colabora(beneficiary.partner_id.vat)
+                # if product_id.code == '02':
+                #     # validar si ya tiene colabora activo
+                #     self._validate_has_colabora(beneficiary.partner_id.vat)
 
         return super(BenefitApplication, self).create(vals)
 
