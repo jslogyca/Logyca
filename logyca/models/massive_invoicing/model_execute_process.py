@@ -657,6 +657,12 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                     #Renovación Prefijos GTIN8
                 
                 if type_process == '5':
+                    invoice=None
+                    invoice_pm=None
+                    invoice_pc=None
+                    invoice_gt=None
+                    invoice_ce=None
+                    invoice_p=None
                     if  product_id == 3:
                         invoice = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactP),
                                                                             ('move_id.x_is_mass_billing','=',True),
