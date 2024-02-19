@@ -658,7 +658,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                 
                 if type_process == '5':
                     if  product_id == 3:
-                        invoice = self.env['account.move.line'].search([('partner_id', '=', id_contactP),
+                        invoice = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactP),
                                                                             ('move_id.x_is_mass_billing','=',True),
                                                                             ('product_id','=',27),
                                                                             ('date','>=','2024-01-01'),
