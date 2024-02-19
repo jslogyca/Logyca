@@ -343,6 +343,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                 conditional_discount_deadline = tariff_discounts.date_discounts_one                                
                 #Se obtiene el representante ante Logyca al cual quedara asociada la orden de venta
                 id_contactP = 0
+                id_contactPt=0
                 for record in partner.partner_id.child_ids:   
                     ls_contacts = record.x_contact_type
                     for i in ls_contacts:
@@ -351,6 +352,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                     
                 if id_contactP == 0:
                     id_contactP = partner.partner_id.id
+                    id_contactPt = partner.partner_id.id
                     
                 #Clientes / Miembros.
                 if type_vinculation == type_vinculation_miembro or type_vinculation == type_vinculation_cliente \
@@ -669,36 +671,73 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                                                             ('product_id','=',27),
                                                                             ('date','>=','2024-01-01'),
                                                                                 ('move_id.invoice_payment_state','=','not_paid'),])
+                        if not invoice:
+                            invoice = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactPt),
+                                                                                ('move_id.x_is_mass_billing','=',True),
+                                                                                ('product_id','=',27),
+                                                                                ('date','>=','2024-01-01'),
+                                                                                    ('move_id.invoice_payment_state','=','not_paid'),])
                     if  product_id == 274:
                         invoice_pm = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactP),
                                                                             ('move_id.x_is_mass_billing','=',True),
                                                                             ('product_id','=',273),
                                                                             ('date','>=','2024-01-01'),
                                                                                 ('move_id.invoice_payment_state','=','not_paid'),])
+                        if not invoice_pm:
+                            invoice_pm = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactPt),
+                                                                                ('move_id.x_is_mass_billing','=',True),
+                                                                                ('product_id','=',273),
+                                                                                ('date','>=','2024-01-01'),
+                                                                                    ('move_id.invoice_payment_state','=','not_paid'),])
                     if  product_id == 1666:
                         invoice_pc = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactP),
                                                                             ('move_id.x_is_mass_billing','=',True),
                                                                             ('product_id','=',1480),
                                                                             ('date','>=','2024-01-01'),
                                                                                 ('move_id.invoice_payment_state','=','not_paid'),])
+                        if not invoice_pc:
+                            invoice_pc = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactPt),
+                                                                                ('move_id.x_is_mass_billing','=',True),
+                                                                                ('product_id','=',1480),
+                                                                                ('date','>=','2024-01-01'),
+                                                                                    ('move_id.invoice_payment_state','=','not_paid'),])
                     if  product_id == 276:
                         invoice_gt = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactP),
                                                                             ('move_id.x_is_mass_billing','=',True),
                                                                             ('product_id','=',271),
                                                                             ('date','>=','2024-01-01'),
                                                                                 ('move_id.invoice_payment_state','=','not_paid'),])
+                        if not invoice_gt:
+                            invoice_gt = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactPt),
+                                                                                ('move_id.x_is_mass_billing','=',True),
+                                                                                ('product_id','=',271),
+                                                                                ('date','>=','2024-01-01'),
+                                                                                    ('move_id.invoice_payment_state','=','not_paid'),])
                     if  product_id == 275:
                         invoice_ce = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactP),
                                                                             ('move_id.x_is_mass_billing','=',True),
                                                                             ('product_id','=',272),
                                                                             ('date','>=','2024-01-01'),
                                                                                 ('move_id.invoice_payment_state','=','not_paid'),])
+                        if not invoice_ce:
+                            invoice_ce = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactPt),
+                                                                                ('move_id.x_is_mass_billing','=',True),
+                                                                                ('product_id','=',272),
+                                                                                ('date','>=','2024-01-01'),
+                                                                                    ('move_id.invoice_payment_state','=','not_paid'),])
+
                     if  product_id == 1745:
                         invoice_p = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactP),
                                                                             ('move_id.x_is_mass_billing','=',True),
                                                                             ('product_id','=',1744),
                                                                             ('date','>=','2024-01-01'),
                                                                                 ('move_id.invoice_payment_state','=','not_paid'),])
+                        if not invoice_p:    
+                            invoice_p = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactPt),
+                                                                                ('move_id.x_is_mass_billing','=',True),
+                                                                                ('product_id','=',1744),
+                                                                                ('date','>=','2024-01-01'),
+                                                                                    ('move_id.invoice_payment_state','=','not_paid'),])
 
 
                                                                                 
@@ -719,7 +758,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             'product_id' : product_id,
                             'name' : process.product_id.name,
                             'product_uom_qty' : 1, #Cantidad
-                            'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                            'price_unit' : round(((invoice.move_id.amount_untaxed*5)/100),2)
                         }
 
                         sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
@@ -747,7 +786,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             'product_id' : product_id,
                             'name' : process.product_id.name,
                             'product_uom_qty' : 1, #Cantidad
-                            'price_unit' : round(((invoice_pm.move_id.amount_total*5)/100),2)
+                            'price_unit' : round(((invoice_pm.move_id.amount_untaxed*5)/100),2)
                         }
 
                         sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
@@ -775,7 +814,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             'product_id' : product_id,
                             'name' : process.product_id.name,
                             'product_uom_qty' : 1, #Cantidad
-                            'price_unit' : round(((invoice_pc.move_id.amount_total*5)/100),2)
+                            'price_unit' : round(((invoice_pc.move_id.amount_untaxed*5)/100),2)
                         }
 
                         sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
@@ -803,7 +842,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             'product_id' : product_id,
                             'name' : process.product_id.name,
                             'product_uom_qty' : 1, #Cantidad
-                            'price_unit' : round(((invoice_gt.move_id.amount_total*5)/100),2)
+                            'price_unit' : round(((invoice_gt.move_id.amount_untaxed*5)/100),2)
                         }
 
                         sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
@@ -831,7 +870,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             'product_id' : product_id,
                             'name' : process.product_id.name,
                             'product_uom_qty' : 1, #Cantidad
-                            'price_unit' : round(((invoice_ce.move_id.amount_total*5)/100),2)
+                            'price_unit' : round(((invoice_ce.move_id.amount_untaxed*5)/100),2)
                         }
 
                         sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
@@ -859,7 +898,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             'product_id' : product_id,
                             'name' : process.product_id.name,
                             'product_uom_qty' : 1, #Cantidad
-                            'price_unit' : round(((invoice_p.move_id.amount_total*5)/100),2)
+                            'price_unit' : round(((invoice_p.move_id.amount_untaxed*5)/100),2)
                         }
 
                         sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
