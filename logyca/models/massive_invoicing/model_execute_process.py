@@ -657,11 +657,12 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                     #Renovación Prefijos GTIN8
                 
                 if type_process == '5':
-                    if  product_id.id == 3:
+                    if  product_id == 3:
                         invoice = self.env['account.move.line'].search([('partner_id', '=', id_contactP),
                                                                             ('move_id.x_is_mass_billing','=',True),
                                                                             ('product_id','=',27),
-                                                                            ('date','>=','2024-01-01')])
+                                                                            ('date','>=','2024-01-01'),
+                                                                            ('invoice_payment_state','=','not_paid'),])
                         if invoice:
                             #Factura 1
                             sale_order_values = {
