@@ -678,7 +678,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             sale_order_line_values = {
                                 'order_id' : sale_order.id,
                                 'product_id' : product_id,
-                                'name' : process.product_id.name + ' ' + prefix_id.Rango,
+                                'name' : process.product_id.name,
                                 'product_uom_qty' : 1, #Cantidad
                                 'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
                             }
