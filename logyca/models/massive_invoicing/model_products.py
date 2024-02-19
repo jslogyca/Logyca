@@ -13,6 +13,7 @@ class x_MassiveInvoicingProducts(models.Model):
                                         ('2', 'Renovación Prefijos Adicionales'),                                        
                                         ('3', 'Renovación Prefijos GTIN8'),
                                         ('4', 'Renovación Prefijos'),
+                                        ('5', 'Reactivación'),
                                     ], string='Tipo de Proceso', required=True)
     product_id = fields.Many2one('product.product', string='Producto', required=True)
     
