@@ -349,6 +349,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                     for i in ls_contacts:
                         if i.id == 2:
                             id_contactP = record.id
+                            id_contactPt = partner.partner_id.id
                     
                 if id_contactP == 0:
                     id_contactP = partner.partner_id.id
