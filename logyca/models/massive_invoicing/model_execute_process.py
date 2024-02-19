@@ -283,7 +283,10 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         #Traer los productos y sus tipos de proceso
         saler_orders_partner = []
         cant_prefixes_textil_partner = []
-        obj_massive_invoicing_products = self.env['massive.invoicing.products'].search([('product_id', '!=', False)])
+        if self.invoicing_companies.process_type == '1':
+            obj_massive_invoicing_products = self.env['massive.invoicing.products'].search([('product_id', '!=', False)])
+        else:
+            obj_massive_invoicing_products = self.env['massive.invoicing.products'].search([('product_id', '!=', False),('type_process', '=', '5')])
         for process in obj_massive_invoicing_products:
             type_vinculation = process.type_vinculation.id
             type_process = process.type_process
@@ -649,7 +652,45 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                     'vat' : partner.partner_id.vat,
                                     'invoice_one' : sale_order.id
                                 }
-                                process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)                                
+                                process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+
+                    #Renovación Prefijos GTIN8
+                
+                if type_process == '5':
+                    if  product_id.id == 3:
+                        invoice = self.env['account.move.line'].search([('partner_id', '=', id_contactP),
+                                                                            ('move_id.x_is_mass_billing','=',True),
+                                                                            ('product_id','=',27),
+                                                                            ('date','>=','2024-01-01')])
+                        if invoice:
+                            #Factura 1
+                            sale_order_values = {
+                                'partner_id' : id_contactP,
+                                'partner_invoice_id' : id_contactP,
+                                'x_origen': 'FM {}'.format(self.year),
+                                'x_type_sale': 'Reactivación',
+                                'validity_date' : self.invoicing_companies.expiration_date                            
+                            }
+
+                            sale_order = self.env['sale.order'].create(sale_order_values)                            
+                            
+                            sale_order_line_values = {
+                                'order_id' : sale_order.id,
+                                'product_id' : product_id,
+                                'name' : process.product_id.name + ' ' + prefix_id.Rango,
+                                'product_uom_qty' : cant_prefixes, #Cantidad
+                                'price_unit' : tariff_prefix_id.fee_value,
+                                'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                            }
+
+                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                            values_save_process = {
+                                'process_id' : self.id,
+                                'partner_id' : partner.partner_id.id,
+                                'vat' : partner.partner_id.vat,
+                                'invoice_one' : sale_order.id
+                            }
+                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)                        
                                     
 class x_MassiveInvoicingEnpointCodeAssignment(models.TransientModel):
     _name = 'massive.invoicing.enpointcodeassignment'
