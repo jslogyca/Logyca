@@ -663,6 +663,39 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                                                             ('product_id','=',27),
                                                                             ('date','>=','2024-01-01'),
                                                                                 ('move_id.invoice_payment_state','=','not_paid'),])
+                    if  product_id == 274:
+                        invoice_pm = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactP),
+                                                                            ('move_id.x_is_mass_billing','=',True),
+                                                                            ('product_id','=',273),
+                                                                            ('date','>=','2024-01-01'),
+                                                                                ('move_id.invoice_payment_state','=','not_paid'),])
+                    if  product_id == 1666:
+                        invoice_pc = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactP),
+                                                                            ('move_id.x_is_mass_billing','=',True),
+                                                                            ('product_id','=',1480),
+                                                                            ('date','>=','2024-01-01'),
+                                                                                ('move_id.invoice_payment_state','=','not_paid'),])
+                    if  product_id == 276:
+                        invoice_gt = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactP),
+                                                                            ('move_id.x_is_mass_billing','=',True),
+                                                                            ('product_id','=',271),
+                                                                            ('date','>=','2024-01-01'),
+                                                                                ('move_id.invoice_payment_state','=','not_paid'),])
+                    if  product_id == 275:
+                        invoice_ce = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactP),
+                                                                            ('move_id.x_is_mass_billing','=',True),
+                                                                            ('product_id','=',272),
+                                                                            ('date','>=','2024-01-01'),
+                                                                                ('move_id.invoice_payment_state','=','not_paid'),])
+                    if  product_id == 1745:
+                        invoice_p = self.env['account.move.line'].search([('move_id.partner_id', '=', id_contactP),
+                                                                            ('move_id.x_is_mass_billing','=',True),
+                                                                            ('product_id','=',1744),
+                                                                            ('date','>=','2024-01-01'),
+                                                                                ('move_id.invoice_payment_state','=','not_paid'),])
+
+
+                                                                                
                         if invoice:
                             #Factura 1
                             sale_order_values = {
@@ -691,7 +724,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                 'invoice_one' : sale_order.id
                             }
                             process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
-                        else:
+                        elif invoice_pm:
                             #Factura 1
                             sale_order_values = {
                                 'partner_id' : id_contactP,
@@ -706,6 +739,147 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             sale_order_line_values = {
                                 'order_id' : sale_order.id,
                                 'product_id' : product_id,
+                                'name' : process.product_id.name,
+                                'product_uom_qty' : 1, #Cantidad
+                                'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                            }
+
+                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                            values_save_process = {
+                                'process_id' : self.id,
+                                'partner_id' : partner.partner_id.id,
+                                'vat' : partner.partner_id.vat,
+                                'invoice_one' : sale_order.id
+                            }
+                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+                        elif invoice_pc:
+                            #Factura 1
+                            sale_order_values = {
+                                'partner_id' : id_contactP,
+                                'partner_invoice_id' : id_contactP,
+                                'x_origen': 'FM {}'.format(self.year),
+                                'x_type_sale': 'Renovación',
+                                'validity_date' : self.invoicing_companies.expiration_date                            
+                            }
+
+                            sale_order = self.env['sale.order'].create(sale_order_values)                            
+                            
+                            sale_order_line_values = {
+                                'order_id' : sale_order.id,
+                                'product_id' : product_id,
+                                'name' : process.product_id.name,
+                                'product_uom_qty' : 1, #Cantidad
+                                'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                            }
+
+                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                            values_save_process = {
+                                'process_id' : self.id,
+                                'partner_id' : partner.partner_id.id,
+                                'vat' : partner.partner_id.vat,
+                                'invoice_one' : sale_order.id
+                            }
+                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+                        elif invoice_gt:
+                            #Factura 1
+                            sale_order_values = {
+                                'partner_id' : id_contactP,
+                                'partner_invoice_id' : id_contactP,
+                                'x_origen': 'FM {}'.format(self.year),
+                                'x_type_sale': 'Renovación',
+                                'validity_date' : self.invoicing_companies.expiration_date                            
+                            }
+
+                            sale_order = self.env['sale.order'].create(sale_order_values)                            
+                            
+                            sale_order_line_values = {
+                                'order_id' : sale_order.id,
+                                'product_id' : product_id,
+                                'name' : process.product_id.name,
+                                'product_uom_qty' : 1, #Cantidad
+                                'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                            }
+
+                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                            values_save_process = {
+                                'process_id' : self.id,
+                                'partner_id' : partner.partner_id.id,
+                                'vat' : partner.partner_id.vat,
+                                'invoice_one' : sale_order.id
+                            }
+                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+                        elif invoice_ce:
+                            #Factura 1
+                            sale_order_values = {
+                                'partner_id' : id_contactP,
+                                'partner_invoice_id' : id_contactP,
+                                'x_origen': 'FM {}'.format(self.year),
+                                'x_type_sale': 'Renovación',
+                                'validity_date' : self.invoicing_companies.expiration_date                            
+                            }
+
+                            sale_order = self.env['sale.order'].create(sale_order_values)                            
+                            
+                            sale_order_line_values = {
+                                'order_id' : sale_order.id,
+                                'product_id' : product_id,
+                                'name' : process.product_id.name,
+                                'product_uom_qty' : 1, #Cantidad
+                                'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                            }
+
+                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                            values_save_process = {
+                                'process_id' : self.id,
+                                'partner_id' : partner.partner_id.id,
+                                'vat' : partner.partner_id.vat,
+                                'invoice_one' : sale_order.id
+                            }
+                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+                        elif invoice_p:
+                            #Factura 1
+                            sale_order_values = {
+                                'partner_id' : id_contactP,
+                                'partner_invoice_id' : id_contactP,
+                                'x_origen': 'FM {}'.format(self.year),
+                                'x_type_sale': 'Renovación',
+                                'validity_date' : self.invoicing_companies.expiration_date                            
+                            }
+
+                            sale_order = self.env['sale.order'].create(sale_order_values)                            
+                            
+                            sale_order_line_values = {
+                                'order_id' : sale_order.id,
+                                'product_id' : product_id,
+                                'name' : process.product_id.name,
+                                'product_uom_qty' : 1, #Cantidad
+                                'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                            }
+
+                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                            values_save_process = {
+                                'process_id' : self.id,
+                                'partner_id' : partner.partner_id.id,
+                                'vat' : partner.partner_id.vat,
+                                'invoice_one' : sale_order.id
+                            }
+                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+
+                        else:
+                            #Factura 1
+                            sale_order_values = {
+                                'partner_id' : id_contactP,
+                                'partner_invoice_id' : id_contactP,
+                                'x_origen': 'FM {}'.format(self.year),
+                                'x_type_sale': 'Renovación',
+                                'validity_date' : self.invoicing_companies.expiration_date                            
+                            }
+
+                            sale_order = self.env['sale.order'].create(sale_order_values)                            
+                            
+                            sale_order_line_values = {
+                                'order_id' : sale_order.id,
+                                'product_id' : 27,
                                 'name' : process.product_id.name,
                                 'product_uom_qty' : 1, #Cantidad
                                 'price_unit' : round(((12000000*5)/100),2)
