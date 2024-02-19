@@ -669,7 +669,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                 'partner_id' : id_contactP,
                                 'partner_invoice_id' : id_contactP,
                                 'x_origen': 'FM {}'.format(self.year),
-                                'x_type_sale': 'Reactivación',
+                                'x_type_sale': 'Renovación',
                                 'validity_date' : self.invoicing_companies.expiration_date                            
                             }
 
@@ -698,7 +698,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                 'partner_id' : id_contactP,
                                 'partner_invoice_id' : id_contactP,
                                 'x_origen': 'FM {}'.format(self.year),
-                                'x_type_sale': 'Reactivación',
+                                'x_type_sale': 'Renovación',
                                 'validity_date' : self.invoicing_companies.expiration_date                            
                             }
 
