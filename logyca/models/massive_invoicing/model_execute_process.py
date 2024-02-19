@@ -662,7 +662,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                                                             ('move_id.x_is_mass_billing','=',True),
                                                                             ('product_id','=',27),
                                                                             ('date','>=','2024-01-01'),
-                                                                            ('invoice_payment_state','=','not_paid'),])
+                                                                            ('move_id.invoice_payment_state','=','not_paid'),])
                         if invoice:
                             #Factura 1
                             sale_order_values = {
