@@ -696,203 +696,203 @@ class x_MassiveInvoicingProcess(models.TransientModel):
 
 
                                                                                 
-                        if invoice:
-                            #Factura 1
-                            sale_order_values = {
-                                'partner_id' : id_contactP,
-                                'partner_invoice_id' : id_contactP,
-                                'x_origen': 'FM {}'.format(self.year),
-                                'x_type_sale': 'Renovación',
-                                'validity_date' : self.invoicing_companies.expiration_date                            
-                            }
+                    if invoice:
+                        #Factura 1
+                        sale_order_values = {
+                            'partner_id' : id_contactP,
+                            'partner_invoice_id' : id_contactP,
+                            'x_origen': 'FM {}'.format(self.year),
+                            'x_type_sale': 'Renovación',
+                            'validity_date' : self.invoicing_companies.expiration_date                            
+                        }
 
-                            sale_order = self.env['sale.order'].create(sale_order_values)                            
-                            
-                            sale_order_line_values = {
-                                'order_id' : sale_order.id,
-                                'product_id' : product_id,
-                                'name' : process.product_id.name,
-                                'product_uom_qty' : 1, #Cantidad
-                                'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
-                            }
+                        sale_order = self.env['sale.order'].create(sale_order_values)                            
+                        
+                        sale_order_line_values = {
+                            'order_id' : sale_order.id,
+                            'product_id' : product_id,
+                            'name' : process.product_id.name,
+                            'product_uom_qty' : 1, #Cantidad
+                            'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                        }
 
-                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
-                            values_save_process = {
-                                'process_id' : self.id,
-                                'partner_id' : partner.partner_id.id,
-                                'vat' : partner.partner_id.vat,
-                                'invoice_one' : sale_order.id
-                            }
-                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
-                        elif invoice_pm:
-                            #Factura 1
-                            sale_order_values = {
-                                'partner_id' : id_contactP,
-                                'partner_invoice_id' : id_contactP,
-                                'x_origen': 'FM {}'.format(self.year),
-                                'x_type_sale': 'Renovación',
-                                'validity_date' : self.invoicing_companies.expiration_date                            
-                            }
+                        sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                        values_save_process = {
+                            'process_id' : self.id,
+                            'partner_id' : partner.partner_id.id,
+                            'vat' : partner.partner_id.vat,
+                            'invoice_one' : sale_order.id
+                        }
+                        process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+                    elif invoice_pm:
+                        #Factura 1
+                        sale_order_values = {
+                            'partner_id' : id_contactP,
+                            'partner_invoice_id' : id_contactP,
+                            'x_origen': 'FM {}'.format(self.year),
+                            'x_type_sale': 'Renovación',
+                            'validity_date' : self.invoicing_companies.expiration_date                            
+                        }
 
-                            sale_order = self.env['sale.order'].create(sale_order_values)                            
-                            
-                            sale_order_line_values = {
-                                'order_id' : sale_order.id,
-                                'product_id' : product_id,
-                                'name' : process.product_id.name,
-                                'product_uom_qty' : 1, #Cantidad
-                                'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
-                            }
+                        sale_order = self.env['sale.order'].create(sale_order_values)                            
+                        
+                        sale_order_line_values = {
+                            'order_id' : sale_order.id,
+                            'product_id' : product_id,
+                            'name' : process.product_id.name,
+                            'product_uom_qty' : 1, #Cantidad
+                            'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                        }
 
-                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
-                            values_save_process = {
-                                'process_id' : self.id,
-                                'partner_id' : partner.partner_id.id,
-                                'vat' : partner.partner_id.vat,
-                                'invoice_one' : sale_order.id
-                            }
-                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
-                        elif invoice_pc:
-                            #Factura 1
-                            sale_order_values = {
-                                'partner_id' : id_contactP,
-                                'partner_invoice_id' : id_contactP,
-                                'x_origen': 'FM {}'.format(self.year),
-                                'x_type_sale': 'Renovación',
-                                'validity_date' : self.invoicing_companies.expiration_date                            
-                            }
+                        sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                        values_save_process = {
+                            'process_id' : self.id,
+                            'partner_id' : partner.partner_id.id,
+                            'vat' : partner.partner_id.vat,
+                            'invoice_one' : sale_order.id
+                        }
+                        process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+                    elif invoice_pc:
+                        #Factura 1
+                        sale_order_values = {
+                            'partner_id' : id_contactP,
+                            'partner_invoice_id' : id_contactP,
+                            'x_origen': 'FM {}'.format(self.year),
+                            'x_type_sale': 'Renovación',
+                            'validity_date' : self.invoicing_companies.expiration_date                            
+                        }
 
-                            sale_order = self.env['sale.order'].create(sale_order_values)                            
-                            
-                            sale_order_line_values = {
-                                'order_id' : sale_order.id,
-                                'product_id' : product_id,
-                                'name' : process.product_id.name,
-                                'product_uom_qty' : 1, #Cantidad
-                                'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
-                            }
+                        sale_order = self.env['sale.order'].create(sale_order_values)                            
+                        
+                        sale_order_line_values = {
+                            'order_id' : sale_order.id,
+                            'product_id' : product_id,
+                            'name' : process.product_id.name,
+                            'product_uom_qty' : 1, #Cantidad
+                            'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                        }
 
-                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
-                            values_save_process = {
-                                'process_id' : self.id,
-                                'partner_id' : partner.partner_id.id,
-                                'vat' : partner.partner_id.vat,
-                                'invoice_one' : sale_order.id
-                            }
-                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
-                        elif invoice_gt:
-                            #Factura 1
-                            sale_order_values = {
-                                'partner_id' : id_contactP,
-                                'partner_invoice_id' : id_contactP,
-                                'x_origen': 'FM {}'.format(self.year),
-                                'x_type_sale': 'Renovación',
-                                'validity_date' : self.invoicing_companies.expiration_date                            
-                            }
+                        sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                        values_save_process = {
+                            'process_id' : self.id,
+                            'partner_id' : partner.partner_id.id,
+                            'vat' : partner.partner_id.vat,
+                            'invoice_one' : sale_order.id
+                        }
+                        process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+                    elif invoice_gt:
+                        #Factura 1
+                        sale_order_values = {
+                            'partner_id' : id_contactP,
+                            'partner_invoice_id' : id_contactP,
+                            'x_origen': 'FM {}'.format(self.year),
+                            'x_type_sale': 'Renovación',
+                            'validity_date' : self.invoicing_companies.expiration_date                            
+                        }
 
-                            sale_order = self.env['sale.order'].create(sale_order_values)                            
-                            
-                            sale_order_line_values = {
-                                'order_id' : sale_order.id,
-                                'product_id' : product_id,
-                                'name' : process.product_id.name,
-                                'product_uom_qty' : 1, #Cantidad
-                                'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
-                            }
+                        sale_order = self.env['sale.order'].create(sale_order_values)                            
+                        
+                        sale_order_line_values = {
+                            'order_id' : sale_order.id,
+                            'product_id' : product_id,
+                            'name' : process.product_id.name,
+                            'product_uom_qty' : 1, #Cantidad
+                            'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                        }
 
-                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
-                            values_save_process = {
-                                'process_id' : self.id,
-                                'partner_id' : partner.partner_id.id,
-                                'vat' : partner.partner_id.vat,
-                                'invoice_one' : sale_order.id
-                            }
-                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
-                        elif invoice_ce:
-                            #Factura 1
-                            sale_order_values = {
-                                'partner_id' : id_contactP,
-                                'partner_invoice_id' : id_contactP,
-                                'x_origen': 'FM {}'.format(self.year),
-                                'x_type_sale': 'Renovación',
-                                'validity_date' : self.invoicing_companies.expiration_date                            
-                            }
+                        sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                        values_save_process = {
+                            'process_id' : self.id,
+                            'partner_id' : partner.partner_id.id,
+                            'vat' : partner.partner_id.vat,
+                            'invoice_one' : sale_order.id
+                        }
+                        process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+                    elif invoice_ce:
+                        #Factura 1
+                        sale_order_values = {
+                            'partner_id' : id_contactP,
+                            'partner_invoice_id' : id_contactP,
+                            'x_origen': 'FM {}'.format(self.year),
+                            'x_type_sale': 'Renovación',
+                            'validity_date' : self.invoicing_companies.expiration_date                            
+                        }
 
-                            sale_order = self.env['sale.order'].create(sale_order_values)                            
-                            
-                            sale_order_line_values = {
-                                'order_id' : sale_order.id,
-                                'product_id' : product_id,
-                                'name' : process.product_id.name,
-                                'product_uom_qty' : 1, #Cantidad
-                                'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
-                            }
+                        sale_order = self.env['sale.order'].create(sale_order_values)                            
+                        
+                        sale_order_line_values = {
+                            'order_id' : sale_order.id,
+                            'product_id' : product_id,
+                            'name' : process.product_id.name,
+                            'product_uom_qty' : 1, #Cantidad
+                            'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                        }
 
-                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
-                            values_save_process = {
-                                'process_id' : self.id,
-                                'partner_id' : partner.partner_id.id,
-                                'vat' : partner.partner_id.vat,
-                                'invoice_one' : sale_order.id
-                            }
-                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
-                        elif invoice_p:
-                            #Factura 1
-                            sale_order_values = {
-                                'partner_id' : id_contactP,
-                                'partner_invoice_id' : id_contactP,
-                                'x_origen': 'FM {}'.format(self.year),
-                                'x_type_sale': 'Renovación',
-                                'validity_date' : self.invoicing_companies.expiration_date                            
-                            }
+                        sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                        values_save_process = {
+                            'process_id' : self.id,
+                            'partner_id' : partner.partner_id.id,
+                            'vat' : partner.partner_id.vat,
+                            'invoice_one' : sale_order.id
+                        }
+                        process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+                    elif invoice_p:
+                        #Factura 1
+                        sale_order_values = {
+                            'partner_id' : id_contactP,
+                            'partner_invoice_id' : id_contactP,
+                            'x_origen': 'FM {}'.format(self.year),
+                            'x_type_sale': 'Renovación',
+                            'validity_date' : self.invoicing_companies.expiration_date                            
+                        }
 
-                            sale_order = self.env['sale.order'].create(sale_order_values)                            
-                            
-                            sale_order_line_values = {
-                                'order_id' : sale_order.id,
-                                'product_id' : product_id,
-                                'name' : process.product_id.name,
-                                'product_uom_qty' : 1, #Cantidad
-                                'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
-                            }
+                        sale_order = self.env['sale.order'].create(sale_order_values)                            
+                        
+                        sale_order_line_values = {
+                            'order_id' : sale_order.id,
+                            'product_id' : product_id,
+                            'name' : process.product_id.name,
+                            'product_uom_qty' : 1, #Cantidad
+                            'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                        }
 
-                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
-                            values_save_process = {
-                                'process_id' : self.id,
-                                'partner_id' : partner.partner_id.id,
-                                'vat' : partner.partner_id.vat,
-                                'invoice_one' : sale_order.id
-                            }
-                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
+                        sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                        values_save_process = {
+                            'process_id' : self.id,
+                            'partner_id' : partner.partner_id.id,
+                            'vat' : partner.partner_id.vat,
+                            'invoice_one' : sale_order.id
+                        }
+                        process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
 
-                        else:
-                            #Factura 1
-                            sale_order_values = {
-                                'partner_id' : id_contactP,
-                                'partner_invoice_id' : id_contactP,
-                                'x_origen': 'FM {}'.format(self.year),
-                                'x_type_sale': 'Renovación',
-                                'validity_date' : self.invoicing_companies.expiration_date                            
-                            }
+                    else:
+                        #Factura 1
+                        sale_order_values = {
+                            'partner_id' : id_contactP,
+                            'partner_invoice_id' : id_contactP,
+                            'x_origen': 'FM {}'.format(self.year),
+                            'x_type_sale': 'Renovación',
+                            'validity_date' : self.invoicing_companies.expiration_date                            
+                        }
 
-                            sale_order = self.env['sale.order'].create(sale_order_values)                            
-                            
-                            sale_order_line_values = {
-                                'order_id' : sale_order.id,
-                                'product_id' : 27,
-                                'name' : process.product_id.name,
-                                'product_uom_qty' : 1, #Cantidad
-                                'price_unit' : round(((12000000*5)/100),2)
-                            }
+                        sale_order = self.env['sale.order'].create(sale_order_values)                            
+                        
+                        sale_order_line_values = {
+                            'order_id' : sale_order.id,
+                            'product_id' : 27,
+                            'name' : process.product_id.name,
+                            'product_uom_qty' : 1, #Cantidad
+                            'price_unit' : round(((12000000*5)/100),2)
+                        }
 
-                            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
-                            values_save_process = {
-                                'process_id' : self.id,
-                                'partner_id' : partner.partner_id.id,
-                                'vat' : partner.partner_id.vat,
-                                'invoice_one' : sale_order.id
-                            }
-                            process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)     
+                        sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+                        values_save_process = {
+                            'process_id' : self.id,
+                            'partner_id' : partner.partner_id.id,
+                            'vat' : partner.partner_id.vat,
+                            'invoice_one' : sale_order.id
+                        }
+                        process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)     
                                     
 class x_MassiveInvoicingEnpointCodeAssignment(models.TransientModel):
     _name = 'massive.invoicing.enpointcodeassignment'
