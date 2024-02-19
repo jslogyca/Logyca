@@ -747,7 +747,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             'product_id' : product_id,
                             'name' : process.product_id.name,
                             'product_uom_qty' : 1, #Cantidad
-                            'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                            'price_unit' : round(((invoice_pm.move_id.amount_total*5)/100),2)
                         }
 
                         sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
@@ -775,7 +775,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             'product_id' : product_id,
                             'name' : process.product_id.name,
                             'product_uom_qty' : 1, #Cantidad
-                            'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                            'price_unit' : round(((invoice_pc.move_id.amount_total*5)/100),2)
                         }
 
                         sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
@@ -803,7 +803,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             'product_id' : product_id,
                             'name' : process.product_id.name,
                             'product_uom_qty' : 1, #Cantidad
-                            'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                            'price_unit' : round(((invoice_gt.move_id.amount_total*5)/100),2)
                         }
 
                         sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
@@ -831,7 +831,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             'product_id' : product_id,
                             'name' : process.product_id.name,
                             'product_uom_qty' : 1, #Cantidad
-                            'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                            'price_unit' : round(((invoice_ce.move_id.amount_total*5)/100),2)
                         }
 
                         sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
@@ -859,7 +859,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             'product_id' : product_id,
                             'name' : process.product_id.name,
                             'product_uom_qty' : 1, #Cantidad
-                            'price_unit' : round(((invoice.move_id.amount_total*5)/100),2)
+                            'price_unit' : round(((invoice_p.move_id.amount_total*5)/100),2)
                         }
 
                         sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
