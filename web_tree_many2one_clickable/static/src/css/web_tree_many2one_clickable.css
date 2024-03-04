@@ -1,0 +1,7 @@
+td.o_many2one_cell a {
+  margin-left: 0.5em;
+  visibility: hidden;
+}
+td.o_many2one_cell:hover a {
+  visibility: visible;
+}/*# sourceMappingURL=web_tree_many2one_clickable.css.map */

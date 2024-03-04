@@ -21,6 +21,11 @@
                 <field name="x_payment_portal_theme" readonly="1"/>
 			</xpath>
 
+            <xpath expr="/tree/field[@name='amount_currency']" position="after">
+                <field name="tax_base_amount" optional="hide"/>
+                <field name="x_budget_group" optional="hide"/>
+            </xpath>
+
             <xpath expr="//page[last()]" position="after">
                 <page string="Seguimiento Cartera"
                    attrs="{'invisible': [('type', '!=', 'out_invoice')]}">
