@@ -20,8 +20,8 @@
             <xpath expr="//field[@name='invoice_partner_bank_id']" position="after">
                 <field name="x_payment_portal_theme" readonly="1"/>
 			</xpath>
-
-            <xpath expr="/tree/field[@name='amount_currency']" position="after">
+            
+            <xpath expr="//field[@name='line_ids']/tree" position="inside">
                 <field name="tax_base_amount" optional="hide"/>
                 <field name="x_budget_group" optional="hide"/>
             </xpath>
