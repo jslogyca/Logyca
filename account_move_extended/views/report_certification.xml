@@ -95,7 +95,7 @@
                         <tbody>
                             <tr t-foreach="partner['lines']" t-as="line">
                                 <td><t t-esc="line['name']"/></td>
-                                <span> 236805 Reteica Por Servicios 0.013 80%</span>
+                                <td><span> 236805 Reteica Por Servicios 0.013 80%</span></td>
                                 <td><t t-esc="line['tax_base_amount']"/></td>
                                 <td><t t-esc="line['balance']"/></td>
                             </tr>
