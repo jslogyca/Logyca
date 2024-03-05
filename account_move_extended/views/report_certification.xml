@@ -23,12 +23,20 @@
                     </div>
                     <div class="col-6">
                         <!-- Fecha de Declaración: <t t-esc="options['declaration_date']"/> -->
-                        Periodo Certificado: <t t-esc="date_from"/> Al <t t-esc="date_to"/>
+                        <!-- Periodo Certificado: <t t-esc="date_from"/> Al <t t-esc="date_to"/> -->
                     </div>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-12">
                         Ciudad Tercero: <t t-esc="partner['partner_id'].x_city.name"/>
+                    </div>
+                </div> -->
+                <div class="row">
+                    <div class="col-6">
+                        Ciudad Tercero: <t t-esc="partner['partner_id'].x_city.name"/>
+                    </div>
+                    <div class="col-6">
+                        Periodo Certificado: <t t-esc="date_from"/> Al <t t-esc="date_to"/>
                     </div>
                 </div>
                 <div class="row">
