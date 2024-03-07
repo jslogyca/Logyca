@@ -250,7 +250,7 @@ class BenefitApplication(models.Model):
                     self._validate_member_or_client(beneficiary.partner_id)
                     
                     # validar si tiene códigos comprados
-                    self._validate_bought_products_create(beneficiary.partner_id.vat)
+                    #self._validate_bought_products_create(beneficiary.partner_id.vat)
 
                 #validar si producto rvc es colabora
                 # if product_id.code == '02':
