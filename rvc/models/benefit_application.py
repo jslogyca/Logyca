@@ -613,7 +613,7 @@ class BenefitApplication(models.Model):
         if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_get_token = "https://app-loginrocp-prod.azurewebsites.net/api/Login"
         else:
-            url_get_token = "https://app-loginrocp-prod.azurewebsites.net/api/Login"
+            url_get_token = "https://app-loginrocp-dev.azurewebsites.net/api/Login"
 
         body_get_token = json.dumps({
             "email": "odoorvc@yopmail.com",
@@ -639,9 +639,9 @@ class BenefitApplication(models.Model):
         """
         
         if self.get_odoo_url() == 'https://logyca.odoo.com':
-            url_get_token = "http://logycassoapi.azurewebsites.net/api/Token/Authenticate"
+            url_get_token = "https://app-loginrocp-prod.azurewebsites.net/api/Login"
         else:
-            url_get_token = "http://logycassoapi.azurewebsites.net/api/Token/Authenticate"
+            url_get_token = "https://app-loginrocp-dev.azurewebsites.net/api/Login"
 
         body_get_token = json.dumps({
             "email": "odoorvc@yopmail.com",
@@ -676,7 +676,7 @@ class BenefitApplication(models.Model):
             today_one_year_later = today_date + relativedelta(years=1)
 
             if self.get_odoo_url() == 'https://logyca.odoo.com':
-                url_assignate= "https://app-colaborags1api-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                url_assignate= "https://app-msadenterprise-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
             else:
                 url_assignate= "https://app-colaborags1api-dev.azurewebsites.net/api/Company/AddCompanyEcommerce"
 
