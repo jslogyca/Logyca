@@ -720,13 +720,13 @@ class BenefitApplication(models.Model):
                 response_assignate.close()
 
                 #error al crear credenciales
-                if result.get('dataError') == True:
+                if result.get('dataError') is True or result.get('apiException').get('status') != 200:
                     #TODO: logging
                     error_message = result.get('apiException').get('message')
                     if not error_message:
                         error_message = result.get('resultMessage')
                     self.message_post(body=_(\
-                        'No pudieron asignarse las credenciales para acceder a la administración de códigos.'\
+                        'No pudieron asignarse las credenciales para GS1-ASC.'\
                             '\n<strong>Error:</strong> %s' % str(error_message)))
                     return False
                 else:
