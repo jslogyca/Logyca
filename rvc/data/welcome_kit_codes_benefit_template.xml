@@ -101,30 +101,28 @@
                         <h2>${object.partner_id.partner_id.name}</h2>
 
                         <p class="justified">Te informamos que se realizó la activación de ${object.codes_count} códigos de barras, los cuales deberás
-                            asignar mediante nuestra aplicación web haciendo <strong>
-                            <a href="https://www.gs1coidentificacion.org/" target="_blank">CLIC AQUÍ.</a>
+                            asignar mediante nuestra <strong>
+                            <a href="https://www.gs1coidentificacion.org/" target="_blank">plataforma de identificación (aquí).</a>
                         </strong>
                     </p>
 
                     <p class="justified">Tus credenciales de acceso fueron enviadas desde el correo
                         <strong>aplicaciones@gs1co.org</strong>, por favor revisa en la bandeja de correos no deseados en caso de no
-                            encontrarlo en tu bandeja de entrada.
+                            visualizarlo en tu bandeja de entrada.
+                    </p>
+
+                    <p class="justified">Recuerda que en caso de que ya tengas una cuenta y no recuerdes tu contraseña, por favor utiliza la opción <strong>"Restablecer contraseña"</strong> para restaurarla.
                     </p>
 
                     <div id="container-documentation" class="container">
                         <p class="justified">
-                            <strong>Para asignar correctamente tus códigos de barras</strong>
-                            <br />
-                                Conoce nuestras guias y tutoriales dando clic en los siguientes botones:</p>
+                            <strong>Ten presente el siguiente material para asignar correctamente tus códigos de barras</strong>
+                        </p>
                         <p id="button">
                             <a id="btn-suscribe" href="https://www.youtube.com/playlist?list=PLJBWy0uN7d94U5SwPGz_jcUcW5830_ysE" target="_blank">Manual de usuario</a>
                         </p>
                         <p id="button">
-                            <a id="btn-suscribe" href="https://gs1co.org/sites/default/files/libreria/Gu%C3%ADa%20de%20identificaci%C3%B3n%20V21.1.pdf" target="_blank">Guía de Identificación</a>
-                        </p>
-                        <p id="button">
-                            <a id="btn-suscribe" href="https://gs1co.org/soluciones/identificacion" target="_blank">Tipos
-                                    de Identificación</a>
+                            <a id="btn-suscribe" href="https://gs1co.org/soluciones/identificacion" target="_blank">Tipos de Identificación</a>
                         </p>
                     </div>
                     <br />
@@ -132,7 +130,7 @@
                         <p>Es importante hacer buen uso del sistema GS1 y evitar cláusulas penales.<br/>
                         Para esto, debes capacitarte en el curso <strong>SIN COSTO</strong> de Identificación de producto con códigos de barras.</p>
                     <p id="button">
-                        <a id="btn-suscribe" href="https://gs1co.org/sites/default/files/libreria/Gu%C3%ADa%20de%20identificaci%C3%B3n%20V21.1.pdf" target="_blank">Inscríbete Aquí</a>
+                        <a id="btn-suscribe" href="https://www.edx.org/es/learn/product-design/logyca-identificacion-de-producto-con-codigos-de-barras" target="_blank">Inscríbete Aquí</a>
                     </p>
                 </div>
 
@@ -146,9 +144,9 @@
             </h1>
 
             <div class="footer text-center">
-                <span class="text-center">Copyright © 2023 Todos los derechos reservados</span>
+                <span class="text-center">Copyright © 2024 Todos los derechos reservados</span>
                 <br/>
-                <span class="text-center">LOGYCA, Avenida El Dorado Nº 92 -32 Módulo G5 Piso 5, Bogotá, CO_110, CO</span>
+                <span class="text-center">Bogotá, Cundinamarca, Colombia, CO , 110221,</span>
                 <br/>
                 <span class="text-center">
                     <small>
