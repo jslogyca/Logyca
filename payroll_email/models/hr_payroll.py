@@ -43,7 +43,8 @@ class PayrollInheritsMail(models.Model):
         """ Action to send Payroll through Email."""
         self.ensure_one()
         template = self.env.ref('payroll_email.email_template_for_my_iyr')
-        attachment = self.env['ir.attachment'].search([('res_model', '=', 'hr.payslip'), ('name', '=', 'LSIyR2023-'+str(self.employee_id.identification_id))], limit=1)
+        # attachment = self.env['ir.attachment'].search([('res_model', '=', 'hr.payslip'), ('name', '=', 'LSIyR2023-'+str(self.employee_id.identification_id))], limit=1)
+        attachment = self.env['ir.attachment'].search([('res_model', '=', 'hr.payslip'), ('res_id', '=', self.id)], limit=1)
         if attachment and template:
             template.attachment_ids = [[6,0, [attachment.id]]]
         if template:
