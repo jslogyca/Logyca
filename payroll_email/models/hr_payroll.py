@@ -8,7 +8,7 @@ class PayrollInheritsMail(models.Model):
     user_id = fields.Many2one('res.users','Current User', default=lambda self: self.env.user)
     flag  = fields.Boolean('Flag',default=False)
     date_send = fields.Datetime('Send Date')
-    flag_iyr  = fields.Boolean('Flag',default=False)
+    flag_iyr  = fields.Boolean('Flag IyR',default=False)
     date_send_iyr = fields.Datetime('Send Date')
 
 

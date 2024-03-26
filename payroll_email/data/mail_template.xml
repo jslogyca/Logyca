@@ -38,13 +38,13 @@
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
-                        Dear ${object.employee_id.name}
+                        Querido ${object.employee_id.name}
                         <br /><br />
-                        Please find  ${object.name} attached with this mail.
+                        En el presente correo encontrará adjunto el Certificado de Ingresos y retenciones 2023
                         <br /><br />
-                        Thank You 
+                        Gracias
                         <br /><br />
-                        ${object.user_id.company_id.name}
+                        ${object.company_id.name}
                     </p>
                 </div>
             </field>
