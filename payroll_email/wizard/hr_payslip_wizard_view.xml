@@ -38,7 +38,7 @@
 				</group>
 
 				<footer>
-					<button name="action_my_iyr_sent" type="object" string="Send Mail"
+					<button name="send_mass_iyr_mail" type="object" string="Send Mail"
 						class="oe_highlight" />
 					or
 					<button name="cancel" string="Close" special="cancel"
