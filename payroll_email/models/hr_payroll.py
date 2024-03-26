@@ -30,6 +30,26 @@ class PayrollInheritsMail(models.Model):
             'context': vals,
             }
 
+    def view_iyr_mass_mail(self):
+        payslip_ids = []
+        active_ids = self.env.context.get('active_ids',[])
+        psp_id = self.env['hr.payslip'].search([('id','in',active_ids)])
+        view_id = self.env.ref('payroll_email.view_iyr_mass_mail').id,
+        for rec in psp_id:
+            if rec.flag == False:
+                payslip_ids.append(rec.id)   
+        vals = ({'default_payslip_ids':payslip_ids})
+        return {
+            'name':"Send Mass IyR by Mail",
+            'type': 'ir.actions.act_window', 
+            'view_type': 'form', 
+            'view_mode': 'form',
+            'res_model': 'payroll.mass.mail', 
+            'target': 'new', 
+            'context': vals,
+            'view_id': view_id,
+            }
+
     def action_my_payslip_sent(self):
         """ Action to send Payroll through Email."""
         self.ensure_one()
