@@ -8,6 +8,9 @@ class PayrollInheritsMail(models.Model):
     user_id = fields.Many2one('res.users','Current User', default=lambda self: self.env.user)
     flag  = fields.Boolean('Flag',default=False)
     date_send = fields.Datetime('Send Date')
+    flag_iyr  = fields.Boolean('Flag',default=False)
+    date_send_iyr = fields.Datetime('Send Date')
+
 
     def view_mass_payroll_wizard(self):
         payslip_ids = []
@@ -35,3 +38,15 @@ class PayrollInheritsMail(models.Model):
             self.env['mail.template'].browse(template.id).send_mail(self.id,force_send=True)
             self.flag = True
             self.date_send = fields.Date.today()
+
+    def action_my_iyr_sent(self):
+        """ Action to send Payroll through Email."""
+        self.ensure_one()
+        template = self.env.ref('payroll_email.email_template_for_my_iyr')
+        attachment = self.env['ir.attachment'].search([('res_model', '=', 'hr.payslip'), ('name', '=', 'LSIyR2023-'+str(self.employee_id.identification_id))], limit=1)
+        if attachment and template:
+            template.attachment_ids = [[6,0, [attachment.id]]]
+        if template:
+            self.env['mail.template'].browse(template.id).send_mail(self.id,force_send=True)
+            self.flag_iyr = True
+            self.date_send_iyr = fields.Date.today()

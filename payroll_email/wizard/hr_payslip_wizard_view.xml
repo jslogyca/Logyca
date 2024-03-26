@@ -27,4 +27,33 @@
 		<field name="view_id" ref="view_payroll_mass_mail" />
 		<field name="target">new</field>
 	</record>
+
+	<record id="view_iyr_mass_mail" model="ir.ui.view">
+		<field name="name">IyR form</field>
+		<field name="model">payroll.mass.mail</field>
+		<field name="arch" type="xml">
+			<form>
+				<group>
+					<field name="payslip_ids" widget="many2many_tags" options="{'no_create_edit': True,'no_create': True}"/>
+				</group>
+
+				<footer>
+					<button name="action_my_iyr_sent" type="object" string="Send Mail"
+						class="oe_highlight" />
+					or
+					<button name="cancel" string="Close" special="cancel"
+						class="oe_link" />
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<record id="action_iyr_mass_mail" model="ir.actions.act_window">
+		<field name="name">IyR Mass Mail</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">payroll.mass.mail</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="view_iyr_mass_mail" />
+		<field name="target">new</field>
+	</record>
 </odoo>
