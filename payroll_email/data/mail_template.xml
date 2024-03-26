@@ -27,7 +27,7 @@
             <!-- <field name="user_signature" eval="False"/> -->
             <field name="auto_delete" eval="True"/>
         </record>
-    <data noupdate="1">
+
         <!--Email template -->
         <record id="email_template_for_my_iyr" model="mail.template">
             <field name="name">Certificado IyR: Send by email</field>
