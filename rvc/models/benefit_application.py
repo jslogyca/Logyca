@@ -737,7 +737,7 @@ class BenefitApplication(models.Model):
                     'method': 'gs1_assign_credentials',
                     'send_date': InitialDate,
                     'send_json': body_assignate,
-                    'x_return': str(result),
+                    'x_return': str(response_assignate.text),
                     'cant_attempts': 1,
                 }
                 create_log = self.env['logyca.api_gateway'].create(vals)
