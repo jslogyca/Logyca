@@ -467,7 +467,9 @@ class BenefitApplication(models.Model):
             json_res = response_assignate.json()
             txt_response = json_res.get('MensajeUI')[0]
             index_start = txt_response.index(":") + 2
-            prefix = txt_response[index_start:]
+            prefix = ""
+            for item in txt_response:
+                prefix += item[index_start:]
 
             response_assignate.close()
             
@@ -511,7 +513,7 @@ class BenefitApplication(models.Model):
 
                 #de lo contrario, son varios gln
                 else:
-                    self.message_post(body=_(f'Los {int(self.glns_codes_quantity)} Códigos GLN fueron creados y entregados con el beneficio. Prefijo: {str(prefix)}'))
+                    self.message_post(body=_(f'Los {int(self.glns_codes_quantity)} Códigos GLN fueron creados y entregados con el beneficio. Prefijo(s): {str(prefix)}'))
         else:
             self.message_post(body=_('No se pudo asignar al beneficiario el/los Código(s) GLN. El servidor respondió %s' % str(response_assignate)))
 
