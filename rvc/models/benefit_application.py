@@ -466,10 +466,7 @@ class BenefitApplication(models.Model):
             #obteniendo el prefijo del código
             json_res = response_assignate.json()
             txt_response = json_res.get('MensajeUI')[0]
-            prefix = ""
-            for item in txt_response:
-                index_start = item.index(":") + 2
-                prefix += item[index_start:]
+            prefix = ", ".join(item.split(": ")[1] for item in txt_response)
 
             response_assignate.close()
             
@@ -549,12 +546,8 @@ class BenefitApplication(models.Model):
             #obteniendo el prefijo del código
             json_res = response_assignate.json()
             txt_response = json_res.get('MensajeUI')[0]
-            prefix = ""
-            for item in txt_response:
-                index_start = item.index(":") + 2
-                prefix += item[index_start:]
+            prefix = ", ".join(item.split(": ")[1] for item in txt_response)
 
-            #cerrando request
             response_assignate.close()
             self.message_post(body=_(f'Los {str(int(self.codes_quantity))} Códigos de Identificación fueron entregados al beneficiario. Prefijo: {str(prefix)}'))
             return True
