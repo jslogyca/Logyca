@@ -466,9 +466,9 @@ class BenefitApplication(models.Model):
             #obteniendo el prefijo del código
             json_res = response_assignate.json()
             txt_response = json_res.get('MensajeUI')[0]
-            index_start = txt_response.index(":") + 2
             prefix = ""
             for item in txt_response:
+                index_start = item.index(":") + 2
                 prefix += item[index_start:]
 
             response_assignate.close()
