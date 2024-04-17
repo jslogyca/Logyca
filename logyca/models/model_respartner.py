@@ -51,9 +51,6 @@ class ResPartner(models.Model):
     x_first_lastname = fields.Char(string='Primer apellido', track_visibility='onchange')
     x_second_lastname = fields.Char(string='Segundo apellido', track_visibility='onchange')
     #x_is_main_contact = fields.Boolean(string='¿Es contacto principal?', track_visibility='onchange')
-    x_is_member_directive = fields.Boolean(string='¿Es miembro del Consejo Directivo?', track_visibility='onchange')
-    x_is_on_board_of_directors = fields.Boolean(string='¿Pertenece a la junta directiva?', track_visibility='onchange')
-    x_collaborative_group_ids = fields.Many2many(comodel_name='collaborative.group', string='Grupos Colaborativos')
 
     #UBICACIÓN PRINCIPAL
     x_city = fields.Many2one('logyca.city', string='Ciudad', track_visibility='onchange', ondelete='restrict')
@@ -84,6 +81,8 @@ class ResPartner(models.Model):
     x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora', track_visibility='onchange')
     x_rvc_information = fields.One2many('logyca.rvc_information', 'partner_id', string = 'Productos adquiridos', track_visibility='onchange')
     #Campos Informativos
+    x_is_member_directive = fields.Boolean(string='¿Es miembro del Consejo Directivo?', track_visibility='onchange')
+    x_is_on_board_of_directors = fields.Boolean(string='¿Pertenece a la junta directiva?', track_visibility='onchange')
     x_belongs_academic_allies_cli = fields.Boolean(string='Pertenece a aliados Académicos del CLI', track_visibility='onchange')
     x_belongs_strategic_allies_cli = fields.Boolean(string='Pertenece a aliados Estratégicos del CLI', track_visibility='onchange')    
     x_meeting_logyca_investigation = fields.Boolean(string='Pertenece a la Junta LOGYCA INVESTIGACIÓN', track_visibility='onchange')    
@@ -133,11 +132,13 @@ class ResPartner(models.Model):
     #x_member_id_team = fields.Many2one('res.users', string='Propietario de la cuenta')
 
     #INFORMACIÓN CONTACTO
+    x_contact_origin = fields.Selection(['Odoo', 'Portal'], string='Origen del contacto', track_visibility='onchange', default='Odoo')
     x_contact_type = fields.Many2many('logyca.contact_types', string='Tipo de contacto', track_visibility='onchange', ondelete='restrict')
     x_contact_job_title = fields.Many2one('logyca.job_title', string='Cargo', track_visibility='onchange', ondelete='restrict')
     x_contact_area = fields.Many2one('logyca.areas', string='Área', track_visibility='onchange', ondelete='restrict')
     x_contact_job_title_historic = fields.Char(string='Cargo histórico', track_visibility='onchange')
     x_contact_area_historic = fields.Char(string='Área histórica', track_visibility='onchange')
+    x_collaborative_group_ids = fields.Many2many(comodel_name='collaborative.group', string='Grupos Colaborativos')
 
     #INFORMACION FACTURACION ELECTRÓNICA
     x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas', track_visibility='onchange')
