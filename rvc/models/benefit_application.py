@@ -549,7 +549,7 @@ class BenefitApplication(models.Model):
             prefix = ", ".join(item.split(": ")[1] for item in txt_response)
 
             response_assignate.close()
-            self.message_post(body=_(f'Los {str(int(self.codes_quantity))} Códigos de Identificación fueron entregados al beneficiario. Prefijo(s): {str(prefix)}'))
+            self.message_post(body=_(f'Los {str(int(self.codes_quantity))} Códigos de Identificación fueron entregados al beneficiario. Prefijo: {str(prefix)}'))
             return True
         else:
             #TODO: logging
@@ -593,11 +593,12 @@ class BenefitApplication(models.Model):
             #obteniendo el prefijo del código
             json_res = response_assignate.json()
             txt_response = json_res.get('MensajeUI')[0]
-            prefix = ", ".join(item.split(": ")[1] for item in txt_response)
+            index_start = txt_response.index(":") + 2
+            prefix = txt_response[index_start:]
 
             #cerrando request
             response_assignate.close()
-            self.message_post(body=_(f'Los {str(int(self.invoice_codes_quantity))} Códigos de Recaudo fueron entregados al beneficiario. Prefijo(s): {str(prefix)}'))
+            self.message_post(body=_(f'Los {str(int(self.invoice_codes_quantity))} Códigos de Recaudo fueron entregados al beneficiario. Prefijo: {str(prefix)}'))
             return True
         else:
             #TODO: logging
