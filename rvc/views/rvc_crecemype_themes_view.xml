@@ -35,7 +35,10 @@
     <!-- MenuItem -->
     <menuitem 
         id="menu_rvc_crecemype_theme"
+        action="action_rvc_crecemype_theme"
         name="Temáticas CreceMype"
         parent="rvc.menu_config_rvc_parent"
-        sequence="10"/>
+        sequence="10"
+        groups="rvc.group_rvc_manager"
+        />
 </odoo>
