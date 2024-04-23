@@ -44,7 +44,8 @@ class BenefitApplication(models.Model):
     benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
                                     ('colabora', 'Colabora'),
                                     ('analitica', 'Analítica'),
-                                    ('tarjeta_digital', 'Tarjeta Digital')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
+                                    ('tarjeta_digital', 'Tarjeta Digital'),
+                                    ('crece_mype', 'Crece Mype')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
     colabora_level = fields.Char(string='Nivel', track_visibility="onchange")
     end_date_colabora = fields.Date(string='Fecha Fin Colabora', track_visibility='onchange')
     acceptance_date = fields.Datetime(string='Fecha/Hora Aceptación', track_visibility='onchange', readonly=True)

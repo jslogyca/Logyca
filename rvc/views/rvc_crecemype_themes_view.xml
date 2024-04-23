@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista form -->
+    <record id="view_rvc_crecemype_theme_form" model="ir.ui.view">
+        <field name="name">rvc.crecemype.theme.form</field>
+        <field name="model">rvc.crecemype.theme</field>
+        <field name="arch" type="xml">
+            <form string="RVC Crecemype Theme">
+                <group>
+                    <field name="name" />
+                    <field name="active" />
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista tree -->
+    <record id="view_rvc_crecemype_theme_tree" model="ir.ui.view">
+        <field name="name">rvc.crecemype.theme.tree</field>
+        <field name="model">rvc.crecemype.theme</field>
+        <field name="arch" type="xml">
+            <tree string="RVC Crecemype Theme">
+                <field name="name"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_rvc_crecemype_theme" model="ir.actions.act_window">
+        <field name="name">RVC Crecemype Theme</field>
+        <field name="res_model">rvc.crecemype.theme</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- MenuItem -->
+    <menuitem 
+        id="menu_rvc_crecemype_theme"
+        name="Temáticas CreceMype"
+        parent="rvc.menu_config_rvc_parent"
+        sequence="10"/>
+</odoo>

@@ -52,6 +52,7 @@
         'views/config_rvc_view.xml',
         'views/log_import_rvc_view.xml',
         'views/product_rvc_view.xml',
+        'views/rvc_crecemype_themes_view.xml',
         'views/benefit_application_view.xml',
         'views/report_mercantile_offer.xml',
         'views/report_rvc_bienv_codes_template.xml',
