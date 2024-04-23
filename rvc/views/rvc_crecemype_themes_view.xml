@@ -5,7 +5,7 @@
         <field name="name">rvc.crecemype.theme.form</field>
         <field name="model">rvc.crecemype.theme</field>
         <field name="arch" type="xml">
-            <form string="RVC Crecemype Theme">
+            <form string="Temáticas LOGYCA / CRECEMYPE">
                 <group>
                     <field name="name" />
                     <field name="active" />
@@ -19,7 +19,7 @@
         <field name="name">rvc.crecemype.theme.tree</field>
         <field name="model">rvc.crecemype.theme</field>
         <field name="arch" type="xml">
-            <tree string="RVC Crecemype Theme">
+            <tree string="Temáticas LOGYCA / CRECEMYPE">
                 <field name="name"/>
                 <field name="active"/>
             </tree>
