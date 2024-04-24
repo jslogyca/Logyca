@@ -40,7 +40,7 @@ class deliveringColaboraMassively(models.TransientModel):
                 if benefit_application.parent_id:
                     benefit_application.update_company(benefit_application)
 
-                benefit_application.write({'state': 'done'})
+                benefit_application.write({'state': 'done', 'delivery_date': datetime.now()})
             else:
                 raise ValidationError(_('La empresa seleccionada no tiene email.'))
             

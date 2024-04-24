@@ -27,7 +27,7 @@
     </record>
 
     <record id="action_rvc_crecemype_theme" model="ir.actions.act_window">
-        <field name="name">RVC Crecemype Theme</field>
+        <field name="name">Temáticas LOGYCA / CRECEMYPE</field>
         <field name="res_model">rvc.crecemype.theme</field>
         <field name="view_mode">tree,form</field>
     </record>

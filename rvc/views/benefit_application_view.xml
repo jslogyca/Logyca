@@ -38,11 +38,14 @@
 							<field name="product_id" attrs="{'readonly': [('state','!=','draft')],'required': [('state','=','draft')]}"/>
 							<field name="benefit_type" invisible="1"/>
                             <field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos','tarjeta_digital'))], 'readonly': [('state','=','done')]}" />
-                            <field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
+                            <field name="crecemype_question" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
+							<field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
 							<field name="end_date_colabora" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
                             <field name="offered_service_id" attrs="{'invisible': [('benefit_type','!=','tarjeta_digital')], 'readonly': [('state','=','done')]}"/>
                             <field name="partner_address" attrs="{'invisible': [('benefit_type','!=','tarjeta_digital')], 'readonly': [('state','=','done')]}"/>
-                            <br/><br/>
+                            <field name="question_answered" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','=','done')]}"/>
+							<field name="delivery_date" attrs="{'invisible': [('state','!=','done')], 'readonly': [('state','=','done')]}"/>
+							<br/><br/>
                             <h2 style="color:#666666" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}">Cantidad Códigos</h2>
                             <br/>
                             <field name="codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
@@ -79,8 +82,8 @@
 					<group>
 						<group string="Otra Información">
                             <field name="reminder_count" readonly="1"/>
-                            <field name="historical_record" readonly="1"/>
 							<field name="is_seller" group="base.group_system" force_save="1" readonly="1"/>
+							<field name="referred_by" attrs="{'readonly': [('state','!=','draft')]}"/>
 							<field name="origin"/>
 							<field name="send_kit_with_no_benefit" group="base.group_system"/>
 						</group>

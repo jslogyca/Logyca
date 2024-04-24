@@ -51,6 +51,8 @@ class BenefitApplication(models.Model):
     acceptance_date = fields.Datetime(string='Fecha/Hora Aceptación', track_visibility='onchange', readonly=True)
     notification_date = fields.Datetime(string='Fecha/Hora Notificación', track_visibility='onchange', readonly=True)
     rejection_date = fields.Datetime(string='Fecha/Hora Rechazo', track_visibility='onchange', readonly=True)
+    delivery_date = fields.Datetime(string='Fecha/Hora Entrega', track_visibility='onchange', readonly=True)
+    question_answered = fields.Boolean('¿Hemos respondido tu pregunta?', default=False, track_visibility='onchange')
     gln = fields.Char('Código GLN', track_visibility='onchange')
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, track_visibility='onchange', ondelete='restrict')
     contact_name = fields.Char('Nombre Contacto', related='partner_id.contact_name', track_visibility='onchange')
@@ -59,8 +61,6 @@ class BenefitApplication(models.Model):
     contact_position = fields.Char('Cargo Contacto', related='partner_id.contact_position', track_visibility='onchange')
     vat = fields.Char('Número Documento', related='partner_id.vat', store=True, track_visibility='onchange')
     access_token = fields.Char('Token', default=_default_access_token, help="Token de acceso para aceptar beneficio desde el correo")
-    historical_record = fields.Boolean('Registro histórico',
-                                       help="Si es verdadero, este registro es de cargue histórico, es decir, no se hizo en Odoo sino que se cargó tiempo después.")
     send_kit_with_no_benefit = fields.Boolean('Enviar kit sin activar beneficio', help="En el caso en que el beneficio haya sido activado manualmente, esta opción \
         cuando está checkeada permite enviar el kit de bienvenida sin activar el beneficio RVC.")
     reminder_count = fields.Integer('Recordatorios', track_visibility='onchange')
@@ -71,6 +71,7 @@ class BenefitApplication(models.Model):
         string='Servicio Ofrecido', help="Servicio que ofrece la empresa")
     partner_address = fields.Char('Dirección Empresa')
     digital_card_ids = fields.One2many('rvc.digital.card', 'postulation_id', string='Tarjetas Digitales')
+    crecemype_question = fields.text('Pregunta', help="Pregunta realizada por la empresa beneficiaria de LOGYCA / CRECEMYPE")
     # GS1 audit fields
     whatsapp_number_trail = fields.Char('Número WhatsApp', help="Número de WhatsApp que creó la postulación")
     #technical fields
@@ -84,6 +85,7 @@ class BenefitApplication(models.Model):
                                     readonly=True,
                                     help="Este campo permite diferenciar las postulaciones RVC que provienen de Odoo, Tienda Virtual y ChatBot.")
     is_seller = fields.Boolean('Seller', default=False, tracking=True, help="La empresa vende en el marketplace del éxito?")
+    referred_by = fields.Char('Referida por', tracking=True, help="¿Cómo se enteró del beneficio RVC?")
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]
@@ -1083,7 +1085,7 @@ class BenefitApplication(models.Model):
                         if postulation_id.parent_id:
                             postulation_id.update_company(postulation_id)
 
-                        postulation_id.write({'state': 'done'})
+                        postulation_id.write({'state': 'done', 'delivery_date': datetime.now()})
                         counter += 1
                     else:
                         raise ValidationError(_('La empresa seleccionada no tiene email.'))
