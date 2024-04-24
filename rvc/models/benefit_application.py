@@ -71,7 +71,7 @@ class BenefitApplication(models.Model):
         string='Servicio Ofrecido', help="Servicio que ofrece la empresa")
     partner_address = fields.Char('Dirección Empresa')
     digital_card_ids = fields.One2many('rvc.digital.card', 'postulation_id', string='Tarjetas Digitales')
-    crecemype_question = fields.text('Pregunta', help="Pregunta realizada por la empresa beneficiaria de LOGYCA / CRECEMYPE")
+    crecemype_question = fields.Text('Pregunta', help="Pregunta realizada por la empresa beneficiaria de LOGYCA / CRECEMYPE")
     # GS1 audit fields
     whatsapp_number_trail = fields.Char('Número WhatsApp', help="Número de WhatsApp que creó la postulación")
     #technical fields
