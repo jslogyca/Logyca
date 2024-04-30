@@ -32,7 +32,7 @@
         <field name="model">benefits.membership</field>
         <field name="arch" type="xml">
             <tree string="Benefits Membership" >
-                <field name="name" decoration-bf="1"/>
+                <field name="name" />
                 <field name="code"/>
                 <field name="categ_id" />
                 <field name="active" />

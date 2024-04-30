@@ -31,7 +31,7 @@
         <field name="model">categ.benefits.membership</field>
         <field name="arch" type="xml">
             <tree string="Categ Benefits Membership" >
-                <field name="name" decoration-bf="1"/>
+                <field name="name" />
                 <field name="code"/>
                 <field name="active" />
             </tree>
