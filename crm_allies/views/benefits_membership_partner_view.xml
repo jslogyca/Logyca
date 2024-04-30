@@ -40,7 +40,7 @@
         <field name="model">benefits.membership.partner</field>
         <field name="arch" type="xml">
             <tree string="Benefits Membership Partner" >
-                <field name="name" decoration-bf="1"/>
+                <field name="name" />
                 <field name="partner_id"/>
                 <field name="benefit_id"/>
                 <field name="categ_id" />
