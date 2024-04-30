@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="benefits_membership_partner_view_form" model="ir.ui.view">
+        <field name="name">benefits.membership.partner.form</field>
+        <field name="model">benefits.membership.partner</field>
+        <field name="arch" type="xml">
+            <form string="Benefits Membership Partner">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="partner_id" required="1"/>
+                            <field name="benefit_id" />
+                            <field name="categ_id" />
+                            <field name="company_user_id" />
+                            <field name="company_email" />
+                        </group>
+                        <group>
+                            <field name="cant_assistants" />
+                            <field name="cant_company" />
+                            <field name="origin" />
+                            <field name="cant_company" />
+                            <field name="partner_user_id" />
+                            <field name="date_done" />
+                        </group>
+                    </group>
+                    <field name="information" />
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="benefits_membership_partner_view_tree" model="ir.ui.view">
+        <field name="name">benefits.membership.partner.tree</field>
+        <field name="model">benefits.membership.partner</field>
+        <field name="arch" type="xml">
+            <tree string="Benefits Membership Partner" >
+                <field name="name" decoration-bf="1"/>
+                <field name="partner_id"/>
+                <field name="benefit_id"/>
+                <field name="categ_id" />
+                <field name="date_done" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="benefits_membership_partner_view_pivot" model="ir.ui.view">
+        <field name="name">benefits.membership.partner.view.pivot</field>
+        <field name="model">benefits.membership.partner</field>
+        <field name="arch" type="xml">
+            <pivot string="benefits_membership Analysis" sample="1">
+                <field name="date_done" interval="month" type="row"/>
+                <field name="categ_id" type="row"/>
+                <field name="benefit_id" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="benefits_membership_partner_view_graph" model="ir.ui.view">
+        <field name="name">benefits.membership.partner.view.graph</field>
+        <field name="model">benefits.membership.partner</field>
+        <field name="arch" type="xml">
+            <graph string="Benefits" sample="1">
+                <field name="benefit_id" type="col"/>
+                <field name="partner_id" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_benefits_membership_partner" model="ir.actions.act_window">
+        <field name="name">Benefits Membership Partner</field>
+        <field name="res_model">benefits.membership.partner</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="view_id" ref="benefits_membership_partner_view_tree"/>
+        <field name="domain">[('active', '=', True)]</field>
+        <field name="context">{'default_active': True}</field>
+    </record>
+
+    <menuitem
+        id="account_menu_benefits_membership_partner"
+        name="Benefits Membership Partner"
+        action="action_benefits_membership_partner"
+        parent="contacts.menu_contacts"
+        sequence="6"/>
+
+</odoo>

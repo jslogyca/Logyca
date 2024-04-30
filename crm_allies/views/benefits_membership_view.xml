@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="benefits_membership_view_form" model="ir.ui.view">
+        <field name="name">benefits.membership.form</field>
+        <field name="model">benefits.membership</field>
+        <field name="arch" type="xml">
+            <form string="Benefits Membership">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="code" required="1"/>
+                            <field name="categ_id" />
+                        </group>
+                        <group>
+                            <field name="active" />
+                            <field name="company_id" />
+                        </group>
+                    </group>               
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="benefits_membership_view_tree" model="ir.ui.view">
+        <field name="name">benefits.membership.tree</field>
+        <field name="model">benefits.membership</field>
+        <field name="arch" type="xml">
+            <tree string="Benefits Membership" >
+                <field name="name" decoration-bf="1"/>
+                <field name="code"/>
+                <field name="categ_id" />
+                <field name="active" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_benefits_membership" model="ir.actions.act_window">
+        <field name="name">Benefits Membership</field>
+        <field name="res_model">benefits.membership</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="benefits_membership_view_tree"/>
+        <field name="domain">[('active', '=', True)]</field>
+        <field name="context">{'default_active': True}</field>
+    </record>
+
+    <menuitem
+        id="account_menu_benefits_membership"
+        name="Benefits Membership"
+        action="action_benefits_membership"
+        parent="contacts.res_partner_menu_config"
+        sequence="101"/>
+
+</odoo>
