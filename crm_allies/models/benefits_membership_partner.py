@@ -14,7 +14,7 @@ class BenefitsMembershipPartner(models.Model):
                                  default=lambda self: self.env.company)
     benefit_id = fields.Many2one('benefits.membership', string="Benefits Membership", required=True)
     categ_id = fields.Many2one('categ.benefits.membership', string="Categ", required=True)
-    information = fields.Text('Information', string='Information')
+    information = fields.Text(string='Information')
     cant_assistants = fields.Integer(string='Cant Assistants')
     cant_company = fields.Integer(string='Cant Company')
     origin = fields.Char(string='Origin')
