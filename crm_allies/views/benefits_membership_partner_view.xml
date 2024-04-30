@@ -53,8 +53,7 @@
         <field name="name">benefits.membership.partner.pivot</field>
         <field name="model">benefits.membership.partner</field>
         <field name="arch" type="xml">
-            <pivot string="benefits_membership Analysis" sample="1">
-                <field name="date_done" interval="month" type="row"/>
+            <pivot string="benefits membership Analysis" sample="1">
                 <field name="categ_id" type="row"/>
                 <field name="benefit_id" type="col"/>
             </pivot>
