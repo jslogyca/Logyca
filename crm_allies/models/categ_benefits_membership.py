@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError, UserError
 
 class CategBenefitsMembership(models.Model):
     _name = 'categ.benefits.membership'
-    _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Categ Benefits Membership'
 
     company_id = fields.Many2one('res.company', string='Company', required=True,

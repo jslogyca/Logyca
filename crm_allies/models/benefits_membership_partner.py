@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError, UserError
 
 class BenefitsMembershipPartner(models.Model):
     _name = 'benefits.membership.partner'
-    _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Benefits Membership Partner'
 
     name = fields.Char('Name')
