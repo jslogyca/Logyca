@@ -54,22 +54,22 @@
         <field name="model">benefits.membership.partner</field>
         <field name="arch" type="xml">
             <pivot string="benefits membership Analysis">
-                <field name="categ_id" type="row"/>
-                <field name="benefit_id" type="col"/>
+                <field name="categ_id" type="col"/>
+                <field name="benefit_id" type="row"/>
             </pivot>
         </field>
     </record>
 
-    <!-- <record id="benefits_membership_partner_view_graph" model="ir.ui.view">
+    <record id="benefits_membership_partner_view_graph" model="ir.ui.view">
         <field name="name">benefits.membership.partner.view.graph</field>
         <field name="model">benefits.membership.partner</field>
         <field name="arch" type="xml">
-            <graph string="Benefits" sample="1">
+            <graph string="Benefits" >           
                 <field name="benefit_id" type="col"/>
                 <field name="partner_id" type="row"/>
             </graph>
         </field>
-    </record> -->
+    </record>
 
     <record id="action_benefits_membership_partner" model="ir.actions.act_window">
         <field name="name">Benefits Membership Partner</field>
