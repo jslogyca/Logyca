@@ -95,7 +95,7 @@
                         <widget name="pie_chart" title="Medium" attrs="{'groupby': 'categ_id'}"/>
                     </group>
                 </group>
-                <!-- <view type="pivot" ref="crm.crm_lead_view_pivot"/> -->
+                <view type="pivot" ref="crm_allies.benefits_membership_partner_view_pivot"/>
                 <!-- <view type="cohort" ref="crm_enterprise.crm_lead_view_cohort"/> -->
             </dashboard>
         </field>
@@ -104,7 +104,7 @@
     <record id="action_benefits_membership_partner" model="ir.actions.act_window">
         <field name="name">Benefits Membership Partner</field>
         <field name="res_model">benefits.membership.partner</field>
-        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="view_mode">dashboard,tree,form,pivot,graph</field>
         <field name="view_id" ref="benefits_membership_partner_view_tree"/>
     </record>
 
