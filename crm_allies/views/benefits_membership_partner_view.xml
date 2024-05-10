@@ -80,8 +80,8 @@
                 <view type="graph" ref="crm_allies.benefits_membership_partner_view_graph"/>
                 <group>
                     <group>
-                        <aggregate name="benefits" string="Benefits" group_operator="count" field="id" measure="__count__"/>
-                        <aggregate name="partner" string="Partners" group_operator="count" field="partner_id" measure="__count__"/>
+                        <aggregate name="benefits" string="Beneficios Entregados" group_operator="count" field="id" measure="__count__"/>
+                        <aggregate name="partner" string="Miembros" group_operator="count" field="partner_id" measure="__count__"/>
                         <!-- <aggregate name="expected_revenue_aggregate" field="planned_revenue" string="Expected Revenue"/>
                         <aggregate name="prorated_revenue_aggregate" field="expected_revenue" invisible="1"/>
                         <formula name="prorated_revenue" string="Prorated Revenue" value="record.prorated_revenue_aggregate" widget="monetary"/>
