@@ -49,7 +49,7 @@
         </field>
     </record>
 
-    <!-- <record id="benefits_membership_partner_view_pivot" model="ir.ui.view">
+    <record id="benefits_membership_partner_view_pivot" model="ir.ui.view">
         <field name="name">benefits.membership.partner.pivot</field>
         <field name="model">benefits.membership.partner</field>
         <field name="arch" type="xml">
@@ -58,7 +58,7 @@
                 <field name="benefit_id" type="col"/>
             </pivot>
         </field>
-    </record> -->
+    </record>
 
     <!-- <record id="benefits_membership_partner_view_graph" model="ir.ui.view">
         <field name="name">benefits.membership.partner.view.graph</field>
