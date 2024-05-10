@@ -46,7 +46,7 @@
         <field name="arch" type="xml">
             <pivot string="benefits membership Analysis">
                 <field name="categ_id" type="col"/>
-                <field name="benefit_id" type="row"/>
+                <field name="name" type="row"/>
             </pivot>
         </field>
     </record>
