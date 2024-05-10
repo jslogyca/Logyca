@@ -40,11 +40,22 @@
         </field>
     </record>
 
+    <record id="benefits_membership_view_pivot" model="ir.ui.view">
+        <field name="name">benefits.membership.pivot</field>
+        <field name="model">benefits.membership</field>
+        <field name="arch" type="xml">
+            <pivot string="benefits membership Analysis">
+                <field name="categ_id" type="col"/>
+                <field name="benefit_id" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
     <record id="action_benefits_membership" model="ir.actions.act_window">
         <field name="name">Benefits Membership</field>
         <field name="res_model">benefits.membership</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="benefits_membership_view_tree"/>
+        <field name="view_mode">pivot,tree,form</field>
+        <field name="view_id" ref="benefits_membership_view_pivot"/>
         <field name="domain">[('active', '=', True)]</field>
         <field name="context">{'default_active': True}</field>
     </record>
