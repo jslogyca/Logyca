@@ -1291,13 +1291,14 @@ class BenefitApplication(models.Model):
         cards_list = []
 
         for i,card in enumerate(self.digital_card_ids, start=0):
-            try:
-                digital_card = next(self.image_generation(card,i))
-                cards_list.append(digital_card)
-            except Exception as e:
-                logging.exception("====> action_generate_digital_cards =>" + str(e))
-                self.message_post(body=_(\
-                    'No se pudo generar la tarjeta digital. <strong>Error:</strong> %s' % str(e)))
+            if not card.digital_card_img:
+                try:
+                    digital_card = next(self.image_generation(card,i))
+                    cards_list.append(digital_card)
+                except Exception as e:
+                    logging.exception("====> action_generate_digital_cards =>" + str(e))
+                    self.message_post(body=_(\
+                        'No se pudo generar la tarjeta digital. <strong>Error:</strong> %s' % str(e)))
 
         return cards_list
 
