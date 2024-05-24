@@ -79,7 +79,8 @@ class BenefitApplication(models.Model):
     benefit_name = fields.Selection(string="Nombre Beneficio", related='product_id.benefit_type', store=True, help="Technical field used for easy quering")
     origin = fields.Selection([('odoo', 'Odoo'), 
                                     ('tienda', 'Tienda Virtual'),
-                                    ('chatbot', 'ChatBot RVC')],
+                                    ('chatbot', 'ChatBot RVC'),
+                                    ('api_marketplaces', 'API Marketplaces'),],
                                     string="Origen",
                                     track_visibility='onchange',
                                     default='odoo',
