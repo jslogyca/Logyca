@@ -5,7 +5,8 @@ from odoo.exceptions import ValidationError, UserError
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, date, timedelta
 from odoo.modules.module import get_module_resource
-
+from PIL import Image, ImageDraw
+from io import BytesIO
 import base64
 import time
 import locale
@@ -1290,8 +1291,13 @@ class BenefitApplication(models.Model):
         cards_list = []
 
         for i,card in enumerate(self.digital_card_ids, start=0):
-            digital_card = self.image_generation(card,i)
-            cards_list.append(digital_card)
+            try:
+                digital_card = next(self.image_generation(card,i))
+                cards_list.append(digital_card)
+            except Exception as e:
+                logging.exception("====> action_generate_digital_cards =>" + str(e))
+                self.message_post(body=_(\
+                    'No se pudo generar la tarjeta digital. <strong>Error:</strong> %s' % str(e)))
 
         return cards_list
 
@@ -1328,15 +1334,11 @@ class BenefitApplication(models.Model):
                 attach_id.unlink()
 
     def image_generation(self, card, i):
-        from PIL import Image, ImageDraw
-        from io import BytesIO
 
         service_offered = card.offered_service_id.name if card.offered_service_id else self.offered_service_id.name
         service_offered_banner =  self.get_banner_digital_card(service_offered)
-        service_len =  len(service_offered)
         base_image_path = get_module_resource('rvc', f'static/img/digital_cards_tmpl/{service_offered_banner}.png')
         image = Image.open(base_image_path)
-
 
         # generating QR image
         image2 = Image.open((BytesIO(self.qr_generation(card))))
@@ -1368,7 +1370,7 @@ class BenefitApplication(models.Model):
         self.digital_card_ids[i].digital_card_img = img_str
         image.close()
         image2.close()
-        return img_str
+        yield img_str
 
     def qr_generation(self, card):
         import urllib
