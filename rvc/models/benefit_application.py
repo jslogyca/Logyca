@@ -1312,6 +1312,7 @@ class BenefitApplication(models.Model):
 
             for i in self.digital_card_ids:
                 logging.info(f"counter is ==>{counter}")
+                logging.info(f"cards is \n ==>{cards}")
                 ir_values = {
                     'name': f"Tarjeta_digital_{i}.JPEG",
                     'type': 'binary',
