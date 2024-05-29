@@ -1305,15 +1305,17 @@ class BenefitApplication(models.Model):
     def send_digital_cards_bearer(self, template):
         if self.digital_card_ids:
             cards = self.action_generate_digital_cards()
+            counter = 0
             attachments = []
             attachments.append(template.attachment_ids)
             template.write({'attachment_ids': []})
 
             for i in self.digital_card_ids:
+                logging.info(f"counter is ==>{counter}")
                 ir_values = {
                     'name': f"Tarjeta_digital_{i}.JPEG",
                     'type': 'binary',
-                    'datas': cards[i],
+                    'datas': cards[counter],
                     'store_fname': f"Tarjeta_digital_{i}.JPEG",
                     'mimetype': 'image/jpeg',
                 }
@@ -1323,6 +1325,7 @@ class BenefitApplication(models.Model):
                     'attachment_ids': [(4, attach_id.id, 0)]
                 })
                 attachments.append(attach_id)
+                counter += 1
                 
             partner=self.env['res.partner'].search([('id','=',self.partner_id.partner_id.id)])
             access_link = partner._notify_get_action_link('view')
