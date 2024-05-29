@@ -1311,6 +1311,7 @@ class BenefitApplication(models.Model):
             template.write({'attachment_ids': []})
 
             for i in self.digital_card_ids:
+                print(f"counter is ==>{counter}")
                 ir_values = {
                     'name': f"Tarjeta_digital_{i}.JPEG",
                     'type': 'binary',
