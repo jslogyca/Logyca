@@ -993,6 +993,7 @@ class BenefitApplication(models.Model):
         """  Acción planificada que envía kits de bienvenida a las postulaciones Aceptadas. """
 
         logging.warning("==> Iniciando cron de enviar kits de bienvenida ...")
+        product_identi = self.env['product.rvc'].search([('benefit_type','=','codigos')],limit=1)
         if not self:
             counter = 0
             self = self.search([
@@ -1002,6 +1003,8 @@ class BenefitApplication(models.Model):
                     ('origin', '=', 'odoo'),
                 '&',
                     ('state', '=', 'confirm'),
+                '&',
+                    ('product_id', '=', product_identi.id),
                     '&',
                         ('codes_quantity', '<', 100),
                         ('origin', 'in', ['tienda', 'chatbot']),
@@ -1017,11 +1020,17 @@ class BenefitApplication(models.Model):
                         if postulation_id.product_id.benefit_type == 'codigos':
                             #para sellers éxito se envía otro kit de bienvenida
                             if postulation_id.is_seller:
-                                if postulation_id._validate_bought_products():
-                                    template = self.env.ref('rvc.mail_template_welcome_kit_rvc_seller')
+                                try:
+                                    if postulation_id._validate_bought_products():
+                                        template = self.env.ref('rvc.mail_template_welcome_kit_rvc_seller')
+                                except:
+                                    continue
                             else:
-                                if postulation_id._validate_bought_products():
-                                    template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                                try:
+                                    if postulation_id._validate_bought_products():
+                                        template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                                except:
+                                    continue
                         elif postulation_id.product_id.benefit_type == 'colabora':
                             template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
                         elif postulation_id.product_id.benefit_type == 'tarjeta_digital':
