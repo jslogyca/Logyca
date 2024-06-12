@@ -1003,8 +1003,6 @@ class BenefitApplication(models.Model):
                     ('origin', '=', 'odoo'),
                 '&',
                     ('state', '=', 'confirm'),
-                '&',
-                    ('product_id', '=', product_identi.id),
                     '&',
                         ('codes_quantity', '<', 100),
                         ('origin', 'in', ['tienda', 'chatbot']),
@@ -1032,7 +1030,10 @@ class BenefitApplication(models.Model):
                                 except:
                                     continue
                         elif postulation_id.product_id.benefit_type == 'colabora':
-                            template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+                            try:
+                                template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+                            except:
+                                continue
                         elif postulation_id.product_id.benefit_type == 'tarjeta_digital':
                             template = self.env.ref('rvc.mail_template_welcome_kit_digital_card_rvc')
 
