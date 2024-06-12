@@ -996,17 +996,19 @@ class BenefitApplication(models.Model):
         product_identi = self.env['product.rvc'].search([('benefit_type','=','codigos')],limit=1)
         if not self:
             counter = 0
-            self = self.search([
-                '|',
-                '&',
-                    ('state', '=', 'confirm'),
-                    ('origin', '=', 'odoo'),
-                '&',
-                    ('state', '=', 'confirm'),
-                    '&',
-                        ('codes_quantity', '<', 100),
-                        ('origin', 'in', ['tienda', 'chatbot']),
-            ])
+            # self = self.search([
+            #     '|',
+            #     '&',
+            #         ('state', '=', 'confirm'),
+            #         ('origin', '=', 'odoo'),
+            #     '&',
+            #         ('state', '=', 'confirm'),
+            #         '&',
+            #             ('codes_quantity', '<', 100),
+            #             ('origin', 'in', ['tienda', 'chatbot']),
+            # ])
+            self = self.search([('state', '=', 'confirm'), ('codes_quantity', '<', 100),
+                                ('product_id', '=', product_identi.id), ('origin', 'in', ['tienda', 'chatbot', 'odoo'])])
 
             for postulation_id in self:
                 counter =+ 1
