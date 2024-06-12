@@ -1101,6 +1101,7 @@ class BenefitApplication(models.Model):
                         counter += 1
                     else:
                         raise ValidationError(_('La empresa seleccionada no tiene email.'))
+                    self.env.cr.commit()
                 else:
                     logging.exception("====> Cron alcanzó el límite de kits a enviar, esperando la próxima ejecución para enviar más...")
 
