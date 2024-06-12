@@ -157,9 +157,7 @@ class BenefitApplication(models.Model):
             if self.product_id.benefit_type == 'codigos' and self.codes_quantity > 0:
                 #requiere activar beneficio con el envío del kit?
                 if self.send_kit_with_no_benefit == False:
-                    if self._validate_bought_products():
-                        result={}
-                        return result
+                    self._validate_bought_products()
 
             view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id
             result ={'name':_("Enviar Kit de Bienvenida"),'view_mode': 'form',
