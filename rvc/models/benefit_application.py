@@ -153,18 +153,17 @@ class BenefitApplication(models.Model):
 
     def action_done(self):
         if self.state in ('confirm'):
+            # si son codigos de productos validamos que no hayan productos comprados disponibles
+            if self.product_id.benefit_type == 'codigos' and self.codes_quantity > 0:
+                #requiere activar beneficio con el envío del kit?
+                if self.send_kit_with_no_benefit == False:
+                    self._validate_bought_products()
+
             view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id
             result ={'name':_("Enviar Kit de Bienvenida"),'view_mode': 'form',
                                 'view_id': view_id, 'view_type': 'form', 'res_model': 'rvc.template.email.wizard',
                                 'type': 'ir.actions.act_window','nodestroy': True,'target': 'new'}
 
-            # si son codigos de productos validamos que no hayan productos comprados disponibles
-            if self.product_id.benefit_type == 'codigos' and self.codes_quantity > 0:
-
-                #requiere activar beneficio con el envío del kit?
-                if self.send_kit_with_no_benefit == False:
-                    if self._validate_bought_products():
-                        return result
             return result
 
     def action_forward_done(self):
@@ -996,19 +995,9 @@ class BenefitApplication(models.Model):
         product_identi = self.env['product.rvc'].search([('benefit_type','=','codigos')],limit=1)
         if not self:
             counter = 0
-            # self = self.search([
-            #     '|',
-            #     '&',
-            #         ('state', '=', 'confirm'),
-            #         ('origin', '=', 'odoo'),
-            #     '&',
-            #         ('state', '=', 'confirm'),
-            #         '&',
-            #             ('codes_quantity', '<', 100),
-            #             ('origin', 'in', ['tienda', 'chatbot']),
-            # ])
             self = self.search([('state', '=', 'confirm'), ('codes_quantity', '<', 100),
-                                ('product_id', '=', product_identi.id), ('origin', 'in', ['tienda', 'chatbot', 'odoo'])])
+                                ('product_id', '=', product_identi.id), 
+                                ('origin', 'in', ['tienda', 'chatbot', 'odoo'])], order="id asc")
 
             for postulation_id in self:
                 counter =+ 1
