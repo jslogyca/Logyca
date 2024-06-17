@@ -84,6 +84,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 #     template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
                 elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
                     template = self.env.ref('rvc.mail_template_welcome_kit_digital_card_rvc')
+                else:
+                    template=None
 
                 # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
                 if template:
