@@ -1,42 +1,664 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* product_perishable_type
+# 	* crm_allies
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0+e\n"
+"Project-Id-Version: Odoo Server 13.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-02 16:47+0000\n"
-"PO-Revision-Date: 2024-04-02 16:47+0000\n"
+"POT-Creation-Date: 2024-07-08 09:12+0000\n"
+"PO-Revision-Date: 2024-07-08 04:17-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: co\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
 
-#. module: product_perishable_type
-#: model:ir.model.fields,field_description:product_perishable_type.field_product_template__display_name
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__type_allies__academicos
+msgid "ACADEMICOS"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_needaction
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__message_needaction
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_needaction
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__active
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__active
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__activity_ids
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__activity_ids
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__activity_ids
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__activity_exception_decoration
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__activity_exception_decoration
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__activity_exception_decoration
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__activity_state
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__activity_state
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__activity_state
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__advance
+msgid "Advance"
+msgstr "Avances a la fecha"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__advance_ids
+msgid "Advances"
+msgstr "Avances a la fecha"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_res_partner__allies_logyca
+#: model:ir.model.fields,field_description:crm_allies.field_res_users__allies_logyca
+msgid "Allies Logyca"
+msgstr "Aliado"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_res_partner__allies_user_id
+#: model:ir.model.fields,field_description:crm_allies.field_res_users__allies_user_id
+msgid "Allies User"
+msgstr "Encargado"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_attachment_count
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__message_attachment_count
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_attachment_count
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_view_dashboard
+msgid "Beneficios Entregados"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_res_partner__benefits_ids
+#: model:ir.model.fields,field_description:crm_allies.field_res_users__benefits_ids
+msgid "Benefits"
+msgstr "Beneficios"
+
+#. module: crm_allies
+#: model:ir.actions.act_window,name:crm_allies.action_benefits_membership
+#: model:ir.model,name:crm_allies.model_benefits_membership
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__benefit_id
+#: model:ir.ui.menu,name:crm_allies.account_menu_benefits_membership
+#: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_view_form
+#: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_view_tree
+msgid "Benefits Membership"
+msgstr "Beneficios Membresía"
+
+#. module: crm_allies
+#: model:ir.actions.act_window,name:crm_allies.action_benefits_membership_partner
+#: model:ir.model,name:crm_allies.model_benefits_membership_partner
+#: model:ir.ui.menu,name:crm_allies.account_menu_benefits_membership_partner
+#: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_view_form
+#: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_view_tree
+msgid "Benefits Membership Partner"
+msgstr "Beneficios Membresía Entregados"
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__sub_type_allies__cadenacomercial
+msgid "CADENA COMERCIAL"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__sub_type_allies__cadenacomercialdroguerias
+msgid "CADENA COMERCIAL DROGUERIAS"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__sub_type_allies__cadenaindependiente
+msgid "CADENA INDEPENDIENTE"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__type_allies__comercial
+msgid "COMERCIAL"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__sub_type_allies__consumomasivo
+msgid "CONSUMO MASIVO"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__cant_assistants
+msgid "Cant Assistants"
+msgstr "Cantidad de asistentes (#)"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__cant_company
+msgid "Cant Company"
+msgstr "Cantidad de empresas beneficiadas (#)"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__categ_id
+msgid "Categ"
+msgstr "Categorías"
+
+#. module: crm_allies
+#: model:ir.actions.act_window,name:crm_allies.action_categ_benefits_membership
+#: model:ir.model,name:crm_allies.model_categ_benefits_membership
+#: model:ir.ui.menu,name:crm_allies.account_menu_categ_benefits_membership
+#: model_terms:ir.ui.view,arch_db:crm_allies.categ_benefits_membership_view_form
+#: model_terms:ir.ui.view,arch_db:crm_allies.categ_benefits_membership_view_tree
+msgid "Categ Benefits Membership"
+msgstr "Categorías Beneficios Membresía"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__code
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__code
+msgid "Code"
+msgstr "Código"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__company_id
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__company_id
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__company_id
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__company_id
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: crm_allies
+#: model:ir.model,name:crm_allies.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: crm_allies
+#: model_terms:ir.actions.act_window,help:crm_allies.action_benefits_membership
+#: model_terms:ir.actions.act_window,help:crm_allies.action_benefits_membership_partner
+#: model_terms:ir.actions.act_window,help:crm_allies.action_categ_benefits_membership
+msgid "Crear un nuevo documento"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__create_uid
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__create_uid
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__create_uid
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__create_uid
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__create_date
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__create_date
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__create_date
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__create_date
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__display_name
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__display_name
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__display_name
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__display_name
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__display_name
 msgid "Display Name"
-msgstr "Nombre Público"
+msgstr ""
 
-#. module: product_perishable_type
-#: model:ir.model.fields,field_description:product_perishable_type.field_product_template__id
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__date_done
+msgid "Done Date"
+msgstr "Fecha de la ejecución del beneficio"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__company_email
+msgid "Email Company"
+msgstr "Correo de contacto (usuario)"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_follower_ids
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__message_follower_ids
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_follower_ids
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_channel_ids
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__message_channel_ids
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_channel_ids
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_channel_ids
+msgid "Followers (Channels)"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_partner_ids
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__message_partner_ids
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_partner_ids
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__sub_type_allies__gobierno
+msgid "GOBIERNO"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__sub_type_allies__harddiscount
+msgid "HARD DISCOUNT"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__id
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__id
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__id
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__id
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__id
 msgid "ID"
 msgstr ""
 
-#. module: product_perishable_type
-#: model:ir.model.fields,field_description:product_perishable_type.field_product_template____last_update
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__activity_exception_icon
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__activity_exception_icon
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__activity_exception_icon
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership__activity_exception_icon
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership_partner__activity_exception_icon
+#: model:ir.model.fields,help:crm_allies.field_categ_benefits_membership__activity_exception_icon
+#: model:ir.model.fields,help:crm_allies.field_project_allies__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership__message_needaction
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership__message_unread
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership_partner__message_needaction
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership_partner__message_unread
+#: model:ir.model.fields,help:crm_allies.field_categ_benefits_membership__message_needaction
+#: model:ir.model.fields,help:crm_allies.field_categ_benefits_membership__message_unread
+#: model:ir.model.fields,help:crm_allies.field_project_allies__message_needaction
+#: model:ir.model.fields,help:crm_allies.field_project_allies__message_unread
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership__message_has_error
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership_partner__message_has_error
+#: model:ir.model.fields,help:crm_allies.field_categ_benefits_membership__message_has_error
+#: model:ir.model.fields,help:crm_allies.field_project_allies__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__indicator
+msgid "Indicator"
+msgstr "Indicador"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__information
+msgid "Information"
+msgstr "Información (Formato texto)"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_is_follower
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__message_is_follower
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_is_follower
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__advance_last
+msgid "Last Advance"
+msgstr "Último avances"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership____last_update
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner____last_update
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership____last_update
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies____last_update
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line____last_update
 msgid "Last Modified on"
-msgstr "Última Modificación el"
+msgstr ""
 
-#. module: product_perishable_type
-#: model:ir.model.fields,field_description:product_perishable_type.field_product_product__perishable
-#: model:ir.model.fields,field_description:product_perishable_type.field_product_template__perishable
-msgid "Perishable"
-msgstr "Perecedero"
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__project_last
+msgid "Last Project"
+msgstr "Proyecto Finalizado (últimos 12 meses)"
 
-#. module: product_perishable_type
-#: model:ir.model,name:product_perishable_type.model_product_template
-msgid "Product Template"
-msgstr "Plantilla del Producto"
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__write_uid
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__write_uid
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__write_uid
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__write_uid
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__write_date
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__write_date
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__write_date
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__write_date
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__type_allies__masificación
+msgid "MASIFICACIÓN"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__type_allies__misionales
+msgid "MISIONALES"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_main_attachment_id
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__message_main_attachment_id
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_main_attachment_id
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: crm_allies
+#: model:res.groups,name:crm_allies.group_manager_crm_allies
+msgid "Manager CRM Allies"
+msgstr "Admin Aliados"
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_view_dashboard
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_dashboard
+msgid "Medium"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_has_error
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__message_has_error
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_has_error
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_ids
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__message_ids
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_ids
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_view_dashboard
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_dashboard
+msgid "Miembros"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__name
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__name
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__name
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__name
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__activity_date_deadline
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__activity_date_deadline
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__activity_date_deadline
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__activity_summary
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__activity_summary
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__activity_summary
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__activity_type_id
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__activity_type_id
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__activity_type_id
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_needaction_counter
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__message_needaction_counter
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_needaction_counter
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_has_error_counter
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__message_has_error_counter
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_has_error_counter
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership__message_needaction_counter
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership_partner__message_needaction_counter
+#: model:ir.model.fields,help:crm_allies.field_categ_benefits_membership__message_needaction_counter
+#: model:ir.model.fields,help:crm_allies.field_project_allies__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership__message_has_error_counter
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership_partner__message_has_error_counter
+#: model:ir.model.fields,help:crm_allies.field_categ_benefits_membership__message_has_error_counter
+#: model:ir.model.fields,help:crm_allies.field_project_allies__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership__message_unread_counter
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership_partner__message_unread_counter
+#: model:ir.model.fields,help:crm_allies.field_categ_benefits_membership__message_unread_counter
+#: model:ir.model.fields,help:crm_allies.field_project_allies__message_unread_counter
+msgid "Number of unread messages"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__sub_type_allies__ong
+msgid "ONG"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__object
+msgid "Object"
+msgstr "Objetivo"
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_dashboard
+msgid "Objetivos"
+msgstr ""
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_view_graph
+msgid "Opportunities"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__origin
+msgid "Origin"
+msgstr "Origen"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__partner_id
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__partner_id
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__partner_id
+msgid "Partner"
+msgstr "Miembro"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__project_present
+msgid "Present Project"
+msgstr "Proyecto Actual"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__project_id
+msgid "Project"
+msgstr "Proyecto"
+
+#. module: crm_allies
+#: model:ir.model,name:crm_allies.model_project_allies
+msgid "ProjectAllies"
+msgstr "Proyectos Aliados"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_res_partner__projects_ids
+#: model:ir.model.fields,field_description:crm_allies.field_res_users__projects_ids
+msgid "Projects"
+msgstr "Proyectos"
+
+#. module: crm_allies
+#: model:ir.actions.act_window,name:crm_allies.action_project_allies
+#: model:ir.ui.menu,name:crm_allies.account_menu_project_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_form
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_graph
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_pivot
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_tree
+msgid "Projects Allies"
+msgstr "Proyectos Aliados"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__activity_user_id
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__activity_user_id
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__activity_user_id
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__activity_user_id
+msgid "Responsible User"
+msgstr "Colaborador"
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__sub_type_allies__servicios
+msgid "SERVICIOS"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership__activity_state
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership_partner__activity_state
+#: model:ir.model.fields,help:crm_allies.field_categ_benefits_membership__activity_state
+#: model:ir.model.fields,help:crm_allies.field_project_allies__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_res_partner__sub_type_allies
+#: model:ir.model.fields,field_description:crm_allies.field_res_users__sub_type_allies
+msgid "Sub Type Allies"
+msgstr "Subtipo"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__categ_id
+msgid "Type"
+msgstr "Categoría"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_res_partner__type_allies
+#: model:ir.model.fields,field_description:crm_allies.field_res_users__type_allies
+msgid "Type Allies"
+msgstr "Tipo"
+
+#. module: crm_allies
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership__activity_exception_decoration
+#: model:ir.model.fields,help:crm_allies.field_benefits_membership_partner__activity_exception_decoration
+#: model:ir.model.fields,help:crm_allies.field_categ_benefits_membership__activity_exception_decoration
+#: model:ir.model.fields,help:crm_allies.field_project_allies__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__sub_type_allies__universidad
+msgid "UNIVERSIDAD"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_unread
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__message_unread
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_unread
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_unread
+msgid "Unread Messages"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_unread_counter
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__message_unread_counter
+#: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_unread_counter
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__company_user_id
+msgid "User Company"
+msgstr "Usuario de la empresa"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__partner_user_id
+msgid "User Partner"
+msgstr "Encargado"
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__sub_type_allies__varios
+msgid "VARIOS"
+msgstr ""
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_view_dashboard
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_dashboard
+msgid "Win/Loss Ratio"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__year_id
+msgid "Year"
+msgstr "Año"
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_view_pivot
+#: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_view_pivot
+msgid "benefits membership Analysis"
+msgstr ""
+
+#. module: crm_allies
+#: model:ir.model,name:crm_allies.model_project_allies_line
+msgid "project.allies.line"
+msgstr "Avances a la fecha"

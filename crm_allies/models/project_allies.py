@@ -21,6 +21,7 @@ class ProjectAllies(models.Model):
     project_last = fields.Char('Last Project')
     advance_last = fields.Char('Last Advance')
     advance_ids = fields.One2many('project.allies.line', 'project_id', string="Advances", index=True)
+    date = fields.Date(string='Date', default=fields.Date.context_today)
 
     def name_get(self):
         return [(project.id, '%s - %s' %
@@ -36,6 +37,7 @@ class ProjectAlliesLine(models.Model):
                                  default=lambda self: self.env.company)
     partner_id = fields.Many2one('res.partner', string="Partner")
     project_id = fields.Many2one('project.allies', string="Project")
+    date = fields.Date(string='Date', default=fields.Date.context_today)
 
     def name_get(self):
         return [(project.id, '%s - %s' %
