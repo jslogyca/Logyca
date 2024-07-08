@@ -20,4 +20,34 @@
             </xpath>
         </field>
     </record>
+    <record model="ir.ui.view" id="view_partner_form_allies">
+        <field name="name">res.partner.form.allies</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales_purchases']" position="after">
+                <page string="Allies" name="allies">
+                    <group>
+                        <group>
+                            <field name="allies_logyca"/>
+                            <field name="allies_user_id"/>
+                        </group>
+                        <group>
+                            <field name="sub_type_allies"/>
+                        </group>
+                    </group>
+                    <field name="projects_ids" nolabel="1">
+                        <tree editable="bottom">
+                            <field name="year_id" />
+                            <field name="object" />
+                            <field name="indicator" />
+                            <field name="project_present" />
+                            <field name="project_last" />
+                            <field name="advance_last" />
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>    
 </odoo>

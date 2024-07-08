@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+account_project_allies,project.allies,model_project_allies,crm_allies.group_manager_crm_allies,1,1,1,1
+account_project_allies_line,project.allies.line,model_project_allies_line,crm_allies.group_manager_crm_allies,1,1,1,1
