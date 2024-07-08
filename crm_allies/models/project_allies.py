@@ -13,7 +13,7 @@ class ProjectAllies(models.Model):
     active = fields.Boolean('Active', default=True)
     company_id = fields.Many2one('res.company', string='Company', required=True,
                                  default=lambda self: self.env.company)
-    partner_id = fields.Many2one('res.partner', string="Partner")
+    partner_id = fields.Many2one('res.partner', string="Partner", domain="[('allies_logyca', '=', True)]")
     year_id = fields.Many2one('account.fiscal.year', string="Year")
     object = fields.Char('Object')
     indicator = fields.Char('Indicator')
@@ -21,6 +21,10 @@ class ProjectAllies(models.Model):
     project_last = fields.Char('Last Project')
     advance_last = fields.Char('Last Advance')
     advance_ids = fields.One2many('project.allies.line', 'project_id', string="Advances", index=True)
+
+    def name_get(self):
+        return [(project.id, '%s - %s' %
+                 (project.partner_id.name, project.project_present)) for project in self]
 
 
 class ProjectAlliesLine(models.Model):
@@ -33,3 +37,6 @@ class ProjectAlliesLine(models.Model):
     partner_id = fields.Many2one('res.partner', string="Partner")
     project_id = fields.Many2one('project.allies', string="Project")
 
+    def name_get(self):
+        return [(project.id, '%s - %s' %
+                 (project.partner_id.name, project.project_present)) for project in self]

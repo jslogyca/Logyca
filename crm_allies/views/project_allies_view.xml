@@ -13,15 +13,12 @@
                             <field name="company_id" required="1"/>
                             <field name="year_id" required="1"/>
                             <field name="object" required="1"/>
-                            <field name="indicator" required="1"/>
-                            <field name="project_present" required="1"/>
-                            <field name="project_last" required="1"/>
-                            <field name="advance_last" required="1"/>
-                            <field name="project_last" required="1"/>
-
                         </group>
                         <group>
-
+                            <field name="indicator" required="1"/>
+                            <field name="project_present" required="1"/>
+                            <field name="project_last" />
+                            <field name="advance_last" force_save="1" readonly="1" />
                         </group>
                         <field name="advance_ids" nolabel="1">
                             <tree editable="bottom">
