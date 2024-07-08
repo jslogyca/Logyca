@@ -16,11 +16,11 @@ class ResPartner(models.Model):
     sub_type_allies = fields.Selection([("CADENACOMERCIAL", "CADENA COMERCIAL"), 
                                 ("CADENACOMERCIALDROGUERIAS", "CADENA COMERCIAL DROGUERIAS"),
                                 ("CADENAINDEPENDIENTE", "CADENA INDEPENDIENTE"),
-                                ("CONSUMOMASIVO", "CONSUMO MASIVO")
-                                ("GOBIERNO", "GOBIERNO")
-                                ("HARDDISCOUNT", "HARD DISCOUNT")
-                                ("ONG", "ONG")
-                                ("SERVICIOS", "SERVICIOS")
-                                ("UNIVERSIDAD", "UNIVERSIDAD")
+                                ("CONSUMOMASIVO", "CONSUMO MASIVO"),
+                                ("GOBIERNO", "GOBIERNO"),
+                                ("HARDDISCOUNT", "HARD DISCOUNT"),
+                                ("ONG", "ONG"),
+                                ("SERVICIOS", "SERVICIOS"),
+                                ("UNIVERSIDAD", "UNIVERSIDAD"),
                                 ("VARIOS", "VARIOS")])
     projects_ids = fields.One2many('project.allies', 'partner_id', string="Projects", index=True)
