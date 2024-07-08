@@ -22,6 +22,8 @@
 
 """,
     "data": [
+        "security/security.xml",
+        "security/ir.model.access.csv",
         "views/benefits_membership_partner_view.xml",
         "views/benefits_membership_view.xml",
         "views/categ_benefits_membership_view.xml",
