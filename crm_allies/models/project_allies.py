@@ -22,6 +22,8 @@ class ProjectAllies(models.Model):
     advance_last = fields.Char('Last Advance')
     advance_ids = fields.One2many('project.allies.line', 'project_id', string="Advances", index=True)
     date = fields.Date(string='Date', default=fields.Date.context_today)
+    type_allies = fields.Selection(related='partner_id.type_allies')
+    sub_type_allies = fields.Selection(related='partner_id.sub_type_allies')
 
     def name_get(self):
         return [(project.id, '%s - %s' %

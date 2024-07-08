@@ -13,8 +13,10 @@
                             <field name="company_id" required="1"/>
                             <field name="year_id" required="1"/>
                             <field name="object" required="1"/>
+                            <field name="type_allies" required="1"/>
                         </group>
                         <group>
+                            <field name="sub_type_allies" required="1"/>
                             <field name="date" required="1"/>
                             <field name="indicator" required="1"/>
                             <field name="project_present" required="1"/>
@@ -84,7 +86,7 @@
                 <group>
                     <group>
                         <aggregate name="object" string="Objetivos" group_operator="count" field="id" measure="__count__"/>
-                        <aggregate name="partner" string="Miembros" group_operator="count" field="partner_id" measure="__count__"/>
+                        <aggregate name="partner" string="Aliados" group_operator="count" field="partner_id" measure="__count__"/>
                         <!-- <aggregate name="expected_revenue_aggregate" field="planned_revenue" string="Expected Revenue"/>
                         <aggregate name="prorated_revenue_aggregate" field="expected_revenue" invisible="1"/>
                         <formula name="prorated_revenue" string="Prorated Revenue" value="record.prorated_revenue_aggregate" widget="monetary"/>
