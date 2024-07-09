@@ -64,8 +64,7 @@
                 <field name="name"/>
                 <field name="partner_id" required="1"/>
                 <field name="object" required="1"/>
-                <field name="state" widget="badge" decoration-success="state == 'done'" decoration-info="state == 'open'"
-                    decoration-danger="state == 'cancel'" decoration-warning="state == 'draft'"  optional="show"/>
+                <field name="state" widget="badge" />
             </tree>
         </field>
     </record>
