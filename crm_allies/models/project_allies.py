@@ -24,10 +24,61 @@ class ProjectAllies(models.Model):
     date = fields.Date(string='Date', default=fields.Date.context_today)
     type_allies = fields.Selection(related='partner_id.type_allies', store=True)
     sub_type_allies = fields.Selection(related='partner_id.sub_type_allies', store=True)
+    allies_user_id = fields.Selection(related='partner_id.allies_user_id', store=True)
+    state = fields.Selection([('draft', 'Draft'),
+                                ('open', 'Open'),
+                                ('cancel', 'Cancel'),
+                                ('done', 'Done'),
+        ], string='Status', default='draft')
+    apply_amount = fields.Boolean('Apply Amount', default=False)
+    total_amount = fields.Float(string='Total Amount', default=0.00)
+    date_cancel = fields.Date(string='Date', default=fields.Date.context_today)
+    date_open = fields.Date(string='Date', default=fields.Date.context_today)
+    date_done = fields.Date(string='Date', default=fields.Date.context_today)
+    reason_id = fields.Many2one('reason.cancel.project', string='Reason')
 
     def name_get(self):
         return [(project.id, '%s - %s' %
                  (project.partner_id.name, project.project_present)) for project in self]
+
+    def save_detail_advance(self):
+        return {
+            'name': 'Add Avances del Proyecto',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': self.env.ref('crm_allies.project_allies_wizard_view_form').id,
+            'res_model': 'project.allies.cancel.wizard',
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'context': self._context
+        }
+
+    def cancel_project(self):
+        return {
+            'name': 'Cancel Project',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': self.env.ref('crm_allies.project_allies_cancel_wizard_view_form').id,
+            'res_model': 'project.allies.cancel.wizard',
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'context': self._context
+        }
+
+    def open_project(self):
+        date = fields.Date.context_today
+        for project in self:
+            project.write({'state': 'open', 'date_open': date})
+
+    def done_project(self):
+        date = fields.Date.context_today
+        for project in self:
+            project.write({'state': 'done', 'date_done': date})
+
+    def draft_project(self):
+        date = fields.Date.context_today
+        for project in self:
+            project.write({'state': 'draft'})
 
 
 class ProjectAlliesLine(models.Model):
@@ -37,9 +88,11 @@ class ProjectAlliesLine(models.Model):
     advance = fields.Char('Advance')
     company_id = fields.Many2one('res.company', string='Company', required=True,
                                  default=lambda self: self.env.company)
-    partner_id = fields.Many2one('res.partner', string="Partner")
     project_id = fields.Many2one('project.allies', string="Project")
     date = fields.Date(string='Date', default=fields.Date.context_today)
+    state_activity = fields.Selection([('in_progress', 'In Progress'),
+                                ('end', 'End'),
+        ], string='Status Activity', default='in_progress')    
 
     def name_get(self):
         return [(project.id, '%s - %s' %

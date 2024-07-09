@@ -5,15 +5,25 @@
         <field name="model">project.allies</field>
         <field name="arch" type="xml">
             <form string="Projects Allies">
+                <header>
+                    <button name="cancel_project" string="Cancel Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'done')]}" />
+                    <button name="open_project" string="Open Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}" />
+                    <button name="done_project" string="Done Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'open')]}" />
+                    <button name="draft_project" string="Draft Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'cancel')]}" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open,done,cancel"/>
+                </header>
                 <sheet>
                     <group>
                         <group>
-                            <field name="name"/>
+                            <field name="name" invisible="1"/>
                             <field name="partner_id" required="1"/>
-                            <field name="company_id" required="1"/>
+                            <field name="allies_user_id" />
+                            <field name="company_id" required="1" invisible="1"/>
                             <field name="year_id" required="1"/>
                             <field name="object" required="1"/>
                             <field name="type_allies" required="1"/>
+                            <field name="apply_amount" />
+                            <field name="total_amount" attrs="{'required': [('apply_amount', '=', True)], 'invisible': [('apply_amount', '=', False)]}"/>
                         </group>
                         <group>
                             <field name="sub_type_allies" required="1"/>
@@ -22,13 +32,17 @@
                             <field name="project_present" required="1"/>
                             <field name="project_last" />
                             <field name="advance_last" force_save="1" readonly="1" />
+                            <field name="date_cancel" force_save="1" readonly="1" attrs="{'invisible': [('state', '!=', 'cancel')]}"/>
+                            <field name="date_open" force_save="1" readonly="1" attrs="{'invisible': [('state', '!=', 'open')]}"/>
+                            <field name="date_done" force_save="1" readonly="1" attrs="{'invisible': [('state', '!=', 'done')]}"/>
                         </group>
-                        <field name="advance_ids" nolabel="1">
+                        <button name="save_detail_advance" string="Add Avances del Proyecto" type="object" icon="fa-building-o" /> 
+                        <field name="advance_ids" nolabel="1" readonly="1">
                             <tree editable="bottom">
+                                <field name="name" invisible="1"/>
                                 <field name="date" />
                                 <field name="advance" />
                                 <field name="company_id" />
-                                <field name="partner_id" />
                             </tree>
                         </field>                        
                     </group>
@@ -50,6 +64,8 @@
                 <field name="name"/>
                 <field name="partner_id" required="1"/>
                 <field name="object" required="1"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'" decoration-info="state == 'open'"
+                    decoration-danger="state == 'cancel'" decoration-warning="state == 'draft'"  optional="show"/>
             </tree>
         </field>
     </record>
@@ -119,5 +135,26 @@
         action="action_project_allies"
         parent="contacts.menu_contacts"
         sequence="7"/>
+
+    <record id="project_allies_line_view_form" model="ir.ui.view">
+        <field name="name">project.allies.line.form</field>
+        <field name="model">project.allies.line</field>
+        <field name="arch" type="xml">
+            <form string="Projects Allies Line">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date" required="1"/>
+                            <field name="advance" required="1"/>
+                        </group>
+                        <group>
+                            <field name="partner_id" required="1"/>
+                            <field name="state_activity" widget="radio" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
 </odoo>
