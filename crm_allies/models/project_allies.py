@@ -24,7 +24,7 @@ class ProjectAllies(models.Model):
     date = fields.Date(string='Date', default=fields.Date.context_today)
     type_allies = fields.Selection(related='partner_id.type_allies', store=True)
     sub_type_allies = fields.Selection(related='partner_id.sub_type_allies', store=True)
-    allies_user_id = fields.Selection('res.partner', string="Partner")
+    allies_user_id = fields.Many2one(related='partner_id.allies_user_id', store=True)
     state = fields.Selection([('draft', 'Draft'),
                                 ('open', 'Open'),
                                 ('cancel', 'Cancel'),
