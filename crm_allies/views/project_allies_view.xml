@@ -24,6 +24,7 @@
                             <field name="type_allies" required="1"/>
                             <field name="apply_amount" />
                             <field name="total_amount" attrs="{'required': [('apply_amount', '=', True)], 'invisible': [('apply_amount', '=', False)]}"/>
+                            <field name="reason_id" attrs="{'invisible': [('state', '!=', 'cancel')]}"/>
                         </group>
                         <group>
                             <field name="sub_type_allies" required="1"/>
@@ -67,6 +68,7 @@
                 <field name="object" />
                 <field name="year_id" />
                 <field name="indicator" />
+                <field name="project_present" required="1"/>
                 <field name="allies_user_id" />
                 <field name="state" widget="badge" />
             </tree>

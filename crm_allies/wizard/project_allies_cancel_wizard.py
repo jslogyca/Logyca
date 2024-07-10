@@ -45,7 +45,7 @@ class ProjectAlliesCancelWizard(models.TransientModel):
             'name': 'Cancel Project',
             'view_type': 'form',
             'view_mode': 'form',
-            'view_id': self.env.ref('crm_allies.project_allies_cancel_wizard_view_form').id,
+            'view_id': self.env.ref('crm_allies.project_allies_wizard_view_form').id,
             'res_model': 'project.allies.cancel.wizard',
             'type': 'ir.actions.act_window',
             'target': 'new',
