@@ -28,7 +28,8 @@ class ResPartnerUpdateImport(models.TransientModel):
             if sheet.cell(row_index, col_index).value == key:
                 return col_index
 
-    def import_file(self):        
+    def import_file(self): 
+        logging.warning("==> Iniciando cron de record_list kits de record_list ...", self)       
         if not self.file_data:
             raise ValidationError('No se encuentra un archivo, por favor cargue uno. \n\n Si no es posible cierre este asistente e intente de nuevo.')
         try:
@@ -54,6 +55,7 @@ class ResPartnerUpdateImport(models.TransientModel):
         error = False
         mens_error = None
         logging.info("==> nrecord_list", record_list)
+        logging.warning("==> Iniciando cron de record_list kits de record_list ...", record_list)
         for fila in record_list:
             # con la identificacion del empleado solamente puedo buscarlo en partners
             partner =self.env['res.partner'].search([('vat','=',str(fila[partner_identification_loc])), ('parent_id','=',None)])
