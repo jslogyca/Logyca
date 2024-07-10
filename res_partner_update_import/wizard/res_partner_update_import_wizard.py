@@ -28,8 +28,7 @@ class ResPartnerUpdateImport(models.TransientModel):
             if sheet.cell(row_index, col_index).value == key:
                 return col_index
 
-    def import_file(self): 
-        logging.warning("==> Iniciando cron de record_list kits de record_list ...", self)       
+    def import_file(self):   
         if not self.file_data:
             raise ValidationError('No se encuentra un archivo, por favor cargue uno. \n\n Si no es posible cierre este asistente e intente de nuevo.')
         try:
@@ -43,36 +42,30 @@ class ResPartnerUpdateImport(models.TransientModel):
         
         sheet = xls_tmp_file.sheet_by_name(xls_tmp_file.sheet_names()[0])
         record_list = [sheet.row_values(i) for i in range(sheet.nrows)]
-        
         partner_identification_loc = self.col_position_from_key(sheet, 'NUMERO DE DOCUMENTO')
         partner_name_loc = int(self.col_position_from_key(sheet, 'NOMBRE DEL CONTACTO'))
         email_contact_loc = int(self.col_position_from_key(sheet, 'CORREO ELECTRONICO'))
+        note_contact_loc = int(self.col_position_from_key(sheet, 'NOTA'))
         
-        #nombres de columnas
-        col_header_names = record_list[1:2]
-        
-        record_list = record_list[2:]
+        record_list = record_list[1:]
         error = False
-        mens_error = None
-        logging.info("==> nrecord_list", record_list)
-        logging.warning("==> Iniciando cron de record_list kits de record_list ...", record_list)
+        mens_error = 'Observaciones: '
         for fila in record_list:
-            # con la identificacion del empleado solamente puedo buscarlo en partners
-            partner =self.env['res.partner'].search([('vat','=',str(fila[partner_identification_loc])), ('parent_id','=',None)])
-            logging.info("==> partner", partner)
+            partner =self.env['res.partner'].search([('vat','=',str(int(fila[partner_identification_loc]))), ('parent_id','=',None)])
             if not partner:
                 error = True
-                mens_error = 'Empresa con NIT ' + str(fila[partner_identification_loc]) + ' no encontrado'
+                mens_error = mens_error + 'Empresa con NIT ' + str(int(fila[partner_identification_loc])) + ' no encontrado'
             else:
                 contact = self.env['res.partner'].search([('name','=', str(fila[partner_name_loc])), ('parent_id','=',partner.id)])
-                logging.info("==> partner", contact)
                 if not contact:
                     contact = self.env['res.partner'].search([('email','=', str(fila[email_contact_loc])), ('parent_id','=',partner.id)])
                     if not contact:
                         error = True
-                        mens_error = 'Contacto ' + str(fila[partner_name_loc]) + ' no encontrado'
+                        mens_error = mens_error + 'Contacto ' + str(fila[partner_name_loc]) + ' no encontrado'
                         continue
-                contact.write({'active': False, 'x_active_for_logyca': False})
-            if error:
-                raise ValidationError('¡Error!. "%s"' %  mens_error)
+                contact.write({'active': False, 'x_active_for_logyca': False, 'comment': str(fila[note_contact_loc])})
+                # contact.write({'active': False, 'comment': str(fila[note_contact_loc])})
+                self.env.cr.commit()
+        if error:
+            raise ValidationError('¡Error!. "%s"' %  mens_error)
         return True
