@@ -9,6 +9,25 @@ class ProjectAllies(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'ProjectAllies'
 
+    @api.depends('vinculation', 'x_type_vinculation', 'company_id', 'partner_id')
+    def _get_vinculation(self):
+        for help in self:
+            if help.partner_id:
+                if help.partner_id.x_type_vinculation:
+                    miembro = False
+                    for vinculation_id in help.partner_id.x_type_vinculation:
+                        if miembro:
+                            continue
+                        help.x_type_vinculation = vinculation_id.id
+                        if vinculation_id.id == 1:
+                            miembro = True
+                    help.vinculation = True
+                else:
+                    help.x_type_vinculation = 12
+                    help.vinculation = True
+            else:
+                help.vinculation = True
+
     name = fields.Char('Name')
     active = fields.Boolean('Active', default=True)
     company_id = fields.Many2one('res.company', string='Company', required=True,
@@ -36,6 +55,8 @@ class ProjectAllies(models.Model):
     date_open = fields.Date(string='Date', default=fields.Date.context_today)
     date_done = fields.Date(string='Date', default=fields.Date.context_today)
     reason_id = fields.Many2one('reason.cancel.project', string='Reason')
+    x_type_vinculation = fields.Many2one('logyca.vinculation_types', string='Tipo de vinculación')
+    vinculation = fields.Boolean(compute='_get_vinculation', string='Vinculation')    
 
     def name_get(self):
         return [(project.id, '%s - %s' %

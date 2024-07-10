@@ -17,6 +17,8 @@
                         <group>
                             <field name="name" invisible="1"/>
                             <field name="partner_id" required="1" string='Aliado'/>
+                            <field name="vinculation" invisible="1"/>
+                            <field name="x_type_vinculation" />
                             <field name="allies_user_id" />
                             <field name="company_id" required="1" invisible="1"/>
                             <field name="year_id" required="1"/>
@@ -65,6 +67,7 @@
             <tree string="Projects Allies" >
                 <field name="name" invisible="1"/>
                 <field name="partner_id" string='Aliado'/>
+                <field name="x_type_vinculation" />
                 <field name="object" />
                 <field name="year_id" />
                 <field name="indicator" />
