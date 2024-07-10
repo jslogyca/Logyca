@@ -37,12 +37,13 @@
                             <field name="date_done" force_save="1" readonly="1" attrs="{'invisible': [('state', '!=', 'done')]}"/>
                         </group>
                         <button name="save_detail_advance" string="Add Avances del Proyecto" type="object" icon="fa-building-o" /> 
-                        <field name="advance_ids" nolabel="1" readonly="1">
+                        <field name="advance_ids" nolabel="1" >
                             <tree editable="bottom">
                                 <field name="name" invisible="1"/>
                                 <field name="date" />
                                 <field name="advance" />
-                                <field name="company_id" />
+                                <field name="company_id" invisible="1"/>
+                                <field name="state_activity" widget="radio" />
                             </tree>
                         </field>                        
                     </group>
