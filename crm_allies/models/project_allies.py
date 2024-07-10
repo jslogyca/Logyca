@@ -66,7 +66,7 @@ class ProjectAllies(models.Model):
         }
 
     def open_project(self):
-        date = fields.Date.context_today
+        date = fields.Datetime.now()
         for project in self:
             project.write({'state': 'open', 'date_open': date})
 
