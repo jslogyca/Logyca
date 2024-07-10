@@ -75,13 +75,38 @@
         </field>
     </record>
 
+    <record id="project_allies_view_search" model="ir.ui.view">
+        <field name="name">project.allies.search</field>
+        <field name="model">project.allies</field>
+        <field name="arch" type="xml">
+            <search string="Tasks">
+                <field name="partner_id" operator="child_of"/>
+                <field name="state"/>
+                <field name="allies_user_id"/>
+                <field name="date"/>
+                <separator/>
+                <filter string="state" name="Finalizado" domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <filter string="state" name="En Progreso" domain="[('state', '=', 'open')]"/>
+                <separator/>
+                <filter string="state" name="Cancelados" domain="[('state', '=', 'cancel')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Stage" name="state" context="{'group_by': 'state'}"/>
+                    <filter string="Assigned to" name="user" context="{'group_by': 'allies_user_id'}"/>
+                    <filter string="Aliado" name="company" context="{'group_by': 'partner_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="project_allies_view_pivot" model="ir.ui.view">
         <field name="name">project.allies.pivot</field>
         <field name="model">project.allies</field>
         <field name="arch" type="xml">
             <pivot string="Projects Allies">
-                <field name="partner_id" type="col"/>
-                <field name="object" type="row"/>
+                <field name="state" type="col"/>
+                <field name="partner_id" type="row"/>
             </pivot>
         </field>
     </record>
