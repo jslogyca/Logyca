@@ -67,7 +67,7 @@
             <tree string="Projects Allies" >
                 <field name="name" invisible="1"/>
                 <field name="partner_id" string='Aliado'/>
-                <field name="x_type_vinculation" />
+                <field name="x_type_vinculation" force_save="1" readonly="1"/>
                 <field name="object" />
                 <field name="year_id" />
                 <field name="indicator" />
@@ -149,6 +149,7 @@
                         <widget name="pie_chart" title="Indicators" attrs="{'groupby': 'indicator'}"/>
                         <widget name="pie_chart" title="State project" attrs="{'groupby': 'state'}"/>
                         <widget name="pie_chart" title="Type Allies" attrs="{'groupby': 'type_allies'}"/>
+                        <widget name="pie_chart" title="Tipo Vinculación" attrs="{'groupby': 'x_type_vinculation'}"/>
                     </group>
                 </group>
                 <view type="pivot" ref="crm_allies.project_allies_view_pivot"/>
