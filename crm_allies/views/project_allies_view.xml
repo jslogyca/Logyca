@@ -16,7 +16,7 @@
                     <group>
                         <group>
                             <field name="name" invisible="1"/>
-                            <field name="partner_id" required="1"/>
+                            <field name="partner_id" required="1" string='Aliado'/>
                             <field name="allies_user_id" />
                             <field name="company_id" required="1" invisible="1"/>
                             <field name="year_id" required="1"/>
@@ -43,7 +43,7 @@
                                 <field name="date" />
                                 <field name="advance" />
                                 <field name="company_id" invisible="1"/>
-                                <field name="state_activity" widget="radio" />
+                                <field name="state_activity" widget="state_selection" />
                             </tree>
                         </field>                        
                     </group>
@@ -62,9 +62,12 @@
         <field name="model">project.allies</field>
         <field name="arch" type="xml">
             <tree string="Projects Allies" >
-                <field name="name"/>
-                <field name="partner_id" required="1"/>
-                <field name="object" required="1"/>
+                <field name="name" invisible="1"/>
+                <field name="partner_id" string='Aliado'/>
+                <field name="object" />
+                <field name="year_id" />
+                <field name="indicator" />
+                <field name="allies_user_id" />
                 <field name="state" widget="badge" />
             </tree>
         </field>
