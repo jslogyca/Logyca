@@ -30,7 +30,7 @@ class ProjectAlliesCancelWizard(models.TransientModel):
     def cancel_project(self):
         self.ensure_one()
         project_id = self.env['project.allies'].browse(self._context.get('active_id'))
-        date = fields.Date.context_today
+        date = fields.Datetime.now()
         for project in project_id:
             project.write({'state': 'cancel', 'date_cancel': date, 'reason_id': self.reason_id.id})
 
