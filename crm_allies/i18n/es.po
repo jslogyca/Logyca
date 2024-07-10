@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-08 09:12+0000\n"
-"PO-Revision-Date: 2024-07-08 04:17-0500\n"
+"POT-Creation-Date: 2024-07-10 21:52+0000\n"
+"PO-Revision-Date: 2024-07-10 16:58-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: co\n"
@@ -34,6 +34,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__active
 #: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__active
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__active
+#: model:ir.model.fields,field_description:crm_allies.field_reason_cancel_project__active
 msgid "Active"
 msgstr "Activo"
 
@@ -62,6 +63,12 @@ msgid "Activity State"
 msgstr ""
 
 #. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_form
+msgid "Add Avances del Proyecto"
+msgstr "AGREGAR AVANCES DEL PROYECTO"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_cancel_wizard__advance
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__advance
 msgid "Advance"
 msgstr "Avances a la fecha"
@@ -72,16 +79,33 @@ msgid "Advances"
 msgstr "Avances a la fecha"
 
 #. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_form
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_tree
+msgid "Aliado"
+msgstr ""
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_dashboard
+msgid "Aliados"
+msgstr ""
+
+#. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_res_partner__allies_logyca
 #: model:ir.model.fields,field_description:crm_allies.field_res_users__allies_logyca
 msgid "Allies Logyca"
 msgstr "Aliado"
 
 #. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__allies_user_id
 #: model:ir.model.fields,field_description:crm_allies.field_res_partner__allies_user_id
 #: model:ir.model.fields,field_description:crm_allies.field_res_users__allies_user_id
 msgid "Allies User"
 msgstr "Encargado"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__apply_amount
+msgid "Apply Amount"
+msgstr "Aplica Valor"
 
 #. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_attachment_count
@@ -89,6 +113,11 @@ msgstr "Encargado"
 #: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__message_attachment_count
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__message_attachment_count
 msgid "Attachment Count"
+msgstr ""
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_wizard_view_form
+msgid "Avances del Proyecto"
 msgstr ""
 
 #. module: crm_allies
@@ -147,6 +176,18 @@ msgid "CONSUMO MASIVO"
 msgstr ""
 
 #. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__project_allies__state__cancel
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_cancel_wizard_view_form
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_wizard_view_form
+msgid "Cancel"
+msgstr "CANCELADO"
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_form
+msgid "Cancel Project"
+msgstr "CANCELAR PROYECTO"
+
+#. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__cant_assistants
 msgid "Cant Assistants"
 msgstr "Cantidad de asistentes (#)"
@@ -173,6 +214,7 @@ msgstr "Categorías Beneficios Membresía"
 #. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__code
 #: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__code
+#: model:ir.model.fields,field_description:crm_allies.field_reason_cancel_project__code
 msgid "Code"
 msgstr "Código"
 
@@ -181,6 +223,7 @@ msgstr "Código"
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__company_id
 #: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__company_id
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__company_id
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_cancel_wizard__company_id
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__company_id
 msgid "Company"
 msgstr "Compañía"
@@ -202,7 +245,9 @@ msgstr ""
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__create_uid
 #: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__create_uid
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__create_uid
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_cancel_wizard__create_uid
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__create_uid
+#: model:ir.model.fields,field_description:crm_allies.field_reason_cancel_project__create_uid
 msgid "Created by"
 msgstr ""
 
@@ -211,18 +256,37 @@ msgstr ""
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__create_date
 #: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__create_date
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__create_date
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_cancel_wizard__create_date
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__create_date
+#: model:ir.model.fields,field_description:crm_allies.field_reason_cancel_project__create_date
 msgid "Created on"
 msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__date
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__date_cancel
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__date_done
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__date_open
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_cancel_wizard__date
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__date
+msgid "Date"
+msgstr "FECHA"
 
 #. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__display_name
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__display_name
 #: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__display_name
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__display_name
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_cancel_wizard__display_name
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__display_name
+#: model:ir.model.fields,field_description:crm_allies.field_reason_cancel_project__display_name
 msgid "Display Name"
 msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__project_allies__state__done
+msgid "Done"
+msgstr "FINALIZADO"
 
 #. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__date_done
@@ -230,9 +294,29 @@ msgid "Done Date"
 msgstr "Fecha de la ejecución del beneficio"
 
 #. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_form
+msgid "Done Project"
+msgstr "Finalización"
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__project_allies__state__draft
+msgid "Draft"
+msgstr "NUEVO"
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_form
+msgid "Draft Project"
+msgstr "REACTIVAR PROYECTO"
+
+#. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__company_email
 msgid "Email Company"
 msgstr "Correo de contacto (usuario)"
+
+#. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__project_allies_line__state_activity__end
+msgid "End"
+msgstr "Fin"
 
 #. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__message_follower_ids
@@ -264,6 +348,16 @@ msgid "GOBIERNO"
 msgstr ""
 
 #. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_wizard_view_form
+msgid "Guardar"
+msgstr ""
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_wizard_view_form
+msgid "Guardar y Nuevo"
+msgstr ""
+
+#. module: crm_allies
 #: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__sub_type_allies__harddiscount
 msgid "HARD DISCOUNT"
 msgstr ""
@@ -273,7 +367,9 @@ msgstr ""
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__id
 #: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__id
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__id
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_cancel_wizard__id
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__id
+#: model:ir.model.fields,field_description:crm_allies.field_reason_cancel_project__id
 msgid "ID"
 msgstr ""
 
@@ -314,9 +410,19 @@ msgid "If checked, some messages have a delivery error."
 msgstr ""
 
 #. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__project_allies_line__state_activity__in_progress
+msgid "In Progress"
+msgstr "En Progreso"
+
+#. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__indicator
 msgid "Indicator"
 msgstr "Indicador"
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_dashboard
+msgid "Indicators"
+msgstr "Indicadores"
 
 #. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__information
@@ -341,7 +447,9 @@ msgstr "Último avances"
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner____last_update
 #: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership____last_update
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies____last_update
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_cancel_wizard____last_update
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies_line____last_update
+#: model:ir.model.fields,field_description:crm_allies.field_reason_cancel_project____last_update
 msgid "Last Modified on"
 msgstr ""
 
@@ -355,7 +463,9 @@ msgstr "Proyecto Finalizado (últimos 12 meses)"
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__write_uid
 #: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__write_uid
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__write_uid
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_cancel_wizard__write_uid
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__write_uid
+#: model:ir.model.fields,field_description:crm_allies.field_reason_cancel_project__write_uid
 msgid "Last Updated by"
 msgstr ""
 
@@ -364,9 +474,17 @@ msgstr ""
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__write_date
 #: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__write_date
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__write_date
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_cancel_wizard__write_date
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__write_date
+#: model:ir.model.fields,field_description:crm_allies.field_reason_cancel_project__write_date
 msgid "Last Updated on"
 msgstr ""
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_res_partner__team_allies
+#: model:ir.model.fields,field_description:crm_allies.field_res_users__team_allies
+msgid "Logyca Team"
+msgstr "Equipo Aliados"
 
 #. module: crm_allies
 #: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__type_allies__masificación
@@ -393,7 +511,6 @@ msgstr "Admin Aliados"
 
 #. module: crm_allies
 #: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_view_dashboard
-#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_dashboard
 msgid "Medium"
 msgstr ""
 
@@ -415,7 +532,6 @@ msgstr ""
 
 #. module: crm_allies
 #: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_view_dashboard
-#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_dashboard
 msgid "Miembros"
 msgstr ""
 
@@ -425,6 +541,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__name
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__name
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__name
+#: model:ir.model.fields,field_description:crm_allies.field_reason_cancel_project__name
 msgid "Name"
 msgstr "Nombre"
 
@@ -508,6 +625,16 @@ msgid "Objetivos"
 msgstr ""
 
 #. module: crm_allies
+#: model:ir.model.fields.selection,name:crm_allies.selection__project_allies__state__open
+msgid "Open"
+msgstr "EN PROGRESO"
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_form
+msgid "Open Project"
+msgstr "ACTIVAR PROYECTO"
+
+#. module: crm_allies
 #: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_view_graph
 msgid "Opportunities"
 msgstr ""
@@ -520,7 +647,6 @@ msgstr "Origen"
 #. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__partner_id
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__partner_id
-#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__partner_id
 msgid "Partner"
 msgstr "Miembro"
 
@@ -533,6 +659,11 @@ msgstr "Proyecto Actual"
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__project_id
 msgid "Project"
 msgstr "Proyecto"
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_cancel_wizard_view_form
+msgid "Project Cancel"
+msgstr "Proyecto Cancelado"
 
 #. module: crm_allies
 #: model:ir.model,name:crm_allies.model_project_allies
@@ -556,6 +687,26 @@ msgid "Projects Allies"
 msgstr "Proyectos Aliados"
 
 #. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_line_view_form
+msgid "Projects Allies Line"
+msgstr "Avances"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__reason_id
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_cancel_wizard__reason_id
+msgid "Reason"
+msgstr "Razón Cancelación"
+
+#. module: crm_allies
+#: model:ir.actions.act_window,name:crm_allies.action_reason_cancel_project
+#: model:ir.model,name:crm_allies.model_reason_cancel_project
+#: model:ir.ui.menu,name:crm_allies.account_menu_reason_cancel_project
+#: model_terms:ir.ui.view,arch_db:crm_allies.reason_cancel_project_view_form
+#: model_terms:ir.ui.view,arch_db:crm_allies.reason_cancel_project_view_tree
+msgid "Reason Cancel Project"
+msgstr "Razón Cancelación"
+
+#. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__activity_user_id
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership_partner__activity_user_id
 #: model:ir.model.fields,field_description:crm_allies.field_categ_benefits_membership__activity_user_id
@@ -566,6 +717,21 @@ msgstr "Colaborador"
 #. module: crm_allies
 #: model:ir.model.fields.selection,name:crm_allies.selection__res_partner__sub_type_allies__servicios
 msgid "SERVICIOS"
+msgstr ""
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_dashboard
+msgid "State project"
+msgstr "Estado del Proyecto"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__state
+msgid "Status"
+msgstr "Estado"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies_line__state_activity
+msgid "Status Activity"
 msgstr ""
 
 #. module: crm_allies
@@ -581,10 +747,21 @@ msgid ""
 msgstr ""
 
 #. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__sub_type_allies
 #: model:ir.model.fields,field_description:crm_allies.field_res_partner__sub_type_allies
 #: model:ir.model.fields,field_description:crm_allies.field_res_users__sub_type_allies
 msgid "Sub Type Allies"
 msgstr "Subtipo"
+
+#. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__total_amount
+msgid "Total Amount"
+msgstr "Total"
+
+#. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_dashboard
+msgid "Total Proyectado"
+msgstr ""
 
 #. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_benefits_membership__categ_id
@@ -592,8 +769,10 @@ msgid "Type"
 msgstr "Categoría"
 
 #. module: crm_allies
+#: model:ir.model.fields,field_description:crm_allies.field_project_allies__type_allies
 #: model:ir.model.fields,field_description:crm_allies.field_res_partner__type_allies
 #: model:ir.model.fields,field_description:crm_allies.field_res_users__type_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_dashboard
 msgid "Type Allies"
 msgstr "Tipo"
 
@@ -643,9 +822,8 @@ msgstr ""
 
 #. module: crm_allies
 #: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_view_dashboard
-#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_dashboard
 msgid "Win/Loss Ratio"
-msgstr ""
+msgstr "Indicadores"
 
 #. module: crm_allies
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__year_id
@@ -653,10 +831,20 @@ msgid "Year"
 msgstr "Año"
 
 #. module: crm_allies
+#: model_terms:ir.ui.view,arch_db:crm_allies.project_allies_view_dashboard
+msgid "Years"
+msgstr "Años"
+
+#. module: crm_allies
 #: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_view_pivot
 #: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_view_pivot
 msgid "benefits membership Analysis"
 msgstr ""
+
+#. module: crm_allies
+#: model:ir.model,name:crm_allies.model_project_allies_cancel_wizard
+msgid "project.allies.cancel.wizard"
+msgstr "Cancelar Proyecto"
 
 #. module: crm_allies
 #: model:ir.model,name:crm_allies.model_project_allies_line
