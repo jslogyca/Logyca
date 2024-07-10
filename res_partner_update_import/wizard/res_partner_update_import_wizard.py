@@ -53,15 +53,17 @@ class ResPartnerUpdateImport(models.TransientModel):
         record_list = record_list[2:]
         error = False
         mens_error = None
+        logging.info("==> nrecord_list", record_list)
         for fila in record_list:
             # con la identificacion del empleado solamente puedo buscarlo en partners
             partner =self.env['res.partner'].search([('vat','=',str(fila[partner_identification_loc])), ('parent_id','=',None)])
-            
+            logging.info("==> partner", partner)
             if not partner:
                 error = True
                 mens_error = 'Empresa con NIT ' + str(fila[partner_identification_loc]) + ' no encontrado'
             else:
                 contact = self.env['res.partner'].search([('name','=', str(fila[partner_name_loc])), ('parent_id','=',partner.id)])
+                logging.info("==> partner", contact)
                 if not contact:
                     contact = self.env['res.partner'].search([('email','=', str(fila[email_contact_loc])), ('parent_id','=',partner.id)])
                     if not contact:
