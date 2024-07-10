@@ -96,4 +96,4 @@ class ProjectAlliesLine(models.Model):
 
     def name_get(self):
         return [(project.id, '%s - %s' %
-                 (project.partner_id.name, project.project_present)) for project in self]
+                 (project.project_id.partner_id.name, project.project_id.project_present)) for project in self]
