@@ -71,12 +71,12 @@ class ProjectAllies(models.Model):
             project.write({'state': 'open', 'date_open': date})
 
     def done_project(self):
-        date = fields.Date.context_today
+        date = fields.Datetime.now()
         for project in self:
             project.write({'state': 'done', 'date_done': date})
 
     def draft_project(self):
-        date = fields.Date.context_today
+        date = fields.Datetime.now()
         for project in self:
             project.write({'state': 'draft'})
 
