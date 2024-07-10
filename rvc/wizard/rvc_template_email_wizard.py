@@ -102,8 +102,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
                         #se usa para eliminar los adjuntos de la plantilla de correo
                         template.attachment_ids = [(5,)]
                 except Exception as e:
-                    benefit_application.message_post(body=_(\
-                    'No se pudo <strong>Enviar</strong></u> el kit de bienvenida del beneficio %s. Error: %s' % (str(benefit_application.product_id.benefit_type), str(e))))
+                    benefit_application.message_post(body=_(f'No se pudo <strong>Enviar</strong></u> el kit de bienvenida del beneficio {benefit_application.product_id.benefit_type}. Error: {e}'))
 
                 if not benefit_application.gln:
                     # si no tiene GLN, asignamos uno.
@@ -113,13 +112,19 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 if benefit_application.product_id.benefit_type == 'codigos':
                     # codigos glns
                     if benefit_application.glns_codes_quantity > 0:
-                        benefit_application.assignate_gln_code(benefit_application.glns_codes_quantity)
-
+                        if benefit_application.send_kit_with_no_benefit is False:
+                            if benefit_application.assignate_gln_code(benefit_application.glns_codes_quantity):
+                                benefit_application.assign_credentials_gs1codes()
+                        else:
+                            benefit_application.assign_credentials_gs1codes()
                     # codigos recaudo
                     if benefit_application.invoice_codes_quantity > 0:
-                        benefit_application.assign_invoice_codes()
-
-                    # Asignar beneficio de códigos de identificación
+                        if benefit_application.send_kit_with_no_benefit is False:
+                            if benefit_application.assign_invoice_codes():
+                                benefit_application.assign_credentials_gs1codes()
+                        else:
+                            benefit_application.assign_credentials_gs1codes()
+                    # codigos producto
                     if benefit_application.codes_quantity > 0:
                         if benefit_application.send_kit_with_no_benefit is False:
                             if benefit_application.assign_identification_codes():
