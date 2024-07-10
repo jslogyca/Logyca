@@ -27,7 +27,7 @@
     </record>
 
     <record id="action_res_partner_update_import_view" model="ir.actions.act_window">
-        <field name="name">Import payroll File</field>
+        <field name="name">Partner Update Import</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">res.partner.update.import</field>
         <field name="view_mode">form</field>
@@ -37,7 +37,7 @@
 
     <menuitem
         id="menu_res_partner_update_import_view"
-        name="Import payroll File"
+        name="Partner Update Import"
         action="action_res_partner_update_import_view"
         parent="contacts.menu_contacts"
         sequence="7"/>
