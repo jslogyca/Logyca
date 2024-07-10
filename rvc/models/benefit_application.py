@@ -153,6 +153,12 @@ class BenefitApplication(models.Model):
 
     def action_done(self):
         if self.state in ('confirm'):
+            # si son codigos de productos validamos que no hayan productos comprados disponibles
+            if self.product_id.benefit_type == 'codigos' and self.codes_quantity > 0:
+                #requiere activar beneficio con el envío del kit?
+                if self.send_kit_with_no_benefit == False:
+                    self._validate_bought_products()
+
             view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id
             result ={'name':_("Enviar Kit de Bienvenida"),'view_mode': 'form',
                                 'view_id': view_id, 'view_type': 'form', 'res_model': 'rvc.template.email.wizard',
@@ -996,19 +1002,12 @@ class BenefitApplication(models.Model):
         """  Acción planificada que envía kits de bienvenida a las postulaciones Aceptadas. """
 
         logging.warning("==> Iniciando cron de enviar kits de bienvenida ...")
+        product_identi = self.env['product.rvc'].search([('benefit_type','=','codigos')],limit=1)
         if not self:
             counter = 0
-            self = self.search([
-                '|',
-                '&',
-                    ('state', '=', 'confirm'),
-                    ('origin', '=', 'odoo'),
-                '&',
-                    ('state', '=', 'confirm'),
-                    '&',
-                        ('codes_quantity', '<', 100),
-                        ('origin', 'in', ['tienda', 'chatbot']),
-            ])
+            self = self.search([('state', '=', 'confirm'), ('codes_quantity', '<', 100),
+                                ('product_id', '=', product_identi.id), 
+                                ('origin', 'in', ['tienda', 'chatbot', 'odoo'])], order="id asc")
 
             for postulation_id in self:
                 counter =+ 1
@@ -1020,13 +1019,22 @@ class BenefitApplication(models.Model):
                         if postulation_id.product_id.benefit_type == 'codigos':
                             #para sellers éxito se envía otro kit de bienvenida
                             if postulation_id.is_seller:
-                                if postulation_id._validate_bought_products():
-                                    template = self.env.ref('rvc.mail_template_welcome_kit_rvc_seller')
+                                try:
+                                    if postulation_id._validate_bought_products():
+                                        template = self.env.ref('rvc.mail_template_welcome_kit_rvc_seller')
+                                except:
+                                    continue
                             else:
-                                if postulation_id._validate_bought_products():
-                                    template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                                try:
+                                    if postulation_id._validate_bought_products():
+                                        template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                                except:
+                                    continue
                         elif postulation_id.product_id.benefit_type == 'colabora':
-                            template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+                            try:
+                                template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+                            except:
+                                continue
                         elif postulation_id.product_id.benefit_type == 'tarjeta_digital':
                             template = self.env.ref('rvc.mail_template_welcome_kit_digital_card_rvc')
 
@@ -1095,6 +1103,7 @@ class BenefitApplication(models.Model):
                         counter += 1
                     else:
                         raise ValidationError(_('La empresa seleccionada no tiene email.'))
+                    self.env.cr.commit()
                 else:
                     logging.exception("====> Cron alcanzó el límite de kits a enviar, esperando la próxima ejecución para enviar más...")
 

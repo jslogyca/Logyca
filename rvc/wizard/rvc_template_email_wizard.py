@@ -80,24 +80,27 @@ class RVCTemplateEmailWizard(models.TransientModel):
                         template = self.env.ref('rvc.mail_template_welcome_kit_rvc_seller')
                     else:
                         template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
-                elif benefit_application.product_id.benefit_type == 'colabora':
-                    template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+                # elif benefit_application.product_id.benefit_type == 'colabora':
+                #     template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
                 elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
                     template = self.env.ref('rvc.mail_template_welcome_kit_digital_card_rvc')
+                else:
+                    template=None
 
                 # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
-                if benefit_application.origin != 'odoo':
-                    #se usa para eliminar los adjuntos de la plantilla de correo
-                    template.attachment_ids = [(5,)]
-                    template= benefit_application.create_OM_attachment(template)
-                else:
-                    template.attachment_ids = False
+                if template:
+                    if benefit_application.origin != 'odoo':
+                        #se usa para eliminar los adjuntos de la plantilla de correo
+                        template.attachment_ids = [(5,)]
+                        template= benefit_application.create_OM_attachment(template)
+                    else:
+                        template.attachment_ids = False
 
                 # Se envía kit de bienvenida
                 # excepto si es tarjeta digital, en ese caso el beneficio se activa primero y DESPUÉS enviamos kit con 
                 # la funcion send_digital_cards_bearer()
                 try:
-                    if benefit_application.product_id.benefit_type != 'tarjeta_digital':
+                    if benefit_application.product_id.benefit_type not in ('tarjeta_digital', 'colabora'):
                         template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
                         #se usa para eliminar los adjuntos de la plantilla de correo
                         template.attachment_ids = [(5,)]

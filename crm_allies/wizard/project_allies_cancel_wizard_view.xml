@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_allies_wizard_view_form" model="ir.ui.view">
+        <field name="name">project.allies.wizard.view.form</field>
+        <field name="model">project.allies.cancel.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group string="Avances del Proyecto" style="border: 1px solid #cccccc; width: 100%; background: #ffffff; text-align:center">
+                        <group style="margin: 10px;width: 90%">
+                            <field name="company_id" force_save="1" readonly="1"/>
+                            <field name="date" />
+                        </group>
+                        <group style="margin: 10px;width: 90%">
+                            <field name="advance" required="1" />
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="save_detail_advance" string="Guardar" type="object" class="oe_highlight"/>
+                    <button name="save_detail_advance_new" string="Guardar y Nuevo" type="object" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel" class="oe_link"/>                    
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="project_allies_cancel_wizard_view_form" model="ir.ui.view">
+        <field name="name">project.allies.cancel.wizard.view.form</field>
+        <field name="model">project.allies.cancel.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group string="Project Cancel" style="border: 1px solid #cccccc; width: 100%; background: #ffffff; text-align:center">
+                        <group style="margin: 10px;width: 90%">
+                            <field name="reason_id" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="cancel_project" string="Project Cancel" type="object" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel" class="oe_link"/>                    
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

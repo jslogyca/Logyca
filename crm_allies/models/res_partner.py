@@ -7,5 +7,21 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     allies_logyca = fields.Boolean('Allies Logyca', default=False)
-    allies_user_id = fields.Many2one('res.partner')
+    team_allies = fields.Boolean('Logyca Team', default=False)
+    allies_user_id = fields.Many2one('res.partner', domain="[('team_allies', '=', True)]")
     benefits_ids = fields.One2many('benefits.membership.partner', 'partner_id', string="Benefits", index=True)
+    type_allies = fields.Selection([("ACADEMICOS", "ACADEMICOS"), 
+                                ("COMERCIAL", "COMERCIAL"),
+                                ("MASIFICACIÓN", "MASIFICACIÓN"),
+                                ("MISIONALES", "MISIONALES")], default="COMERCIAL")
+    sub_type_allies = fields.Selection([("CADENACOMERCIAL", "CADENA COMERCIAL"), 
+                                ("CADENACOMERCIALDROGUERIAS", "CADENA COMERCIAL DROGUERIAS"),
+                                ("CADENAINDEPENDIENTE", "CADENA INDEPENDIENTE"),
+                                ("CONSUMOMASIVO", "CONSUMO MASIVO"),
+                                ("GOBIERNO", "GOBIERNO"),
+                                ("HARDDISCOUNT", "HARD DISCOUNT"),
+                                ("ONG", "ONG"),
+                                ("SERVICIOS", "SERVICIOS"),
+                                ("UNIVERSIDAD", "UNIVERSIDAD"),
+                                ("VARIOS", "VARIOS")])
+    projects_ids = fields.One2many('project.allies', 'partner_id', string="Projects", index=True)

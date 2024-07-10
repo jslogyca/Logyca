@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_allies_view_form" model="ir.ui.view">
+        <field name="name">project.allies.form</field>
+        <field name="model">project.allies</field>
+        <field name="arch" type="xml">
+            <form string="Projects Allies">
+                <header>
+                    <button name="cancel_project" string="Cancel Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'done')]}" />
+                    <button name="open_project" string="Open Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}" />
+                    <button name="done_project" string="Done Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'open')]}" />
+                    <button name="draft_project" string="Draft Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'cancel')]}" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open,done,cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" invisible="1"/>
+                            <field name="partner_id" required="1" string='Aliado'/>
+                            <field name="allies_user_id" />
+                            <field name="company_id" required="1" invisible="1"/>
+                            <field name="year_id" required="1"/>
+                            <field name="object" required="1"/>
+                            <field name="type_allies" required="1"/>
+                            <field name="apply_amount" />
+                            <field name="total_amount" attrs="{'required': [('apply_amount', '=', True)], 'invisible': [('apply_amount', '=', False)]}"/>
+                        </group>
+                        <group>
+                            <field name="sub_type_allies" required="1"/>
+                            <field name="date" required="1"/>
+                            <field name="indicator" required="1"/>
+                            <field name="project_present" required="1"/>
+                            <field name="project_last" />
+                            <field name="advance_last" force_save="1" readonly="1" />
+                            <field name="date_cancel" force_save="1" readonly="1" attrs="{'invisible': [('state', '!=', 'cancel')]}"/>
+                            <field name="date_open" force_save="1" readonly="1" attrs="{'invisible': [('state', '!=', 'open')]}"/>
+                            <field name="date_done" force_save="1" readonly="1" attrs="{'invisible': [('state', '!=', 'done')]}"/>
+                        </group>
+                        <button name="save_detail_advance" string="Add Avances del Proyecto" type="object" icon="fa-building-o" /> 
+                        <field name="advance_ids" nolabel="1" >
+                            <tree editable="bottom">
+                                <field name="name" invisible="1"/>
+                                <field name="date" />
+                                <field name="advance" />
+                                <field name="company_id" invisible="1"/>
+                                <field name="state_activity" widget="state_selection" />
+                            </tree>
+                        </field>                        
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="project_allies_view_tree" model="ir.ui.view">
+        <field name="name">project.allies.tree</field>
+        <field name="model">project.allies</field>
+        <field name="arch" type="xml">
+            <tree string="Projects Allies" >
+                <field name="name" invisible="1"/>
+                <field name="partner_id" string='Aliado'/>
+                <field name="object" />
+                <field name="year_id" />
+                <field name="indicator" />
+                <field name="allies_user_id" />
+                <field name="state" widget="badge" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="project_allies_view_pivot" model="ir.ui.view">
+        <field name="name">project.allies.pivot</field>
+        <field name="model">project.allies</field>
+        <field name="arch" type="xml">
+            <pivot string="Projects Allies">
+                <field name="partner_id" type="col"/>
+                <field name="object" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="project_allies_view_graph" model="ir.ui.view">
+        <field name="name">project.allies.view.graph</field>
+        <field name="model">project.allies</field>
+        <field name="arch" type="xml">
+            <graph string="Projects Allies">
+                <field name="object" type="col"/>
+                <field name="partner_id" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="project_allies_view_dashboard" model="ir.ui.view">
+        <field name="name">project.allies.view.dashboard</field>
+        <field name="model">project.allies</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <dashboard>
+                <view type="graph" ref="crm_allies.project_allies_view_graph"/>
+                <group>
+                    <group>
+                        <aggregate name="object" string="Objetivos" group_operator="count" field="id" measure="__count__"/>
+                        <aggregate name="partner" string="Aliados" group_operator="count" field="partner_id" measure="__count__"/>
+                        <formula name="prorated_total_amount" string="Total Proyectado" value="record.total_amount" widget="monetary"/>
+                        <!-- <aggregate name="expected_revenue_aggregate" field="planned_revenue" string="Expected Revenue"/>
+                        <aggregate name="prorated_revenue_aggregate" field="expected_revenue" invisible="1"/>
+                        <formula name="deal_size" string="Average Deal Size" value="record.expected_revenue_aggregate / record.opportunities" widget="monetary"/>
+                        <aggregate name="days_to_assign" string="Days to Assign" field="day_open" group_operator="avg" value_label="days"/>
+                        <aggregate name="days_to_close" string="Days to Close" field="day_close" group_operator="avg" value_label="days"/>
+                        <aggregate name="days_exceeding_closing" string="Exceeding Close Days" field="days_exceeding_closing" group_operator="avg"/> -->
+                    </group>
+                    <group col="1">
+                        <widget name="pie_chart" title="Years" attrs="{'groupby': 'year_id'}"/>
+                        <widget name="pie_chart" title="Indicators" attrs="{'groupby': 'indicator'}"/>
+                        <widget name="pie_chart" title="State project" attrs="{'groupby': 'state'}"/>
+                        <widget name="pie_chart" title="Type Allies" attrs="{'groupby': 'type_allies'}"/>
+                    </group>
+                </group>
+                <view type="pivot" ref="crm_allies.project_allies_view_pivot"/>
+                <!-- <view type="cohort" ref="crm_enterprise.crm_lead_view_cohort"/> -->
+            </dashboard>
+        </field>
+    </record>
+
+    <record id="action_project_allies" model="ir.actions.act_window">
+        <field name="name">Projects Allies</field>
+        <field name="res_model">project.allies</field>
+        <field name="view_mode">dashboard,tree,form,pivot,graph</field>
+        <field name="view_id" ref="project_allies_view_dashboard"/>
+    </record>
+
+    <menuitem
+        id="account_menu_project_allies"
+        name="Projects Allies"
+        action="action_project_allies"
+        parent="contacts.menu_contacts"
+        sequence="7"/>
+
+    <record id="project_allies_line_view_form" model="ir.ui.view">
+        <field name="name">project.allies.line.form</field>
+        <field name="model">project.allies.line</field>
+        <field name="arch" type="xml">
+            <form string="Projects Allies Line">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date" required="1"/>
+                            <field name="advance" required="1"/>
+                        </group>
+                        <group>
+                            <field name="state_activity" widget="radio" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
