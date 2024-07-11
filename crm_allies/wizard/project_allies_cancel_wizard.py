@@ -30,9 +30,9 @@ class ProjectAlliesCancelWizard(models.TransientModel):
     def cancel_project(self):
         self.ensure_one()
         project_id = self.env['project.allies'].browse(self._context.get('active_id'))
-        date = fields.Date.context_today
-        for project_id in self:
-            project_id.write({'state': 'cancel', 'date_cancel': date, 'reason_id': self.reason_id.id})
+        date = fields.Datetime.now()
+        for project in project_id:
+            project.write({'state': 'cancel', 'date_cancel': date, 'reason_id': self.reason_id.id})
 
     def save_detail_advance_new(self):
         self.ensure_one()
@@ -45,6 +45,7 @@ class ProjectAlliesCancelWizard(models.TransientModel):
             'name': 'Cancel Project',
             'view_type': 'form',
             'view_mode': 'form',
+            'view_id': self.env.ref('crm_allies.project_allies_wizard_view_form').id,
             'res_model': 'project.allies.cancel.wizard',
             'type': 'ir.actions.act_window',
             'target': 'new',
