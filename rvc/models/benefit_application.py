@@ -1066,15 +1066,24 @@ class BenefitApplication(models.Model):
                         if postulation_id.product_id.benefit_type == 'codigos':
                             # codigos glns
                             if postulation_id.glns_codes_quantity > 0:
-                                postulation_id.assignate_gln_code(postulation_id.glns_codes_quantity)
-
+                                if postulation_id.send_kit_with_no_benefit is False:
+                                    if postulation_id.assignate_gln_code(postulation_id.glns_codes_quantity):
+                                        postulation_id.assign_credentials_gs1codes()
+                                else:
+                                    postulation_id.assign_credentials_gs1codes()
                             # codigos recaudo
                             if postulation_id.invoice_codes_quantity > 0:
-                                postulation_id.assign_invoice_codes()
-
-                            # Asignar beneficio de códigos de identificación
+                                if postulation_id.send_kit_with_no_benefit is False:
+                                    if postulation_id.assign_invoice_codes():
+                                        postulation_id.assign_credentials_gs1codes()
+                                else:
+                                    postulation_id.assign_credentials_gs1codes()
+                            # codigos producto
                             if postulation_id.codes_quantity > 0:
-                                if postulation_id.assign_identification_codes():
+                                if postulation_id.send_kit_with_no_benefit is False:
+                                    if postulation_id.assign_identification_codes():
+                                        postulation_id.assign_credentials_gs1codes()
+                                else:
                                     postulation_id.assign_credentials_gs1codes()
 
                             # Agregar tipo de vinculacion al tercero
