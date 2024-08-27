@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="1">  
+    <data noupdate="0">
         <record id="offered_service_1" model="rvc.digital.card.offered.service">
             <field name="name">Alimentos y bebidas</field>
             <field name="active">1</field>

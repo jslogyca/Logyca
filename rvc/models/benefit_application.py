@@ -113,10 +113,8 @@ class BenefitApplication(models.Model):
                 raise ValidationError(_('¡Oops! No puede eliminar una postulación que no esté en estado borrador o cancelada.'))
         return super(BenefitApplication, self).unlink()
 
-
     def action_cancel(self):
         self.write({'state': 'cancel'})
-
 
     def action_confirm(self):
         for benefit_application in self:
@@ -201,7 +199,6 @@ class BenefitApplication(models.Model):
 
     def action_re_done(self):
         self.write({'state': 'confirm', 'acceptance_date': datetime.now()})
-
 
     def action_notified(self):
         for benefit_application in self:
@@ -571,7 +568,6 @@ class BenefitApplication(models.Model):
             self.message_post(body=_('Los Códigos de Identificación no pudieron ser entregados al beneficiario. <strong>Error:</strong> %s' % str(response_assignate)))
             return False
 
-
     def assign_invoice_codes(self):
         """
             Función que asigna códigos de recaudo
@@ -736,13 +732,11 @@ class BenefitApplication(models.Model):
                     error_message = result.get('apiException').get('message')
                     if not error_message:
                         error_message = result.get('resultMessage')
-                    self.message_post(body=_(\
-                        'No pudieron asignarse las credenciales para GS1-ASC.'\
-                            '\n<strong>Error:</strong> %s' % str(error_message)))
+                    self.message_post(body=_(f'No pudieron asignarse las credenciales para GS1-ASC.\n<strong>Error:</strong> {str(error_message)}'))
                     return False
-                else:
-                    self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
-                    return True
+
+                self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
+                return True
             else:
                 vals = {
                     'method': 'gs1_assign_credentials',
@@ -1115,7 +1109,6 @@ class BenefitApplication(models.Model):
                     self.env.cr.commit()
                 else:
                     logging.exception("====> Cron alcanzó el límite de kits a enviar, esperando la próxima ejecución para enviar más...")
-
 
     def _cron_mark_as_rejected(self):
         logging.warning("==> Iniciando cron de marcar postulaciones como rechazadas ...")
