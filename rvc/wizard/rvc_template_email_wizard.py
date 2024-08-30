@@ -54,14 +54,18 @@ class RVCTemplateEmailWizard(models.TransientModel):
         active_id = context.get('active_ids', False)
         benefit_application = self.env['benefit.application'].browse(active_id)
         if benefit_application:
-            benefit_application.message_post(body=_(\
-                    '%s <u><strong>ACEPTÓ</strong></u> el beneficio.' % str(benefit_application.partner_id.partner_id.name)))
+            if benefit_application.product_id.benefit_type == 'crece_mype':
+                benefit_application._send_assing_crece_mype()
+                benefit_application._get_employe(benefit_application.email_employee)
+            else:
+                benefit_application.message_post(body=_(\
+                        '%s <u><strong>ACEPTÓ</strong></u> el beneficio.' % str(benefit_application.partner_id.partner_id.name)))
 
-            if benefit_application.product_id.benefit_type == 'codigos':
-                benefit_application.attach_OM_2_partner(benefit_application)
+                if benefit_application.product_id.benefit_type == 'codigos':
+                    benefit_application.attach_OM_2_partner(benefit_application)
 
-            if benefit_application.product_id.benefit_type == 'colabora':
-                benefit_application.calculate_end_date_colabora()
+                if benefit_application.product_id.benefit_type == 'colabora':
+                    benefit_application.calculate_end_date_colabora()
 
             benefit_application.write({'state': 'confirm', 'acceptance_date': datetime.now()})
         return {'type': 'ir.actions.act_window_close'}
@@ -80,8 +84,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
                         template = self.env.ref('rvc.mail_template_welcome_kit_rvc_seller')
                     else:
                         template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
-                # elif benefit_application.product_id.benefit_type == 'colabora':
-                #     template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+                elif benefit_application.product_id.benefit_type == 'colabora':
+                    template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
                 elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
                     template = self.env.ref('rvc.mail_template_welcome_kit_digital_card_rvc')
                 else:

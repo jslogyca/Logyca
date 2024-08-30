@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rvc_crecemype_done_wizard_form" model="ir.ui.view">
+        <field name="name">rvc.crecemype.done.wizard.view.form</field>
+        <field name="model">rvc.crecemype.done.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <group>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_application_done" string="Update" type="object" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel" class="oe_link"/>                    
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rvc_crecemype_done_wizard" model="ir.actions.act_window">
+        <field name="name">Update Crecemype</field>
+        <field name="res_model">rvc.crecemype.done.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="rvc_crecemype_done_wizard_form" />
+        <field name="binding_model_id" ref="rvc.model_benefit_application" />
+    </record>
+
+</odoo>
