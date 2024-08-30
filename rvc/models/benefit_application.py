@@ -89,6 +89,13 @@ class BenefitApplication(models.Model):
                                     help="Este campo permite diferenciar las postulaciones RVC que provienen de Odoo, Tienda Virtual y ChatBot.")
     is_seller = fields.Boolean('Seller', default=False, tracking=True, help="La empresa vende en el marketplace del éxito?")
     referred_by = fields.Char('Referida por', tracking=True, help="¿Cómo se enteró del beneficio RVC?")
+    email_employee = fields.Char('Email Colaborador')
+    name_employee = fields.Char('Nombre de quién consulta')
+    email_company = fields.Char('Email de quién consulta')
+    product_benefit = fields.Char('Producto que maneja')
+    canal = fields.Selection([('advice', 'Advice'),
+                                ('email', 'Email'),], string='Canal', default='email')
+    employee_id = fields.Many2one('res.partner', string='Colaborador', track_visibility='onchange', ondelete='restrict')                                
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]
@@ -113,8 +120,10 @@ class BenefitApplication(models.Model):
                 raise ValidationError(_('¡Oops! No puede eliminar una postulación que no esté en estado borrador o cancelada.'))
         return super(BenefitApplication, self).unlink()
 
+
     def action_cancel(self):
         self.write({'state': 'cancel'})
+
 
     def action_confirm(self):
         for benefit_application in self:
@@ -199,6 +208,7 @@ class BenefitApplication(models.Model):
 
     def action_re_done(self):
         self.write({'state': 'confirm', 'acceptance_date': datetime.now()})
+
 
     def action_notified(self):
         for benefit_application in self:
@@ -294,6 +304,12 @@ class BenefitApplication(models.Model):
                     validation = '%s no aplica para el beneficio. Es miembro o cliente CE' %\
                             (partner_id.vat + '-' + str(partner_id.name.strip()))
                     raise ValidationError(str(validation))
+        return True
+
+    def _get_employe(self, email):
+        employee_id = self.env['res.partner'].search([('email', '=', email)], order="id asc", limit=1)
+        if employee_id:
+            self.write({'employee_id': employee_id.id})
         return True
 
     def _validate_gln(self):
@@ -568,6 +584,7 @@ class BenefitApplication(models.Model):
             self.message_post(body=_('Los Códigos de Identificación no pudieron ser entregados al beneficiario. <strong>Error:</strong> %s' % str(response_assignate)))
             return False
 
+
     def assign_invoice_codes(self):
         """
             Función que asigna códigos de recaudo
@@ -620,6 +637,7 @@ class BenefitApplication(models.Model):
         if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_get_token = "https://app-loginrocp-prod.azurewebsites.net/api/Login"
         else:
+            # url_get_token = "https://app-loginrocp-prod.azurewebsites.net/api/Login"
             url_get_token = "https://app-loginrocp-dev.azurewebsites.net/api/Login"
 
         body_get_token = json.dumps({
@@ -683,9 +701,11 @@ class BenefitApplication(models.Model):
             today_one_year_later = today_date + relativedelta(years=1)
 
             if self.get_odoo_url() == 'https://logyca.odoo.com':
-                url_assignate= "https://app-msadenterprise-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
             else:
-                url_assignate= "https://app-colaborags1api-dev.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                url_assignate= "https://app-mstransaction-release.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                # url_assignate= "https://app-mstransaction-dev.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                # url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
 
             #validando el nombre de contacto para asignar credenciales
             # si no tiene contact_name le ponemos el nombre de la empresa
@@ -701,25 +721,31 @@ class BenefitApplication(models.Model):
             # que tiene el contacto del beneficiario
             contact_email = re_assign_email if re_assign_email != None else self.contact_email
 
-            InitialDate = today_date.strftime('%Y-%m-%d')
-
+            year = int(self.end_date_colabora.strftime("%Y"))
+            InitialDate = self.end_date_colabora.replace(year=year-1)
+            contact_email = self.contact_email
             body_assignate = json.dumps({
-                    "Nit": self.vat,
+                    "TypeService": 2,
                     "Name": credentials_contact_name,
+                    "Nit": self.vat,
+                    "GLN": self.gln,
+                    "InitialDate": str(InitialDate),
+                    "EndDate": str(self.end_date_colabora),
                     "UserMail": contact_email,
-                    "InitialDate": InitialDate,
-                    "EndDate": today_one_year_later.strftime('%Y-%m-%d'),
-                    "level": 1,
-                    "TypeService": 1,
+                    "level": self.colabora_level,
+                    "IsOverconsumption": False,
                     "NumberOverConsumption": 0,
-                    "IsOverconsumption": False
+                    "IsSponsored":  True,
+                    "IsTextil": False
                 })
             headers_assignate = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
-
             #Making http post request
             response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
 
-            logging.info("====> response_assignate_credentials =>" + str(response_assignate))
+            # logging.info("====> response_assignate_credentials =>" + str(response_assignate))
+            if response_assignate.get('resultMessage'):
+                raise ValidationError(\
+                    _('¡Validación!  %s ') % str(response_assignate.get('resultMessage')))
 
             if response_assignate.status_code == 200:
                 #TODO: logging
@@ -732,11 +758,13 @@ class BenefitApplication(models.Model):
                     error_message = result.get('apiException').get('message')
                     if not error_message:
                         error_message = result.get('resultMessage')
-                    self.message_post(body=_(f'No pudieron asignarse las credenciales para GS1-ASC.\n<strong>Error:</strong> {str(error_message)}'))
+                    self.message_post(body=_(\
+                        'No pudieron asignarse las credenciales para GS1-ASC.'\
+                            '\n<strong>Error:</strong> %s' % str(error_message)))
                     return False
-
-                self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
-                return True
+                else:
+                    self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
+                    return True
             else:
                 vals = {
                     'method': 'gs1_assign_credentials',
@@ -752,8 +780,8 @@ class BenefitApplication(models.Model):
                     log = "No se pudo crear un registro de log de errores."
 
                 #TODO: logging
-                logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate))
-                logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate.text))
+                # logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate))
+                # logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate.text))
                 self.message_post(body=_(\
                         'No pudieron asignarse las credenciales. <strong>Error:</strong> %s. %s' % (str(response_assignate),str(log))))
                 return False
@@ -770,9 +798,10 @@ class BenefitApplication(models.Model):
             today_one_year_later = today_date + relativedelta(years=1)
 
             if self.get_odoo_url() == 'https://logyca.odoo.com':
-                url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/"
+                url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
             else:
-                url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                # url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                url_assignate= "https://app-mstransaction-release.azurewebsites.net/api/Company/AddCompanyEcommerce"
 
             
             #validando el nombre de contacto para asignar credenciales
@@ -789,23 +818,29 @@ class BenefitApplication(models.Model):
             # que tiene el contacto del beneficiario
             contact_email = re_assign_email if re_assign_email != None else self.contact_email
 
+            year = int(self.end_date_colabora.strftime("%Y"))
+            InitialDate = self.end_date_colabora.replace(year=year-1)
+            contact_email = self.contact_email
             body_assignate = json.dumps({
-                    "Nit": self.vat,
-                    "Name": credentials_contact_name,
-                    "UserMail": contact_email,
-                    "InitialDate": today_date.strftime('%Y-%m-%d'),
-                    "EndDate": today_one_year_later.strftime('%Y-%m-%d'),
-                    "level": 0,
                     "TypeService": 2,
+                    "Name": credentials_contact_name,
+                    "Nit": self.vat,
+                    "GLN": self.gln,
+                    "InitialDate": str(InitialDate),
+                    "EndDate": str(self.end_date_colabora),
+                    "UserMail": contact_email,
+                    "level": self.colabora_level,
+                    "IsOverconsumption": False,
                     "NumberOverConsumption": 0,
-                    "IsOverconsumption": False
-                })
+                    "IsSponsored":  True,
+                    "IsTextil": False
+                })               
             headers_assignate = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
 
             #Making http post request
             response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
 
-            logging.info("====> response_assignate_credentials =>" + str(response_assignate))
+            # logging.info("====> response_assignate_credentials =>" + str(response_assignate))
 
             if response_assignate.status_code == 200:
                 #TODO: logging
@@ -827,8 +862,8 @@ class BenefitApplication(models.Model):
                     return True
             else:
                 #TODO: logging
-                logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate))
-                logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate.text))
+                # logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate))
+                # logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate.text))
                 self.message_post(body=_(\
                         'No pudieron asignarse las credenciales. <strong>Error:</strong> %s' % str(response_assignate)))
                 return False
@@ -845,9 +880,11 @@ class BenefitApplication(models.Model):
             today_one_year_later = today_date + relativedelta(years=1)
 
             if self.get_odoo_url() == 'https://logyca.odoo.com':
-                url_assignate= "https://logycacolaboraapiv1.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
             else:
-                url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                url_assignate= "https://app-mstransaction-release.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                # url_assignate= "https://app-mstransaction-dev.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                # url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
 
             #validando el nombre de contacto para asignar credenciales
             # si no tiene contact_name le ponemos el nombre de la empresa
@@ -858,30 +895,31 @@ class BenefitApplication(models.Model):
                 credentials_contact_name = self.partner_id.partner_id.name
             elif self.partner_id.partner_id.x_first_name and self.partner_id.partner_id.x_first_lastname:
                 credentials_contact_name = self.partner_id.partner_id.x_first_name + " " + self.partner_id.partner_id.x_first_lastname
-
+            year = int(self.end_date_colabora.strftime("%Y"))
+            InitialDate = self.end_date_colabora.replace(year=year-1)
+            contact_email = self.contact_email
             body_assignate = json.dumps({
-                    "Nit": self.vat,
-                    "Name": credentials_contact_name,
-                    "UserMail": self.contact_email,
-                    "InitialDate": today_date.strftime('%Y-%m-%d'),
-                    "EndDate": today_one_year_later.strftime('%Y-%m-%d'),
-                    "level": int(self.colabora_level),
                     "TypeService": 2,
+                    "Name": credentials_contact_name,
+                    "Nit": self.vat,
+                    "GLN": self.gln,
+                    "InitialDate": str(InitialDate),
+                    "EndDate": str(self.end_date_colabora),
+                    "UserMail": contact_email,
+                    "level": self.colabora_level,
+                    "IsOverconsumption": False,
                     "NumberOverConsumption": 0,
-                    "IsOverconsumption": False
+                    "IsSponsored":  True,
+                    "IsTextil": False
                 })
             headers_assignate = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
-
             #Making http post request
             response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
-
             logging.info("====> response_assignate_colabora =>" + str(response_assignate))
-
             if response_assignate.status_code == 200:
                 #TODO: logging
                 result = response_assignate.json()
                 response_assignate.close()
-
                 #TODO: se requiere que la API de Colabora nos devuelva dataError=False cuando sea exitosa la asignacion de colabora
                 #la condición está al revés, es decir, se espera que en el caso ideal devuelva dataError=True. 
                 if result.get('dataError') == True:
@@ -1110,6 +1148,7 @@ class BenefitApplication(models.Model):
                 else:
                     logging.exception("====> Cron alcanzó el límite de kits a enviar, esperando la próxima ejecución para enviar más...")
 
+
     def _cron_mark_as_rejected(self):
         logging.warning("==> Iniciando cron de marcar postulaciones como rechazadas ...")
 
@@ -1233,6 +1272,10 @@ class BenefitApplication(models.Model):
     def get_odoo_url(self):
         return self.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
+    def validate_has_colabora(self):
+        for benefit in self:
+            benefit._validate_has_colabora(benefit.partner_id.vat)
+
     def _validate_has_colabora(self, vat):
         """ Valida si la empresa ya tiene colabora.
         En caso de que si, no es apto para ser beneficiario RVC.
@@ -1246,24 +1289,25 @@ class BenefitApplication(models.Model):
         if bearer_token or bearer_token[0]:
 
             if self.get_odoo_url() == 'https://logyca.odoo.com':
-                url = "https://logycacolaboraapiv1.azurewebsites.net/api/Validity/ValidityCount?nit=%s" % (str(vat))
+                url = "https://app-mstransaction-prod.azurewebsites.net/api/Company/GetCompanyWithStatusServiceByNit?compaynNit=%s" % (str(vat))
             else:
-                url = "https://logycacolaboratestapi.azurewebsites.net/api/Validity/ValidityCount?nit=%s" % (str(vat))
+                url = "https://app-mstransaction-release.azurewebsites.net/api/Company/GetCompanyWithStatusServiceByNit?compaynNit=%s" % (str(vat))
+                # url = "https://app-mstransaction-dev.azurewebsites.net/api/Company/GetCompanyWithStatusServiceByNit?compaynNit=%s" % (str(vat))
+                # url = "https://app-mstransaction-prod.azurewebsites.net/api/Company/GetCompanyWithStatusServiceByNit?compaynNit=%s" % (str(vat))
 
             headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
 
             #Making http get request
             response = requests.get(url, headers=headers, verify=True)
-
             if response.status_code == 200:
                 result = response.json()
+                if result.get('resultMessage'):
+                    raise ValidationError(\
+                        _('¡Validación!  %s ') % str(result.get('resultMessage')))
                 if 'resultObject' in result:
-                    if hasattr(result.get('resultObject'), '__iter__'):
-                        for i in result.get('resultObject'):
-                            if i.get('moduleName') == 'Negociación' and i.get('moduleName') == 'Calidad de datos':
-                                raise ValidationError(\
-                                    _('¡Error de Validación! La empresa %s ya tiene Logyca/Colabora activo.') % str(vat))
-
+                    raise ValidationError(('¡Estado Actual LOGYCA / COLABORA!  %s ') % str(result.get('resultObject')['companyName']) + ' Nivel: ' +
+                                        str(result.get('resultObject')['currentLevel']) + ' Fecha Incial: ' +  str(result.get('resultObject')['initialDate'])[0:10] + ' Fecha Final: ' +
+                                        str(result.get('resultObject')['endDate'])[0:10])
                 response.close()
             else:
                 logging.debug(f" Error en _validate_has_colabora código: =====> {response.status_code}")
@@ -1478,3 +1522,17 @@ class BenefitApplication(models.Model):
         text = '\n'.join(wrapped)
 
         return text, font, txt_padding
+
+    def _send_assing_crece_mype(self):
+        for benefit_admon in self:
+            partner=self.employee_id
+            if partner and benefit_admon.email_employee:
+                if benefit_admon.product_id.benefit_type == 'crece_mype':
+                    access_link = partner._notify_get_action_link('view')
+                    subject = "Asignacion de caso LOGYCA/CRECEMYPE: Correo electronico"
+                    template = self.env.ref('rvc.mail_template_notify_crecemype')
+                    template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False, email_values={'subject': subject})
+
+    def action_application_done(self):
+        for application in self:
+            application.write({'state': 'done'})
