@@ -95,7 +95,8 @@ class BenefitApplication(models.Model):
     product_benefit = fields.Char('Producto que maneja')
     canal = fields.Selection([('advice', 'Advice'),
                                 ('email', 'Email'),], string='Canal', default='email')
-    employee_id = fields.Many2one('res.partner', string='Colaborador', track_visibility='onchange', ondelete='restrict')                                
+    employee_id = fields.Many2one('res.partner', string='Colaborador', track_visibility='onchange', ondelete='restrict')
+    date_done_cons = fields.Date(string='Date Solución', default=fields.Date.context_today)
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]
@@ -1534,5 +1535,16 @@ class BenefitApplication(models.Model):
                     template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False, email_values={'subject': subject})
 
     def action_application_done(self):
-        for application in self:
-            application.write({'state': 'done'})
+        for benefit_application in self:
+            view_id = self.env.ref('rvc.rvc_template_email_wizard_mype_form').id,
+            return {
+                'name':_("Confirmar"),
+                'view_mode': 'form',
+                'view_id': view_id,
+                'view_type': 'form',
+                'res_model': 'rvc.template.email.wizard',
+                'type': 'ir.actions.act_window',
+                'nodestroy': True,
+                'target': 'new',
+                'domain': '[]'
+            }

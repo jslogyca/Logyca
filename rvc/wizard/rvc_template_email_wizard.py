@@ -6,14 +6,15 @@ from datetime import datetime
 import re
 import logging
 
+
 class RVCTemplateEmailWizard(models.TransientModel):
     _name = "rvc.template.email.wizard"
     _rec_name = 'id'
 
-
     note_deactive = fields.Text(string='Nota Adicional')
     email_credentials = fields.Char(string="Email Credenciales")
-
+    date_done_cons = fields.Date(string='Date Solución', default=fields.Date.context_today)
+    
     def action_reason_desactive(self):
         context = dict(self._context or {})
         active_id = context.get('active_ids', False)
@@ -248,3 +249,12 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     if benefit_application.product_id.benefit_type == 'colabora':
                         benefit_application.assign_credentials_colabora(re_assign=True, re_assign_email=rec.email_credentials)
         return True
+
+    def action_application_done(self):
+        context = dict(self._context or {})
+        active_id = context.get('active_ids', False)
+        benefit_application = self.env['benefit.application'].browse(active_id)
+        if benefit_application:
+            for benefit in benefit_application:
+                benefit.write({'state': 'done', 'date_done_cons': self.date_done_cons})
+        return {'type': 'ir.actions.act_window_close'}
