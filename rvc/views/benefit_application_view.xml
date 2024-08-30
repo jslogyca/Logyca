@@ -23,7 +23,7 @@
 					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary"
                      attrs="{'invisible': ['|','|','|',('id','=', False),('state','=','rejected'),('state','=','cancel'),('state','=','done')]}" groups="rvc.group_rvc_manager"/>
 					<button string="Update Crecemype" name="action_application_done" type="object" class="oe_highlight" 
-								states="confirm" />					 
+								attrs="{'invisible': [('benefit_type','!=','crece_mype')]}" />					 
 				</header>			
 				<sheet>
                     <h1>Postulación a Beneficio RVC</h1>
@@ -45,6 +45,7 @@
 							<field name="email_employee" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
 							<field name="employee_id" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
 							<field name="name_employee" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
+							<field name="date_done_cons" attrs="{'invisible': [('benefit_type','!=','crece_mype')]}" force_save="1" readonly="1"/>
 							<field name="email_company" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
 							<field name="product_benefit" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
 							<field name="canal" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>

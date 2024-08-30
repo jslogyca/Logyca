@@ -33,5 +33,36 @@
             <field name="target">new</field>
         </record>
 
+        <record id="rvc_template_email_wizard_mype_form" model="ir.ui.view">
+            <field name="name">rvc.template.email.mype.wizard.form</field>
+            <field name="model">rvc.template.email.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Confirmar">
+                    <sheet>
+                        <h3>
+                            Solución consulta
+                        </h3>
+                        <group>
+                            <field name="date_done_cons" required="1"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Confirmar" name="action_application_done" type="object" default_focus="1" class="oe_highlight"/>
+                        <button string="Cancelar" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_rvc_template_email_mype_wizard" model="ir.actions.act_window">
+            <field name="name">Confirmar</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rvc.template.email.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="rvc_template_email_wizard_mype_form"/>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
     </data>
 </odoo>
