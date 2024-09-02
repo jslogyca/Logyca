@@ -722,16 +722,17 @@ class BenefitApplication(models.Model):
             # que tiene el contacto del beneficiario
             contact_email = re_assign_email if re_assign_email != None else self.contact_email
 
-            year = int(self.end_date_colabora.strftime("%Y"))
-            InitialDate = self.end_date_colabora.replace(year=year-1)
+            colabora_initial_date = today_date.strftime('%Y-%m-%d')
+            colabora_end_date = today_one_year_later.strftime('%Y-%m-%d')
+
             contact_email = self.contact_email
             body_assignate = json.dumps({
                     "TypeService": 2,
                     "Name": credentials_contact_name,
                     "Nit": self.vat,
                     "GLN": self.gln,
-                    "InitialDate": str(InitialDate),
-                    "EndDate": str(self.end_date_colabora),
+                    "InitialDate": colabora_initial_date,
+                    "EndDate": colabora_end_date,
                     "UserMail": contact_email,
                     "level": self.colabora_level,
                     "IsOverconsumption": False,
