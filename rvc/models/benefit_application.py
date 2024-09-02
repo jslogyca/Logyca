@@ -743,11 +743,7 @@ class BenefitApplication(models.Model):
             headers_assignate = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
             #Making http post request
             response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
-
-            # logging.info("====> response_assignate_credentials =>" + str(response_assignate))
-            if response_assignate.get('resultMessage'):
-                raise ValidationError(\
-                    _('¡Validación!  %s ') % str(response_assignate.get('resultMessage')))
+            logging.info("====> response_assignate_credentials => %s" % str(response_assignate))
 
             if response_assignate.status_code == 200:
                 #TODO: logging
@@ -768,9 +764,10 @@ class BenefitApplication(models.Model):
                     self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
                     return True
             else:
+                today = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 vals = {
                     'method': 'gs1_assign_credentials',
-                    'send_date': InitialDate,
+                    'send_date': today,
                     'send_json': body_assignate,
                     'x_return': str(response_assignate.text),
                     'cant_attempts': 1,
@@ -781,9 +778,6 @@ class BenefitApplication(models.Model):
                 else:
                     log = "No se pudo crear un registro de log de errores."
 
-                #TODO: logging
-                # logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate))
-                # logging.exception("====> assign_credentials_gs1codes =>" + str(response_assignate.text))
                 self.message_post(body=_(\
                         'No pudieron asignarse las credenciales. <strong>Error:</strong> %s. %s' % (str(response_assignate),str(log))))
                 return False
