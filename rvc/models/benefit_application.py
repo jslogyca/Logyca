@@ -696,17 +696,15 @@ class BenefitApplication(models.Model):
 
     def assign_credentials_gs1codes(self, re_assign=False, re_assign_email=None):
         bearer_token = self.get_token_gs1_co_api()
+        today_date = datetime.now()
 
         if bearer_token or bearer_token[0]:
-            today_date = datetime.now()
             today_one_year_later = today_date + relativedelta(years=1)
 
             if self.get_odoo_url() == 'https://logyca.odoo.com':
-                url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                url_assignate= "https://app-msadenterprise-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
             else:
-                url_assignate= "https://app-mstransaction-release.azurewebsites.net/api/Company/AddCompanyEcommerce"
-                # url_assignate= "https://app-mstransaction-dev.azurewebsites.net/api/Company/AddCompanyEcommerce"
-                # url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                url_assignate= "https://app-colaborags1api-dev.azurewebsites.net/api/Company/AddCompanyEcommerce"
 
             #validando el nombre de contacto para asignar credenciales
             # si no tiene contact_name le ponemos el nombre de la empresa
@@ -720,30 +718,31 @@ class BenefitApplication(models.Model):
 
             # si viene de reasignar credenciales utiliza el correo nuevo ingresado y si no usa el
             # que tiene el contacto del beneficiario
-            contact_email = re_assign_email if re_assign_email != None else self.contact_email
+            contact_email = re_assign_email if re_assign_email is not None else self.contact_email
 
             colabora_initial_date = today_date.strftime('%Y-%m-%d')
-            colabora_end_date = today_one_year_later.strftime('%Y-%m-%d')
 
-            contact_email = self.contact_email
             body_assignate = json.dumps({
-                    "TypeService": 2,
-                    "Name": credentials_contact_name,
                     "Nit": self.vat,
-                    "GLN": self.gln,
-                    "InitialDate": colabora_initial_date,
-                    "EndDate": colabora_end_date,
+                    "Name": credentials_contact_name,
                     "UserMail": contact_email,
-                    "level": self.colabora_level,
-                    "IsOverconsumption": False,
+                    "InitialDate": colabora_initial_date,
+                    "EndDate": today_one_year_later.strftime('%Y-%m-%d'),
+                    "level": 1,
+                    "TypeService": 1,
                     "NumberOverConsumption": 0,
-                    "IsSponsored":  True,
-                    "IsTextil": False
+                    "IsOverconsumption": False
                 })
             headers_assignate = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
+
             #Making http post request
-            response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
-            logging.info("====> response_assignate_credentials => %s" % str(response_assignate))
+            response_assignate = requests.post(url_assignate,
+                                               headers=headers_assignate,
+                                               data=body_assignate,
+                                               verify=True,
+                                               timeout=10)
+
+            logging.info("====> response_assignate_credentials => %s", str(response_assignate))
 
             if response_assignate.status_code == 200:
                 #TODO: logging
@@ -756,18 +755,15 @@ class BenefitApplication(models.Model):
                     error_message = result.get('apiException').get('message')
                     if not error_message:
                         error_message = result.get('resultMessage')
-                    self.message_post(body=_(\
-                        'No pudieron asignarse las credenciales para GS1-ASC.'\
-                            '\n<strong>Error:</strong> %s' % str(error_message)))
+                    self.message_post(body=_(f'No pudieron asignarse las credenciales para GS1-ASC.\n<strong>Error:</strong> {str(error_message)}'))
                     return False
-                else:
-                    self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
-                    return True
+
+                self.message_post(body=_('Las credenciales para acceder a la administración de códigos fueron entregadas con el beneficio.'))
+                return True
             else:
-                today = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 vals = {
                     'method': 'gs1_assign_credentials',
-                    'send_date': today,
+                    'send_date': today_date.strftime('%Y-%m-%d'),
                     'send_json': body_assignate,
                     'x_return': str(response_assignate.text),
                     'cant_attempts': 1,
@@ -778,8 +774,10 @@ class BenefitApplication(models.Model):
                 else:
                     log = "No se pudo crear un registro de log de errores."
 
-                self.message_post(body=_(\
-                        'No pudieron asignarse las credenciales. <strong>Error:</strong> %s. %s' % (str(response_assignate),str(log))))
+                #TODO: logging
+                logging.exception("====> assign_credentials_gs1codes => %s", str(response_assignate))
+
+                self.message_post(body=f'No pudieron asignarse las credenciales. <strong>Error:</strong> {str(response_assignate)}. {str(log)}')
                 return False
         else:
             self.message_post(body=_("No pudo obtenerse el token para realizar la asignación de credenciales en www.gs1coidentificacion.org."\
