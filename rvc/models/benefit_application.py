@@ -97,6 +97,7 @@ class BenefitApplication(models.Model):
                                 ('email', 'Email'),], string='Canal', default='email')
     employee_id = fields.Many2one('res.partner', string='Colaborador', track_visibility='onchange', ondelete='restrict')
     date_done_cons = fields.Date(string='Date Solución', default=fields.Date.context_today)
+    renewal = fields.Boolean('Renewal', default=False)
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]

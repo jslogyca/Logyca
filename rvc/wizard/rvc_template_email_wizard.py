@@ -168,6 +168,105 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
         return {'type': 'ir.actions.act_window_close'}
 
+    def action_done_mass(self):
+        context = dict(self._context or {})
+        active_id = context.get('active_ids', False)
+        benefit_application = self.env['benefit.application'].browse(active_id)
+        if benefit_application:
+            for benefit in benefit_application:
+                partner=self.env['res.partner'].search([('id','=',benefit.partner_id.partner_id.id)])
+                if benefit.partner_id.contact_email:
+                    access_link = partner._notify_get_action_link('view')
+
+                    if benefit.product_id.benefit_type == 'codigos':
+                        if benefit.is_seller:
+                            template = self.env.ref('rvc.mail_template_welcome_kit_rvc_seller')
+                        else:
+                            template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                    elif benefit.product_id.benefit_type == 'colabora':
+                        template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
+                    elif benefit.product_id.benefit_type == 'tarjeta_digital':
+                        template = self.env.ref('rvc.mail_template_welcome_kit_digital_card_rvc')
+                    else:
+                        template=None
+
+                    # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
+                    if template:
+                        if benefit.origin != 'odoo':
+                            #se usa para eliminar los adjuntos de la plantilla de correo
+                            template.attachment_ids = [(5,)]
+                            template= benefit.create_OM_attachment(template)
+                        else:
+                            template.attachment_ids = False
+
+                    # Se envía kit de bienvenida
+                    # excepto si es tarjeta digital, en ese caso el beneficio se activa primero y DESPUÉS enviamos kit con 
+                    # la funcion send_digital_cards_bearer()
+                    try:
+                        if benefit.product_id.benefit_type not in ('tarjeta_digital', 'colabora'):
+                            template.with_context(url=access_link).send_mail(benefit.id, force_send=True)
+                            #se usa para eliminar los adjuntos de la plantilla de correo
+                            template.attachment_ids = [(5,)]
+                    except Exception as e:
+                        benefit.message_post(body=_(f'No se pudo <strong>Enviar</strong></u> el kit de bienvenida del beneficio {benefit.product_id.benefit_type}. Error: {e}'))
+
+                    if not benefit.gln:
+                        # si no tiene GLN, asignamos uno.
+                        if benefit._validate_gln() is False and benefit.glns_codes_quantity == 0:
+                            benefit.assignate_gln_code()
+
+                    if benefit.product_id.benefit_type == 'codigos':
+                        # codigos glns
+                        if benefit.glns_codes_quantity > 0:
+                            if benefit.send_kit_with_no_benefit is False:
+                                if benefit.assignate_gln_code(benefit.glns_codes_quantity):
+                                    benefit.assign_credentials_gs1codes()
+                            else:
+                                benefit.assign_credentials_gs1codes()
+                        # codigos recaudo
+                        if benefit.invoice_codes_quantity > 0:
+                            if benefit.send_kit_with_no_benefit is False:
+                                if benefit.assign_invoice_codes():
+                                    benefit.assign_credentials_gs1codes()
+                            else:
+                                benefit.assign_credentials_gs1codes()
+                        # codigos producto
+                        if benefit.codes_quantity > 0:
+                            if benefit.send_kit_with_no_benefit is False:
+                                if benefit.assign_identification_codes():
+                                    benefit.assign_credentials_gs1codes()
+                            else:
+                                benefit.assign_credentials_gs1codes()
+
+                        # Agregar tipo de vinculacion al tercero
+                        benefit.add_vinculation_partner()
+
+                    elif benefit.product_id.benefit_type == 'colabora':
+                        # Activar colabora
+                        if benefit.assign_colabora():
+                            benefit.assign_credentials_colabora()
+
+                    elif benefit.product_id.benefit_type == 'tarjeta_digital':
+                        if benefit.digital_card_ids:
+                            benefit.send_digital_cards_bearer(template)
+                        else:
+                            raise ValidationError(_('¡Error! No hay tarjetas digitales para generar 😔.\n\nPara solicitarlas: \n'\
+                                                    '1. Active el modo edición yendo al botón EDITAR del lado superior izquierdo.\n'\
+                                                    '2. Vaya a la sección de Tarjetas Digitales.\n'\
+                                                    '3. Pulse la opción "Agregar línea."'))
+
+                    #Actualizar Contacto y Empresa
+                    benefit.update_contact(benefit.partner_id)
+                    if benefit.parent_id:
+                        benefit.update_company(benefit)
+
+                    benefit.write({'state': 'done', 'delivery_date': datetime.now()})
+                else:
+                    raise ValidationError(_('La empresa seleccionada no tiene email.'))
+                self.env.cr.commit()
+
+        return {'type': 'ir.actions.act_window_close'}
+
     def action_re_done(self):
         """
         forward email kit notification
@@ -257,4 +356,13 @@ class RVCTemplateEmailWizard(models.TransientModel):
         if benefit_application:
             for benefit in benefit_application:
                 benefit.write({'state': 'done', 'date_done_cons': self.date_done_cons})
+        return {'type': 'ir.actions.act_window_close'}
+
+    def action_application_confirm(self):
+        context = dict(self._context or {})
+        active_id = context.get('active_ids', False)
+        benefit_application = self.env['benefit.application'].browse(active_id)
+        if benefit_application:
+            for benefit in benefit_application:
+                benefit.write({'state': 'confirm'})
         return {'type': 'ir.actions.act_window_close'}
