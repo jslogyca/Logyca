@@ -53,6 +53,8 @@
 																	'required': [('benefit_type','=','colabora')]}"/>
 							<field name="renewal" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))], 
 																	'required': [('benefit_type','=','colabora')]}"/>
+							<field name="email_colabora" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))], 
+																	'required': [('benefit_type','=','colabora')]}"/>
 							<field name="end_date_colabora" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))],
 																	'required': [('benefit_type','=','colabora')]}"/>
 							<button name="validate_has_colabora" type="object" string="ESTADO ACTUAL LOGYCA / COLABORA" icon="fa-truck" groups="rvc.group_rvc_manager"

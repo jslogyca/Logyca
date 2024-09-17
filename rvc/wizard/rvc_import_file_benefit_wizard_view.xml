@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rvc_import_file_benefit_wizard_view" model="ir.ui.view">
+        <field name="name">rvc.import.file.benefit.wizard.form</field>
+        <field name="model">rvc.import.file.benefit.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cargue Masivo de Beneficiarios">
+                <sheet>
+                    <group string="Asistente para importar masivamente Beneficiarios">
+                        <group>
+                            <div>
+                                <p><strong>Condiciones:</strong></p>
+                                <ul>
+                                    <li>Estar registrada en Odoo</li>
+                                    <li>Estar activa</li>
+                                </ul>
+                            </div>
+                        </group>
+                    </group>
+                    <group string="Cargue su plantilla de Excel">
+                        <group>
+                            <field name="file_data" filename="filename" placeholder="Choose a file to import..."/>
+                            <field name="filename" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="import_file" string="Import" type="object" class="btn-primary" />
+                    <button string="Cancelar" special="cancel" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rvc_import_file_benefit_wizard_view" model="ir.actions.act_window">
+        <field name="name">Cargue Masivo de Beneficiarios</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">rvc.import.file.benefit.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="rvc_import_file_benefit_wizard_view"/>
+        <field name="target">new</field>
+    </record>     
+
+    <menuitem id="menu_rvc_import_file_benefit_wizard"
+        name="Cargue Masivo de Beneficiarios"
+        parent="rvc.hr_menu_benefit_application_parent"
+        sequence="4"
+        action="action_rvc_import_file_benefit_wizard_view"
+        groups="rvc.group_rvc_manager"/>
+
+</odoo>

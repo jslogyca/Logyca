@@ -98,6 +98,7 @@ class BenefitApplication(models.Model):
     employee_id = fields.Many2one('res.partner', string='Colaborador', track_visibility='onchange', ondelete='restrict')
     date_done_cons = fields.Date(string='Date Solución', default=fields.Date.context_today)
     renewal = fields.Boolean('Renewal', default=False)
+    email_colabora = fields.Char('Email Colabora', tracking=True)
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]
@@ -815,7 +816,10 @@ class BenefitApplication(models.Model):
 
             year = int(self.end_date_colabora.strftime("%Y"))
             InitialDate = self.end_date_colabora.replace(year=year-1)
-            contact_email = self.contact_email
+            if self.email_colabora:
+                contact_email = self.email_colabora
+            else:
+                contact_email = self.contact_email
             body_assignate = json.dumps({
                     "TypeService": 2,
                     "Name": credentials_contact_name,
@@ -892,7 +896,10 @@ class BenefitApplication(models.Model):
                 credentials_contact_name = self.partner_id.partner_id.x_first_name + " " + self.partner_id.partner_id.x_first_lastname
             year = int(self.end_date_colabora.strftime("%Y"))
             InitialDate = self.end_date_colabora.replace(year=year-1)
-            contact_email = self.contact_email
+            if self.email_colabora:
+                contact_email = self.email_colabora
+            else:
+                contact_email = self.contact_email
             body_assignate = json.dumps({
                     "TypeService": 2,
                     "Name": credentials_contact_name,
