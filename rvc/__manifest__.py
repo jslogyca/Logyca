@@ -49,6 +49,7 @@
         'wizard/rvc_template_assignate_credentials.xml',
         'wizard/delivering_colabora_massively_view.xml',
         'wizard/rvc_crecemype_done_wizard_view.xml',
+        'wizard/rvc_import_file_benefit_wizard_view.xml',
         'views/rvc_beneficiary_view.xml',
         'views/rvc_sponsor_view.xml',
         'views/config_rvc_view.xml',
