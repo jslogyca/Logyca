@@ -40,6 +40,7 @@
         'views/hr_prima_report.xml',
         'views/hr_reason_end_contract_view.xml',
         'views/hr_payroll_structure_view.xml',
+        'views/hr_payslip_run_view.xml',
     ],
     'qweb': [
     ]

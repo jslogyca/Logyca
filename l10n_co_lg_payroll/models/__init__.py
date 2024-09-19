@@ -12,3 +12,4 @@ from . import res_company
 from . import resource_calendar
 from . import hr_leave_type
 from . import hr_prima_report
+from . import hr_payslip_run
