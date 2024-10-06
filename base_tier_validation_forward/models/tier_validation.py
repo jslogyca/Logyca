@@ -35,7 +35,9 @@ class TierValidation(models.AbstractModel):
         sequences = self._get_sequences_to_approve(self.env.user)
         reviews = self.review_ids.filtered(lambda l: l.sequence in sequences)
         ctx = self._add_comment("forward", reviews)["context"]
-        comment = self.env["comment.wizard"].with_context(ctx).create({"comment": "/"})
+        comment = (
+            self.env["comment.wizard"].with_context(**ctx).create({"comment": "/"})
+        )
         wizard = self.env.ref("base_tier_validation_forward.view_forward_wizard")
         return {
             "name": _("Forward"),
@@ -74,7 +76,7 @@ class TierValidation(models.AbstractModel):
         if hasattr(self, post):
             # Notify state change
             getattr(self, post)(
-                subtype=self._get_forwarded_notification_subtype(),
+                subtype_xmlid=self._get_forwarded_notification_subtype(),
                 body=self._notify_forwarded_reviews_body(),
             )
 
@@ -84,7 +86,7 @@ class TierValidation(models.AbstractModel):
         )
         if has_comment:
             comment = has_comment.mapped("comment")[0]
-            return _(
-                "A review was forwarded from {} {}".format(self.env.user.name, comment)
+            return _("A review was forwarded from %(user_name)s %(comment)s") % (
+                {"user_name": self.env.user.name, "comment": comment}
             )
         return _("A review was forwarded by %s.") % (self.env.user.name)

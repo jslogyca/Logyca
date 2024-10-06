@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-	<record id="edit_holiday_status_form_book_holiday" model="ir.ui.view">
+	<!-- <record id="edit_holiday_status_form_book_holiday" model="ir.ui.view">
 		<field name="name">hr.holiday.status.form.book_holiday</field>
 		<field name="model">hr.leave.type</field>
 		<field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
@@ -9,5 +9,5 @@
                 <field name="book_holiday" widget="radio" />
             </xpath>
 		</field>
-	</record>
+	</record> -->
 </odoo>

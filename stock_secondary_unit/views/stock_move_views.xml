@@ -9,11 +9,20 @@
         <field name="groups_id" eval="[(4, ref('uom.group_uom'))]" />
         <field name="arch" type="xml">
             <field name="product_uom_qty" position="before">
-                <field name="secondary_uom_qty" />
+                <field
+                    name="secondary_uom_qty"
+                    attrs="{'readonly': [('state', 'in', ('done', 'cancel')), ('is_locked', '=', True)]}"
+                    force_save="1"
+                    optional="show"
+                />
                 <field
                     name="secondary_uom_id"
-                    domain="[('product_tmpl_id.product_variant_ids', 'in', [product_id])]"
+                    domain="['|', ('product_id', '=', product_id),
+                                '&amp;', ('product_tmpl_id.product_variant_ids', 'in', [product_id]),
+                                         ('product_id', '=', False)]"
+                    attrs="{'readonly': [('state', '!=', 'draft'), ('id', '!=', False)]}"
                     options="{'no_create': True}"
+                    optional="show"
                 />
             </field>
         </field>
@@ -28,11 +37,20 @@
         <field name="groups_id" eval="[(4, ref('uom.group_uom'))]" />
         <field name="arch" type="xml">
             <field name="product_uom_qty" position="before">
-                <field name="secondary_uom_qty" />
+                <field
+                    name="secondary_uom_qty"
+                    attrs="{'readonly': [('state', 'in', ('done', 'cancel')), ('is_locked', '=', True)]}"
+                    force_save="1"
+                    optional="show"
+                />
                 <field
                     name="secondary_uom_id"
-                    domain="[('product_tmpl_id.product_variant_ids', 'in', [product_id])]"
+                    domain="['|', ('product_id', '=', product_id),
+                                '&amp;', ('product_tmpl_id.product_variant_ids', 'in', [product_id]),
+                                         ('product_id', '=', False)]"
+                    attrs="{'readonly': [('state', '!=', 'draft'), ('id', '!=', False)]}"
                     options="{'no_create': True}"
+                    optional="show"
                 />
             </field>
         </field>

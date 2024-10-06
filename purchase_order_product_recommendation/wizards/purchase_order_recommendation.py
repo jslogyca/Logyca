@@ -1,5 +1,6 @@
 # Copyright 2019 David Vidal <david.vidal@tecnativa.com>
 # Copyright 2020 Manuel Calero - Tecnativa
+# Copyright 2020 Tecnativa - Pedro M. Baeza
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from datetime import datetime, timedelta
@@ -84,8 +85,12 @@ class PurchaseOrderRecommendation(models.TransientModel):
         )
         partner = self.order_id.partner_id.commercial_partner_id
         supplierinfos = supplierinfo_obj.search([("name", "=", partner.id)])
-        product_tmpls = supplierinfos.mapped("product_tmpl_id")
-        products = supplierinfos.mapped("product_id")
+        product_tmpls = supplierinfos.mapped("product_tmpl_id").filtered(
+            lambda x: x.active and x.purchase_ok
+        )
+        products = supplierinfos.mapped("product_id").filtered(
+            lambda x: x.active and x.purchase_ok
+        )
         products += product_tmpls.mapped("product_variant_ids")
         return products
 
@@ -103,10 +108,14 @@ class PurchaseOrderRecommendation(models.TransientModel):
     def _get_move_line_domain(self, products, src, dst):
         """Allows to easily extend the domain by third modules"""
         combine = datetime.combine
+        # We can receive a context to be able to get different dates with
+        # the same wizard attributes, for example comparing periods
+        date_begin = self.env.context.get("period_date_begin", self.date_begin)
+        date_end = self.env.context.get("period_date_end", self.date_end)
         domain = [
             ("product_id", "in", products.ids),
-            ("date", ">=", combine(self.date_begin, datetime.min.time())),
-            ("date", "<=", combine(self.date_end, datetime.max.time())),
+            ("date", ">=", combine(date_begin, datetime.min.time())),
+            ("date", "<=", combine(date_end, datetime.max.time())),
             ("location_id.usage", "=", src),
             ("location_dest_id.usage", "=", dst),
             ("state", "=", "done"),
@@ -131,8 +140,8 @@ class PurchaseOrderRecommendation(models.TransientModel):
         return domain
 
     def _find_move_line(self, src="internal", dst="customer"):
-        """"Returns a dictionary from the move lines in a range of dates
-            from and to given location types"""
+        """ "Returns a dictionary from the move lines in a range of dates
+        from and to given location types"""
         products = self._get_products()
         domain = self._get_move_line_domain(products, src, dst)
         found_lines = self.env["stock.move.line"].read_group(
@@ -141,7 +150,10 @@ class PurchaseOrderRecommendation(models.TransientModel):
         # Manual ordering that circumvents ORM limitations
         found_lines = sorted(
             found_lines,
-            key=lambda res: (res["product_id_count"], res["qty_done"],),
+            key=lambda res: (
+                res["product_id_count"],
+                res["qty_done"],
+            ),
             reverse=True,
         )
         product_dict = {p.id: p for p in products}
@@ -166,22 +178,30 @@ class PurchaseOrderRecommendation(models.TransientModel):
                 found_lines.update({product.id: {"product_id": product}})
         return found_lines
 
-    @api.model
+    def _prepare_wizard_line_from_seller(self, vals, seller):
+        """Allow to add values coming from the selected seller, which will have
+        more priority than existing prepared values.
+
+        :param vals: Existing wizard line dictionary vals.
+        :param seller: Selected seller for this line.
+        """
+        self.ensure_one()
+        return {
+            "price_unit": seller.price,
+        }
+
     def _prepare_wizard_line(self, vals, order_line=False):
         """Used to create the wizard line"""
+        self.ensure_one()
         product_id = order_line and order_line.product_id or vals["product_id"]
         if self.warehouse_ids:
             units_available = sum(
-                [
-                    product_id.with_context(warehouse=wh).qty_available
-                    for wh in self.warehouse_ids.ids
-                ]
+                product_id.with_context(warehouse=wh).qty_available
+                for wh in self.warehouse_ids.ids
             )
             units_virtual_available = sum(
-                [
-                    product_id.with_context(warehouse=wh).virtual_available
-                    for wh in self.warehouse_ids.ids
-                ]
+                product_id.with_context(warehouse=wh).virtual_available
+                for wh in self.warehouse_ids.ids
             )
         else:
             units_available = product_id.qty_available
@@ -191,15 +211,17 @@ class PurchaseOrderRecommendation(models.TransientModel):
         )
         vals["is_modified"] = bool(qty_to_order)
         units_included = order_line and order_line.product_qty or qty_to_order
-        price_unit = product_id._select_seller(
+        seller = product_id._select_seller(
             partner_id=self.order_id.partner_id,
             date=fields.Date.today(),
             quantity=units_included,
             uom_id=product_id.uom_po_id,
-        ).price
-        return {
+        )
+        res = {
             "purchase_line_id": order_line and order_line.id,
             "product_id": product_id.id,
+            "product_name": product_id.name,
+            "product_code": product_id.code,
             "times_delivered": vals.get("times_delivered", 0),
             "times_received": vals.get("times_received", 0),
             "units_received": vals.get("qty_received", 0),
@@ -210,9 +232,10 @@ class PurchaseOrderRecommendation(models.TransientModel):
             ),
             "units_delivered": vals.get("qty_delivered", 0),
             "units_included": units_included,
-            "price_unit": price_unit,
             "is_modified": vals.get("is_modified", False),
         }
+        res.update(self._prepare_wizard_line_from_seller(res, seller))
+        return res
 
     @api.onchange(
         "order_id",
@@ -240,6 +263,9 @@ class PurchaseOrderRecommendation(models.TransientModel):
                 found_dict[product] = line
             found_dict[product]["qty_delivered"] = line.get("qty_done", 0)
             found_dict[product]["times_delivered"] = line.get("product_id_count", 0)
+            found_dict[product].update(
+                {k: v for k, v in line.items() if k not in found_dict[product].keys()}
+            )
         RecomendationLine = self.env["purchase.order.recommendation.line"]
         existing_product_ids = []
         # Add products from purchase order lines
@@ -292,19 +318,45 @@ class PurchaseOrderRecommendationLine(models.TransientModel):
     _description = "Recommended product for current purchase order"
     _order = "id"
 
-    currency_id = fields.Many2one(related="product_id.currency_id", readonly=True,)
-    partner_id = fields.Many2one(
-        related="wizard_id.order_id.partner_id", readonly=True,
+    currency_id = fields.Many2one(
+        related="product_id.currency_id",
+        readonly=True,
     )
-    product_id = fields.Many2one(comodel_name="product.product", string="Product",)
-    price_unit = fields.Monetary(readonly=True,)
-    times_delivered = fields.Integer(readonly=True,)
-    times_received = fields.Integer(readonly=True,)
-    units_received = fields.Float(readonly=True,)
-    units_delivered = fields.Float(readonly=True,)
-    units_avg_delivered = fields.Float(digits="Product Unit of Measure", readonly=True,)
-    units_available = fields.Float(readonly=True,)
-    units_virtual_available = fields.Float(readonly=True,)
+    partner_id = fields.Many2one(
+        related="wizard_id.order_id.partner_id",
+        readonly=True,
+    )
+    product_id = fields.Many2one(
+        comodel_name="product.product",
+        string="Product",
+    )
+    product_name = fields.Char()
+    product_code = fields.Char(string="Product reference")
+    price_unit = fields.Monetary(
+        readonly=True,
+    )
+    times_delivered = fields.Integer(
+        readonly=True,
+    )
+    times_received = fields.Integer(
+        readonly=True,
+    )
+    units_received = fields.Float(
+        readonly=True,
+    )
+    units_delivered = fields.Float(
+        readonly=True,
+    )
+    units_avg_delivered = fields.Float(
+        digits="Product Unit of Measure",
+        readonly=True,
+    )
+    units_available = fields.Float(
+        readonly=True,
+    )
+    units_virtual_available = fields.Float(
+        readonly=True,
+    )
     units_included = fields.Float()
     wizard_id = fields.Many2one(
         comodel_name="purchase.order.recommendation",
@@ -313,7 +365,9 @@ class PurchaseOrderRecommendationLine(models.TransientModel):
         required=True,
         readonly=True,
     )
-    purchase_line_id = fields.Many2one(comodel_name="purchase.order.line",)
+    purchase_line_id = fields.Many2one(
+        comodel_name="purchase.order.line",
+    )
     is_modified = fields.Boolean()
 
     @api.onchange("units_included")

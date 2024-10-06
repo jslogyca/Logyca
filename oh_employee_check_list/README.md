@@ -1,5 +1,5 @@
 Open HRMS Employee Checklist
----------------------
+---------------------------
 Supporting Addon for Open HRMS, Manages Employee's Entry & Exit Process
 
 Overview
@@ -17,6 +17,7 @@ Contacts
 info - info@cybrosys.com
 Nilmar Shereef - odoo@cybrosys.com
 Kavya Raveendran - v13 
+Neethu UM - v15
 
 Website:
 https://www.openhrms.com

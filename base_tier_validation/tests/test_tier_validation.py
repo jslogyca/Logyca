@@ -9,6 +9,7 @@ from odoo.tests.common import Form, tagged
 from .common import CommonTierValidation
 
 
+@tagged("post_install", "-at_install")
 class TierTierValidation(CommonTierValidation):
     def test_01_auto_validation(self):
         """When the user can validate all future reviews, it is not needed
@@ -156,7 +157,7 @@ class TierTierValidation(CommonTierValidation):
         record.invalidate_cache()
         res = record.validate_tier()
         ctx = res.get("context")
-        wizard = Form(self.env["comment.wizard"].with_context(ctx))
+        wizard = Form(self.env["comment.wizard"].with_context(**ctx))
         wizard.comment = "Test Comment"
         wiz = wizard.save()
         wiz.add_comment()
@@ -191,7 +192,7 @@ class TierTierValidation(CommonTierValidation):
         record.invalidate_cache()
         res = record.reject_tier()  # Rejection
         ctx = res.get("context")
-        wizard = Form(self.env["comment.wizard"].with_context(ctx))
+        wizard = Form(self.env["comment.wizard"].with_context(**ctx))
         wizard.comment = "Test Comment"
         wiz = wizard.save()
         wiz.add_comment()
@@ -254,8 +255,8 @@ class TierTierValidation(CommonTierValidation):
         self.assertTrue(any(r.status == "approved" for r in record1.review_ids))
 
     def test_12_approve_sequence_same_user(self):
-        """ Similar to test_12_approve_sequence, but all same users,
-        the approve_sequence still apply correctly """
+        """Similar to test_12_approve_sequence, but all same users,
+        the approve_sequence still apply correctly"""
         # Create new test record
         test_record = self.test_model.create({"test_field": 2.5})
         # Create tier definitions
@@ -298,6 +299,51 @@ class TierTierValidation(CommonTierValidation):
         record1.validate_tier()
         self.assertEqual(
             1, len(record1.review_ids.filtered(lambda l: l.status == "pending"))
+        )
+        record1.validate_tier()
+        self.assertEqual(
+            0, len(record1.review_ids.filtered(lambda l: l.status == "pending"))
+        )
+
+    def test_12_approve_sequence_same_user_bypassed(self):
+        """Similar to test_12_approve_sequence, with all same users,
+        but approve_sequence_bypass is True"""
+        # Create new test record
+        test_record = self.test_model.create({"test_field": 2.5})
+        # Create tier definitions
+        self.tier_def_obj.create(
+            {
+                "model_id": self.tester_model.id,
+                "review_type": "individual",
+                "reviewer_id": self.test_user_1.id,
+                "definition_domain": "[('test_field', '>', 1.0)]",
+                "approve_sequence": True,
+                "approve_sequence_bypass": True,
+                "sequence": 20,
+            }
+        )
+        self.tier_def_obj.create(
+            {
+                "model_id": self.tester_model.id,
+                "review_type": "individual",
+                "reviewer_id": self.test_user_1.id,
+                "definition_domain": "[('test_field', '>', 1.0)]",
+                "approve_sequence": True,
+                "approve_sequence_bypass": True,
+                "sequence": 10,
+            }
+        )
+        # Request validation
+        self.assertFalse(self.test_record.review_ids)
+        reviews = test_record.with_user(self.test_user_1.id).request_validation()
+        self.assertTrue(reviews)
+
+        record1 = test_record.with_user(self.test_user_1.id)
+        record1.invalidate_cache()
+        self.assertTrue(record1.can_review)
+        # When the first tier is validated, all the rest will be approved.
+        self.assertEqual(
+            3, len(record1.review_ids.filtered(lambda l: l.status == "pending"))
         )
         record1.validate_tier()
         self.assertEqual(
@@ -403,14 +449,37 @@ class TierTierValidation(CommonTierValidation):
         records = self.env["tier.validation.tester"].search(
             [("reviewer_ids", "=", False)]
         )
-        self.assertEquals(len(records), 1)
+        self.assertEqual(len(records), 1)
         self.test_record.with_user(self.test_user_2.id).request_validation()
         record = self.test_record.with_user(self.test_user_1.id)
         record.invalidate_cache()
         records = self.env["tier.validation.tester"].search(
             [("reviewer_ids", "=", False)]
         )
-        self.assertEquals(len(records), 0)
+        self.assertEqual(len(records), 0)
+
+    def test_18_test_review_by_res_users_field(self):
+        selected_field = self.env["ir.model.fields"].search(
+            [("model", "=", self.test_model._name), ("name", "=", "user_id")]
+        )
+        test_record = self.test_model.create(
+            {"test_field": 2.5, "user_id": self.test_user_2.id}
+        )
+
+        definition = self.env["tier.definition"].create(
+            {
+                "model_id": self.tester_model.id,
+                "review_type": "field",
+                "reviewer_field_id": selected_field.id,
+                "definition_domain": "[('test_field', '>', 1.0)]",
+                "approve_sequence": True,
+            }
+        )
+
+        reviews = test_record.request_validation()
+        review = reviews.filtered(lambda r: r.definition_id == definition)
+        self.assertTrue(review)
+        self.assertEqual(review.reviewer_ids, self.test_user_2)
 
 
 @tagged("at_install")

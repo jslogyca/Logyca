@@ -21,7 +21,7 @@ class ConfigDiscountLogRevenue(models.Model):
                         ('grandes', 'Grandes')], string='Company Size', tracking=True)
     amount_user = fields.Integer(string='Amount User')
     discount = fields.Float(string='Discount')
-    revenue_range = fields.Many2one('revenue.macro.sector', string='Rango de Ingresos', track_visibility='onchange', ondelete='restrict')
+    revenue_range = fields.Many2one('revenue.macro.sector', string='Rango de Ingresos', tracking=True, ondelete='restrict')
 
     def name_get(self):
         return [(discount.id, '%s - %s' % (discount.revenue_range.amount, discount.discount)) for discount in self]

@@ -18,14 +18,14 @@ class BaseSubstateMixin(models.AbstractModel):
             if rec.substate_id and rec.state != target_state:
                 raise ValidationError(
                     _(
-                        'The substate "%s" is not define for the state'
-                        ' "%s" but for "%s" '
+                        "The substate %(name)s is not defined for the state"
+                        " %(state)s but for %(target_state)s "
                     )
-                    % (
-                        rec.substate_id.name,
-                        _(rec_states[rec.state]),
-                        _(rec_states[target_state]),
-                    )
+                    % {
+                        "name": rec.substate_id.name,
+                        "state": _(rec_states[rec.state]),
+                        "target_state": _(rec_states[target_state]),
+                    }
                 )
 
     def _track_template(self, tracking):
@@ -46,7 +46,7 @@ class BaseSubstateMixin(models.AbstractModel):
         return res
 
     def _get_default_substate_id(self, state_val=False):
-        """ Gives default substate_id """
+        """Gives default substate_id"""
         search_domain = self._get_default_substate_domain(state_val)
         # perform search, return the first found
         return (
@@ -56,8 +56,8 @@ class BaseSubstateMixin(models.AbstractModel):
         )
 
     def _get_default_substate_domain(self, state_val=False):
-        """ Override this method
-            to change domain values
+        """Override this method
+        to change domain values
         """
         if not state_val:
             state_val = self._get_default_state_value()
@@ -72,15 +72,19 @@ class BaseSubstateMixin(models.AbstractModel):
         ]
         return domain
 
-    def _get_default_state_value(self,):
-        """ Override this method
-            to change state_value
-            """
+    def _get_default_state_value(
+        self,
+    ):
+        """Override this method
+        to change state_value
+        """
         return "draft"
 
-    def _get_substate_type(self,):
-        """ Override this method
-            to change substate_type (get by xml id for example)
+    def _get_substate_type(
+        self,
+    ):
+        """Override this method
+        to change substate_type (get by xml id for example)
         """
         return self.env["base.substate.type"].search(
             [("model", "=", self._name)], limit=1
@@ -91,7 +95,7 @@ class BaseSubstateMixin(models.AbstractModel):
         string="Sub State",
         ondelete="restrict",
         default=lambda self: self._get_default_substate_id(),
-        track_visibility="onchange",
+        tracking=5,
         index=True,
         domain=lambda self: [("model", "=", self._name)],
         copy=False,

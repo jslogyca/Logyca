@@ -133,7 +133,7 @@ class Survey(models.Model):
             result_user.append(str(date_tz))
 
             for question in obj_survey_question:
-                obj_survey_user_input_line = self.env['survey.user_input_line'].search([('survey_id', '=', self.id),('user_input_id','=',user_input.id),('question_id','=',question.id)])
+                obj_survey_user_input_line = self.env['survey.user_input.line'].search([('survey_id', '=', self.id),('user_input_id','=',user_input.id),('question_id','=',question.id)])
                 for result in obj_survey_user_input_line:
                     if result.value_suggested and result.value_suggested_row: 
                         result_user.append(question.title+' - '+result.value_suggested_row.value)
@@ -238,7 +238,7 @@ class SurveyQuestion(models.Model):
     
     
 class SurveyUserInputLine(models.Model):
-    _inherit = 'survey.user_input_line'
+    _inherit = 'survey.user_input.line'
     
     answer_type = fields.Selection(selection_add = [('little_faces', 'little_faces')], string='Answer Type')
     value_little_faces = fields.Integer('Nivel de Satisfacción (Emojis)')

@@ -6,16 +6,31 @@ from odoo_test_helper import FakeModelLoader
 from odoo.tests import common
 
 
-class CommonTierValidation(common.SavepointCase):
+class CommonTierValidation(common.TransactionCase):
     @classmethod
     def setUpClass(cls):
-        super(CommonTierValidation, cls).setUpClass()
-
+        super().setUpClass()
+        # Remove this variable in v16 and put instead:
+        # from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
+        DISABLED_MAIL_CONTEXT = {
+            "tracking_disable": True,
+            "mail_create_nolog": True,
+            "mail_create_nosubscribe": True,
+            "mail_notrack": True,
+            "no_reset_password": True,
+        }
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
         cls.loader = FakeModelLoader(cls.env, cls.__module__)
         cls.loader.backup_registry()
-        from .tier_validation_tester import TierValidationTester, TierValidationTester2
+        from .tier_validation_tester import (
+            TierDefinition,
+            TierValidationTester,
+            TierValidationTester2,
+        )
 
-        cls.loader.update_registry((TierValidationTester, TierValidationTester2))
+        cls.loader.update_registry(
+            (TierValidationTester, TierValidationTester2, TierDefinition)
+        )
 
         cls.test_model = cls.env[TierValidationTester._name]
         cls.test_model_2 = cls.env[TierValidationTester2._name]
@@ -60,7 +75,7 @@ class CommonTierValidation(common.SavepointCase):
 
         # Create tier definitions:
         cls.tier_def_obj = cls.env["tier.definition"]
-        cls.tier_def_obj.create(
+        cls.tier_definition = cls.tier_def_obj.create(
             {
                 "model_id": cls.tester_model.id,
                 "review_type": "individual",
@@ -76,4 +91,4 @@ class CommonTierValidation(common.SavepointCase):
     @classmethod
     def tearDownClass(cls):
         cls.loader.restore_registry()
-        super(CommonTierValidation, cls).tearDownClass()
+        return super(CommonTierValidation, cls).tearDownClass()

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="logyca_budget_group_view_form" model="ir.ui.view">
+        <field name="name">logyca.budget_group.lg.form</field>
+        <field name="model">logyca.budget_group</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet string="Grupos presupuestal">
+                    <group >
+                        <group >
+                            <field name="code"/>
+                            <field name="name"/>
+                        </group>
+                        <group >
+                            <field name="lser_analytic_tag_ids"/>
+                            <field name="iac_analytic_tag_ids"/>
+                            <field name="log_analytic_tag_ids"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="logyca_budget_group_view_lg_tree" model="ir.ui.view">
+        <field name="name">logyca.budget_group.lg.tree</field>
+        <field name="model">logyca.budget_group</field>
+        <field name="arch" type="xml">
+            <tree string="Grupos presupuestal" >
+                <field name="code"/>
+                <field name="name"/>
+                <field name="lser_analytic_tag_ids"/>
+                <field name="iac_analytic_tag_ids"/>
+                <field name="log_analytic_tag_ids"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_logyca_budget_group" model="ir.actions.act_window">
+        <field name="name">Grupos presupuestal</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">logyca.budget_group</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_logyca_budget_group"
+        name="Grupos presupuestal"
+        parent="main_menu_fact_mass_confg"
+        action="action_logyca_budget_group"
+        sequence="3"
+        groups="group_invoice_mass"/>
+
+</odoo>

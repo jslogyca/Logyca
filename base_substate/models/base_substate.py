@@ -5,11 +5,11 @@ from odoo import fields, models
 
 
 class BaseSubstateType(models.Model):
-    """This model define technical data which precises
+    """This model defines technical data which precises
     for each target model concerned by substate,
     the technical "state" field name.
     Data in this model should be created by import as technical data
-    in the specific module. For exemple in sale_subsatate we can define:
+    in the specific module. For example in sale_substate we can define:
     base.substate.type:
      - name: Sale order Substate
      - model: sale.order
@@ -48,7 +48,9 @@ class TargetStateValue(models.Model):
         'Ex: for sale order "Quotation", "Sale order", "Locked"...',
     )
     base_substate_type_id = fields.Many2one(
-        "base.substate.type", string="Substate Type", ondelete="restrict",
+        "base.substate.type",
+        string="Substate Type",
+        ondelete="restrict",
     )
     target_state_value = fields.Char(
         required=True,
@@ -80,7 +82,8 @@ class BaseSubstate(models.Model):
     name = fields.Char("Substate Name", required=True, translate=True)
     description = fields.Text(translate=True)
     sequence = fields.Integer(
-        index=True, help="Gives the sequence order when applying the default substate",
+        index=True,
+        help="Gives the sequence order when applying the default substate",
     )
     target_state_value_id = fields.Many2one(
         "target.state.value", string="Target State Value", ondelete="restrict"

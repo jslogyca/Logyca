@@ -1,7 +1,13 @@
 <odoo>
     <data>
         <!-- Top menu item -->    
-        <menuitem name="Logyca" id="logyca.menu_root"/>        
+            <menuitem
+                id="logyca.menu_root"
+                name="Logyca"
+                sequence="10"
+                web_icon="logyca,static/description/icon.png"
+                groups="logyca.group_invoice_mass"/>
+
             <!-- menu city -->    
             <menuitem name="Ciudades" id="logyca.menu_city" sequence="1" parent="logyca.menu_root" action="logyca_menu_action_city"/>
             <!-- menu ciiu -->    
@@ -19,6 +25,73 @@
                 <menuitem name="Rango de activos" id="logyca.menu_asset_range" parent="logyca.menus_parameterization"  sequence="9" action="logyca_menu_action_asset_range"/>    
             <!-- menu Reportes -->        
             <menuitem name="Reportes" id="logyca.menus_reports" sequence="4" parent="logyca.menu_root" action="logyca_menu_action_reports"/>
-            <menuitem name="Reporte Cartera" id="logyca.menus_debtors_report" sequence="11" parent="studio_customization.contabilidad_reporte_cd30cc8d-42e8-4b0c-8791-9d46405e3542" action="logyca_action_debtors_report"/>
+
+            <menuitem 
+                id="logyca_menus_report_financial"
+                name="Reportes Financieros" 
+                sequence="6" 
+                parent="account_accountant.menu_accounting" />
+
+            <menuitem 
+                id="logyca_menus_debtors_report"
+                name="Reporte Cartera"
+                sequence="11"
+                parent="logyca_menus_report_financial" 
+                action="logyca_action_debtors_report"/>
+
+            <menuitem
+                id="main_menu_fact_mass"
+                name="Facturación Masiva"
+                sequence="10"
+                web_icon="logyca,static/description/validating.png"/>
+
+            <menuitem
+                id="main_menu_fact_mass_confg"
+                name="Parametrización"
+                parent="main_menu_fact_mass" 
+                sequence="1" />
+
+            <menuitem
+                id="main_menu_fact_mass_ejec_proc"
+                name="Ejecución Proceso"
+                parent="main_menu_fact_mass"
+                sequence="2"
+                groups="logyca.group_invoice_mass"/>
+
+            <menuitem
+                id="main_menu_fact_mass_report"
+                name="Reportes"
+                parent="main_menu_fact_mass"
+                sequence="3" />                
+
+            <menuitem id="menu_massive_invoicing_process_oc"
+                name="Ordenes de Venta"
+                parent="main_menu_fact_mass_ejec_proc"
+                action="action_massive_invoicing_process"
+                sequence="1" />
+          
+            <menuitem id="menu_massive_invoicing_process_fact"
+                name="Facturación"
+                parent="main_menu_fact_mass_ejec_proc"
+                action="action_massive_invoicing_process_fac"
+                sequence="2" />
+
+            <menuitem id="menu_massive_invoicing_process_rpi"
+                name="Reporte de inconsistencias"
+                parent="main_menu_fact_mass_report"
+                action="action_massive_invoicing_inconsistencies_report"
+                sequence="1" />
+          
+            <menuitem id="menu_massive_invoicing_process_rppi"
+                name="Reporte de inconsistencias de prefijos"
+                parent="main_menu_fact_mass_report"
+                action="action_massive_invoicing_prefix_inconsistencies_report"
+                sequence="2" />
+
+            <menuitem id="menu_massive_invoicing_report_cxc"
+                name="Reporte CXC Facturación Masiva"
+                parent="main_menu_fact_mass_report"
+                action="action_massive_invoicing_report_cxc"
+                sequence="3" />
     </data>
 </odoo>

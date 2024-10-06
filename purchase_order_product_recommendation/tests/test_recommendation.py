@@ -1,14 +1,25 @@
 # Copyright 2019 David Vidal <david.vidal@tecnativa.com>
 # Copyright 2020 Manuel Calero - Tecnativa
+# Copyright 2020 Tecnativa - Pedro M. Baeza
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import fields
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
-class RecommendationCase(SavepointCase):
+class RecommendationCase(TransactionCase):
     @classmethod
     def setUpClass(cls):
-        super(RecommendationCase, cls).setUpClass()
+        super().setUpClass()
+        # Remove this variable in v16 and put instead:
+        # from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
+        DISABLED_MAIL_CONTEXT = {
+            "tracking_disable": True,
+            "mail_create_nolog": True,
+            "mail_create_nosubscribe": True,
+            "mail_notrack": True,
+            "no_reset_password": True,
+        }
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
         cls.partner = cls.env["res.partner"].create({"name": "Mr. Odoo"})
         cls.category_obj = cls.env["product.category"]
         cls.categ1 = cls.category_obj.create({"name": "Test Cat 1"})
@@ -236,9 +247,9 @@ class RecommendationCaseTests(RecommendationCase):
         line_prod_3 = wizard.line_ids.filtered(lambda x: x.product_id == self.prod_3)
         self.assertEqual(line_prod_3.times_delivered, 1)
         self.assertEqual(line_prod_3.units_delivered, 13)
-        self.assertEqual(line_prod_3.units_included, 9)
-        self.assertEqual(line_prod_3.units_available, 4)
-        self.assertEqual(line_prod_3.units_virtual_available, 4)
+        self.assertEqual(line_prod_3.units_included, 8)
+        self.assertEqual(line_prod_3.units_available, 5)
+        self.assertEqual(line_prod_3.units_virtual_available, 5)
 
     def test_action_accept(self):
         """Open wizard when there are PO Lines and click on Accept"""
@@ -305,3 +316,16 @@ class RecommendationCaseTests(RecommendationCase):
             [("purchase_ok", "!=", False)]
         )
         self.assertEqual(len(wizard.line_ids), purchase_products_number)
+
+    def test_recommendations_inactive_product(self):
+        """Recommendations are OK."""
+        self.prod_2.active = False
+        wizard = self.wizard()
+        wizard.date_begin = wizard.date_end = fields.Date.from_string("2019-02-01")
+        wizard._generate_recommendations()
+        # The first recommendation line is the prod_3, as prod_2 is archived
+        self.assertEqual(wizard.line_ids[0].product_id, self.prod_3)
+        self.prod_3.purchase_ok = False
+        wizard._generate_recommendations()
+        # No recommendations as both elegible products are excluded
+        self.assertFalse(wizard.line_ids)

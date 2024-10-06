@@ -2,7 +2,7 @@
 ###################################################################################
 #
 #    Cybrosys Technologies Pvt. Ltd.
-#    Copyright (C) 2018-TODAY Cybrosys Technologies (<https://www.cybrosys.com>).
+#    Copyright (C) 2021-TODAY Cybrosys Technologies (<https://www.cybrosys.com>).
 #    Author: Cybrosys Techno Solutions (<https://www.cybrosys.com>)
 #
 #    This program is free software: you can modify
@@ -22,9 +22,10 @@
 
 {
     'name': 'Open HRMS Employee Checklist',
-    'version': '13.0.1.0.1',
+    'version': '15.0.1.0.0',
     'summary': """Manages Employee's Entry & Exit Process""",
     'description': """This module is used to remembering the employee's entry and exit progress.""",
+    'live_test_url': 'https://youtu.be/KV_Jb_9AGqU',
     'category': 'Generic Modules/Human Resources',
     'author': 'Cybrosys Techno solutions,Open HRMS',
     'company': 'Cybrosys Techno Solutions',
@@ -38,8 +39,7 @@
         'views/employee_check_list_view.xml',
         'views/hr_plan_view.xml',
     ],
-    'demo': [],
-    'images': ['static/description/banner.jpg'],
+    'images': ['static/description/banner.png'],
     'license': 'AGPL-3',
     'installable': True,
     'auto_install': False,

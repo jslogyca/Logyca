@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="massive_invoicing_smlv_view_form" model="ir.ui.view">
+        <field name="name">massive.invoicing.smlv.form</field>
+        <field name="model">massive.invoicing.smlv</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet string="Salario Mínimo">
+                    <group >
+                        <group >
+                            <field name="year" />
+                        </group>
+                        <group >
+                            <field name="smlv" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="massive_invoicing_smlv_view_tree" model="ir.ui.view">
+        <field name="name">massive.invoicing.smlv.tree</field>
+        <field name="model">massive.invoicing.smlv</field>
+        <field name="arch" type="xml">
+            <tree string="Salario Mínimo" >
+                <field name="year" />
+                <field name="smlv"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_massive_invoicing_smlv" model="ir.actions.act_window">
+        <field name="name">Salario Mínimo</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">massive.invoicing.smlv</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_massive_invoicing_smlv"
+        name="Salario Mínimo"
+        parent="main_menu_fact_mass_confg"
+        action="action_massive_invoicing_smlv"
+        sequence="0"
+        groups="group_invoice_mass"/>
+
+</odoo>

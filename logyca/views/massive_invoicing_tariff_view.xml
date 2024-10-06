@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="massive_invoicing_tariff_lg_view_form" model="ir.ui.view">
+        <field name="name">massive.invoicing.tariff.lg.form</field>
+        <field name="model">massive.invoicing.tariff</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet string="Tarifas por Activos">
+                    <group >
+                        <group >
+                            <field name="year"/>
+                            <field name="type_vinculation"/>
+                            <field name="asset_range"/>
+                        </group>
+                        <group >
+                            <field name="product_id"/>
+                            <field name="fee_value"/>
+                            <field name="unit_fee_value"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="massive_invoicing_tariff_view_lg_tree" model="ir.ui.view">
+        <field name="name">massive.invoicing.tariff.lg.tree</field>
+        <field name="model">massive.invoicing.tariff</field>
+        <field name="arch" type="xml">
+            <tree string="Tarifas por Activos" >
+                <field name="year"/>
+                <field name="type_vinculation"/>
+                <field name="asset_range"/>
+                <field name="product_id"/>
+                <field name="fee_value"/>
+                <field name="unit_fee_value"/>                   
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_massive_invoicing_tariff" model="ir.actions.act_window">
+        <field name="name">Tarifas por Activos</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">massive.invoicing.tariff</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_massive_invoicing_tariff"
+        name="Tarifas por Activos"
+        parent="main_menu_fact_mass_confg"
+        action="action_massive_invoicing_tariff"
+        sequence="3"
+        groups="group_invoice_mass"/>
+
+</odoo>

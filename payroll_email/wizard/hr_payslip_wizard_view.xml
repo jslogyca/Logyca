@@ -56,4 +56,13 @@
 		<field name="view_id" ref="view_iyr_mass_mail" />
 		<field name="target">new</field>
 	</record>
+
+	<record id="action_iyr_mass_mail" model="ir.actions.act_window">
+		<field name="name">IyR Mass Mail</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">payroll.mass.mail</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="view_iyr_mass_mail" />
+		<field name="target">new</field>
+	</record>
 </odoo>

@@ -48,7 +48,8 @@ class TierDefinition(models.Model):
         domain="[('id', 'in', valid_reviewer_field_ids)]",
     )
     valid_reviewer_field_ids = fields.One2many(
-        comodel_name="ir.model.fields", compute="_compute_domain_reviewer_field",
+        comodel_name="ir.model.fields",
+        compute="_compute_domain_reviewer_field",
     )
     definition_type = fields.Selection(
         string="Definition", selection=[("domain", "Domain")], default="domain"
@@ -67,10 +68,18 @@ class TierDefinition(models.Model):
         "this definition is triggered.",
     )
     has_comment = fields.Boolean(string="Comment", default=False)
+    notify_reminder_delay = fields.Integer(
+        string="Send reminder message on pending reviews",
+        help="Number of days after which a message must be posted to remind about "
+        "pending validation  (0 = no reminder)",
+    )
     approve_sequence = fields.Boolean(
         string="Approve by sequence",
         default=False,
         help="Approval order by the specified sequence number",
+    )
+    approve_sequence_bypass = fields.Boolean(
+        help="Bypassed (auto validated), if previous tier was validated by same reviewer",
     )
 
     @api.onchange("review_type")
@@ -84,3 +93,33 @@ class TierDefinition(models.Model):
             rec.valid_reviewer_field_ids = self.env["ir.model.fields"].search(
                 [("model", "=", rec.model), ("relation", "=", "res.users")]
             )
+
+    def _get_review_needing_reminder(self):
+        """Return all the reviews that have the reminder setup."""
+        self.ensure_one()
+        if not self.notify_reminder_delay:
+            return self.env["tier.review"]
+        review_date = fields.Datetime.subtract(
+            fields.Datetime.now(), days=self.notify_reminder_delay
+        )
+        return self.env["tier.review"].search(
+            [
+                ("definition_id", "=", self.id),
+                ("status", "=", "pending"),
+                "|",
+                "&",
+                ("create_date", "<", review_date),
+                ("last_reminder_date", "=", False),
+                ("last_reminder_date", "<", review_date),
+            ],
+            limit=1,
+        )
+
+    def _cron_send_review_reminder(self):
+        definition_with_reminder = self.env["tier.definition"].search(
+            [("notify_reminder_delay", ">", 0)]
+        )
+        for record in definition_with_reminder:
+            review_to_remind = record._get_review_needing_reminder()
+            if review_to_remind:
+                review_to_remind._send_review_reminder()

@@ -78,10 +78,10 @@ class HrLoan(models.Model):
                                 ('refuse', 'Refused'),
                                 ('cancel', 'Canceled'),
                                 ('done', 'Done'),
-                            ], string="State", default='draft', track_visibility='onchange', copy=False, )
+                            ], string="State", default='draft', tracking=True, copy=False, )
     type_compute = fields.Selection([('fijo', 'Fijo'),
                                         ('amount', 'Amount'),
-                                        ('fee', 'Fee')], string="Compute Type", track_visibility='onchange')
+                                        ('fee', 'Fee')], string="Compute Type", tracking=True)
     analytic_account_id = fields.Many2one('account.analytic.account', string='Account Analytic', tracking=True)
     payslip_id = fields.Many2one('hr.payslip', string="Payslip Ref.", help="Payslip")
 

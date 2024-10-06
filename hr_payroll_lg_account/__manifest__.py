@@ -18,6 +18,7 @@
         'hr_payroll',
         'hr_payroll_account',
         'logyca',
+        'hr_work_entry_contract_enterprise',
     ],
     'description': '''
 

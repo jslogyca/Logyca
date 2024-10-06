@@ -240,10 +240,10 @@ class AccountBalancePartnerReport(models.Model):
                             From
                             (
                             SELECT 
-                            COALESCE(e.code_prefix,substring(a.code for 1)) as Cuenta_Nivel_1,
-                            COALESCE(d.code_prefix,coalesce(c.code_prefix,coalesce(b.code_prefix,substring(a.code for 1)))) || ' - ' || coalesce(d."name",coalesce(c."name",coalesce(b."name",a."name")))  as Cuenta_Nivel_2,
-                            COALESCE(c.code_prefix,coalesce(b.code_prefix,substring(a.code for 1))) || ' - ' || coalesce(c."name",coalesce(b."name",a."name")) as Cuenta_Nivel_3,
-                            COALESCE(b.code_prefix,substring(a.code for 1)) || ' - ' || COALESCE(b."name",a."name") as Cuenta_Nivel_4,
+                            COALESCE(e.code_prefix_start,substring(a.code for 1)) as Cuenta_Nivel_1,
+                            COALESCE(d.code_prefix_start,coalesce(c.code_prefix_start,coalesce(b.code_prefix_start,substring(a.code for 1)))) || ' - ' || coalesce(d."name",coalesce(c."name",coalesce(b."name",a."name")))  as Cuenta_Nivel_2,
+                            COALESCE(c.code_prefix_start,coalesce(b.code_prefix_start,substring(a.code for 1))) || ' - ' || coalesce(c."name",coalesce(b."name",a."name")) as Cuenta_Nivel_3,
+                            COALESCE(b.code_prefix_start,substring(a.code for 1)) || ' - ' || COALESCE(b."name",a."name") as Cuenta_Nivel_4,
                             a.code || ' - ' || a."name" as Cuenta_Nivel_5,a.id 
                             FROM account_account a
                             LEFT JOIN account_group b on a.group_id = b.id

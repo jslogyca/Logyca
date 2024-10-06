@@ -3,7 +3,7 @@
 {
     "name": "Base Tier Validation",
     "summary": "Implement a validation process based on tiers.",
-    "version": "13.0.1.9.2",
+    "version": "15.0.1.5.0",
     "development_status": "Mature",
     "maintainers": ["LoisRForgeFlow"],
     "category": "Tools",
@@ -14,14 +14,26 @@
     "installable": True,
     "depends": ["mail"],
     "data": [
+        "data/cron_data.xml",
         "data/mail_data.xml",
         "security/ir.model.access.csv",
         "security/tier_validation_security.xml",
+        "views/res_config_settings_views.xml",
         "views/tier_definition_view.xml",
         "views/tier_review_view.xml",
-        "views/assets_backend.xml",
         "wizard/comment_wizard_view.xml",
         "templates/tier_validation_templates.xml",
     ],
-    "qweb": ["static/src/xml/systray.xml", "static/src/xml/tier_review_template.xml"],
+    "assets": {
+        "web.assets_backend": [
+            "/base_tier_validation/static/src/js/systray.js",
+            "/base_tier_validation/static/src/js/tier_review_widget.js",
+            "/base_tier_validation/static/src/scss/systray.scss",
+            "/base_tier_validation/static/src/scss/review.scss",
+        ],
+        "web.assets_qweb": [
+            "base_tier_validation/static/src/xml/systray.xml",
+            "base_tier_validation/static/src/xml/tier_review_template.xml",
+        ],
+    },
 }

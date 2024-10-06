@@ -12,14 +12,18 @@ class HrEmployeeDocument(models.Model):
         """Sending document expiry notification to employees."""
 
         now = datetime.now() + timedelta(days=1)
-        date_now = now.date()
+        # date_now = now.date()
+        date_now = fields.Date.today()
         match = self.search([])
         for i in match:
             if i.expiry_date:
                 if i.notification_type == 'single':
                     exp_date = fields.Date.from_string(i.expiry_date)
-                    if date_now == exp_date:
-                        mail_content = "  Hello  " + i.employee_ref.name + ",<br>Your Document " + i.name + "is going to expire on " + \
+                    print('exp_date :',exp_date)
+                    # if date_now == exp_date:
+                    if date_now == i.expiry_date:
+
+                        mail_content = "  Hello  " + i.employee_ref.name + ",<br>Your Document " + i.name + " is going to expire on " + \
                                        str(i.expiry_date) + ". Please renew it before expiry date"
                         main_content = {
                             'subject': _('Document-%s Expired On %s') % (i.name, i.expiry_date),
@@ -30,9 +34,10 @@ class HrEmployeeDocument(models.Model):
                         self.env['mail.mail'].create(main_content).send()
                 elif i.notification_type == 'multi':
                     exp_date = fields.Date.from_string(i.expiry_date) - timedelta(days=i.before_days)
-                    if date_now == exp_date or date_now == i.expiry_date:
+                    if date_now == exp_date or date_now == i.expiry_date: #on Expire date and few days(As it set) before expire date
+                        print('mail send started before few')
                         mail_content = "  Hello  " + i.employee_ref.name + ",<br>Your Document " + i.name + \
-                                       "is going to expire on " + str(i.expiry_date) + \
+                                       " is going to expire on " + str(i.expiry_date) + \
                                        ". Please renew it before expiry date"
                         main_content = {
                             'subject': _('Document-%s Expired On %s') % (i.name, i.expiry_date),
@@ -43,9 +48,13 @@ class HrEmployeeDocument(models.Model):
                         self.env['mail.mail'].create(main_content).send()
                 elif i.notification_type == 'everyday':
                     exp_date = fields.Date.from_string(i.expiry_date) - timedelta(days=i.before_days)
-                    if date_now >= exp_date and date_now == i.expiry_date:
+                    # if date_now >= exp_date and date_now == i.expiry_date:
+                    if date_now >= exp_date or date_now == i.expiry_date:
+
+                        print('Everyday till START sending')
+
                         mail_content = "  Hello  " + i.employee_ref.name + ",<br>Your Document " + i.name + \
-                                       "is going to expire on " + str(i.expiry_date) + \
+                                       " is going to expire on " + str(i.expiry_date) + \
                                        ". Please renew it before expiry date"
                         main_content = {
                             'subject': _('Document-%s Expired On %s') % (i.name, i.expiry_date),
@@ -56,10 +65,13 @@ class HrEmployeeDocument(models.Model):
                         self.env['mail.mail'].create(main_content).send()
                 elif i.notification_type == 'everyday_after':
                     exp_date = fields.Date.from_string(i.expiry_date) + timedelta(days=i.before_days)
-                    if date_now == exp_date and date_now == i.expiry_date:
+                    # if date_now == exp_date and date_now == i.expiry_date:
+                    if date_now <= exp_date or date_now == i.expiry_date:
+
+                        print('Every day after START sending')
                         mail_content = "  Hello  " + i.employee_ref.name + ",<br>Your Document " + i.name + \
-                                       "is going to expire on " + str(i.expiry_date) + \
-                                       ". Please renew it before expiry date"
+                                       " is expired on " + str(i.expiry_date) + \
+                                       ". Please renew it "
                         main_content = {
                             'subject': _('Document-%s Expired On %s') % (i.name, i.expiry_date),
                             'author_id': self.env.user.partner_id.id,
@@ -69,9 +81,10 @@ class HrEmployeeDocument(models.Model):
                         self.env['mail.mail'].create(main_content).send()
                 else:
                     exp_date = fields.Date.from_string(i.expiry_date) - timedelta(days=7)
-                    if date_now >= exp_date:
+                    # if date_now >= exp_date:
+                    if date_now == exp_date:
                         mail_content = "  Hello  " + i.employee_ref.name + ",<br>Your Document " + i.name + \
-                                       "is going to expire on " + \
+                                       " is going to expire on " + \
                                        str(i.expiry_date) + ". Please renew it before expiry date"
                         main_content = {
                             'subject': _('Document-%s Expired On %s') % (i.name, i.expiry_date),

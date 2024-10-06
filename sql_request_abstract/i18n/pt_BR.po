@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-01 02:11+0000\n"
-"PO-Revision-Date: 2022-02-01 20:33+0000\n"
-"Last-Translator: Rodrigo Macedo <rmsolucoeseminformatica@protonmail.com>\n"
+"PO-Revision-Date: 2019-09-03 01:23+0000\n"
+"Last-Translator: Rodrigo Macedo <rmsolucoeseminformatic4@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/"
 "teams/23907/pt_BR/)\n"
 "Language: pt_BR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Weblate 3.8\n"
 
 #. module: sql_request_abstract
 #: model:ir.model.fields,field_description:sql_request_abstract.field_sql_request_mixin__group_ids
@@ -31,37 +31,17 @@ msgid "Allowed Users"
 msgstr "Usuários Permitidos"
 
 #. module: sql_request_abstract
-#: model:ir.model.fields,field_description:sql_request_abstract.field_sql_request_mixin__display_name
-msgid "Display Name"
-msgstr "Nome para Mostrar"
-
-#. module: sql_request_abstract
+#: model:ir.model.fields.selection,name:sql_request_abstract.selection__bi_sql_view__state__draft
+#: model:ir.model.fields.selection,name:sql_request_abstract.selection__sql_export__state__draft
 #: model:ir.model.fields.selection,name:sql_request_abstract.selection__sql_request_mixin__state__draft
 msgid "Draft"
 msgstr "Rascunho"
-
-#. module: sql_request_abstract
-#: model:ir.model.fields,field_description:sql_request_abstract.field_sql_request_mixin__id
-msgid "ID"
-msgstr "Identificação"
-
-#. module: sql_request_abstract
-#: model:ir.model.fields,help:sql_request_abstract.field_sql_request_mixin__use_external_database
-msgid ""
-"If filled, the query will be executed against an external database, "
-"configured in Odoo main configuration file. "
-msgstr ""
 
 #. module: sql_request_abstract
 #: code:addons/sql_request_abstract/models/sql_request_mixin.py:0
 #, python-format
 msgid "It is not allowed to execute a not checked request."
 msgstr "Não é permitido executar uma solicitação não verificada."
-
-#. module: sql_request_abstract
-#: model:ir.model.fields,field_description:sql_request_abstract.field_sql_request_mixin____last_update
-msgid "Last Modified on"
-msgstr "Última atualização em"
 
 #. module: sql_request_abstract
 #: model:res.groups,name:sql_request_abstract.group_sql_request_manager
@@ -99,14 +79,11 @@ msgid "SQL Request Mixin"
 msgstr "SQL Solicitado Mixin"
 
 #. module: sql_request_abstract
+#: model:ir.model.fields.selection,name:sql_request_abstract.selection__bi_sql_view__state__sql_valid
+#: model:ir.model.fields.selection,name:sql_request_abstract.selection__sql_export__state__sql_valid
 #: model:ir.model.fields.selection,name:sql_request_abstract.selection__sql_request_mixin__state__sql_valid
 msgid "SQL Valid"
 msgstr "SQL Válido"
-
-#. module: sql_request_abstract
-#: model:ir.model.fields,field_description:sql_request_abstract.field_sql_request_mixin__smart_search
-msgid "Smart Search"
-msgstr "Pesquisa Inteligente"
 
 #. module: sql_request_abstract
 #: model:ir.model.fields,field_description:sql_request_abstract.field_sql_request_mixin__state
@@ -149,22 +126,9 @@ msgid "Unimplemented mode : '%s'"
 msgstr "Modo não implementado: '%s'"
 
 #. module: sql_request_abstract
-#: model:ir.model.fields,field_description:sql_request_abstract.field_sql_request_mixin__use_external_database
-msgid "Use External Database"
-msgstr ""
-
-#. module: sql_request_abstract
 #: model:res.groups,name:sql_request_abstract.group_sql_request_user
 msgid "User"
 msgstr "Usuário"
-
-#. module: sql_request_abstract
-#: code:addons/sql_request_abstract/models/sql_request_mixin.py:0
-#, python-format
-msgid ""
-"You can't use an external database as there are no such configuration about "
-"this. Please contact your Odoo administrator to solve this issue."
-msgstr ""
 
 #. module: sql_request_abstract
 #: model:ir.model.fields,help:sql_request_abstract.field_sql_request_mixin__query
@@ -174,3 +138,12 @@ msgid ""
 msgstr ""
 "Você não pode usar as seguintes palavras: DELETE, DROP, CREATE, INSERT, "
 "ALTER, TRUNCATE, EXECUTE, UPDATE."
+
+#~ msgid "Display Name"
+#~ msgstr "Nome para Mostrar"
+
+#~ msgid "ID"
+#~ msgstr "Identificação"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Última atualização em"

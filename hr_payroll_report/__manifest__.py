@@ -26,11 +26,6 @@
         'wizard/hr_payroll_report_view.xml',
         'security/ir.model.access.csv',
         'views/hr_salary_rule_view.xml',
-        # 'views/report_payslip.xml',
-        # 'report/hr_payslip_contractor_report.xml',
-        # 'report/report_payslip_contractor.xml',
-        # 'report/hr_payslip_report_contractor_invoice.xml',
-        # 'report/report_contractor_invoice.xml'      
     ],
     'qweb': [
     ]

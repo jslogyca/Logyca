@@ -31,6 +31,8 @@ class ReportExcelEnforcement(models.Model):
     credit = fields.Float('credit')
     debit = fields.Float('debit')
 
+
+# e.x_studio_clase as x_studio_clase,
     def _select(self):
         select_str = """
         SELECT
@@ -43,7 +45,6 @@ class ReportExcelEnforcement(models.Model):
             p.id as analytic_group_two_id,
             a.ref as ref,
             j.id as company_id,
-            e.x_studio_clase as x_studio_clase,
             d.id  as cuenta_analitica,
             a.name as descripcion, 
             e.code as tipo_cuenta,

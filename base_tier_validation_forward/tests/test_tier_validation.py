@@ -4,11 +4,11 @@
 from odoo_test_helper import FakeModelLoader
 
 from odoo.tests import Form
-from odoo.tests.common import SavepointCase, tagged
+from odoo.tests.common import TransactionCase, tagged
 
 
 @tagged("post_install", "-at_install")
-class TierTierValidation(SavepointCase):
+class TierTierValidation(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super(TierTierValidation, cls).setUpClass()
@@ -16,10 +16,14 @@ class TierTierValidation(SavepointCase):
         cls.loader = FakeModelLoader(cls.env, cls.__module__)
         cls.loader.backup_registry()
         from odoo.addons.base_tier_validation.tests.tier_validation_tester import (
+            TierDefinition,
             TierValidationTester,
+            TierValidationTester2,
         )
 
-        cls.loader.update_registry((TierValidationTester,))
+        cls.loader.update_registry(
+            (TierValidationTester, TierValidationTester2, TierDefinition)
+        )
         cls.test_model = cls.env[TierValidationTester._name]
 
         cls.tester_model = cls.env["ir.model"].search(
@@ -66,7 +70,7 @@ class TierTierValidation(SavepointCase):
     @classmethod
     def tearDownClass(cls):
         cls.loader.restore_registry()
-        super(TierTierValidation, cls).tearDownClass()
+        return super(TierTierValidation, cls).tearDownClass()
 
     def test_01_forward_tier(self):
         # Create new test record
@@ -98,7 +102,7 @@ class TierTierValidation(SavepointCase):
         wizard = Form(
             self.env["tier.validation.forward.wizard"]
             .with_user(self.test_user_2.id)
-            .with_context(ctx)
+            .with_context(**ctx)
         )
         wizard.forward_reviewer_id = self.test_user_1
         wizard.forward_description = "Please review again"
@@ -112,7 +116,9 @@ class TierTierValidation(SavepointCase):
         res = record.with_user(self.test_user_1.id).validate_tier()
         ctx = res.get("context")
         wizard = Form(
-            self.env["comment.wizard"].with_user(self.test_user_1.id).with_context(ctx)
+            self.env["comment.wizard"]
+            .with_user(self.test_user_1.id)
+            .with_context(**ctx)
         )
         wizard.comment = "Forward tier is reviewed"
         wiz = wizard.save()

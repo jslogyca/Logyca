@@ -5,7 +5,7 @@ import logging
 import re
 from io import BytesIO
 
-from odoo import api, models
+from odoo import models
 
 _logger = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ try:
                 # Only up to 100 duplicates
                 deduplicated_secuence = "~{:02d}".format(duplicated_secuence + 1)
                 if duplicated_secuence > 99:
-                    raise xlsxwriter.exceptions.DuplicateWorksheetName
+                    raise xlsxwriter.exceptions.DuplicateWorksheetName  # noqa: B904
                 if duplicated_secuence:
                     sheetname = re.sub(pattern, deduplicated_secuence, sheetname)
                 elif len(sheetname) <= 28:
@@ -71,9 +71,9 @@ class ReportXlsxAbstract(models.AbstractModel):
 
     def _get_objs_for_report(self, docids, data):
         """
-        Returns objects for xlsx report.  From WebUI these
+        Returns objects for xlx report.  From WebUI these
         are either as docids taken from context.active_ids or
-        in the case of wizard are in data. Manual calls may rely
+        in the case of wizard are in data.  Manual calls may rely
         on regular context, setting docids, or setting data.
 
         :param docids: list of integers, typically provided by
@@ -101,7 +101,7 @@ class ReportXlsxAbstract(models.AbstractModel):
     def create_xlsx_report(self, docids, data):
         objs = self._get_objs_for_report(docids, data)
         file_data = BytesIO()
-        workbook = self.get_workbook(file_data)
+        workbook = xlsxwriter.Workbook(file_data, self.get_workbook_options())
         self.generate_xlsx_report(workbook, data, objs)
         workbook.close()
         file_data.seek(0)
@@ -116,15 +116,3 @@ class ReportXlsxAbstract(models.AbstractModel):
 
     def generate_xlsx_report(self, workbook, data, objs):
         raise NotImplementedError()
-
-    @api.model
-    def _get_new_workbook(self, file_data):
-        """
-        :return: empty Workbook
-        :rtype: xlsxwriter.Workbook object
-        """
-        return xlsxwriter.Workbook(file_data, self.get_workbook_options())
-
-    @api.model
-    def get_workbook(self, file_data):
-        return self._get_new_workbook(file_data)
