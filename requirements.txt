@@ -3,4 +3,4 @@
 pem==23.1.0
 xmlsig==1.0.1
 requests==2.32.3
-lxml==4.8.0
+lxml==4.9.1
