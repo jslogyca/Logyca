@@ -19,7 +19,7 @@ If you have any question/queries/additional works on OpenHRMS or this module, Yo
 Contacts
 --------
 info - info@cybrosys.com
-Nilmar Shereef - shereef@cybrosys.in
+Nilmar Shereef
 
 Website:
 https://www.openhrms.com

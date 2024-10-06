@@ -13,27 +13,26 @@
 				<field name="colabor_id" attrs="{'invisible': [('ticket_interno', '=', False)]}"/>
             </xpath>
 		</field>
-	</record>
+	 </record>
+
 	<record id="helpdesk_ticket_view_form_logyca_type" model="ir.ui.view">
 		<field name="name">helpdesk.ticket.view.form.logyca.type</field>
 		<field name="model">helpdesk.ticket</field>
-		<field name="inherit_id" ref="studio_customization.odoo_studio_helpdesk_f320d02a-43c2-4b38-b7d8-8e9b8d471ddb"/>
+		<field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
 		<field name="arch" type="xml">
-            <xpath expr="//field[@name='ticket_type_id']" position="before">
+            <xpath expr="//field[@name='team_id']" position="before">
 				<field name="type_desk" required="1"/>
 				<field name="platform_id" required="1"/>
 				<field name="service_id" domain="[('platform_id', '=', platform_id)]" required="1"/>
-            </xpath>
-            <xpath expr="//field[@name='ticket_type_id']" position="after">
 				<field name="vinculation" invisible="1"/>
-				<field name="x_type_vinculation" force_save="1" readonly="1" />
+				<field name="x_type_vinculation" force_save="1" readonly="1" />				
             </xpath>
 		</field>
 	</record>
 	<record id="helpdesk_ticket_view_form_domain_type" model="ir.ui.view">
 		<field name="name">helpdesk.ticket.view.form.domain.type</field>
 		<field name="model">helpdesk.ticket</field>
-		<field name="inherit_id" ref="studio_customization.odoo_studio_helpdesk_f320d02a-43c2-4b38-b7d8-8e9b8d471ddb"/>
+		<field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
 		<field name="arch" type="xml">
             <xpath expr="//field[@name='ticket_type_id']" position="replace">
 				<field name="ticket_type_id" domain="[('service_id', '=', service_id)]" required="1"/>

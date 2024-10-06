@@ -30,7 +30,7 @@
     <menuitem 
 		id="menu_action_hr_salary_rule_config_form" 
 		action="action_salary_rule_config_form" 
-		parent="hr_payroll.menu_hr_payroll_configuration"
+		parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration"
 		sequence="20"/>
 
 	<record id="hr_salary_rule_view_tree_children_seq" model="ir.ui.view">

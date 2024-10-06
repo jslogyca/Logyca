@@ -1,22 +1,138 @@
 <?xml version="1.0" ?>
 <odoo>
-    <data>
-        <record id="view_partner_not_contacted_again_inherit" model="ir.ui.view">
-            <field name="name">not.contacted.again.res.partner</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="arch" type="xml">
-                <data>
-                    <xpath expr="//field[@name='x_not_contacted_again']" position="after">
-                        <field name="x_not_contacted_again_partially"/>
-                    </xpath>
-                    <xpath expr="//field[@name='bank_ids']/tree//field[@name='acc_number']" position="after">
-                        <field name="company_id"/>
-                    </xpath>
-                </data>
-            </field>
-        </record>
-            
-    </data>
+    <record id="view_partner_not_contacted_again_inherit" model="ir.ui.view">
+        <field name="name">not.contacted.again.res.partner</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='mobile']" position="after">
+                <field name="x_not_contacted_again"/>
+                <field name="x_not_contacted_again_partially"/>
+            </xpath>
+            <!-- <xpath expr="//field[@name='street']" position="before"> -->
+            <xpath expr="//span[@name='address_name']" position="before">
+                <field name="x_type_thirdparty" widget="many2many_checkboxes" />
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="before">
+                <field name="x_document_type" />
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="after">
+                    <field name="x_digit_verification" />
+                    <field name="x_active_for_logyca"/>
+                    <!-- <field name="x_cargo_directivo"/> -->
+                    <field name="x_first_name" attrs="{'invisible': [('is_company','=', True)]}"/>
+                    <field name="x_second_name" attrs="{'invisible': [('is_company','=', True)]}"/>
+                    <field name="x_first_lastname" attrs="{'invisible': [('is_company','=', True)]}"/>
+                    <field name="x_second_lastname" attrs="{'invisible': [('is_company','=', True)]}"/>
+            </xpath>
+            <!-- <xpath expr="//field[@name='l10n_latam_identification_type_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath> -->
+            <xpath expr="//field[@name='city']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='state_id']" position="before">
+                <field name="x_city"/>
+            </xpath>                
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="x_tax_responsibilities" widget="many2many_tags"/>
+                <field name="x_is_business_group"/>
+                <field name="x_name_business_group" attrs="{'invisible': [('x_is_business_group','=', False)]}"/>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/notebook[1]" position="after">
+                <notebook name="studio_notebook_Py5Y9">
+                    <page name="studio_page_Py5Y9" string="Clasificación">
+                        <group name="studio_group_Py5Y9">
+                            <group name="studio_group_Py5Y9_left">
+                                <field name="x_organization_type" attrs="{'invisible': [('is_company','=', False)]}"/>
+                                <!-- <field name="x_entity_type"/> -->
+                                <field name="x_sector_id"/>
+                                <!-- <field name="x_subsector_id"/> -->
+                            </group>
+                            <group name="studio_group_Py5Y9_right">
+                                <field name="x_ciiu_activity" widget="many2many_tags" domain="[['child_ids','=',False]]"/>
+                                <field name="x_work_groups" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page name="studio_page_gNPQ5" string="Inf. Vinculación">
+                        <group name="studio_group_gNPQ5">
+                            <group name="studio_group_gNPQ5_left">
+                                <field name="x_active_vinculation" widget="boolean_toggle" readonly="0"/>
+                                <field name="x_date_vinculation" readonly="0"/>
+                                <field name="x_type_vinculation" widget="many2many_tags" domain="[['novelty','=',1]]"/>
+                                <field name="x_date_decoupling"/>
+                                <field name="x_reason_desvinculation"/>
+                            </group>
+                            <group name="studio_group_gNPQ5_right">
+                                <field name="x_additional_codes"/>
+                                <field name="x_codes_gtin"/>
+                                <field name="x_excluded_massive_invoicing"/>
+                                <field name="x_gtin_massive_invoicing"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page name="studio_page_rvc2020" string="Inf. RVC">
+                        <group name="studio_group_rvc2020">
+                            <field name="x_sponsored"/>
+                            <field name="x_flagging_company" attrs="{'invisible': [['x_sponsored','=',False]]}" />
+                            <field name="x_rvc_information" attrs="{'invisible': [['x_sponsored','=',False]]}" >
+                                <tree editable="bottom">
+                                <field name="types"/>
+                                <field name="activation_date"/>
+                                <field name="finally_date"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                    <page name="studio_page_s9FNl" string="Inf. Historica">
+                        <group name="studio_group_s9FNl">
+                            <group name="studio_group_s9FNl_left">
+                                <field name="x_history_partner_notes">
+                                    <tree string="Información historia de salesforce NOTAS">
+                                        <field name="id"/>
+                                        <field name="title"/>
+                                        <field name="activity_date"/>
+                                        <field name="body"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group name="studio_group_s9FNl_right">
+                                <field name="x_history_partner_emails">
+                                    <tree string="Información historia de salesforce EMAILS">
+                                        <field name="id"/>
+                                        <field name="title"/>
+                                        <field name="activity_date"/>
+                                        <field name="body"/>
+                                        <field name="from_address"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_partner_latam_form_type" model="ir.ui.view">
+        <field name="name">res_partner.latam.form.type</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="l10n_latam_base.view_partner_latam_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='l10n_latam_identification_type_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+         </field>
+    </record>
+    <record id="res_partner_view_form_private_city" model="ir.ui.view">
+        <field name="name">res.partner.view.form.private.city</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_view_form_private"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='city']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
             
 </odoo>

@@ -4,10 +4,10 @@
 
 {
     "name": "SQL Request Abstract",
-    "version": "14.0.1.3.0",
+    "version": "15.0.1.0.0",
     "author": "GRAP,Akretion,Odoo Community Association (OCA)",
     "maintainers": ["legalsylvain"],
-    "website": "https://github.com/OCA/server-tools",
+    "website": "https://github.com/OCA/reporting-engine",
     "license": "AGPL-3",
     "category": "Tools",
     "summary": "Abstract Model to manage SQL Requests",

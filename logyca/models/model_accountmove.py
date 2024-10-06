@@ -31,9 +31,9 @@ class AccountMove(models.Model):
         return country_id
     
     #PAÍS 
-    x_country_account_id = fields.Many2one('res.country', string='País', default=_get_default_country_id, track_visibility='onchange')
+    x_country_account_id = fields.Many2one('res.country', string='País', default=_get_default_country_id, tracking=True)
     #NUMERO DE ORDEN DE COMPRA
-    x_num_order_purchase = fields.Char(string='Número orden de compra', track_visibility='onchange')
+    x_num_order_purchase = fields.Char(string='Número orden de compra', tracking=True)
     #FACTURACIÓN ELECTRONICA
     x_date_send_dian = fields.Datetime(string='Fecha de envío a la DIAN', copy=False)
     x_send_dian = fields.Boolean(string='Enviado a la DIAN', copy=False)
@@ -44,8 +44,8 @@ class AccountMove(models.Model):
     x_have_out_invoice = fields.Boolean(string='Tiene NC', compute='_have_nc')    
     #Tiene Aprobaciones
     x_have_approval_request = fields.Boolean(string='Tiene Aprobaciones', compute='_have_approval_request')    
-    x_create_approval_request = fields.Boolean(string='Crearon Aprobación para NC',store = True, track_visibility='onchange')    
-    x_approved_approval_request = fields.Boolean(string='Aprobaron la creación de la NC',store = True, track_visibility='onchange')   
+    x_create_approval_request = fields.Boolean(string='Crearon Aprobación para NC',store = True, tracking=True)    
+    x_approved_approval_request = fields.Boolean(string='Aprobaron la creación de la NC',store = True, tracking=True)   
     #Es factura de facturación masiva
     x_is_mass_billing = fields.Boolean(string='Factura creada por el proceso de facturación masiva.')
     #Valor total descuentos
@@ -101,10 +101,11 @@ class AccountMove(models.Model):
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
         }
-
+        status_dian = None
         response = requests.request("GET", url, headers=headers)
         response_data = json.loads(response.text)
-        status_dian = response_data['ResultData']['DocumentStatus']
+        if response_data and response_data['ResultData']:
+            status_dian = response_data['ResultData']['DocumentStatus']
 
         return status_dian
 
@@ -325,7 +326,7 @@ class AccountMove(models.Model):
         
         cant_contactsFE = 0
         #cant_RT = 0
-        if self.type == 'out_invoice' or self.type == 'out_refund' or self.type == 'out_receipt':            
+        if self.move_type == 'out_invoice' or self.move_type == 'out_refund' or self.move_type == 'out_receipt':            
             # Referencia
             if not self.ref:
                 raise ValidationError(_('No se dígito información para el campo Referencia, por favor verificar.'))     
@@ -617,6 +618,16 @@ class AccountAsset(models.Model):
     
     move_ids = fields.Many2one(related='original_move_line_ids.move_id', string='Movimiento Original', readonly=True, copy=False)
     x_budget_group = fields.Many2one(string='Grupo presupuestal', readonly=True, related='original_move_line_ids.x_budget_group')
+    x_partner = fields.Many2one('res.partner', string='Asociado')
+    x_studio_accumulated_depreciation = fields.Float(string='Depreciación acumulada', default=0.0)
+    x_studio_history_cost = fields.Float(string='Costo histórico', default=0.0)
+    x_studio_asset_plate = fields.Char(string='Placa del activo')
+    x_studio_serial = fields.Char(string='Serial')
+    x_studio_date_depreciation = fields.Date(string='Fecha depreciación total')
+    x_studio_fecha_de_compra_his = fields.Date(string='Fecha de Compra (Histórica)')
+    x_studio_deprecieted_periods = fields.Integer(string='Periodos depreciados')
+    x_studio_ussefull_life = fields.Integer(string='Vida útil')
+    
 
 #Plazos de pago
 class AccountPaymentTerm(models.Model):

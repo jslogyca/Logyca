@@ -13,6 +13,7 @@
     'depends': [
         'hr',
         'hr_payroll',
+        'hr_work_entry_contract_enterprise',
         ],
     'description': '''
 

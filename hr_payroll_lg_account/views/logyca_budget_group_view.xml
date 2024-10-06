@@ -3,7 +3,7 @@
 	<record id="logyca_budget_group_form_account" model="ir.ui.view">
 		<field name="name">logyca.budget_group.form.account</field>
 		<field name="model">logyca.budget_group</field>
-		<field name="inherit_id" ref="studio_customization.default_form_view_fo_e5c0cb77-1f92-4cb1-ba93-9930359a31bc"/>
+		<field name="inherit_id" ref="logyca.logyca_budget_group_view_form"/>
 		<field name="arch" type="xml">
 			<xpath expr="//field[@name='name']" position="after">
 				<field name="type_id" />

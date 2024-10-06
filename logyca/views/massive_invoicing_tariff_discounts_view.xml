@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="massive_invoicing_tariff_discounts_view_form" model="ir.ui.view">
+        <field name="name">massive.invoicing.tariff.discounts.form</field>
+        <field name="model">massive.invoicing.tariff.discounts</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet string="Tarifario de descuentos">
+                    <group >
+                        <group >
+                            <field name="tariff"/>
+                            <field name="discount_percentage"/>
+                        </group>
+                        <group >
+                            <field name="discounts_one"/>
+                            <field name="date_discounts_one"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="massive_invoicing_tariff_discounts_view_tree" model="ir.ui.view">
+        <field name="name">massive.invoicing.tariff.discounts.tree</field>
+        <field name="model">massive.invoicing.tariff.discounts</field>
+        <field name="arch" type="xml">
+            <tree string="Tarifario de descuentos" >
+                <field name="tariff"/>
+                <field name="discount_percentage"/>
+                <field name="discounts_one"/>
+                <field name="date_discounts_one"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_massive_invoicing_tariff_discounts" model="ir.actions.act_window">
+        <field name="name">Tarifario de descuentos</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">massive.invoicing.tariff.discounts</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_massive_invoicing_tariff_discounts"
+        name="Tarifario de descuentos"
+        parent="main_menu_fact_mass_confg"
+        action="action_massive_invoicing_tariff_discounts"
+        sequence="4"
+        groups="group_invoice_mass"/>
+
+</odoo>

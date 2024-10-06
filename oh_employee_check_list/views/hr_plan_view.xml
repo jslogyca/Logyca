@@ -10,7 +10,8 @@
                     <field name="on_board_type_check" invisible="1"/>
                     <field name="off_board_type_check" invisible="1"/>
                     <notebook>
-                        <page string="Checklists" name="checklist" attrs="{'invisible': [('check_type_check', '!=', True)]}">
+                        <page string="Checklists" name="checklist"
+                              attrs="{'invisible': [('check_type_check', '!=', True)]}">
                             <group string="Checklists">
                                 <group name="entry_checklist"
                                        attrs="{'invisible': [('on_board_type_check', '!=', True)]}">
@@ -22,14 +23,14 @@
                                 </group>
                             </group>
                         </page>
-                    <page name="notes" string="Notes">
-                        <field name="note" placeholder="Log a note..."/>
-                    </page>
-                </notebook>
+                        <page name="notes" string="Notes">
+                            <field name="note" placeholder="Log a note..."/>
+                        </page>
+                    </notebook>
+                </field>
             </field>
-        </field>
-    </record>
+        </record>
 
 
-</data>
-        </odoo>
+    </data>
+</odoo>

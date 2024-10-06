@@ -28,7 +28,7 @@ class HrPayrollReportLG(models.TransientModel):
         filename = self.data_name
         
         url = path + "model={}&id={}&filename={}.xlsx".format(
-            model, self.id, filename)
+            model, self.payslip_run_id.id, filename)
 
         return {
             'type' : 'ir.actions.act_url',

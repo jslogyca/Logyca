@@ -229,13 +229,13 @@ class CRMTeam(models.Model):
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 	
-    x_is_deferred = fields.Boolean(string='¿Es Diferido?',track_visibility='onchange')
-    x_automatic_activation = fields.Boolean(string='Activación automática',track_visibility='onchange')
-    x_code_type = fields.Integer(string='Tipo de codigo',track_visibility='onchange')
-    x_mandatory_prefix = fields.Integer(string='Prefijo obligatorio',track_visibility='onchange') 
-    x_scheme = fields.Integer(string='Esquema',track_visibility='onchange')
-    x_type_document = fields.Integer(string='Tipo documento',track_visibility='onchange')
-    x_date_validity = fields.Datetime(string='Fecha de expiración',track_visibility='onchange')
+    x_is_deferred = fields.Boolean(string='¿Es Diferido?',tracking=True)
+    x_automatic_activation = fields.Boolean(string='Activación automática',tracking=True)
+    x_code_type = fields.Integer(string='Tipo de codigo',tracking=True)
+    x_mandatory_prefix = fields.Integer(string='Prefijo obligatorio',tracking=True) 
+    x_scheme = fields.Integer(string='Esquema',tracking=True)
+    x_type_document = fields.Integer(string='Tipo documento',tracking=True)
+    x_date_validity = fields.Datetime(string='Fecha de expiración',tracking=True)
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -260,7 +260,7 @@ class SaleOrder(models.Model):
     x_type_sale = fields.Selection([('Renovación', 'Renovación'),
                                       #('Recurrente', 'Recurrente'),
                                       ('Nueva venta', 'Nueva venta')], string='Tipo de venta') 
-    x_country_account_id = fields.Many2one('res.country', string='País', default=_get_default_country_id, track_visibility='onchange')
+    x_country_account_id = fields.Many2one('res.country', string='País', default=_get_default_country_id, tracking=True)
     x_conditional_discount = fields.Float(string='Descuento condicionado')
     x_conditional_discount_deadline = fields.Date(string='Fecha límite descuento condicionado')    
     x_amount_total_conditional_discount = fields.Float(string='Total con descuento condicionado',compute='_compute_amount_total_conditional_discount')
@@ -334,8 +334,9 @@ class PurchaseOrder(models.Model):
         return country_id
     
     x_reason_cancellation = fields.Text(string='Motivo de cancelación')
-    x_country_account_id = fields.Many2one('res.country', string='País', default=_get_default_country_id, track_visibility='onchange')
-    
+    x_country_account_id = fields.Many2one('res.country', string='País', default=_get_default_country_id, tracking=True)
+    x_studio_listo_para_facturar = fields.Boolean(string='Listo para Facturar', default=False)
+
     #Validaciones antes de CANCELAR una orden de compra
     def button_cancel(self):        
         for record in self:

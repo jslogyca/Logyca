@@ -26,6 +26,6 @@
     <menuitem 
 		id="menu_massive_tariff_prefix" 
 		action="action_massive_tariff_prefix" 
-		parent="studio_customization.logyca_parametrizaci_ad8d64d2-1139-4184-9c30-5361f61a6ffd"
+		parent="main_menu_fact_mass_confg"
 		sequence="21"/>	
 </odoo>

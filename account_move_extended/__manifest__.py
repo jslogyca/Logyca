@@ -15,6 +15,7 @@
         'analytic',
         'logyca',
         'l10n_co_reports',
+        'base_vat',
         ],
     'description': '''
 
@@ -29,6 +30,7 @@
         'views/res_users_view.xml',
         'views/account_move.xml',
         'views/account_sector_macro_view.xml',
+        'views/res_partner_view.xml',
         'wizard/update_revenue_wizard_view.xml',
         'security/ir.model.access.csv',
         'security/account_move_extended_security.xml',

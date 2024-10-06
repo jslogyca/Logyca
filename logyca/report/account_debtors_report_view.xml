@@ -82,6 +82,6 @@
         id="account_debtors_report_menu"
         name="Account Debtors Report"
         action="action_account_debtors_report"
-        parent="studio_customization.contabilidad_reporte_cd30cc8d-42e8-4b0c-8791-9d46405e3542" 
+        parent="logyca_menus_report_financial" 
         sequence="30" />    
 </odoo>

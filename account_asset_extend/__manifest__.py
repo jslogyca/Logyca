@@ -12,6 +12,7 @@
     'installable': True,
     'depends': [
         'account_asset',
+        'account_move_extended',
         ],
     'description': '''
 

@@ -23,9 +23,9 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'views/massive_income_tariff_view.xml',
-        'views/res_partner_view.xml',
-        'views/massive_income_tariff_discounts_view.xml',
-        'data/massive_income_tariff_data.xml',
+        # 'views/res_partner_view.xml',
+        # 'views/massive_income_tariff_discounts_view.xml',
+        # 'data/massive_income_tariff_data.xml',
     ],
     'qweb': [
     ]

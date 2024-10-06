@@ -13,27 +13,27 @@ class RVCBeneficiary(models.Model):
 
     partner_id = fields.Many2one('res.partner', string='Patrocinado')
     contact_id = fields.Many2one('res.partner', string='Contacto')
-    vat = fields.Char('Número de documento', related='partner_id.vat', track_visibility='onchange')
-    phone = fields.Char('Teléfono', related='partner_id.phone', track_visibility='onchange')
-    email = fields.Char('Email', related='partner_id.email', track_visibility='onchange')
+    vat = fields.Char('Número de documento', related='partner_id.vat', tracking=True)
+    phone = fields.Char('Teléfono', related='partner_id.phone', tracking=True)
+    email = fields.Char('Email', related='partner_id.email', tracking=True)
     x_sector_id = fields.Many2one('logyca.sectors', string='Sector', related='partner_id.x_sector_id', readonly=True, store=True)
-    date_send = fields.Date(string='Fecha de Envio', track_visibility='onchange')
+    date_send = fields.Date(string='Fecha de Envio', tracking=True)
     x_company_size = fields.Selection([('1', 'Mipyme'),
                                         ('2', 'Pyme'),
                                         ('3', 'Mediana'),
                                         ('4', 'Grande'),
                                         ('5', 'Micro'),
-                                        ('6', 'Pequeña')], string='Tamaño empresa', related='partner_id.x_company_size', readonly=True, store=True, track_visibility='onchange')
-    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, track_visibility='onchange')
-    contact_name = fields.Char('Nombre Contacto', track_visibility='onchange')
-    contact_phone = fields.Char('Teléfono Contacto', track_visibility='onchange')
-    contact_email = fields.Char('Email Contacto', track_visibility='onchange')
-    contact_position = fields.Char('Cargo Contacto', track_visibility='onchange')
-    active = fields.Boolean('Activo', default=True, track_visibility='onchange')
-    codes_quantity = fields.Integer('Cantidad de Códigos', track_visibility='onchange')
+                                        ('6', 'Pequeña')], string='Tamaño empresa', related='partner_id.x_company_size', readonly=True, store=True, tracking=True)
+    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, tracking=True)
+    contact_name = fields.Char('Nombre Contacto', tracking=True)
+    contact_phone = fields.Char('Teléfono Contacto', tracking=True)
+    contact_email = fields.Char('Email Contacto', tracking=True)
+    contact_position = fields.Char('Cargo Contacto', tracking=True)
+    active = fields.Boolean('Activo', default=True, tracking=True)
+    codes_quantity = fields.Integer('Cantidad de Códigos', tracking=True)
     macro_sector = fields.Selection([('manufactura', 'Manufactura'), 
                                     ('servicios', 'Servicios'),
-                                    ('comercio', 'Comercio')], string='Macrosector', related='partner_id.macro_sector', track_visibility='onchange')
+                                    ('comercio', 'Comercio')], string='Macrosector', related='partner_id.macro_sector', tracking=True)
 
     _sql_constraints = [
         ('rvc_beneficiary_uniq', 'unique (partner_id)', 'La empresa beneficiaria que está tratando de crear ya existe.')

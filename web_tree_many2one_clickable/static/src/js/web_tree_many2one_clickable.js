@@ -6,14 +6,14 @@
  * Copyright 2019 Alexandre Díaz <alexandre.diaz@tecnativa.com>
  * License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). */
 
-odoo.define("web_tree_many2one_clickable.many2one_clickable", function(require) {
+odoo.define("web_tree_many2one_clickable.many2one_clickable", function (require) {
     "use strict";
 
     var ListRenderer = require("web.ListRenderer");
     var ListFieldMany2One = require("web.relational_fields").ListFieldMany2One;
 
     ListRenderer.include({
-        _renderBodyCell: function(record, node, colIndex, options) {
+        _renderBodyCell: function (record, node, colIndex, options) {
             if (
                 !node.attrs.widget &&
                 node.attrs.name &&
@@ -29,7 +29,7 @@ odoo.define("web_tree_many2one_clickable.many2one_clickable", function(require) 
     });
 
     ListFieldMany2One.include({
-        _renderReadonly: function() {
+        _renderReadonly: function () {
             this._super.apply(this, arguments);
             var self = this;
 
@@ -45,10 +45,8 @@ odoo.define("web_tree_many2one_clickable.many2one_clickable", function(require) 
                 // Append button
                 var $a = $("<a/>", {
                     href: "#",
-                    class:
-                        "o_form_uri btn btn-sm btn-secondary" +
-                        " fa fa-angle-double-right",
-                }).on("click", function(ev) {
+                    class: "o_form_uri btn btn-sm btn-secondary fa fa-angle-double-right",
+                }).on("click", function (ev) {
                     ev.preventDefault();
                     ev.stopPropagation();
 
@@ -58,6 +56,9 @@ odoo.define("web_tree_many2one_clickable.many2one_clickable", function(require) 
                         res_id: self.value.res_id,
                         views: [[false, "form"]],
                         target: "target",
+                        context: self.record.getContext({
+                            additionalContext: self.attrs.context || {},
+                        }),
                     });
                 });
                 this.$el.append($a);

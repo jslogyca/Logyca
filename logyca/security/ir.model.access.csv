@@ -20,16 +20,11 @@ access_logyca_budget_group,logyca.budget_group,model_logyca_budget_group,,1,1,1,
 access_logyca_asset_range,logyca.asset_range,model_logyca_asset_range,,1,1,1,1
 access_logyca_reports,logyca.reports,model_logyca_reports,,1,1,1,1
 access_logyca_api_gateway,logyca.api_gateway,model_logyca_api_gateway,,1,1,1,1
-access_account_balance_partner_report,account.balance.partner.report,model_account_balance_partner_report,,1,0,0,0
-access_account_auxiliar_report,account.auxiliar.report,model_account_auxiliar_report,,1,0,0,0
 access_logyca_reports_account,logyca.reports.account,model_logyca_reports_account,,1,1,1,1
 access_logyca_payment_file,logyca.payment.file,model_logyca_payment_file,,1,1,1,1
-access_account_info_powerbi,account.info.powerbi,model_account_info_powerbi,,1,0,0,0
 access_logyca_flatfile_payroll,logyca.flatfile.payroll,model_logyca_flatfile_payroll,,1,1,1,1
 access_logyca_homologationfile_payroll,logyca.homologationfile.payroll,model_logyca_homologationfile_payroll,,1,1,1,1
 access_logyca_rvc_information,logyca.rvc_information,model_logyca_rvc_information,,1,1,1,1
-access_account_auxiliar_schemefavorite,account.auxiliar.schemefavorite,model_account_auxiliar_schemefavorite,,1,1,1,1
-access_logyca_custom_alerts,logyca.custom_alerts,model_logyca_custom_alerts,,1,1,1,1
 access_logyca_payment_information,logyca.payment.information,model_logyca_payment_information,,1,1,1,1
 access_logyca_payment_methods,logyca.payment.methods,model_logyca_payment_methods,,1,1,1,1
 access_massive_invoicing_smlv,massive.invoicing.smlv,model_massive_invoicing_smlv,,1,1,1,1

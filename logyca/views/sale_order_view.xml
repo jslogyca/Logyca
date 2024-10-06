@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<odoo>
+	<record id="sale_order_form_lg" model="ir.ui.view">
+		<field name="name">sale.order.form.lg</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//page[@name='other_information']/group/group/field[@name='require_signature']" position="before">
+                <field name="x_origen" />
+			</xpath>
+		</field>
+	</record>
+
+</odoo>

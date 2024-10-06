@@ -6,6 +6,8 @@ from dateutil.relativedelta import relativedelta
 from odoo.tools.misc import formatLang
 from odoo import api, fields, models, _
 
+from odoo.exceptions import ValidationError
+
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
@@ -29,9 +31,10 @@ class ResPartner(models.Model):
                                         ('grande4', 'Grande 4'),
                                     ('grande5', 'Grande 5')], string='Tamaño Empresa Interno')
     fact_annual = fields.Selection([('activos', 'Por Activos'), 
-                                    ('ingresos', 'Por Ingresos')], string='Facturación Anual', default='activos', track_visibility='onchange')
+                                    ('ingresos', 'Por Ingresos')], string='Facturación Anual', default='activos', tracking=True)
     amount_revenue_membre = fields.Float('Ingresos Memebresía', default=0.0)
     revenue_memb_ids = fields.Many2one('revenue.macro.sector', string='Rango de Ingresos Membresía')
+    x_income_range = fields.Many2one('revenue.macro.sector', string='Rango de ingresos', tracking=True, ondelete='restrict')
 
 
     def action_update_revenue_partner(self):
@@ -61,4 +64,20 @@ class ResPartner(models.Model):
             'nodestroy': True,
             'target': 'new',
             'domain': '[]'
-        }    
+        }
+
+    @api.constrains('vat', 'country_id')
+    def check_vat(self):
+        # The context key 'no_vat_validation' allows you to store/set a VAT number without doing validations.
+        # This is for API pushes from external platforms where you have no control over VAT numbers.
+        if self.env.context.get('no_vat_validation'):
+            return
+        if not self.env.context.get('no_vat_validation'):
+            return
+
+        for partner in self:
+            country = partner.commercial_partner_id.country_id
+            if partner.vat and self._run_vat_test(partner.vat, country, partner.is_company) is False:
+                partner_label = _("partner [%s]", partner.name)
+                msg = partner._build_vat_error_message(country and country.code.lower() or None, partner.vat, partner_label)
+                raise ValidationError(msg)
