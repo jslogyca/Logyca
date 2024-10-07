@@ -1242,7 +1242,7 @@ class BenefitApplication(models.Model):
         if isinstance(postulation_id, int):
             postulation_id = self.browse(postulation_id)
 
-        pdf = self.env.ref('rvc.action_report_rvc').render_qweb_pdf(postulation_id.id)
+        pdf = self.env.ref('rvc.action_report_rvc')._render_qweb_pdf(postulation_id.id)
         b64_pdf = base64.b64encode(pdf[0])
 
         attachment = self.env['ir.attachment'].create({
@@ -1342,8 +1342,10 @@ class BenefitApplication(models.Model):
     def create_OM_attachment(self, template):
         ''' This attaches the merchant offer to the welcome kit
             when the RVC application is not done in Odoo.'''
+        # report_template_id = self.env.ref(
+        #     'rvc.action_report_rvc').render_qweb_pdf(self.id)
         report_template_id = self.env.ref(
-            'rvc.action_report_rvc').render_qweb_pdf(self.id)
+            'rvc.action_report_rvc')._render_qweb_pdf(self.id)
         data_record = base64.b64encode(report_template_id[0])
         ir_values = {
             'name': "Oferta Mercantil RVC.pdf",
