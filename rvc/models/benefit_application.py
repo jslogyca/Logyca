@@ -1242,7 +1242,7 @@ class BenefitApplication(models.Model):
         if isinstance(postulation_id, int):
             postulation_id = self.browse(postulation_id)
 
-        pdf = self.env.ref('rvc.action_report_rvc').render_qweb_pdf(postulation_id.id)
+        pdf = self.env.ref('rvc.action_report_rvc')._render_qweb_pdf(postulation_id.id)
         b64_pdf = base64.b64encode(pdf[0])
 
         attachment = self.env['ir.attachment'].create({
