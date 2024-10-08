@@ -14,7 +14,7 @@
 		</field>
 	</record>
 
-	<record id="purchase_type_order_form_lg" model="ir.ui.view">
+	<!-- <record id="purchase_type_order_form_lg" model="ir.ui.view">
 		<field name="name">purchase.type.order.form.lg</field>
 		<field name="model">purchase.order</field>
 		<field name="inherit_id" ref="purchase_order_type.purchase_order_form"/>
@@ -23,6 +23,6 @@
                 <field name="order_type" />
 			</xpath>
 		</field>
-	</record>
+	</record> -->
 
 </odoo>
