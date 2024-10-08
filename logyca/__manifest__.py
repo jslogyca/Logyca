@@ -34,7 +34,9 @@
         'account_asset',
         'approvals',
         'l10n_latam_base',
-        'account_budget'],
+        'purchase_order_type',
+        'account_budget'
+    ],
     
     # always loaded 
     'data': [
