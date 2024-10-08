@@ -116,8 +116,25 @@
       <field name="arch" type="xml">
         <tree>                      
           <field name="code"/>                 
-          <field name="name"/>                                             
+          <field name="name"/>
+          <field name="color" widget="color_picker"/>
         </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_contact_types_form">
+      <field name="name">logyca list contact_types_form</field>
+      <field name="model">logyca.contact_types</field>
+      <field name="arch" type="xml">
+        <form>                      
+          <sheet>
+              <group col="4">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+              </group>
+          </sheet>
+        </form>
       </field>
     </record>
 

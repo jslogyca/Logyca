@@ -134,8 +134,8 @@ class ResPartner(models.Model):
     #INFORMACIÓN CONTACTO
     x_contact_origin = fields.Selection([('odoo', 'Odoo'),('portal', 'Portal')], string='Origen del contacto', tracking=True, default='odoo')
     x_contact_type = fields.Many2many('logyca.contact_types', string='Tipo de contacto', tracking=True, ondelete='restrict')
-    x_contact_job_title = fields.Many2one('logyca.job_title', string='Cargo', tracking=True, ondelete='restrict')
     x_contact_area = fields.Many2one('logyca.areas', string='Área', tracking=True, ondelete='restrict')
+    x_contact_job_title = fields.Many2one('logyca.job_title', string='Cargo', tracking=True, ondelete='restrict', domain="[('area_id', '=', x_contact_area)]")
     x_contact_job_title_historic = fields.Char(string='Cargo histórico', tracking=True)
     x_contact_area_historic = fields.Char(string='Área histórica', tracking=True)
 
