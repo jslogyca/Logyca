@@ -39,6 +39,47 @@
                 <field name="x_is_business_group"/>
                 <field name="x_name_business_group" attrs="{'invisible': [('x_is_business_group','=', False)]}"/>
             </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='contact_addresses']/field[@name='child_ids']/kanban/templates[1]" position="replace">
+                <templates>
+                    <t t-name="kanban-box">
+                        <t t-set="color" t-value="kanban_color(record.color.raw_value)"/>
+                        <div t-att-class="color + (record.title.raw_value == 1 ? ' oe_kanban_color_alert' : '') + ' oe_kanban_global_click'">
+                            <div class="o_kanban_image">
+                                <img alt="Contact image" t-att-src="kanban_image('res.partner', 'avatar_128', record.id.raw_value)"/>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <field name="name"/>
+                                <field name="x_contact_type" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                <field name="x_contact_job_title"/>
+                                <field name="x_contact_area"/>
+                                <div t-if="record.function.raw_value"><field name="function"/></div>
+                                <div t-if="record.email.raw_value"><field name="email" widget="email"/></div>
+                                <div t-if="record.type.raw_value != 'contact'">
+                                    <div>
+                                        <field name="zip"/>
+                                        <field name="city"/>
+                                    </div>
+                                    <field t-if="record.state_id.raw_value" name="state_id"/>
+                                    <field name="country_id"/>
+                                </div>
+                                <div t-if="record.phone.raw_value">Phone: <t t-esc="record.phone.value"/></div>
+                                <div t-if="record.mobile.raw_value">Mobile: <t t-esc="record.mobile.value"/></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='contact_addresses']/field[@name='child_ids']/form/sheet/group/group/field[@name='title']" position="after">
+                <field name="x_contact_type" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tipo ..."/>
+                <field name="x_contact_area"/>
+                <field name="x_contact_job_title"/>
+                <field name="x_work_groups" widget="many2many_tags"/>
+                <field name="x_collaborative_group_ids" widget="many2many_tags"/>
+                <field name="x_is_member_directive"/>
+                <!-- <field name="x_cargo_directivo"/> -->
+                <field name="x_is_on_board_of_directors"/>
+                <field name="x_active_for_logyca" widget="boolean_toggle"/>
+            </xpath>
             <xpath expr="//form[1]/sheet[1]/notebook[1]" position="after">
                 <notebook name="studio_notebook_Py5Y9">
                     <page name="studio_page_Py5Y9" string="Clasificación">
@@ -50,7 +91,7 @@
                                 <!-- <field name="x_subsector_id"/> -->
                             </group>
                             <group name="studio_group_Py5Y9_right">
-                                <field name="x_ciiu_activity" widget="many2many_tags" domain="[['child_ids','=',False]]"/>
+                                <field name="x_ciiu_activity"/>
                                 <field name="x_work_groups" widget="many2many_tags"/>
                             </group>
                         </group>
