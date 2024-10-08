@@ -12,8 +12,6 @@ import requests
 class ReportExcelSaleProductWizard(models.TransientModel):
     _name = 'report.excel.sale.product.wizard'
 
-
-
     date_from = fields.Date(string='Fecha de Inicio')
     date_to = fields.Date(string='Fecha Fin')
     data = fields.Binary("Archivo")
@@ -22,7 +20,6 @@ class ReportExcelSaleProductWizard(models.TransientModel):
     all_company = fields.Boolean(string='Todas las Compañías', default=True)
     product_id = fields.Many2one('product.product', string='Producto')
     by_product_company = fields.Boolean(string='By Product and Company', default=False)
-
 
     def do_report(self):
         if self.by_product_company:
@@ -73,18 +70,18 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     gf.complete_name,
                                     gl.complete_name,
                                     mc.name,
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_unit*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_unit
                                     END AS price_unit_by_product,
                                     l.quantity,   
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN ((l.price_unit*l.quantity)*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
@@ -95,9 +92,9 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     ELSE 0.0
                                     END AS discount,
                                     l.discount,
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN (((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
@@ -109,13 +106,13 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     THEN 0.0
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
-                                    WHEN m.type = 'out_refund' AND (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)>0
+                                    WHEN m.move_type = 'out_refund' AND (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)>0
                                     THEN round((coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0)*-1),2)
                                     ELSE round(coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0),2)
                                     END AS tax,
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_total*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
@@ -146,7 +143,7 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     LEFT join account_analytic_group gl on gl.id=l.x_account_analytic_group_two                                                                
                                     INNER JOIN res_currency mc on mc.id=m.currency_id
                                     where m.date between %s and %s
-                                    and m.type in ('out_invoice', 'out_refund') and m.state='posted' 
+                                    and m.move_type in ('out_invoice', 'out_refund') and m.state='posted' 
                                     and exclude_from_invoice_tab is False and l.product_id=%s''', 
                                     (date_from, date_to, self.product_id.id))
         else:
@@ -169,18 +166,18 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     gf.complete_name,
                                     gl.complete_name,
                                     mc.name,
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_unit*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_unit
                                     END AS price_unit_by_product,
                                     l.quantity,   
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN ((l.price_unit*l.quantity)*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
@@ -191,9 +188,9 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     ELSE 0.0
                                     END AS discount,
                                     l.discount,
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN (((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
@@ -205,13 +202,13 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     THEN 0.0
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
-                                    WHEN m.type = 'out_refund' AND (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)>0
+                                    WHEN m.move_type = 'out_refund' AND (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)>0
                                     THEN round((coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0)*-1),2)
                                     ELSE round(coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0),2)
                                     END AS tax,
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_total*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
@@ -242,7 +239,7 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     LEFT join account_analytic_group gl on gl.id=l.x_account_analytic_group_two
                                     INNER JOIN res_currency mc on mc.id=m.currency_id
                                     where m.date between %s and %s
-                                    and m.type in ('out_invoice', 'out_refund') and m.state='posted' and exclude_from_invoice_tab is False ''', 
+                                    and m.move_type in ('out_invoice', 'out_refund') and m.state='posted' and exclude_from_invoice_tab is False ''', 
                                     (date_from, date_to))
         
         lineas = self._cr.fetchall()
@@ -271,18 +268,18 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     gf.complete_name,
                                     gl.complete_name,
                                     mc.name,
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_unit*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_unit
                                     END AS price_unit_by_product,
                                     l.quantity,   
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN ((l.price_unit*l.quantity)*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
@@ -293,9 +290,9 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     ELSE 0.0
                                     END AS discount,
                                     l.discount,
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN (((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
@@ -307,13 +304,13 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     THEN 0.0
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
-                                    WHEN m.type = 'out_refund' AND (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)>0
+                                    WHEN m.move_type = 'out_refund' AND (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)>0
                                     THEN round((coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0)*-1),2)
                                     ELSE round(coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0),2)
                                     END AS tax,
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_total*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
@@ -343,7 +340,7 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     LEFT join account_analytic_group gf on gf.id=l.x_account_analytic_group
                                     LEFT join account_analytic_group gl on gl.id=l.x_account_analytic_group_two                                                                  
                                     where m.date between %s and %s
-                                    and m.type in ('out_invoice', 'out_refund') and m.state='posted' 
+                                    and m.move_type in ('out_invoice', 'out_refund') and m.state='posted' 
                                     and exclude_from_invoice_tab is False AND m.company_id=%s and l.product_id=%s''', 
                                     (date_from, date_to, company_id.id, self.product_id.id))
         else:
@@ -366,18 +363,18 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     gf.complete_name,
                                     gl.complete_name,
                                     mc.name,
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_unit*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
                                     ELSE l.price_unit
                                     END AS price_unit_by_product,
                                     l.quantity,   
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN ((l.price_unit*l.quantity)*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
@@ -388,9 +385,9 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     ELSE 0.0
                                     END AS discount,
                                     l.discount,
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN (((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
@@ -402,13 +399,13 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     THEN 0.0
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
-                                    WHEN m.type = 'out_refund' AND (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)>0
+                                    WHEN m.move_type = 'out_refund' AND (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)>0
                                     THEN round((coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0)*-1),2)
                                     ELSE round(coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0),2)
                                     END AS tax,
-                                    CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+                                    CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
                                     THEN (l.price_total*-1)
-                                    WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+                                    WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
                                     THEN l.debit*-1
                                     WHEN l.amount_currency<>0.0
                                     THEN l.credit
@@ -438,7 +435,7 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     LEFT join account_analytic_group gf on gf.id=l.x_account_analytic_group
                                     LEFT join account_analytic_group gl on gl.id=l.x_account_analytic_group_two                                       
                                     where m.date between %s and %s
-                                    and m.type in ('out_invoice', 'out_refund') and m.state='posted' 
+                                    and m.move_type in ('out_invoice', 'out_refund') and m.state='posted' 
                                     and exclude_from_invoice_tab is False AND m.company_id=%s''', 
                                     (date_from, date_to, company_id.id))
 
@@ -533,9 +530,9 @@ class ReportExcelSaleProductWizard(models.TransientModel):
         self._cr.execute(''' select 
                                 c.name as company,
                                 pt.name,
-                                CASE WHEN m.type = 'out_refund' and sum(l.amount_currency)=0.0
+                                CASE WHEN m.move_type = 'out_refund' and sum(l.amount_currency)=0.0
                                 THEN (((sum(l.price_unit)*sum(l.quantity))-(round(((sum(l.price_unit)*sum(l.discount))/100),2)))*-1)
-                                WHEN m.type = 'out_refund' and sum(l.amount_currency)<>0.0
+                                WHEN m.move_type = 'out_refund' and sum(l.amount_currency)<>0.0
                                 THEN sum(l.debit)*-1
                                 WHEN sum(l.amount_currency)<>0.0
                                 THEN sum(l.credit)
@@ -557,8 +554,8 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                 LEFT join account_analytic_group gl on gl.id=l.x_account_analytic_group_two
                                 INNER JOIN res_currency mc on mc.id=m.currency_id
                                 where m.date between %s and %s
-                                and m.type in ('out_invoice', 'out_refund') and m.state='posted' 
-                                and exclude_from_invoice_tab is False and c.id=%s GROUP BY c.name, pt.name, m.type ''', 
+                                and m.move_type in ('out_invoice', 'out_refund') and m.state='posted' 
+                                and exclude_from_invoice_tab is False and c.id=%s GROUP BY c.name, pt.name, m.move_type ''', 
                                 (date_from, date_to, company_id.id))
         
         lineas = self._cr.fetchall()
