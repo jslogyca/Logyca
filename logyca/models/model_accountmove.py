@@ -429,7 +429,7 @@ class AccountMove(models.Model):
         for asset, vals, invoice, validate in zip(assets, create_list, invoice_list, auto_validate):
             if 'model_id' in vals:
                 asset._onchange_model_id()
-                asset._onchange_method_period()
+                # asset._onchange_method_period()
                 if validate:
                     asset.validate()
             if invoice:
