@@ -7,7 +7,7 @@
     'category': 'Accounting/Accounting',
     'website': 'https://logyca.com',
     'author': 'LOGYCA',
-    'license': '',
+    'license': 'LGPL-3',
     'application': True,
     'installable': True,
     'depends': [

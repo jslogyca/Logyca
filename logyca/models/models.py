@@ -97,6 +97,7 @@ class x_contact_types(models.Model):
     code = fields.Char(string='Código', size=10, required=True)
     name = fields.Char(string='Nombre', required=True)
     color = fields.Integer(string='Color', default=_get_default_color)
+    type_fe = fields.Boolean('Tipo FE', default=False)
 
     def name_get(self):
         result = []

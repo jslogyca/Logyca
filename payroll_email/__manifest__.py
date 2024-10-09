@@ -8,7 +8,7 @@
     'category': 'Generic Modules/Human Resources',
     'author': 'LOGYCA / SERVICIOS SAS',
     'website': 'https://logyca.com',
-    'license': '',
+    'license': 'LGPL-3',
     'support': 'lctorres@logyca.com',
     'maintainer': 'LOGYCA / SERVICIOS SAS',
     'application': False,
