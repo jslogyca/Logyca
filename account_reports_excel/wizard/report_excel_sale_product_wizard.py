@@ -11,6 +11,7 @@ import requests
 
 class ReportExcelSaleProductWizard(models.TransientModel):
     _name = 'report.excel.sale.product.wizard'
+    _description = 'Report Excel Sale Product Wizard'
 
     date_from = fields.Date(string='Fecha de Inicio')
     date_to = fields.Date(string='Fecha Fin')

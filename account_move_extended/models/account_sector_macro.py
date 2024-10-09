@@ -9,6 +9,7 @@ from odoo.exceptions import UserError, AccessError, ValidationError
 
 class AccountSectorMacro(models.Model):
     _name= 'account.sector.macro'
+    _description = 'Account Sector Macro'
     _inherit = ['mail.thread']
 
     

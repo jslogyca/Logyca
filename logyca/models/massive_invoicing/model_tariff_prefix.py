@@ -11,7 +11,7 @@ class MassiveTariffPrefix(models.Model):
     
     #company_id = fields.Many2one('res.company', string='Compañia')
     year = fields.Integer(string='Año', required=True)
-    type_vinculation = fields.Many2one('logyca.vinculation_types', string='Tipo de vinculación', tracking=True, ondelete='restrict', required=True)
+    type_vinculation = fields.Many2one('logyca.vinculation_types', string='Tipo de vinculación', ondelete='restrict', required=True)
     product_id = fields.Many2one('product.product', string='Producto', required=True)
     fee_value = fields.Float(string='Valor de la tarifa', required=True)
     type_prefix = fields.Selection([('6D', '6D'),

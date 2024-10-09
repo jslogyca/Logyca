@@ -20,8 +20,8 @@ class x_MassiveInvoicingProcess(models.TransientModel):
     is_textil = fields.Boolean(string='Textileros')
     #Info Facturas
     cant_invoices = fields.Integer(string='Cantidad de facturas creadas', readonly=True)
-    state_process = fields.Char(String='Estado del proceso', readonly=True)
-    state_process_publish = fields.Char(String='Estado del proceso 2', readonly=True)
+    state_process = fields.Char(string='Estado del proceso', readonly=True)
+    state_process_publish = fields.Char(string='Estado del proceso 2', readonly=True)
         
     def name_get(self):
         result = []

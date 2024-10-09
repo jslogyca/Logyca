@@ -11,11 +11,11 @@ class x_MassiveInvoicingTariff(models.Model):
     
     #company_id = fields.Many2one('res.company', string='Compañia')
     year = fields.Integer(string='Año', required=True)
-    type_vinculation = fields.Many2one('logyca.vinculation_types', string='Tipo de vinculación', tracking=True, ondelete='restrict', required=True)
-    asset_range = fields.Many2one('logyca.asset_range', string='Rango de activos', tracking=True, ondelete='restrict', required=True)
+    type_vinculation = fields.Many2one('logyca.vinculation_types', string='Tipo de vinculación', ondelete='restrict', required=True)
+    asset_range = fields.Many2one('logyca.asset_range', string='Rango de activos', ondelete='restrict', required=True)
     product_id = fields.Many2one('product.product', string='Producto', required=True)
     fee_value = fields.Float(string='Valor de la tarifa', required=True)
-    unit_fee_value = fields.Float(string='Tarifa unitaria', help='Cálculo de la tarifa UNITARIA redondeando a la milésima más cercana: ROUND(SMLV * Valor de la tarifa,-3).',compute='_compute_unit_fee_value', store=True, tracking=True)
+    unit_fee_value = fields.Float(string='Tarifa unitaria', help='Cálculo de la tarifa UNITARIA redondeando a la milésima más cercana: ROUND(SMLV * Valor de la tarifa,-3).',compute='_compute_unit_fee_value', store=True)
     
     
     def name_get(self):

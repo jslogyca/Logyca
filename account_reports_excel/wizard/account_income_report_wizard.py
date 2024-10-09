@@ -11,8 +11,7 @@ import requests
 
 class ReportIncomeReportWizard(models.TransientModel):
     _name = 'report.income.report.wizard'
-
-
+    _description = 'Report Income Report Wizard'
 
     date_from = fields.Date(string='Fecha de Inicio')
     date_to = fields.Date(string='Fecha Fin')

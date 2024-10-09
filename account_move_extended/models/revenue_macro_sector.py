@@ -38,7 +38,7 @@ class RevenueMacroSector(models.Model):
                                         ('2', 'Pequeña'),
                                         ('3', 'Mediana'),
                                         ('4', 'Grande')
-                                    ], string='Tamaño empresa', tracking=True)
+                                    ], string='Tamaño empresa')
 
     def name_get(self):
         return [(type.id, '%s' % (type.amount)) for type in self]
