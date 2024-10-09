@@ -44,8 +44,14 @@
 			<xpath expr="//div[@name='journal_div']" position="after">
                 <field name="x_country_account_id" />
 			</xpath>
-			<xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="after">
+			<!-- <xpath expr="//form/sheet/notebook/page[@name='invoice_line_ids']/field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="after">
                 <field name="x_budget_group" />
+			</xpath> -->
+			<xpath expr="//form/sheet/notebook/page[@id='aml_tab']/field[@name='line_ids']/tree/field[@name='analytic_account_id']" position="before">
+                <field name="x_budget_group" />
+			</xpath>
+			<xpath expr="//form/sheet/notebook/page[@id='aml_tab']/field[@name='line_ids']/tree/field[@name='tax_base_amount']" position="attributes">
+                <attribute name="invisible">False</attribute>
 			</xpath>
 		</field>
 	</record>

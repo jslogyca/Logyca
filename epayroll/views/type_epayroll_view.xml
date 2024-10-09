@@ -44,7 +44,7 @@
 	<menuitem
 		id="hr_menu_epayroll_setting"
 		name="EPayslip"
-		parent="hr_payroll.menu_hr_payroll_configuration"
+		parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration"
 		sequence="100"
 		groups="epayroll.group_epayslip_manager"/>          
 
