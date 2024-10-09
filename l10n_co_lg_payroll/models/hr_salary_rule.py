@@ -8,7 +8,7 @@ class HrSalaryRule(models.Model):
 
     constante_legal = fields.Boolean('Constant', default=False)
     rule_salary = fields.Boolean('Salary Rule', default=False)
-    amount_fix = fields.Float(default=0.0, currency_field='company_currency_id', string='Fixed Amount', digits="Payroll Fix")
+    amount_fix = fields.Float(default=0.0, string='Fixed Amount', digits="Payroll Fix")
     base_prima = fields.Selection([('base_salary', 'Salary'),
                                 ('variable_salary', 'Variable Salary')], string='Base Prima')
     aux_transp = fields.Boolean('Aux. Transp.', default=False)

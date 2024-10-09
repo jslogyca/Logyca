@@ -16,6 +16,7 @@
         'base',
         'hr',
         'hr_payroll',
+        'logyca',
     ],
     'description': '''
 

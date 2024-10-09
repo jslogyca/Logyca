@@ -11,7 +11,8 @@ import requests
 
 
 class HrPayrollReportLG(models.TransientModel):
-    _name = 'hr.payroll.report.lg'  
+    _name = 'hr.payroll.report.lg'
+    _description = 'Hr Payroll Report LG'
   
     payslip_run_id  = fields.Many2one('hr.payslip.run', string='Payslip run', required=True)
     data = fields.Binary("Archivo")

@@ -11,6 +11,8 @@ import requests
 
 class hr_holiday_book_report_wizard(models.TransientModel):
     _name = 'hr.holiday.book.report.wizard'
+    _description = 'Holiday Book Report Wizard'
+    
 
     date_to = fields.Date(string='Fecha Fin')
     employee_ids = fields.Many2many('hr.employee', 'employee_holidays_wizard_rel',

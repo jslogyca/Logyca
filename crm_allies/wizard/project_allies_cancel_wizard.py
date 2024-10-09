@@ -9,6 +9,7 @@ import base64
 
 class ProjectAlliesCancelWizard(models.TransientModel):
     _name = 'project.allies.cancel.wizard'
+    _description = 'Project Allies Cancel Wizard'
 
     advance = fields.Char('Advance')
     company_id = fields.Many2one('res.company', string='Company', required=True,

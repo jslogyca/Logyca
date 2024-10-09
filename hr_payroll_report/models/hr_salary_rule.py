@@ -7,4 +7,4 @@ class HrSalaryRule(models.Model):
     _inherit = 'hr.salary.rule'
 
     prenomina = fields.Boolean('Prenomina')
-    sequence_report = fields.Integer('Report Sequence', select=True)
+    sequence_report = fields.Integer('Report Sequence')
