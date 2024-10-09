@@ -64,6 +64,15 @@ class AccountMove(models.Model):
     analytic_account_id = fields.Many2one('account.analytic.account', string='Red de Valor')
     reviewed_by = fields.Many2one('res.users', string='Revisado Por', help="Este campo aparece en el reporte de Soporte de Factura", default=False)
 
+    @api.depends('company_id', 'invoice_filter_type_domain')
+    def _compute_suitable_journal_ids(self):
+        for m in self:
+            journal_type = m.invoice_filter_type_domain or 'general'
+            company_id = m.company_id.id or self.env.company.id
+            # domain = [('company_id', '=', company_id), ('type', '=', journal_type)]
+            domain = [('company_id', '=', company_id)]
+            m.suitable_journal_ids = self.env['account.journal'].search(domain)
+
     @api.depends('x_debtor_portfolio_status_id')
     def debtor_portfolio_status_as_char(self):
         for rec in self:
