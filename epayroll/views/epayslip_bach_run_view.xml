@@ -120,8 +120,8 @@
 	<menuitem
 		id="menu_epayroll_setting"
 		name="EPayslip"
-		parent="hr_payroll.menu_hr_payroll_root"
-		sequence="100"
+		parent="hr_work_entry_contract_enterprise.menu_hr_payroll_root"
+		sequence="180"
 		groups="epayroll.group_epayslip_manager"/>          
 
 	<menuitem
