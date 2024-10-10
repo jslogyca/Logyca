@@ -14,4 +14,3 @@ account_epayslip_line,epayslip.line,model_epayslip_line,epayroll.group_epayslip_
 account_connection_server,connection.server,model_connection_server,epayroll.group_epayslip_manager,1,1,1,1
 account_hr_electronictag_structure,hr.electronictag.structure,model_hr_electronictag_structure,epayroll.group_epayslip_manager,1,1,1,1
 account_hr_epayslips_note_wizard,hr.epayslips.note.wizard,model_hr_epayslips_note_wizard,epayroll.group_epayslip_manager,1,1,1,1
-account_hr_etype_leave,hr.etype.leave,model_hr_etype_leave,epayroll.group_epayslip_manager,1,1,1,1
