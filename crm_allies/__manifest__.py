@@ -7,7 +7,7 @@
     'category': 'Sales/CRM',
     "website": "www.logyca.com",
     "author": "LOGYCA",
-    "license": "",
+    'license': 'LGPL-3',
     "support": "lctorres@logyca.com",
     "maintainer": "LOGYCA",
     "application": False,
@@ -15,6 +15,7 @@
     "depends": [
         "base",
         "contacts",
+        "logyca",
     ],
     "description": """
 

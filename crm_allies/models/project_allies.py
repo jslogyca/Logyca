@@ -104,6 +104,7 @@ class ProjectAllies(models.Model):
 
 class ProjectAlliesLine(models.Model):
     _name = 'project.allies.line'
+    _description = 'Project Allies Line'
 
     name = fields.Char('Name')
     advance = fields.Char('Advance')

@@ -12,22 +12,22 @@ class AccountAgedPartner(models.AbstractModel):
     _inherit = "account.aged.partner"
 
 
-    def _get_columns_name(self, options):
-        columns = [
-            {},
-            {'name': _("Ref"), 'class': '', 'style': 'text-align:center; white-space:nowrap;'},
-            {'name': _("Due Date"), 'class': 'date', 'style': 'white-space:nowrap;'},
-            {'name': _("Journal"), 'class': '', 'style': 'text-align:center; white-space:nowrap;'},
-            {'name': _("Account"), 'class': '', 'style': 'text-align:center; white-space:nowrap;'},
-            {'name': _("As of: %s") % format_date(self.env, options['date']['date_to']), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
-            {'name': _("1 - 30"), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
-            {'name': _("31 - 60"), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
-            {'name': _("61 - 90"), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
-            {'name': _("91 - 120"), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
-            {'name': _("Older"), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
-            {'name': _("Total"), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
-        ]
-        return columns  
+    # def _get_columns_name(self, options):
+    #     columns = [
+    #         {},
+    #         {'name': _("Ref"), 'class': '', 'style': 'text-align:center; white-space:nowrap;'},
+    #         {'name': _("Due Date"), 'class': 'date', 'style': 'white-space:nowrap;'},
+    #         {'name': _("Journal"), 'class': '', 'style': 'text-align:center; white-space:nowrap;'},
+    #         {'name': _("Account"), 'class': '', 'style': 'text-align:center; white-space:nowrap;'},
+    #         {'name': _("As of: %s") % format_date(self.env, options['date']['date_to']), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
+    #         {'name': _("1 - 30"), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
+    #         {'name': _("31 - 60"), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
+    #         {'name': _("61 - 90"), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
+    #         {'name': _("91 - 120"), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
+    #         {'name': _("Older"), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
+    #         {'name': _("Total"), 'class': 'number sortable', 'style': 'white-space:nowrap;'},
+    #     ]
+    #     return columns  
 
     # @api.model
     # def _get_lines(self, options, line_id=None):

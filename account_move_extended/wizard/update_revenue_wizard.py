@@ -4,12 +4,11 @@ from odoo.exceptions import ValidationError
 
 
 class UpdateRevenueWizard(models.TransientModel):
-
     _name = "update.revenue.wizard"
+    _description = "Income Macro Sector"
 
     amount = fields.Char('Ingresos')
     fiscal_id = fields.Many2one('account.fiscal.year', string='Ejercicio fiscal')
-    
 
     def update_revenue_partner(self):
         context = dict(self._context or {})

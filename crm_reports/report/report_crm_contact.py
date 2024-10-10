@@ -42,7 +42,7 @@ class ReportCRMContact(models.Model):
                                         ('4', 'Grande'),
                                         ('5', 'Micro'),
                                         ('6', 'Pequeña')
-                                    ], string='TAMAÑO EMPRESA', tracking=True)
+                                    ], string='TAMAÑO EMPRESA')
     revenue_memb_ids = fields.Many2one('revenue.macro.sector', 'RANGO DE INGRESOS', readonly=True)
 
     def _select(self):

@@ -8,6 +8,7 @@
     """,
     'version': '13.0.1.0.0',
     'sequence': 115,
+    'license': 'LGPL-3',
     'category': 'Marketing',
     'depends': [
         'mass_mailing',

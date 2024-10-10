@@ -20,7 +20,7 @@ class ReportExcelSaleProduct(models.Model):
     company_id = fields.Many2one('res.company','Compañía')
     invoice_origin = fields.Char('Origin')
     product_id = fields.Many2one('product.product', 'Product', readonly=True)
-    product_template_id = fields.Many2one('product.template', 'Product', readonly=True)
+    product_template_id = fields.Many2one('product.template', 'Product Tmp', readonly=True)
     analytic_account_id = fields.Many2one('account.analytic.account', 'Analytic', readonly=True)
     analytic_account_red = fields.Many2one('account.analytic.account', 'Red', readonly=True)
     analytic_group_id = fields.Many2one('account.analytic.group', 'Group', readonly=True)
@@ -28,8 +28,8 @@ class ReportExcelSaleProduct(models.Model):
     state = fields.Selection(selection=[('draft', 'Draft'),
                                     ('posted', 'Posted'),
                                     ('cancel', 'Cancelled')], string='Status', default='draft')
-    vendedor_id = fields.Many2one('res.partner', 'Cliente', readonly=True)
-    team_id = fields.Many2one('crm.team', 'Cliente', readonly=True)
+    vendedor_id = fields.Many2one('res.partner', 'Vendedor', readonly=True)
+    team_id = fields.Many2one('crm.team', 'Equipo', readonly=True)
     x_send_dian = fields.Boolean('Send DIAN')
     x_date_send_dian = fields.Date('Date Send DIAN')
     x_cufe_dian = fields.Char('CUFE')

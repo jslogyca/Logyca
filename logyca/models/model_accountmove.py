@@ -252,14 +252,6 @@ class AccountMove(models.Model):
     #Purchase - Se reemplaza metodo propio de odoo por el nuestro
     @api.onchange('purchase_vendor_bill_id', 'purchase_id')
     def _onchange_purchase_auto_complete(self):
-        ''' Load from either an old purchase order, either an old vendor bill.
-
-        When setting a 'purchase.bill.union' in 'purchase_vendor_bill_id':
-        * If it's a vendor bill, 'invoice_vendor_bill_id' is set and the loading is done by '_onchange_invoice_vendor_bill'.
-        * If it's a purchase order, 'purchase_id' is set and this method will load lines.
-
-        /!\ All this not-stored fields must be empty at the end of this function.
-        '''
         if self.purchase_vendor_bill_id.vendor_bill_id:
             self.invoice_vendor_bill_id = self.purchase_vendor_bill_id.vendor_bill_id
             self._onchange_invoice_vendor_bill()
@@ -363,20 +355,20 @@ class AccountMove(models.Model):
             for record in partner.child_ids:   
                 ls_contacts = record.x_contact_type              
                 for i in ls_contacts:
-                    if i.id == 3:
+                    if i.type_fe:
                         cant_contactsFE = cant_contactsFE + 1
                         if not record.name:
                             raise ValidationError(_('El contacto de tipo facturación electrónica no tiene nombre, por favor verificar.'))     
                         if record.x_active_for_logyca == False:
                             raise ValidationError(_('El contacto de tipo facturación electrónica no esta activo, por favor verificar.'))    
-                        if not record.street:
-                            raise ValidationError(_('El contacto de tipo facturación electrónica no tiene dirección, por favor verificar.'))    
-                        if not record.x_city:
-                            raise ValidationError(_('El contacto de tipo facturación electrónica no tiene ciudad, por favor verificar.'))    
+                        # if not record.street:
+                        #     raise ValidationError(_('El contacto de tipo facturación electrónica no tiene dirección, por favor verificar.'))    
+                        # if not record.x_city:
+                        #     raise ValidationError(_('El contacto de tipo facturación electrónica no tiene ciudad, por favor verificar.'))    
                         if not record.email:
                             raise ValidationError(_('El contacto de tipo facturación electrónica no tiene email, por favor verificar.'))    
-                        if not record.phone and not record.mobile:
-                            raise ValidationError(_('El contacto de tipo facturación electrónica no tiene teléfono, por favor verificar.'))
+                        # if not record.phone and not record.mobile:
+                        #     raise ValidationError(_('El contacto de tipo facturación electrónica no tiene teléfono, por favor verificar.'))
                         
             if cant_contactsFE == 0:
                 raise ValidationError(_('El cliente al que pertenece la factura no tiene un contacto de tipo facturación electrónica, por favor verificar.'))     

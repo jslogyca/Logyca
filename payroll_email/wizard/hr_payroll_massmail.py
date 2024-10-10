@@ -4,6 +4,7 @@ from odoo import api,fields, models
 
 class PayslipMassMail(models.TransientModel):
     _name="payroll.mass.mail"
+    _description = 'Payslip Mass Mail'
     
     payslip_ids = fields.Many2many('hr.payslip',string="Payslips",required=True)
    

@@ -50,8 +50,8 @@
 			<xpath expr="//form/sheet/notebook/page[@id='aml_tab']/field[@name='line_ids']/tree/field[@name='analytic_account_id']" position="before">
                 <field name="x_budget_group" />
 			</xpath>
-			<xpath expr="//form/sheet/notebook/page[@id='aml_tab']/field[@name='line_ids']/tree/field[@name='tax_base_amount']" position="attributes">
-                <attribute name="invisible">False</attribute>
+			<xpath expr="//form/sheet/notebook/page[@id='aml_tab']/field[@name='line_ids']/tree/field[@name='tax_base_amount']" position="replace">
+                <field name="tax_base_amount" invisible="0" readonly="0"/>
 			</xpath>
 		</field>
 	</record>

@@ -99,7 +99,7 @@ class EPayslipBach(models.Model):
     finish_date = fields.Date()
     name = fields.Char(string='Name')  
     payslip_ids = fields.One2many('hr.payslip', 'epayslip_bach_id', string='HR payslip') # agregarle a hr payslip many2one 
-    epayslip_line_ids = fields.One2many('epayslip.line', 'epayslip_bach_id', string='Epayslip line', ondelete="restrict")
+    epayslip_line_ids = fields.One2many('epayslip.line', 'epayslip_bach_id', string='Epayslip line')
     state = fields.Selection([('draft', 'Draft'), 
                                 ('generated', 'Generated'),
                                 ('sent', 'Sent'),

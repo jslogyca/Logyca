@@ -13,9 +13,10 @@ import xlrd
 import time
 from datetime import datetime, timedelta
 
+
 class RVCImportFileSponsoredWizard(models.TransientModel):
     _name = 'rvc.import.file.sponsored.wizard'
-
+    _description = 'RVCImport File Sponsored Wizard'
 
     file_data = fields.Binary(string='File', required=True)
     filename = fields.Char(string='Name File')
