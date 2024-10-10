@@ -9,6 +9,7 @@ import logging
 
 class RVCTemplateEmailWizard(models.TransientModel):
     _name = "rvc.template.email.wizard"
+    _description = 'RVC Template Email Wizard'
     _rec_name = 'id'
 
     note_deactive = fields.Text(string='Nota Adicional')

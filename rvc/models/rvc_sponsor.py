@@ -16,15 +16,8 @@ class RVCSponsored(models.Model):
     phone = fields.Char('Teléfono', related='partner_id.phone')
     email = fields.Char('Email', related='partner_id.email')
     x_sector_id = fields.Many2one('logyca.sectors', string='Sector', related='partner_id.x_sector_id', readonly=True, store=True)
-    x_company_size = fields.Selection([('1', 'Mipyme'),
-                                        ('2', 'Pyme'),
-                                        ('3', 'Mediana'),
-                                        ('4', 'Grande'),
-                                        ('5', 'Micro'),
-                                        ('6', 'Pequeña')], string='Tamaño empresa', related='partner_id.x_company_size', readonly=True, store=True)
-    macro_sector = fields.Selection([('manufactura', 'Manufactura'), 
-                                    ('servicios', 'Servicios'),
-                                    ('comercio', 'Comercio')], string='Macrosector', related='partner_id.macro_sector')       
+    x_company_size = fields.Selection(string='Tamaño empresa', related='partner_id.x_company_size')
+    macro_sector = fields.Selection(string='Macrosector', related='partner_id.macro_sector')       
 
     contact_name = fields.Char('Nombre Contacto')
     contact_phone = fields.Char('Teléfono Contacto',)

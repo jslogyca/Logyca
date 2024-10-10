@@ -4,6 +4,7 @@ from . import res_partner
 from . import type_epayroll
 from . import hr_payroll_structure_type
 from . import type_note_epayroll
+from . import hr_etype_leave
 from . import payment_method_epayroll
 from . import payment_form_epayroll
 from . import hr_payslip

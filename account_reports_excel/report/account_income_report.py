@@ -35,6 +35,7 @@ class AccountIncomeReport(models.TransientModel):
 
 class WizardAccountIncomeReport(models.TransientModel):
     _name = 'wizard.account.income.report'
+    _description = 'Wizard Account Income Report'
 
     date_start = fields.Date('Date Start')
     date_stop = fields.Date('Date Stop')

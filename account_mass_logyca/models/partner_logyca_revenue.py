@@ -10,8 +10,8 @@ class PartnerLogycaRevenue(models.Model):
     _name= 'partner.logyca.revenue'
     _description = "Partner Logyca Revenue"
 
-    config_discount_id = fields.Many2one('config.discount.log.revenue', string='Discount', tracking=True)
-    partner_id = fields.Many2one('res.partner', string='Partner', tracking=True)
+    config_discount_id = fields.Many2one('config.discount.log.revenue', string='Discount')
+    partner_id = fields.Many2one('res.partner', string='Partner')
     year = fields.Integer(string='Año', required=True)
 
     def name_get(self):

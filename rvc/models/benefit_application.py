@@ -42,11 +42,7 @@ class BenefitApplication(models.Model):
     codes_quantity = fields.Integer('Códigos Productos', tracking=True)
     glns_codes_quantity = fields.Integer('Códigos GLN', tracking=True)
     invoice_codes_quantity = fields.Integer('Códigos Recaudo', tracking=True)
-    benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
-                                    ('colabora', 'Colabora'),
-                                    ('analitica', 'Analítica'),
-                                    ('tarjeta_digital', 'Tarjeta Digital'),
-                                    ('crece_mype', 'CreceMype')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", tracking=True)
+    benefit_type = fields.Selection(related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", tracking=True)
     colabora_level = fields.Char(string='Nivel', tracking=True)
     end_date_colabora = fields.Date(string='Fecha Fin Colabora', tracking=True)
     acceptance_date = fields.Datetime(string='Fecha/Hora Aceptación', tracking=True, readonly=True)
