@@ -26,3 +26,4 @@ from . import model_info_accounting_powerbi
 from . import model_account_aged_partner 
 from . import model_debtors_report 
 from . import model_account_journal
+from . import account_report
