@@ -80,7 +80,7 @@ class AccountReport(models.AbstractModel):
             level = lines[y].get('level')
             is_total_line = 'total' in lines[y].get('class', '').split(' ')
             if not level:
-                level=0
+                level=3
             if level == 0:
                 y_offset += 1
                 style = level_0_style
