@@ -29,7 +29,7 @@ class HrPayrollReportLG(models.TransientModel):
         filename = self.data_name
         
         url = path + "model={}&id={}&filename={}.xlsx".format(
-            model, self.payslip_run_id.id, filename)
+            model, self.id, filename)
 
         return {
             'type' : 'ir.actions.act_url',
@@ -122,14 +122,14 @@ class HrPayrollReportLG(models.TransientModel):
             else:
                 ws.write_row(fila,0,x)
             fila+=1
-
         try:
             wb.close()
-            out = base64.encodestring(buf.getvalue())
+            # out = base64.encodestring(buf.getvalue())
+            out = base64.encodebytes(buf.getvalue())
             buf.close()
             self.data = out
             # self.data_name = unicode(str(self.payslip_run_id.name), 'utf-8')+".xlsx"
-            self.data_name = str(self.payslip_run_id.name) + '-' + str(date_file)
+            self.data_name = str(self.payslip_run_id.name) + '-' + str(date_file)            
         except ValueError:
             raise Warning('No se pudo generar el archivo')
 
