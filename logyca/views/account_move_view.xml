@@ -44,9 +44,9 @@
 			<xpath expr="//div[@name='journal_div']" position="after">
                 <field name="x_country_account_id" />
 			</xpath>
-			<!-- <xpath expr="//form/sheet/notebook/page[@name='invoice_line_ids']/field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="after">
-                <field name="x_budget_group" />
-			</xpath> -->
+			<xpath expr="//form/sheet/notebook/page[@id='invoice_tab']/field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="after">
+                <field name="x_budget_group" attrs="{'invisible': [('parent.move_type', 'not in', ('in_invoice', 'in_refund','in_receipt'))]}" />
+			</xpath>
 			<xpath expr="//form/sheet/notebook/page[@id='aml_tab']/field[@name='line_ids']/tree/field[@name='analytic_account_id']" position="before">
                 <field name="x_budget_group" />
 			</xpath>
