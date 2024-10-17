@@ -450,56 +450,57 @@ class AccountMoveReversal(models.TransientModel):
         self.refund_method = 'cancel'
         
         #Validar que no deje crear NC a facturas ya pagadas
-        moves = self.env['account.move'].browse(self.env.context['active_ids']) if self.env.context.get('active_model') == 'account.move' else self.move_id        
+        # moves = self.env['account.move'].browse(self.env.context['active_ids']) if self.env.context.get('active_model') == 'account.move' else self.move_id
+        moves = self.move_ids
         for move in moves:
-            if move.invoice_payment_state == 'paid':
+            if move.payment_state == 'paid':
                     raise ValidationError(_('La factura '+move.name+' ya esta pagada no se puede hacer nota crédito.'))
                     
-        #Validar que reverse los ingresos diferidos ya publicados
-        query_assets = '''
-                Select d.id
-                From account_move a 
-                inner join account_move_line b on a.id = b.move_id
-                inner join account_asset c on b.asset_id = c.id
-                inner join account_move d on c.id = d.asset_id
-                where a.id = %s and d.state = 'posted'
-        ''' % (self.move_id.id)
-        
-        self._cr.execute(query_assets)
-        result_query_assets = self._cr.dictfetchall()
-        
-        if result_query_assets:
-            for assets in result_query_assets:        
-                    self.env.context['active_ids'].append(assets.get("id"))        
-        
-        #Guardar en un array los ingresos diferidos en borrador para eliminar
-        assets_draft_detele = []
-        query_assets_draft = '''
-                Select d.id
-                From account_move a 
-                inner join account_move_line b on a.id = b.move_id
-                inner join account_asset c on b.asset_id = c.id
-                inner join account_move d on c.id = d.asset_id
-                where a.id = %s and d.state = 'draft'
-        ''' % (self.move_id.id)
-        
-        self._cr.execute(query_assets_draft)
-        result_query_assets_draft = self._cr.dictfetchall()
-        
-        if result_query_assets_draft:
-            for assets in result_query_assets_draft:    
-                move_unlink = self.env['account.move'].search([('id', '=', assets.get("id"))])
-                assets_draft_detele.append(move_unlink)
+            #Validar que reverse los ingresos diferidos ya publicados
+            query_assets = '''
+                    Select d.id
+                    From account_move a 
+                    inner join account_move_line b on a.id = b.move_id
+                    inner join account_asset c on a.asset_id = c.id
+                    inner join account_move d on c.id = d.asset_id
+                    where a.id = %s and d.state = 'posted'
+            ''' % (move.id)
+            
+            self._cr.execute(query_assets)
+            result_query_assets = self._cr.dictfetchall()
+            
+            if result_query_assets:
+                for assets in result_query_assets:        
+                        self.env.context['active_ids'].append(assets.get("id"))        
+            
+            #Guardar en un array los ingresos diferidos en borrador para eliminar
+            assets_draft_detele = []
+            query_assets_draft = '''
+                    Select d.id
+                    From account_move a 
+                    inner join account_move_line b on a.id = b.move_id
+                    inner join account_asset c on a.asset_id = c.id
+                    inner join account_move d on c.id = d.asset_id
+                    where a.id = %s and d.state = 'draft'
+            ''' % (move.id)
+            
+            self._cr.execute(query_assets_draft)
+            result_query_assets_draft = self._cr.dictfetchall()
+            
+            if result_query_assets_draft:
+                for assets in result_query_assets_draft:    
+                    move_unlink = self.env['account.move'].search([('id', '=', assets.get("id"))])
+                    assets_draft_detele.append(move_unlink)
                 #move_unlink.unlink()                   
         
-        #Ejecutar metodo original
-        method_original = super(AccountMoveReversal, self).reverse_moves()
-        
-        #Eliminar ingresos diferidos en borrador
-        if result_query_assets:
-            if assets_draft_detele:
-                for assets_draft in assets_draft_detele:    
-                    assets_draft.unlink()                   
+            #Ejecutar metodo original
+            method_original = super(AccountMoveReversal, self).reverse_moves()
+            
+            #Eliminar ingresos diferidos en borrador
+            if result_query_assets:
+                if assets_draft_detele:
+                    for assets_draft in assets_draft_detele:    
+                        assets_draft.unlink()                   
         
         #Si es una NC de facturación masvia debe cancelar la orden de venta que se genero por este proceso
         id_nc = method_original.get('res_id')

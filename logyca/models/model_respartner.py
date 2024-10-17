@@ -160,12 +160,22 @@ class ResPartner(models.Model):
     def _date_update_asset(self):
         self.x_date_update_asset = fields.Date.today()
 
-    @api.onchange('x_active_for_logyca')
-    def _onchange_active(self):    
-        if self.x_active_for_logyca == True:
+    @api.onchange('x_active_for_logyca', 'active')
+    def _onchange_active(self):
+        print('PPPPPPP', self.x_active_for_logyca, self.active)
+        if self.x_active_for_logyca:
+            print('PPPPPPP 222222', self.x_active_for_logyca, self.active)
             self.active = True
         else:
-            self.active = False        
+            print('PPPPPPP 3333333', self.x_active_for_logyca, self.active)
+            self.active = False
+
+    # @api.onchange('x_active_for_logyca')
+    # def _onchange_active(self):    
+    #     if self.x_active_for_logyca:
+    #         self.active = True
+    #     else:
+    #         self.active = False        
 
     @api.depends('vat')
     def _compute_no_same_vat_partner_id(self):

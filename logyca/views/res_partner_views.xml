@@ -79,6 +79,7 @@
                 <!-- <field name="x_cargo_directivo"/> -->
                 <field name="x_is_on_board_of_directors"/>
                 <field name="x_active_for_logyca" widget="boolean_toggle"/>
+                <field name="active" widget="boolean_toggle"/>
             </xpath>
             <xpath expr="//form[1]/sheet[1]/notebook[1]" position="after">
                 <notebook name="studio_notebook_Py5Y9">
