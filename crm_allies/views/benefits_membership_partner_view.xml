@@ -13,6 +13,7 @@
                             <field name="benefit_id" />
                             <field name="categ_id" />
                             <field name="company_user_id" />
+                            <field name="company_user" />
                             <field name="company_email" />
                         </group>
                         <group>
