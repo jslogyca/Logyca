@@ -73,7 +73,7 @@ class BenefImportFileMemberWizard(models.TransientModel):
                 suffix = ".0"
                 if beneficiary_nit.endswith(suffix):
                     beneficiary_nit = beneficiary_nit[:-len(suffix)]
-                partner_id = self.env['res.partner'].search([('vat','=',str(beneficiary_nit)), ('parent_id','=',None)])
+                partner_id = self.env['res.partner'].search([('vat','=',str(beneficiary_nit)), ('parent_id','=',None)], limit=1)
                 if partner_id:
                     if fila[3]:
                         bene_name = str(fila[3])
