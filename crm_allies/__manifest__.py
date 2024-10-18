@@ -31,6 +31,7 @@
         "views/project_allies_view.xml",
         "views/reason_cancel_project_view.xml",
         "wizard/project_allies_cancel_wizard_view.xml",
+        "wizard/benefi_import_file_member_wizard_view.xml",
     ],
     "qweb": [],
 }
