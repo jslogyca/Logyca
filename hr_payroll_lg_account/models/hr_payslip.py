@@ -166,7 +166,7 @@ class HrPayslip(models.Model):
                 slip.name_move = move.name
             else:
                 move.write({'name': slip.name_move})
-                move.journal_id.sequence_id.write({'number_next_actual': (move.journal_id.sequence_id.number_next_actual-1)})
+                # move.journal_id.sequence_id.write({'number_next_actual': (move.journal_id.sequence_id.number_next_actual-1)})
         return res
 
     def action_payslip_cancel_done(self):
