@@ -170,5 +170,6 @@ class HrPayslipEmployees(models.TransientModel):
         payslips.update_input_employee()
         payslips.compute_sheet()
         payslip_run.state = 'verify'
+        payslips.update_input_employee()
 
         return success_result
