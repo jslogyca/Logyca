@@ -32,6 +32,8 @@ class HrPayslip(models.Model):
             self.struct_id = False
         self.with_context(contract=True)._get_new_input_line_ids()
         self.with_context(contract=True)._compute_line_ids()
+        self.with_context(contract=True).action_refresh_from_work_entries()
+        self.with_context(contract=True)._compute_input_line_ids()
         return
 
     def action_payslip_cancel_done(self):
