@@ -5,6 +5,8 @@ from odoo import api, fields, models, tools, _
 from datetime import date, datetime, time, timedelta
 from dateutil.relativedelta import relativedelta
 
+from odoo.tools import float_round, date_utils, convert_file, html2plaintext
+
 
 def days_between(start_date, end_date):
     #Add 1 day to end date to solve different last days of month 
@@ -31,15 +33,70 @@ class HrPayslip(models.Model):
         if not self.contract_id:
             self.struct_id = False
         self.with_context(contract=True)._get_new_input_line_ids()
-        self.with_context(contract=True)._compute_line_ids()
-        self.with_context(contract=True).action_refresh_from_work_entries()
-        self.with_context(contract=True)._compute_input_line_ids()
+        self.with_context(contract=True)._compute_worked_days_line_ids()
         return
+
+    @api.depends('employee_id', 'contract_id', 'struct_id', 'date_from', 'date_to')
+    def _compute_worked_days_line_ids(self):
+        if self.env.context.get('salary_simulation') or any(not p.date_to or not p.date_from for p in self):
+            return
+        valid_slips = self.filtered(lambda p: p.employee_id and p.date_from and p.date_to and p.contract_id and p.struct_id)
+        # Make sure to reset invalid payslip's worked days line
+        invalid_slips = self - valid_slips
+        invalid_slips.worked_days_line_ids = [(5, False, False)]
+        if not valid_slips:
+            return
+        # Ensure work entries are generated for all contracts
+        generate_from = min(p.date_from for p in self)
+        current_month_end = date_utils.end_of(fields.Date.today(), 'month')
+        generate_to = max(min(fields.Date.to_date(p.date_to), current_month_end) for p in valid_slips)
+        self.mapped('contract_id')._generate_work_entries(generate_from, generate_to)
+
+        for slip in valid_slips:
+            if slip._origin.id:
+                slip_number = slip._origin.id
+            else:
+                slip_number = slip.id
+            for vals in slip._get_worked_day_lines():
+                self.env["hr.payslip.worked_days"].create(
+                    {
+                        "sequence": vals["sequence"],
+                        "work_entry_type_id": vals["work_entry_type_id"],
+                        "number_of_days": vals["number_of_days"],
+                        "number_of_hours": vals["number_of_hours"],
+                        "payslip_id": slip_number,
+                    }
+                )
+                slip.with_context(contract=True)._get_new_input_line_ids()
+                self.env.cr.commit()
+
+    def _get_worked_day_lines_values(self, domain=None):
+        self.ensure_one()
+        res = []
+        hours_per_day = self._get_worked_day_lines_hours_per_day()
+        work_hours = self.contract_id._get_work_hours(self.date_from, self.date_to, domain=domain)
+        work_hours_ordered = sorted(work_hours.items(), key=lambda x: x[1])
+        biggest_work = work_hours_ordered[-1][0] if work_hours_ordered else 0
+        add_days_rounding = 0
+        for work_entry_type_id, hours in work_hours_ordered:
+            work_entry_type = self.env['hr.work.entry.type'].browse(work_entry_type_id)
+            days = round(hours / hours_per_day, 5) if hours_per_day else 0
+            if work_entry_type_id == biggest_work:
+                days += add_days_rounding
+            day_rounded = self._round_days(work_entry_type, days)
+            add_days_rounding += (days - day_rounded)
+            attendance_line = {
+                'sequence': work_entry_type.sequence,
+                'work_entry_type_id': work_entry_type_id,
+                'number_of_days': day_rounded,
+                'number_of_hours': hours,
+            }
+            res.append(attendance_line)
+        return res        
 
     def action_payslip_cancel_done(self):
         if self.filtered(lambda slip: slip.state == "done"):
             self.move_id.button_draft()
-            # self.move_id.unlink()
         return self.write({"state": "cancel"})
 
     def get_change_salary(self, employee_id, from_date, to_date):
@@ -205,3 +262,4 @@ def variable_salary_prima(payslip, categories, worked_days, inputs, from_date, t
 def days_leave_prima(payslip, categories, worked_days, inputs, from_date, to_date):
     days_leave = payslip.dict._get_days_leave_prima(from_date, to_date)
     return days_leave
+
