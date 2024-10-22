@@ -35,7 +35,8 @@
         'account_asset',
         'approvals',
         'l10n_latam_base',
-        'account_budget'
+        'account_budget',
+        'maintenance',
     ],
     
     # always loaded 
@@ -70,6 +71,7 @@
         'views/sale_order_view.xml',
         'views/product_template_view.xml',
         'views/account_move_reversal_view.xml',
+        'views/maintenance_equipment_view.xml',
     ], 
     
 }
