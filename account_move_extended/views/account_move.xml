@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-	<record id="account_move_reviewed_by" model="ir.ui.view">
-		<field name="name">account.move.reviewed.form.inherit</field>
+	<record id="account_move_reviewed_by_lg" model="ir.ui.view">
+		<field name="name">account.move.reviewed.form.inherit.lg</field>
 		<field name="model">account.move</field>
 		<field name="inherit_id" ref="account.view_move_form"/>
 		<field name="arch" type="xml">
+
             <xpath expr="//field[@name='journal_id']" position="after">
                 <field name="reviewed_by" 
                        attrs="{'invisible':[('reviewed_by','=',False)]}" force_save="1" readonly="1"/>
@@ -14,7 +15,7 @@
                 <button name="action_reviewed_by" string="Revisado" type="object" groups="account_move_extended.account_move_extended_reviewer"/>
 			</xpath>
 
-            <xpath expr="//group[@name='accounting_info_group']" position="after">
+            <!-- <xpath expr="//group[@name='accounting_info_group']" position="after">
                 <group string="LOGYCA" name="logyca_accounting" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund'))]}">
                     <field name="x_payment_portal_theme" force_save="1" readonly="1"/>
                 </group>
@@ -23,8 +24,47 @@
             <xpath expr="//field[@name='line_ids']/tree" position="inside">
                 <field name="tax_base_amount" optional="hide"/>
                 <field name="x_budget_group" optional="hide"/>
-            </xpath>
+            </xpath> -->
 
+            <!-- <xpath expr="//page[@name='other_info']" position="after">
+                <page string="Seguimiento Cartera"
+                   attrs="{'invisible': [('move_type', '!=', 'out_invoice')]}">
+                    <group cols="12">
+                        <field name="x_debtor_portfolio_status_str" invisible="1"/>
+                        <group cols="6">
+                            <field name="x_debt_portfolio_monitoring"/>
+                            <field name="x_last_contact_debtor"/>
+                            <field name="x_debtor_portfolio_status_id"/>
+                            <field name="x_estimated_payment_date"
+                                   attrs="{'required': [('x_debtor_portfolio_status_str', '=', 'Programación de Pago')],
+                                          'invisible': [('x_debtor_portfolio_status_str', '!=', 'Programación de Pago')]}"/>
+                        </group>
+                        <group cols="6">
+                        </group>
+                    </group>
+                </page>
+            </xpath> -->
+		</field>
+	</record>
+	<record id="account_move_inherit_lg_red" model="ir.ui.view">
+		<field name="name">account.move.inherit.lg.red</field>
+		<field name="model">account.move</field>
+		<field name="inherit_id" ref="account.view_move_form"/>
+		<field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_reference']" position="after">
+                <field name="reviewed_by" 
+                       attrs="{'invisible':[('reviewed_by','=',False)]}" force_save="1" readonly="1"/>
+			</xpath>
+
+            <xpath expr="//button[@name='button_set_checked']" position="after">
+                <button name="action_reviewed_by" string="Revisado" type="object" groups="account_move_extended.account_move_extended_reviewer"
+                    attrs="{'invisible':[('reviewed_by','=',False)]}"/>
+			</xpath>
+            <xpath expr="//group[@name='accounting_info_group']" position="after">
+                <group string="LOGYCA" name="logyca_accounting" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund'))]}">
+                    <field name="x_payment_portal_theme" force_save="1" readonly="1"/>
+                </group>
+			</xpath>
             <xpath expr="//page[@name='other_info']" position="after">
                 <page string="Seguimiento Cartera"
                    attrs="{'invisible': [('move_type', '!=', 'out_invoice')]}">
@@ -42,14 +82,7 @@
                         </group>
                     </group>
                 </page>
-            </xpath>
-		</field>
-	</record>
-	<record id="account_move_inherit_lg_red" model="ir.ui.view">
-		<field name="name">account.move.inherit.lg.red</field>
-		<field name="model">account.move</field>
-		<field name="inherit_id" ref="account.view_move_form"/>
-		<field name="arch" type="xml">
+            </xpath>            
             <xpath expr="//form/sheet/notebook/page[@id='aml_tab']/field[@name='line_ids']/tree/field[@name='analytic_tag_ids']" position="after">
                 <field name="invoice_tag_ids" domain="[('red_valor', '=', True)]"/>
 			</xpath>
