@@ -28,3 +28,4 @@ from . import model_debtors_report
 from . import model_account_journal
 from . import account_report
 from . import purchase_order_line
+from . import maintenance_equipment
