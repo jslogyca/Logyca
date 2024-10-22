@@ -53,6 +53,7 @@ class HrPayslip(models.Model):
         self.mapped('contract_id')._generate_work_entries(generate_from, generate_to)
 
         for slip in valid_slips:
+            slip.mapped('worked_days_line_ids').unlink()
             if slip._origin.id:
                 slip_number = slip._origin.id
             else:
@@ -209,7 +210,6 @@ class HrPayslip(models.Model):
                     and n.date_from BETWEEN %s and %s """, (self.employee_id.id, from_date, to_date),
             )
         res = self.env.cr.fetchone()
-        print('AUX TRANSPO', res)
         return res and res[0] or 0.0
 
     def _get_lines_variable_prima(self, from_date, to_date):

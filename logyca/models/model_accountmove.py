@@ -43,6 +43,7 @@ class AccountMove(models.Model):
     #Tiene Nota Credito
     x_have_out_invoice = fields.Boolean(string='Tiene NC', compute='_have_nc')    
     #Tiene Aprobaciones
+    approval_id = fields.Many2one('approval.request', string='Solicitud de Aprobación')
     x_have_approval_request = fields.Boolean(string='Tiene Aprobaciones', compute='_have_approval_request')    
     x_create_approval_request = fields.Boolean(string='Crearon Aprobación para NC',store = True, tracking=True)    
     x_approved_approval_request = fields.Boolean(string='Aprobaron la creación de la NC',store = True, tracking=True)   
@@ -56,6 +57,15 @@ class AccountMove(models.Model):
     #Recibo de pago - Campo temporal
     x_receipt_payment = fields.Char(string='N° Recibo de pago', copy=False)
     x_journal_resolution_num = fields.Char(string='Number', related='journal_id.x_resolution_number')
+
+    def open_approval_request_view(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'approval.request',
+            'view_mode': 'form',
+            'res_id': self.approval_id.id,
+            'views': [(False, 'form')],
+        }
 
     @api.onchange('state')
     def _compute_x_status_dian(self):
@@ -176,7 +186,11 @@ class AccountMove(models.Model):
         else:
             self.x_have_approval_request = False
             self.x_create_approval_request = False
-        
+
+        approval_id = self.env['approval.request'].search([('x_account_move_id', '=', self.id)], order="id asc", limit=1)
+        if approval_id:
+            self.approval_id = approval_id.id
+
         query_approval = '''
             Select id,"name" 
             From approval_request 
