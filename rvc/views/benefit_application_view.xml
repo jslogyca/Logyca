@@ -84,6 +84,7 @@
                                 <field name="contact_mobile"/>
                                 <field name="offered_service_id"/>
                                 <field name="digital_card_img" readonly="1" widget="download"/>
+								<field name="digital_card_img_url" widget="url"/>
                             </tree>
                         </field>
 					</group>

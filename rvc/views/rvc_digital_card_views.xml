@@ -29,6 +29,9 @@
                     <group string="Descargar Tarjeta Digital" attrs="{'invisible':[('digital_card_img','=',False)]}">
                         <field name="digital_card_img" widget="download" nolabel="1"/>
                     </group>
+                    <group string="Descargar Tarjeta Digital">
+                        <field name="digital_card_img_url" string="URL de la Tarjeta Digital"/>
+                    </group>
                 </sheet>
             </form>
         </field>
