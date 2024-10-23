@@ -83,11 +83,11 @@ class BenefImportFileMemberWizard(models.TransientModel):
                         date_done = fila[0]
                         benef_id = self.env['benefits.membership'].search([('name','=',str(bene_name)), ('active','=',True)])
                         if benef_id:
-                            exis_benef = self.env['benefits.membership.partner'].search([('partner_id','=',partner_id.id), 
-                                                                    ('benefit_id','=',benef_id.id),
-                                                                    ('date_done','=',date_done)])
-                            if exis_benef:
-                                continue                            
+                            # exis_benef = self.env['benefits.membership.partner'].search([('partner_id','=',partner_id.id), 
+                            #                                         ('benefit_id','=',benef_id.id),
+                            #                                         ('date_done','=',date_done)])
+                            # if exis_benef:
+                            #     continue                            
                             try:
                                 with self._cr.savepoint():
                                     benef_ids = self.env['benefits.membership.partner'].create({
