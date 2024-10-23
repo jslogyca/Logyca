@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <report
+    <!-- <report
         id="report_invoice_support"
         model="account.move"
         string="Soporte de Factura"
         report_type="qweb-pdf"
         name="invoice_support_report.report_invoice_support"
         file="invoice_support_report.report_invoice_support"
-    />
+    /> -->
 </odoo>

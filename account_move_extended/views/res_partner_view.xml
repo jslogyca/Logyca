@@ -4,9 +4,9 @@
 	<record id="view_res_partner_finan" model="ir.ui.view">
 		<field name="name">res_partner_finan</field>
 		<field name="model">res.partner</field>
-		<field name="inherit_id" ref="studio_customization.odoo_studio_res_part_96c3b415-a333-436c-9b90-db13f23de750"/>
+		<field name="inherit_id" ref="base.view_partner_form"/>
 		<field name="arch" type="xml">
-            <xpath expr="//page[@name='studio_page_6zNV9']" position="replace">
+            <xpath expr="//page[@name='sales_purchases']" position="after">
                 <page name="financ" string="Inf. Financiera ">
                     <group>
                         <group>

@@ -34,37 +34,33 @@ class BenefitApplication(models.Model):
                                     ('confirm', 'Aceptado'),
                                     ('rejected', 'Rechazado'),
                                     ('cancel', 'Cancelado'),
-                                    ('done', 'Entregado')], string='State', default='draft', readonly=True, track_visibility='onchange')
-    partner_id = fields.Many2one('rvc.beneficiary', string='Empresa Beneficiaria', track_visibility='onchange', ondelete='restrict')
-    parent_id = fields.Many2one('rvc.sponsor', string='Empresa Patrocinadora', track_visibility='onchange', ondelete='restrict')
-    product_id = fields.Many2one('product.rvc', string='Producto', track_visibility='onchange', ondelete='restrict')
-    name = fields.Char(string='Name', track_visibility='onchange')
-    codes_quantity = fields.Integer('Códigos Productos', track_visibility='onchange')
-    glns_codes_quantity = fields.Integer('Códigos GLN', track_visibility='onchange')
-    invoice_codes_quantity = fields.Integer('Códigos Recaudo', track_visibility='onchange')
-    benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
-                                    ('colabora', 'Colabora'),
-                                    ('analitica', 'Analítica'),
-                                    ('tarjeta_digital', 'Tarjeta Digital'),
-                                    ('crece_mype', 'CreceMype')], related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", track_visibility='onchange')
-    colabora_level = fields.Char(string='Nivel', track_visibility="onchange")
-    end_date_colabora = fields.Date(string='Fecha Fin Colabora', track_visibility='onchange')
-    acceptance_date = fields.Datetime(string='Fecha/Hora Aceptación', track_visibility='onchange', readonly=True)
-    notification_date = fields.Datetime(string='Fecha/Hora Notificación', track_visibility='onchange', readonly=True)
-    rejection_date = fields.Datetime(string='Fecha/Hora Rechazo', track_visibility='onchange', readonly=True)
-    delivery_date = fields.Datetime(string='Fecha/Hora Entrega', track_visibility='onchange', readonly=True)
-    question_answered = fields.Boolean('¿Hemos respondido tu pregunta?', default=False, track_visibility='onchange')
-    gln = fields.Char('Código GLN', track_visibility='onchange')
-    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, track_visibility='onchange', ondelete='restrict')
-    contact_name = fields.Char('Nombre Contacto', related='partner_id.contact_name', track_visibility='onchange')
-    contact_phone = fields.Char('Teléfono Contacto', related='partner_id.contact_phone', track_visibility='onchange')
-    contact_email = fields.Char('Email Contacto', related='partner_id.contact_email', track_visibility='onchange')
-    contact_position = fields.Char('Cargo Contacto', related='partner_id.contact_position', track_visibility='onchange')
-    vat = fields.Char('Número Documento', related='partner_id.vat', store=True, track_visibility='onchange')
+                                    ('done', 'Entregado')], string='State', default='draft', readonly=True, tracking=True)
+    partner_id = fields.Many2one('rvc.beneficiary', string='Empresa Beneficiaria', tracking=True, ondelete='restrict')
+    parent_id = fields.Many2one('rvc.sponsor', string='Empresa Patrocinadora', tracking=True, ondelete='restrict')
+    product_id = fields.Many2one('product.rvc', string='Producto', tracking=True, ondelete='restrict')
+    name = fields.Char(string='Name', tracking=True)
+    codes_quantity = fields.Integer('Códigos Productos', tracking=True)
+    glns_codes_quantity = fields.Integer('Códigos GLN', tracking=True)
+    invoice_codes_quantity = fields.Integer('Códigos Recaudo', tracking=True)
+    benefit_type = fields.Selection(related='product_id.benefit_type', readonly=True, store=True, string="Beneficio", tracking=True)
+    colabora_level = fields.Char(string='Nivel', tracking=True)
+    end_date_colabora = fields.Date(string='Fecha Fin Colabora', tracking=True)
+    acceptance_date = fields.Datetime(string='Fecha/Hora Aceptación', tracking=True, readonly=True)
+    notification_date = fields.Datetime(string='Fecha/Hora Notificación', tracking=True, readonly=True)
+    rejection_date = fields.Datetime(string='Fecha/Hora Rechazo', tracking=True, readonly=True)
+    delivery_date = fields.Datetime(string='Fecha/Hora Entrega', tracking=True, readonly=True)
+    question_answered = fields.Boolean('¿Hemos respondido tu pregunta?', default=False, tracking=True)
+    gln = fields.Char('Código GLN', tracking=True)
+    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, tracking=True, ondelete='restrict')
+    contact_name = fields.Char('Nombre Contacto', related='partner_id.contact_name', tracking=True)
+    contact_phone = fields.Char('Teléfono Contacto', related='partner_id.contact_phone', tracking=True)
+    contact_email = fields.Char('Email Contacto', related='partner_id.contact_email', tracking=True)
+    contact_position = fields.Char('Cargo Contacto', related='partner_id.contact_position', tracking=True)
+    vat = fields.Char('Número Documento', related='partner_id.vat', store=True, tracking=True)
     access_token = fields.Char('Token', default=_default_access_token, help="Token de acceso para aceptar beneficio desde el correo")
     send_kit_with_no_benefit = fields.Boolean('Enviar kit sin activar beneficio', help="En el caso en que el beneficio haya sido activado manualmente, esta opción \
         cuando está checkeada permite enviar el kit de bienvenida sin activar el beneficio RVC.")
-    reminder_count = fields.Integer('Recordatorios', track_visibility='onchange')
+    reminder_count = fields.Integer('Recordatorios', tracking=True)
     codes_count = fields.Integer(string='Contador Códigos', compute="_compute_codes_count")
     message_ids = fields.One2many(groups="rvc.group_rvc_manager")
     activity_ids = fields.One2many(groups="rvc.group_rvc_manager")
@@ -73,7 +69,7 @@ class BenefitApplication(models.Model):
     partner_address = fields.Char('Dirección Empresa')
     digital_card_ids = fields.One2many('rvc.digital.card', 'postulation_id', string='Tarjetas Digitales')
     crecemype_question = fields.Text('Pregunta', help="Pregunta realizada por la empresa beneficiaria de LOGYCA / CRECEMYPE")
-    crecemype_theme_id = fields.Many2one('rvc.crecemype.theme', string='Temática', track_visibility='onchange')
+    crecemype_theme_id = fields.Many2one('rvc.crecemype.theme', string='Temática', tracking=True)
     # GS1 audit fields
     whatsapp_number_trail = fields.Char('Número WhatsApp', help="Número de WhatsApp que creó la postulación")
     #technical fields
@@ -83,7 +79,7 @@ class BenefitApplication(models.Model):
                                     ('chatbot', 'ChatBot RVC'),
                                     ('api_marketplaces', 'API Marketplaces'),],
                                     string="Origen",
-                                    track_visibility='onchange',
+                                    tracking=True,
                                     default='odoo',
                                     readonly=True,
                                     help="Este campo permite diferenciar las postulaciones RVC que provienen de Odoo, Tienda Virtual y ChatBot.")
@@ -95,8 +91,10 @@ class BenefitApplication(models.Model):
     product_benefit = fields.Char('Producto que maneja')
     canal = fields.Selection([('advice', 'Advice'),
                                 ('email', 'Email'),], string='Canal', default='email')
-    employee_id = fields.Many2one('res.partner', string='Colaborador', track_visibility='onchange', ondelete='restrict')
+    employee_id = fields.Many2one('res.partner', string='Colaborador', tracking=True, ondelete='restrict')
     date_done_cons = fields.Date(string='Date Solución', default=fields.Date.context_today)
+    renewal = fields.Boolean('Renewal', default=False)
+    email_colabora = fields.Char('Email Colabora', tracking=True)
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]
@@ -325,7 +323,8 @@ class BenefitApplication(models.Model):
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/EmpresaGln/"
             else:
-                url = "https://app-asc-dev.azurewebsites.net/codes/EmpresaGln/"
+                # url = "https://app-asc-dev.azurewebsites.net/codes/EmpresaGln/"
+                url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/EmpresaGln/"
 
             payload = {'nit': str(self.vat)}
 
@@ -638,8 +637,8 @@ class BenefitApplication(models.Model):
         if self.get_odoo_url() == 'https://logyca.odoo.com':
             url_get_token = "https://app-loginrocp-prod.azurewebsites.net/api/Login"
         else:
-            # url_get_token = "https://app-loginrocp-prod.azurewebsites.net/api/Login"
-            url_get_token = "https://app-loginrocp-dev.azurewebsites.net/api/Login"
+            url_get_token = "https://app-loginrocp-prod.azurewebsites.net/api/Login"
+            # url_get_token = "https://app-loginrocp-dev.azurewebsites.net/api/Login"   
 
         body_get_token = json.dumps({
             "email": "odoorvc@yopmail.com",
@@ -704,7 +703,8 @@ class BenefitApplication(models.Model):
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url_assignate= "https://app-msadenterprise-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
             else:
-                url_assignate= "https://app-colaborags1api-dev.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                # url_assignate= "https://app-colaborags1api-dev.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                url_assignate= "https://app-msadenterprise-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
 
             #validando el nombre de contacto para asignar credenciales
             # si no tiene contact_name le ponemos el nombre de la empresa
@@ -795,11 +795,13 @@ class BenefitApplication(models.Model):
                 url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
             else:
                 # url_assignate= "https://logycacolaboratestapi.azurewebsites.net/api/Company/AddCompanyEcommerce"
-                url_assignate= "https://app-mstransaction-release.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                # url_assignate= "https://app-mstransaction-release.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
 
             
             #validando el nombre de contacto para asignar credenciales
             # si no tiene contact_name le ponemos el nombre de la empresa
+            print('%%%%%%', url_assignate)
             credentials_contact_name = ""
             if self.contact_name:
                 credentials_contact_name = self.contact_name
@@ -814,7 +816,10 @@ class BenefitApplication(models.Model):
 
             year = int(self.end_date_colabora.strftime("%Y"))
             InitialDate = self.end_date_colabora.replace(year=year-1)
-            contact_email = self.contact_email
+            if self.email_colabora:
+                contact_email = self.email_colabora
+            else:
+                contact_email = self.contact_email
             body_assignate = json.dumps({
                     "TypeService": 2,
                     "Name": credentials_contact_name,
@@ -830,17 +835,17 @@ class BenefitApplication(models.Model):
                     "IsTextil": False
                 })               
             headers_assignate = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
-
+            print('%%%%%%', body_assignate)
             #Making http post request
             response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
-
+            print('%%%%%%', body_assignate)
             # logging.info("====> response_assignate_credentials =>" + str(response_assignate))
-
+            print('%%%%%% 222', response_assignate.status_code)
             if response_assignate.status_code == 200:
                 #TODO: logging
                 result = response_assignate.json()
                 response_assignate.close()
-
+                print('%%%%%% 3333', result)
                 #error al crear credenciales
                 if result.get('dataError') == True:
                     #TODO: logging
@@ -876,12 +881,13 @@ class BenefitApplication(models.Model):
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
             else:
-                url_assignate= "https://app-mstransaction-release.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                # url_assignate= "https://app-mstransaction-release.azurewebsites.net/api/Company/AddCompanyEcommerce"
                 # url_assignate= "https://app-mstransaction-dev.azurewebsites.net/api/Company/AddCompanyEcommerce"
-                # url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
+                url_assignate= "https://app-mstransaction-prod.azurewebsites.net/api/Company/AddCompanyEcommerce"
 
             #validando el nombre de contacto para asignar credenciales
             # si no tiene contact_name le ponemos el nombre de la empresa
+            print('%%%%%%', url_assignate)
             credentials_contact_name = ""
             if self.contact_name:
                 credentials_contact_name = self.contact_name
@@ -891,7 +897,10 @@ class BenefitApplication(models.Model):
                 credentials_contact_name = self.partner_id.partner_id.x_first_name + " " + self.partner_id.partner_id.x_first_lastname
             year = int(self.end_date_colabora.strftime("%Y"))
             InitialDate = self.end_date_colabora.replace(year=year-1)
-            contact_email = self.contact_email
+            if self.email_colabora:
+                contact_email = self.email_colabora
+            else:
+                contact_email = self.contact_email
             body_assignate = json.dumps({
                     "TypeService": 2,
                     "Name": credentials_contact_name,
@@ -910,10 +919,13 @@ class BenefitApplication(models.Model):
             #Making http post request
             response_assignate = requests.post(url_assignate, headers=headers_assignate, data=body_assignate, verify=True)
             logging.info("====> response_assignate_colabora =>" + str(response_assignate))
+            print('%%%%%% 222', response_assignate.status_code)
+            print('%%%%%%', body_assignate)
             if response_assignate.status_code == 200:
                 #TODO: logging
                 result = response_assignate.json()
                 response_assignate.close()
+                print('%%%%%% 333', result)
                 #TODO: se requiere que la API de Colabora nos devuelva dataError=False cuando sea exitosa la asignacion de colabora
                 #la condición está al revés, es decir, se espera que en el caso ideal devuelva dataError=True. 
                 if result.get('dataError') == True:
@@ -1226,7 +1238,7 @@ class BenefitApplication(models.Model):
         if isinstance(postulation_id, int):
             postulation_id = self.browse(postulation_id)
 
-        pdf = self.env.ref('rvc.action_report_rvc').render_qweb_pdf(postulation_id.id)
+        pdf = self.env.ref('rvc.action_report_rvc')._render_qweb_pdf(postulation_id.id)
         b64_pdf = base64.b64encode(pdf[0])
 
         attachment = self.env['ir.attachment'].create({
@@ -1285,16 +1297,19 @@ class BenefitApplication(models.Model):
             if self.get_odoo_url() == 'https://logyca.odoo.com':
                 url = "https://app-mstransaction-prod.azurewebsites.net/api/Company/GetCompanyWithStatusServiceByNit?compaynNit=%s" % (str(vat))
             else:
-                url = "https://app-mstransaction-release.azurewebsites.net/api/Company/GetCompanyWithStatusServiceByNit?compaynNit=%s" % (str(vat))
+                # url = "https://app-mstransaction-release.azurewebsites.net/api/Company/GetCompanyWithStatusServiceByNit?compaynNit=%s" % (str(vat))
+                url = "https://app-mstransaction-prod.azurewebsites.net/api/Company/GetCompanyWithStatusServiceByNit?compaynNit=%s" % (str(vat))
                 # url = "https://app-mstransaction-dev.azurewebsites.net/api/Company/GetCompanyWithStatusServiceByNit?compaynNit=%s" % (str(vat))
                 # url = "https://app-mstransaction-prod.azurewebsites.net/api/Company/GetCompanyWithStatusServiceByNit?compaynNit=%s" % (str(vat))
 
             headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer %s' % bearer_token}
-
+            print('&&&&&&&', url)
             #Making http get request
             response = requests.get(url, headers=headers, verify=True)
+            print('&&&&&&&222', response.status_code)
             if response.status_code == 200:
                 result = response.json()
+                print('&&&&&&&333', result)
                 if result.get('resultMessage'):
                     raise ValidationError(\
                         _('¡Validación!  %s ') % str(result.get('resultMessage')))
@@ -1323,8 +1338,10 @@ class BenefitApplication(models.Model):
     def create_OM_attachment(self, template):
         ''' This attaches the merchant offer to the welcome kit
             when the RVC application is not done in Odoo.'''
+        # report_template_id = self.env.ref(
+        #     'rvc.action_report_rvc').render_qweb_pdf(self.id)
         report_template_id = self.env.ref(
-            'rvc.action_report_rvc').render_qweb_pdf(self.id)
+            'rvc.action_report_rvc')._render_qweb_pdf(self.id)
         data_record = base64.b64encode(report_template_id[0])
         ir_values = {
             'name': "Oferta Mercantil RVC.pdf",

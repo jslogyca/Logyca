@@ -7,7 +7,7 @@
     'category': 'Accounting/Accounting',
     'website': 'https://logyca.com',
     'author': 'LOGYCA',
-    'license': '',
+    'license': 'LGPL-3',
     'application': False,
     'installable': True,
     'depends': [
@@ -24,11 +24,11 @@
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
+        # 'data/config_discount_logycaedx_data.xml',
         'views/config_discount_logycaedx_view.xml',
         'views/config_discount_log_revenue_view.xml',
         'views/partner_logycaedx_view.xml',
         'views/partner_logyca_revenue_view.xml',
-        'data/config_discount_logycaedx_data.xml',
     ],
     'qweb': [
     ]

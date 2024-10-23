@@ -6,6 +6,7 @@ from datetime import date
 
 class AccountIncomeReport(models.TransientModel):
     _name = 'account.income.report'
+    _description = 'Account Income Report'
 
 
     partner_id = fields.Many2one('res.partner', string='Partner')
@@ -28,12 +29,13 @@ class AccountIncomeReport(models.TransientModel):
     date = fields.Date('Diferido Date')
     state_dif = fields.Selection(selection=[('draft', 'Draft'),
                                     ('posted', 'Posted'),
-                                    ('cancel', 'Cancelled')], string='Status', default='draft')
+                                    ('cancel', 'Cancelled')], string='Status Diferido', default='draft')
     id_usuario=fields.Integer('ID Usuario')
 
 
 class WizardAccountIncomeReport(models.TransientModel):
     _name = 'wizard.account.income.report'
+    _description = 'Wizard Account Income Report'
 
     date_start = fields.Date('Date Start')
     date_stop = fields.Date('Date Stop')

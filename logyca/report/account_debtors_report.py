@@ -93,8 +93,8 @@ class AccountDebtorsReport(models.Model):
         group_by_str = """
             WHERE
                 am.state='posted' 
-                and am.type='out_invoice'
-                and (am.invoice_payment_state='not_paid' or am.invoice_payment_state='in_payment')
+                and am.move_type='out_invoice'
+                and (am.payment_state='not_paid' or am.payment_state='in_payment')
                 and (am.name LIKE 'FEC%' or am.name LIKE 'FAC%' or am.name LIKE 'FAM%')
                 ORDER BY move_id ASC
         """

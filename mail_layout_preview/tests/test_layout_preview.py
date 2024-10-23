@@ -5,7 +5,7 @@
 from lxml import etree
 
 from odoo import tools
-from odoo.tests.common import HttpCase, SavepointCase, tagged
+from odoo.tests.common import HttpCase, TransactionCase, tagged
 
 
 class TestLayoutMixin(object):
@@ -14,28 +14,30 @@ class TestLayoutMixin(object):
         vals = {
             "name": "Test Preview Template",
             "subject": "Preview ${object.name}",
-            "body_html": "<p>Hello ${object.name}</p>",
+            "body_html": '<p>Hello <t t-out="object.name"/></p>',
             "model_id": env["ir.model"]._get(model).id,
-            "user_signature": False,
         }
         vals.update(kw)
         return env["mail.template"].create(vals)
 
 
 @tagged("-at_install", "post_install")
-class TestLayoutPreview(SavepointCase, TestLayoutMixin):
+class TestLayoutPreview(TransactionCase, TestLayoutMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
-        cls.wiz_model = cls.env["email_template.preview"]
+        cls.wiz_model = cls.env["mail.template.preview"]
         cls.partner = cls.env.ref("base.res_partner_4")
         cls.tmpl = cls._create_template(cls.env, cls.partner._name)
 
     def test_wizard_preview_url(self):
-        wiz = self.wiz_model.with_context(
-            template_id=self.tmpl.id, default_res_id=self.partner.id
-        ).create({})
+        wiz = self.wiz_model.create(
+            {
+                "mail_template_id": self.tmpl.id,
+                "resource_ref": "{},{}".format(self.partner._name, self.partner.id),
+            }
+        )
         self.assertEqual(
             wiz.layout_preview_url,
             "/email-preview/res.partner/{}/{}/".format(self.tmpl.id, self.partner.id),
@@ -61,9 +63,8 @@ class TestController(HttpCase, TestLayoutMixin):
         templates = self.env["mail.template"].search([("model_id.model", "=", model)])
         url_pattern = "/email-preview/res.partner/mail.email_template_partner/{}"
         for el, tmpl in zip(list_items, templates):
-            self.assertEqual(
-                el.attrib, {"class": "preview", "href": url_pattern.format(tmpl.id)}
-            )
+            self.assertEqual(el.attrib["class"], "preview")
+            self.assertEqual(el.attrib["href"], url_pattern.format(tmpl.id))
 
     def test_controller2(self):
         self.authenticate("admin", "admin")
@@ -74,4 +75,4 @@ class TestController(HttpCase, TestLayoutMixin):
             self.base_url + "{}/{}/{}/".format(model, tmpl.id, partner.id)
         )
         content = response.content.decode()
-        self.assertIn("<p>Hello {}</p>".format(partner.name), content)
+        self.assertIn("<p>Hello %s</p>" % (partner.name), content)

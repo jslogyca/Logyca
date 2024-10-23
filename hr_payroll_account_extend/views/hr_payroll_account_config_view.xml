@@ -97,6 +97,6 @@
         id="menu_hr_payroll_account_config"
         name="Payroll Account Config"
         action="action_hr_payroll_account_config"
-        parent="hr_payroll.menu_hr_payroll_configuration"
+        parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration"
         sequence="53" />
 </odoo>

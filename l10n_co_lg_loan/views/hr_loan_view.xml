@@ -130,8 +130,8 @@
     <!--loan menu-->
     <menuitem name="Loans"
         id="menu_hr_loans_and_advances" 
-        parent="hr_payroll.menu_hr_payroll_root"
-        sequence="20"/>
+        parent="hr_work_entry_contract_enterprise.menu_hr_payroll_root"
+        sequence="75"/>
 
     <menuitem name="Loan"
         id="menu_base_hr_loan_request"

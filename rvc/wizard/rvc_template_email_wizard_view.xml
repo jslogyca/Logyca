@@ -64,5 +64,59 @@
             <field name="target">new</field>
         </record>
 
+        <record id="rvc_template_email_wizard_done_appli_form" model="ir.ui.view">
+            <field name="name">rvc.template.email.done.appli.wizard.form</field>
+            <field name="model">rvc.template.email.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Aceptar">
+                    <sheet>
+                        <h3>
+                            Aceptar Beneficio
+                        </h3>
+                    </sheet>
+                    <footer>
+                        <button string="Aceptar Beneficio" name="action_application_confirm" type="object" default_focus="1" class="oe_highlight"/>
+                        <button string="Cancelar" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_rvc_done_appli_wizard" model="ir.actions.act_window">
+            <field name="name">Aceptar Beneficio</field>
+            <field name="res_model">rvc.template.email.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="rvc_template_email_wizard_done_appli_form" />
+            <field name="binding_model_id" ref="rvc.model_benefit_application" />
+        </record>
+
+        <record id="rvc_template_email_wizard_done_kit_form" model="ir.ui.view">
+            <field name="name">rvc.template.email.done.kit.wizard.form</field>
+            <field name="model">rvc.template.email.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Enviar Kit">
+                    <sheet>
+                        <h3>
+                            Enviar Kit
+                        </h3>
+                    </sheet>
+                    <footer>
+                        <button string="Enviar Kit" name="action_done_mass" type="object" default_focus="1" class="oe_highlight"/>
+                        <button string="Cancelar" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_rvc_done_kit_wizard" model="ir.actions.act_window">
+            <field name="name">Enviar Kit</field>
+            <field name="res_model">rvc.template.email.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="rvc_template_email_wizard_done_kit_form" />
+            <field name="binding_model_id" ref="rvc.model_benefit_application" />
+        </record>
+
     </data>
 </odoo>

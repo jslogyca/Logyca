@@ -29,6 +29,6 @@
     <menuitem 
 		id="menu_massive_income_tariff" 
 		action="action_massive_income_tariff" 
-		parent="studio_customization.logyca_parametrizaci_ad8d64d2-1139-4184-9c30-5361f61a6ffd"
+		parent="logyca.main_menu_fact_mass_confg"
 		sequence="20"/>	
 </odoo>

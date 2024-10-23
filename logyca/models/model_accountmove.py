@@ -31,9 +31,9 @@ class AccountMove(models.Model):
         return country_id
     
     #PAÍS 
-    x_country_account_id = fields.Many2one('res.country', string='País', default=_get_default_country_id, track_visibility='onchange')
+    x_country_account_id = fields.Many2one('res.country', string='País', default=_get_default_country_id, tracking=True)
     #NUMERO DE ORDEN DE COMPRA
-    x_num_order_purchase = fields.Char(string='Número orden de compra', track_visibility='onchange')
+    x_num_order_purchase = fields.Char(string='Número orden de compra', tracking=True)
     #FACTURACIÓN ELECTRONICA
     x_date_send_dian = fields.Datetime(string='Fecha de envío a la DIAN', copy=False)
     x_send_dian = fields.Boolean(string='Enviado a la DIAN', copy=False)
@@ -43,9 +43,10 @@ class AccountMove(models.Model):
     #Tiene Nota Credito
     x_have_out_invoice = fields.Boolean(string='Tiene NC', compute='_have_nc')    
     #Tiene Aprobaciones
+    approval_id = fields.Many2one('approval.request', string='Solicitud de Aprobación')
     x_have_approval_request = fields.Boolean(string='Tiene Aprobaciones', compute='_have_approval_request')    
-    x_create_approval_request = fields.Boolean(string='Crearon Aprobación para NC',store = True, track_visibility='onchange')    
-    x_approved_approval_request = fields.Boolean(string='Aprobaron la creación de la NC',store = True, track_visibility='onchange')   
+    x_create_approval_request = fields.Boolean(string='Crearon Aprobación para NC',store = True, tracking=True)    
+    x_approved_approval_request = fields.Boolean(string='Aprobaron la creación de la NC',store = True, tracking=True)   
     #Es factura de facturación masiva
     x_is_mass_billing = fields.Boolean(string='Factura creada por el proceso de facturación masiva.')
     #Valor total descuentos
@@ -56,6 +57,15 @@ class AccountMove(models.Model):
     #Recibo de pago - Campo temporal
     x_receipt_payment = fields.Char(string='N° Recibo de pago', copy=False)
     x_journal_resolution_num = fields.Char(string='Number', related='journal_id.x_resolution_number')
+
+    def open_approval_request_view(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'approval.request',
+            'view_mode': 'form',
+            'res_id': self.approval_id.id,
+            'views': [(False, 'form')],
+        }
 
     @api.onchange('state')
     def _compute_x_status_dian(self):
@@ -101,10 +111,11 @@ class AccountMove(models.Model):
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
         }
-
+        status_dian = None
         response = requests.request("GET", url, headers=headers)
         response_data = json.loads(response.text)
-        status_dian = response_data['ResultData']['DocumentStatus']
+        if response_data and response_data['ResultData']:
+            status_dian = response_data['ResultData']['DocumentStatus']
 
         return status_dian
 
@@ -175,7 +186,11 @@ class AccountMove(models.Model):
         else:
             self.x_have_approval_request = False
             self.x_create_approval_request = False
-        
+
+        approval_id = self.env['approval.request'].search([('x_account_move_id', '=', self.id)], order="id asc", limit=1)
+        if approval_id:
+            self.approval_id = approval_id.id
+
         query_approval = '''
             Select id,"name" 
             From approval_request 
@@ -251,14 +266,6 @@ class AccountMove(models.Model):
     #Purchase - Se reemplaza metodo propio de odoo por el nuestro
     @api.onchange('purchase_vendor_bill_id', 'purchase_id')
     def _onchange_purchase_auto_complete(self):
-        ''' Load from either an old purchase order, either an old vendor bill.
-
-        When setting a 'purchase.bill.union' in 'purchase_vendor_bill_id':
-        * If it's a vendor bill, 'invoice_vendor_bill_id' is set and the loading is done by '_onchange_invoice_vendor_bill'.
-        * If it's a purchase order, 'purchase_id' is set and this method will load lines.
-
-        /!\ All this not-stored fields must be empty at the end of this function.
-        '''
         if self.purchase_vendor_bill_id.vendor_bill_id:
             self.invoice_vendor_bill_id = self.purchase_vendor_bill_id.vendor_bill_id
             self._onchange_invoice_vendor_bill()
@@ -312,12 +319,18 @@ class AccountMove(models.Model):
     def action_post(self): 
         
         #Validar que las cuentas de resultado 4-5-6 OBLIGUEN a cuentas analítica o etiqueta analítica
-        for invoice_line in self.invoice_line_ids:            
+        for invoice_line in self.invoice_line_ids:
+            payslip_id = self.env['hr.payslip'].search([('move_id', '=', invoice_line.move_id.id)], limit=1)
+            if payslip_id:
+                continue
             if str(invoice_line.account_id.code).find("4", 0, 1) != -1 or str(invoice_line.account_id.code).find("5", 0, 1) != -1 or str(invoice_line.account_id.code).find("6", 0, 1) != -1:
                 if not invoice_line.analytic_account_id and not invoice_line.analytic_tag_ids:
                     raise ValidationError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+invoice_line.name+", por favor verificar."))
                 
         for line in self.line_ids:
+            payslip_id = self.env['hr.payslip'].search([('move_id', '=', line.move_id.id)], limit=1)
+            if payslip_id:
+                continue            
             if str(line.account_id.code).find("4", 0, 1) != -1 or str(line.account_id.code).find("5", 0, 1) != -1 or str(line.account_id.code).find("6", 0, 1) != -1:
                 if not line.analytic_account_id and not line.analytic_tag_ids:
                     raise ValidationError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+line.name+", por favor verificar."))
@@ -325,7 +338,7 @@ class AccountMove(models.Model):
         
         cant_contactsFE = 0
         #cant_RT = 0
-        if self.type == 'out_invoice' or self.type == 'out_refund' or self.type == 'out_receipt':            
+        if self.move_type == 'out_invoice' or self.move_type == 'out_refund' or self.move_type == 'out_receipt':            
             # Referencia
             if not self.ref:
                 raise ValidationError(_('No se dígito información para el campo Referencia, por favor verificar.'))     
@@ -362,20 +375,20 @@ class AccountMove(models.Model):
             for record in partner.child_ids:   
                 ls_contacts = record.x_contact_type              
                 for i in ls_contacts:
-                    if i.id == 3:
+                    if i.type_fe:
                         cant_contactsFE = cant_contactsFE + 1
                         if not record.name:
                             raise ValidationError(_('El contacto de tipo facturación electrónica no tiene nombre, por favor verificar.'))     
                         if record.x_active_for_logyca == False:
                             raise ValidationError(_('El contacto de tipo facturación electrónica no esta activo, por favor verificar.'))    
-                        if not record.street:
-                            raise ValidationError(_('El contacto de tipo facturación electrónica no tiene dirección, por favor verificar.'))    
-                        if not record.x_city:
-                            raise ValidationError(_('El contacto de tipo facturación electrónica no tiene ciudad, por favor verificar.'))    
+                        # if not record.street:
+                        #     raise ValidationError(_('El contacto de tipo facturación electrónica no tiene dirección, por favor verificar.'))    
+                        # if not record.x_city:
+                        #     raise ValidationError(_('El contacto de tipo facturación electrónica no tiene ciudad, por favor verificar.'))    
                         if not record.email:
                             raise ValidationError(_('El contacto de tipo facturación electrónica no tiene email, por favor verificar.'))    
-                        if not record.phone and not record.mobile:
-                            raise ValidationError(_('El contacto de tipo facturación electrónica no tiene teléfono, por favor verificar.'))
+                        # if not record.phone and not record.mobile:
+                        #     raise ValidationError(_('El contacto de tipo facturación electrónica no tiene teléfono, por favor verificar.'))
                         
             if cant_contactsFE == 0:
                 raise ValidationError(_('El cliente al que pertenece la factura no tiene un contacto de tipo facturación electrónica, por favor verificar.'))     
@@ -404,7 +417,7 @@ class AccountMove(models.Model):
                     and move_line.account_id.create_asset != "no"
                     and not move.reversed_entry_id
                     and not (move_line.currency_id or move.currency_id).is_zero(move_line.price_total)
-                    and not move_line.asset_id
+                    and not move_line.asset_ids
                 ):
                     if not move_line.name:
                         raise UserError(_('Journal Items of {account} should have a label in order to generate an asset').format(account=move_line.account_id.display_name))
@@ -428,7 +441,7 @@ class AccountMove(models.Model):
         for asset, vals, invoice, validate in zip(assets, create_list, invoice_list, auto_validate):
             if 'model_id' in vals:
                 asset._onchange_model_id()
-                asset._onchange_method_period()
+                # asset._onchange_method_period()
                 if validate:
                     asset.validate()
             if invoice:
@@ -457,56 +470,57 @@ class AccountMoveReversal(models.TransientModel):
         self.refund_method = 'cancel'
         
         #Validar que no deje crear NC a facturas ya pagadas
-        moves = self.env['account.move'].browse(self.env.context['active_ids']) if self.env.context.get('active_model') == 'account.move' else self.move_id        
+        # moves = self.env['account.move'].browse(self.env.context['active_ids']) if self.env.context.get('active_model') == 'account.move' else self.move_id
+        moves = self.move_ids
         for move in moves:
-            if move.invoice_payment_state == 'paid':
+            if move.payment_state == 'paid':
                     raise ValidationError(_('La factura '+move.name+' ya esta pagada no se puede hacer nota crédito.'))
                     
-        #Validar que reverse los ingresos diferidos ya publicados
-        query_assets = '''
-                Select d.id
-                From account_move a 
-                inner join account_move_line b on a.id = b.move_id
-                inner join account_asset c on b.asset_id = c.id
-                inner join account_move d on c.id = d.asset_id
-                where a.id = %s and d.state = 'posted'
-        ''' % (self.move_id.id)
-        
-        self._cr.execute(query_assets)
-        result_query_assets = self._cr.dictfetchall()
-        
-        if result_query_assets:
-            for assets in result_query_assets:        
-                    self.env.context['active_ids'].append(assets.get("id"))        
-        
-        #Guardar en un array los ingresos diferidos en borrador para eliminar
-        assets_draft_detele = []
-        query_assets_draft = '''
-                Select d.id
-                From account_move a 
-                inner join account_move_line b on a.id = b.move_id
-                inner join account_asset c on b.asset_id = c.id
-                inner join account_move d on c.id = d.asset_id
-                where a.id = %s and d.state = 'draft'
-        ''' % (self.move_id.id)
-        
-        self._cr.execute(query_assets_draft)
-        result_query_assets_draft = self._cr.dictfetchall()
-        
-        if result_query_assets_draft:
-            for assets in result_query_assets_draft:    
-                move_unlink = self.env['account.move'].search([('id', '=', assets.get("id"))])
-                assets_draft_detele.append(move_unlink)
+            #Validar que reverse los ingresos diferidos ya publicados
+            query_assets = '''
+                    Select d.id
+                    From account_move a 
+                    inner join account_move_line b on a.id = b.move_id
+                    inner join account_asset c on a.asset_id = c.id
+                    inner join account_move d on c.id = d.asset_id
+                    where a.id = %s and d.state = 'posted'
+            ''' % (move.id)
+            
+            self._cr.execute(query_assets)
+            result_query_assets = self._cr.dictfetchall()
+            
+            if result_query_assets:
+                for assets in result_query_assets:        
+                        self.env.context['active_ids'].append(assets.get("id"))        
+            
+            #Guardar en un array los ingresos diferidos en borrador para eliminar
+            assets_draft_detele = []
+            query_assets_draft = '''
+                    Select d.id
+                    From account_move a 
+                    inner join account_move_line b on a.id = b.move_id
+                    inner join account_asset c on a.asset_id = c.id
+                    inner join account_move d on c.id = d.asset_id
+                    where a.id = %s and d.state = 'draft'
+            ''' % (move.id)
+            
+            self._cr.execute(query_assets_draft)
+            result_query_assets_draft = self._cr.dictfetchall()
+            
+            if result_query_assets_draft:
+                for assets in result_query_assets_draft:    
+                    move_unlink = self.env['account.move'].search([('id', '=', assets.get("id"))])
+                    assets_draft_detele.append(move_unlink)
                 #move_unlink.unlink()                   
         
-        #Ejecutar metodo original
-        method_original = super(AccountMoveReversal, self).reverse_moves()
-        
-        #Eliminar ingresos diferidos en borrador
-        if result_query_assets:
-            if assets_draft_detele:
-                for assets_draft in assets_draft_detele:    
-                    assets_draft.unlink()                   
+            #Ejecutar metodo original
+            method_original = super(AccountMoveReversal, self).reverse_moves()
+            
+            #Eliminar ingresos diferidos en borrador
+            if result_query_assets:
+                if assets_draft_detele:
+                    for assets_draft in assets_draft_detele:    
+                        assets_draft.unlink()                   
         
         #Si es una NC de facturación masvia debe cancelar la orden de venta que se genero por este proceso
         id_nc = method_original.get('res_id')
@@ -617,6 +631,16 @@ class AccountAsset(models.Model):
     
     move_ids = fields.Many2one(related='original_move_line_ids.move_id', string='Movimiento Original', readonly=True, copy=False)
     x_budget_group = fields.Many2one(string='Grupo presupuestal', readonly=True, related='original_move_line_ids.x_budget_group')
+    x_partner = fields.Many2one('res.partner', string='Asociado')
+    x_studio_accumulated_depreciation = fields.Float(string='Depreciación acumulada', default=0.0)
+    x_studio_history_cost = fields.Float(string='Costo histórico', default=0.0)
+    x_studio_asset_plate = fields.Char(string='Placa del activo')
+    x_studio_serial = fields.Char(string='Serial')
+    x_studio_date_depreciation = fields.Date(string='Fecha depreciación total')
+    x_studio_fecha_de_compra_his = fields.Date(string='Fecha de Compra (Histórica)')
+    x_studio_deprecieted_periods = fields.Integer(string='Periodos depreciados')
+    x_studio_ussefull_life = fields.Integer(string='Vida útil')
+    
 
 #Plazos de pago
 class AccountPaymentTerm(models.Model):

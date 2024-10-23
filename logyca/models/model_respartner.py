@@ -8,31 +8,31 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     _order = 'name'
     #TRACK VISIBILITY OLD FIELDS
-    street = fields.Char(track_visibility='onchange')
-    country_id = fields.Many2one(track_visibility='onchange')
-    state_id = fields.Many2one(track_visibility='onchange')
-    zip = fields.Char(track_visibility='onchange')
-    phone = fields.Char(track_visibility='onchange')
-    mobile = fields.Char(track_visibility='onchange')
-    email = fields.Char(track_visibility='onchange')
-    website = fields.Char(track_visibility='onchange')
-    lang = fields.Selection(track_visibility='onchange')
-    category_id = fields.Many2many(track_visibility='onchange')
-    user_id = fields.Many2one(track_visibility='onchange')
-    property_payment_term_id = fields.Many2one(track_visibility='onchange')
-    property_product_pricelist = fields.Many2one(track_visibility='onchange')
-    property_account_position_id = fields.Many2one(track_visibility='onchange')
-    property_supplier_payment_term_id = fields.Many2one(track_visibility='onchange')
-    property_purchase_currency_id = fields.Many2one(track_visibility='onchange')
-    property_account_receivable_id = fields.Many2one(track_visibility='onchange')
-    property_account_payable_id = fields.Many2one(track_visibility='onchange')
-    comment = fields.Text(track_visibility='onchange')
+    street = fields.Char(tracking=True)
+    country_id = fields.Many2one(tracking=True)
+    state_id = fields.Many2one(tracking=True)
+    zip = fields.Char(tracking=True)
+    phone = fields.Char(tracking=True)
+    mobile = fields.Char(tracking=True)
+    email = fields.Char(tracking=True)
+    website = fields.Char(tracking=True)
+    lang = fields.Selection(tracking=True)
+    category_id = fields.Many2many(tracking=True)
+    user_id = fields.Many2one(tracking=True)
+    property_payment_term_id = fields.Many2one(tracking=True)
+    property_product_pricelist = fields.Many2one(tracking=True)
+    property_account_position_id = fields.Many2one(tracking=True)
+    property_supplier_payment_term_id = fields.Many2one(tracking=True)
+    property_purchase_currency_id = fields.Many2one(tracking=True)
+    property_account_receivable_id = fields.Many2one(tracking=True)
+    property_account_payable_id = fields.Many2one(tracking=True)
+    comment = fields.Text(tracking=True)
 
     #INFORMACION BASICA
-    name = fields.Char(track_visibility='onchange')
+    name = fields.Char(tracking=True)
     same_vat_partner_id = fields.Many2one('res.partner', string='Partner with same Tax ID', compute='_compute_no_same_vat_partner_id', store=False)
-    x_type_thirdparty = fields.Many2many('logyca.type_thirdparty',string='Tipo de tercero',track_visibility='onchange', ondelete='restrict')
-    x_active_for_logyca = fields.Boolean(string='Activo', track_visibility='onchange')
+    x_type_thirdparty = fields.Many2many('logyca.type_thirdparty',string='Tipo de tercero',tracking=True, ondelete='restrict')
+    x_active_for_logyca = fields.Boolean(string='Activo', tracking=True)
     x_document_type = fields.Selection([
                                         ('11', 'Registro civil de nacimiento'),
                                         ('12', 'Tarjeta de identidad'),
@@ -44,17 +44,17 @@ class ResPartner(models.Model):
                                         ('42', 'Tipo de documento extranjero'),
                                         ('43', 'Sin identificación del exterior o para uso definido por la DIAN'),
                                         ('44', 'Documento de identificación extranjero persona jurídica')
-                                    ], string='Tipo de documento', track_visibility='onchange')
-    x_digit_verification = fields.Integer(string='Digito de verificación', track_visibility='onchange',compute='_compute_verification_digit', store=True)
-    x_first_name = fields.Char(string='Primer nombre', track_visibility='onchange')
-    x_second_name = fields.Char(string='Segundo nombre', track_visibility='onchange')
-    x_first_lastname = fields.Char(string='Primer apellido', track_visibility='onchange')
-    x_second_lastname = fields.Char(string='Segundo apellido', track_visibility='onchange')
-    #x_is_main_contact = fields.Boolean(string='¿Es contacto principal?', track_visibility='onchange')
+                                    ], string='Tipo de documento', tracking=True)
+    x_digit_verification = fields.Integer(string='Digito de verificación', tracking=True,compute='_compute_verification_digit', store=True)
+    x_first_name = fields.Char(string='Primer nombre', tracking=True)
+    x_second_name = fields.Char(string='Segundo nombre', tracking=True)
+    x_first_lastname = fields.Char(string='Primer apellido', tracking=True)
+    x_second_lastname = fields.Char(string='Segundo apellido', tracking=True)
+    #x_is_main_contact = fields.Boolean(string='¿Es contacto principal?', tracking=True)
     x_collaborative_group_ids = fields.Many2many(comodel_name='collaborative.group', string='Grupos Colaborativos')
 
     #UBICACIÓN PRINCIPAL
-    x_city = fields.Many2one('logyca.city', string='Ciudad', track_visibility='onchange', ondelete='restrict')
+    x_city = fields.Many2one('logyca.city', string='Ciudad', tracking=True, ondelete='restrict', domain="[('state_id', '=', state_id)]")
 
     #CLASIFICACION
     x_organization_type = fields.Selection([('1', 'Empresa'),
@@ -62,36 +62,36 @@ class ResPartner(models.Model):
                                             ('3', 'Centro de investigación'),
                                             ('4', 'Multilateral'),
                                             ('5', 'Gobierno'),
-                                            ('6', 'ONG: Organización no Gubernamental')], string='Tipo de organización', track_visibility='onchange')
-    x_work_groups = fields.Many2many('logyca.work_groups', string='Grupos de trabajo', track_visibility='onchange', ondelete='restrict')
-    x_sector_id = fields.Many2one('logyca.sectors', string='Sector', track_visibility='onchange', ondelete='restrict')
-    x_ciiu_activity = fields.Many2one('logyca.ciiu', string='Códigos CIIU', track_visibility='onchange', ondelete='restrict')
+                                            ('6', 'ONG: Organización no Gubernamental')], string='Tipo de organización', tracking=True)
+    x_work_groups = fields.Many2many('logyca.work_groups', string='Grupos de trabajo', tracking=True, ondelete='restrict')
+    x_sector_id = fields.Many2one('logyca.sectors', string='Sector', tracking=True, ondelete='restrict')
+    x_ciiu_activity = fields.Many2one('logyca.ciiu', string='Códigos CIIU', tracking=True, ondelete='restrict')
 
     #GRUPO EMPRESARIAL
-    x_is_business_group = fields.Boolean(string='¿Es un Grupo Empresarial?', track_visibility='onchange')
-    x_name_business_group = fields.Char(string='Nombre Grupo Empresarial', track_visibility='onchange')
+    x_is_business_group = fields.Boolean(string='¿Es un Grupo Empresarial?', tracking=True)
+    x_name_business_group = fields.Char(string='Nombre Grupo Empresarial', tracking=True)
 
     #VINCULACION CON logyca
-    x_active_vinculation = fields.Boolean(string='Estado de la vinculación', track_visibility='onchange')
-    x_date_vinculation = fields.Date(string="Fecha de vinculación", track_visibility='onchange')
-    x_type_vinculation = fields.Many2many('logyca.vinculation_types', string='Tipo de vinculación', track_visibility='onchange', ondelete='restrict')
-    x_excluded_massive_invoicing = fields.Boolean(string='¿Empresa que se excluye del proceso de facturación masiva?', track_visibility='onchange')
-    x_gtin_massive_invoicing = fields.Boolean(string='¿Empresa especial GTIN8 incluida en facturación masiva?', track_visibility='onchange')
+    x_active_vinculation = fields.Boolean(string='Estado de la vinculación', tracking=True)
+    x_date_vinculation = fields.Date(string="Fecha de vinculación", tracking=True)
+    x_type_vinculation = fields.Many2many('logyca.vinculation_types', string='Tipo de vinculación', tracking=True, ondelete='restrict')
+    x_excluded_massive_invoicing = fields.Boolean(string='¿Empresa que se excluye del proceso de facturación masiva?', tracking=True)
+    x_gtin_massive_invoicing = fields.Boolean(string='¿Empresa especial GTIN8 incluida en facturación masiva?', tracking=True)
     #Campos RVC
-    x_sponsored = fields.Boolean(string='Patrocinado', track_visibility='onchange')
-    x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora', track_visibility='onchange')
-    x_rvc_information = fields.One2many('logyca.rvc_information', 'partner_id', string = 'Productos adquiridos', track_visibility='onchange')
+    x_sponsored = fields.Boolean(string='Patrocinado', tracking=True)
+    x_flagging_company = fields.Many2one('res.partner', string='Empresa Jalonadora', tracking=True)
+    x_rvc_information = fields.One2many('logyca.rvc_information', 'partner_id', string = 'Productos adquiridos', tracking=True)
     #Campos Informativos
-    x_is_member_directive = fields.Boolean(string='¿Es miembro del Consejo Directivo?', track_visibility='onchange')
-    x_is_on_board_of_directors = fields.Boolean(string='¿Pertenece a la junta directiva?', track_visibility='onchange')
-    x_belongs_academic_allies_cli = fields.Boolean(string='Pertenece a aliados Académicos del CLI', track_visibility='onchange')
-    x_belongs_strategic_allies_cli = fields.Boolean(string='Pertenece a aliados Estratégicos del CLI', track_visibility='onchange')    
-    x_meeting_logyca_investigation = fields.Boolean(string='Pertenece a la Junta LOGYCA INVESTIGACIÓN', track_visibility='onchange')    
-    x_acceptance_data_policy = fields.Boolean(string='Acepta política de tratamiento de datos', track_visibility='onchange')
-    x_acceptance_date = fields.Date(string='Fecha de aceptación', track_visibility='onchange')
-    x_not_contacted_again = fields.Boolean(string='No volver a ser contactado total', help="Prohibido enviar información referente a LOGYCA", track_visibility='onchange')
-    x_not_contacted_again_partially = fields.Boolean(string='No volver a ser contactado parcial', help="Prohibido enviar información comercial, eventos, formaciones, campañas", track_visibility='onchange')
-    x_date_decoupling = fields.Date(string="Fecha de desvinculación", track_visibility='onchange')
+    x_is_member_directive = fields.Boolean(string='¿Es miembro del Consejo Directivo?', tracking=True)
+    x_is_on_board_of_directors = fields.Boolean(string='¿Pertenece a la junta directiva?', tracking=True)
+    x_belongs_academic_allies_cli = fields.Boolean(string='Pertenece a aliados Académicos del CLI', tracking=True)
+    x_belongs_strategic_allies_cli = fields.Boolean(string='Pertenece a aliados Estratégicos del CLI', tracking=True)    
+    x_meeting_logyca_investigation = fields.Boolean(string='Pertenece a la Junta LOGYCA INVESTIGACIÓN', tracking=True)    
+    x_acceptance_data_policy = fields.Boolean(string='Acepta política de tratamiento de datos', tracking=True)
+    x_acceptance_date = fields.Date(string='Fecha de aceptación', tracking=True)
+    x_not_contacted_again = fields.Boolean(string='No volver a ser contactado total', help="Prohibido enviar información referente a LOGYCA", tracking=True)
+    x_not_contacted_again_partially = fields.Boolean(string='No volver a ser contactado parcial', help="Prohibido enviar información comercial, eventos, formaciones, campañas", tracking=True)
+    x_date_decoupling = fields.Date(string="Fecha de desvinculación", tracking=True)
     x_reason_desvinculation = fields.Selection([
                                         ('1', 'Desvinculado por no pago'),
                                         ('2', 'Desvinculado Voluntariamente'),
@@ -99,16 +99,15 @@ class ResPartner(models.Model):
                                         ('4', 'Desvinculado por Liquidación de la Empresa'),
                                         ('5', 'Desvinculado por mal uso del sistema'),
                                         ('6', 'Desvinculado por migración 2020')
-                                    ], string='Desvinculado por', track_visibility='onchange')
+                                    ], string='Desvinculado por', tracking=True)
     x_reason_desvinculation_text = fields.Text(string='Observaciones desvinculación') 
-    x_additional_codes  = fields.Boolean(string='¿Maneja Códigos Adicionales?', track_visibility='onchange')
-    x_codes_gtin = fields.Boolean(string='¿Maneja Códigos GTIN-8?', track_visibility='onchange')
+    x_additional_codes  = fields.Boolean(string='¿Maneja Códigos Adicionales?', tracking=True)
+    x_codes_gtin = fields.Boolean(string='¿Maneja Códigos GTIN-8?', tracking=True)
 
     #INFORMACION FINANCIERA
-    x_asset_range = fields.Many2one('logyca.asset_range', string='Rango de activos', track_visibility='onchange', ondelete='restrict')
-    x_income_range = fields.Many2one('revenue.macro.sector', string='Rango de ingresos', track_visibility='onchange', ondelete='restrict')
-    x_date_update_asset = fields.Date(string='Fecha de última modificación', compute='_date_update_asset', store=True, track_visibility='onchange')
-    #x_date_update_asset = fields.Date(string='Fecha de última modificación', track_visibility='onchange')
+    x_asset_range = fields.Many2one('logyca.asset_range', string='Rango de activos', tracking=True, ondelete='restrict')
+    x_date_update_asset = fields.Date(string='Fecha de última modificación', compute='_date_update_asset', store=True, tracking=True)
+    #x_date_update_asset = fields.Date(string='Fecha de última modificación', tracking=True)
     x_company_size = fields.Selection([
                                         ('1', 'Mipyme'),
                                         ('2', 'Pyme'),
@@ -116,10 +115,10 @@ class ResPartner(models.Model):
                                         ('4', 'Grande'),
                                         ('5', 'Micro'),
                                         ('6', 'Pequeña')
-                                    ], string='Tamaño empresa', track_visibility='onchange')
+                                    ], string='Tamaño empresa', tracking=True)
 
     #INFORMACION TRIBUTARIA
-    x_tax_responsibilities = fields.Many2many('logyca.responsibilities_rut', string='Responsabilidades Tributarias', track_visibility='onchange', ondelete='restrict')
+    x_tax_responsibilities = fields.Many2many('logyca.responsibilities_rut', string='Responsabilidades Tributarias', tracking=True, ondelete='restrict')
 
     #INFORMACION COMERCIAL
     x_account_origin = fields.Selection([
@@ -129,29 +128,29 @@ class ResPartner(models.Model):
                                         ('4', 'Telemercadeo'),
                                         ('5', 'Web'),
                                         ('6', 'Otro')
-                                    ], string='Origen de la cuenta', track_visibility='onchange')
+                                    ], string='Origen de la cuenta', tracking=True)
     #x_member_id_team = fields.Many2one('res.users', string='Propietario de la cuenta')
 
     #INFORMACIÓN CONTACTO
-    x_contact_origin = fields.Selection([('odoo', 'Odoo'),('portal', 'Portal')], string='Origen del contacto', track_visibility='onchange', default='odoo')
-    x_contact_type = fields.Many2many('logyca.contact_types', string='Tipo de contacto', track_visibility='onchange', ondelete='restrict')
-    x_contact_job_title = fields.Many2one('logyca.job_title', string='Cargo', track_visibility='onchange', ondelete='restrict')
-    x_contact_area = fields.Many2one('logyca.areas', string='Área', track_visibility='onchange', ondelete='restrict')
-    x_contact_job_title_historic = fields.Char(string='Cargo histórico', track_visibility='onchange')
-    x_contact_area_historic = fields.Char(string='Área histórica', track_visibility='onchange')
+    x_contact_origin = fields.Selection([('odoo', 'Odoo'),('portal', 'Portal')], string='Origen del contacto', tracking=True, default='odoo')
+    x_contact_type = fields.Many2many('logyca.contact_types', string='Tipo de contacto', tracking=True, ondelete='restrict')
+    x_contact_area = fields.Many2one('logyca.areas', string='Área', tracking=True, ondelete='restrict')
+    x_contact_job_title = fields.Many2one('logyca.job_title', string='Cargo', tracking=True, ondelete='restrict', domain="[('area_id', '=', x_contact_area)]")
+    x_contact_job_title_historic = fields.Char(string='Cargo histórico', tracking=True)
+    x_contact_area_historic = fields.Char(string='Área histórica', tracking=True)
 
     #INFORMACION FACTURACION ELECTRÓNICA
-    x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas', track_visibility='onchange')
+    x_email_invoice_electronic = fields.Char(string='Correo electrónico para recepción electrónica de facturas', tracking=True)
 
     #INFORMACIÓN EDUCACIÓN - CLIENTES
-    X_is_a_student = fields.Boolean(string='¿Es estudiante?', track_visibility='onchange')
-    x_educational_institution = fields.Char(string='Institución', track_visibility='onchange')
-    x_educational_faculty = fields.Char(string='Facultad', track_visibility='onchange')
-    x_taken_courses_logyca = fields.Boolean(string='¿Ha tomado cursos en LOGYCA?', track_visibility='onchange')
+    X_is_a_student = fields.Boolean(string='¿Es estudiante?', tracking=True)
+    x_educational_institution = fields.Char(string='Institución', tracking=True)
+    x_educational_faculty = fields.Char(string='Facultad', tracking=True)
+    x_taken_courses_logyca = fields.Boolean(string='¿Ha tomado cursos en LOGYCA?', tracking=True)
 
     #CAMPOS HISTORICOS
-    x_owner_history = fields.Char(string='Propietario historico', track_visibility='onchange')
-    x_info_creation_history = fields.Char(string='Información de creación y modificación historica', track_visibility='onchange')
+    x_owner_history = fields.Char(string='Propietario historico', tracking=True)
+    x_info_creation_history = fields.Char(string='Información de creación y modificación historica', tracking=True)
     x_history_partner_notes = fields.One2many('logyca.history_partner_notes', 'partner_id', string = 'Notas')
     x_history_partner_emails = fields.One2many('logyca.history_partner_emails', 'partner_id', string = 'Emails')
     x_history_partner_opportunity = fields.One2many('logyca.history_partner_opportunity', 'partner_id', string = 'Oportunidades')
@@ -161,12 +160,22 @@ class ResPartner(models.Model):
     def _date_update_asset(self):
         self.x_date_update_asset = fields.Date.today()
 
-    @api.onchange('x_active_for_logyca')
-    def _onchange_active(self):    
-        if self.x_active_for_logyca == True:
+    @api.onchange('x_active_for_logyca', 'active')
+    def _onchange_active(self):
+        print('PPPPPPP', self.x_active_for_logyca, self.active)
+        if self.x_active_for_logyca:
+            print('PPPPPPP 222222', self.x_active_for_logyca, self.active)
             self.active = True
         else:
-            self.active = False        
+            print('PPPPPPP 3333333', self.x_active_for_logyca, self.active)
+            self.active = False
+
+    # @api.onchange('x_active_for_logyca')
+    # def _onchange_active(self):    
+    #     if self.x_active_for_logyca:
+    #         self.active = True
+    #     else:
+    #         self.active = False        
 
     @api.depends('vat')
     def _compute_no_same_vat_partner_id(self):

@@ -11,8 +11,7 @@ import requests
 
 class ReportIncomeReportWizard(models.TransientModel):
     _name = 'report.income.report.wizard'
-
-
+    _description = 'Report Income Report Wizard'
 
     date_from = fields.Date(string='Fecha de Inicio')
     date_to = fields.Date(string='Fecha Fin')
@@ -76,7 +75,7 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
                                     left join account_analytic_account red on red.id = i.analytic_account_id                                    
                                     where l.exclude_from_invoice_tab is False and i.date between %s and %s and i.state='posted'
-                                    and a.asset_type = 'sale' and i.type in ('out_invoice')
+                                    and a.asset_type = 'sale' and i.move_type in ('out_invoice')
                                     order by p.id, m.id''', 
                                     (date_from, date_to))
         
@@ -115,7 +114,7 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
                                     left join account_analytic_account red on red.id = i.analytic_account_id                                    
                                     where l.exclude_from_invoice_tab is False and i.date between '2022-09-01' and '2022-11-30' and i.state='posted'
-                                    and l.asset_id is null and i.type in ('out_invoice')
+                                    and l.asset_id is null and i.move_type in ('out_invoice')
                                     order by p.id, i.id ''', 
                                     (date_from, date_to))
         

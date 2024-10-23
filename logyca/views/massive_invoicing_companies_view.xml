@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="massive_invoicing_companies_view_form" model="ir.ui.view">
+        <field name="name">massive.invoicing.companies.form</field>
+        <field name="model">massive.invoicing.companies</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet string="Massive Invoicing - Companies for invoicing">
+                    <group col="4">
+                        <field name="name" required="1" />
+                        <field name="process_type" required="1" widget="radio"/>
+                        <field name="expiration_date" required="1"/>
+                        <field name="url_enpoint_code_assignment" required="1"/>
+                        <newline/>
+                        <b>Parametros empresas textileras</b>
+                        <div style="padding:5px;border:solid;">                        
+                            Capacidad de códigos: <field name="textile_code_capability" required="1"/>
+                            <br/>
+                            Porcentaje de la tarifa: <field name="percentage_textile_tariff" required="1"/>
+                        </div>
+                        <newline/>
+                        <button name="consult_companies" string="Consultar compañias" type="object" class="oe_highlight" style="margin:5px;" attrs="{'invisible': [('process_type', '=', '2')]}"/>
+                        <newline/>
+                        <field name="cant_thirdparties_miembros" force_save="1" readonly="1" attrs="{'invisible': [('process_type', '=', '2')]}"/>
+                        <field name="cant_thirdparties_clientes" force_save="1" readonly="1" attrs="{'invisible': [('process_type', '=', '2')]}"/>
+                        <field name="cant_thirdparties_textil" force_save="1" readonly="1" attrs="{'invisible': [('process_type', '=', '2')]}"/>
+                        <field name="cant_thirdparties_gtin_special" force_save="1" readonly="1" attrs="{'invisible': [('process_type', '=', '2')]}"/>
+                        <newline/>
+                        <field name="thirdparties" colspan="4" can_create="true" can_write="true" attrs="{'readonly': [('process_type', '=', '1')]}">
+                            <tree>
+                                <field name="name"/>
+                                <field name="vat"/>     
+                                <field name="x_date_vinculation"/>                                        
+                                <field name="x_type_vinculation" widget="many2many_tags"/>                                        
+                                <field name="x_sector_id"/>                                        
+                            </tree>
+                        </field>
+                        <newline/>
+                        <separator/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="massive_invoicing_companies_view_tree" model="ir.ui.view">
+        <field name="name">massive.invoicing.companies.tree</field>
+        <field name="model">massive.invoicing.companies</field>
+        <field name="arch" type="xml">
+            <tree string="Empresas a facturar" >
+                <field name="name" />
+                <field name="process_type"/>
+                <field name="cant_thirdparties_miembros"/>
+                <field name="cant_thirdparties_clientes"/>
+                <field name="cant_thirdparties_textil"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_massive_invoicing_companies" model="ir.actions.act_window">
+        <field name="name">Empresas a facturar</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">massive.invoicing.companies</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_massive_invoicing_companies"
+        name="Empresas a facturar"
+        parent="main_menu_fact_mass"
+        action="action_massive_invoicing_companies"
+        sequence="0"
+        groups="group_invoice_mass"/>
+
+</odoo>

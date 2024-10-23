@@ -18,7 +18,6 @@ class RVCImportFileWizard(models.TransientModel):
     _name = 'rvc.import.file.wizard'
     _description = 'Cargue Masivo de Postulaciones a Beneficios'
 
-
     file_data = fields.Binary(string='File', required=True)
     filename = fields.Char(string='Name File')
     benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
@@ -28,7 +27,7 @@ class RVCImportFileWizard(models.TransientModel):
     def validate_mail(self, email):
         if email:
             match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', str(email.lower()))
-        if match == None:
+        if not match:
             return False
         return True
 

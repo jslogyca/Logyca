@@ -10,7 +10,7 @@
     "category": "Human Resources",
     'website': 'https://logyca.com',
     'author': 'LOGYCA / SERVICIOS SAS',
-    'license': '',
+    'license': 'LGPL-3',
     'support': 'lctorres@logyca.com',
     'maintainer': 'LOGYCA / SERVICIOS SAS',
     'depends': [

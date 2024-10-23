@@ -16,4 +16,4 @@ class HRSalaryRule(models.Model):
     electronictag_id = fields.Many2one('hr.electronictag.structure', string='Electronic Tags')
     type_extra = fields.Selection(related='electronictag_id.type_extra', string='Tipo Extra')
     porcentaje_hora_extra = fields.Float('Porcentaje Hora Extra')
-    type_incapacidad_id = fields.Many2one('hr.tipo.incapacidad.dian', string='Tipo de Incapacidad')
+    # type_incapacidad_id = fields.Many2one('hr.etype.leave', string='Tipo de Incapacidad')

@@ -20,7 +20,7 @@ class ReportExcelSaleProduct(models.Model):
     company_id = fields.Many2one('res.company','Compañía')
     invoice_origin = fields.Char('Origin')
     product_id = fields.Many2one('product.product', 'Product', readonly=True)
-    product_template_id = fields.Many2one('product.template', 'Product', readonly=True)
+    product_template_id = fields.Many2one('product.template', 'Product Tmp', readonly=True)
     analytic_account_id = fields.Many2one('account.analytic.account', 'Analytic', readonly=True)
     analytic_account_red = fields.Many2one('account.analytic.account', 'Red', readonly=True)
     analytic_group_id = fields.Many2one('account.analytic.group', 'Group', readonly=True)
@@ -28,8 +28,8 @@ class ReportExcelSaleProduct(models.Model):
     state = fields.Selection(selection=[('draft', 'Draft'),
                                     ('posted', 'Posted'),
                                     ('cancel', 'Cancelled')], string='Status', default='draft')
-    vendedor_id = fields.Many2one('res.partner', 'Cliente', readonly=True)
-    team_id = fields.Many2one('crm.team', 'Cliente', readonly=True)
+    vendedor_id = fields.Many2one('res.partner', 'Vendedor', readonly=True)
+    team_id = fields.Many2one('crm.team', 'Equipo', readonly=True)
     x_send_dian = fields.Boolean('Send DIAN')
     x_date_send_dian = fields.Date('Date Send DIAN')
     x_cufe_dian = fields.Char('CUFE')
@@ -69,18 +69,18 @@ class ReportExcelSaleProduct(models.Model):
             gf.id as analytic_group_id,
             gl.id as analytic_group_two_id,
             mc.id as currency_id,
-            CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+            CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
             THEN (l.price_unit*-1)
-            WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+            WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
             THEN l.debit*-1
             WHEN l.amount_currency<>0.0
             THEN l.credit
             ELSE l.price_unit
             END AS price_unit_by_product,
             l.quantity as quantity,   
-            CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+            CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
             THEN ((l.price_unit*l.quantity)*-1)
-            WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+            WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
             THEN l.debit*-1
             WHEN l.amount_currency<>0.0
             THEN l.credit
@@ -91,9 +91,9 @@ class ReportExcelSaleProduct(models.Model):
             ELSE 0.0
             END AS discount,
             l.discount as discount_id,
-            CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+            CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
             THEN (((l.price_unit*l.quantity)-(round(((l.price_unit*l.discount)/100),2)))*-1)
-            WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+            WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
             THEN l.debit*-1
             WHEN l.amount_currency<>0.0
             THEN l.credit
@@ -105,13 +105,13 @@ class ReportExcelSaleProduct(models.Model):
             THEN 0.0
             WHEN l.amount_currency<>0.0
             THEN l.credit
-            WHEN m.type = 'out_refund' AND (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)>0
+            WHEN m.move_type = 'out_refund' AND (select count(*) from account_move_line_account_tax_rel where account_move_line_id=l.id)>0
             THEN round((coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0)*-1),2)
             ELSE round(coalesce((((l.price_unit*l.quantity)-((l.price_unit*l.discount)/100))*0.19),0),2)
             END AS tax,
-            CASE WHEN m.type = 'out_refund' and l.amount_currency=0.0
+            CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
             THEN (l.price_total*-1)
-            WHEN m.type = 'out_refund' and l.amount_currency<>0.0
+            WHEN m.move_type = 'out_refund' and l.amount_currency<>0.0
             THEN l.debit*-1
             WHEN l.amount_currency<>0.0
             THEN l.credit
@@ -154,7 +154,7 @@ class ReportExcelSaleProduct(models.Model):
 
     def _group_by(self):
         group_by_str = """
-                WHERE m.type in ('out_invoice', 'out_refund') and m.state='posted' and exclude_from_invoice_tab is False
+                WHERE m.move_type in ('out_invoice', 'out_refund') and m.state='posted' and exclude_from_invoice_tab is False
                 ORDER BY m.id DESC
         """
         return group_by_str

@@ -11,6 +11,7 @@ account_benefit_application,benefit.application,model_benefit_application,rvc.gr
 access_rvc_digital_card,access_rvc_digital_card,model_rvc_digital_card,rvc.group_rvc_manager,1,1,1,1
 access_rvc_digital_card_off_service,access_rvc_digital_card_off_service,model_rvc_digital_card_offered_service,rvc.group_rvc_manager,1,1,1,1
 access_rvc_crecemype_done_wizard,rvc.crecemype.done.wizard,model_rvc_crecemype_done_wizard,rvc.group_rvc_manager,1,1,1,1
+access_rvc_import_file_benefit_wizard,rvc.import.file.benefit.wizard,model_rvc_import_file_benefit_wizard,rvc.group_rvc_manager,1,1,1,1
 
 access_sup_rvc_import_file_wizard,rvc.import.file.wizard,model_rvc_import_file_wizard,rvc.group_rvc_support,0,0,0,0
 access_sup_rvc_sponsor,rvc.sponsor,model_rvc_sponsor,rvc.group_rvc_support,1,0,0,0

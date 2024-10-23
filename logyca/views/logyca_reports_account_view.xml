@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="logyca_reports_account_view_form" model="ir.ui.view">
+        <field name="name">logyca.reports.account.lg.form</field>
+        <field name="model">logyca.reports.account</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet string="Reportes creados por LOGYCA para Contabilidad">
+                    <group col="4">
+                    <button name="get_excel" class="oe_highlight" type="object" string="Generar Excel"/>						
+                        <separator/>	
+                        <field name="name" modifiers="{&quot;required&quot;: true}"/>
+                        <field name="description" modifiers="{&quot;required&quot;: true}"/>
+                        <field name="columns" groups = "base.group_no_one" modifiers="{&quot;required&quot;: true}"/>
+                        <newline/>
+                            <field name="query" groups = "base.group_no_one" colspan="4" modifiers="{}"/>
+                        <newline/>
+                        <field name="excel_file_name" invisible="1"/>
+                        <field name="excel_file" filename="excel_file_name" invisible="1"/>	
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="logyca_reports_account_view_tree" model="ir.ui.view">
+        <field name="name">logyca.reports.account.lg.tree</field>
+        <field name="model">logyca.reports.account</field>
+        <field name="arch" type="xml">
+            <tree string="Consultas" >
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_logyca_reports_account" model="ir.actions.act_window">
+        <field name="name">Consultas</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">logyca.reports.account</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_logyca_reports_account"
+        name="Consultas"
+        parent="logyca_menus_report_financial"
+        action="action_logyca_reports_account"
+        sequence="3" />
+
+    <record id="action_logyca_libro_diario_report" model="ir.actions.act_window">
+        <field name="name">Libro Diario</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">logyca.libro_diario.report</field>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_logyca_libro_diario_report"
+        name="Libro Diario"
+        parent="logyca_menus_report_financial"
+        action="action_logyca_libro_diario_report"
+        sequence="4" />
+
+    <record id="action_account_balance_partner_filter" model="ir.actions.act_window">
+        <field name="name">Balance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.balance.partner.filter</field>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_account_balance_partner_filter"
+        name="Balance"
+        parent="logyca_menus_report_financial"
+        action="action_account_balance_partner_filter"
+        sequence="1" />
+
+    <record id="action_account_auxiliar_filter" model="ir.actions.act_window">
+        <field name="name">Auxiliar</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.auxiliar.filter</field>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_account_balance_partner_filter"
+        name="Auxiliar"
+        parent="logyca_menus_report_financial"
+        action="action_account_auxiliar_filter"
+        sequence="2" />
+
+</odoo>

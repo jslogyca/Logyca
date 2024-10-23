@@ -11,7 +11,8 @@ import requests
 
 
 class HrPayrollReportLG(models.TransientModel):
-    _name = 'hr.payroll.report.lg'  
+    _name = 'hr.payroll.report.lg'
+    _description = 'Hr Payroll Report LG'
   
     payslip_run_id  = fields.Many2one('hr.payslip.run', string='Payslip run', required=True)
     data = fields.Binary("Archivo")
@@ -121,14 +122,14 @@ class HrPayrollReportLG(models.TransientModel):
             else:
                 ws.write_row(fila,0,x)
             fila+=1
-
         try:
             wb.close()
-            out = base64.encodestring(buf.getvalue())
+            # out = base64.encodestring(buf.getvalue())
+            out = base64.encodebytes(buf.getvalue())
             buf.close()
             self.data = out
             # self.data_name = unicode(str(self.payslip_run_id.name), 'utf-8')+".xlsx"
-            self.data_name = str(self.payslip_run_id.name) + '-' + str(date_file)
+            self.data_name = str(self.payslip_run_id.name) + '-' + str(date_file)            
         except ValueError:
             raise Warning('No se pudo generar el archivo')
 

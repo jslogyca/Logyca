@@ -102,11 +102,12 @@ class comercial_report(models.Model):
                                   when c.x_studio_tipo_de_cuenta = 'Ahorros' then '37'
                     else '' end,'') as TipoTransaccion,
                     coalesce(d.bic,'') as Banco,coalesce(c.acc_number,'') as NoCuentaBeneficiario,
-                    coalesce(b.email,''),coalesce(substring(a."name" from 6 for 21),'') as DocumentoAutorizado,coalesce(substring(a.communication from 1 for 21),'') as Referencia,'' as OficinaEntrega,coalesce(a.amount,0) as ValorTransaccion,		
-                    coalesce(cast(extract(year from a.payment_date) as varchar) || lpad(extract(month from a.payment_date)::text, 2, '0') ||  lpad(extract(day from a.payment_date)::text, 2, '0'),'') as FechaAplicacion	
+                    coalesce(b.email,''),coalesce(substring(m."name" from 6 for 21),'') as DocumentoAutorizado,coalesce(substring(m.ref from 1 for 21),'') as Referencia,'' as OficinaEntrega,coalesce(a.amount,0) as ValorTransaccion,		
+                    coalesce(cast(extract(year from m.date) as varchar) || lpad(extract(month from m.date)::text, 2, '0') ||  lpad(extract(day from m.date)::text, 2, '0'),'') as FechaAplicacion	
             From account_payment a
             inner join res_partner b on a.partner_id = b.id
-            left join res_partner_bank c on a.partner_bank_account_id = c.id
+            left join account_move m on m.id=a.move_id
+            left join res_partner_bank c on a.partner_bank_id = c.id
             left join res_bank d on c.bank_id = d.id
             where partner_type = 'supplier' and a.id in (%s)
         ''' % (payments_ids)

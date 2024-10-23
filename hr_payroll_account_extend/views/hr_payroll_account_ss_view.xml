@@ -57,6 +57,6 @@
         id="menu_hr_payroll_account_ss"
         name="Payroll Account SS"
         action="action_hr_payroll_account_ss"
-        parent="hr_payroll.menu_hr_payroll_configuration"
+        parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration"
         sequence="54" />
 </odoo>

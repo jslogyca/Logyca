@@ -41,6 +41,6 @@
         id="menu_hr_reason_end_contract"
         name="Reason End Contract"
         action="action_hr_reason_end_contract"
-        parent="hr_payroll.menu_hr_payroll_configuration"
+        parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration"
         sequence="53" />
 </odoo>

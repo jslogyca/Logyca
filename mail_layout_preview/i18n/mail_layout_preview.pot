@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0\n"
+"Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -34,7 +34,7 @@ msgid "Copy the link"
 msgstr ""
 
 #. module: mail_layout_preview
-#: model:ir.model,name:mail_layout_preview.model_email_template_preview
+#: model:ir.model,name:mail_layout_preview.model_mail_template_preview
 msgid "Email Template Preview"
 msgstr ""
 
@@ -49,7 +49,7 @@ msgid "Find your template"
 msgstr ""
 
 #. module: mail_layout_preview
-#: model:ir.model.fields,field_description:mail_layout_preview.field_email_template_preview__layout_preview_url
+#: model:ir.model.fields,field_description:mail_layout_preview.field_mail_template_preview__layout_preview_url
 msgid "Full layout preview"
 msgstr ""
 

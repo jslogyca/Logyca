@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record id="account_move_form_fe" model="ir.ui.view">
+        <field name="name">account.move.form.fe</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='other_info']" position="after">
+                <page name="studio_page_Y8T10" string="Facturación electrónica">
+                    <div>
+                        <button name="get_status_dian" class="" string="Obtener Estado DIAN" type="object" attrs="{'invisible': ['|',['state','!=','posted'],['x_send_dian','=',False]]}"/>
+                        <button string="Ver en la DIAN" type="object" name="get_url_invoice_dian" attrs="{'invisible': ['|',['state','!=','posted'],['x_send_dian','=',False]]}"/>
+                    </div>
+                    <group name="studio_group_Y8T10">
+                        <group name="studio_group_Y8T10_left">
+                            <field name="x_send_dian" force_save="True" attrs="{}" readonly="1"/>
+                            <field name="x_cufe_dian" force_save="True" attrs="{}" readonly="1"/>
+                            <field name="x_status_dian" force_save="True" readonly="1"/>
+                        </group>
+                        <group name="studio_group_Y8T10_right">
+                            <field name="x_date_send_dian" force_save="True" attrs="{'invisible': [['x_date_send_dian','=',False]]}" readonly="1"/>
+                            <field name="x_motive_error" force_save="True" attrs="{'invisible': [['x_motive_error','=',False]]}" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+	<record id="account_move_inherit_lg" model="ir.ui.view">
+		<field name="name">account.move.inherit.lg</field>
+		<field name="model">account.move</field>
+		<field name="inherit_id" ref="account.view_move_form"/>
+		<field name="arch" type="xml">
+            <xpath expr="//field[@name='ref']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+			<xpath expr="//field[@name='payment_reference']" position="after">
+                <field name="create_uid" string="Creado por"/>
+                <field name="ref" />
+                <field name="x_num_order_purchase" />
+			</xpath>
+			<xpath expr="//button[@name='open_created_caba_entries']" position="after">
+                <field name="x_have_approval_request" invisible="1"/>
+                <button name="open_approval_request_view" class="oe_stat_button" icon="fa-check-square-o" type="object" 
+                    attrs="{'invisible': [('x_have_approval_request', '=', False)]}" string="Aprobaciones">
+                </button>
+			</xpath>
+			<xpath expr="//button[@name='action_reverse']" position="after">
+                <button name="create_approval_request" string="Crear Aprobación para NC" type="object" 
+                        groups="account.group_account_invoice" 
+                        attrs="{'invisible': ['|',('move_type', 'not in', ('out_invoice', 'in_invoice')), ('state', '!=', 'posted')]}">
+                </button>
+            </xpath>
+			<!-- <xpath expr="//field[@name='currency_id']" position="after"> -->
+			<xpath expr="//div[@name='journal_div']" position="after">
+                <field name="x_country_account_id" />
+			</xpath>
+			<xpath expr="//form/sheet/notebook/page[@id='invoice_tab']/field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="after">
+                <field name="x_budget_group" attrs="{'invisible': [('parent.move_type', 'not in', ('in_invoice', 'in_refund','in_receipt'))]}" />
+			</xpath>
+			<xpath expr="//form/sheet/notebook/page[@id='aml_tab']/field[@name='line_ids']/tree/field[@name='analytic_account_id']" position="before">
+                <field name="x_budget_group" />
+			</xpath>
+			<xpath expr="//form/sheet/notebook/page[@id='aml_tab']/field[@name='line_ids']/tree/field[@name='tax_base_amount']" position="replace">
+                <field name="tax_base_amount" invisible="0" readonly="0"/>
+			</xpath>
+		</field>
+	</record>
+
+</odoo>

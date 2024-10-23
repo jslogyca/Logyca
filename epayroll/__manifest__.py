@@ -7,7 +7,7 @@
     'category': 'Accounting/Accounting',
     'website': 'https://logyca.com',
     'author': 'LOGYCA',
-    'license': '',
+    'license': 'LGPL-3',
     'application': False,
     'installable': True,
     'depends': [
@@ -15,6 +15,7 @@
         'hr_payroll',
         'logyca',
         'hr_contract_types',
+        'hr_work_entry_contract_enterprise',
         ],
     'description': '''
 

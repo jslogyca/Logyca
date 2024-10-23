@@ -44,7 +44,7 @@
 		id="menu_config_discount_logycaedx"
 		name="Config Discount Logyca EDX"
 		action="action_config_discount_logycaedx"
-		parent="studio_customization.logyca_parametrizaci_ad8d64d2-1139-4184-9c30-5361f61a6ffd"
+		parent="logyca.main_menu_fact_mass_confg"
 		sequence="10"
 		groups="group_technical_mass_invoice"/>          
 </odoo>

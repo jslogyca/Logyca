@@ -4,12 +4,10 @@
 	<record id="view_users_form_group_manager" model="ir.ui.view">
 		<field name="name">res.users.form.group.manager</field>
 		<field name="model">res.users</field>
-		<field name="inherit_id" ref="base.user_groups_view"/>
+		<field name="inherit_id" ref="base.view_users_form"/>
 		<field name="arch" type="xml">
-            <xpath expr="//field[@name='sel_groups_1_8_9']" position="after">
-                <group>
-                    <field name="group_manager"/>
-                </group>
+            <xpath expr="//field[@name='companies_count']" position="after">
+				<field name="group_manager"/>
 			</xpath>
 		</field>
 	</record>

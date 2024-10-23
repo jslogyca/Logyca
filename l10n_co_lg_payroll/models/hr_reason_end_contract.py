@@ -9,7 +9,7 @@ class HRReasonEndContract(models.Model):
     _description = "Reason End Contract"
     _order = "name desc"
 
-    name = fields.Char('Name', tracking=True)
-    code = fields.Char('Code', tracking=True)
+    name = fields.Char('Name')
+    code = fields.Char('Code')
 
 

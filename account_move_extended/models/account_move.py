@@ -15,7 +15,7 @@ class AccountMoveLine(models.Model):
 
     @api.onchange('x_budget_group')
     def onchange_budget_group(self):
-        if self.move_id.type== 'in_invoice' or self.move_id.type== 'in_refund': 
+        if self.move_id.move_type== 'in_invoice' or self.move_id.move_type== 'in_refund': 
             company_id = self.product_id.company_id.id
 
             if company_id and company_id == 1:
@@ -62,7 +62,16 @@ class AccountMove(models.Model):
     x_estimated_payment_date = fields.Date('Fecha Estimada Pago')
     x_payment_portal_theme = fields.Selection([('logyca', 'LOGYCA'), ('gs1', 'GS1')], string='Portal de Pagos',help="Indica en qué portal de pagos debe pagarse la factura")
     analytic_account_id = fields.Many2one('account.analytic.account', string='Red de Valor')
-    reviewed_by = fields.Many2one('res.users', string='Revisado Por', help="Este campo aparece en el reporte de Soporte de Factura", readonly="1")
+    reviewed_by = fields.Many2one('res.users', string='Revisado Por', help="Este campo aparece en el reporte de Soporte de Factura", default=False)
+
+    @api.depends('company_id', 'invoice_filter_type_domain')
+    def _compute_suitable_journal_ids(self):
+        for m in self:
+            journal_type = m.invoice_filter_type_domain or 'general'
+            company_id = m.company_id.id or self.env.company.id
+            # domain = [('company_id', '=', company_id), ('type', '=', journal_type)]
+            domain = [('company_id', '=', company_id)]
+            m.suitable_journal_ids = self.env['account.journal'].search(domain)
 
     @api.depends('x_debtor_portfolio_status_id')
     def debtor_portfolio_status_as_char(self):

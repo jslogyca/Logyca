@@ -31,7 +31,7 @@ class ECertificate(models.Model):
         ('valid', 'Valid'),
         ('expired', 'Expired')
     ], required=True, string="Status", default='draft')
-    cert_file = fields.Binary(string='PFX File', required=False, store=True, help='Upload the PFX File', filters='*.pfx')
+    cert_file = fields.Binary(string='PFX File', required=False, store=True, help='Upload the PFX File')
     pem_file = fields.Binary(string='File PEM', required=False, store=True, help='Upload the PEM File')
     cert_pass = fields.Char('Password')
     company_id = fields.Many2one('res.company', string='Company', required=True,

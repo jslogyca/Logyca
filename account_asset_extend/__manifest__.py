@@ -7,11 +7,12 @@
     'category': 'Accounting/Accounting',
     'website': 'https://logyca.com',
     'author': 'LOGYCA',
-    'license': '',
+    'license': 'LGPL-3',
     'application': False,
     'installable': True,
     'depends': [
         'account_asset',
+        'account_move_extended',
         ],
     'description': '''
 

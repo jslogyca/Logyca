@@ -13,7 +13,7 @@ class x_report_partner_history(models.TransientModel):
                                         ('logyca.history_partner_opportunity', 'Oportunidades / Servicios / Facturas'),
                                         ('logyca.history_partner_case', 'Casos')        
                                     ], string='Inf. Historica a Consultar', required=True, default='logyca.history_partner_notes')    
-    partner_id = fields.Many2one('res.partner', string='Cliente', required=True, domain=[('x_type_thirdparty', 'not in', [2])],options="{'no_create': True, 'no_create_edit':True}")
+    partner_id = fields.Many2one('res.partner', string='Cliente', required=True, domain=[('x_type_thirdparty', 'not in', [2])])
     filter_domain = fields.Char(string='Filtro')
     visible_result = fields.Boolean(string='Visible',default=False)
     #Campos a filtrar    

@@ -7,6 +7,7 @@ _logger = logging.getLogger(__name__)
 
 class CollaborativeGroup(models.Model):
     _name = 'collaborative.group'
+    _description = 'Collaborative Group'
 
     name = fields.Char('Nombre')
     active = fields.Boolean('Activo')

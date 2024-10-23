@@ -11,7 +11,7 @@ class HRPayslipInputType(models.Model):
                               ('overtime', 'Overtime'),
                               ('holidays', 'Holidays'),
                               ('no_aplica', 'No Aplica'), 
-                              ('compensation_contract', 'Compensation Contract')], 'Input Type', select=True, required=True)
+                              ('compensation_contract', 'Compensation Contract')], 'Input Type', required=True)
     active = fields.Boolean(default=True)
     percentage = fields.Float('Percentage')
     input_id = fields.Many2one("hr.salary.rule", string="Salary Rule Input")

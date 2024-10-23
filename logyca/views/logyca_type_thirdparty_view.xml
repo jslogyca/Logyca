@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="logyca_type_thirdparty_view_form" model="ir.ui.view">
+        <field name="name">logyca.type_thirdparty.lg.form</field>
+        <field name="model">logyca.type_thirdparty</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet string="Tipos de tercero">
+                    <group >
+                        <group >
+                            <field name="code"/>
+                            <field name="name"/>
+                        </group>
+                        <group >
+                            <field name="types"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="logyca_type_thirdparty_view_lg_tree" model="ir.ui.view">
+        <field name="name">logyca.type_thirdparty.lg.tree</field>
+        <field name="model">logyca.type_thirdparty</field>
+        <field name="arch" type="xml">
+            <tree string="Tipos de tercero" >
+                <field name="code"/>
+                <field name="name"/>
+                <field name="types"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_logyca_type_thirdparty" model="ir.actions.act_window">
+        <field name="name">Tipos de tercero</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">logyca.type_thirdparty</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_logyca_type_thirdparty"
+        name="Tipos de tercero"
+        parent="logyca.menus_parameterization"
+        action="action_logyca_type_thirdparty"
+        sequence="30" />
+
+</odoo>

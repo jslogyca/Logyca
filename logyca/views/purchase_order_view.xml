@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<odoo>
+	<record id="purchase_order_form_lg" model="ir.ui.view">
+		<field name="name">purchase.order.form.lg</field>
+		<field name="model">purchase.order</field>
+		<field name="inherit_id" ref="purchase.purchase_order_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='currency_id']" position="after">
+                <field name="x_studio_listo_para_facturar" widget="toggle_button" />
+			</xpath>
+			<xpath expr="//field[@name='date_order']" position="before">
+                <field name="x_reason_cancellation" />
+			</xpath>
+			<xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='account_analytic_id']" position="after">
+                <field name="x_budget_group" />
+			</xpath>
+		</field>
+	</record>
+
+	<!-- <record id="purchase_type_order_form_lg" model="ir.ui.view">
+		<field name="name">purchase.type.order.form.lg</field>
+		<field name="model">purchase.order</field>
+		<field name="inherit_id" ref="purchase_order_type.purchase_order_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='order_type']" position="replace">
+                <field name="order_type" />
+			</xpath>
+		</field>
+	</record> -->
+
+</odoo>
