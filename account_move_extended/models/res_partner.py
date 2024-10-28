@@ -81,3 +81,8 @@ class ResPartner(models.Model):
                 partner_label = _("partner [%s]", partner.name)
                 msg = partner._build_vat_error_message(country and country.code.lower() or None, partner.vat, partner_label)
                 raise ValidationError(msg)
+
+    def write(self, values):
+        if not self.env.user.has_group('account_move_extended.account_move_manager_main_partner'):
+            raise ValidationError(_('You are not authorized to change the company, please contact'))
+        return super(ResPartner, self).write(values)
