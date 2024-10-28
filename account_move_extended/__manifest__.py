@@ -23,6 +23,8 @@
 
 ''',    
     'data': [
+        'security/account_move_extended_security.xml',
+        'security/ir.model.access.csv',
         'views/account_sector_red_view.xml',
         'views/report_certification.xml',
         'views/revenue_macro_sector_view.xml',
@@ -32,8 +34,6 @@
         'views/account_sector_macro_view.xml',
         'views/res_partner_view.xml',
         'wizard/update_revenue_wizard_view.xml',
-        'security/ir.model.access.csv',
-        'security/account_move_extended_security.xml',
         'data/macrosectors_data.xml',
         'data/debtor_portfolio_status_data.xml'
     ],

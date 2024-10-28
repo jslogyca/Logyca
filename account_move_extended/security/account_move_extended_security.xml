@@ -4,4 +4,8 @@
         <field name="name">Revisor Asientos Contables</field>
         <field name="category_id" ref="base.module_category_accounting_accounting"/>
     </record>
+    <record id="account_move_manager_main_partner" model="res.groups">
+        <field name="name">Manager Principal Contactos</field>
+        <field name="category_id" ref="base.module_category_accounting_accounting"/>
+    </record>
 </odoo>
