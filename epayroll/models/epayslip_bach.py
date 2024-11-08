@@ -27,6 +27,8 @@ from odoo.addons.epayroll.models.epayslip_bach_xml import *
 from odoo.addons.epayroll.WSSEDian2.SOAPSing import SOAPSing
 from odoo.addons.epayroll.WSSEDian2.Signing import Signing
 
+import pyqrcode
+
 try:
     import pyqrcode
 except ImportError:
