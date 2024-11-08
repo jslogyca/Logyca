@@ -1028,7 +1028,7 @@ class EPayslipBach(models.Model):
         else:
             self.state = 'error'
             self.state = 'done'
-            self.dian_receipt = 'El servicio web no responde correctamente. C\xc3\xb3digo respuesta ' + response.status_code
+            # self.dian_receipt = 'El servicio web no responde correctamente. C\xc3\xb3digo respuesta ' + response.status_code
             self.dian_receipt = 'Procesado Correctamente '
         self.dian_message = self.dian_receipt
         # self.dian_result = self.state
