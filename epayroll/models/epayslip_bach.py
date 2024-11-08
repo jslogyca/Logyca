@@ -38,10 +38,10 @@ from odoo.addons.epayroll.WSSEDian2.Signing import Signing
 # except:    
 #     _logger.warning("no se ha cargado requests")
 
-# try:
-#     import hashlib
-# except ImportError:
-#     _logger.warning('Cannot import hashlib library')
+try:
+    import hashlib
+except ImportError:
+    _logger.warning('Cannot import hashlib library')
     
 # try:
 #     from lxml import etree
