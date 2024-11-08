@@ -7,85 +7,85 @@ from datetime import date, datetime, timedelta
 from dateutil.relativedelta import relativedelta
 import pytz
 
-# import random
-# from io import BytesIO
-# from zipfile import ZipFile
-# from xml.dom import minidom
+import random
+from io import BytesIO
+from zipfile import ZipFile
+from xml.dom import minidom
 
-# import pem, xmlsig, logging
+import pem, xmlsig, logging
 import logging
 _logger = logging.getLogger(__name__)
 
-# from lxml import etree
-# from lxml.etree import Element, SubElement
-# import xml.etree.ElementTree as ET
+from lxml import etree
+from lxml.etree import Element, SubElement
+import xml.etree.ElementTree as ET
 
-# from pytz import timezone
-# from six import string_types
+from pytz import timezone
+from six import string_types
 
 from odoo.addons.epayroll.models.epayslip_bach_xml import *
 from odoo.addons.epayroll.WSSEDian2.SOAPSing import SOAPSing
 from odoo.addons.epayroll.WSSEDian2.Signing import Signing
 
-# try:
-#     import pyqrcode
-# except ImportError:
-#     _logger.warning('Cannot import pyqrcode library *************************')
+try:
+    import pyqrcode
+except ImportError:
+    _logger.warning('Cannot import pyqrcode library *************************')
 
 
-# try:
-#     import requests 
-# except:    
-#     _logger.warning("no se ha cargado requests")
+try:
+    import requests 
+except:    
+    _logger.warning("no se ha cargado requests")
 
 try:
     import hashlib
 except ImportError:
     _logger.warning('Cannot import hashlib library')
     
-# try:
-#     from lxml import etree
-# except:
-#     print("Cannot import  etree")
+try:
+    from lxml import etree
+except:
+    print("Cannot import  etree")
     
-# try:
-#     import xmltodict
-# except ImportError:
-#     _logger.warning('Cannot import xmltodict library')  
+try:
+    import xmltodict
+except ImportError:
+    _logger.warning('Cannot import xmltodict library')  
     
-# try:
-#     from cryptography.hazmat.backends import default_backend
-#     from cryptography.hazmat.primitives.serialization import load_pem_private_key
-#     import OpenSSL
-#     from OpenSSL import crypto
-#     type_ = crypto.FILETYPE_PEM
-# except:
-#     _logger.warning('Cannot import OpenSSL library')
+try:
+    from cryptography.hazmat.backends import default_backend
+    from cryptography.hazmat.primitives.serialization import load_pem_private_key
+    import OpenSSL
+    from OpenSSL import crypto
+    type_ = crypto.FILETYPE_PEM
+except:
+    _logger.warning('Cannot import OpenSSL library')
     
-# try:
-#     import base64
-# except ImportError:
-#     _logger.warning('Cannot import base64 library ***********************')
+try:
+    import base64
+except ImportError:
+    _logger.warning('Cannot import base64 library ***********************')
     
-# from random import randint
+from random import randint
 
-# try:
-#     import uuid
-# except ImportError:
-#     _logger.warning('Cannot import uuid library')
+try:
+    import uuid
+except ImportError:
+    _logger.warning('Cannot import uuid library')
     
-# try:
-#     import gzip
-# except:
-#     _logger.warning("no se ha cargado gzip ***********************")
+try:
+    import gzip
+except:
+    _logger.warning("no se ha cargado gzip ***********************")
 
-# import zipfile
+import zipfile
 
-# try:
-#     import zlib
-#     compression = zipfile.ZIP_DEFLATED
-# except:
-#     compression = zipfile.ZIP_STORED
+try:
+    import zlib
+    compression = zipfile.ZIP_DEFLATED
+except:
+    compression = zipfile.ZIP_STORED
 
 class EPayslipBach(models.Model):
     _name = 'epayslip.bach'
