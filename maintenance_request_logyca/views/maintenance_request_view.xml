@@ -6,12 +6,7 @@
         <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"></field>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='description']" position="after">
-                <field name="equipment_ids" nolabel="1">
-                    <tree editable="bottom">
-                        <field name="name" />
-                        <field name="category_id" />
-                    </tree>
-                </field>
+                <field name="equipment_asset_ids" widget="many2many_tags" />
             </xpath>
         </field>
     </record>
