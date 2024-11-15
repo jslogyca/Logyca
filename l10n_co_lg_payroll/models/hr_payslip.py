@@ -58,6 +58,8 @@ class HrPayslip(models.Model):
                 slip_number = slip._origin.id
             else:
                 slip_number = slip.id
+                continue
+
             for vals in slip._get_worked_day_lines():
                 self.env["hr.payslip.worked_days"].create(
                     {
