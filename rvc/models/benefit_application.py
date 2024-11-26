@@ -18,6 +18,9 @@ import uuid
 import textwrap
 import time
 
+import rvc.models.rvc_activations as rvc_activations
+from dto import ActivateServiceDTO
+
 _logger = logging.getLogger(__name__)
 
 class BenefitApplication(models.Model):
@@ -119,10 +122,8 @@ class BenefitApplication(models.Model):
                 raise ValidationError(_('¡Oops! No puede eliminar una postulación que no esté en estado borrador o cancelada.'))
         return super(BenefitApplication, self).unlink()
 
-
     def action_cancel(self):
         self.write({'state': 'cancel'})
-
 
     def action_confirm(self):
         for benefit_application in self:
@@ -208,7 +209,6 @@ class BenefitApplication(models.Model):
     def action_re_done(self):
         self.write({'state': 'confirm', 'acceptance_date': datetime.now()})
 
-
     def action_notified(self):
         for benefit_application in self:
             #Antes de notificar al beneficiario validamos si beneficio es codigos
@@ -285,8 +285,6 @@ class BenefitApplication(models.Model):
         self._validate_gln_only_numbers()
         self._validate_gln()
 
-        # if 'state' in vals and vals['state'] not in ('done', 'cancel'):
-        #     self._validate_bought_products()
         return res
 
     @api.constrains('gln')
@@ -410,8 +408,8 @@ class BenefitApplication(models.Model):
                             Inténtelo nuevamente o comuníquese con soporte. Error: %s' % (str(response))))
             return True
 
-    # validacion para el create, ya que no tenemos self entonces en esta funcion no se usa self.
     def _validate_bought_products_create(self, vat):
+        # validacion para el create, ya que aún no existe el id, 'self' no está disponible.
         cr = self._cr
         cr.execute("SELECT value FROM ir_config_parameter WHERE key='web.base.url'")
         query_result = self.env.cr.dictfetchone()
@@ -583,7 +581,6 @@ class BenefitApplication(models.Model):
             #TODO: logging
             self.message_post(body=_('Los Códigos de Identificación no pudieron ser entregados al beneficiario. <strong>Error:</strong> %s' % str(response_assignate)))
             return False
-
 
     def assign_invoice_codes(self):
         """
@@ -1153,7 +1150,6 @@ class BenefitApplication(models.Model):
                     self.env.cr.commit()
                 else:
                     logging.exception("====> Cron alcanzó el límite de kits a enviar, esperando la próxima ejecución para enviar más...")
-
 
     def _cron_mark_as_rejected(self):
         logging.warning("==> Iniciando cron de marcar postulaciones como rechazadas ...")
