@@ -7,4 +7,3 @@ from . import rvc_template_email_wizard
 from . import send_notification_beneficiary
 from . import delivering_colabora_massively
 from . import rvc_crecemype_done_wizard
-from ..models import rvc_activations
