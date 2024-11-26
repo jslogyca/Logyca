@@ -3,7 +3,7 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime
-from rvc.models import rvc_activations
+from models import rvc_activations
 import re
 import logging
 
