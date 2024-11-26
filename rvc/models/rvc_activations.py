@@ -1,3 +1,4 @@
+from odoo import _
 import logging
 import requests
 from datetime import date
@@ -49,8 +50,7 @@ def activate_logyca_colabora(postulation):
     )
 
     postulation.message_post(
-        "Logyca Colabora activation response",
-        response_json
+        body=_(f"Logyca Colabora activation response:\n{response_json}")
     )
 
     return True
