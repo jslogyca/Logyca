@@ -14,7 +14,7 @@ def activate_logyca_colabora(postulation):
 
     payload = {
         "nit": postulation.vat,
-        "orderId": postulation.id,
+        "orderId": str(postulation.id),
         "sponsor": postulation.parent_id.vat,
         "digitalCards": [],
         "detailsOrder": [
