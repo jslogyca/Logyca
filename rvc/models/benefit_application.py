@@ -18,9 +18,6 @@ import uuid
 import textwrap
 import time
 
-import rvc.models.rvc_activations as rvc_activations
-from dto import ActivateServiceDTO
-
 _logger = logging.getLogger(__name__)
 
 class BenefitApplication(models.Model):
