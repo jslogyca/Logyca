@@ -48,9 +48,10 @@ def activate_logyca_colabora(postulation):
         "Postulation %d\nLogyca Colabora activation response: %s",
         postulation.id, response_json
     )
-
-    postulation.message_post(
-        body=_(f"Logyca Colabora activation response:\n{response_json}")
-    )
-
+    if response.status_code != 200:
+        logging.error(
+            "Postulation %d\nLogyca Colabora activation failed: %s",
+            postulation.id, response_json
+        )
+        return False
     return True

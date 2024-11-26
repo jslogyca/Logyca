@@ -83,7 +83,13 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 if benefit_application.product_id.benefit_type == 'codigos':
                     pass
                 elif benefit_application.product_id.benefit_type == 'colabora':
-                    rvc_activations.activate_logyca_colabora(benefit_application)
+                    activated = rvc_activations.activate_logyca_colabora(benefit_application)
+                    if activated:
+                        benefit_application.message_post(body=_(\
+                            'Se <strong>ACTIVÓ</strong></u> el beneficio de la plataforma LOGYCA / COLABORA.'))
+                    else:
+                        benefit_application.message_post(body=_(\
+                            'No se pudo <strong>ACTIVAR</strong></u> el beneficio de la plataforma LOGYCA / COLABORA.'))
                 elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
                     if benefit_application.digital_card_ids:
                         pass
