@@ -1,7 +1,7 @@
 from odoo import _
 import logging
 import requests
-from rvc_activations_services import RvcActivationServices
+from .rvc_activations_services import RvcActivationServices
 from datetime import date
 from .enums import OriginsEnum
 from .dto import Order_InputDTO, OrderDetail_InputDTO, DigitalCard_InputDTO
