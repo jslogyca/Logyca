@@ -21,7 +21,7 @@ def activate_logyca_colabora(postulation) -> bool:
         digitalCards=[],
         detailsOrder=[
             OrderDetail_InputDTO(
-                sku="54",
+                sku="54", #TODO: Define SKU for each level, make product an API endpoint to get the SKU by name
                 quantity=1,
                 totalDetailOrderValue=0.0,
                 totalDetailOrderUnTaxed=0.0
