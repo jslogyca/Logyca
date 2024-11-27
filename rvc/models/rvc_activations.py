@@ -14,33 +14,41 @@ def activate_logyca_colabora(postulation) -> bool:
     token = postulation.get_token_gs1_co_api()
     logging.debug("Token: %s", token)
 
-    payload = {
-        "nit": postulation.vat,
-        "orderId": str(postulation.id),
-        "sponsor": postulation.parent_id.vat,
-        "digitalCards": [],
-        "detailsOrder": [
-            {
-                "sku": "54",
-                "quantity": 1,
-                "totalDetailOrderValue": 0.0,
-                "totalDetailOrderUnTaxed": 0.0
-            }
+    order_input = Order_InputDTO(
+        nit=postulation.vat,
+        orderId=str(postulation.id),
+        sponsor=postulation.parent_id.vat,
+        digitalCards=[],
+        detailsOrder=[
+            OrderDetail_InputDTO(
+                sku="54",
+                quantity=1,
+                totalDetailOrderValue=0.0,
+                totalDetailOrderUnTaxed=0.0
+            )
         ],
-        "buyerEmail": postulation.contact_email,
-        "salesmanEmail": "",
-        "totalOrderValue": 0,
-        "totalOrderUnTaxed": 0,
-        "origin": OriginsEnum.ODOO.value,
-        "cellphone": postulation.contact_phone,
-        "isSeller": postulation.is_seller
-    }
+        buyerEmail=postulation.contact_email,
+        salesmanEmail="",
+        totalOrderValue=0,
+        totalOrderUnTaxed=0,
+        origin=OriginsEnum.ODOO.value,
+        cellphone=postulation.contact_phone,
+        isSeller=postulation.is_seller
+    )
+
+    payload = order_input.model_dump()
+
     logging.info(
         " Postulation %d\nLogyca Colabora activation request: %s",
         postulation.id,
         payload,
     )
-    headers = {"Content-Type": "application", "Authorization": f"Bearer {token}"}
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {token}"
+    }
+
     response = requests.post(
         "https://gateway-odoo-dev.azurewebsites.net/gateway/activator",
         json=payload,
@@ -61,8 +69,6 @@ def activate_logyca_colabora(postulation) -> bool:
         )
         return False
 
-        # TODO: loggear errores en el log creado para odoo
-        # https://logyca.odoo.com/web?debug=1#cids=1%2C2%2C3&menu_id=380&action=955&model=logyca.api_gateway&view_type=list
     return True
 
 def activate_gs1_codes(postulation) -> bool:
@@ -82,32 +88,34 @@ def activate_gs1_codes(postulation) -> bool:
     details_order = []
     for sku, quantity in zip(skus, quantities):
         details_order.append(OrderDetail_InputDTO(
-            sku = sku,
-            quantity = quantity,
-            totalDetailOrderValue = 0.0,
-            totalDetailOrderUnTaxed = 0.0
+            sku=sku,
+            quantity=quantity,
+            totalDetailOrderValue=0.0,
+            totalDetailOrderUnTaxed=0.0
         ))
 
-    payload = {
-        "nit": postulation.vat,
-        "orderId": str(postulation.id),
-        "sponsor": postulation.parent_id.vat,
-        "digitalCards": [],
-        "detailsOrder": details_order,
-        "buyerEmail": postulation.contact_email,
-        "salesmanEmail": "",
-        "totalOrderValue": 0,
-        "totalOrderUnTaxed": 0,
-        "origin": OriginsEnum.ODOO.value,
-        "cellphone": postulation.contact_phone,
-        "isSeller": postulation.is_seller,
-    }
+    order_input = Order_InputDTO(
+        nit=postulation.vat,
+        orderId=str(postulation.id),
+        sponsor=postulation.parent_id.vat,
+        digitalCards=[],
+        detailsOrder=details_order,
+        buyerEmail=postulation.contact_email,
+        salesmanEmail="",
+        totalOrderValue=0,
+        totalOrderUnTaxed=0,
+        origin=OriginsEnum.ODOO.value,
+        cellphone=postulation.contact_phone,
+        isSeller=postulation.is_seller,
+    )
+
+    payload = order_input.model_dump()
 
     logging.info(
         " Postulation %d\nGS1 Codes activation request: %s", postulation.id, payload
     )
 
-    headers = {"Content-Type": "application", "Authorization": f"Bearer {token}"}
+    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {token}"}
     response = requests.post(
         "https://gateway-odoo-dev.azurewebsites.net/gateway/activator",
         json=payload,
@@ -163,7 +171,7 @@ def activate_digital_cards(postulation)-> bool:
         totalDetailOrderUnTaxed = 0.0
     ))
 
-    payload = Order_InputDTO(
+    order_input = Order_InputDTO(
         nit=postulation.vat,
         orderId=str(postulation.id),
         sponsor=postulation.parent_id.vat,
@@ -178,6 +186,8 @@ def activate_digital_cards(postulation)-> bool:
         isSeller=postulation.is_seller,
     )
 
+    payload = order_input.model_dump()
+
     logging.info(
         " Postulation %d\nDigital Cards activation request: %s", postulation.id, payload
     )
@@ -185,7 +195,7 @@ def activate_digital_cards(postulation)-> bool:
     headers = {"Content-Type": "application", "Authorization": f"Bearer {token}"}
     response = requests.post(
         "https://gateway-odoo-dev.azurewebsites.net/gateway/activator",
-        json=payload.dict(),
+        json=payload,
         headers=headers,
         timeout=10,
     )

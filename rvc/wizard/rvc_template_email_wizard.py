@@ -98,7 +98,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
                         activated = rvc_activations.activate_digital_cards(benefit_application)
                         if activated:
                             benefit_application.message_post(body=_(\
-                            '✅ Se solicitó la activación de el beneficio de Tarjetas Digitales.'))
+                            '✅ Se solicitó la activación de Tarjetas Digitales.'))
                     else:
                         raise ValidationError(
                             _('¡Error! No hay tarjetas digitales para generar 😔.\n\nPara solicitarlas: \n'
