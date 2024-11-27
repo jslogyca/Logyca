@@ -84,28 +84,28 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     activated = rvc_activations.activate_gs1_codes(benefit_application)
                     if activated:
                         benefit_application.message_post(body=_(\
-                            'Se <strong>ACTIVÓ</strong></u> el beneficio de Códigos GS1.'))
+                            '✅ Se solicitó la activación de Códigos GS1.'))
                 elif benefit_application.product_id.benefit_type == 'colabora':
                     activated = rvc_activations.activate_logyca_colabora(benefit_application)
                     if activated:
                         benefit_application.message_post(body=_(\
-                            'Se <strong>ACTIVÓ</strong></u> el beneficio de la plataforma LOGYCA / COLABORA.'))
+                            '✅ Se solicitó la activación de la plataforma LOGYCA / COLABORA.'))
                     else:
                         benefit_application.message_post(body=_(\
-                            'No se pudo <strong>ACTIVAR</strong></u> el beneficio de la plataforma LOGYCA / COLABORA.'))
+                            '🚫 No se pudo <strong>solicitar la activación</strong></u> de la plataforma LOGYCA / COLABORA.'))
                 elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
                     if benefit_application.digital_card_ids:
                         activated = rvc_activations.activate_digital_cards(benefit_application)
+                        if activated:
+                            benefit_application.message_post(body=_(\
+                            '✅ Se solicitó la activación de el beneficio de Tarjetas Digitales.'))
                     else:
-                        raise ValidationError(_('¡Error! No hay tarjetas digitales para generar 😔.\n\nPara solicitarlas: \n'\
-                                                '1. Active el modo edición yendo al botón EDITAR del lado superior izquierdo.\n'\
-                                                '2. Vaya a la sección de Tarjetas Digitales.\n'\
-                                                '3. Pulse la opción "Agregar línea."'))
-
-                #Actualizar Contacto y Empresa
-                # benefit_application.update_contact(benefit_application.partner_id)
-                # if benefit_application.parent_id:
-                #     benefit_application.update_company(benefit_application)
+                        raise ValidationError(
+                            _('¡Error! No hay tarjetas digitales para generar 😔.\n\nPara solicitarlas: \n'
+                              '1. Active el modo edición yendo al botón EDITAR del lado superior izquierdo.\n'
+                              '2. Vaya a la sección de Tarjetas Digitales.\n'
+                              '3. Pulse la opción "Agregar línea."')
+                        )
 
                 benefit_application.write({'state': 'done', 'delivery_date': datetime.now()})
             else:
