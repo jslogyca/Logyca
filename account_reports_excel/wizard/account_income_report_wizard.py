@@ -105,6 +105,8 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     ca.name
                                     from account_move_line l
                                     inner join account_move i on i.id=l.move_id
+                                    left join asset_move_line_rel aml on aml.line_id = l.id
+                                    left join account_asset a on a.id=aml.asset_id
                                     left join account_analytic_account ca on ca.id=l.analytic_account_id
                                     inner join res_company c on c.id=i.company_id
                                     inner join res_partner p on p.id=i.partner_id
@@ -115,7 +117,7 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
                                     left join account_analytic_account red on red.id = i.analytic_account_id                                    
                                     where l.exclude_from_invoice_tab is False and i.date between '2022-09-01' and '2022-11-30' and i.state='posted'
-                                    and l.asset_id is null and i.move_type in ('out_invoice')
+                                    and a.id is null and i.move_type in ('out_invoice')
                                     order by p.id, i.id ''', 
                                     (date_from, date_to))
         
