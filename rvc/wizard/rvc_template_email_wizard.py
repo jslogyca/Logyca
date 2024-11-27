@@ -103,9 +103,9 @@ class RVCTemplateEmailWizard(models.TransientModel):
                                                 '3. Pulse la opción "Agregar línea."'))
 
                 #Actualizar Contacto y Empresa
-                benefit_application.update_contact(benefit_application.partner_id)
-                if benefit_application.parent_id:
-                    benefit_application.update_company(benefit_application)
+                # benefit_application.update_contact(benefit_application.partner_id)
+                # if benefit_application.parent_id:
+                #     benefit_application.update_company(benefit_application)
 
                 benefit_application.write({'state': 'done', 'delivery_date': datetime.now()})
             else:
