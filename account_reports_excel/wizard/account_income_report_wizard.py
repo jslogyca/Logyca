@@ -62,8 +62,9 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     m.state,
                                     ca.name
                                     from account_move m
-                                    inner join account_move_line l on l.asset_id=m.asset_id
-                                    inner join account_asset a on a.id=l.asset_id
+                                    inner join account_move_line l on l.move_id=m.id
+                                    inner join asset_move_line_rel aml on aml.line_id = l.id
+                                    inner join account_asset a on a.id=aml.asset_id
                                     inner join account_analytic_account ca on ca.id=a.account_analytic_id
                                     inner join account_move i on i.id=l.move_id
                                     inner join res_company c on c.id=m.company_id
