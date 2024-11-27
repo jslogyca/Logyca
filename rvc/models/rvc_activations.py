@@ -1,12 +1,14 @@
 from odoo import _
 import logging
 import requests
+from rvc_activations_services import RvcActivationServices
 from datetime import date
 from .enums import OriginsEnum
 from .dto import Order_InputDTO, OrderDetail_InputDTO, DigitalCard_InputDTO
 
-def activate_logyca_colabora(postulation):
-    """ Maps a rvc postulation into a logyca colabora activation request"""
+
+def activate_logyca_colabora(postulation) -> bool:
+    """Maps a rvc postulation into a logyca colabora activation request"""
 
     logging.debug("Activating Logyca Colabora for postulation %d", postulation.id)
     token = postulation.get_token_gs1_co_api()
@@ -33,25 +35,98 @@ def activate_logyca_colabora(postulation):
         "cellphone": postulation.contact_phone,
         "isSeller": postulation.is_seller
     }
-    logging.info(" Postulation %d\nLogyca Colabora activation request: %s", postulation.id, payload)
-    headers = {
-        "Content-Type": "application",
-        "Authorization": f"Bearer {token}" 
-    }
+    logging.info(
+        " Postulation %d\nLogyca Colabora activation request: %s",
+        postulation.id,
+        payload,
+    )
+    headers = {"Content-Type": "application", "Authorization": f"Bearer {token}"}
     response = requests.post(
         "https://gateway-odoo-dev.azurewebsites.net/gateway/activator",
         json=payload,
         headers=headers,
-        timeout=10)
+        timeout=10,
+    )
     response_json = response.json()
     logging.info(
         "Postulation %d\nLogyca Colabora activation response: %s",
-        postulation.id, response_json
+        postulation.id,
+        response_json
     )
     if response.status_code != 200:
         logging.error(
             "Postulation %d\nLogyca Colabora activation failed: %s",
-            postulation.id, response_json
+            postulation.id,
+            response_json
         )
         return False
+
+        # TODO: loggear errores en el log creado para odoo
+        # https://logyca.odoo.com/web?debug=1#cids=1%2C2%2C3&menu_id=380&action=955&model=logyca.api_gateway&view_type=list
+    return True
+
+def activate_gs1_codes(postulation) -> bool:
+    """Maps a rvc postulation into a gs1 codes activation request"""
+
+    logging.debug("Activating GS1 Codes for postulation %d", postulation.id)
+    token = postulation.get_token_gs1_co_api()
+    logging.debug("Token: %s", token)
+
+    skus, quantities = RvcActivationServices.calculate_sku(
+        postulation.codes_quantity,
+        postulation.gln_codes_quantity,
+        postulation.invoice_codes_quantity
+    )
+
+    details_order = []
+    for sku, quantity in zip(skus, quantities):
+        details_order.append({
+            "sku": sku,
+            "quantity": quantity,
+            "totalDetailOrderValue": 0.0,
+            "totalDetailOrderUnTaxed": 0.0,
+        })
+
+    payload = {
+        "nit": postulation.vat,
+        "orderId": str(postulation.id),
+        "sponsor": postulation.parent_id.vat,
+        "digitalCards": [],
+        "detailsOrder": details_order,
+        "buyerEmail": postulation.contact_email,
+        "salesmanEmail": "",
+        "totalOrderValue": 0,
+        "totalOrderUnTaxed": 0,
+        "origin": OriginsEnum.ODOO.value,
+        "cellphone": postulation.contact_phone,
+        "isSeller": postulation.is_seller,
+    }
+
+    logging.info(
+        " Postulation %d\nGS1 Codes activation request: %s", postulation.id, payload
+    )
+
+    headers = {"Content-Type": "application", "Authorization": f"Bearer {token}"}
+    response = requests.post(
+        "https://gateway-odoo-dev.azurewebsites.net/gateway/activator",
+        json=payload,
+        headers=headers,
+        timeout=10,
+    )
+
+    response_json = response.json()
+    logging.info(
+        "Postulation %d\nGS1 Codes activation response: %s",
+        postulation.id,
+        response_json,
+    )
+
+    if response.status_code != 200:
+        logging.error(
+            "Postulation %d\nGS1 Codes activation failed: %s",
+            postulation.id,
+            response_json,
+        )
+        return False
+
     return True

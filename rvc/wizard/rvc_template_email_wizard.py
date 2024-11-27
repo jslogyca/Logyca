@@ -81,7 +81,10 @@ class RVCTemplateEmailWizard(models.TransientModel):
             contact_email = benefit_application.partner_id.contact_email
             if contact_email:
                 if benefit_application.product_id.benefit_type == 'codigos':
-                    pass
+                    activated = rvc_activations.activate_gs1_codes(benefit_application)
+                    if activated:
+                        benefit_application.message_post(body=_(\
+                            'Se <strong>ACTIVÓ</strong></u> el beneficio de Códigos GS1.'))
                 elif benefit_application.product_id.benefit_type == 'colabora':
                     activated = rvc_activations.activate_logyca_colabora(benefit_application)
                     if activated:

@@ -10,4 +10,5 @@ from . import rvc_digital_card
 from . import res_partner
 from . import rvc_crecemype_theme
 from . import rvc_activations
+from . import rvc_activations_services
 from . import dto
