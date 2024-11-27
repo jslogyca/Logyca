@@ -143,15 +143,15 @@ def activate_digital_cards(postulation)-> bool:
     for card in postulation.digital_card_ids:
         digital_cards.append(
             DigitalCard_InputDTO(
-                name=card.name,
-                email=card.email,
-                phone=card.phone,
-                service=card.service,
-                city=card.city,
-                address=card.address,
-                website=card.website,
-                facebook=card.facebook,
-                instagram=card.instagram,
+                name=card.contact_name,
+                email=card.contact_email,
+                phone=card.contact_mobile,
+                service=str(card.offered_service_id),
+                city=card.city_id,
+                address=card.street,
+                website=card.url_website,
+                facebook=card.url_facebook,
+                instagram=card.url_instagram,
             )
         )
 
