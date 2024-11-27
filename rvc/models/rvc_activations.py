@@ -75,7 +75,7 @@ def activate_gs1_codes(postulation) -> bool:
     skus, quantities = RvcActivationServices.calculate_sku(
         _,
         postulation.codes_quantity,
-        postulation.gln_codes_quantity,
+        postulation.glns_codes_quantity,
         postulation.invoice_codes_quantity
     )
 
