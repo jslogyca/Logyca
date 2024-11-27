@@ -147,11 +147,11 @@ def activate_digital_cards(postulation)-> bool:
                 email=card.contact_email,
                 phone=card.contact_mobile,
                 service=str(card.offered_service_id),
-                city=card.city_id,
+                city=card.city_id.name,
                 address=card.street,
-                website=card.url_website,
-                facebook=card.url_facebook,
-                instagram=card.url_instagram,
+                website=card.url_website or "",
+                facebook=card.url_facebook or "",
+                instagram=card.url_instagram or "",
             )
         )
 
