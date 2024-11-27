@@ -95,7 +95,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
                             'No se pudo <strong>ACTIVAR</strong></u> el beneficio de la plataforma LOGYCA / COLABORA.'))
                 elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
                     if benefit_application.digital_card_ids:
-                        pass
+                        activated = rvc_activations.activate_digital_cards(benefit_application)
                     else:
                         raise ValidationError(_('¡Error! No hay tarjetas digitales para generar 😔.\n\nPara solicitarlas: \n'\
                                                 '1. Active el modo edición yendo al botón EDITAR del lado superior izquierdo.\n'\
