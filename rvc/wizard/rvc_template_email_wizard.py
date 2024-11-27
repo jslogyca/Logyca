@@ -3,6 +3,7 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime
+from ..models import rvc_activations
 import re
 import logging
 
@@ -77,91 +78,34 @@ class RVCTemplateEmailWizard(models.TransientModel):
         active_id = context.get('active_ids', False)
         benefit_application = self.env['benefit.application'].browse(active_id)
         if benefit_application:
-            partner=self.env['res.partner'].search([('id','=',benefit_application.partner_id.partner_id.id)])
-            if benefit_application.partner_id.contact_email:
-                access_link = partner._notify_get_action_link('view')
-
+            contact_email = benefit_application.partner_id.contact_email
+            if contact_email:
                 if benefit_application.product_id.benefit_type == 'codigos':
-                    if benefit_application.is_seller:
-                        template = self.env.ref('rvc.mail_template_welcome_kit_rvc_seller')
-                    else:
-                        template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
+                    activated = rvc_activations.activate_gs1_codes(benefit_application)
+                    if activated:
+                        benefit_application.message_post(body=_(\
+                            '✅ Se solicitó la activación de Códigos GS1.'))
                 elif benefit_application.product_id.benefit_type == 'colabora':
-                    template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
-                elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
-                    template = self.env.ref('rvc.mail_template_welcome_kit_digital_card_rvc')
-                else:
-                    template=None
-
-                # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
-                if template:
-                    if benefit_application.origin != 'odoo':
-                        #se usa para eliminar los adjuntos de la plantilla de correo
-                        template.attachment_ids = [(5,)]
-                        template= benefit_application.create_OM_attachment(template)
+                    activated = rvc_activations.activate_logyca_colabora(benefit_application)
+                    if activated:
+                        benefit_application.message_post(body=_(\
+                            '✅ Se solicitó la activación de la plataforma LOGYCA / COLABORA.'))
                     else:
-                        template.attachment_ids = False
-
-                # Se envía kit de bienvenida
-                # excepto si es tarjeta digital, en ese caso el beneficio se activa primero y DESPUÉS enviamos kit con 
-                # la funcion send_digital_cards_bearer()
-                try:
-                    if benefit_application.product_id.benefit_type not in ('tarjeta_digital', 'colabora'):
-                        template.with_context(url=access_link).send_mail(benefit_application.id, force_send=True)
-                        #se usa para eliminar los adjuntos de la plantilla de correo
-                        template.attachment_ids = [(5,)]
-                except Exception as e:
-                    benefit_application.message_post(body=_(f'No se pudo <strong>Enviar</strong></u> el kit de bienvenida del beneficio {benefit_application.product_id.benefit_type}. Error: {e}'))
-
-                if not benefit_application.gln:
-                    # si no tiene GLN, asignamos uno.
-                    if benefit_application._validate_gln() is False and benefit_application.glns_codes_quantity == 0:
-                        benefit_application.assignate_gln_code()
-
-                if benefit_application.product_id.benefit_type == 'codigos':
-                    # codigos glns
-                    if benefit_application.glns_codes_quantity > 0:
-                        if benefit_application.send_kit_with_no_benefit is False:
-                            if benefit_application.assignate_gln_code(benefit_application.glns_codes_quantity):
-                                benefit_application.assign_credentials_gs1codes()
-                        else:
-                            benefit_application.assign_credentials_gs1codes()
-                    # codigos recaudo
-                    if benefit_application.invoice_codes_quantity > 0:
-                        if benefit_application.send_kit_with_no_benefit is False:
-                            if benefit_application.assign_invoice_codes():
-                                benefit_application.assign_credentials_gs1codes()
-                        else:
-                            benefit_application.assign_credentials_gs1codes()
-                    # codigos producto
-                    if benefit_application.codes_quantity > 0:
-                        if benefit_application.send_kit_with_no_benefit is False:
-                            if benefit_application.assign_identification_codes():
-                                benefit_application.assign_credentials_gs1codes()
-                        else:
-                            benefit_application.assign_credentials_gs1codes()
-
-                    # Agregar tipo de vinculacion al tercero
-                    benefit_application.add_vinculation_partner()
-
-                elif benefit_application.product_id.benefit_type == 'colabora':
-                    # Activar colabora
-                    if benefit_application.assign_colabora():
-                        benefit_application.assign_credentials_colabora()
-
+                        benefit_application.message_post(body=_(\
+                            '🚫 No se pudo <strong>solicitar la activación</strong></u> de la plataforma LOGYCA / COLABORA.'))
                 elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
                     if benefit_application.digital_card_ids:
-                        benefit_application.send_digital_cards_bearer(template)
+                        activated = rvc_activations.activate_digital_cards(benefit_application)
+                        if activated:
+                            benefit_application.message_post(body=_(\
+                            '✅ Se solicitó la activación de Tarjetas Digitales.'))
                     else:
-                        raise ValidationError(_('¡Error! No hay tarjetas digitales para generar 😔.\n\nPara solicitarlas: \n'\
-                                                '1. Active el modo edición yendo al botón EDITAR del lado superior izquierdo.\n'\
-                                                '2. Vaya a la sección de Tarjetas Digitales.\n'\
-                                                '3. Pulse la opción "Agregar línea."'))
-
-                #Actualizar Contacto y Empresa
-                benefit_application.update_contact(benefit_application.partner_id)
-                if benefit_application.parent_id:
-                    benefit_application.update_company(benefit_application)
+                        raise ValidationError(
+                            _('¡Error! No hay tarjetas digitales para generar 😔.\n\nPara solicitarlas: \n'
+                              '1. Active el modo edición yendo al botón EDITAR del lado superior izquierdo.\n'
+                              '2. Vaya a la sección de Tarjetas Digitales.\n'
+                              '3. Pulse la opción "Agregar línea."')
+                        )
 
                 benefit_application.write({'state': 'done', 'delivery_date': datetime.now()})
             else:
