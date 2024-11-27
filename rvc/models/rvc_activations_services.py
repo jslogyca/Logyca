@@ -1,15 +1,13 @@
 from odoo import models
 from .enums import SkuRvcProductsEnum
+from typing import Tuple, List
 
 class RvcActivationServices(models.Model):
     _name = 'rvc.activation.services'
 
     def calculate_sku(
-        self,
-        codes_quantity,
-        gln_codes_quantity,
-        invoice_codes_quantity
-    ) -> tuple[list[int], list[int]]:
+        self, codes_quantity: int, gln_codes_quantity: int, invoice_codes_quantity: int
+    ) -> Tuple[List[int], List[int]]:
         """Calculates the SKU and quantity for each type of code to be activated"""
         skus = []
         quantities = []
