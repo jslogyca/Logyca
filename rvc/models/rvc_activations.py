@@ -84,10 +84,11 @@ class RvcActivations(models.AbstractModel):
         token = postulation.get_token_gs1_co_api()
         logging.debug("Token: %s", token)
 
-        skus, quantities = self.calculate_gs1_codes_sku(
-            postulation.codes_quantity,
-            postulation.glns_codes_quantity,
-            postulation.invoice_codes_quantity
+        skus, quantities = self.env['rvc.activation.services'] \
+            .calculate_gs1_codes_sku(
+                postulation.codes_quantity,
+                postulation.glns_codes_quantity,
+                postulation.invoice_codes_quantity
         )
 
         details_order = []
