@@ -2,10 +2,11 @@ from odoo import models
 from .enums import SkuRvcProductsEnum
 from typing import Tuple, List
 
-class RvcActivationServices(models.Model):
+class RvcActivationServices(models.AbstractModel):
     _name = 'rvc.activation.services'
+    _description = 'Servicios de Activación RVC'
 
-    def calculate_sku(
+    def calculate_gs1_codes_sku(
         self, codes_quantity: int, glns_codes_quantity: int, invoice_codes_quantity: int
     ) -> Tuple[List[int], List[int]]:
         """Calculates the SKU and quantity for each type of code to be activated"""
@@ -25,3 +26,17 @@ class RvcActivationServices(models.Model):
             quantities.append(invoice_codes_quantity)
 
         return (skus, quantities)
+
+    def calculate_colabora_level_sku(
+        self, postulation
+    ) -> int:
+        """Calculates the SKU for the level of colabora to be activated"""
+
+        product = self.env['product.product'].search([
+            ('name', 'ilike', 'colabora'),
+            ('attribute_value_ids', 'like', f'nivel {postulation.colabora_level}')
+        ])
+
+        if product:
+            return product.id
+        return 0

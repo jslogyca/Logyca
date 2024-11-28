@@ -14,6 +14,8 @@ def activate_logyca_colabora(postulation) -> bool:
     token = postulation.get_token_gs1_co_api()
     logging.debug("Token: %s", token)
 
+    colabora_level_sku = RvcActivationServices().calculate_colabora_level_sku(postulation)
+
     order_input = Order_InputDTO(
         nit=postulation.vat,
         orderId=str(postulation.id),
@@ -21,7 +23,7 @@ def activate_logyca_colabora(postulation) -> bool:
         digitalCards=[],
         detailsOrder=[
             OrderDetail_InputDTO(
-                sku="54", #TODO: Define SKU for each level, make product an API endpoint to get the SKU by name
+                sku=colabora_level_sku,
                 quantity=1,
                 totalDetailOrderValue=0.0,
                 totalDetailOrderUnTaxed=0.0
@@ -78,7 +80,7 @@ def activate_gs1_codes(postulation) -> bool:
     token = postulation.get_token_gs1_co_api()
     logging.debug("Token: %s", token)
 
-    skus, quantities = RvcActivationServices.calculate_sku(
+    skus, quantities = RvcActivationServices.calculate_gs1_codes_sku(
         _,
         postulation.codes_quantity,
         postulation.glns_codes_quantity,
