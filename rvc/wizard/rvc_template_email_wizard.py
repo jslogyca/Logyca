@@ -3,7 +3,7 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime
-from ..models import rvc_activations
+from ..models.rvc_activations import RvcActivations
 import re
 import logging
 
@@ -81,12 +81,12 @@ class RVCTemplateEmailWizard(models.TransientModel):
             contact_email = benefit_application.partner_id.contact_email
             if contact_email:
                 if benefit_application.product_id.benefit_type == 'codigos':
-                    activated = rvc_activations.activate_gs1_codes(benefit_application)
+                    activated = self.env['rvc.activations'].activate_gs1_codes(benefit_application)
                     if activated:
                         benefit_application.message_post(body=_(\
                             '✅ Se solicitó la activación de Códigos GS1.'))
                 elif benefit_application.product_id.benefit_type == 'colabora':
-                    activated = rvc_activations.activate_logyca_colabora(benefit_application)
+                    activated = self.env['rvc.activations'].activate_logyca_colabora(benefit_application)
                     if activated:
                         benefit_application.message_post(body=_(\
                             '✅ Se solicitó la activación de la plataforma LOGYCA / COLABORA.'))
@@ -95,7 +95,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
                             '🚫 No se pudo <strong>solicitar la activación</strong></u> de la plataforma LOGYCA / COLABORA.'))
                 elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
                     if benefit_application.digital_card_ids:
-                        activated = rvc_activations.activate_digital_cards(benefit_application)
+                        activated = self.env['rvc.activations'].activate_digital_cards(benefit_application)
                         if activated:
                             benefit_application.message_post(body=_(\
                             '✅ Se solicitó la activación de Tarjetas Digitales.'))
