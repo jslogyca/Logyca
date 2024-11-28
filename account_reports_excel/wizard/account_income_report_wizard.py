@@ -116,7 +116,7 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join product_product pp ON pp.id = l.product_id
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
                                     left join account_analytic_account red on red.id = i.analytic_account_id                                    
-                                    where l.exclude_from_invoice_tab is False and i.date between '2022-09-01' and '2022-11-30' and i.state='posted'
+                                    where l.exclude_from_invoice_tab is False and i.date between %s and %s and i.state='posted'
                                     and a.id is null and i.move_type in ('out_invoice')
                                     order by p.id, i.id ''', 
                                     (date_from, date_to))
