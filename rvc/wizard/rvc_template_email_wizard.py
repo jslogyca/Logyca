@@ -106,8 +106,6 @@ class RVCTemplateEmailWizard(models.TransientModel):
                               '2. Vaya a la sección de Tarjetas Digitales.\n'
                               '3. Pulse la opción "Agregar línea."')
                         )
-
-                benefit_application.write({'state': 'done', 'delivery_date': datetime.now()})
             else:
                 raise ValidationError(_('La empresa seleccionada no tiene email.'))
 
