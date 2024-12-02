@@ -13,7 +13,7 @@ class RvcActivations(models.AbstractModel):
     def activate_logyca_colabora(self, postulation) -> bool:
         """Maps a rvc postulation into a logyca colabora activation request"""
 
-        logging.debug("Activating Logyca Colabora for postulation %d", postulation.id)
+        logging.debug("Activating Logyca / Colabora for postulation %d", postulation.id)
         token = postulation.get_token_gs1_co_api()
         logging.debug("Token: %s", token)
 
