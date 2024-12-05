@@ -102,7 +102,8 @@
                                     <field name="partner_id"/>
                                     <field name="vat"/>     
                                     <field name="type_vinculation" widget="many2many_tags"/>
-                                    <field name="cant_prefixes_ds"/>                                        
+                                    <field name="cant_prefixes_ds"/>
+                                    <field name="cant_prefixes_cp_ds"/>
                                     <field name="cant_prefixes_fixed_weight"/>                                        
                                     <field name="cant_prefixes_variable_weight"/>                                        
                                     <field name="cant_prefixes_mixed"/>                                        
