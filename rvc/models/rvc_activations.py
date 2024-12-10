@@ -56,7 +56,7 @@ class RvcActivations(models.AbstractModel):
         }
 
         response = requests.post(
-            "https://gateway-odoo-dev.azurewebsites.net/gateway/activator",
+            "https://gateway-odoo-prod.azurewebsites.net/gateway/activator",
             json=payload,
             headers=headers,
             timeout=10,
@@ -123,7 +123,7 @@ class RvcActivations(models.AbstractModel):
 
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {token}"}
         response = requests.post(
-            "https://gateway-odoo-dev.azurewebsites.net/gateway/activator",
+            "https://gateway-odoo-prod.azurewebsites.net/gateway/activator",
             json=payload,
             headers=headers,
             timeout=10,
@@ -200,7 +200,7 @@ class RvcActivations(models.AbstractModel):
 
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {token}"}
         response = requests.post(
-            "https://gateway-odoo-dev.azurewebsites.net/gateway/activator",
+            "https://gateway-odoo-prod.azurewebsites.net/gateway/activator",
             json=payload,
             headers=headers,
             timeout=10,
