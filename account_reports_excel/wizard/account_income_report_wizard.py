@@ -44,39 +44,40 @@ class ReportIncomeReportWizard(models.TransientModel):
         value = []
         self._cr.execute(''' select p.vat,
                                     p.name,
-                                    i.name,
+                                    m.name,
                                     pt.name,
                                     red.name,
-                                    i.amount_untaxed, 
-                                    to_char(i.date,'DD/MM/YYYY'),
-                                    date_part('month',i.date)as mes_fact,
-                                    date_part('year',i.date)as year_fact,
+                                    m.amount_untaxed, 
+                                    to_char(m.date,'DD/MM/YYYY'),
+                                    date_part('month',m.date)as mes_fact,
+                                    date_part('year',m.date)as year_fact,
                                     c.name as company_id,
                                     up.name,
                                     team.name,
-                                    m.name,
-                                    m.amount_total, 
-                                    to_char(m.date,'DD/MM/YYYY'),
-                                    date_part('month',m.date)as mes,
-                                    date_part('year',m.date)as year,
-                                    m.state,
+                                    ma.name,
+                                    ma.amount_total, 
+                                    to_char(ma.date,'DD/MM/YYYY'),
+                                    date_part('month',ma.date)as mes,
+                                    date_part('year',ma.date)as year,
+                                    ma.state,
                                     ca.name
                                     from account_move m
-                                    inner join account_move_line l on l.asset_id=m.asset_id
-                                    inner join account_asset a on a.id=l.asset_id
+                                    inner join account_move_line l on l.move_id=m.id
+                                    inner join asset_move_line_rel aml on aml.line_id = l.id
+                                    inner join account_asset a on a.id=aml.asset_id
+                                    inner join account_move ma on ma.asset_id=a.id
                                     inner join account_analytic_account ca on ca.id=a.account_analytic_id
-                                    inner join account_move i on i.id=l.move_id
                                     inner join res_company c on c.id=m.company_id
-                                    inner join res_partner p on p.id=i.partner_id
-                                    inner join res_users u on u.id=i.invoice_user_id
+                                    inner join res_partner p on p.id=m.partner_id
+                                    inner join res_users u on u.id=m.invoice_user_id
                                     inner join res_partner up on up.id=u.partner_id
-                                    inner join crm_team team on team.id=i.team_id
+                                    inner join crm_team team on team.id=m.team_id
                                     inner join product_product pp ON pp.id = l.product_id
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
-                                    left join account_analytic_account red on red.id = i.analytic_account_id                                    
-                                    where l.exclude_from_invoice_tab is False and i.date between %s and %s and i.state='posted'
-                                    and a.asset_type = 'sale' and i.move_type in ('out_invoice')
-                                    order by p.id, m.id''', 
+                                    left join account_analytic_account red on red.id = m.analytic_account_id                                    
+                                    where l.exclude_from_invoice_tab is False and m.date between %s and %s and m.state='posted'
+                                    and a.asset_type = 'sale' and m.move_type in ('out_invoice')
+                                    order by p.id, m.id ''', 
                                     (date_from, date_to))
         
         lineas = self._cr.fetchall()
@@ -104,6 +105,8 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     ca.name
                                     from account_move_line l
                                     inner join account_move i on i.id=l.move_id
+                                    left join asset_move_line_rel aml on aml.line_id = l.id
+                                    left join account_asset a on a.id=aml.asset_id
                                     left join account_analytic_account ca on ca.id=l.analytic_account_id
                                     inner join res_company c on c.id=i.company_id
                                     inner join res_partner p on p.id=i.partner_id
@@ -113,8 +116,8 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join product_product pp ON pp.id = l.product_id
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
                                     left join account_analytic_account red on red.id = i.analytic_account_id                                    
-                                    where l.exclude_from_invoice_tab is False and i.date between '2022-09-01' and '2022-11-30' and i.state='posted'
-                                    and l.asset_id is null and i.move_type in ('out_invoice')
+                                    where l.exclude_from_invoice_tab is False and i.date between %s and %s and i.state='posted'
+                                    and a.id is null and i.move_type in ('out_invoice')
                                     order by p.id, i.id ''', 
                                     (date_from, date_to))
         
