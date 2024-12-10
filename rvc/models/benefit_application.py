@@ -280,7 +280,9 @@ class BenefitApplication(models.Model):
     def write(self, vals):
         res = super(BenefitApplication, self).write(vals)
         self._validate_gln_only_numbers()
-        self._validate_gln()
+
+        # comentado por salida a producción con proyecto 5Minutos
+        # self._validate_gln()
 
         return res
 
