@@ -78,6 +78,10 @@ class RVCTemplateEmailWizard(models.TransientModel):
         active_id = context.get('active_ids', False)
         benefit_application = self.env['benefit.application'].browse(active_id)
         if benefit_application:
+            if benefit_application.send_kit_with_no_benefit:
+                benefit_application.message_post(body=_(\
+                    '✅ Se entregó el beneficio RVC correctamente.'))
+                return benefit_application.write({'state': 'done', 'delivery_date': datetime.now()})
             contact_email = benefit_application.partner_id.contact_email
             if contact_email:
                 if benefit_application.product_id.benefit_type == 'codigos':
