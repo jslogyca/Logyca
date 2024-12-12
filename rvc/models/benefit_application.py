@@ -263,12 +263,9 @@ class BenefitApplication(models.Model):
 
                 #validar si producto rvc es codigos
                 if product_id.code == '01':
-                    
+
                     # validar si es miembro o cliente
                     self._validate_member_or_client(beneficiary.partner_id)
-                    
-                    # validar si tiene códigos comprados
-                    self._validate_bought_products_create(beneficiary.partner_id.vat)
 
                 #validar si producto rvc es colabora
                 # if product_id.code == '02':
@@ -406,32 +403,6 @@ class BenefitApplication(models.Model):
                         _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
                             Inténtelo nuevamente o comuníquese con soporte. Error: %s' % (str(response))))
             return True
-
-    def _validate_bought_products_create(self, vat):
-        # validacion para el create, ya que aún no existe el id, 'self' no está disponible.
-        cr = self._cr
-        cr.execute("SELECT value FROM ir_config_parameter WHERE key='web.base.url'")
-        query_result = self.env.cr.dictfetchone()
-
-        if query_result['value'] == 'https://logyca.odoo.com':
-            url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(vat))
-        else:
-            url = "https://app-asc-dev.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(vat))
-
-        response = requests.get(url)
-
-        if response.status_code == 200:
-            result = response.json()
-            response.close()
-
-            if result.get('CodigosCompradosDisponiblesNPV') > 50:
-                 raise ValidationError(\
-                    _('¡Lo sentimos! La empresa tiene %s código(s) comprados disponibles.') % str(result.get('CodigosCompradosDisponiblesNPV')))
-        else:
-            raise ValidationError(\
-                    _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
-                        Inténtelo nuevamente o comuníquese con soporte. Error: %s' % (str(response))))
-        return True
 
     def _validate_qty_codes(self):
         for rec in self:
