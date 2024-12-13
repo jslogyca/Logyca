@@ -46,3 +46,13 @@ class rvc_digital_card(models.Model):
     def _partner_name(self):
         for digital_card in self:
             digital_card.partner_name = digital_card.postulation_id.partner_id.partner_id.name
+
+    def action_download(self):
+        """ Allows to download the digital card image"""
+        self.ensure_one()
+        url = self.digital_card_img_url
+        return {
+            'type': 'ir.actions.act_url',
+            'url': url,
+            'target': 'new',
+        }
