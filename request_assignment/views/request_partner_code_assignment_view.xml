@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="request_partner_code_assignment_view_form" model="ir.ui.view">
+        <field name="name">request.partner.code.assignment.form</field>
+        <field name="model">request.partner.code.assignment</field>
+        <field name="arch" type="xml">
+            <form string="Request Partner Code Assignment" create="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="vat" required="1"/>
+                            <field name="partner_id" required="1"/>
+                            <field name="id_requisition" />
+                            <field name="type_requisition" />
+                        </group>
+                        <group>
+                            <field name="user_requisition" />
+                            <field name="date_requisition" />
+                            <field name="user_approved" />
+                            <field name="date_approved" />
+                            <field name="file_requisition" />
+                        </group>
+                    </group>
+                    <field name="comments_requisition" />
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="request_partner_code_assignment_view_tree" model="ir.ui.view">
+        <field name="name">request.partner.code.assignment.tree</field>
+        <field name="model">request.partner.code.assignment</field>
+        <field name="arch" type="xml">
+            <tree string="Request Partner Code Assignment" create="false" >
+                <field name="vat" required="1"/>
+                <field name="partner_id" required="1"/>
+                <field name="id_requisition" />
+                <field name="date_requisition" />
+                <field name="type_requisition" />
+                <field name="comments_requisition" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_request_partner_code_assignment" model="ir.actions.act_window">
+        <field name="name">Request Partner Code Assignment</field>
+        <field name="res_model">request.partner.code.assignment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="request_partner_code_assignment_view_tree"/>
+    </record>
+
+    <menuitem
+        id="account_menu_request_partner_code_assignment"
+        name="Request Partner Code Assignment"
+        action="action_request_partner_code_assignment"
+        parent="contacts.res_partner_menu_config"
+        sequence="201"/>
+
+</odoo>
