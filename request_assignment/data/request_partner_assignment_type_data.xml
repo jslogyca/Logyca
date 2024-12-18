@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="request_assignment_type1" model="request.partner.assignment.type">
+            <field name="name">Certificados</field>
+            <field name="code">01</field>
+            <field name="active">True</field>
+        </record>
+        <record id="request_assignment_type2" model="request.partner.assignment.type">
+            <field name="name">Cesiones</field>
+            <field name="code">02</field>
+            <field name="active">True</field>
+        </record>
+        <record id="request_assignment_type3" model="request.partner.assignment.type">
+            <field name="name">Desvinculaciones</field>
+            <field name="code">03</field>
+            <field name="active">True</field>
+        </record>
+        <record id="request_assignment_type4" model="request.partner.assignment.type">
+            <field name="name">Verificaciones</field>
+            <field name="code">04</field>
+            <field name="active">True</field>
+        </record>
+        <record id="request_assignment_type5" model="request.partner.assignment.type">
+            <field name="name">Devolución de prefijos</field>
+            <field name="code">05</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>
