@@ -18,10 +18,18 @@
                             <field name="date_requisition" />
                             <field name="user_approved" />
                             <field name="date_approved" />
-                            <field name="file_requisition" />
                         </group>
                     </group>
+                    <group>
                     <field name="comments_requisition" />
+                    <field name="response_attachments" />
+                    </group>
+                    <field name="user_attachments" nolabel="1" force_save="1" readonly="1">
+                        <tree editable="bottom">
+                            <field name="name" />
+                            <field name="path" />
+                        </tree>
+                    </field>                    
                 </sheet>
             </form>
         </field>
