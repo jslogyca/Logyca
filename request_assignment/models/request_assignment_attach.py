@@ -3,9 +3,9 @@
 from odoo import fields, models
 
 
-class RequestAssignmentAttach(models.Model):
-    _name = 'request.assignment.attach'
-    _description = 'Request Assignment Attach'
+class RequestAssignmentAttachMent(models.Model):
+    _name = 'request.assignment.attachment'
+    _description = 'Request Assignment AttachMent'
     
     name = fields.Char(string='Name')
     path = fields.Char(string='Path')
