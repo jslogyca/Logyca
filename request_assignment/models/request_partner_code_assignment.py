@@ -18,7 +18,7 @@ class RequestPartnerCodeAssignment(models.Model):
     date_approved = fields.Date(string='Date Requisition Approved', default=fields.Date.context_today)
     comments_requisition = fields.Text(string='Comments Requisition')
     file_requisition = fields.Many2one('ir.attachment',string='Attachment')
-    user_attachments = fields.One2many('request.assignment.attachment', 'request_assignment_id', string="assignment attach", index=True)
+    # user_attachments = fields.One2many('request.assignment.attachment', 'request_assignment_id', string="assignment attach", index=True)
     response_attachments = fields.Text(string='Response Attachments')
 
     def name_get(self):
