@@ -24,12 +24,12 @@
                     <field name="comments_requisition" />
                     <field name="response_attachments" />
                     </group>
-                    <field name="user_attachments" nolabel="1" force_save="1" readonly="1">
+                    <!-- <field name="user_attachments" nolabel="1" force_save="1" readonly="1">
                         <tree editable="bottom">
                             <field name="name" />
                             <field name="path" />
                         </tree>
-                    </field>                    
+                    </field> -->
                 </sheet>
             </form>
         </field>
