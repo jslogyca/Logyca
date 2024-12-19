@@ -15,7 +15,6 @@
                             <field name="date_requisition" />
                             <field name="user_approved" />
                             <field name="date_approved" />
-                            <field name="file_requisition" />
                             <field name="comments_requisition" />                            
                         </tree>
                     </field>
