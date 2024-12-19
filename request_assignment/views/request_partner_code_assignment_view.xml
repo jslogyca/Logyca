@@ -57,11 +57,11 @@
         <field name="view_id" ref="request_partner_code_assignment_view_tree"/>
     </record>
 
-    <menuitem
+    <!-- <menuitem
         id="account_menu_request_partner_code_assignment"
         name="Request Partner Code Assignment"
         action="action_request_partner_code_assignment"
         parent="contacts.res_partner_menu_config"
-        sequence="201"/>
+        sequence="201"/> -->
 
 </odoo>
