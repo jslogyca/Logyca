@@ -3,6 +3,7 @@
 from odoo import fields, models
 from datetime import date, timedelta
 
+
 class RequestPartnerCodeAssignment(models.Model):
     _name = 'request.partner.code.assignment'
     _description = 'Request Partner Code Assignment'
@@ -19,8 +20,8 @@ class RequestPartnerCodeAssignment(models.Model):
     file_requisition = fields.Many2one('ir.attachment',string='Attachment')
     user_attachments = fields.One2many('request.assignment.attach', 'request_assignment_id', string="Projects", index=True)
     response_attachments = fields.Text(string='Response Attachments')
-    
-    
+
     def name_get(self):
         return [(request.id, '%s - %s' %
                  (request.partner_id.name, request.type_requisition.name)) for request in self]
+
