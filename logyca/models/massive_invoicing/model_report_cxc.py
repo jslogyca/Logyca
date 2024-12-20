@@ -132,7 +132,7 @@ class MassiveInvoicingCXC_report(models.TransientModel):
                 without_iva = amount_untaxed-value_discount
                 #------------Info pagos
                 invoice_payments_widget = move.invoice_payments_widget
-                paid = move.invoice_payment_state
+                paid = move.payment_state
                 reconciled_info = move._get_reconciled_info_JSON_values()
                 document_paid = ''
                 date_paid = ''
