@@ -39,7 +39,7 @@ class MassiveInvoicingCXC_report(models.TransientModel):
         #obj_account_moves = self.env['account.move'].search([('x_is_mass_billing', '=', True),('name','in',names)])
         date_initial_filter = datetime.strptime(str(self.ano_filter)+'-01-01','%Y-%m-%d')
         date_finally_filter = datetime.strptime(str(self.ano_filter)+'-12-31','%Y-%m-%d')
-        obj_account_moves = self.env['account.move'].search([('x_is_mass_billing', '=', True),('move_type','in',('out_invoice','out_refund')),('invoice_date','>=',date_initial_filter),('invoice_date','<=',date_finally_filter)]) 
+        obj_account_moves = self.env['account.move'].search([('x_is_mass_billing', '=', True),('move_type','in',('out_invoice')),('invoice_date','>=',date_initial_filter),('invoice_date','<=',date_finally_filter)]) 
         #raise ValidationError(_(obj_account_moves))
         lst_account_moves = []
         for move in obj_account_moves:
