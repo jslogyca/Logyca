@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="request_partner_code_assignment_view_form_exte">
+        <field name="name">request.partner.code.assignment.view.form.exte</field>
+        <field name="model">request.partner.code.assignment</field>
+        <field name="inherit_id" ref="request_assignment.request_partner_code_assignment_view_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='comments_requisition']" position="after">
+                <field name="response_attachments" />
+                <field name="user_attachments" nolabel="1" force_save="1" readonly="1">
+                    <tree editable="bottom">
+                        <field name="name" />
+                        <field name="path" />
+                    </tree>
+                </field>
+            </xpath>
+        </field>
+    </record>
+</odoo>
