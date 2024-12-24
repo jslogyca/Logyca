@@ -39,11 +39,11 @@
         <field name="view_id" ref="request_partner_assignment_type_view_tree"/>
     </record>
 
-    <!-- <menuitem
+    <menuitem
         id="account_menu_request_partner_assignment_type"
         name="Request Partner Assignment Type"
         action="action_request_partner_assignment_type"
         parent="contacts.res_partner_menu_config"
-        sequence="200"/> -->
+        sequence="200"/>
 
 </odoo>

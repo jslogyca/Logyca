@@ -22,14 +22,7 @@
                     </group>
                     <group>
                     <field name="comments_requisition" />
-                    <field name="response_attachments" />
                     </group>
-                    <!-- <field name="user_attachments" nolabel="1" force_save="1" readonly="1">
-                        <tree editable="bottom">
-                            <field name="name" />
-                            <field name="path" />
-                        </tree>
-                    </field> -->
                 </sheet>
             </form>
         </field>
@@ -57,11 +50,11 @@
         <field name="view_id" ref="request_partner_code_assignment_view_tree"/>
     </record>
 
-    <!-- <menuitem
+    <menuitem
         id="account_menu_request_partner_code_assignment"
         name="Request Partner Code Assignment"
         action="action_request_partner_code_assignment"
         parent="contacts.res_partner_menu_config"
-        sequence="201"/> -->
+        sequence="201"/>
 
 </odoo>
