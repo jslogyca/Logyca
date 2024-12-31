@@ -1578,9 +1578,10 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                             ('partner_id','=',partner_company.id),
                                             ('IdEsquema','=',7)])
         print('EMPRESA PREFIJOS CLIENTE MIEMBROS 555554', assignment_partner_ids, id_contactP, self.id)                                            
-        cant_pref=0                                        
+        cant_pref = True                                     
         for assignment_partner in assignment_partner_ids:
             print('EMPRESA PREFIJOS CLIENTE MIEMBROS 555554', assignment_partner)
+            print('EMPRESA PREFIJOS CLIENTE MIEMBROS 5555599', cant_pref)
             if assignment_partner.Rango == '4D':
                 unit_fee_value = self.env['massive.tariff.prefix'].search([('type_prefix', '=', '4D'),
                                                     ('year','=',self.year)])
@@ -1589,8 +1590,10 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                                     ('year','=',self.year)])
             if assignment_partner.Rango == '6D':
                 unit_fee_value = self.env['massive.tariff.prefix'].search([('type_prefix', '=', '6D'),
-                                                    ('year','=',self.year)])            
-            if cant_pref == 0:
+                                                    ('year','=',self.year)])
+            print('EMPRESA PREFIJOS CLIENTE MIEMBROS 555559', cant_pref)
+            if cant_pref:
+                print('EMPRESA PREFIJOS CLIENTE MIEMBROS 555557', cant_pref)
                 sale_order_line_values = {
                     'order_id' : sale_order.id,
                     'name' : product_id.product_tmpl_id.name + str(assignment_partner.Rango) + ' 60% Descuento',
@@ -1601,6 +1604,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                 }
                 sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
             else:
+                print('EMPRESA PREFIJOS CLIENTE MIEMBROS 555558', product_uom_qty)
                 sale_order_line_values = {
                     'order_id' : sale_order.id,
                     'name' : product_id.product_tmpl_id.name + str(assignment_partner.Rango),
@@ -1610,49 +1614,9 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                     'discount' : discount                            
                 }
                 sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
-            cant_pref+=1
+            cant_pref = False
         return sale_order
-
-    def _create_sale_order_fm_pm(self, partner_company, id_contactP, conditional_discount, 
-                            conditional_discount_deadline, product_id, product_uom_qty, unit_fee_value, discount):
-        #Factura 1: Renovación Prefijo 
-        print('EMPRESA PREFIJOS CLIENTE MIEMBROS 555553')
-        sale_order_values = {
-            'partner_id' : id_contactP,
-            'client_order_ref' : 'Por pago de la factura antes del 2025-01-31 aplica un descuento por pronto pago del 4.75%',
-            'partner_invoice_id' : id_contactP,
-            'x_origen': 'FM {}'.format(self.year),
-            'x_type_sale': 'Renovación',
-            'x_conditional_discount': (product_uom_qty)*conditional_discount,
-            'x_conditional_discount_deadline': conditional_discount_deadline,
-            'validity_date' : self.invoicing_companies.expiration_date                            
-        }
-        sale_order = self.env['sale.order'].create(sale_order_values)
-        assignment_partner_ids = self.env['massive.invoicing.enpointcodeassignment'].search([('process_id', '=', self.id),
-                                            ('partner_id','=',partner_company.id),
-                                            ('IdEsquema','=',7)])
-        print('EMPRESA PREFIJOS CLIENTE MIEMBROS 555554', assignment_partner_ids, id_contactP, self.id)
-        for assignment_partner in assignment_partner_ids:
-            print('EMPRESA PREFIJOS CLIENTE MIEMBROS 555554', assignment_partner)
-            if assignment_partner.Rango == '4D':
-                unit_fee_value = self.env['massive.tariff.prefix'].search([('type_prefix', '=', '4D'),
-                                                    ('year','=',self.year)])
-            if assignment_partner.Rango == '5D':
-                unit_fee_value = self.env['massive.tariff.prefix'].search([('type_prefix', '=', '5D'),
-                                                    ('year','=',self.year)])
-            if assignment_partner.Rango == '6D':
-                unit_fee_value = self.env['massive.tariff.prefix'].search([('type_prefix', '=', '6D'),
-                                                    ('year','=',self.year)])            
-            sale_order_line_values = {
-                'order_id' : sale_order.id,
-                'name' : product_id.product_tmpl_id.name + str(assignment_partner.Rango),
-                'product_id' : product_id.id,
-                'product_uom_qty' : product_uom_qty, #Cantidad
-                'price_unit' : unit_fee_value.fee_value,
-                'discount' : discount                            
-            }
-            sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
-        return sale_order        
+       
 
     def _create_sale_order_fm_aport(self, partner_company, id_contactP, conditional_discount, 
                             conditional_discount_deadline, product_id, product_uom_qty, unit_fee_value, discount):
