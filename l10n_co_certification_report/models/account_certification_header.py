@@ -16,6 +16,7 @@ class AccountCertificationHeader(models.Model):
     partner_id = fields.Many2one('res.partner', string='Partner')
     date_from = fields.Date(string='Fecha Inicio')
     date_to = fields.Date(string='Fecha Fin')
+    date = fields.Date(string='Fecha Expedición')
     report_line = fields.One2many('account.certification.header.line', 'header_id', 'Lines')
     date_expe = fields.Date('Date Expe')
     total_amount = fields.Float(string='Total')

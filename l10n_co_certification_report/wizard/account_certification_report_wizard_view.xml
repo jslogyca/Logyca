@@ -10,6 +10,7 @@
                         <!-- <field name="date_range_id"/> -->
                         <field name="date_from" required="1"/>
                         <field name="date_to" required="1"/>
+                        <field name="date" required="1"/>
                     </group>
                     <group>
                         <field
