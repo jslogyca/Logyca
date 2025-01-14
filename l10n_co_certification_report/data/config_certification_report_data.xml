@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="configcertificationreport1" model="config.certification.report">
+            <field name="name">Certificado de Retenciones</field>
+        </record>
+        <record id="configcertificationreport2" model="config.certification.report">
+            <field name="name">Certificado Rete IVA</field>
+        </record>
+        <record id="configcertificationreport3" model="config.certification.report">
+            <field name="name">Certificado Rete ICA</field>
+        </record>
+    </data>
+</odoo>

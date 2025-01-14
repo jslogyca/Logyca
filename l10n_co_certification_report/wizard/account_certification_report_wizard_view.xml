@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="account_certification_wizard" model="ir.ui.view">
+        <field name="name">Account Certification Report Wizard</field>
+        <field name="model">account.certification.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Account Certification Report Wizard">
+                <group name="main_info">
+                    <group>
+                        <!-- <field name="date_range_id"/> -->
+                        <field name="date_from" required="1"/>
+                        <field name="date_to" required="1"/>
+                    </group>
+                    <group>
+                        <field
+                            name="company_id"
+                            options="{'no_create': True}"
+                            groups="base.group_multi_company"/>
+                        <field name="default_rep_id" required="1"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Partners">
+                        <group>
+                            <field name="partner_ids" widget="one2many_list" nolabel="1"/>
+                        </group>
+                    </page>
+                </notebook>
+                <footer>
+                        <button
+                            name="do_report"
+                            string="Download File"
+                            type="object"
+                            class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_account_certification_wizard" model="ir.actions.act_window">
+        <field name="name">Account Certification Report Wizard</field>
+        <field name="res_model">account.certification.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="account_certification_wizard" />
+        <field name="target">new</field>
+    </record>
+</odoo>
