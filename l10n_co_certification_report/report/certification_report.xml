@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="certification_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+                    <div class="page">
+                        <!-- <h2 style="text-align: center;" > -->
+                        <h2 style="padding-top: 15px; text-align: center;" >
+                            <strong><span t-field="o.default_rep_id.name"/></strong>
+                        </h2>
+                        <h4 style="text-align: center;">
+                            <span>Periodo Certificado: </span>
+                            <span t-field="o.date_from"/>
+                            <span> Al </span>
+                            <span t-field="o.date_to"/>
+                        </h4>
+                        <div class="row" style="margin-top: 60px;">
+                            <div class="col-2">
+                                <p style="margin:0px"><strong>Razón Social:</strong></p>
+                                <p style="margin:0px"><strong>NIT:</strong></p>
+                                <p style="margin:0px"><strong>Dirección:</strong></p>
+                                <p style="margin:0px"><strong>Teléfono:</strong></p>
+                                <p style="margin:0px"><strong>Moneda:</strong></p>
+                                <p style="margin:0px"><strong>Fecha de Expedición:</strong></p>
+                            </div>
+                            <div class="col-6">
+                                <p style="margin:0px">
+                                    <span t-field="o.partner_id.name"/>
+                                </p>
+                                <p style="margin:0px">
+                                    <span t-field="o.partner_id.vat"/>
+                                </p>
+                                <p style="margin:0px">
+                                    <span t-field="o.partner_id.street"/>-
+                                    <span t-field="o.partner_id.x_city.name"/> /
+                                    <span t-field="o.partner_id.country_id.name"/>
+                                </p>
+                                <p style="margin:0px">
+                                    <span t-field="o.partner_id.phone"/>
+                                </p>
+                                <p style="margin:0px">
+                                    <span t-field="o.currency_id.name"/>
+                                </p>
+                                <p style="margin:0px">
+                                    <span t-field="o.currency_id.name"/>
+                                </p>
+                            </div>
+                            <div class="col-4">
+                                <span> </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                Durante el año gravable de 2024, se practicó en la ciudad de
+                                <t t-esc="env.company.city"/>
+                                <span > retención de ICA a</span>
+                                <t t-esc="o.partner_id.name"/> con NIT:
+                                <t t-esc="o.partner_id.vat"/>.
+                            </div>
+                        </div>
+                        <table class="table table-striped" style="margin-top: 20px; font-size: 85%;">
+                            <thead>
+                                <tr style="background-color: #BCBCBC;">
+                                    <th class="text-center">CONCEPTO DE RETENCIÓN</th>
+                                    <th class="text-center">MONTO DEL PAGO SUJETO A RETENCIÓN</th>
+                                    <!-- <th class="text-center">TASA APLICADA</th> -->
+                                    <th class="text-center">RETENIDO Y CONSIGNADO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.report_line" t-as="l">
+
+                                    <t t-if="l.tax_id == False">
+                                        <td>
+                                            <span t-field="l.tax_id.name"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td>
+                                            <span t-field="l.account_id.code"/>-
+                                            <span t-field="l.account_id.name"/>
+                                        </td>
+                                    </t>
+                                    <td class="text-right">
+                                        <t t-esc="'{0:,.2f}'.format(l.base)" />
+                                    </td>
+                                    <!-- <td class="text-right">
+                                        <span t-field="l.tax_percent"/>
+                                        <span>%</span>
+                                    </td> -->
+                                    <td class="text-right">
+                                        <t t-esc="'{0:,.2f}'.format(l.amount)" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                            <div class="row">
+                                <div t-att-class="'offset-1 col-11' or 'offset-5 col-7'"
+                                     style="border: 2px solid black;">
+                                    <div class="col-12 text-center">
+                                        <strong>TOTAL DE IMPUESTOS DESCONTABLES</strong>
+                                    </div>
+                                    <div t-att-class="'col-6' or 'col-4'">
+                                        <div>
+                                            <strong>MONTO DEL PAGO SUJETO A:</strong>
+                                        </div>
+                                        <t>
+                                            <t t-esc="'{0:,.2f}'.format(o.base)" />
+                                        </t>
+                                    </div>
+                                    <div t-att-class="'col-6' or 'col-4'">
+                                        <div>
+                                            <strong>RETENIDO Y CONSIGNADO:</strong>
+                                        </div>
+                                        <t t-esc="'{0:,.2f}'.format(o.amount)" />
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        <div class="row" style="margin-top: 30px; text-align: justify;">
+                            <div class="col-12">
+                                <span><strong> OBSERVACIONES: </strong></span>
+                                <p><span t-field="o.default_rep_id.note"/></p>
+                                <br/>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 20px;">
+                            <div class="col-12">
+                                <p>
+                                    <span>Certificate issued on the </span>
+                                    <span t-field="o.date_expe" t-options='{"format": "dd"}'/>
+                                    <span>rd day in the month </span>
+                                    <span t-field="o.date_expe" t-options='{"format": "MMMM"}'/>
+                                    <span> of the year </span>
+                                    <span t-field="o.date_expe" t-options='{"format": "YYYY"}'/>
+                                    <span>.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>                  
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <report
+       id="certification_report_pdf"
+       model="account.certification.header"
+       string="Tax Certification Report"
+       report_type="qweb-pdf"
+       print_report_name="'%s' % (object.file_name)"
+       name="l10n_co_certification_report.certification_report"
+       file="l10n_co_certification_report.certification_report"
+       menu="False"
+    />
+
+</odoo>

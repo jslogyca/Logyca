@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- PDF REPORTS : paperformat -->
+    <record id="report_cert_qweb_paperformat" model="report.paperformat">
+        <field name="name">Account financial report qweb paperformat</field>
+        <field name="default" eval="True" />
+        <field name="format">custom</field>
+        <field name="page_height">297</field>
+        <field name="page_width">210</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">12</field>
+        <field name="margin_bottom">8</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">10</field>
+        <field name="dpi">110</field>
+    </record>
+    <!-- Account Certification Report Wizard -->
+    <record id="action_print_account_certification_report_qweb"
+            model="ir.actions.report" >
+        <field name="name">Account Certification Report Wizard</field>
+        <field name="model">account.certification.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_co_certification_report.account_certification_report</field>
+        <field name="report_file">l10n_co_certification_report.account_certification_report</field>
+    </record>
+    <report
+        id="report_account_certification_header"
+        model="account.certification.header"
+        string="Account Certification Report"
+        report_type="qweb-pdf"
+        name="l10n_co_certification_report.certification_report"
+        file="l10n_co_certification_report.certification_report"
+        menu="False"
+    />
+</odoo>

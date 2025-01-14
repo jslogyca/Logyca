@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="config_certification_report_view_form" model="ir.ui.view">
+        <field name="name">config.certification.report.form</field>
+        <field name="model">config.certification.report</field>
+        <field name="arch" type="xml">
+            <form string="Config Certification Report">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" default_focus="1" placeholder="Name" required="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="active" widget="toggle"/>
+                            <field name="company_id" required="1"/>
+                        </group>
+                        <group>
+                            <field name="by_city" required="1" widget="toggle"/>
+                            <field name="city_id" attrs="{'invisible': [('by_city', '=', False)], 'required': [('by_city', '=', True)]}" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Default Taxes" name="taxes">
+                            <group>
+                                <field name="tax_ids" widget="one2many_list"
+                                       required="1" nolabel="1"
+                                       domain="[('company_id','=',company_id)]"/>
+                            </group>
+                        </page>
+                        <page string="Default Accounts" name="accounts">
+                            <group>
+                                <field name="account_ids" widget="one2many_list"
+                                       required="1" nolabel="1"
+                                       domain="[('company_id','=',company_id)]"/>
+                            </group>
+                        </page>
+                        <page string="Notes" name="note">
+                            <group>
+                                <field name="note" nolabel="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="config_certification_report_view_tree" model="ir.ui.view">
+        <field name="name">config.certification.report.tree</field>
+        <field name="model">config.certification.report</field>
+        <field name="arch" type="xml">
+            <tree string="Config Certification Report" >
+                <field name="name"/>
+                <field name="tax_ids" widget="many2many_tags"/>
+                <field name="active"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_config_certification_report" model="ir.actions.act_window">
+        <field name="name">Config Certification Report</field>
+        <field name="res_model">config.certification.report</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

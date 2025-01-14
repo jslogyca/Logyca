@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem id="menu_account_certification_parent"
+        name="Account Certification Report"
+        parent="account.menu_finance_reports"
+        sequence="3"
+        groups="account.group_account_user"
+    />
+
+    <menuitem
+        id="menu_account_certification_wizard"
+        name="Account Certification Report"
+        parent="l10n_co_certification_report.menu_account_certification_parent"
+        action="action_account_certification_wizard"
+        sequence="0"
+        groups="account.group_account_user"
+    />
+
+    <menuitem
+        id="hr_menu_config_certification_report"
+        name="Config Certification Report"
+        action="action_config_certification_report"
+        parent="l10n_co_certification_report.menu_account_certification_parent"
+        sequence="2"
+        groups="account.group_account_user"
+    />
+
+</odoo>

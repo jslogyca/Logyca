@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+account_account_certification_report_wizard,account.certification.report.wizard,model_account_certification_report_wizard,account.group_account_user,1,1,1,1
+account_config_certification_report,config.certification.report,model_config_certification_report,account.group_account_user,1,1,1,1
+account_config_certification_report,config.certification.report,model_config_certification_report,account.group_account_user,1,1,1,1
+account_certification_header_admin,account.certification.header admin,model_account_certification_header,base.group_system,1,1,1,1
+account_certification_header_account_user,account.certification.header account user,model_account_certification_header,account.group_account_user,1,1,1,1
+account_certification_header_line_admin,account.certification.header.line admin,model_account_certification_header_line,base.group_system,1,1,1,1
+account_certification_header_line_account_user,account.certification.header.line account user,model_account_certification_header_line,account.group_account_user,1,1,1,1
