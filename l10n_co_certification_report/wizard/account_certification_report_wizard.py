@@ -18,6 +18,7 @@ class AccountCertificationReportWizard(models.TransientModel):
                                  default=lambda self: self.env.company)
     date_from = fields.Date(string='Date from')
     date_to = fields.Date(string='Date to')
+    date = fields.Date(string='Date')
     default_rep_id = fields.Many2one('config.certification.report',
                                      string='Report Default')
 
@@ -47,6 +48,7 @@ class AccountCertificationReportWizard(models.TransientModel):
             header_id = header_obj.create({
                 'date_from': self.date_from,
                 'date_to': self.date_to,
+                'date': self.date,
                 'partner_id': partner.id,
                 'company_id': self.company_id.id,
                 'date_expe': date,

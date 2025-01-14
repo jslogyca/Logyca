@@ -44,7 +44,7 @@
                                     <span t-field="o.currency_id.name"/>
                                 </p>
                                 <p style="margin:0px">
-                                    <span t-field="o.currency_id.name"/>
+                                    <span t-field="o.date"/>
                                 </p>
                             </div>
                             <div class="col-4">
