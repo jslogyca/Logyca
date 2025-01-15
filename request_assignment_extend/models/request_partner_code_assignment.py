@@ -9,3 +9,7 @@ class RequestPartnerCodeAssignment(models.Model):
     
     user_attachments = fields.One2many('request.assignment.attachment', 'request_assignment_id', string="assignment attach", index=True)
     response_attachments = fields.Text(string='Response Attachments')
+    prefixes_sent = fields.Text(string='Prefixes Sent')
+    prefixes_approved = fields.Text(string='Prefixes Approved')
+    total_transfer = fields.Boolean('Total Transfer', default=False)
+    
