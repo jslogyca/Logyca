@@ -110,8 +110,8 @@ class comercial_report(models.TransientModel):
                 LEFT JOIN product_product pp ON pp.id=aml.product_id
                 LEFT JOIN product_template pt ON pp.product_tmpl_id = pt.id
             WHERE am.state='posted' 
-                and am.type in ('out_invoice', 'entry')
-                and (am.invoice_payment_state='not_paid' or am.invoice_payment_state='in_payment')
+                and am.move_type in ('out_invoice', 'entry')
+                and (am.payment_state='not_paid' or am.payment_state='in_payment')
                 and (am.name LIKE 'FEC%' or am.name LIKE 'FAC%' or am.name LIKE 'FAM%' or am.name LIKE 'CXC%' or am.name LIKE 'FSIV%')
         '''  + str(self.where())
         
