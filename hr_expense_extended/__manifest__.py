@@ -13,6 +13,7 @@
     'depends': [
         'base',
         'hr_expense',
+        'logyca',
         ],
     'description': '''
 
