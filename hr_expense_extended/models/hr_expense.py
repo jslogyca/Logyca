@@ -24,3 +24,8 @@ class HrExpenseSheet(models.Model):
                 current_managers = report.employee_id.expense_manager_id | report.employee_id.parent_id.user_id | report.employee_id.department_id.manager_id.user_id
                 is_editable = (is_approver or self.env.user in current_managers) and report.employee_id.user_id != self.env.user
             report.is_editable = is_editable
+
+class HrExpense(models.Model):
+    _inherit = 'hr.expense'
+
+    budget_group_id = fields.Many2one('logyca.budget_group', string='Budget', ondelete='restrict')
