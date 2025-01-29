@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Account Debtors Report -->
+    <!-- <record id="report_cxc_debtors_account_search" model="ir.ui.view">
+        <field name="name">report.cxc.debtors.account.search</field>
+        <field name="model">report.cxc.debtors.account</field>
+        <field name="arch" type="xml">
+            <search string="Account Debtors Report">
+                <field name="move_id"/>
+                <field name="partner_id"/>
+                <field name="date"/>
+                <separator/>
+                <group  string="Extended Filters">
+                    <filter string="Today" name="today_invoices" help="today invoices."
+                        domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="This Month" name="this_month_invoices" help="this month invoices."
+                        domain="[('date', '&lt;', (context_today()+relativedelta(months=1)).strftime('%Y-%m-01')), 
+                        ('date','&gt;=',context_today().strftime('%Y-%m-01'))]"/>
+                    <filter string="This Year" name="this_year_invoices" help="this year invoices."
+                        domain="[('date','&lt;=', time.strftime('%Y-12-31')),('date','&gt;=',time.strftime('%Y-01-01'))]"/>                        
+                </group>         
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="partner_id" string="Partner" context="{'group_by':'partner_id'}"/>
+                    <filter name="date" string="Date" context="{'group_by':'date'}"/>
+                    <filter name="move_id" string="Invoice" context="{'group_by':'id'}"/>
+                </group>                    
+            </search>
+        </field>
+    </record> -->
+
+    <record id="report_cxc_debtors_account_tree" model="ir.ui.view">
+        <field name="name">report.cxc.debtors.account.tree</field>
+        <field name="model">report.cxc.debtors.account</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0" delete="0" string="Account Debtors Report">
+                <field name="id"/>
+                <field name="company_id"/>
+                <field name="date"/>
+                <field name="year_fact"/>
+                <field name="doc_move"/>
+                <field name="number_move"/>
+                <field name="vat"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="amount_untaxed" sum="VALOR"/>
+                <field name="amount_tax" sum="T. IVA"/>
+                <field name="amount_total" sum="T. FACTURA"/>
+                <field name="amount_residual" sum="SALDO FACTURA"/>
+                <field name="currency_id"/>
+                <field name="invoice_date_due"/>
+                <field name="payment_term_id"/>
+                <field name="days_debtor"/>
+                <field name="mes_fact"/>
+                <field name="type_debtors"/>
+                <field name="vendedor_id"/>
+                <field name="team_id"/>
+                <field name="x_debt_portfolio_monitoring"/>
+                <field name="x_last_contact_debtor"/>                
+                <field name="x_debtor_portfolio_status_id"/>
+                <field name="x_estimated_payment_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="report_cxc_debtors_account_pivot" model="ir.ui.view">
+        <field name="model">report.cxc.debtors.account</field>
+        <field name="arch" type="xml">
+            <pivot string="Account Debtors Report">
+                <field name="company_id" type="row"/>
+                <field name="date" type="col"/>
+                <field name="amount_total" type="measure" />
+            </pivot>
+        </field>
+    </record>
+
+    <!-- <record id="report_cxc_debtors_account_graph" model="ir.ui.view">
+        <field name="name">report.cxc.debtors.account.graph</field>
+        <field name="model">report.cxc.debtors.account</field>
+        <field name="arch" type="xml">
+            <graph string="Account Debtors Report">
+                <field name="company_id" type="col"/>
+                <field name="amount_total" type="row"/>
+            </graph>
+        </field>
+    </record> -->
+
+    <record id="report_cxc_debtors_account_user_graph" model="ir.ui.view">
+        <field name="name">report.cxc.debtors.account.user.graph</field>
+        <field name="model">report.cxc.debtors.account</field>
+        <field name="arch" type="xml">
+            <graph string="Account Debtors Report">
+                <field name="vendedor_id" type="col"/>
+                <field name="amount_total" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="report_cxc_debtors_account_dashboard" model="ir.ui.view">
+        <field name="name">report.cxc.debtors.account.dashboard</field>
+        <field name="model">report.cxc.debtors.account</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <dashboard>
+                <!-- <view type="graph" ref="logyca.report_cxc_debtors_account_graph"/> -->
+                <view type="graph" ref="logyca.report_cxc_debtors_account_user_graph"/>
+                <group>
+                    <group>
+                        <aggregate name="vendedor" string="RESPONSABLE" group_operator="count" field="vendedor_id" measure="__count__"/>
+                        <aggregate name="partner" string="RAZÓN SOCIAL" group_operator="count" field="partner_id" measure="__count__"/>
+                        <!-- <aggregate name="expected_revenue_aggregate" field="planned_revenue" string="Expected Revenue"/>
+                        <aggregate name="prorated_revenue_aggregate" field="expected_revenue" invisible="1"/>
+                        <formula name="prorated_revenue" string="Prorated Revenue" value="record.prorated_revenue_aggregate" widget="monetary"/>
+                        <formula name="deal_size" string="Average Deal Size" value="record.expected_revenue_aggregate / record.opportunities" widget="monetary"/>
+                        <aggregate name="days_to_assign" string="Days to Assign" field="day_open" group_operator="avg" value_label="days"/>
+                        <aggregate name="days_to_close" string="Days to Close" field="day_close" group_operator="avg" value_label="days"/>
+                        <aggregate name="days_exceeding_closing" string="Exceeding Close Days" field="days_exceeding_closing" group_operator="avg"/> -->
+                    </group>
+                    <group col="1">
+                        <widget name="pie_chart" title="TIPO DE CARTERA" attrs="{'groupby': 'type_debtors'}"/>
+                        <widget name="pie_chart" title="PRODUCTO" attrs="{'groupby': 'product_id'}"/>
+                    </group>
+                </group>
+                <view type="pivot" ref="logyca.report_cxc_debtors_account_pivot"/>
+                <!-- <view type="cohort" ref="crm_enterprise.crm_lead_view_cohort"/> -->
+            </dashboard>
+        </field>
+    </record>    
+
+    <record id="action_report_cxc_debtors_account" model="ir.actions.act_window">
+        <field name="name">Account Debtors Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">report.cxc.debtors.account</field>
+        <field name="view_mode">tree,dashboard,form,pivot,graph</field>
+    </record>
+
+    <menuitem
+        id="report_cxc_debtors_account_menu"
+        name="Account Debtors CXC Report"
+        action="action_report_cxc_debtors_account"
+        parent="logyca_menus_report_financial" 
+        sequence="31" />    
+</odoo>

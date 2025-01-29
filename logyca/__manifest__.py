@@ -56,6 +56,7 @@
         'views/account_move_report_invoice.xml',
         'views/model_tariff_prefix_view.xml',
         'report/account_debtors_report_view.xml',
+        'report/report_cxc_debtors_account_view.xml',
         'views/massive_invoicing_companies_view.xml',
         'views/massive_invoicing_smlv_view.xml',
         'views/massive_invoicing_codes_assignment_view.xml',
