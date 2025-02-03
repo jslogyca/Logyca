@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='comments_requisition']" position="after">
                 <group col="1">
+                    <!-- <field name="partner_receiver"/> -->
                     <field name="prefixes_sent"/>
                     <field name="prefixes_approved"/>
                     <field name="total_transfer" string="Cesión completa?" help="Esta casilla está marcada si se solicitó cesión completa de los prefijos"/>
