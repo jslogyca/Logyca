@@ -7,13 +7,16 @@
         <field name="inherit_id" ref="request_assignment.request_partner_code_assignment_view_form"></field>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='comments_requisition']" position="after">
-                <group col="1">
-                    <!-- <field name="partner_receiver"/> -->
-                    <field name="prefixes_sent"/>
-                    <field name="prefixes_approved"/>
-                    <field name="total_transfer" string="Cesión completa?" help="Esta casilla está marcada si se solicitó cesión completa de los prefijos"/>
+                <group>
+                    <group>
+                        <!-- <field name="partner_receiver"/> -->
+                        <field name="prefixes_sent"/>
+                        <field name="prefixes_approved"/>
+                        <field name="total_transfer" string="Cesión completa?" help="Esta casilla está marcada si se solicitó cesión completa de los prefijos"/>
+                    </group>
+                    <group></group>
                 </group>
-                <group col="2">
+                <group>
                     <group string="Adjuntos Solicitud">
                         <field name="user_attachments" nolabel="1" force_save="1" readonly="1">
                             <tree editable="bottom">

@@ -21,8 +21,8 @@
                             <field name="date_approved" />
                         </group>
                     </group>
-                    <group>
-                    <field name="comments_requisition" />
+                    <group string="Comentarios Respuesta Solicitud">
+                        <field name="comments_requisition" />
                     </group>
                 </sheet>
             </form>
