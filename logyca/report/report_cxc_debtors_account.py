@@ -19,8 +19,8 @@ class ReportCXCDebtorsAccount(models.Model):
     number_move = fields.Char('NRO')
     vat = fields.Char('NIT')
     partner_id = fields.Many2one('res.partner', 'RAZÓN SOCIAL', readonly=True)
-    move_id = fields.Many2one('account.move', 'Invoice', readonly=True)
-    product_template_id = fields.Many2one('product.template', 'TEMPLATE', readonly=True)
+    move_id = fields.Many2one('account.move', 'FACTURA', readonly=True)
+    product_template_id = fields.Many2one('product.template', 'PRODUCTO', readonly=True)
     product_id = fields.Many2one('product.product', 'PRODUCTO', readonly=True)
     amount_untaxed = fields.Float('VALOR')
     amount_tax = fields.Float('T. IVA')
@@ -38,9 +38,11 @@ class ReportCXCDebtorsAccount(models.Model):
     x_last_contact_debtor = fields.Date('FECHA DE SEGUIMIENTO ULTIMO CONTACTO')
     x_estimated_payment_date = fields.Date('FECHA PROGRAMACIÓN PAGO')
     # x_debtor_portfolio_status_id = fields.Many2one('debtor.portfolio.status', 'ESTADO DE CARTERA', readonly=True)
-    x_debtor_portfolio_status_id = fields.Char('Status')
+    x_debtor_portfolio_status_id = fields.Char('ESTADO')
+    priority_cxc = fields.Selection([('baja', 'Baja'), 
+                                    ('media', 'Media'),
+                                    ('alta', 'Alta')], string='PRIORIDAD')
     
-
     def _select(self):
         select_str = """
             SELECT cc.id as company_id, 
@@ -72,7 +74,19 @@ class ReportCXCDebtorsAccount(models.Model):
             am.x_debt_portfolio_monitoring AS x_debt_portfolio_monitoring,
             am.x_last_contact_debtor AS x_last_contact_debtor,
             dps.name AS x_debtor_portfolio_status_id,
-            am.x_estimated_payment_date AS x_estimated_payment_date           
+            am.x_estimated_payment_date AS x_estimated_payment_date,
+            CASE WHEN (CASE WHEN now() > am.invoice_date_due 
+            THEN DATE_PART('day', now() - am.invoice_date_due)
+            ELSE 0 END)<=30
+            THEN 'baja'
+            WHEN (CASE WHEN now() > am.invoice_date_due 
+            THEN DATE_PART('day', now() - am.invoice_date_due)
+            ELSE 0 END)>30 and (CASE WHEN now() > am.invoice_date_due 
+            THEN DATE_PART('day', now() - am.invoice_date_due)
+            ELSE 0 END)<=90
+            THEN 'media'
+            ELSE 'alta'
+            END AS priority_cxc            
 		"""
         return select_str
 

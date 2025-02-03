@@ -74,27 +74,59 @@
         </field>
     </record>
 
-    <!-- <record id="report_cxc_debtors_account_graph" model="ir.ui.view">
-        <field name="name">report.cxc.debtors.account.graph</field>
+    <record id="report_cxc_debtors_account_filter" model="ir.ui.view">
+        <field name="name">report.cxc.debtors.account.filter</field>
         <field name="model">report.cxc.debtors.account</field>
         <field name="arch" type="xml">
-            <graph string="Account Debtors Report">
-                <field name="company_id" type="col"/>
-                <field name="amount_total" type="row"/>
-            </graph>
+            <search string="Search Invoice">
+                <!-- <field name="name" string="Invoice" filter_domain="[                                 '|', '|' , '|', '|',                                 ('name', 'ilike', self), ('invoice_origin', 'ilike', self),                                 ('ref', 'ilike', self), ('payment_reference', 'ilike', self),                                 ('partner_id', 'child_of', self)]"/> -->
+                <field name="company_id"/>
+                <field name="partner_id" operator="child_of"/>
+                <separator/>
+                <filter name="date" string="Invoice Date" date="date"/>
+                <filter name="invoice_date_due" string="Due Date" date="invoice_date_due"/>
+                <separator/>
+                <!-- <filter invisible="1" string="Late Activities" name="activities_overdue" domain="[('my_activity_date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]" help="Show all records which has next action date is before today"/>
+                <filter invisible="1" string="Today Activities" name="activities_today" domain="[('my_activity_date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter invisible="1" string="Future Activities" name="activities_upcoming_all" domain="[('my_activity_date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Salesperson" name="salesperson" context="{'group_by':'invoice_user_id'}"/>
+                    <filter string="Partner" name="groupy_by_partner" domain="[]" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Status" name="status" context="{'group_by':'state'}"/>
+                    <filter string="Journal" name="groupy_by_journal" domain="[]" context="{'group_by': 'journal_id'}"/>
+                    <separator/>
+                    <filter string="Invoice Date" name="invoicedate" context="{'group_by': 'invoice_date'}"/>
+                    <filter string="Due Date" name="duedate" context="{'group_by': 'invoice_date_due'}"/>
+                    <filter string="Date" name="group_by_date" context="{'group_by': 'date'}"/>
+                    <filter string="Company" name="group_by_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group> -->
+            </search>
         </field>
-    </record> -->
+    </record>
 
     <record id="report_cxc_debtors_account_user_graph" model="ir.ui.view">
         <field name="name">report.cxc.debtors.account.user.graph</field>
         <field name="model">report.cxc.debtors.account</field>
         <field name="arch" type="xml">
-            <graph string="Account Debtors Report">
-                <field name="vendedor_id" type="col"/>
-                <field name="amount_total" type="row"/>
+            <graph string="Account Debtors Report" type="bar">
+                <!-- <field name="vendedor_id" type="col"/>
+                <field name="amount_total" type="row"/> -->
+           		<field name="type_debtors" group="True"/>
+           		<field name="vendedor_id" operator="*"/>
             </graph>
         </field>
     </record>
+
+    <!-- <record id="report_cxc_debtors_account_user_graph_product" model="ir.ui.view">
+        <field name="name">report.cxc.debtors.account.user.graph.product</field>
+        <field name="model">report.cxc.debtors.account</field>
+        <field name="arch" type="xml">
+            <graph string="Account Debtors Report" type="bar">
+           		<field name="type_debtors" group="True"/>
+           		<field name="product_template_id" operator="*"/>
+            </graph>
+        </field>
+    </record> -->
 
     <record id="report_cxc_debtors_account_dashboard" model="ir.ui.view">
         <field name="name">report.cxc.debtors.account.dashboard</field>
@@ -118,7 +150,7 @@
                     </group>
                     <group col="1">
                         <widget name="pie_chart" title="TIPO DE CARTERA" attrs="{'groupby': 'type_debtors'}"/>
-                        <widget name="pie_chart" title="PRODUCTO" attrs="{'groupby': 'product_id'}"/>
+                        <widget name="pie_chart" title="PRODUCTO" attrs="{'groupby': 'product_template_id'}"/>
                     </group>
                 </group>
                 <view type="pivot" ref="logyca.report_cxc_debtors_account_pivot"/>
@@ -131,7 +163,7 @@
         <field name="name">Account Debtors Report</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">report.cxc.debtors.account</field>
-        <field name="view_mode">tree,dashboard,form,pivot,graph</field>
+        <field name="view_mode">dashboard,graph,pivot,tree,form</field>
     </record>
 
     <menuitem
