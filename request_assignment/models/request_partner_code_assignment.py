@@ -7,7 +7,7 @@ from datetime import date, timedelta
 class RequestPartnerCodeAssignment(models.Model):
     _name = 'request.partner.code.assignment'
     _description = 'Request Partner Code Assignment'
-    _order_by = 'date_requisition desc'
+    _order = 'date_requisition desc'
 
     partner_id = fields.Many2one('res.partner', string='Partner', required=True)
     vat = fields.Char(string='NIT')
