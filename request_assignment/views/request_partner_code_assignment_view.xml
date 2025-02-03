@@ -53,12 +53,12 @@
         <field name="name">request.partner.code.assignment.search</field>
         <field name="model">request.partner.code.assignment</field>
         <field name="arch" type="xml">
-            <search string="Request Partner Code Assignment Search">
+            <search>
                 <field name="id_requisition"/>
                 <field name="vat"/>
-                <group expand="0" string="Group By">
-                    <filter string="Type Requisition" domain="[]" context="{'group_by':'type_requisition'}"/>
-                </group>
+                <separator/>
+                <filter string="Type Requisition" name="group_type_requisition"
+                        context="{'group_by':'type_requisition'}"/>
             </search>
         </field>
     </record>
