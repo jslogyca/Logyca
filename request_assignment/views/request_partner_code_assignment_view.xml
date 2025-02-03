@@ -7,7 +7,7 @@
             <form string="Request Partner Code Assignment" create="false">
                 <sheet>
                     <group>
-                        <!-- <field name="state_requisition"/> -->
+                        <field name="state_requisition"/>
                         <group>
                             <field name="vat" required="1"/>
                             <field name="partner_id" required="1"/>
@@ -29,34 +29,6 @@
         </field>
     </record>
 
-    <record id="request_partner_code_assignment_view_tree" model="ir.ui.view">
-        <field name="name">request.partner.code.assignment.tree</field>
-        <field name="model">request.partner.code.assignment</field>
-        <field name="arch" type="xml">
-            <tree string="Request Partner Code Assignment" create="false" >
-                <field name="vat" required="1"/>
-                <field name="partner_id" required="1"/>
-                <field name="id_requisition" />
-                <field name="date_requisition" />
-                <field name="type_requisition" />
-                <field name="comments_requisition" />
-                <!-- <field name="state_requisition" widget="badge"
-                       decoration-warning="status in ['Fallido', 'Rechazado']"
-                       decoration-success="status in ['Aprobado', 'Completada con cumplimiento']"
-                       decoration-info="status in ['Pendiente', 'En proceso']"
-                       decoration-danger="status in ['Completada sin cumplimiento']"/> -->
-            </tree>
-        </field>
-    </record>
-
-    <record id="action_request_partner_code_assignment" model="ir.actions.act_window">
-        <field name="name">Request Partner Code Assignment</field>
-        <field name="res_model">request.partner.code.assignment</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="request_partner_code_assignment_view_tree"/>
-        <field name="search_view_id" ref="view_request_partner_code_assignment_search"/>
-    </record>
-
     <record id="view_request_partner_code_assignment_search" model="ir.ui.view">
         <field name="name">request.partner.code.assignment.search</field>
         <field name="model">request.partner.code.assignment</field>
@@ -69,6 +41,34 @@
                 </group>
             </search>
         </field>
+    </record>
+
+    <record id="request_partner_code_assignment_view_tree" model="ir.ui.view">
+        <field name="name">request.partner.code.assignment.tree</field>
+        <field name="model">request.partner.code.assignment</field>
+        <field name="arch" type="xml">
+            <tree string="Request Partner Code Assignment" create="false" >
+                <field name="vat" required="1"/>
+                <field name="partner_id" required="1"/>
+                <field name="id_requisition" />
+                <field name="date_requisition" />
+                <field name="type_requisition" />
+                <field name="comments_requisition" optional="hide"/>
+                <field name="state_requisition" widget="badge"
+                       decoration-warning="status in ['Fallido', 'Rechazado']"
+                       decoration-success="status in ['Aprobado', 'Completada con cumplimiento']"
+                       decoration-info="status in ['Pendiente', 'En proceso']"
+                       decoration-danger="status in ['Completada sin cumplimiento']" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_request_partner_code_assignment" model="ir.actions.act_window">
+        <field name="name">Request Partner Code Assignment</field>
+        <field name="res_model">request.partner.code.assignment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="request_partner_code_assignment_view_tree"/>
+        <field name="search_view_id" ref="view_request_partner_code_assignment_search"/>
     </record>
 
     <menuitem
