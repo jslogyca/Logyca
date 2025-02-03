@@ -69,23 +69,6 @@
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="request_partner_code_assignment_view_tree"/>
         <field name="search_view_id" ref="view_request_partner_code_assignment_search"/>
-<<<<<<< HEAD
-=======
-    </record>
-
-    <record id="view_request_partner_code_assignment_search" model="ir.ui.view">
-        <field name="name">request.partner.code.assignment.search</field>
-        <field name="model">request.partner.code.assignment</field>
-        <field name="arch" type="xml">
-            <search string="Request Partner Code Assignment Search">
-                <field name="id_requisition"/>
-                <field name="vat"/>
-                <group expand="0" string="Group By">
-                    <filter string="Type Requisition" domain="[]" context="{'group_by':'type_requisition'}"/>
-                </group>
-            </search>
-        </field>
->>>>>>> 3f82e6b... [IMP] request_assignment and request_assignment_extend adjustments as follows:
     </record>
 
     <menuitem
