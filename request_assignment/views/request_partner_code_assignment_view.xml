@@ -12,11 +12,7 @@
                             <field name="partner_id" required="1"/>
                             <field name="id_requisition" />
                             <field name="type_requisition" />
-                            <field name="state_requisition" widget="badge"
-                                decoration-warning="state_requisition in ['Fallido', 'Rechazado']"
-                                decoration-success="state_requisition in ['Aprobado', 'Completada con cumplimiento']"
-                                decoration-info="state_requisition in ['Pendiente', 'En proceso']"
-                                decoration-danger="state_requisition in ['Completada sin cumplimiento']"/>
+                            <field name="state_requisition" widget="badge" decoration-warning="state_requisition in ['Fallido', 'Rechazado']" decoration-success="state_requisition in ['Aprobado', 'Completada con cumplimiento']" decoration-info="state_requisition in ['Pendiente', 'En proceso']" decoration-danger="state_requisition in ['Completada sin cumplimiento']"/>
                         </group>
                         <group>
                             <field name="user_requisition" />
@@ -25,35 +21,9 @@
                             <field name="date_approved" />
                         </group>
                     </group>
-                    <group string="Comentarios Respuesta Solicitud">
+                    <group>
                         <field name="comments_requisition" />
                     </group>
-                    <!-- Primera fila para transfer_group -->
-                    <group>
-                        <group name="transfer_group">
-                            <field name="partner_receiver"/>
-                            <field name="prefixes_sent"/>
-                            <field name="prefixes_approved"/>
-                            <field name="total_transfer" string="Cesión completa?" help="Esta casilla está marcada si se solicitó cesión completa de los prefijos"/>
-                        </group>
-                        <group></group>
-                    </group>
-                    <!-- Segunda fila para los adjuntos -->
-                    <div>
-                        <group>
-                            <group string="Adjuntos Solicitud">
-                                <field name="user_attachments" nolabel="1" force_save="1" readonly="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="path"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group string="Adjuntos Respuesta">
-                                <field name="response_attachments" nolabel="1" force_save="1" readonly="1"/>
-                            </group>
-                        </group>
-                    </div>
                 </sheet>
             </form>
         </field>
