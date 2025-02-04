@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="request_assignment.request_partner_code_assignment_view_form"></field>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='comments_requisition']" position="after">
-                <!-- Primera fila para transfer_group -->
+                <!-- Grupo para campos de transferencia -->
                 <group>
                     <group name="transfer_group">
                         <field name="partner_receiver"/>
@@ -17,22 +17,25 @@
                     </group>
                     <group></group>
                 </group>
-                <!-- Segunda fila para los adjuntos -->
-                <div>
-                    <group>
-                        <group string="Adjuntos Solicitud">
-                            <field name="user_attachments" nolabel="1" force_save="1" readonly="1">
-                                <tree editable="bottom">
-                                    <field name="name"/>
-                                    <field name="path"/>
-                                </tree>
-                            </field>
+
+                <!-- Notebook para los adjuntos -->
+                <notebook>
+                    <page string="Documentos" name="documents">
+                        <group>
+                            <group string="Adjuntos Solicitud">
+                                <field name="user_attachments" widget="one2many_list" nolabel="1">
+                                    <tree editable="bottom" create="false" delete="false">
+                                        <field name="name"/>
+                                        <field name="path" style="max-width: 500px; text-overflow: ellipsis; overflow: hidden;"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group string="Adjuntos Respuesta">
+                                <field name="response_attachments" nolabel="1" readonly="1" style="max-width: 500px; text-overflow: ellipsis; overflow: hidden;"/>
+                            </group>
                         </group>
-                        <group string="Adjuntos Respuesta">
-                            <field name="response_attachments" nolabel="1" force_save="1" readonly="1"/>
-                        </group>
-                    </group>
-                </div>
+                    </page>
+                </notebook>
             </xpath>
         </field>
     </record>
