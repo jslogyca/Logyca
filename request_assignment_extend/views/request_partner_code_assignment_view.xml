@@ -6,7 +6,7 @@
         <field name="model">request.partner.code.assignment</field>
         <field name="inherit_id" ref="request_assignment.request_partner_code_assignment_view_form"></field>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='comments_requisition']" position="after">
+            <xpath expr="//group[field[@name='comments_requisition']]" position="after">
                 <!-- Grupo para campos de transferencia -->
                 <group>
                     <group name="transfer_group">
