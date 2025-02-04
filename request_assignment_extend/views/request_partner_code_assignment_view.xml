@@ -26,12 +26,12 @@
                                 <field name="user_attachments" widget="one2many_list" nolabel="1">
                                     <tree editable="bottom" create="false" delete="false">
                                         <field name="name"/>
-                                        <field name="path" style="max-width: 500px; text-overflow: ellipsis; overflow: hidden;"/>
+                                        <field name="path" style="overflow: scroll;"/>
                                     </tree>
                                 </field>
                             </group>
                             <group string="Adjuntos Respuesta">
-                                <field name="response_attachments" nolabel="1" readonly="1" style="max-width: 500px; text-overflow: ellipsis; overflow: hidden;"/>
+                                <field name="response_attachments" nolabel="1" readonly="1" style="overflow: scroll;"/>
                             </group>
                         </group>
                     </page>
