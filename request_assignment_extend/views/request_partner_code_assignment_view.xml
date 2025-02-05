@@ -26,12 +26,12 @@
                                 <field name="user_attachments" widget="one2many_list" nolabel="1">
                                     <tree editable="bottom" create="false" delete="false">
                                         <field name="name"/>
-                                        <field name="path" style="overflow: scroll;"/>
+                                        <button name="action_download_file" type="object" string="Descargar Archivo"/>
                                     </tree>
                                 </field>
                             </group>
                             <group string="Adjuntos Respuesta">
-                                <field name="response_attachments" nolabel="1" readonly="1" style="overflow: scroll;"/>
+                                <field name="response_attachments" nolabel="1" readonly="1"/>
                             </group>
                         </group>
                     </page>
