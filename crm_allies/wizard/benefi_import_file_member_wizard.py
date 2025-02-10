@@ -74,6 +74,7 @@ class BenefImportFileMemberWizard(models.TransientModel):
                 if beneficiary_nit.endswith(suffix):
                     beneficiary_nit = beneficiary_nit[:-len(suffix)]
                 partner_id = self.env['res.partner'].search([('vat','=',str(beneficiary_nit)), ('parent_id','=',None)], limit=1)
+                print('NIT EMPRESA', partner_id, str(beneficiary_nit))
                 if partner_id:
                     if fila[3]:
                         bene_name = str(fila[3])
@@ -81,7 +82,9 @@ class BenefImportFileMemberWizard(models.TransientModel):
                         company_email = str(fila[5])
                         formato = '%Y-%m-%dT%H:%M:%S'
                         date_done = fila[0]
+                        print('FECHAAAA', date_done)
                         benef_id = self.env['benefits.membership'].search([('name','=',str(bene_name)), ('active','=',True)])
+                        print('BENEFICIOSSSSSS EMPRESA', benef_id, str(bene_name))
                         if benef_id:
                             # exis_benef = self.env['benefits.membership.partner'].search([('partner_id','=',partner_id.id), 
                             #                                         ('benefit_id','=',benef_id.id),
@@ -100,11 +103,21 @@ class BenefImportFileMemberWizard(models.TransientModel):
                                                                         'company_email': company_email or '',
                                                                         'date_done': date_done})
                             except Exception as e:
-                                validation = "Fila %s: %s no se pudo crear como empresa beneficiaria. %s" % (str(count), partner_id.vat + '-' + str(partner_id.name.strip()),str(e))
+                                validation = "Fila %s: %s no se pudo crear el beneficio. %s" % (str(count), partner_id.vat + '-' + str(partner_id.name.strip()),str(e))
                                 errors.append(validation)
                                 continue
                             cre.append(benef_ids.id)
                             self.env.cr.commit()
+                        else:
+                            validation = "Fila %s: %s El beneficio no existe. " % (str(count), str(bene_name))
+                            errors.append(validation)
+                            continue
+                else:
+                    validation = "Fila %s: no se pudo crear como empresa beneficiaria. " % (str(count),)
+                    errors.append(validation)
+                    continue
+
+
 
         if len(errors)>=1:
             error.append(errors)

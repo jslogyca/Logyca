@@ -14,4 +14,5 @@ class BenefitsMembership(models.Model):
     active = fields.Boolean('Active', default=True)
     company_id = fields.Many2one('res.company', string='Company', required=True,
                                  default=lambda self: self.env.company)
-    categ_id = fields.Many2one('categ.benefits.membership', string="Type", required=True)    
+    categ_id = fields.Many2one('categ.benefits.membership', string="Type", required=True)
+    
