@@ -24,3 +24,8 @@ class BenefitsMembershipPartner(models.Model):
     company_email = fields.Char(string='Email Company')
     partner_user_id = fields.Many2one('res.partner', string='User Partner')
     date_done = fields.Date(string='Done Date', default=fields.Date.context_today)
+    sector_id = fields.Many2one('logyca.sectors', string='Sectors', related='partner_id.x_sector_id')
+
+    def name_get(self):
+        return [(benefit.id, '%s - %s' %
+                 (benefit.partner_id.name, benefit.benefit_id.name)) for benefit in self]
