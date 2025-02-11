@@ -14,6 +14,7 @@
     "installable": True,
     "depends": [
         "request_assignment",
+        "contacts"
     ],
     "description": """
 
