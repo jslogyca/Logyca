@@ -13,7 +13,7 @@
     "application": False,
     "installable": True,
     "depends": [
-        "base",
+        "contacts",
     ],
     "description": """
 
