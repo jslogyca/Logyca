@@ -1,16 +1,16 @@
 CRM Dashboard
-=============
-* CRM Dashboard Odoo 13.
+==================
+* CRM Dashboard module for Odoo 15.
 
 Installation
 ============
-	- www.odoo.com/documentation/13.0/setup/install.html
+	- www.odoo.com/documentation/15.0/setup/install.html
 	- Install our custom addon
 
 License
 -------
 General Public License, Version 3 (LGPL v3).
-(https://www.odoo.com/documentation/user/13.0/legal/licenses/licenses.html)
+(https://www.odoo.com/documentation/user/15.0/legal/licenses/licenses.html)
 
 Company
 -------
