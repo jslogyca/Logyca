@@ -516,13 +516,24 @@ class CRMLead(models.Model):
             month from create_date);''' % month_string)
             data = self._cr.dictfetchall()
 
-            for rec in data:
-                datetime_object = datetime.strptime(str(int(rec['create_date'])), "%m")
-                month_name = datetime_object.strftime("%B")
-                month_dict[month_name] = rec['count']
+            # for rec in data:
+            #     datetime_object = datetime.strptime(str(int(rec['create_date'])), "%m")
+            #     month_name = datetime_object.strftime("%B")
+            #     month_dict[month_name] = rec['count']
 
-            test = {'month': list(month_dict.keys()),
-                    'count': list(month_dict.values())}
+            # test = {'month': list(month_dict.keys()),
+            #         'count': list(month_dict.values())}
+            day_dict = {}
+            last_day = date_utils.end_of(fields.Date.today(), "month").strftime("%d")
+
+            for i in range(1, int(last_day), 1):
+                day_dict[i] = 0
+            
+            for rec in data:
+                day_dict[int(rec['create_date'].strftime("%d"))] = rec['count']
+
+            test = {'month': list(day_dict.keys()),
+                    'count': list(day_dict.values())}                    
 
         return test
 
