@@ -529,8 +529,8 @@ class CRMLead(models.Model):
             for i in range(1, int(last_day), 1):
                 day_dict[i] = 0
             
-            for rec in data:
-                day_dict[int(rec['create_date'].strftime("%d"))] = rec['count']
+            # for rec in data:
+            #     day_dict[int(rec['create_date'].strftime("%d"))] = rec['count']
 
             test = {'month': list(day_dict.keys()),
                     'count': list(day_dict.values())}                    
