@@ -517,7 +517,7 @@ class CRMLead(models.Model):
             data = self._cr.dictfetchall()
 
             for rec in data:
-                datetime_object = datetime.strptime(str(int(rec['date_deadline'])), "%m")
+                datetime_object = datetime.strptime(str(int(rec['create_date'])), "%m")
                 month_name = datetime_object.strftime("%B")
                 month_dict[month_name] = rec['count']
 
