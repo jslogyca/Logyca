@@ -20,7 +20,7 @@
                             </tree>
                         </field>
                     </group>
-                    <group string="Solicitudes Recibidas">
+                    <!-- <group string="Solicitudes Recibidas">
                         <field name="request_received_ids" nolabel="1" force_save="1" readonly="1">
                             <tree editable="bottom">
                                 <field name="id_requisition" />
@@ -32,7 +32,7 @@
                                 <field name="comments_requisition" />
                             </tree>
                         </field>
-                    </group>
+                    </group> -->
                 </page>
             </xpath>
         </field>

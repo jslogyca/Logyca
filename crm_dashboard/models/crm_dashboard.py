@@ -1,3 +1,4 @@
+""""CRM Dashboard"""
 # -*- coding: utf-8 -*-
 #############################################################################
 #
@@ -27,7 +28,19 @@ from odoo.tools import date_utils
 from odoo.http import request
 
 from dateutil.relativedelta import relativedelta
-from datetime import datetime
+from datetime import date, datetime, time, timedelta
+
+
+def days_between(start_date, end_date):
+    #Add 1 day to end date to solve different last days of month 
+    #s1, e1 =  datetime.strptime(start_date,"%Y-%m-%d") , datetime.strptime(end_date,"%Y-%m-%d")  + timedelta(days=1)
+    s1, e1 =  start_date , end_date + timedelta(days=1)
+    #Convert to 360 days
+    s360 = (s1.year * 12 + s1.month) * 30 + s1.day
+    e360 = (e1.year * 12 + e1.month) * 30 + e1.day
+    #Count days between the two 360 dates and return tuple (months, days)
+    res = divmod(e360 - s360, 30)
+    return ((res[0] * 30) + res[1]) or 0
 
 
 class CRMSalesTeam(models.Model):
@@ -56,10 +69,29 @@ class SalesOrder(models.Model):
 class CRMLead(models.Model):
     _inherit = 'crm.lead'
 
+    @api.depends('follow_lead', 'date_follow', 'state_id', 'partner_id')
+    def _get_follow(self):
+        for follow in self:
+            if follow.date_follow:
+                date = fields.Datetime.now()
+                follow_lead = days_between(follow.date_follow, date)
+                if follow_lead <= 7:
+                    follow.follow_lead = 'baja'
+                elif follow_lead >= 8 and follow_lead <= 14:
+                    follow.follow_lead = 'media'
+                else:
+                    follow.follow_lead = 'alta'
+            else:
+                follow.follow_lead = 'baja'
+
     crm_manager_id = fields.Many2one("res.users", string="CRM Manager",
                                      store=True)
     monthly_goal = fields.Float(string="Monthly Goal")
     achievement_amount = fields.Float(string="Monthly Achievement")
+    date_follow = fields.Date('field_name', default=fields.Date.context_today)
+    follow_lead = fields.Selection([('baja', 'Baja'), 
+                                ('media', 'Media'),
+                                ('alta', 'Alta')], string='Follow', default='baja', compute='_get_follow')
 
     @api.model
     def _get_currency(self):
@@ -484,33 +516,44 @@ class CRMLead(models.Model):
             month from create_date);''' % month_string)
             data = self._cr.dictfetchall()
 
-            for rec in data:
-                datetime_object = datetime.strptime(str(int(rec['date_part'])), "%m")
-                month_name = datetime_object.strftime("%B")
-                month_dict[month_name] = rec['count']
+            # for rec in data:
+            #     datetime_object = datetime.strptime(str(int(rec['create_date'])), "%m")
+            #     month_name = datetime_object.strftime("%B")
+            #     month_dict[month_name] = rec['count']
 
-            test = {'month': list(month_dict.keys()),
-                    'count': list(month_dict.values())}
+            # test = {'month': list(month_dict.keys()),
+            #         'count': list(month_dict.values())}
+            day_dict = {}
+            last_day = date_utils.end_of(fields.Date.today(), "month").strftime("%d")
+
+            for i in range(1, int(last_day), 1):
+                day_dict[i] = 0
+            
+            # for rec in data:
+            #     day_dict[int(rec['create_date'].strftime("%d"))] = rec['count']
+
+            test = {'month': list(day_dict.keys()),
+                    'count': list(day_dict.values())}                    
 
         return test
 
-    @api.model
-    def get_lost_reason_count(self):
-        """Top 5 Lost Reason and Count"""
-        self._cr.execute('''select lost_reason,count(lost_reason) as counts
-        from crm_lead where probability=0 and active=false and lost_reason is not null
-        group by lost_reason order by counts desc limit 5''')
-        data1 = self._cr.fetchall()
-
-        reason_count = []
-        for rec in data1:
-            reason_id = rec[0]
-            reason_id_obj = self.env['crm.lost.reason'].browse(reason_id)
-            rec_list = list(rec)
-            rec_list[0] = reason_id_obj.name
-            reason_count.append(rec_list)
-
-        return {'reason_count': reason_count}
+    # @api.model
+    # def get_lost_reason_count(self):
+    #     """Top 5 Lost Reason and Count"""
+    #     self._cr.execute('''select lost_reason_id,count(lost_reason_id) as counts
+    #     from crm_lead where probability=0 and active=false and lost_reason_id is not null
+    #     group by lost_reason_id order by counts desc limit 5''')
+    #     data1 = self._cr.fetchall()
+    #
+    #     reason_count = []
+    #     for rec in data1:
+    #         reason_id = rec[0]
+    #         reason_id_obj = self.env['crm.lost.reason'].browse(reason_id)
+    #         rec_list = list(rec)
+    #         rec_list[0] = reason_id_obj.name
+    #         reason_count.append(rec_list)
+    #
+    #     return {'reason_count': reason_count}
 
     @api.model
     def get_ratio_based_country(self):
@@ -765,7 +808,6 @@ class CRMLead(models.Model):
             if inv_target == [None]:
                 inv_target = [0]
             team_id = rec['sale_team_id']
-
         target_annual = (sum(sales) + sum(inv_target))
 
         if self.env.user.has_group('sales_team.group_sale_manager'):
@@ -852,7 +894,7 @@ class CRMLead(models.Model):
         if revenue_value == 0:
             ratio_value = 0
         if revenue_value > 0:
-            self._cr.execute('''select case when a.count_one+b.count_two = 0 then 0 else (
+            self._cr.execute('''select case when b.count_two = 0 then 0 else (
             CAST(a.count_one as float) / CAST(b.count_two as float))end as final_count
             from (select COUNT(id) as count_one from crm_lead WHERE
             crm_lead.user_id = '%s' AND crm_lead.active = True AND crm_lead.probability = 100
@@ -967,7 +1009,7 @@ class CRMLead(models.Model):
         if revenue_value == 0:
             ratio_value = 0
         if revenue_value > 0:
-            self._cr.execute('''select case when a.count_one + b.count_two = 0 then 0 else (
+            self._cr.execute('''select case when b.count_two = 0 then 0 else (
             CAST(a.count_one as float) / CAST(b.count_two as float))end as final_count from (
             select COUNT(id) as count_one from crm_lead WHERE crm_lead.user_id = '%s' AND
             crm_lead.active = True AND crm_lead.probability = 100 AND Extract(Year FROM
@@ -1081,7 +1123,7 @@ class CRMLead(models.Model):
         if revenue_value == 0:
             ratio_value = 0
         if revenue_value > 0:
-            self._cr.execute('''select case when a.count_one+b.count_two = 0 then 0 else (
+            self._cr.execute('''select case when b.count_two = 0 then 0 else (
             CAST(a.count_one as float) / CAST(b.count_two as float))end as final_count
             from (select COUNT(id) as count_one from crm_lead 
             WHERE crm_lead.user_id = '%s' AND crm_lead.active = True AND 
@@ -1200,7 +1242,7 @@ class CRMLead(models.Model):
         if revenue_value == 0:
             ratio_value = 0
         if revenue_value > 0:
-            self._cr.execute('''select case when a.count_one+b.count_two = 0 then 0 else (
+            self._cr.execute('''select case when b.count_two = 0 then 0 else (
             CAST(a.count_one as float) / CAST(b.count_two as float))end as final_count
             from (select COUNT(id) as count_one from crm_lead
             WHERE crm_lead.user_id = '%s' AND crm_lead.active = True AND
@@ -1320,7 +1362,7 @@ class CRMLead(models.Model):
         if revenue_value == 0:
             ratio_value = 0
         if revenue_value > 0:
-            self._cr.execute('''select case when a.count_one+b.count_two = 0 then 0 else (
+            self._cr.execute('''select case when b.count_two = 0 then 0 else (
             CAST(a.count_one as float) / CAST(b.count_two as float))end as final_count
             from (select COUNT(id) as count_one from crm_lead
             WHERE crm_lead.user_id = '%s' AND crm_lead.active = True AND

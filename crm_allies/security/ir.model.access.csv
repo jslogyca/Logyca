@@ -6,3 +6,4 @@ account_reason_cancel_project,reason.cancel.project,model_reason_cancel_project,
 account_benefits_membership,benefits.membership,model_benefits_membership,crm_allies.group_manager_crm_allies,1,1,1,1
 account_categ_benefits_membership,categ.benefits.membership,model_categ_benefits_membership,crm_allies.group_manager_crm_allies,1,1,1,1
 account_benefits_membership_partner,benefits.membership.partner,model_benefits_membership_partner,crm_allies.group_manager_crm_allies,1,1,1,1
+account_benefi_import_file_member_wizard,benefi.import.file.member.wizard,model_benefi_import_file_member_wizard,crm_allies.group_manager_crm_allies,1,1,1,1
