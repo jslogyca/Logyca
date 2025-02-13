@@ -13,8 +13,7 @@
     "application": False,
     "installable": True,
     "depends": [
-        "request_assignment",
-        "contacts"
+        "request_assignment"
     ],
     "description": """
 
