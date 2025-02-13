@@ -10,7 +10,7 @@
                 <!-- Grupo para campos de transferencia -->
                 <group>
                     <group name="transfer_group">
-                        <!-- <field name="partner_receiver"/> -->
+                        <field name="partner_receiver_id"/>
                         <field name="prefixes_sent"/>
                         <field name="prefixes_approved"/>
                         <field name="total_transfer" string="Cesión completa?" help="Esta casilla está marcada si se solicitó cesión completa de los prefijos"/>
