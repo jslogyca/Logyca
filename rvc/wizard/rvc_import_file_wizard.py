@@ -26,9 +26,9 @@ class RVCImportFileWizard(models.TransientModel):
     
     def validate_mail(self, email):
         if email:
-            match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', str(email.lower()))
-        if not match:
-            return False
+            match = re.match(r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', str(email.lower()))
+            if not match:
+                return False
         return True
 
     def import_file(self):
