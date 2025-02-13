@@ -11,11 +11,6 @@ class ResPartner(models.Model):
 
     request_assignment_ids = fields.One2many(
         'request.partner.code.assignment', 
-        'partner_id', 
+        'partner_id',
         string='Request Assignment'
-    )
-    request_received_ids = fields.One2many(
-        'request.partner.code.assignment', 
-        'partner_receiver_id', 
-        string='Request Partner Receiver'
     )
