@@ -19,7 +19,11 @@ class RequestPartnerCodeAssignment(models.Model):
     date_approved = fields.Datetime(string='Date Requisition Approved')
     comments_requisition = fields.Text(string='Comments Requisition')
     file_requisition = fields.Many2one('ir.attachment',string='Attachment')
-    state_requisition = fields.Char(string="State Requisition", help='Status of the requisition',)
+    state_requisition = fields.Char(
+        string="State Requisition",
+        help='Status of the requisition',
+        required=False
+    )
 
     def name_get(self):
         return [(request.id, '%s - %s' %
