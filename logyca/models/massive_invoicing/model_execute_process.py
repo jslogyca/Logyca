@@ -923,6 +923,41 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                         }
                         process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
 
+    def _create_sale_order_add_aport(self, partner_company, conditional_discount, 
+                            product_id, product_uom_qty, unit_fee_value, discount, invoice_id):
+        #Factura 1: Renovación Aporte Patrimonial corresponde al producto Renovación Aportes Patrimoniales Actividades ECR
+        sale_order_values = {
+            'partner_id' : partner_company.id,
+            'client_order_ref' : 'Por factura sin pago ' + invoice_id.name,
+            'partner_invoice_id' : partner_company.id,
+            'x_origen': 'FM {}'.format(self.year),
+            'x_type_sale': 'Renovación',
+            'x_conditional_discount': conditional_discount,
+            'x_conditional_discount_deadline': None,
+            'validity_date' : self.invoicing_companies.expiration_date                            
+        }
+        
+        sale_order = self.env['sale.order'].create(sale_order_values)
+        
+        sale_order_line_values = {
+            'order_id' : sale_order.id,
+            'product_id' : product_id.id,
+            'product_uom_qty' : product_uom_qty, #Cantidad
+            'price_unit' : unit_fee_value,
+            'discount' : discount                            
+        }
+        
+        sale_order_line = self.env['sale.order.line'].create(sale_order_line_values)
+
+        values_save_process = {
+            'process_id' : self.id,
+            'partner_id' : partner_company.id,
+            'vat' : partner_company.vat,
+            'invoice_one' : sale_order.id                                              
+        }
+        process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)        
+        return True                        
+
     #Ejecución proceso
     def execute_process(self): 
         #Eliminar ordenes de venta si ya existen solamente cuando se ejecute facturación masiva general y no adicional
@@ -973,6 +1008,43 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         obj_company = self.env['massive.invoicing.partnercalculationprefixes'].search([('process_id', '=', self.id),('have_prefixes','=','1')])
         discount_pref = 0
         for partner_company in self.invoicing_companies.thirdparties:
+            if self.invoicing_companies.process_type == '2':
+                invoice_ids = self.env['account.move'].search([('partner_id', '=', partner_company.id),
+                                                                ('x_is_mass_billing', '=', True),
+                                                                ('date', '>=', '2025-01-01'),
+                                                                ('payment_state', '=', 'not_paid'),
+                                                                ('state', '=', 'posted'),
+                                                                ('move_type', '=', 'out_invoice')])
+                invoice_ids += self.env['account.move'].search([('partner_id.parent_id', '=', partner_company.id),
+                                                                ('x_is_mass_billing', '=', True),
+                                                                ('date', '>=', '2025-01-01'),
+                                                                ('payment_state', '=', 'not_paid'),
+                                                                ('state', '=', 'posted'),
+                                                                ('move_type', '=', 'out_invoice')])
+                print('FACTURAS', invoice_ids)                                                                
+                if invoice_ids:
+                    for invoice_id in invoice_ids:
+                        for line in invoice_id.invoice_line_ids:
+                            if line.product_id.id == 27:
+                                obj_massive_products = self.env['massive.invoicing.products'].search([('product_id', '=', 3)])
+                                self._create_sale_order_add_aport(partner_company, 0, 
+                                        obj_massive_products.product_id, 1, (line.price_unit*0.05), 0, invoice_id)
+                            if line.product_id.id == 1744:
+                                obj_massive_products = self.env['massive.invoicing.products'].search([('product_id', '=', 1745)])
+                                self._create_sale_order_add_aport(partner_company, 0, 
+                                        obj_massive_products.product_id, 1, (invoice_id.amount_untaxed*0.05), 0, invoice_id)
+                                break
+                            if line.product_id.id == 271 and len(invoice_id.invoice_line_ids) == 1:
+                                obj_massive_products = self.env['massive.invoicing.products'].search([('product_id', '=', 276)])
+                                self._create_sale_order_add_aport(partner_company, 0, 
+                                        obj_massive_products.product_id, 1, (invoice_id.amount_untaxed*0.05), 0, invoice_id)
+                                break
+                            if line.product_id.id == 273 and len(invoice_id.invoice_line_ids) == 1:
+                                obj_massive_products = self.env['massive.invoicing.products'].search([('product_id', '=', 274)])
+                                self._create_sale_order_add_aport(partner_company, 0, 
+                                        obj_massive_products.product_id, 1, (invoice_id.amount_untaxed*0.05), 0, invoice_id)
+                                break
+                continue
             is_member = False
             for vinculation in partner_company.x_type_vinculation:
                 print('EMPRESA SELECCIONADA', vinculation.name, partner_company.name)
