@@ -91,6 +91,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                 raise ValidationError(_('No esta configurado un plazo de pago valido para facturación masiva')) 
             
             #Campos de fac masiva
+            ref = sale.client_order_ref
             values_update = {
                 'x_is_mass_billing' : True,
                 'ref': ref,
