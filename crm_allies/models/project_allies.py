@@ -68,17 +68,17 @@ class ProjectAllies(models.Model):
     type_member = fields.Selection([("A", "TIPO A"), 
                                 ("B", "TIPO B"),
                                 ("C", "TIPO C")], string='Clasificación')
-    # member_red_id = fields.Many2one('logyca.member.red', string='Red de Valor')
+    member_red_id = fields.Many2one('logyca.member.red', string='Red de Valor')
     city_id = fields.Many2one('logyca.city', string='Ciudad')
     contact_partner = fields.Char('Contacto de la Empresa')
 
-    @api.onchange('partner_id', 'vat', 'type_member')
+    @api.onchange('partner_id', 'vat', 'type_member', 'member_red_id')
     def _get_type_member(self):
         for help in self:
             if help.partner_id:
                 if help.partner_id.type_member:
                     help.type_member = help.partner_id.type_member
-                    # help.member_red_id = help.partner_id.member_red_id
+                    help.member_red_id = help.partner_id.member_red_id
                 if help.partner_id.vat:
                     help.vat = help.partner_id.vat
                 if help.partner_id.x_city:
