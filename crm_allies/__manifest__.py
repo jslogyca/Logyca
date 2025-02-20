@@ -16,6 +16,7 @@
         "base",
         "contacts",
         "logyca",
+        "crm_member_red",
     ],
     "description": """
 

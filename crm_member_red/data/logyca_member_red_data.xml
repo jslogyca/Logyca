@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="logyca_member_red1" model="logyca.member.red">
+            <field name="name">Salud</field>
+            <field name="code">1</field>
+            <field name="active">True</field>
+        </record>
+        <record id="logyca_member_red2" model="logyca.member.red">
+            <field name="name">Textil y Agro</field>
+            <field name="code">2</field>
+            <field name="active">True</field>
+        </record>
+        <record id="logyca_member_red3" model="logyca.member.red">
+            <field name="name">Transporte y Aliados Académicos</field>
+            <field name="code">3</field>
+            <field name="active">True</field>
+        </record>
+        <record id="logyca_member_red4" model="logyca.member.red">
+            <field name="name">Consumo</field>
+            <field name="code">4</field>
+            <field name="active">True</field>
+        </record>
+        <record id="logyca_member_red5" model="logyca.member.red">
+            <field name="name">Proveedores de Soluciones</field>
+            <field name="code">5</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

@@ -29,7 +29,6 @@ class ResPartner(models.Model):
                                 ("B", "TIPO B"),
                                 ("C", "TIPO C")], string='Clasificación', default='C')
     icon_id = fields.Many2one('ir.attachment', string='A', domain="[('name', '=', 'a.png')]")
-    member_red_id = fields.Many2one('logyca.member.red', string='Red de Valor')
 
     @api.onchange('x_type_vinculation', 'x_active_vinculation')
     def _onchange_type_vinculation(self):

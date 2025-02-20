@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+account_logyca_member_red,logyca.member.red,model_logyca_member_red,crm_allies.group_manager_crm_allies,1,1,1,1
