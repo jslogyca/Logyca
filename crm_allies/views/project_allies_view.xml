@@ -23,7 +23,7 @@
                             <field name="vinculation" invisible="1"/>
                             <field name="x_type_vinculation" />
                             <field name="type_member" force_save="1" readonly="1"/>
-                            <field name="member_red_id" force_save="1" readonly="1"/>
+                            <!-- <field name="member_red_id" force_save="1" readonly="1"/> -->
                             <field name="company_id" required="1" invisible="1"/>
                             <field name="year_id" required="1"/>
                             <field name="object" required="1"/>
@@ -68,7 +68,7 @@
                 <field name="partner_id" string='Aliado'/>
                 <field name="x_type_vinculation" force_save="1" readonly="1"/>
                 <field name="type_member" />
-                <field name="member_red_id" />
+                <!-- <field name="member_red_id" /> -->
                 <field name="object" />
                 <field name="year_id" />
                 <field name="city_id" />
@@ -99,7 +99,7 @@
                     <filter string="Estado" name="state" context="{'group_by': 'state'}"/>
                     <filter string="Aliado" name="partner_id" context="{'group_by': 'partner_id'}" />
                     <filter string="Tipo" name="type_member" context="{'group_by': 'type_member'}" />
-                    <filter string="Red de Valor" name="member_red_id" context="{'group_by': 'member_red_id'}" />
+                    <!-- <filter string="Red de Valor" name="member_red_id" context="{'group_by': 'member_red_id'}" /> -->
                     <filter string="Vinculación" name="x_type_vinculation" context="{'group_by': 'x_type_vinculation'}" />
                     <filter string="Ciudad" name="city_id" context="{'group_by': 'city_id'}" />
                 </group>
@@ -153,7 +153,7 @@
                         <widget name="pie_chart" title="Estados de los Proyectos" attrs="{'groupby': 'state'}"/>
                         <widget name="pie_chart" title="Por Tipo" attrs="{'groupby': 'type_member'}"/>
                         <widget name="pie_chart" title="Por Ciudad" attrs="{'groupby': 'city_id'}"/>
-                        <widget name="pie_chart" title="Por Red de Valor" attrs="{'groupby': 'member_red_id'}"/>
+                        <!-- <widget name="pie_chart" title="Por Red de Valor" attrs="{'groupby': 'member_red_id'}"/> -->
                         <widget name="pie_chart" title="Por Tipo de Vinculación" attrs="{'groupby': 'x_type_vinculation'}"/>
                     </group>
                 </group>
