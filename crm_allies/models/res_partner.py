@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models
+from odoo import api, fields, models, Command, _
 
 
 class ResPartner(models.Model):
@@ -25,3 +25,16 @@ class ResPartner(models.Model):
                                 ("UNIVERSIDAD", "UNIVERSIDAD"),
                                 ("VARIOS", "VARIOS")])
     projects_ids = fields.One2many('project.allies', 'partner_id', string="Projects", index=True)
+    type_member = fields.Selection([("A", "TIPO A"), 
+                                ("B", "TIPO B"),
+                                ("C", "TIPO C")], string='Clasificación', default='C')
+    icon_id = fields.Many2one('ir.attachment', string='A', domain="[('name', '=', 'a.png')]")
+    member_red_id = fields.Many2one('logyca.member.red', string='Red de Valor')
+
+    @api.onchange('x_type_vinculation', 'x_active_vinculation')
+    def _onchange_type_vinculation(self):
+        for partner_id in self:
+            if partner_id.x_type_vinculation and partner_id.x_active_vinculation:
+                for type_vinculation in partner_id.x_type_vinculation:
+                        partner_id.category_id = [(6, 0, type_vinculation.tag_id.id)]
+

@@ -51,7 +51,7 @@
         id="account_menu_categ_benefits_membership"
         name="Categ Benefits Membership"
         action="action_categ_benefits_membership"
-        parent="contacts.res_partner_menu_config"
-        sequence="102"/>
+        parent="account_menu_benefits_membership_conf"
+        sequence="2"/>
 
 </odoo>
