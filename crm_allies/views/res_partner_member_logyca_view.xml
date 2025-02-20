@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_partner_member_logyca_view_tree" model="ir.ui.view">
+        <field name="name">res.partner.member.logyca.tree</field>
+        <field name="model">res.partner.member.logyca</field>
+        <field name="arch" type="xml">
+            <tree string="Miembros LOGYCA" create="false" edit="false">
+                <field name="id" invisible="1"/>
+                <field name="partner_id"/>
+                <field name="x_date_vinculation" />
+                <field name="x_type_vinculation" />
+                <field name="type_member"/>
+                <field name="member_red_id" />
+                <field name="city_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="res_partner_member_logyca_filter" model="ir.ui.view">
+        <field name="name">res.partner.member.logyca.filter</field>
+        <field name="model">res.partner.member.logyca</field>
+        <field name="arch" type="xml">
+            <search string="Miembros LOGYCA">
+                <field name="partner_id" operator="child_of"/>
+                <field name="x_type_vinculation"/>
+                <field name="type_member"/>
+                <field name="member_red_id"/>
+                <field name="city_id"/>
+                <separator/>
+                <filter name="x_date_vinculation" string="Fecha Vinculación" date="x_date_vinculation"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Ciudad" name="groupy_by_city_id" domain="[]" context="{'group_by': 'city_id'}"/>
+                    <filter string="Red de Valor" name="groupy_by_member_red_id" domain="[]" context="{'group_by': 'member_red_id'}"/>
+                    <filter string="Tipo" name="groupy_by_type_member" domain="[]" context="{'group_by': 'type_member'}"/>
+                    <separator/>
+                    <filter string="Tipo de Vinculación" name="group_by_x_type_vinculation" context="{'group_by': 'x_type_vinculation'}"/>
+                    <filter string="Fecha de Vinculación" name="group_by_x_date_vinculation" context="{'group_by': 'x_date_vinculation'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+
+    <record id="res_partner_member_logyca_view_pivot" model="ir.ui.view">
+        <field name="name">res.partner.member.logyca.pivot</field>
+        <field name="model">res.partner.member.logyca</field>
+        <field name="arch" type="xml">
+            <pivot string="Miembros LOGYCA">
+                <field name="type_member" type="col"/>
+                <field name="partner_id" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="res_partner_member_logyca_view_graph" model="ir.ui.view">
+        <field name="name">res.partner.member.logyca.view.graph</field>
+        <field name="model">res.partner.member.logyca</field>
+        <field name="arch" type="xml">
+            <graph string="Miembros LOGYCA">
+                <field name="type_member" type="col"/>
+                <field name="partner_id" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="res_partner_member_logyca_view_dashboard" model="ir.ui.view">
+        <field name="name">res.partner.member.logyca.view.dashboard</field>
+        <field name="model">res.partner.member.logyca</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <dashboard>
+                <view type="graph" ref="crm_allies.res_partner_member_logyca_view_graph"/>
+                <group>
+                    <group>
+                        <aggregate name="partner" string="Total Miembros" group_operator="count" field="partner_id" measure="__count__"/>
+                    </group>
+                    <group col="1">
+                        <widget name="pie_chart" title="Por Tipo" attrs="{'groupby': 'type_member'}"/>
+                        <widget name="pie_chart" title="Por Ciudad" attrs="{'groupby': 'city_id'}"/>
+                        <widget name="pie_chart" title="Por Red de Valor" attrs="{'groupby': 'member_red_id'}"/>
+                        <widget name="pie_chart" title="Por Tipo de Vinculación" attrs="{'groupby': 'x_type_vinculation'}"/>
+                    </group>
+                </group>
+                <view type="pivot" ref="crm_allies.res_partner_member_logyca_view_pivot"/>
+                <!-- <view type="cohort" ref="crm_enterprise.crm_lead_view_cohort"/> -->
+            </dashboard>
+        </field>
+    </record>
+
+    <record id="action_res_partner_member_logyca" model="ir.actions.act_window">
+        <field name="name">Miembros LOGYCA</field>
+        <field name="res_model">res.partner.member.logyca</field>
+        <field name="view_mode">dashboard,tree,pivot,graph</field>
+        <field name="view_id" ref="res_partner_member_logyca_view_dashboard"/>
+    </record>
+
+    <menuitem
+        id="account_menu_benefits_membership_lg"
+        name="Miembros y Aliados"
+        parent="contacts.menu_contacts"
+        sequence="6"/>
+
+    <menuitem
+        id="account_menu_res_partner_member_logyca"
+        name="Miembros LOGYCA"
+        action="action_res_partner_member_logyca"
+        parent="account_menu_benefits_membership_lg"
+        sequence="0"/>    
+
+</odoo>

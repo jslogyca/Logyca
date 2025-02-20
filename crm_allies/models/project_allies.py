@@ -28,39 +28,65 @@ class ProjectAllies(models.Model):
             else:
                 help.vinculation = True
 
+
+    @api.depends('advance_ids.date')
+    def _compute_last_date(self):
+        for record in self:
+            # Encuentra la última fecha de 'date_order' en las líneas de pedido
+            last_order = max(record.advance_ids, key=lambda line: line.date, default=None)
+            record.date_open = last_order.date if last_order else False
+
     name = fields.Char('Name')
     active = fields.Boolean('Active', default=True)
     company_id = fields.Many2one('res.company', string='Company', required=True,
                                  default=lambda self: self.env.company)
     partner_id = fields.Many2one('res.partner', string="Partner", domain="[('allies_logyca', '=', True)]")
+    vat = fields.Char('NIT')
     year_id = fields.Many2one('account.fiscal.year', string="Year")
-    object = fields.Char('Object')
+    object = fields.Char('Objetivo y Avance')
     indicator = fields.Char('Indicator')
     project_present = fields.Char('Present Project')
     project_last = fields.Char('Last Project')
     advance_last = fields.Char('Last Advance')
     advance_ids = fields.One2many('project.allies.line', 'project_id', string="Advances", index=True)
-    date = fields.Date(string='Date', default=fields.Date.context_today)
+    date = fields.Date(string='Fecha de Inicio', default=fields.Date.context_today)
     type_allies = fields.Selection(related='partner_id.type_allies', store=True)
     sub_type_allies = fields.Selection(related='partner_id.sub_type_allies', store=True)
     allies_user_id = fields.Many2one(related='partner_id.allies_user_id', store=True)
     state = fields.Selection([('draft', 'Draft'),
                                 ('open', 'Open'),
-                                ('cancel', 'Cancel'),
                                 ('done', 'Done'),
         ], string='Status', default='draft')
     apply_amount = fields.Boolean('Apply Amount', default=False)
     total_amount = fields.Float(string='Total Amount', default=0.00)
     date_cancel = fields.Date(string='Date', default=fields.Date.context_today)
-    date_open = fields.Date(string='Date', default=fields.Date.context_today)
-    date_done = fields.Date(string='Date', default=fields.Date.context_today)
+    date_open = fields.Date(compute='_compute_last_date', string='Última Fecha de Contacto')
+    date_done = fields.Date(string='Fecha Finalización', default=fields.Date.context_today)
     reason_id = fields.Many2one('reason.cancel.project', string='Reason')
     x_type_vinculation = fields.Many2one('logyca.vinculation_types', string='Tipo de vinculación')
-    vinculation = fields.Boolean(compute='_get_vinculation', string='Vinculation')    
+    vinculation = fields.Boolean(compute='_get_vinculation', string='Vinculation')
+    type_member = fields.Selection([("A", "TIPO A"), 
+                                ("B", "TIPO B"),
+                                ("C", "TIPO C")], string='Clasificación')
+    member_red_id = fields.Many2one('logyca.member.red', string='Red de Valor')
+    city_id = fields.Many2one('logyca.city', string='Ciudad')
+    contact_partner = fields.Char('Contacto de la Empresa')
+
+    @api.onchange('partner_id', 'vat', 'type_member', 'member_red_id')
+    def _get_type_member(self):
+        for help in self:
+            if help.partner_id:
+                if help.partner_id.type_member:
+                    help.type_member = help.partner_id.type_member
+                    help.member_red_id = help.partner_id.member_red_id
+                if help.partner_id.vat:
+                    help.vat = help.partner_id.vat
+                if help.partner_id.x_city:
+                    help.city_id = help.partner_id.x_city
 
     def name_get(self):
         return [(project.id, '%s - %s' %
-                 (project.partner_id.name, project.project_present)) for project in self]
+                 (project.partner_id.name, project.object)) for project in self]
 
     def save_detail_advance(self):
         return {
@@ -107,11 +133,12 @@ class ProjectAlliesLine(models.Model):
     _description = 'Project Allies Line'
 
     name = fields.Char('Name')
-    advance = fields.Char('Advance')
+    advance = fields.Char('Avance')
     company_id = fields.Many2one('res.company', string='Company', required=True,
                                  default=lambda self: self.env.company)
     project_id = fields.Many2one('project.allies', string="Project")
-    date = fields.Date(string='Date', default=fields.Date.context_today)
+    date = fields.Date(string='Fecha del Avance', default=fields.Date.context_today)
+    contact_partner = fields.Char('Contacto de la Empresa')
     state_activity = fields.Selection([('in_progress', 'In Progress'),
                                 ('end', 'End'),
         ], string='Status Activity', default='in_progress')    

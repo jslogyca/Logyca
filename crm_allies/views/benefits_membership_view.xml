@@ -61,10 +61,16 @@
     </record>
 
     <menuitem
+        id="account_menu_benefits_membership_conf"
+        name="Configuración"
+        parent="account_menu_benefits_membership_lg"
+        sequence="10"/>
+
+    <menuitem
         id="account_menu_benefits_membership"
-        name="Benefits Membership"
+        name="Beneficios Membresía"
         action="action_benefits_membership"
-        parent="contacts.res_partner_menu_config"
-        sequence="101"/>
+        parent="account_menu_benefits_membership_conf"
+        sequence="1"/>
 
 </odoo>

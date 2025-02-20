@@ -143,10 +143,16 @@
     </record>
 
     <menuitem
-        id="account_menu_benefits_membership_partner"
-        name="Benefits Membership Partner"
-        action="action_benefits_membership_partner"
+        id="account_menu_benefits_membership_lg"
+        name="Miembros y Aliados"
         parent="contacts.menu_contacts"
         sequence="6"/>
+
+    <menuitem
+        id="account_menu_benefits_membership_partner"
+        name="Miembros"
+        action="action_benefits_membership_partner"
+        parent="account_menu_benefits_membership_lg"
+        sequence="1"/>
 
 </odoo>

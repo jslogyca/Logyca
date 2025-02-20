@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record model="ir.ui.view" id="view_partner_form_benefits">
+    <!-- <record model="ir.ui.view" id="view_partner_form_benefits">
         <field name="name">res.partner.form.benefits</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"></field>
@@ -19,13 +19,13 @@
                 </page>
             </xpath>
         </field>
-    </record>
+    </record> -->
     <record model="ir.ui.view" id="view_partner_form_allies">
         <field name="name">res.partner.form.allies</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"></field>
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='sales_purchases']" position="after">
+            <!-- <xpath expr="//page[@name='sales_purchases']" position="after">
                 <page string="Allies" name="allies">
                     <group>
                         <group>
@@ -47,6 +47,28 @@
                         </tree>
                     </field>
                 </page>
+            </xpath> -->
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="type_member" class="d-flex flex-wrap" widget="radio" options="{'horizontal': true}" />
+                <field name="member_red_id" />
+                <field class="d-flex flex-wrap" name="icon_id" widget="radio_image" 
+                                options="{'horizontal': true}" attrs="{'invisible': [('type_member', 'in', ('B', 'C'))]}"/>
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="res_partner_kanban_view_member">
+        <field name="name">base.res.partner.kanban.view.member</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="type_member" />
+                <field name="member_red_id" />
+            </xpath>
+            <xpath expr="//div[@class='o_kanban_tags_section oe_kanban_partner_categories']" position="after">
+                <field name="type_member" widget="kanban_label_selection" 
+                    options="{'classes': {'B': 'info', 'A': 'success', 'C': 'warning'}}"/>
+                <field name="member_red_id" />
             </xpath>
         </field>
     </record>    

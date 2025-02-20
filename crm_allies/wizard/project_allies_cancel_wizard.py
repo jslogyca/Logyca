@@ -16,6 +16,7 @@ class ProjectAlliesCancelWizard(models.TransientModel):
                                  default=lambda self: self.env.company)
     date = fields.Date(string='Date', default=fields.Date.context_today)
     reason_id = fields.Many2one('reason.cancel.project', string='Reason')
+    contact_partner = fields.Char('Contacto de la Empresa')
 
     def save_detail_advance(self):
         self.ensure_one()
@@ -26,6 +27,7 @@ class ProjectAlliesCancelWizard(models.TransientModel):
             'company_id': self.company_id.id,
             'project_id': project_id.id,
             'date': self.date,
+            'contact_partner': self.contact_partner,
         })
 
     def cancel_project(self):

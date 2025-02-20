@@ -10,34 +10,32 @@
                     <button name="open_project" string="Open Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}" />
                     <button name="done_project" string="Done Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'open')]}" />
                     <button name="draft_project" string="Draft Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'cancel')]}" />
-                    <field name="state" widget="statusbar" statusbar_visible="draft,open,done,cancel"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open,done"/>
                 </header>
                 <sheet>
                     <group>
                         <group>
                             <field name="name" invisible="1"/>
                             <field name="partner_id" required="1" string='Aliado'/>
+                            <field name="vat" force_save="1" readonly="1"/>
+                            <field name="city_id" force_save="1" readonly="1"/>
+                            <field name="contact_partner" required="1" />
                             <field name="vinculation" invisible="1"/>
                             <field name="x_type_vinculation" />
-                            <field name="allies_user_id" />
+                            <field name="type_member" force_save="1" readonly="1"/>
+                            <field name="member_red_id" force_save="1" readonly="1"/>
                             <field name="company_id" required="1" invisible="1"/>
                             <field name="year_id" required="1"/>
                             <field name="object" required="1"/>
-                            <field name="type_allies" required="1"/>
                             <field name="apply_amount" />
                             <field name="total_amount" attrs="{'required': [('apply_amount', '=', True)], 'invisible': [('apply_amount', '=', False)]}"/>
                             <field name="reason_id" attrs="{'invisible': [('state', '!=', 'cancel')]}"/>
                         </group>
                         <group>
-                            <field name="sub_type_allies" required="1"/>
                             <field name="date" required="1"/>
-                            <field name="indicator" required="1"/>
-                            <field name="project_present" required="1"/>
-                            <field name="project_last" />
-                            <field name="advance_last" force_save="1" readonly="1" />
-                            <field name="date_cancel" force_save="1" readonly="1" attrs="{'invisible': [('state', '!=', 'cancel')]}"/>
-                            <field name="date_open" force_save="1" readonly="1" attrs="{'invisible': [('state', '!=', 'open')]}"/>
-                            <field name="date_done" force_save="1" readonly="1" attrs="{'invisible': [('state', '!=', 'done')]}"/>
+                            <field name="date_open" />
+                            <field name="date_done" />
+                            <field name="create_uid" />
                         </group>
                         <button name="save_detail_advance" string="Add Avances del Proyecto" type="object" icon="fa-building-o" /> 
                         <field name="advance_ids" nolabel="1" >
@@ -45,8 +43,8 @@
                                 <field name="name" invisible="1"/>
                                 <field name="date" />
                                 <field name="advance" />
+                                <field name="contact_partner" />
                                 <field name="company_id" invisible="1"/>
-                                <field name="state_activity" widget="state_selection" />
                             </tree>
                         </field>                        
                     </group>
@@ -66,13 +64,16 @@
         <field name="arch" type="xml">
             <tree string="Projects Allies" >
                 <field name="name" invisible="1"/>
+                <field name="vat" />
                 <field name="partner_id" string='Aliado'/>
                 <field name="x_type_vinculation" force_save="1" readonly="1"/>
+                <field name="type_member" />
+                <field name="member_red_id" />
                 <field name="object" />
                 <field name="year_id" />
-                <field name="indicator" />
-                <field name="project_present" required="1"/>
-                <field name="allies_user_id" />
+                <field name="city_id" />
+                <field name="date" />
+                <field name="date_open" />
                 <field name="state" widget="badge" />
             </tree>
         </field>
@@ -82,22 +83,25 @@
         <field name="name">project.allies.search</field>
         <field name="model">project.allies</field>
         <field name="arch" type="xml">
-            <search string="Tasks">
+            <search string="Proyectos">
                 <field name="partner_id" operator="child_of"/>
                 <field name="state"/>
-                <field name="allies_user_id"/>
                 <field name="date"/>
                 <separator/>
-                <filter string="state" name="Finalizado" domain="[('state', '=', 'done')]"/>
+                <filter string="Finalizado" name="state" domain="[('state', '=', 'done')]"/>
                 <separator/>
-                <filter string="state" name="En Progreso" domain="[('state', '=', 'open')]"/>
+                <filter string="En Progreso" name="state" domain="[('state', '=', 'open')]"/>
                 <separator/>
-                <filter string="state" name="Cancelados" domain="[('state', '=', 'cancel')]"/>
+                <filter name="date" string="Fecha de Inicio" date="date"/>
+                <filter name="date_open" string="Última Fecha de Contacto" date="date_open"/>
                 <separator/>
                 <group expand="0" string="Group By">
-                    <filter string="Stage" name="state" context="{'group_by': 'state'}"/>
-                    <filter string="Assigned to" name="user" context="{'group_by': 'allies_user_id'}"/>
-                    <filter string="Aliado" name="company" context="{'group_by': 'partner_id'}" />
+                    <filter string="Estado" name="state" context="{'group_by': 'state'}"/>
+                    <filter string="Aliado" name="partner_id" context="{'group_by': 'partner_id'}" />
+                    <filter string="Tipo" name="type_member" context="{'group_by': 'type_member'}" />
+                    <filter string="Red de Valor" name="member_red_id" context="{'group_by': 'member_red_id'}" />
+                    <filter string="Vinculación" name="x_type_vinculation" context="{'group_by': 'x_type_vinculation'}" />
+                    <filter string="Ciudad" name="city_id" context="{'group_by': 'city_id'}" />
                 </group>
             </search>
         </field>
@@ -108,7 +112,7 @@
         <field name="model">project.allies</field>
         <field name="arch" type="xml">
             <pivot string="Projects Allies">
-                <field name="state" type="col"/>
+                <field name="type_member" type="col"/>
                 <field name="partner_id" type="row"/>
             </pivot>
         </field>
@@ -119,7 +123,7 @@
         <field name="model">project.allies</field>
         <field name="arch" type="xml">
             <graph string="Projects Allies">
-                <field name="object" type="col"/>
+                <field name="type_member" type="col"/>
                 <field name="partner_id" type="row"/>
             </graph>
         </field>
@@ -134,9 +138,9 @@
                 <view type="graph" ref="crm_allies.project_allies_view_graph"/>
                 <group>
                     <group>
-                        <aggregate name="object" string="Objetivos" group_operator="count" field="id" measure="__count__"/>
-                        <aggregate name="partner" string="Aliados" group_operator="count" field="partner_id" measure="__count__"/>
-                        <formula name="prorated_total_amount" string="Total Proyectado" value="record.total_amount" widget="monetary"/>
+                        <aggregate name="object" string="Total de Proyectos" group_operator="count" field="id" measure="__count__"/>
+                        <aggregate name="partner" string="Total Aliados" group_operator="count" field="partner_id" measure="__count__"/>
+                        <formula name="prorated_total_amount" string="Total Proyectado Ingresos" value="record.total_amount" widget="monetary"/>
                         <!-- <aggregate name="expected_revenue_aggregate" field="planned_revenue" string="Expected Revenue"/>
                         <aggregate name="prorated_revenue_aggregate" field="expected_revenue" invisible="1"/>
                         <formula name="deal_size" string="Average Deal Size" value="record.expected_revenue_aggregate / record.opportunities" widget="monetary"/>
@@ -145,11 +149,12 @@
                         <aggregate name="days_exceeding_closing" string="Exceeding Close Days" field="days_exceeding_closing" group_operator="avg"/> -->
                     </group>
                     <group col="1">
-                        <widget name="pie_chart" title="Years" attrs="{'groupby': 'year_id'}"/>
-                        <widget name="pie_chart" title="Indicators" attrs="{'groupby': 'indicator'}"/>
-                        <widget name="pie_chart" title="State project" attrs="{'groupby': 'state'}"/>
-                        <widget name="pie_chart" title="Type Allies" attrs="{'groupby': 'type_allies'}"/>
-                        <widget name="pie_chart" title="Tipo Vinculación" attrs="{'groupby': 'x_type_vinculation'}"/>
+                        <widget name="pie_chart" title="Proyectos por Año" attrs="{'groupby': 'year_id'}"/>
+                        <widget name="pie_chart" title="Estados de los Proyectos" attrs="{'groupby': 'state'}"/>
+                        <widget name="pie_chart" title="Por Tipo" attrs="{'groupby': 'type_member'}"/>
+                        <widget name="pie_chart" title="Por Ciudad" attrs="{'groupby': 'city_id'}"/>
+                        <widget name="pie_chart" title="Por Red de Valor" attrs="{'groupby': 'member_red_id'}"/>
+                        <widget name="pie_chart" title="Por Tipo de Vinculación" attrs="{'groupby': 'x_type_vinculation'}"/>
                     </group>
                 </group>
                 <view type="pivot" ref="crm_allies.project_allies_view_pivot"/>
@@ -167,10 +172,10 @@
 
     <menuitem
         id="account_menu_project_allies"
-        name="Projects Allies"
+        name="Alidos"
         action="action_project_allies"
-        parent="contacts.menu_contacts"
-        sequence="7"/>
+        parent="account_menu_benefits_membership_lg"
+        sequence="2"/>
 
     <record id="project_allies_line_view_form" model="ir.ui.view">
         <field name="name">project.allies.line.form</field>
@@ -184,7 +189,7 @@
                             <field name="advance" required="1"/>
                         </group>
                         <group>
-                            <field name="state_activity" widget="radio" />
+                            <field name="contact_partner" required="1" />
                         </group>
                     </group>
                 </sheet>
