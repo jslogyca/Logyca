@@ -27,8 +27,10 @@ class ResPartner(models.Model):
     projects_ids = fields.One2many('project.allies', 'partner_id', string="Projects", index=True)
     type_member = fields.Selection([("A", "TIPO A"), 
                                 ("B", "TIPO B"),
-                                ("C", "TIPO C")], string='Clasificación', default='C')
+                                ("C", "TIPO C")], string='Clasificación')
     icon_id = fields.Many2one('ir.attachment', string='A', domain="[('name', '=', 'a.png')]")
+    user_loyalty = fields.Boolean(string='Lider Fidelización')
+    
 
     @api.onchange('x_type_vinculation', 'x_active_vinculation')
     def _onchange_type_vinculation(self):

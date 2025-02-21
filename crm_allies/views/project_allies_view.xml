@@ -23,6 +23,7 @@
                             <field name="vinculation" invisible="1"/>
                             <field name="x_type_vinculation" />
                             <field name="type_member" force_save="1" readonly="1"/>
+                            <field name="x_sector_id" force_save="1" readonly="1"/>
                             <field name="member_red_id" force_save="1" readonly="1"/>
                             <field name="company_id" required="1" invisible="1"/>
                             <field name="year_id" required="1"/>
@@ -32,6 +33,7 @@
                             <field name="reason_id" attrs="{'invisible': [('state', '!=', 'cancel')]}"/>
                         </group>
                         <group>
+                            <field name="user_loyalty_id" required="1"/>
                             <field name="date" required="1"/>
                             <field name="date_open" />
                             <field name="date_done" />
@@ -67,6 +69,7 @@
                 <field name="vat" />
                 <field name="partner_id" string='Aliado'/>
                 <field name="x_type_vinculation" force_save="1" readonly="1"/>
+                <field name="x_sector_id" />
                 <field name="type_member" />
                 <field name="member_red_id" />
                 <field name="object" />
@@ -164,7 +167,7 @@
     </record>
 
     <record id="action_project_allies" model="ir.actions.act_window">
-        <field name="name">Projects Allies</field>
+        <field name="name">Proyectos de Fidelización</field>
         <field name="res_model">project.allies</field>
         <field name="view_mode">dashboard,tree,form,pivot,graph</field>
         <field name="view_id" ref="project_allies_view_dashboard"/>
@@ -172,7 +175,7 @@
 
     <menuitem
         id="account_menu_project_allies"
-        name="Alidos"
+        name="Proyectos de Fidelización"
         action="action_project_allies"
         parent="account_menu_benefits_membership_lg"
         sequence="2"/>

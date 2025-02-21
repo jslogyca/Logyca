@@ -51,8 +51,6 @@
             <xpath expr="//field[@name='category_id']" position="after">
                 <field name="type_member" class="d-flex flex-wrap" widget="radio" options="{'horizontal': true}" />
                 <field name="member_red_id" />
-                <field class="d-flex flex-wrap" name="icon_id" widget="radio_image" 
-                                options="{'horizontal': true}" attrs="{'invisible': [('type_member', 'in', ('B', 'C'))]}"/>
             </xpath>
         </field>
     </record>

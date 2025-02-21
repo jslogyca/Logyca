@@ -144,7 +144,7 @@
 
     <menuitem
         id="account_menu_benefits_membership_lg"
-        name="Miembros y Aliados"
+        name="Miembros y Fidelización"
         parent="contacts.menu_contacts"
         sequence="6"/>
 
