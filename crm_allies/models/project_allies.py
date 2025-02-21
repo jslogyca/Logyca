@@ -40,7 +40,9 @@ class ProjectAllies(models.Model):
     active = fields.Boolean('Active', default=True)
     company_id = fields.Many2one('res.company', string='Company', required=True,
                                  default=lambda self: self.env.company)
-    partner_id = fields.Many2one('res.partner', string="Partner", domain="[('allies_logyca', '=', True)]")
+    partner_id = fields.Many2one('res.partner', string="Partner", domain=[("parent_id", "!=", False)])
+    user_loyalty_id = fields.Many2one('res.partner', string="Partner", domain="[('user_loyalty', '=', True)]")
+    # user_loyalty_id = fields.Many2one('res.partner', string="Partner")
     vat = fields.Char('NIT')
     year_id = fields.Many2one('account.fiscal.year', string="Year")
     object = fields.Char('Objetivo y Avance')
@@ -70,6 +72,7 @@ class ProjectAllies(models.Model):
                                 ("C", "TIPO C")], string='Clasificación')
     member_red_id = fields.Many2one('logyca.member.red', string='Red de Valor')
     city_id = fields.Many2one('logyca.city', string='Ciudad')
+    x_sector_id = fields.Many2one('logyca.sectors', string='Sector')
     contact_partner = fields.Char('Contacto de la Empresa')
 
     @api.onchange('partner_id', 'vat', 'type_member', 'member_red_id')
@@ -83,6 +86,8 @@ class ProjectAllies(models.Model):
                     help.vat = help.partner_id.vat
                 if help.partner_id.x_city:
                     help.city_id = help.partner_id.x_city
+                if help.partner_id.x_sector_id:
+                    help.x_sector_id = help.partner_id.x_sector_id
 
     def name_get(self):
         return [(project.id, '%s - %s' %
