@@ -1,0 +1,69 @@
+<odoo>
+    <record id="action_misuse_gs1_log" model="ir.actions.act_window">
+        <field name="name">Misuse GS1 Log</field>
+        <field name="res_model">misuse.gs1.log</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="view_misuse_gs1_log_tree" model="ir.ui.view">
+        <field name="name">misuse.gs1.log.tree</field>
+        <field name="model">misuse.gs1.log</field>
+        <field name="arch" type="xml">
+            <tree string="Misuse GS1 Log" create="false">
+                <field name="partner_id"/>
+                <field name="case_id"/>
+                <field name="misuse_type"/>
+                <field name="state" widget="badge" decoration-info="state in ['Pendiente']" decoration-danger="state in ['Incumplimiento']" decoration-success="state in ['Exitoso']"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="remaining_time"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_misuse_gs1_log_form" model="ir.ui.view">
+        <field name="name">misuse.gs1.log.form</field>
+        <field name="model">misuse.gs1.log</field>
+        <field name="arch" type="xml">
+            <form string="Misuse GS1 Log">
+                <sheet>
+                    <group>
+                        <field name="partner_id"/>
+                        <field name="case_id"/>
+                        <field name="misuse_type"/>
+                        <field name="tracking_type"/>
+                        <field name="state" widget="badge" decoration-info="state in ['Pendiente']" decoration-danger="state in ['Incumplimiento']" decoration-success="state in ['Exitoso']"/>
+                    </group>
+                    <group>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <field name="remaining_time"/>
+                    </group>
+                    <group>
+                        <field name="prefixes"/>
+                    </group>
+                    <notebook>
+                        <page string="Attachments">
+                            <field name="user_attachments">
+                                <tree string="Attachments" create="false" editable="bottom">
+                                    <field name="name"/>
+                                    <field name="path"/>
+                                </tree>
+                                <form string="Attachment">
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="path"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu to access misuse.gs1.log from contacts module -->
+    <menuitem id="misuse_gs1_log_menu" name="Misuse GS1 Log" action="action_misuse_gs1_log"
+              parent="contacts.res_partner_menu_config" sequence="199"/>
+</odoo>
