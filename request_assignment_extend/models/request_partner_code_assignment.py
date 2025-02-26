@@ -11,12 +11,7 @@ class RequestPartnerCodeAssignment(models.Model):
     prefixes_sent = fields.Text(string='Prefixes Sent')
     prefixes_approved = fields.Text(string='Prefixes Approved')
     total_transfer = fields.Boolean('Total Transfer', default=False)
-    partner_receiver_id = fields.Many2one(
-        'res.partner',
-        string='Partner Receiver',
-        required=False,
-        inverse_name='request_received_ids'
-    )
+    partner_receiver_id = fields.Many2one('res.partner', string='Partner Receiver')
     user_attachments = fields.One2many(
         'request.assignment.attachment',
         'request_assignment_id',

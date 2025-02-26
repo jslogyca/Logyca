@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from datetime import date
+
 
 class MisuseGs1Log(models.Model):
     _name = 'misuse.gs1.log'

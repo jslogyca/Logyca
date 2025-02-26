@@ -10,4 +10,5 @@
     ],
     'installable': True,
     'application': False,
+    'license': 'Other proprietary'
 }
