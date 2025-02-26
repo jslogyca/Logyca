@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_misuse_gs1_log,Access Misuse GS1 Log,model_misuse_gs1_log,base.group_user,1,1,1,1
+access_misuse_gs1_log_attachment,Access Misuse GS1 Log Attachment,model_misuse_gs1_log_attachment,base.group_user,1,1,1,1
