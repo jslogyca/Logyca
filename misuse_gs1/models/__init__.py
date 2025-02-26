@@ -1,1 +1,1 @@
-import misuse_gs1_log
+from . import models
