@@ -13,17 +13,8 @@ class MisuseGs1Log(models.Model):
     user_attachments = fields.One2many('misuse.gs1.log.attachment', 'log_id', string='User Attachments')
     date_start = fields.Date(string='Start date', required=True)
     date_end = fields.Date(string='End date', required=True)
-    remaining_time = fields.Integer(string='Remaining Time (days)', compute='_compute_remaining_time', store=True)
+    remaining_time = fields.Integer(string='Remaining Time (days)')
     prefixes = fields.Char(string='Prefixes')
-
-    @api.depends('date_end', 'date_start')
-    def _compute_remaining_time(self):
-        for rec in self:
-            if rec.date_start and rec.date_end:
-                delta = rec.date_end - rec.date_start
-                rec.remaining_time = delta.days
-            else:
-                rec.remaining_time = 0
 
 class MisuseGs1LogAttachment(models.Model):
     _name = 'misuse.gs1.log.attachment'
