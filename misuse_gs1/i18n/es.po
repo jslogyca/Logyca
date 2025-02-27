@@ -1,0 +1,151 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* misuse_gs1
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-02-27 18:08+0000\n"
+"PO-Revision-Date: 2025-02-27 18:08+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: misuse_gs1
+#: model_terms:ir.ui.view,arch_db:misuse_gs1.view_misuse_gs1_log_form
+msgid "Attachment"
+msgstr "Adjunto"
+
+#. module: misuse_gs1
+#: model:ir.model,name:misuse_gs1.model_misuse_gs1_log_attachment
+msgid "Attachment for Misuse GS1 Log"
+msgstr "Adjunto para Log de uso inadecuado GS1"
+
+#. module: misuse_gs1
+#: model_terms:ir.ui.view,arch_db:misuse_gs1.view_misuse_gs1_log_form
+msgid "Attachments"
+msgstr "Adjuntos"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__case_id
+msgid "Case ID"
+msgstr "ID del Caso"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__state
+msgid "Case status"
+msgstr "Estado del caso"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__create_uid
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__create_date
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__display_name
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__date_end
+msgid "End date"
+msgstr "Fecha fin"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__id
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__id
+msgid "ID"
+msgstr "ID"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log____last_update
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__write_uid
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__write_date
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__log_id
+msgid "Log"
+msgstr "Registro"
+
+#. module: misuse_gs1
+#: model:ir.actions.act_window,name:misuse_gs1.action_misuse_gs1_log
+#: model:ir.ui.menu,name:misuse_gs1.misuse_gs1_log_menu
+#: model_terms:ir.ui.view,arch_db:misuse_gs1.view_misuse_gs1_log_form
+#: model_terms:ir.ui.view,arch_db:misuse_gs1.view_misuse_gs1_log_tree
+msgid "Misuse GS1 Log"
+msgstr "Log de uso inadecuado GS1"
+
+#. module: misuse_gs1
+#: model:ir.model,name:misuse_gs1.model_misuse_gs1_log
+msgid "Misuse GS1 Log - trazabilidad del mal uso del sistema GS1"
+msgstr "Misuse GS1 Log - trazabilidad del mal uso del sistema GS1"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__misuse_type
+msgid "Misuse type"
+msgstr "Tipo uso inadecuado"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__partner_id
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__path
+msgid "Path"
+msgstr "Ruta"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__prefixes
+msgid "Prefixes"
+msgstr "Prefijos"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__remaining_time
+msgid "Remaining Time (days)"
+msgstr "Tiempo restante (días)"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__date_start
+msgid "Start date"
+msgstr "Fecha de inicio"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__tracking_type
+msgid "Tracking type"
+msgstr "Tipo de seguimiento"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__user_attachments
+msgid "User Attachments"
+msgstr "Adjuntos del usuario"
