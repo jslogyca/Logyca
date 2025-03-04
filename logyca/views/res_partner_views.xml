@@ -122,7 +122,7 @@
                                 <tree editable="bottom">
                                 <field name="types"/>
                                 <field name="activation_date"/>
-                                <field name="finally_date"/>
+                                <field name="deactivation_date"/>
                                 </tree>
                             </field>
                         </group>
