@@ -248,8 +248,7 @@ class ResPartner(models.Model):
             raise ValidationError(_('Ya existe un Cliente ('+name_tercer+') con este número de NIT creado por '+user_create+'.'))                
         if cant_vat_archivado > 1:
             raise ValidationError(_('Ya existe un Cliente ('+name_tercer+') con este número de NIT pero se encuentra archivado, fue creado por '+user_create+'.'))                
-        
-        
+
     @api.onchange('vat')
     def _onchange_vatnumber(self):
         for record in self:
@@ -268,21 +267,21 @@ class ResPartner(models.Model):
         name_contact = ""
         for record in self.child_ids:            
             ls_contacts = record.x_contact_type  
-            
+
             for i in ls_contacts:
                 if i.id == 3:
                     cant_contactsFE = cant_contactsFE + 1
                     name_contact = name_contact +" | "+record.name
-    
+
         if cant_contactsFE > 1:
             raise ValidationError(_('Tiene más de un contacto ('+name_contact+') de tipo facturación electrónica, por favor verificar.')) 
-        
+
         #Tipo de contacto representante ante LOGYCA
         cant_contactsRL = 0
         name_contact = ""
         for record in self.child_ids:            
             ls_contacts = record.x_contact_type  
-            
+
             for i in ls_contacts:
                 if i.id == 2:
                     cant_contactsRL = cant_contactsRL + 1
@@ -290,14 +289,14 @@ class ResPartner(models.Model):
 
         if cant_contactsRL > 1:
             raise ValidationError(_('Tiene más de un contacto ('+name_contact+') como Representante ante LOGYCA, por favor verificar.'))
-    
+
     #@api.constrains('x_active_for_logyca')
     #def _validate_active_due(self):
     #    if self.is_company:
     #        if self.x_active_for_logyca == False:            
     #            if self.total_due > 0:
     #                raise UserError(_('El cliente ('+self.name+'). No puede ser archivado por que posee cartera.')) 
-                
+
     @api.constrains('x_tax_responsibilities')
     def _check_tax_responsibilities(self):
         #Responsabilidades Tributarias Validas para FE
@@ -309,7 +308,7 @@ class ResPartner(models.Model):
 
             if cant_RT == 0:
                     raise ValidationError(_('El cliente debe tener una Responsabilidad Tributaria válida para Facturación Electrónica.'))  
-        
+
     # @api.onchange('name')
     # def _onchange_namecontact(self):
     #     for record in self:
@@ -318,7 +317,6 @@ class ResPartner(models.Model):
     #             if obj:
     #                 raise UserError(_('Ya existe un Contacto con ese nombre.'))
 
-# TABLA RVC
 class x_rvc_information(models.Model):
     _name = 'logyca.rvc_information'
     _description = 'RVC Information'
