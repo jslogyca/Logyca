@@ -329,4 +329,4 @@ class x_rvc_information(models.Model):
                               ('logyca_crecemype', 'Logyca / CRECEMYPE'),
                               ], string='Servicio', required=True)
     activation_date = fields.Date(string="Fecha activación")
-    finally_date = fields.Date(string="Fecha finalización")
+    deactivation_date = fields.Date(string="Fecha finalización")
