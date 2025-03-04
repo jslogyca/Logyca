@@ -317,15 +317,18 @@ class ResPartner(models.Model):
     #             obj = self.search([('x_type_thirdparty','not in',[1,3]),('name','=',record.name)])
     #             if obj:
     #                 raise UserError(_('Ya existe un Contacto con ese nombre.'))
-    
+
 # TABLA RVC
 class x_rvc_information(models.Model):
     _name = 'logyca.rvc_information'
     _description = 'RVC Information'
-    
+
     partner_id = fields.Many2one('res.partner',string='Cliente', required=True, ondelete='cascade')
-    types = fields.Selection([('1', 'Logyca / COLABORA'),
-                              ('2', 'Logyca / ANALÍTICA'),
-                              ('3', 'Derechos de identificación')], string='Servicio', required=True)
-    activation_date = fields.Date(string="Fecha activación")    
-    finally_date = fields.Date(string="Fecha finalización")    
+    types = fields.Selection([('gs1_identificacion', 'Derechos de identificación'),
+                              ('gs1_tarjeta_digital', 'Tarjeta digital GS1'),
+                              ('logyca_colabora', 'Logyca / COLABORA'),
+                              ('logyca_analitica', 'Logyca / ANALÍTICA'),
+                              ('logyca_crecemype', 'Logyca / CRECEMYPE'),
+                              ], string='Servicio', required=True)
+    activation_date = fields.Date(string="Fecha activación")
+    finally_date = fields.Date(string="Fecha finalización")
