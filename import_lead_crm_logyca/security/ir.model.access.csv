@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-crm_lead_import_file_wizard,crm.lead.import.file.wizard,model_crm_lead_import_file_wizard,sale_crm_logyca.group_manager_crm_import,1,1,1,1
+crm_lead_import_file_wizard,crm.lead.import.file.wizard,model_crm_lead_import_file_wizard,import_lead_crm_logyca.group_manager_crm_import,1,1,1,1
