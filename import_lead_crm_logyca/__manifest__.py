@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': 'CRM - Sale - LOGYCA ',
+    'name': 'Import Leads CRM - LOGYCA ',
     'summary': 'Description',
     'version': '1.1',
     'category': 'Accounting/Accounting',
@@ -12,8 +12,6 @@
     'installable': True,
     'depends': [
         'crm',
-        'sale',
-        'product',
         'sales_team',
         ],
     'description': '''
@@ -22,9 +20,9 @@
 
 ''',    
     'data': [
-        'views/crm_lead_view.xml',
-        'views/crm_team_member_view.xml',
-        'views/crm_team_view.xml',
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'wizard/crm_lead_import_file_wizard_view.xml',
     ],
     'qweb': [
     ]

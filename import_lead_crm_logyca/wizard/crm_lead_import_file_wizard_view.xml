@@ -7,7 +7,7 @@
             <form string="CRM Lead Import File Wizard">
                 <sheet>
                     <group string="Asistente para importar masivamente Leads">
-                        <group>
+                        <!-- <group>
                             <div>
                                 <p><strong>Condiciones:</strong></p>
                                 <ul>
@@ -15,7 +15,7 @@
                                     <li>Estar activa</li>
                                 </ul>
                             </div>
-                        </group>
+                        </group> -->
                     </group>
                     <group string="Cargue su plantilla de Excel">
                         <group>
