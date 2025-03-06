@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="crm_lead_import_file_wizard_view" model="ir.ui.view">
+        <field name="name">crm.lead.import.file.wizard.form</field>
+        <field name="model">crm.lead.import.file.wizard</field>
+        <field name="arch" type="xml">
+            <form string="CRM Lead Import File Wizard">
+                <sheet>
+                    <group string="Asistente para importar masivamente Leads">
+                        <group>
+                            <div>
+                                <p><strong>Condiciones:</strong></p>
+                                <ul>
+                                    <li>Estar registrada en Odoo</li>
+                                    <li>Estar activa</li>
+                                </ul>
+                            </div>
+                        </group>
+                    </group>
+                    <group string="Cargue su plantilla de Excel">
+                        <group>
+                            <field name="file_data" filename="filename" placeholder="Choose a file to import..."/>
+                            <field name="filename" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="import_file" string="Import" type="object" class="btn-primary" />
+                    <button string="Cancelar" special="cancel" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_crm_lead_import_file_wizard_view" model="ir.actions.act_window">
+        <field name="name">CRM Lead Import File Wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">crm.lead.import.file.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="crm_lead_import_file_wizard_view"/>
+        <field name="target">new</field>
+    </record>     
+
+    <menuitem id="menu_crm_lead_import_file_wizard"
+        name="CRM Lead Import File Wizard"
+        parent="crm.crm_menu_sales"
+        sequence="102"
+        action="action_crm_lead_import_file_wizard_view" />
+
+</odoo>

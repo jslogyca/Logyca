@@ -14,6 +14,7 @@
         'crm',
         'sale',
         'product',
+        'sales_team',
         ],
     'description': '''
 
@@ -21,19 +22,12 @@
 
 ''',    
     'data': [
-        # 'security/account_move_extended_security.xml',
-        # 'security/ir.model.access.csv',
+        'security/security.xml',
+        'security/ir.model.access.csv',
         'views/crm_lead_view.xml',
-        # 'views/report_certification.xml',
-        # 'views/revenue_macro_sector_view.xml',
-        # 'views/product_template_view.xml',
-        # 'views/res_users_view.xml',
-        # 'views/account_move.xml',
-        # 'views/account_sector_macro_view.xml',
-        # 'views/res_partner_view.xml',
-        # 'wizard/update_revenue_wizard_view.xml',
-        # 'data/macrosectors_data.xml',
-        # 'data/debtor_portfolio_status_data.xml'
+        'views/crm_team_member_view.xml',
+        'views/crm_team_view.xml',
+        'wizard/crm_lead_import_file_wizard_view.xml',
     ],
     'qweb': [
     ]

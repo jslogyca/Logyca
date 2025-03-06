@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="crm_team_view_form_t_lg">
+        <field name="name">crm.team.view.form.t.lg</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sales_team.crm_team_view_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                    <label for="total_amount"/>
+                    <div class="o_row">
+                        <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <span class="oe_read_only">/ Year</span>
+                        <field name="total_goal" invisible="1"/>
+                    </div>
+            </xpath>          
+        </field>
+    </record>
+</odoo>
