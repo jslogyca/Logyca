@@ -11,6 +11,7 @@ class CRMLead(models.Model):
     _inherit = 'crm.lead'
 
     product_id = fields.Many2one('product.product', string='Product', ondelete='restrict')
+    product_two_id = fields.Many2one('product.product', string='Product Opt', ondelete='restrict')
     analytic_account_id = fields.Many2one('account.analytic.account', string='Analytic Account',
         index=True, compute="_compute_analytic_account_id", store=True, readonly=False, check_company=True, copy=True)
         

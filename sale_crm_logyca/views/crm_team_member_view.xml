@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="crm_team_member_form_lg">
+        <field name="name">crm.team.member.form.lg</field>
+        <field name="model">crm.team.member</field>
+        <field name="inherit_id" ref="sales_team.crm_team_member_view_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='crm_team_id']" position="after">
+                <label for="total_amount"/>
+                <div class="o_row">
+                    <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <span class="oe_read_only">/ Year</span>
+                </div>
+                <label for="total_amount_team"/>
+                <div class="o_row">
+                    <field name="total_amount_team" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <span class="oe_read_only">/ Year</span>
+                </div>
+                <label for="total_invoice"/>
+                <div class="o_row">
+                    <field name="total_invoice" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <span class="oe_read_only">/ Year</span>
+                    <field name="total_goal" invisible="1"/>
+                </div>
+                <field name="date_start" />
+                <field name="date_end" />
+            </xpath>
+        </field>
+    </record>
+    <record id="crm_team_member_view_tree_goal" model="ir.ui.view">
+        <field name="name">crm.team.member.view.tree.goal</field>
+        <field name="model">crm.team.member</field>
+        <field name="inherit_id" ref="sales_team.crm_team_member_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="total_amount" />
+                <field name="total_amount_team" />
+                <field name="total_invoice" />
+            </xpath>
+        </field>
+    </record>    
+    <record model="ir.ui.view" id="crm_team_member_filter_lg">
+        <field name="name">crm.team.member.filter.lg</field>
+        <field name="model">crm.team.member</field>
+        <field name="inherit_id" ref="sales_team.crm_team_member_view_search"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='crm_team_id']" position="after">
+                <field name="total_amount" />
+                <field name="date_start" />
+                <field name="date_end" />
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="crm_team_member_kanban_leads_lg">
+        <field name="name">crm.team.member.kanban.leads.lg</field>
+        <field name="model">crm.team.member</field>
+        <field name="inherit_id" ref="sales_team.crm_team_member_view_kanban"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='crm_team_id']" position="after">
+                <div class="d-flex align-items-baseline text-break">
+                    <i class="fa fa-money mr-1" role="img" aria-label="Meta" title="Meta"/><field name="total_amount"/>
+                </div>
+                <div class="d-flex align-items-baseline text-break">
+                    <i class="fa fa-calendar mr-1" role="img" aria-label="Meta" title="Inicio Meta"/><field name="date_start"/>
+                </div>
+                <div class="d-flex align-items-baseline text-break">
+                    <i class="fa fa-calendar mr-1" role="img" aria-label="Meta" title="Final Meta"/><field name="date_end"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+    <record id="crm_team_member_view_pivot" model="ir.ui.view">
+        <field name="name">crm.team.member.view.pivot</field>
+        <field name="model">crm.team.member</field>
+        <field name="arch" type="xml">
+            <pivot string="Miembros Equipo">
+                <field name="total_amount" type="col"/>
+                <field name="total_invoice" type="col"/>
+                <field name="crm_team_id" type="row"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="crm_team_member_view_graph" model="ir.ui.view">
+        <field name="name">crm.team.member.view.graph</field>
+        <field name="model">crm.team.member</field>
+        <field name="arch" type="xml">
+            <graph string="Miembros Equipo" type="bar">
+                <!-- <field name="total_amount" type="col"/> -->
+                <field name="total_amount" type="measure" />
+                <field name="total_invoice" type="measure" />
+                <field name="crm_team_id" type="row"/>
+                <!-- <field name="id" type="measure"/> -->
+            </graph>
+        </field>
+    </record>
+    <record id="sales_team.crm_team_member_action" model="ir.actions.act_window">
+        <field name="view_mode">graph,kanban,pivot,tree,form</field>
+    </record>    
+
+</odoo>

@@ -1,0 +1,221 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_crm_logyca
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-06 02:31+0000\n"
+"PO-Revision-Date: 2025-03-05 21:34-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: co\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. module: sale_crm_logyca
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_team_member_kanban_leads_lg
+msgid ""
+"<i class=\"fa fa-calendar mr-1\" role=\"img\" aria-label=\"Meta\" title=\"Final Meta"
+"\"/>"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_team_member_kanban_leads_lg
+msgid ""
+"<i class=\"fa fa-calendar mr-1\" role=\"img\" aria-label=\"Meta\" title=\"Inicio Meta"
+"\"/>"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_team_member_kanban_leads_lg
+msgid "<i class=\"fa fa-money mr-1\" role=\"img\" aria-label=\"Meta\" title=\"Meta\"/>"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_team_member_form_lg
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_team_view_form_t_lg
+msgid "<span class=\"oe_read_only\">/ Year</span>"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_lead_import_file_wizard_view
+msgid "<strong>Condiciones:</strong>"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_lead__analytic_account_id
+msgid "Analytic Account"
+msgstr "Cuenta Analítica"
+
+#. module: sale_crm_logyca
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_lead_import_file_wizard_view
+msgid "Asistente para importar masivamente Leads"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.actions.act_window,name:sale_crm_logyca.action_crm_lead_import_file_wizard_view
+#: model:ir.model,name:sale_crm_logyca.model_crm_lead_import_file_wizard
+#: model:ir.ui.menu,name:sale_crm_logyca.menu_crm_lead_import_file_wizard
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_lead_import_file_wizard_view
+msgid "CRM Lead Import File Wizard"
+msgstr "Importar Oportunidades"
+
+#. module: sale_crm_logyca
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_lead_import_file_wizard_view
+msgid "Cancelar"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_lead_import_file_wizard_view
+msgid "Cargue su plantilla de Excel"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_lead_import_file_wizard_view
+msgid "Choose a file to import..."
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_lead_import_file_wizard__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_lead_import_file_wizard__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_lead_import_file_wizard__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_lead_import_file_wizard_view
+msgid "Estar activa"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_lead_import_file_wizard_view
+msgid "Estar registrada en Odoo"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_team_member__date_end
+msgid "Fecha de End"
+msgstr "Fecha Final"
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_team_member__date_start
+msgid "Fecha de Inicio"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_lead_import_file_wizard__file_data
+msgid "File"
+msgstr "Archivo"
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_lead_import_file_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_lead_import_file_wizard_view
+msgid "Import"
+msgstr "Cargar"
+
+#. module: sale_crm_logyca
+#: code:addons/sale_crm_logyca/wizard/crm_lead_import_file_wizard.py:0
+#, python-format
+msgid "Invalid file"
+msgstr "Archivo Invalido"
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_lead_import_file_wizard____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_lead_import_file_wizard__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_lead_import_file_wizard__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.model,name:sale_crm_logyca.model_crm_lead
+msgid "Lead/Opportunity"
+msgstr "Iniciativa/Oportunidad"
+
+#. module: sale_crm_logyca
+#: model:res.groups,name:sale_crm_logyca.group_manager_crm_import
+msgid "Manager CRM Import"
+msgstr "Importar Oportunidades"
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_team__total_amount
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_team_member__total_amount
+msgid "Meta de Facturación"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_team_member__total_amount_team
+msgid "Meta de Facturación Equipo"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_team_member_view_graph
+#: model_terms:ir.ui.view,arch_db:sale_crm_logyca.crm_team_member_view_pivot
+msgid "Miembros Equipo"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_lead_import_file_wizard__filename
+msgid "Name File"
+msgstr "Nombre del archivo"
+
+#. module: sale_crm_logyca
+#: code:addons/sale_crm_logyca/wizard/crm_lead_import_file_wizard.py:0
+#, python-format
+msgid "No se importaron los beneficios"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_lead__product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_lead__product_two_id
+msgid "Product Opt"
+msgstr "Producto Opcional"
+
+#. module: sale_crm_logyca
+#: model:ir.model,name:sale_crm_logyca.model_crm_team
+msgid "Sales Team"
+msgstr "Equipo de Ventas"
+
+#. module: sale_crm_logyca
+#: model:ir.model,name:sale_crm_logyca.model_crm_team_member
+msgid "Sales Team Member"
+msgstr "Miembro del equipo de ventas"
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_team_member__total_invoice
+msgid "Total Facturado"
+msgstr ""
+
+#. module: sale_crm_logyca
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_team__total_goal
+#: model:ir.model.fields,field_description:sale_crm_logyca.field_crm_team_member__total_goal
+msgid "Total Goal"
+msgstr ""
