@@ -66,6 +66,7 @@ class CRMLeadImportFileWizard(models.TransientModel):
                 
                 beneficiary_nit = str(fila[0])
                 company_name = str(fila[3])
+                product_name = str(fila[12])
                 validation = ''
                 expected_revenue = 0.0
 
@@ -75,6 +76,8 @@ class CRMLeadImportFileWizard(models.TransientModel):
                     beneficiary_nit = beneficiary_nit[:-len(suffix)]
                 partner_id = self.env['res.partner'].search([('vat','=',str(beneficiary_nit)), ('parent_id','=',None)], limit=1)
                 company_id = self.env['res.company'].search([('name','=',str(company_name))], limit=1)
+                product_template_id = self.env['product.template'].search([('name','=',str(product_name))], limit=1)
+                product_id = self.env['product.product'].search([('product_tmpl_id','=',product_template_id.id)], order="id asc", limit=1)
                 expected_revenue = fila[4]
                 bene_name = str(fila[2])
                 user_id = 263
@@ -82,17 +85,16 @@ class CRMLeadImportFileWizard(models.TransientModel):
                 description = str(fila[7])
                 partner_name = str(fila[1])
                 contact_name = str(fila[8])
-                street = str(fila[9])
+                function_job = str(fila[9])
                 mobile = str(fila[10])
                 email_from = str(fila[11])
-                print('EMPRESA', partner_id)
                 if partner_id:
                     formato = '%Y-%m-%dT%H:%M:%S'
-                    print('EMPRESA2222', partner_id.id, bene_name, company_id)
                     try:
                         with self._cr.savepoint():
                             benef_ids = self.env['crm.lead'].create({
                                                 'partner_id': partner_id.id,
+                                                'product_id': product_id.id,
                                                 'name': bene_name,
                                                 'expected_revenue': expected_revenue,
                                                 'type': 'opportunity',
@@ -100,12 +102,11 @@ class CRMLeadImportFileWizard(models.TransientModel):
                                                 'source_id': source_id,
                                                 'description': description,
                                                 'contact_name': contact_name,
-                                                'street': street,
+                                                'function': function_job,
                                                 'mobile': mobile,
                                                 'email_from': email_from,
                                                 'phone': mobile,
                                                 'company_id': company_id.id})
-                        print('EMPRESA3333', benef_ids)
                     except Exception as e:
                         validation = "Fila %s: %s no se pudo crear como empresa beneficiaria. %s" % (str(count), partner_id.vat + '-' + str(partner_id.name.strip()),str(e))
                         errors.append(validation)
@@ -121,15 +122,15 @@ class CRMLeadImportFileWizard(models.TransientModel):
                                                 'mobile': mobile,
                                                 'phone': mobile,
                                                 'email_from': email_from,
-                                                'street': street,
+                                                'function': function_job,
                                                 'name': bene_name,
                                                 'expected_revenue': expected_revenue,
                                                 'type': 'opportunity',
                                                 'user_id': user_id,
                                                 'source_id': source_id,
                                                 'description': description,
+                                                'product_id': product_id.id,
                                                 'company_id': company_id.id})
-                        print('EMPRESA3333', benef_ids)
                     except Exception as e:
                         validation = "Fila %s: %s no se pudo crear como empresa beneficiaria. %s" % (str(count), partner_id.vat + '-' + str(partner_id.name.strip()),str(e))
                         errors.append(validation)
