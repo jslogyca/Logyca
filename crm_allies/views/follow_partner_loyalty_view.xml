@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="follow_partner_loyalty_view_tree" model="ir.ui.view">
+        <field name="name">follow.partner.loyalty.tree</field>
+        <field name="model">follow.partner.loyalty</field>
+        <field name="arch" type="xml">
+            <tree string="Follow Partner Loyalty" editable="bottom">
+                <field name="name" invisible="1"/>
+                <field name="check_loyalty" invisible="1"/>
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="contact_partner" />
+                <field name="job_partner" />
+                <field name="phone_partner" />
+                <field name="email_partner" />
+                <field name="description" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="follow_partner_loyalty_filter" model="ir.ui.view">
+        <field name="name">follow.partner.loyalty.filter</field>
+        <field name="model">follow.partner.loyalty</field>
+        <field name="arch" type="xml">
+            <search string="Follow Partner Loyalty">
+                <field name="partner_id" operator="child_of"/>
+                <separator/>
+                <filter name="date" string="Fecha Vinculación" date="date"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Fecha" name="groupy_by_date" domain="[]" context="{'group_by': 'date'}"/>
+                    <filter string="Empresa" name="groupy_by_partner_id" domain="[]" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_follow_partner_loyalty" model="ir.actions.act_window">
+        <field name="name">Follow Partner Loyalty</field>
+        <field name="res_model">follow.partner.loyalty</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="follow_partner_loyalty_view_tree"/>
+    </record>
+
+    <menuitem
+        id="account_menu_follow_partner_loyalty"
+        name="Follow Partner Loyalty"
+        action="action_follow_partner_loyalty"
+        parent="account_menu_benefits_membership_lg"
+        sequence="5"/>    
+
+</odoo>

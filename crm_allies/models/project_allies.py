@@ -28,7 +28,6 @@ class ProjectAllies(models.Model):
             else:
                 help.vinculation = True
 
-
     @api.depends('advance_ids.date')
     def _compute_last_date(self):
         for record in self:

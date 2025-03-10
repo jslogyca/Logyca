@@ -14,6 +14,7 @@ class ResPartnerMemberLogyca(models.Model):
     id = fields.Integer('ID')
     partner_id = fields.Many2one('res.partner', 'Miembro', readonly=True)
     vat = fields.Char(string='NIT')
+    name = fields.Char(string='Name')
     x_type_vinculation = fields.Many2one('logyca.vinculation_types', string='Tipo de vinculación')
     type_member = fields.Selection([("A", "TIPO A"), 
                                 ("B", "TIPO B"),
@@ -22,6 +23,18 @@ class ResPartnerMemberLogyca(models.Model):
     x_sector_id = fields.Many2one('logyca.sectors', string='Sector')
     city_id = fields.Many2one('logyca.city', string='Ciudad')
     x_date_vinculation = fields.Date('Fecha de Vinculación')
+    meet_loyalty = fields.Selection([("SI", "SI"),
+                                ("NO", "NO")], default="COMERCIAL", string='Reunión Fidelización')    
+    date_loyalty = fields.Date(string='Fecha de Fidelización')
+    description_loyalty = fields.Char('Obsercaciones Fidelización')
+    service_member_count = fields.Integer(compute='_compute_service_member_count', string='Servicios Count')
+    benefit_member_count = fields.Integer(compute='_compute_service_member_count', string='Benficios Count')
+    x_company_size = fields.Selection([("1", "Mipyme"), 
+                                ("2", "Pyme"),
+                                ("3", "Mediana"),
+                                ("4", "Grande"),
+                                ("5", "Micro"),
+                                ("6", "Pequeña")], string='Tamaño')
 
     def _select(self):
         select_str = """
@@ -29,12 +42,18 @@ class ResPartnerMemberLogyca(models.Model):
             p.id as id, 
             p.id as partner_id,
             p.vat as vat,
+            p.name || ' - ' || p.vat || ' - ' || vp.name as name,
             vp.id as x_type_vinculation,
             p.type_member as type_member,
             p.member_red_id as member_red_id,
             p.x_city as city_id,
             to_char(p.x_date_vinculation,'YYYY/MM/DD') AS x_date_vinculation,
-            p.x_sector_id as x_sector_id
+            p.x_sector_id as x_sector_id,
+            p.meet_loyalty as meet_loyalty,
+            p.date_loyalty as date_loyalty,
+            p.description_loyalty as description_loyalty,
+            1 as sale_order_count,
+            p.x_company_size as x_company_size
 		"""
         return select_str
 
@@ -68,3 +87,25 @@ class ResPartnerMemberLogyca(models.Model):
 
         # _logger.info(sql)
         self.env.cr.execute(sql)
+
+    def action_view_service_member(self):
+        action = self.env['ir.actions.act_window']._for_xml_id('crm_allies.action_member_product_logyca_partner')
+        all_child = self.with_context(active_test=False).search([('partner_id', 'child_of', self.ids)])
+        action["domain"] = [("partner_id", "in", all_child.ids)]
+        return action
+
+    def action_view_benefit_member(self):
+        action = self.env['ir.actions.act_window']._for_xml_id('crm_allies.action_benefits_membership_partner')
+        all_child = self.with_context(active_test=False).search([('partner_id', 'child_of', self.ids)])
+        action["domain"] = [("partner_id", "in", all_child.ids)]
+        return action
+
+    def _compute_service_member_count(self):
+        member_product_id = self.env['res.member.product.logyca'].search([('partner_id', '=', self.partner_id.id)], 
+                    order="id asc")
+        member_benefit_id = self.env['benefits.membership.partner'].search([('partner_id', '=', self.partner_id.id),
+                                                ('date_done', '>=', '2025-01-01'),
+                                                ('date_done', '<=', '2025-12-31')], 
+                    order="id asc")
+        (self).service_member_count = len(member_product_id)
+        (self).benefit_member_count = len(member_benefit_id)

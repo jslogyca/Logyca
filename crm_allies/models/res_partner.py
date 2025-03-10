@@ -30,11 +30,8 @@ class ResPartner(models.Model):
                                 ("C", "TIPO C")], string='Clasificación')
     icon_id = fields.Many2one('ir.attachment', string='A', domain="[('name', '=', 'a.png')]")
     user_loyalty = fields.Boolean(string='Lider Fidelización')
-
-    # @api.onchange('x_type_vinculation', 'x_active_vinculation')
-    # def _onchange_type_vinculation(self):
-    #     for partner_id in self:
-    #         if partner_id.x_type_vinculation and partner_id.x_active_vinculation:
-    #             for type_vinculation in partner_id.x_type_vinculation:
-    #                     partner_id.category_id = [(6, 0, type_vinculation.tag_id.id)]
-
+    meet_loyalty = fields.Selection([("SI", "SI"),
+                                ("NO", "NO")], default="COMERCIAL", string='Reunión Fidelización')    
+    date_loyalty = fields.Date(string='Fecha de Fidelización')
+    follow_ids = fields.One2many('follow.partner.loyalty', 'partner_id', string="Fidelización", index=True)
+    description_loyalty = fields.Char('Obsercaciones Fidelización')

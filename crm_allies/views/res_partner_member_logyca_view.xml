@@ -1,19 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="res_partner_member_logyca_view_form" model="ir.ui.view">
+        <field name="name">res.partner.member.logyca.form</field>
+        <field name="model">res.partner.member.logyca</field>
+        <field name="arch" type="xml">
+            <form string="Miembros LOGYCA" create="false" edit="false">     
+                <sheet>
+                    <div class="oe_button_box" name="button_box" >
+                        <button class="oe_stat_button" type="object" name="action_view_service_member" icon="fa-usd">
+                            <field string="Servicios Pagos" name="service_member_count" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_benefit_member" icon="fa-heart">
+                            <field string="Beneficios Usados" name="benefit_member_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" string='Aliado'/>
+                            <field name="vat" force_save="1" readonly="1"/>
+                            <field name="city_id" force_save="1" readonly="1"/>
+                            <field name="x_type_vinculation" />
+                            <field name="x_date_vinculation" required="1" />
+                            <field name="x_company_size" required="1" />
+                        </group>
+                        <group>
+                            <field name="type_member" force_save="1" readonly="1" widget="badge"/>
+                            <field name="x_sector_id" force_save="1" readonly="1"/>
+                            <field name="member_red_id" force_save="1" readonly="1"/>
+                            <field name="meet_loyalty" force_save="1" readonly="1"/>
+                            <field name="date_loyalty" force_save="1" readonly="1"/>
+                            <field name="description_loyalty" force_save="1" readonly="1" widget="text"/>                            
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
     <record id="res_partner_member_logyca_view_tree" model="ir.ui.view">
         <field name="name">res.partner.member.logyca.tree</field>
         <field name="model">res.partner.member.logyca</field>
         <field name="arch" type="xml">
-            <tree string="Miembros LOGYCA" create="false" edit="false">
+            <tree string="Miembros LOGYCA" create="false" edit="false" decoration-success="type_member == 'A'" decoration-info="type_member == 'B'" decoration-muted="type_member == 'C'">
                 <field name="id" invisible="1"/>
                 <field name="vat"/>
                 <field name="partner_id"/>
                 <field name="x_date_vinculation" />
                 <field name="x_type_vinculation" />
-                <field name="type_member"/>
+                <field name="type_member" widget="badge"/>
                 <field name="member_red_id" />
+                <field name="x_sector_id" />
                 <field name="city_id" />
+                <field name="meet_loyalty" />
+                <field name="date_loyalty" />
+                <field name="description_loyalty" />
             </tree>
         </field>
     </record>
@@ -51,7 +91,7 @@
         <field name="arch" type="xml">
             <pivot string="Miembros LOGYCA">
                 <field name="type_member" type="col"/>
-                <field name="partner_id" type="row"/>
+                <field name="member_red_id" type="row"/>
             </pivot>
         </field>
     </record>
@@ -79,14 +119,12 @@
                         <aggregate name="partner" string="Total Miembros" group_operator="count" field="partner_id" measure="__count__"/>
                     </group>
                     <group col="1">
-                        <widget name="pie_chart" title="Por Tipo" attrs="{'groupby': 'type_member'}"/>
-                        <!-- <widget name="pie_chart" title="Por Ciudad" attrs="{'groupby': 'city_id'}"/> -->
+                        <widget name="pie_chart" title="Por Tamaño" attrs="{'groupby': 'x_company_size'}"/>
+                        <widget name="pie_chart" title="Reunión de Fidelización" attrs="{'groupby': 'meet_loyalty'}"/>
                         <widget name="pie_chart" title="Por Red de Valor" attrs="{'groupby': 'member_red_id'}"/>
-                        <!-- <widget name="pie_chart" title="Por Tipo de Vinculación" attrs="{'groupby': 'x_type_vinculation'}"/> -->
                     </group>
                 </group>
-                <!-- <view type="pivot" ref="crm_allies.res_partner_member_logyca_view_pivot"/> -->
-                <!-- <view type="cohort" ref="crm_enterprise.crm_lead_view_cohort"/> -->
+                <view type="pivot" ref="crm_allies.res_partner_member_logyca_view_pivot"/>
             </dashboard>
         </field>
     </record>
@@ -94,7 +132,7 @@
     <record id="action_res_partner_member_logyca" model="ir.actions.act_window">
         <field name="name">Miembros LOGYCA</field>
         <field name="res_model">res.partner.member.logyca</field>
-        <field name="view_mode">dashboard,tree,pivot,graph</field>
+        <field name="view_mode">dashboard,tree,form,pivot,graph</field>
         <field name="view_id" ref="res_partner_member_logyca_view_dashboard"/>
     </record>
 
