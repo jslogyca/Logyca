@@ -31,7 +31,7 @@ class ResPartner(models.Model):
     icon_id = fields.Many2one('ir.attachment', string='A', domain="[('name', '=', 'a.png')]")
     user_loyalty = fields.Boolean(string='Lider Fidelización')
     meet_loyalty = fields.Selection([("SI", "SI"),
-                                ("NO", "NO")], default="COMERCIAL", string='Reunión Fidelización')    
+                                ("NO", "NO")], default="NO", string='Reunión Fidelización')    
     date_loyalty = fields.Date(string='Fecha de Fidelización')
     follow_ids = fields.One2many('follow.partner.loyalty', 'partner_id', string="Fidelización", index=True)
     description_loyalty = fields.Char('Obsercaciones Fidelización')
