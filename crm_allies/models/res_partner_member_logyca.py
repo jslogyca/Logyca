@@ -24,7 +24,7 @@ class ResPartnerMemberLogyca(models.Model):
     city_id = fields.Many2one('logyca.city', string='Ciudad')
     x_date_vinculation = fields.Date('Fecha de Vinculación')
     meet_loyalty = fields.Selection([("SI", "SI"),
-                                ("NO", "NO")], default="COMERCIAL", string='Reunión Fidelización')    
+                                ("NO", "NO")], default="NO", string='Reunión Fidelización')    
     date_loyalty = fields.Date(string='Fecha de Fidelización')
     description_loyalty = fields.Char('Obsercaciones Fidelización')
     service_member_count = fields.Integer(compute='_compute_service_member_count', string='Servicios Count')
