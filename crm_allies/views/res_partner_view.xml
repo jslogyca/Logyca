@@ -20,40 +20,38 @@
             </xpath>
         </field>
     </record> -->
-    <record model="ir.ui.view" id="view_partner_form_allies">
-        <field name="name">res.partner.form.allies</field>
+    <record model="ir.ui.view" id="view_partner_form_follow">
+        <field name="name">res.partner.form.follow</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"></field>
         <field name="arch" type="xml">
-            <!-- <xpath expr="//page[@name='sales_purchases']" position="after">
-                <page string="Allies" name="allies">
+            <xpath expr="//page[@name='sales_purchases']" position="after">
+                <page string="Fidelización" name="loyalty">
                     <group>
                         <group>
-                            <field name="allies_logyca"/>
-                            <field name="allies_user_id"/>
+                            <field name="meet_loyalty" force_save="1" readonly="1"/>
+                            <field name="type_member" class="d-flex flex-wrap" widget="radio" options="{'horizontal': true}" />
                         </group>
                         <group>
-                            <field name="sub_type_allies"/>
+                            <field name="date_loyalty" force_save="1" readonly="1"/>
+                            <field name="member_red_id" />
                         </group>
                     </group>
-                    <field name="projects_ids" nolabel="1">
+                    <field name="follow_ids" nolabel="1" force_save="1" readonly="1">
                         <tree editable="bottom">
-                            <field name="year_id" />
-                            <field name="object" />
-                            <field name="indicator" />
-                            <field name="project_present" />
-                            <field name="project_last" />
-                            <field name="advance_last" />
+                            <field name="date" />
+                            <field name="contact_partner" />
+                            <field name="job_partner" />
+                            <field name="phone_partner" />
+                            <field name="email_partner" />                            
+                            <field name="description" />
                         </tree>
                     </field>
                 </page>
-            </xpath> -->
-            <xpath expr="//field[@name='category_id']" position="after">
-                <field name="type_member" class="d-flex flex-wrap" widget="radio" options="{'horizontal': true}" />
-                <field name="member_red_id" />
             </xpath>
         </field>
     </record>
+
     <record model="ir.ui.view" id="res_partner_kanban_view_member">
         <field name="name">base.res.partner.kanban.view.member</field>
         <field name="model">res.partner</field>

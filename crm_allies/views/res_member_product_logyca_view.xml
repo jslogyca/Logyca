@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_member_product_logyca_view_tree" model="ir.ui.view">
+        <field name="name">res.member.product.logyca.tree</field>
+        <field name="model">res.member.product.logyca</field>
+        <field name="arch" type="xml">
+            <tree string="Servicios Pagos" create="false" edit="false">
+                <field name="id" invisible="1"/>
+                <field name="vat"/>
+                <field name="partner_id"/>
+                <field name="product_id" />
+                <field name="year_fact" />                
+                <field name="amount_untaxed" />
+                <field name="invoice_user_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="res_member_product_logyca_filter" model="ir.ui.view">
+        <field name="name">res.member.product.logyca.filter</field>
+        <field name="model">res.member.product.logyca</field>
+        <field name="arch" type="xml">
+            <search string="Servicios Pagos">
+                <field name="partner_id" operator="child_of"/>
+                <field name="year_fact"/>
+                <field name="product_id"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Servicio" name="groupy_by_product_id" domain="[]" context="{'group_by': 'product_id'}"/>
+                    <filter string="Empresa" name="groupy_by_partner_id" domain="[]" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Año" name="groupy_by_year_fact" domain="[]" context="{'group_by': 'year_fact'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- <record id="res_member_product_logyca_view_pivot" model="ir.ui.view">
+        <field name="name">res.member.product.logyca.pivot</field>
+        <field name="model">res.member.product.logyca</field>
+        <field name="arch" type="xml">
+            <pivot string="Servicios Pagos">
+                <field name="type_member" type="col"/>
+                <field name="partner_id" type="row"/>
+            </pivot>
+        </field>
+    </record> -->
+
+    <record id="res_member_product_logyca_view_graph" model="ir.ui.view">
+        <field name="name">res.member.product.logyca.view.graph</field>
+        <field name="model">res.member.product.logyca</field>
+        <field name="arch" type="xml">
+            <graph string="Servicios Pagos" type="bar">
+                <field name="product_id" type="row"/>
+                <field name="id" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_res_member_product_logyca" model="ir.actions.act_window">
+        <field name="name">Servicios Pagos</field>
+        <field name="res_model">res.member.product.logyca</field>
+        <field name="view_mode">tree,graph</field>
+        <field name="view_id" ref="res_member_product_logyca_view_tree"/>
+    </record>
+    <record id="action_member_product_logyca_partner" model="ir.actions.act_window">
+        <field name="name">Servicios Pagos</field>
+        <field name="res_model">res.member.product.logyca</field>
+        <field name="view_mode">graph,tree</field>
+        <field name="view_id" ref="res_member_product_logyca_view_graph"/>
+    </record>
+
+    <menuitem
+        id="account_menu_res_member_product_logyca"
+        name="Servicios Pagos"
+        action="action_res_member_product_logyca"
+        parent="account_menu_benefits_membership_lg"
+        sequence="7"/>    
+
+</odoo>

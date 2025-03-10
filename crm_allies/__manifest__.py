@@ -34,6 +34,8 @@
         "views/reason_cancel_project_view.xml",
         "views/res_partner_member_logyca_view.xml",
         "views/res_member_removed_logyca_view.xml",
+        "views/follow_partner_loyalty_view.xml",
+        "views/res_member_product_logyca_view.xml",
         "views/res_partner_view.xml",
         "wizard/project_allies_cancel_wizard_view.xml",
         "wizard/benefi_import_file_member_wizard_view.xml",
