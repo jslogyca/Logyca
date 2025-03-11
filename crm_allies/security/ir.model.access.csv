@@ -9,5 +9,4 @@ account_benefits_membership_partner,benefits.membership.partner,model_benefits_m
 account_benefi_import_file_member_wizard,benefi.import.file.member.wizard,model_benefi_import_file_member_wizard,crm_allies.group_manager_crm_allies,1,1,1,1
 account_res_partner_member_logyca,res.partner.member.logyca,model_res_partner_member_logyca,crm_allies.group_manager_crm_allies,1,1,1,1
 account_res_member_removed_logyca,res.member.removed.logyca,model_res_member_removed_logyca,crm_allies.group_manager_crm_allies,1,1,1,1
-follow_partner_loyalty,follow.partner.loyalty,model_follow_partner_loyalty,crm_allies.group_manager_crm_allies,1,1,1,1
 res_member_product_logyca,res.member.product.logyca,model_res_member_product_logyca,crm_allies.group_manager_crm_allies,1,1,1,1
