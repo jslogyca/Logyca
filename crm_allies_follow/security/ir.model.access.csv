@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+follow_partner_loyalty,follow.partner.loyalty,model_follow_partner_loyalty,crm_allies_follow.group_manager_crm_follow,1,1,1,1

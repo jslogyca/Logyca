@@ -27,17 +27,17 @@
         <field name="arch" type="xml">
             <xpath expr="//page[@name='sales_purchases']" position="after">
                 <page string="Fidelización" name="loyalty">
-                    <group>
-                        <group>
+                    <group name='loyalte_one'>
+                        <group name='loyalte_two'>
                             <field name="meet_loyalty" force_save="1" readonly="1"/>
                             <field name="type_member" class="d-flex flex-wrap" widget="radio" options="{'horizontal': true}" />
                         </group>
-                        <group>
+                        <group name='loyalte_four' >
                             <field name="date_loyalty" force_save="1" readonly="1"/>
                             <field name="member_red_id" />
                         </group>
                     </group>
-                    <field name="follow_ids" nolabel="1" force_save="1" readonly="1">
+                    <!-- <field name="follow_ids" nolabel="1" force_save="1" readonly="1">
                         <tree editable="bottom">
                             <field name="date" />
                             <field name="contact_partner" />
@@ -46,7 +46,7 @@
                             <field name="email_partner" />                            
                             <field name="description" />
                         </tree>
-                    </field>
+                    </field> -->
                 </page>
             </xpath>
         </field>

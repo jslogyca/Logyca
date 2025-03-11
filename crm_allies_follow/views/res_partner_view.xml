@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_partner_form_follow">
+        <field name="name">res.partner.form.follow</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='loyalte_one']" position="after">
+                <field name="follow_ids" nolabel="1" force_save="1" readonly="1">
+                    <tree editable="bottom">
+                        <field name="date" />
+                        <field name="contact_partner" />
+                        <field name="job_partner" />
+                        <field name="phone_partner" />
+                        <field name="email_partner" />                            
+                        <field name="description" />
+                    </tree>
+                </field>
+            </xpath>
+        </field>
+    </record>
+</odoo>

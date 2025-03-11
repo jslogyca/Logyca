@@ -47,7 +47,7 @@
         id="account_menu_follow_partner_loyalty"
         name="Follow Partner Loyalty"
         action="action_follow_partner_loyalty"
-        parent="account_menu_benefits_membership_lg"
+        parent="crm_allies.account_menu_benefits_membership_lg"
         sequence="5"/>    
 
 </odoo>
