@@ -33,5 +33,4 @@ class ResPartner(models.Model):
     meet_loyalty = fields.Selection([("SI", "SI"),
                                 ("NO", "NO")], default="NO", string='Reunión Fidelización')    
     date_loyalty = fields.Date(string='Fecha de Fidelización')
-    follow_ids = fields.One2many('follow.partner.loyalty', 'partner_id', string="Fidelización", index=True)
     description_loyalty = fields.Char('Obsercaciones Fidelización')
