@@ -74,7 +74,6 @@ class AccountDebtorsReport(models.Model):
 
         from_str = """
             account_move am
-                LEFT JOIN account_analytic_account aaa ON aaa.id = am.analytic_account_id 
                 INNER JOIN account_payment_term apt on apt.id = am.invoice_payment_term_id
                 inner join crm_team t on t.id=am.team_id
                 LEFT JOIN debtor_portfolio_status dps on dps.id=am.x_debtor_portfolio_status_id

@@ -97,7 +97,6 @@ class ReportCXCDebtorsAccount(models.Model):
             account_move_line aml
                 INNER JOIN account_move am on aml.move_id = am.id
                 INNER JOIN res_company cc on cc.id=am.company_id
-                LEFT JOIN account_analytic_account aaa ON aaa.id = am.analytic_account_id 
                 LEFT JOIN account_payment_term apt on apt.id = am.invoice_payment_term_id
                 LEFT join crm_team t on t.id=am.team_id
                 LEFT JOIN debtor_portfolio_status dps on dps.id=am.x_debtor_portfolio_status_id
@@ -119,7 +118,6 @@ class ReportCXCDebtorsAccount(models.Model):
                 and am.move_type in ('out_invoice', 'entry')
                 and (am.payment_state='not_paid' or am.payment_state='in_payment')
                 and (am.name LIKE 'FEC%' or am.name LIKE 'FAC%' or am.name LIKE 'FAM%' or am.name LIKE 'CXC%' or am.name LIKE 'FSIV%')
-                and aml.exclude_from_invoice_tab is False
                 ORDER BY number_move ASC
         """
         return group_by_str

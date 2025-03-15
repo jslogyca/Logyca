@@ -10,12 +10,8 @@ from odoo.tools import float_is_zero
 class BlanketOrder(models.Model):
     _name = "purchase.blanket.order"
     _inherit = ["mail.thread", "mail.activity.mixin"]
-    _description = "Blanket Order"
+    _description = "Purchase Blanket Order"
     _order = "date_start desc, id desc"
-
-    @api.model
-    def _default_currency(self):
-        return self.env.user.company_id.currency_id
 
     @api.model
     def _default_company(self):
@@ -42,7 +38,6 @@ class BlanketOrder(models.Model):
         string="Vendor",
         readonly=True,
         tracking=True,
-        states={"draft": [("readonly", False)]},
     )
     partner_ref = fields.Char(string="Vendor Reference", copy=False)
     line_ids = fields.One2many(
@@ -71,9 +66,9 @@ class BlanketOrder(models.Model):
         "account.payment.term",
         string="Payment Terms",
         readonly=True,
-        states={"draft": [("readonly", False)]},
     )
     confirmed = fields.Boolean(copy=False)
+    cancelled = fields.Boolean(copy=False)
     state = fields.Selection(
         selection=[
             ("draft", "Draft"),
@@ -88,7 +83,6 @@ class BlanketOrder(models.Model):
     )
     validity_date = fields.Date(
         readonly=True,
-        states={"draft": [("readonly", False)]},
         tracking=True,
         help="Date until which the blanket order will be valid, after this "
         "date the blanket order will be marked as expired",
@@ -98,23 +92,20 @@ class BlanketOrder(models.Model):
         required=True,
         string="Start Date",
         default=fields.Datetime.now,
-        states={"draft": [("readonly", False)]},
         help="Blanket Order starting date.",
     )
-    note = fields.Text(readonly=True, states={"draft": [("readonly", False)]})
+    note = fields.Text(readonly=True)
     user_id = fields.Many2one(
         "res.users",
         string="Responsible",
         readonly=True,
         default=lambda self: self.env.uid,
-        states={"draft": [("readonly", False)]},
     )
     company_id = fields.Many2one(
         "res.company",
         string="Company",
         default=_default_company,
         readonly=True,
-        states={"draft": [("readonly", False)]},
     )
     purchase_count = fields.Integer(compute="_compute_purchase_count")
 
@@ -178,6 +169,7 @@ class BlanketOrder(models.Model):
         "line_ids.remaining_uom_qty",
         "validity_date",
         "confirmed",
+        "cancelled",
     )
     def _compute_state(self):
         today = fields.Date.today()
@@ -185,9 +177,9 @@ class BlanketOrder(models.Model):
             "Product Unit of Measure"
         )
         for order in self:
-            if not order.confirmed:
+            if not order.confirmed and not order.cancelled:
                 order.state = "draft"
-            elif order.validity_date <= today:
+            elif order.validity_date <= today or order.cancelled:
                 order.state = "expired"
             elif float_is_zero(
                 sum(order.line_ids.mapped("remaining_uom_qty")),
@@ -225,7 +217,7 @@ class BlanketOrder(models.Model):
         self.fiscal_position_id = (
             self.env["account.fiscal.position"]
             .with_context(company_id=self.company_id.id)
-            .get_fiscal_position(self.partner_id.id)
+            ._get_fiscal_position(partner=self.partner_id)
         )
 
         self.currency_id = (
@@ -238,7 +230,7 @@ class BlanketOrder(models.Model):
 
     def unlink(self):
         for order in self:
-            if order.state not in ("draft", "cancel"):
+            if order.state not in ("draft", "expired"):
                 raise UserError(
                     _(
                         "You can not delete an open blanket order! "
@@ -269,7 +261,7 @@ class BlanketOrder(models.Model):
 
     def set_to_draft(self):
         for order in self:
-            order.write({"state": "draft"})
+            order.write({"cancelled": False})
         return True
 
     def action_confirm(self):
@@ -277,11 +269,11 @@ class BlanketOrder(models.Model):
         for order in self:
             vals = {"confirmed": True}
             # Set name by sequence only if is necessary
-            if order.name == _("Draft"):
+            if order.name == "Draft":
                 sequence_obj = self.env["ir.sequence"]
                 if order.company_id:
                     sequence_obj = sequence_obj.with_company(order.company_id)
-                name = sequence_obj.next_by_code("purchase.blanket.order") or _("Draft")
+                name = sequence_obj.next_by_code("purchase.blanket.order") or "Draft"
                 vals.update({"name": name})
             order.write(vals)
         return True
@@ -298,7 +290,7 @@ class BlanketOrder(models.Model):
                                 "Try to cancel them before."
                             )
                         )
-            order.write({"state": "expired"})
+            order.write({"cancelled": True, "confirmed": False})
         return True
 
     def action_view_purchase_orders(self):
@@ -327,7 +319,12 @@ class BlanketOrder(models.Model):
             [("state", "=", "open"), ("validity_date", "<=", today)]
         )
         expired_orders.modified(["validity_date"])
-        expired_orders.recompute()
+        expired_orders.env.flush_all()
+
+    @api.model
+    def compute_warnings(self):
+        """Base function to create activity warnings"""
+        return True
 
     @api.model
     def _search_original_uom_qty(self, operator, value):
@@ -377,7 +374,7 @@ class BlanketOrder(models.Model):
 
 class BlanketOrderLine(models.Model):
     _name = "purchase.blanket.order.line"
-    _description = "Blanket Order Line"
+    _description = "Purchase Blanket Order Line"
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
     @api.depends("original_uom_qty", "price_unit", "taxes_id")
@@ -411,7 +408,15 @@ class BlanketOrderLine(models.Model):
         required=True,
         domain=[("purchase_ok", "=", True)],
     )
-    product_uom = fields.Many2one("uom.uom", string="Unit of Measure", required=True)
+    product_uom = fields.Many2one(
+        "uom.uom",
+        string="Unit of Measure",
+        compute="_compute_product_uom",
+        store=True,
+        readonly=False,
+        precompute=True,
+        required=True,
+    )
     price_unit = fields.Float(string="Price", required=True, digits=("Product Price"))
     taxes_id = fields.Many2many(
         "account.tax",
@@ -509,7 +514,6 @@ class BlanketOrderLine(models.Model):
         return super().name_get()
 
     def _get_display_price(self, product):
-
         seller = product._select_seller(
             partner_id=self.order_id.partner_id,
             quantity=self.original_uom_qty,
@@ -560,7 +564,7 @@ class BlanketOrderLine(models.Model):
             ):
                 self.price_unit = self._get_display_price(self.product_id)
             if self.product_id.code:
-                name = "[{}] {}".format(name, self.product_id.code)
+                name = f"[{name}] {self.product_id.code}"
             if self.product_id.description_purchase:
                 name += "\n" + self.product_id.description_purchase
             self.name = name
@@ -608,6 +612,14 @@ class BlanketOrderLine(models.Model):
             line.remaining_qty = line.product_uom._compute_quantity(
                 line.remaining_uom_qty, line.product_id.uom_id
             )
+
+    @api.depends("product_id")
+    def _compute_product_uom(self):
+        for line in self:
+            if not line.product_uom or (
+                line.product_id.uom_id.id != line.product_uom.id
+            ):
+                line.product_uom = line.product_id.uom_id
 
     def _validate(self):
         try:
