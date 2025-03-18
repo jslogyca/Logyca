@@ -14,6 +14,7 @@
                         domain="[('company_id', '=', company_id)]"/>
                 <field name="analytic_account_id" />
                 <field name="source_id" />
+                <field name="campaign_id"/>
             </xpath>
             <xpath expr="//field[@name='tag_ids']" position="attributes">
                 <attribute name="invisible">True</attribute>
@@ -39,6 +40,18 @@
         <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"></field>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='activity_state']" position="after">
+                <field name="product_id" />
+                <field name="product_two_id" />
+                <field name="analytic_account_id" />
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_crm_case_leads_filter_lg">
+        <field name="name">crm.case.leads.filter</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_leads_filter"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='team_id']" position="after">
                 <field name="product_id" />
                 <field name="product_two_id" />
                 <field name="analytic_account_id" />

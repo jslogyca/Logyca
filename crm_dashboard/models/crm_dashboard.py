@@ -1,25 +1,3 @@
-""""CRM Dashboard"""
-# -*- coding: utf-8 -*-
-#############################################################################
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#
-#    Copyright (C) 2021-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
-#
-#    You can modify it under the terms of the GNU LESSER
-#    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU LESSER GENERAL PUBLIC LICENSE (LGPL v3) for more details.
-#
-#    You should have received a copy of the GNU LESSER GENERAL PUBLIC LICENSE
-#    (LGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-#############################################################################
 import datetime
 import calendar
 
@@ -76,11 +54,11 @@ class CRMLead(models.Model):
                 date = fields.Datetime.now()
                 follow_lead = days_between(follow.date_follow, date)
                 if follow_lead <= 7:
-                    follow.follow_lead = 'baja'
+                    follow.follow_lead = 'alta'
                 elif follow_lead >= 8 and follow_lead <= 14:
                     follow.follow_lead = 'media'
                 else:
-                    follow.follow_lead = 'alta'
+                    follow.follow_lead = 'baja'
             else:
                 follow.follow_lead = 'baja'
 
@@ -92,6 +70,9 @@ class CRMLead(models.Model):
     follow_lead = fields.Selection([('baja', 'Baja'), 
                                 ('media', 'Media'),
                                 ('alta', 'Alta')], string='Follow', default='baja', compute='_get_follow')
+    risk_lead = fields.Selection([('bajo', 'Bajo'), 
+                                ('medio', 'Medio'),
+                                ('alto', 'Alto')], string='Riesgo', default='bajo')
 
     @api.model
     def _get_currency(self):
@@ -1442,35 +1423,4 @@ class CRMLead(models.Model):
 class CampaignSmartButton(models.Model):
     _inherit = 'utm.campaign'
 
-    total_ratio = fields.Float(compute='_compute_ratio')
-
-    def get_ratio(self):
-        """Onclick of Smart Button"""
-        self.ensure_one()
-
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Win Loss Ratio',
-            'view_mode': 'kanban',
-            'res_model': 'crm.lead',
-            'domain': [['user_id', '=', self.env.uid], "|",
-                       "&", ["active", "=", True], ["probability", '=', 100],
-                       "&", ["active", "=", False], ["probability", '=', 0]
-                       ],
-            'context': "{'create': False,'records_draggable': False}"
-        }
-
-    def _compute_ratio(self):
-        """Compute the Win Loss Ratio"""
-        total_won = self.env['crm.lead'].search_count(
-            [('active', '=', True), ('probability', '=', 100),
-             ('user_id', '=', self.env.uid)])
-        total_lose = self.env['crm.lead'].search_count(
-            [('active', '=', False), ('probability', '=', 0),
-             ('user_id', '=', self.env.uid)])
-
-        if total_lose == 0:
-            ratio = 0
-        else:
-            ratio = round(total_won / total_lose, 2)
-        self.total_ratio = ratio
+    total_ratio = fields.Float(defaut=0.0)

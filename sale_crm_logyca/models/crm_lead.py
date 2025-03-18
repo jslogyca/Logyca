@@ -44,3 +44,9 @@ class CRMLead(models.Model):
         if archived:
             archived.write({'probability': 0, 'automated_probability': 0, 'lost_alert': False})
         return res
+
+    @api.onchange('activity_ids')
+    def validas_activity_ids(self):
+        print('rrrrrrrrrrr')
+        UUUUUUU
+    
