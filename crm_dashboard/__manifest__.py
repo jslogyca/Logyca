@@ -32,27 +32,12 @@
     'website': "https://www.cybrosys.com",
     'depends': ['base', 'crm', 'sale_management'],
     'data': [
-        'views/dashboard_view.xml',
         'views/crm_lead_view.xml',
     ],
     'assets': {
         'web.assets_backend': [
-            'crm_dashboard/static/src/css/dashboard.css',
-            'crm_dashboard/static/src/css/style.scss',
-            'crm_dashboard/static/src/css/material-gauge.css',
-            'crm_dashboard/static/src/js/dashboard_view.js',
-            'crm_dashboard/static/src/js/custom.js',
-            'crm_dashboard/static/src/js/lib/highcharts.js',
-            'crm_dashboard/static/src/js/lib/Chart.bundle.js',
-            'crm_dashboard/static/src/js/lib/funnel.js',
-            'crm_dashboard/static/src/js/lib/d3.min.js',
-            'crm_dashboard/static/src/js/lib/material-gauge.js',
-            'crm_dashboard/static/src/js/lib/columnHeatmap.min.js',
-            'crm_dashboard/static/src/js/lib/columnHeatmap.js',
         ],
         'web.assets_qweb': [
-            'crm_dashboard/static/src/xml/dashboard_view.xml',
-            # 'crm_dashboard/static/src/xml/sub_dashboard.xml',
         ],
     },
     'images': [
