@@ -4,7 +4,7 @@ from odoo import models
 import json
 
 class ReportCertificationReport(models.AbstractModel):
-    _inherit = 'l10n_co_reports.certification_report'
+    _inherit = 'report.l10n_co_reports.report_certification'
 
     def print_pdf(self, options):
         lines = self._get_lines(options)

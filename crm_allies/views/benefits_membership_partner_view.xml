@@ -105,7 +105,7 @@
         </field>
     </record>
 
-    <record id="benefits_membership_partner_view_dashboard" model="ir.ui.view">
+    <!-- <record id="benefits_membership_partner_view_dashboard" model="ir.ui.view">
         <field name="name">benefits.membership.partner.view.dashboard</field>
         <field name="model">benefits.membership.partner</field>
         <field name="mode">primary</field>
@@ -116,13 +116,6 @@
                     <group>
                         <aggregate name="benefits" string="Beneficios Entregados" group_operator="count" field="id" measure="__count__"/>
                         <aggregate name="partner" string="Miembros" group_operator="count" field="partner_id" measure="__count__"/>
-                        <!-- <aggregate name="expected_revenue_aggregate" field="planned_revenue" string="Expected Revenue"/>
-                        <aggregate name="prorated_revenue_aggregate" field="expected_revenue" invisible="1"/>
-                        <formula name="prorated_revenue" string="Prorated Revenue" value="record.prorated_revenue_aggregate" widget="monetary"/>
-                        <formula name="deal_size" string="Average Deal Size" value="record.expected_revenue_aggregate / record.opportunities" widget="monetary"/>
-                        <aggregate name="days_to_assign" string="Days to Assign" field="day_open" group_operator="avg" value_label="days"/>
-                        <aggregate name="days_to_close" string="Days to Close" field="day_close" group_operator="avg" value_label="days"/>
-                        <aggregate name="days_exceeding_closing" string="Exceeding Close Days" field="days_exceeding_closing" group_operator="avg"/> -->
                     </group>
                     <group col="1">
                         <widget name="pie_chart" title="Win/Loss Ratio" attrs="{'groupby': 'date_done'}"/>
@@ -130,16 +123,15 @@
                     </group>
                 </group>
                 <view type="pivot" ref="crm_allies.benefits_membership_partner_view_pivot"/>
-                <!-- <view type="cohort" ref="crm_enterprise.crm_lead_view_cohort"/> -->
             </dashboard>
         </field>
-    </record>
+    </record> -->
 
     <record id="action_benefits_membership_partner" model="ir.actions.act_window">
         <field name="name">Benefits Membership Partner</field>
         <field name="res_model">benefits.membership.partner</field>
-        <field name="view_mode">dashboard,tree,form,pivot,graph</field>
-        <field name="view_id" ref="benefits_membership_partner_view_dashboard"/>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="view_id" ref="benefits_membership_partner_view_tree"/>
     </record>
 
     <menuitem

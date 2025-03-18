@@ -14,5 +14,16 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html) -->
             <field name="interval_type">days</field>
             <field name="numbercall">-1</field>
         </record>
+
+        <record id="ir_cron_formio_license_notify_renewal_reminder_actitivies" forcecreate="True" model="ir.cron">
+            <field name="name">Forms: Notify License Renewal Reminders</field>
+            <field name="model_id" ref="model_formio_license"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_notify_renewal_reminder_actitivies()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+        </record>
     </data>
 </odoo>

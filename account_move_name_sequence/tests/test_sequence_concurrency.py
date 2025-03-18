@@ -177,7 +177,7 @@ class TestSequenceConcurrency(TransactionCase):
             with env0.cr.savepoint(), env1.cr.savepoint():
                 # Edit something in "last move"
                 invoice.write({"write_uid": env0.uid})
-                invoice.flush()
+                env0.flush_all()
                 self._create_invoice_form(env1)
 
     def test_sequence_concurrency_30_editing_last_payment(self):
@@ -198,7 +198,7 @@ class TestSequenceConcurrency(TransactionCase):
             with env0.cr.savepoint(), env1.cr.savepoint():
                 # Edit something in "last move"
                 payment_move.write({"write_uid": env0.uid})
-                payment_move.flush()
+                env0.flush_all()
                 self._create_payment_form(env1)
 
     @tools.mute_logger("odoo.sql_db")
@@ -221,7 +221,9 @@ class TestSequenceConcurrency(TransactionCase):
             lines2reconcile = (
                 (payment_move | invoice)
                 .mapped("line_ids")
-                .filtered(lambda l: l.account_id.internal_type == "receivable")
+                .filtered(
+                    lambda line: line.account_id.account_type == "asset_receivable"
+                )
             )
             with env0.cr.savepoint(), env1.cr.savepoint():
                 # Reconciling "last move"
@@ -229,7 +231,7 @@ class TestSequenceConcurrency(TransactionCase):
                 # lock records too many time
                 lines2reconcile.reconcile()
                 # Many pieces of code call flush directly
-                lines2reconcile.flush()
+                env0.flush_all()
                 self._create_invoice_form(env1)
 
     def test_sequence_concurrency_50_reconciling_last_payment(self):
@@ -251,7 +253,9 @@ class TestSequenceConcurrency(TransactionCase):
             lines2reconcile = (
                 (payment_move | invoice)
                 .mapped("line_ids")
-                .filtered(lambda l: l.account_id.internal_type == "receivable")
+                .filtered(
+                    lambda line: line.account_id.account_type == "asset_receivable"
+                )
             )
             with env0.cr.savepoint(), env1.cr.savepoint():
                 # Reconciling "last move"
@@ -259,7 +263,7 @@ class TestSequenceConcurrency(TransactionCase):
                 # lock records too many time
                 lines2reconcile.reconcile()
                 # Many pieces of code call flush directly
-                lines2reconcile.flush()
+                env0.flush_all()
                 self._create_payment_form(env1)
 
     def test_sequence_concurrency_90_payments(self):

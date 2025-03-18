@@ -424,7 +424,7 @@ msgstr "你确定吗？本表单将不予公布。"
 
 #. module: formio
 #: model_terms:ir.ui.view,arch_db:formio.view_formio_version_github_tag_form
-msgid "Are you sure to reset, to download and install again?"
+msgid "Are you sure to reset, to download and reinstall?"
 msgstr "您要重置，下载并重新安装吗？"
 
 #. module: formio
@@ -1597,7 +1597,7 @@ msgstr "模型名称"
 
 #. module: formio
 #: model_terms:ir.ui.view,arch_db:formio.view_formio_version_github_tag_form
-msgid "Reset (to download and install again)"
+msgid "Reset (to download and reinstall)"
 msgstr "重置（将重新下载并安装）"
 
 #. module: formio

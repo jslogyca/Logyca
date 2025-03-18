@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+asset.modify# -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import api, fields, models, _
@@ -6,7 +6,7 @@ from odoo.exceptions import UserError
 
 
 class AssetSell(models.TransientModel):
-    _inherit = 'account.asset.sell'
+    _inherit = 'asset.modify'
 
     def do_action(self):
         self.ensure_one()

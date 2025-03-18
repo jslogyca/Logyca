@@ -1,4 +1,4 @@
-# Copyright 2023 Nova Code (https://www.novacode.nl)
+# Copyright Nova Code (https://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
 import logging
@@ -17,23 +17,64 @@ class ServerAction(models.Model):
 
     formio_ref = fields.Char(
         string="Forms Ref",
+        compute='_compute_formio_ref',
+        store=True,
         help="Identifies a server action with related form builder.",
     )
+    formio_form_execute_after_action = fields.Selection(
+        [
+            ('submit', 'Submit'),
+            ('save_draft', 'Save Draft'),
+            ('submit_save_draft', 'Submit and Save Draft')
+        ],
+        string='Forms Execute After',
+        help='If assigned in a Form Builder (Actions API), this sever action will be executed.'
+    )
+    formio_builder_ids = fields.Many2many(
+        'formio.builder',
+        compute='_compute_formio_builder_ids',
+        search='_search_formio_builder_ids'
+    )
 
-    @api.onchange('model_id')
-    def _onchange_formio_ref(self):
+    def _search_formio_builder_ids(self, operator, operand):
+        domain = [('id', 'in', operand)]
+        builders = self.env['formio.builder'].search(domain)
+        return [('id', 'in', builders.mapped('server_action_ids').ids)]
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        res = super().create(vals_list)
+        active_model = self._context.get('active_model')
+        active_id = self._context.get('active_id')
+        if active_model == 'formio.builder' and active_id:
+            builder = self.env['formio.builder'].browse(active_id)
+            builder.server_action_ids = [fields.Command.link(res.id)]
+        return res
+
+    @api.depends('model_id')
+    def _compute_formio_ref(self):
         form_model = self.env.ref('formio.model_formio_form')
-        if self.model_id.id == form_model.id and not self.formio_ref:
-            self.formio_ref = str(uuid.uuid4())
-        elif self.model_id.id != form_model.id:
-            self.formio_ref = False
+        for rec in self:
+            if rec.model_id.id == form_model.id and not rec.formio_ref:
+                rec.formio_ref = str(uuid.uuid4())
+            elif rec.model_id.id != form_model.id:
+                rec.formio_ref = False
+
+    def _compute_formio_builder_ids(self):
+        domain = [('server_action_ids', 'in', self.ids)]
+        builders = self.env['formio.builder'].search(domain)
+        for rec in self:
+            rec.formio_builder_ids = self.env['formio.builder'].id
+            for builder in builders:
+                if rec.id in builder.server_action_ids.ids:
+                    rec.formio_builder_ids = [fields.Command.link(builder.id)]
 
     @api.constrains('formio_ref')
     def constaint_check_formio_ref(self):
         for rec in self:
             if rec.formio_ref:
                 if re.search(r"[^a-zA-Z0-9_-]", rec.formio_ref) is not None:
-                    raise ValidationError(_('Forms Ref is invalid. Use ASCII letters, digits, "-" or "_".'))
+                    raise ValidationError(_('Form Ref is invalid. Use ASCII letters, digits, "-" or "_".'))
 
     @api.constrains('formio_ref')
     def _constraint_unique_formio_ref(self):
@@ -41,7 +82,7 @@ class ServerAction(models.Model):
             domain = [("formio_ref", "=", rec.formio_ref)]
             if rec.formio_ref and self.search_count(domain) > 1:
                 msg = _(
-                    'A Server Action with Forms Ref "%s" already exists.\nForms Ref should be unique.'
+                    'A Server Action with Form Ref "%s" already exists.\nForm Ref should be unique.'
                 ) % (rec.formio_ref)
                 raise ValidationError(msg)
 

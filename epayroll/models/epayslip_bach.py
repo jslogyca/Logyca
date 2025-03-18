@@ -12,7 +12,8 @@ from io import BytesIO
 from zipfile import ZipFile
 from xml.dom import minidom
 
-import pem, xmlsig, logging
+# import pem, xmlsig, logging
+import xmlsig, logging
 import logging
 _logger = logging.getLogger(__name__)
 

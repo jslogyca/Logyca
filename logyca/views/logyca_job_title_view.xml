@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="logyca_menu_action_job_title" model="ir.actions.act_window">
+        <field name="name">Cargos</field>
+          <field name="res_model">logyca.job_title</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear cargo
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_job_title">
+      <field name="name">logyca list job_title</field>
+      <field name="model">logyca.job_title</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>                                              
+        </tree>
+      </field>
+    </record>
+    <menuitem name="Cargos" id="logyca.menu_job_title" parent="logyca.menus_parameterization"  sequence="5" action="logyca_menu_action_job_title"/>
+</odoo>

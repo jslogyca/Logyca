@@ -20,7 +20,7 @@
 ###############################################################################
 {
     "name" : "Multi Chatbot Connector",
-    "version" : "13.0.0.1",
+    "version" : "17.0.0.1",
     "author" : "Geminate Consultancy Services",
     "website" : "http://www.geminatecs.com",
     "category" : "Website",

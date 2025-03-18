@@ -1,6 +1,6 @@
 {
     "name": "Invoice Support Report",
-    "version": "13.0.0.0.0",
+    "version": "17.0.0.0.0",
     "license": "AGPL-3",
     "author": "Capriatto Ft. LOGYCA SERVICIOS",
     "website": "https://github.com/jslogyca/Logyca",

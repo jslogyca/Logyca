@@ -12,9 +12,9 @@
                             <field name="name"/>
                         </group>
                         <group >
-                            <field name="lser_analytic_tag_ids"/>
+                            <!-- <field name="lser_analytic_tag_ids"/>
                             <field name="iac_analytic_tag_ids"/>
-                            <field name="log_analytic_tag_ids"/>
+                            <field name="log_analytic_tag_ids"/> -->
                         </group>
                     </group>
                 </sheet>
@@ -29,9 +29,9 @@
             <tree string="Grupos presupuestal" >
                 <field name="code"/>
                 <field name="name"/>
-                <field name="lser_analytic_tag_ids"/>
+                <!-- <field name="lser_analytic_tag_ids"/>
                 <field name="iac_analytic_tag_ids"/>
-                <field name="log_analytic_tag_ids"/>
+                <field name="log_analytic_tag_ids"/> -->
             </tree>
         </field>
     </record>
@@ -46,7 +46,7 @@
 
     <menuitem id="menu_logyca_budget_group"
         name="Grupos presupuestal"
-        parent="main_menu_fact_mass_confg"
+        parent="logyca.menus_parameterization"
         action="action_logyca_budget_group"
         sequence="3"
         groups="group_invoice_mass"/>
