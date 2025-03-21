@@ -1,6 +1,6 @@
 {
     'name': 'Misuse GS1 Log',
-    'version': '15.0.1.0.0',
+    'version': '15.0.1.0.1',
     'summary': 'Almacena la trazabilidad del mal uso del sistema GS1',
     'author': 'LOGYCA / SERVICIOS',
     'depends': ['contacts'],
