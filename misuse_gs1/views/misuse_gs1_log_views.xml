@@ -39,9 +39,6 @@
                         <field name="date_end"/>
                         <field name="remaining_time"/>
                     </group>
-                    <group>
-                        <field name="prefixes"/>
-                    </group>
                     <notebook>
                         <page string="Attachments">
                             <field name="user_attachments">
@@ -49,12 +46,6 @@
                                     <field name="name"/>
                                     <field name="path"/>
                                 </tree>
-                                <form string="Attachment">
-                                    <group>
-                                        <field name="name"/>
-                                        <field name="path"/>
-                                    </group>
-                                </form>
                             </field>
                         </page>
                     </notebook>
