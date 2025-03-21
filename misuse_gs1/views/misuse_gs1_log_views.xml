@@ -40,9 +40,20 @@
                         <field name="remaining_time"/>
                     </group>
                     <notebook>
+                        <page string="Follow-up">
+                            <field name="follow_up">
+                                <tree string="Follow-up" create="false">
+                                    <field name="date_time"/>
+                                    <field name="comments"/>
+                                    <field name="gs1_agent_email"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <notebook>
                         <page string="Attachments">
                             <field name="user_attachments">
-                                <tree string="Attachments" create="false" editable="bottom">
+                                <tree string="Attachments" create="false">
                                     <field name="name"/>
                                     <field name="path"/>
                                 </tree>
