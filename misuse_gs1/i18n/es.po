@@ -55,9 +55,9 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: misuse_gs1
-#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_followup__date_time
-msgid "Date and Time"
-msgstr "Fecha y hora"
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_followup__create_date
+msgid "Created on"
+msgstr "Creado el"
 
 #. module: misuse_gs1
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__display_name

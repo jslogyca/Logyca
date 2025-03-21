@@ -43,7 +43,7 @@
                         <page string="Follow-up">
                             <field name="follow_up">
                                 <tree string="Follow-up" create="false">
-                                    <field name="date_time"/>
+                                    <field name="create_date"/>
                                     <field name="gs1_agent_email"/>
                                     <field name="comments"/>
                                 </tree>
