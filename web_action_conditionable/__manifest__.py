@@ -9,7 +9,7 @@
     "license": "AGPL-3",
     "assets": {
         "web.assets_backend": [
-            "web_action_conditionable/static/src/js/field_one2many.js",
+            # "web_action_conditionable/static/src/js/field_one2many.js",
         ],
     },
     "installable": True,
