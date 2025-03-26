@@ -6,19 +6,18 @@
 		<field name="arch" type="xml">
 			<form string="Epayslip Bach Run">		
 				<header>
-					<button name="action_draft" id='action_draft_id' string='Draft' type="object" attrs='{"invisible":[("state", "not in", ("cancel"))]}'/>  
+					<button name="action_draft" id='action_draft_id' string='Draft' type="object" />  
 					<button name="action_hr_epayslip_file" id='action_hr_epayslip_file' string='Report' type="object" 
-							attrs='{"invisible":[("state", "not in", ("generated"))]}' class="oe_highlight"/>
-					<button name="action_validate_generate_epayslip" id='action_validate_generate_epayslip' string='Generar Nóminas Electrónicas' type="object" attrs='{"invisible":[("state", "!=", "draft")]}' class="oe_highlight"/>  
-						<button name="update_data" id='update_data' string='Update Data' type="object" attrs='{"invisible":[("state", "!=", "draft")]}' class="oe_highlight"/>  
-					<!-- <button name="action_generated" id='action_generated_id' string='Generated' type="object" attrs='{"invisible":[("state", "!=", "draft")]}'/>   -->
-					<button name="action_sent" id='action_sent_id' string='Sent' type="object" attrs='{"invisible":[("state", "!=", "generated")]}' class="oe_highlight"/>
+							class="oe_highlight"/>
+					<button name="action_validate_generate_epayslip" id='action_validate_generate_epayslip' string='Generar Nóminas Electrónicas' type="object"  class="oe_highlight"/>  
+						<button name="update_data" id='update_data' string='Update Data' type="object"  class="oe_highlight"/>  
+					<!-- <button name="action_generated" id='action_generated_id' string='Generated' type="object" />   -->
+					<button name="action_sent" id='action_sent_id' string='Sent' type="object" class="oe_highlight"/>
 					<button name="action_cancel" 
 							id='action_cancel_id' 
 							string='Cancel' 
-							type="object" 
-							attrs='{"invisible":[("state", "=", "cancel")]}'/>
-					<button name="get_status_validation" id='get_status_validation_id' string='Validar' type="object" attrs='{"invisible":[("state", "!=", "sent")]}' class="oe_highlight"/>
+							type="object" />
+					<button name="get_status_validation" id='get_status_validation_id' string='Validar' type="object" class="oe_highlight"/>
 					<field name = 'state'
 							widget='statusbar'
 							statusbar_visible='draft,generated,sent,cancel'
@@ -27,19 +26,19 @@
 				<sheet> 
 					<label string='Name' for='name'/> 
 					<h1> 
-						<field name="name" attrs='{"readonly":[("state", "!=", "draft")]}' required='True'/>
+						<field name="name"  required='True'/>
 					</h1>
 					<group>													
 						<group>	
 							<label string='Periodo' for='start_date'/>
 							<div> 												
-								<field name = 'start_date' attrs='{"readonly":[("state", "!=", "draft")]}' class="oe_inline"  /> - <field name = 'finish_date' attrs='{"readonly":[("state", "!=", "draft")]}' class="oe_inline" />
+								<field name = 'start_date'  class="oe_inline"  /> - <field name = 'finish_date'  class="oe_inline" />
 							</div>								 												
 						</group>
 						
 						<group>	
-							<field name="company_id" attrs='{"readonly":[("state", "!=", "draft")]}' default=''/> 												
-							<field name="type_epayroll" attrs='{"readonly":[("state", "!=", "draft")]}' required="1"/> 												
+							<field name="company_id"  default=''/> 												
+							<field name="type_epayroll"  required="1"/> 												
 						</group>
 					</group>
 					<notebook>

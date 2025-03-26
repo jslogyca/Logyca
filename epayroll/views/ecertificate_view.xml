@@ -6,38 +6,38 @@
 		<field name="arch" type="xml">
 			<form string="Certificates">
 				<header>
-					<button string="Valid" name="action_valid_cert" type="object" states="draft" class="oe_highlight"/>
-					<button string="Draft" name="action_draft_cert" type="object" states="valid" class="oe_highlight"/>
+					<button string="Valid" name="action_valid_cert" type="object" class="oe_highlight"/>
+					<button string="Draft" name="action_draft_cert" type="object" class="oe_highlight"/>
 					<field name="state" widget="statusbar"/>
 				</header>
 				<sheet>
-					<div class="oe_title" name="title" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}">
+					<div class="oe_title" name="title" >
 						<label for="name" class="oe_edit_only"/>
 						<h1>
-							<field name="name" placeholder="Certificate name" attrs="{'readonly':[('state','!=','draft')]}"/>
+							<field name="name" placeholder="Certificate name" />
 						</h1>
 					</div>
 					<group>
 						<group>
-							<field name="cert_file" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
-							<field name="pem_file" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
-							<field name="cert_pass" password="True" required="1" attrs="{'readonly':[('state','!=','draft')]}" />
-							<field name="subject_c" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
-							<field name="subject_title" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
-							<field name="subject_common_name" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
-							<field name="issuer_serial_number" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
-							<field name="issuer_email_address" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+							<field name="cert_file" required="1" />
+							<field name="pem_file" required="1" />
+							<field name="cert_pass" password="True" required="1"  />
+							<field name="subject_c"  />
+							<field name="subject_title"  />
+							<field name="subject_common_name"  />
+							<field name="issuer_serial_number"  />
+							<field name="issuer_email_address"  />
 						</group>
 						<group>
-							<field name="date_start" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
-							<field name="date_end" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}"/>
+							<field name="date_start"  />
+							<field name="date_end" />
 							<field name="company_id" groups="base.group_multi_company"/>
-							<field name="issuer_organization" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
-							<field name="subject_serial_number" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
-							<field name="subject_email_address" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
-							<field name="issuer_country" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
-							<field name="cert_serial_number" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
-							<field name="cert_signature_algor" attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','draft')]}" />
+							<field name="issuer_organization"  />
+							<field name="subject_serial_number"  />
+							<field name="subject_email_address"  />
+							<field name="issuer_country"  />
+							<field name="cert_serial_number"  />
+							<field name="cert_signature_algor"  />
 						</group>
 					</group>
 				</sheet>

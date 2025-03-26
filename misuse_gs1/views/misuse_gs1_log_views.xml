@@ -39,24 +39,22 @@
                         <field name="date_end"/>
                         <field name="remaining_time"/>
                     </group>
-                    <notebook>
-                        <page string="Follow-up">
-                            <field name="follow_up">
-                                <tree string="Follow-up" create="false">
-                                    <field name="create_date"/>
-                                    <field name="gs1_agent_email"/>
-                                    <field name="comments"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
+                    <group>
+                        <field name="prefixes"/>
+                    </group>
                     <notebook>
                         <page string="Attachments">
                             <field name="user_attachments">
-                                <tree string="Attachments" create="false">
+                                <tree string="Attachments" create="false" editable="bottom">
                                     <field name="name"/>
                                     <field name="path"/>
                                 </tree>
+                                <form string="Attachment">
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="path"/>
+                                    </group>
+                                </form>
                             </field>
                         </page>
                     </notebook>

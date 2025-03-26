@@ -6,72 +6,65 @@
 		<field name="arch" type="xml">
 			<form string="Postulación a Beneficios">
 				<header>
-				 	<button name="action_notified" type="object" attrs="{'invisible': ['|',('benefit_type','=','tarjeta_digital'), ('state','!=','draft')]}"
+				 	<button name="action_notified" type="object"
                         string="Notificar al Beneficiario" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-					<button name="action_confirm" type="object" states="draft,notified" string="Confirm" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-					<button name="action_notified" type="object" states="notified" string="Volver a notificar" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-					<button name="action_reminder" type="object" states="notified" string="Enviar Recortadorio" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-				 	<button name="action_done" type="object" states="confirm" string="Enviar Kit de Bienvenida" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-				 	<button name="action_forward_done" type="object" states="done" string="Enviar Kit Nuevamente" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-					<button name="action_rejected" type="object" states="notified" string="Rejected" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_confirm" type="object" string="Confirm" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_notified" type="object"  string="Volver a notificar" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_reminder" type="object"  string="Enviar Recortadorio" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+				 	<button name="action_done" type="object" string="Enviar Kit de Bienvenida" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+				 	<button name="action_forward_done" type="object" string="Enviar Kit Nuevamente" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_rejected" type="object"  string="Rejected" class="oe_highlight" groups="rvc.group_rvc_manager"/>
                     <button name="action_generate_digital_cards" type="object" string="Generar Tarjetas Digitales" class="oe_highlight"
-                        groups="rvc.group_rvc_manager" attrs="{'invisible': ['|',('benefit_type','!=','tarjeta_digital'),('state','not in',['confirm','done'])]}"/>
-                    <button name="action_new_credentials" type="object" string="Re-Asignar Credenciales" class="oe_highlight" groups="rvc.group_rvc_manager"
-                        attrs="{'invisible': ['|',['benefit_type','not in',('colabora','codigos')],['state','!=','done']]}"/>
-					<button name="action_reactivate" type="object" states="rejected,cancel" string="Re-activar Postulación" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+                        groups="rvc.group_rvc_manager" />
+                    <button name="action_new_credentials" type="object" string="Re-Asignar Credenciales" class="oe_highlight" groups="rvc.group_rvc_manager" />
+					<button name="action_reactivate" type="object" string="Re-activar Postulación" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />
 					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary"
-                     attrs="{'invisible': ['|','|','|',('id','=', False),('state','=','rejected'),('state','=','cancel'),('state','=','done')]}" groups="rvc.group_rvc_manager"/>
-					<button string="Update Crecemype" name="action_application_done" type="object" class="oe_highlight" 
-								attrs="{'invisible': [('benefit_type','!=','crece_mype')]}" />					 
+                     groups="rvc.group_rvc_manager"/>
+					<button string="Update Crecemype" name="action_application_done" type="object" class="oe_highlight" />					 
 				</header>			
 				<sheet>
                     <h1>Postulación a Beneficio RVC</h1>
 					<group>
 						<group string="Beneficiario">
-							<field name="partner_id" attrs="{'readonly': [('state','!=','draft')]}"/>
-							<field name="vat" attrs="{'readonly': [('state','!=','draft')]}"/>
-							<field name="contact_name" attrs="{'required': [('state','=','draft')]}"/>
+							<field name="partner_id" />
+							<field name="vat" />
+							<field name="contact_name" />
 							<field name="contact_phone"/>
 							<field name="contact_email"/>
 							<field name="contact_position" />
 						</group>
 						<group string="Detalles del Beneficio">
-							<field name="product_id" attrs="{'readonly': [('state','!=','draft')],'required': [('state','=','draft')]}"/>
+							<field name="product_id" />
 							<field name="benefit_type" invisible="1"/>
-                            <field name="gln" attrs="{'invisible': [('benefit_type','not in',('colabora','codigos','tarjeta_digital'))], 'readonly': [('state','=','done')]}" />
-                            <field name="crecemype_theme_id" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
-							<field name="crecemype_question" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
-							<field name="email_employee" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
-							<field name="employee_id" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
-							<field name="name_employee" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
-							<field name="date_done_cons" attrs="{'invisible': [('benefit_type','!=','crece_mype')]}" force_save="1" readonly="1"/>
-							<field name="email_company" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
-							<field name="product_benefit" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
-							<field name="canal" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))]}"/>
-							<field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))], 
-																	'required': [('benefit_type','=','colabora')]}"/>
-							<field name="renewal" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))], 
-																	'required': [('benefit_type','=','colabora')]}"/>
-							<field name="email_colabora" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))], 
-																	'required': [('benefit_type','=','colabora')]}"/>
-							<field name="end_date_colabora" attrs="{'invisible': [('benefit_type','!=','colabora')], 'readonly': [('state','in',('confirm','rejected','cancel','done'))],
-																	'required': [('benefit_type','=','colabora')]}"/>
-							<button name="validate_has_colabora" type="object" string="ESTADO ACTUAL LOGYCA / COLABORA" icon="fa-truck" groups="rvc.group_rvc_manager"
-																	attrs="{'invisible': [('benefit_type','!=','colabora')]}"/>
-                            <field name="offered_service_id" attrs="{'invisible': [('benefit_type','!=','tarjeta_digital')], 'readonly': [('state','=','done')]}"/>
-                            <field name="partner_address" attrs="{'invisible': [('benefit_type','!=','tarjeta_digital')], 'readonly': [('state','=','done')]}"/>
-                            <field name="question_answered" attrs="{'invisible': [('benefit_type','!=','crece_mype')], 'readonly': [('state','=','done')]}"/>
-							<field name="delivery_date" attrs="{'invisible': [('state','!=','done')], 'readonly': [('state','=','done')]}"/>
+                            <field name="gln" />
+                            <field name="crecemype_theme_id" />
+							<field name="crecemype_question" />
+							<field name="email_employee" />
+							<field name="employee_id" />
+							<field name="name_employee" />
+							<field name="date_done_cons" force_save="1" readonly="1"/>
+							<field name="email_company" />
+							<field name="product_benefit" />
+							<field name="canal" />
+							<field name="colabora_level" />
+							<field name="renewal" />
+							<field name="email_colabora" />
+							<field name="end_date_colabora" />
+							<button name="validate_has_colabora" type="object" string="ESTADO ACTUAL LOGYCA / COLABORA" icon="fa-truck" groups="rvc.group_rvc_manager" />
+                            <field name="offered_service_id" />
+                            <field name="partner_address" />
+                            <field name="question_answered" />
+							<field name="delivery_date" />
 							<br/><br/>
-                            <h2 style="color:#666666" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}">Cantidad Códigos</h2>
+                            <h2 style="color:#666666" >Cantidad Códigos</h2>
                             <br/>
-                            <field name="codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
-                            <field name="glns_codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
-                            <field name="invoice_codes_quantity" attrs="{'invisible': [('benefit_type','!=','codigos')], 'readonly': [('state','=','done')]}"/>
+                            <field name="codes_quantity" />
+                            <field name="glns_codes_quantity" />
+                            <field name="invoice_codes_quantity" />
                         </group>
 					</group>
-					<group name="digital_cards" string="Tarjetas Digitales" attrs="{'invisible': [('benefit_type','!=','tarjeta_digital')]}" 
+					<group name="digital_cards" string="Tarjetas Digitales"
                     col="1" colspan="12">
                         <div class="small">
                             Haga clic sobre la tarjeta para ver su información completa.
@@ -93,7 +86,7 @@
 					</group>
 					<group>
 						<group string="Halonador">
-							<field name="parent_id" attrs="{'readonly': [('state','!=','draft')],'required': [('state','=','draft')]}"/>
+							<field name="parent_id" />
                             <field name="id" invisible="1"/>
 						</group>
 						<group string="Auditoría GS1" >
@@ -105,7 +98,7 @@
 						<group string="Otra Información">
                             <field name="reminder_count" readonly="1"/>
 							<field name="is_seller" group="base.group_system" force_save="1" readonly="1"/>
-							<field name="referred_by" attrs="{'readonly': [('state','!=','draft')]}"/>
+							<field name="referred_by" />
 							<field name="origin"/>
 							<field name="send_kit_with_no_benefit" group="base.group_system"/>
 						</group>
@@ -137,7 +130,7 @@
 				<field name="product_id"/>
 				<field name="benefit_type" invisible="1"/>
 				<field name="codes_count" string="# Códigos" optional="hide"/>
-				<field name="colabora_level" attrs="{'invisible': [('benefit_type','!=','colabora')]}" optional="hide"/>
+				<field name="colabora_level"  optional="hide"/>
 				<field name="state"/>
 			</tree>
 		</field>

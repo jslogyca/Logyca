@@ -459,81 +459,80 @@ class AccountMove(models.Model):
 class AccountMoveReversal(models.TransientModel):
     _inherit = "account.move.reversal"
     
-    refund_method = fields.Selection(default='cancel')    
+    # refund_method = fields.Selection(default='cancel') 
     reason = fields.Selection([('1', 'Devolución de servicio'),
                               ('2', 'Diferencia del precio real y el importe cobrado'),
                               ('3', 'Se emitió una factura por error de tercero')], string='Motivo', required=True)    
     description = fields.Text(string='Descripción')
     
     
-    # def reverse_moves(self):
-    #     print('reverse_moves LOGYCA', self)
-    #     self.refund_method = 'cancel'
+    def reverse_moves(self):
+        self.refund_method = 'cancel'
         
-    #     #Validar que no deje crear NC a facturas ya pagadas
-    #     # moves = self.env['account.move'].browse(self.env.context['active_ids']) if self.env.context.get('active_model') == 'account.move' else self.move_id
-    #     moves = self.move_ids
-    #     for move in moves:
-    #         if move.payment_state == 'paid':
-    #                 raise ValidationError(_('La factura '+move.name+' ya esta pagada no se puede hacer nota crédito.'))
+        #Validar que no deje crear NC a facturas ya pagadas
+        # moves = self.env['account.move'].browse(self.env.context['active_ids']) if self.env.context.get('active_model') == 'account.move' else self.move_id
+        moves = self.move_ids
+        for move in moves:
+            if move.payment_state == 'paid':
+                    raise ValidationError(_('La factura '+move.name+' ya esta pagada no se puede hacer nota crédito.'))
                     
-    #         #Validar que reverse los ingresos diferidos ya publicados
-    #         query_assets = '''
-    #                 Select d.id
-    #                 From account_move a 
-    #                 inner join account_move_line b on a.id = b.move_id
-    #                 inner join account_asset c on a.asset_id = c.id
-    #                 inner join account_move d on c.id = d.asset_id
-    #                 where a.id = %s and d.state = 'posted'
-    #         ''' % (move.id)
+            #Validar que reverse los ingresos diferidos ya publicados
+            query_assets = '''
+                    Select d.id
+                    From account_move a 
+                    inner join account_move_line b on a.id = b.move_id
+                    inner join account_asset c on a.asset_id = c.id
+                    inner join account_move d on c.id = d.asset_id
+                    where a.id = %s and d.state = 'posted'
+            ''' % (move.id)
             
-    #         self._cr.execute(query_assets)
-    #         result_query_assets = self._cr.dictfetchall()
+            self._cr.execute(query_assets)
+            result_query_assets = self._cr.dictfetchall()
             
-    #         if result_query_assets:
-    #             for assets in result_query_assets:        
-    #                     self.env.context['active_ids'].append(assets.get("id"))        
+            if result_query_assets:
+                for assets in result_query_assets:        
+                        self.env.context['active_ids'].append(assets.get("id"))        
             
-    #         #Guardar en un array los ingresos diferidos en borrador para eliminar
-    #         assets_draft_detele = []
-    #         query_assets_draft = '''
-    #                 Select d.id
-    #                 From account_move a 
-    #                 inner join account_move_line b on a.id = b.move_id
-    #                 inner join account_asset c on a.asset_id = c.id
-    #                 inner join account_move d on c.id = d.asset_id
-    #                 where a.id = %s and d.state = 'draft'
-    #         ''' % (move.id)
+            #Guardar en un array los ingresos diferidos en borrador para eliminar
+            assets_draft_detele = []
+            query_assets_draft = '''
+                    Select d.id
+                    From account_move a 
+                    inner join account_move_line b on a.id = b.move_id
+                    inner join account_asset c on a.asset_id = c.id
+                    inner join account_move d on c.id = d.asset_id
+                    where a.id = %s and d.state = 'draft'
+            ''' % (move.id)
             
-    #         self._cr.execute(query_assets_draft)
-    #         result_query_assets_draft = self._cr.dictfetchall()
+            self._cr.execute(query_assets_draft)
+            result_query_assets_draft = self._cr.dictfetchall()
             
-    #         if result_query_assets_draft:
-    #             for assets in result_query_assets_draft:    
-    #                 move_unlink = self.env['account.move'].search([('id', '=', assets.get("id"))])
-    #                 assets_draft_detele.append(move_unlink)
-    #             #move_unlink.unlink()                   
+            if result_query_assets_draft:
+                for assets in result_query_assets_draft:    
+                    move_unlink = self.env['account.move'].search([('id', '=', assets.get("id"))])
+                    assets_draft_detele.append(move_unlink)
+                #move_unlink.unlink()                   
         
-    #         #Ejecutar metodo original
-    #         method_original = super(AccountMoveReversal, self).reverse_moves()
+            #Ejecutar metodo original
+            method_original = super(AccountMoveReversal, self).reverse_moves()
             
-    #         #Eliminar ingresos diferidos en borrador
-    #         if result_query_assets:
-    #             if assets_draft_detele:
-    #                 for assets_draft in assets_draft_detele:    
-    #                     assets_draft.unlink()                   
+            #Eliminar ingresos diferidos en borrador
+            if result_query_assets:
+                if assets_draft_detele:
+                    for assets_draft in assets_draft_detele:    
+                        assets_draft.unlink()                   
         
-    #     #Si es una NC de facturación masvia debe cancelar la orden de venta que se genero por este proceso
-    #     id_nc = method_original.get('res_id')
-    #     obj_nc = self.env['account.move'].search([('id', '=', id_nc)])
-    #     if obj_nc.x_is_mass_billing == True:
-    #         name_sale_order = obj_nc.invoice_origin
-    #         partner_sale_order = obj_nc.partner_id.id
-    #         company_sale_order = obj_nc.company_id.id
-    #         obj_sale_order = self.env['sale.order'].search([('name', '=', name_sale_order),('partner_id.id','=',partner_sale_order),('company_id.id','=',company_sale_order)])
-    #         obj_sale_order.action_cancel()
+        #Si es una NC de facturación masvia debe cancelar la orden de venta que se genero por este proceso
+        id_nc = method_original.get('res_id')
+        obj_nc = self.env['account.move'].search([('id', '=', id_nc)])
+        if obj_nc.x_is_mass_billing == True:
+            name_sale_order = obj_nc.invoice_origin
+            partner_sale_order = obj_nc.partner_id.id
+            company_sale_order = obj_nc.company_id.id
+            obj_sale_order = self.env['sale.order'].search([('name', '=', name_sale_order),('partner_id.id','=',partner_sale_order),('company_id.id','=',company_sale_order)])
+            obj_sale_order.action_cancel()
             
-        # return method_original        
+        return method_original        
         #return super(AccountMoveReversal, self).reverse_moves()
         
         
@@ -545,8 +544,8 @@ class AccountMoveLine(models.Model):
     # Fields Reports
     #x_vat_partner = fields.Char(string='NIT Asociado', store=True, readonly=True, related='partner_id.vat', change_default=True)
     x_type_doc_partner = fields.Char(string='NIT Asociado', store=True, readonly=True, related='partner_id.vat')
-    x_account_analytic_group = fields.Many2one(string='Grupo Analítico / Familia', store=True, readonly=True, related='analytic_account_id.group_id', change_default=True)
-    x_account_analytic_group_two = fields.Many2one(string='Grupo Analítico / Línea', store=True, readonly=True, related='x_account_analytic_group.parent_id', change_default=True)
+    # x_account_analytic_group = fields.Many2one(string='Grupo Analítico / Familia', store=True, readonly=True, related='analytic_account_id.group_id', change_default=True)
+    # x_account_analytic_group_two = fields.Many2one(string='Grupo Analítico / Línea', store=True, readonly=True, related='x_account_analytic_group.parent_id', change_default=True)
     #x_analytic_line_account = fields.Many2one(string='Cuenta Analítica Calculada', store=True, readonly=True, related='analytic_line_ids.account_id', change_default=True)
     #x_account_analytic_group = fields.Many2one(string='Grupo Analítico / Familia', store=True, readonly=True, related='analytic_line_ids.group_id', change_default=True)
     #x_account_analytic_group_two = fields.Many2one(string='Grupo Analítico / Línea', store=True, readonly=True, related='x_account_analytic_group.parent_id', change_default=True)
@@ -609,29 +608,29 @@ class AccountInvoiceReport(models.Model):
 #Lineas Analiticas
 class AccountAnalyticLine(models.Model):
     _inherit = 'account.analytic.line'
-    x_groupline_id = fields.Many2one(string='Grupo Analítico / Línea', store=True, readonly=True, related='group_id.parent_id', change_default=True)    
+    # x_groupline_id = fields.Many2one(string='Grupo Analítico / Línea', store=True, readonly=True, related='group_id.parent_id', change_default=True)    
 
 #Importar Bancos CSV
-class AccountBankStatementImport(models.TransientModel):
-    _inherit = 'account.bank.statement.import'
+# class AccountBankStatementImport(models.TransientModel):
+#     _inherit = 'account.bank.statement.import'
     
-    #attachment_ids = fields.Many2many('ir.attachment', string='Files', required=True, help='Get you bank statements in electronic format from your bank and select them here.')
-    x_documents_odoo = fields.Many2one('documents.document', string='Documentos en Odoo', ondelete='restrict')
+#     #attachment_ids = fields.Many2many('ir.attachment', string='Files', required=True, help='Get you bank statements in electronic format from your bank and select them here.')
+#     x_documents_odoo = fields.Many2one('documents.document', string='Documentos en Odoo', ondelete='restrict')
     
-    def import_file(self):        
-        if self.x_documents_odoo:            
-            for data_file in self.x_documents_odoo:                 
-                self.attachment_ids = data_file.attachment_id
-            return super(AccountBankStatementImport, self).import_file()              
-        else:
-            return super(AccountBankStatementImport, self).import_file()
+#     def import_file(self):        
+#         if self.x_documents_odoo:            
+#             for data_file in self.x_documents_odoo:                 
+#                 self.attachment_ids = data_file.attachment_id
+#             return super(AccountBankStatementImport, self).import_file()              
+#         else:
+#             return super(AccountBankStatementImport, self).import_file()
         
 #Ingresos diferidos
 class AccountAsset(models.Model):
     _inherit = 'account.asset'
     
     move_ids = fields.Many2one(related='original_move_line_ids.move_id', string='Movimiento Original', readonly=True, copy=False)
-    x_budget_group = fields.Many2one(string='Grupo presupuestal', readonly=True, related='original_move_line_ids.x_budget_group')
+    x_budget_group = fields.Many2one(string='Grupo presupuestal', readonly=True)
     x_partner = fields.Many2one('res.partner', string='Asociado')
     x_studio_accumulated_depreciation = fields.Float(string='Depreciación acumulada', default=0.0)
     x_studio_history_cost = fields.Float(string='Costo histórico', default=0.0)
@@ -649,11 +648,6 @@ class AccountPaymentTerm(models.Model):
     
     x_is_mass_billing = fields.Boolean(string='Facturación masiva')   
     
-#Plan contable
-class AccountAccount(models.Model):
-    _inherit = 'account.account'
-    
-    x_discount_account = fields.Boolean(string='Cuenta asignada para descuento')   
     
     
 

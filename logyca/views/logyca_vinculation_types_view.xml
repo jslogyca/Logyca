@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="logyca_menu_action_vinculation_types" model="ir.actions.act_window">
+        <field name="name">Tipos de vinculación</field>
+          <field name="res_model">logyca.vinculation_types</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear tipos de vinculación
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_vinculation_types">
+      <field name="name">logyca list vinculation_types</field>
+      <field name="model">logyca.vinculation_types</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>   
+          <field name="active"/>   
+          <field name="novelty"/>                           
+        </tree>
+      </field>
+    </record>
+
+    <menuitem name="Tipos de vinculación" id="logyca.menu_vinculation_types" parent="logyca.menus_parameterization"  sequence="2" action="logyca_menu_action_vinculation_types"/>
+</odoo>

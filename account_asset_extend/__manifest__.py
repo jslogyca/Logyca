@@ -16,11 +16,11 @@
         ],
     'description': '''
 
-========================
+======================== Asset
 
 ''',    
     'data': [
-        'views/account_asset_view.xml',
+        # 'views/account_asset_view.xml',
     ],
     'qweb': [
     ]

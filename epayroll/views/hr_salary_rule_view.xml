@@ -14,7 +14,7 @@
 							</group>
 							<group>
 								<field name="type_extra" force_save="1" readonly="1"/>
-								<field name="porcentaje_hora_extra" attrs="{'invisible': [('type_extra', '!=', 'hora_extra')]}" />
+								<field name="porcentaje_hora_extra"  />
 								<!-- <field name="type_incapacidad_id"   attrs="{'invisible': [('type_extra', '!=', 'incapacidad')]}" /> -->
 							</group>
 						</group>

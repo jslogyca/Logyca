@@ -29,7 +29,7 @@
         'data/ir_cron_data.xml',
         'views/hr_holiday_book_employee_view.xml',
         'views/hr_contract_view.xml',
-        'views/hr_leave_view.xml',
+        # 'views/hr_leave_view.xml',
         'views/hr_leave_type_view.xml',
         'views/hr_holiday_book_ajust_view.xml',
         'wizard/hr_holiday_book_report_wizard_view.xml',

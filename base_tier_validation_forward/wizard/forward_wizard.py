@@ -40,7 +40,7 @@ class ValidationForwardWizard(models.TransientModel):
                 "requested_by": self.env.uid,
             }
         )
-        # Because following fileds are readonly, we need to write after create
+        # Because following fields are readonly, we need to write after create
         review.write(
             {
                 "name": self.forward_description,
@@ -50,5 +50,5 @@ class ValidationForwardWizard(models.TransientModel):
                 "approve_sequence": self.approve_sequence,
             }
         )
-        rec.invalidate_cache()
+        rec.invalidate_recordset()
         rec.review_ids._compute_can_review()

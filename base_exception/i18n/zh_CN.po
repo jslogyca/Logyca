@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-01 10:38+0000\n"
-"PO-Revision-Date: 2019-08-31 04:24+0000\n"
-"Last-Translator: 黎伟杰 <674416404@qq.com>\n"
+"PO-Revision-Date: 2024-06-16 11:07+0000\n"
+"Last-Translator: xtanuiha <feihu.zhang@live.com>\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/oca/teams/23907/"
 "zh_CN/)\n"
 "Language: zh_CN\n"
@@ -18,23 +18,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.8\n"
-
-#. module: base_exception
-#: code:addons/base_exception/models/base_exception.py:0
-#, python-format
-msgid "(Blocking exception)"
-msgstr ""
+"X-Generator: Weblate 4.17\n"
 
 #. module: base_exception
 #: model_terms:ir.ui.view,arch_db:base_exception.view_exception_rule_form
 msgid "<code>self</code>: Record on which the rule is evaluated."
 msgstr "<code>self</code>: 记录对规则求值的位置。"
-
-#. module: base_exception
-#: model_terms:ir.ui.view,arch_db:base_exception.view_exception_rule_form
-msgid "<code>time</code>: useful Python libraries"
-msgstr "<code>time</code>: 有用的Python库"
 
 #. module: base_exception
 #: model:ir.model.fields,field_description:base_exception.field_exception_rule__active
@@ -49,12 +38,22 @@ msgstr "应用于"
 #. module: base_exception
 #: model_terms:ir.ui.view,arch_db:base_exception.view_exception_rule_form
 msgid "Archived"
-msgstr ""
+msgstr "已归档"
+
+#. module: base_exception
+#: model_terms:ir.ui.view,arch_db:base_exception.view_exception_rule_form
+msgid "As well as all the libraries provided in safe_eval."
+msgstr "以及 safe_eval 中提供的所有库。"
 
 #. module: base_exception
 #: model:ir.model.fields.selection,name:base_exception.selection__exception_rule__exception_type__by_domain
 msgid "By domain"
 msgstr "通过域"
+
+#. module: base_exception
+#: model:ir.model.fields.selection,name:base_exception.selection__exception_rule__exception_type__by_method
+msgid "By method"
+msgstr "通过方法"
 
 #. module: base_exception
 #: model:ir.model.fields.selection,name:base_exception.selection__exception_rule__exception_type__by_py_code
@@ -66,44 +65,19 @@ msgstr "通过python代码"
 msgid ""
 "By python code: allow to define any arbitrary check\n"
 "By domain: limited to a selection by an odoo domain:\n"
-"           performance can be better when exceptions            are "
-"evaluated with several records"
+"           performance can be better when exceptions           are evaluated "
+"with several records\n"
+"By method: allow to select an existing check method"
 msgstr ""
-"通过python代码：允许定义任意检查\n"
-"通过域: 仅限于odoo域的选择:\n"
-"           在评估异常情况时           可以使用几种记录来改进性能"
+"通过Python代码：允许定义任意检查\n"
+"通过domain：限制使用Odoo domain进行选择：当对多条记录计算异常时，"
+"性能可能更优\n"
+"通过方法：允许选择一个现有的检查方法"
 
 #. module: base_exception
-#: model:ir.model.fields,field_description:base_exception.field_base_exception__changeset_change_ids
-#: model:ir.model.fields,field_description:base_exception.field_base_exception_method__changeset_change_ids
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule__changeset_change_ids
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule_confirm__changeset_change_ids
-msgid "Changeset Changes"
-msgstr ""
-
-#. module: base_exception
-#: model:ir.model.fields,field_description:base_exception.field_base_exception__changeset_ids
-#: model:ir.model.fields,field_description:base_exception.field_base_exception_method__changeset_ids
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule__changeset_ids
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule_confirm__changeset_ids
-msgid "Changesets"
-msgstr ""
-
-#. module: base_exception
-#: model:ir.model.fields,field_description:base_exception.field_base_exception__count_pending_changeset_changes
-#: model:ir.model.fields,field_description:base_exception.field_base_exception_method__count_pending_changeset_changes
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule__count_pending_changeset_changes
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule_confirm__count_pending_changeset_changes
-msgid "Count Pending Changeset Changes"
-msgstr ""
-
-#. module: base_exception
-#: model:ir.model.fields,field_description:base_exception.field_base_exception__count_pending_changesets
-#: model:ir.model.fields,field_description:base_exception.field_base_exception_method__count_pending_changesets
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule__count_pending_changesets
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule_confirm__count_pending_changesets
-msgid "Count Pending Changesets"
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:base_exception.view_exception_rule_confirm
+msgid "Close"
+msgstr "关闭"
 
 #. module: base_exception
 #: model:ir.model.fields,field_description:base_exception.field_exception_rule__create_uid
@@ -121,10 +95,7 @@ msgid "Description"
 msgstr "说明"
 
 #. module: base_exception
-#: model:ir.model.fields,field_description:base_exception.field_base_exception__display_name
-#: model:ir.model.fields,field_description:base_exception.field_base_exception_method__display_name
 #: model:ir.model.fields,field_description:base_exception.field_exception_rule__display_name
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule_confirm__display_name
 msgid "Display Name"
 msgstr "显示名称"
 
@@ -142,16 +113,17 @@ msgstr ""
 "在这里输入Python代码。有关Python表达式的帮助，请参阅本文档的帮助选项卡。"
 
 #. module: base_exception
-#: code:addons/base_exception/models/base_exception.py:0
+#. odoo-python
+#: code:addons/base_exception/models/base_exception_method.py:0
 #, python-format
 msgid ""
 "Error when evaluating the exception.rule rule:\n"
-" %s \n"
-"(%s)"
+" %(rule_name)s \n"
+"(%(error)s)"
 msgstr ""
-"评估exception.rule规则时出错:\n"
-" %s \n"
-"(%s)"
+"评估异常规则时出现错误：\n"
+"%(rule_name)s\n"
+"（%(error)s）"
 
 #. module: base_exception
 #: model:ir.model,name:base_exception.model_base_exception
@@ -165,7 +137,6 @@ msgstr "异常名称"
 
 #. module: base_exception
 #: model:ir.model,name:base_exception.model_exception_rule
-#: model_terms:ir.ui.view,arch_db:base_exception.view_exception_rule_tree
 msgid "Exception Rule"
 msgstr "异常规则"
 
@@ -206,15 +177,9 @@ msgid "Exceptions"
 msgstr "异常"
 
 #. module: base_exception
-#: model_terms:ir.ui.view,arch_db:base_exception.view_exception_rule_confirm
-msgid "Exceptions Rules"
-msgstr "异常规则"
-
-#. module: base_exception
 #: model:ir.model.fields,field_description:base_exception.field_base_exception__exceptions_summary
-#, fuzzy
 msgid "Exceptions Summary"
-msgstr "异常管理"
+msgstr "异常摘要"
 
 #. module: base_exception
 #: model:ir.model.fields,field_description:base_exception.field_exception_rule_confirm__exception_ids
@@ -237,10 +202,7 @@ msgid "Help with Python expressions"
 msgstr "帮助Python表达式"
 
 #. module: base_exception
-#: model:ir.model.fields,field_description:base_exception.field_base_exception__id
-#: model:ir.model.fields,field_description:base_exception.field_base_exception_method__id
 #: model:ir.model.fields,field_description:base_exception.field_exception_rule__id
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule_confirm__id
 msgid "ID"
 msgstr "ID"
 
@@ -252,16 +214,8 @@ msgstr "忽略异常"
 
 #. module: base_exception
 #: model:ir.model.fields,field_description:base_exception.field_exception_rule__is_blocking
-msgid "Is blocking"
-msgstr ""
-
-#. module: base_exception
-#: model:ir.model.fields,field_description:base_exception.field_base_exception____last_update
-#: model:ir.model.fields,field_description:base_exception.field_base_exception_method____last_update
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule____last_update
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule_confirm____last_update
-msgid "Last Modified on"
-msgstr "最后修改时间"
+msgid "Is Blocking"
+msgstr "是否阻断"
 
 #. module: base_exception
 #: model:ir.model.fields,field_description:base_exception.field_exception_rule__write_uid
@@ -279,6 +233,12 @@ msgid "Main Exception"
 msgstr "主要异常"
 
 #. module: base_exception
+#: model:ir.model.fields,field_description:base_exception.field_exception_rule__method
+msgid "Method"
+msgstr "方法"
+
+#. module: base_exception
+#. odoo-python
 #: code:addons/base_exception/wizard/base_exception_confirm.py:0
 #, python-format
 msgid "Only 1 ID accepted, got %r."
@@ -318,39 +278,25 @@ msgid "Sequence"
 msgstr "序列"
 
 #. module: base_exception
-#: model:ir.model.fields,field_description:base_exception.field_base_exception__smart_search
-#: model:ir.model.fields,field_description:base_exception.field_base_exception_method__smart_search
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule__smart_search
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule_confirm__smart_search
-msgid "Smart Search"
-msgstr ""
-
-#. module: base_exception
+#. odoo-python
 #: code:addons/base_exception/models/base_exception.py:0
 #, python-format
 msgid "The exceptions can not be ignored, because some of them are blocking."
-msgstr ""
+msgstr "无法忽略这些例外，因为其中有一些是阻断性的。"
 
 #. module: base_exception
-#: code:addons/base_exception/models/base_exception.py:0
+#. odoo-python
+#: code:addons/base_exception/models/exception_rule.py:0
 #, python-format
 msgid ""
-"There is a problem of configuration, python code or domain is missing to "
-"match the exception type."
-msgstr "存在配置问题，缺少python代码或域以匹配异常类型。"
+"There is a problem of configuration, python code, domain or method is "
+"missing to match the exception type."
+msgstr "存在配置问题，缺少与异常类型匹配的Python代码、domain或方法。"
 
 #. module: base_exception
 #: model_terms:ir.ui.view,arch_db:base_exception.view_exception_rule_form
 msgid "To block the exception use: <code>failed = True</code>"
 msgstr "阻止异常使用: <code>failed = True</code>"
-
-#. module: base_exception
-#: model:ir.model.fields,field_description:base_exception.field_base_exception__user_can_see_changeset
-#: model:ir.model.fields,field_description:base_exception.field_base_exception_method__user_can_see_changeset
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule__user_can_see_changeset
-#: model:ir.model.fields,field_description:base_exception.field_exception_rule_confirm__user_can_see_changeset
-msgid "User Can See Changeset"
-msgstr ""
 
 #. module: base_exception
 #: model_terms:ir.ui.view,arch_db:base_exception.view_exception_rule_form
@@ -362,9 +308,41 @@ msgstr "各种字段可能使用Python代码或Python表达式。可以使用以
 #. module: base_exception
 #: model:ir.model.fields,help:base_exception.field_exception_rule__is_blocking
 msgid "When checked the exception can not be ignored"
-msgstr ""
+msgstr "当被选中时，该异常不能被忽略"
 
-#. module: base_exception
-#: model_terms:ir.ui.view,arch_db:base_exception.view_exception_rule_confirm
-msgid "_Close"
-msgstr "关闭"
+#~ msgid "Last Modified on"
+#~ msgstr "最后修改时间"
+
+#~ msgid "_Close"
+#~ msgstr "关闭"
+
+#, python-format
+#~ msgid ""
+#~ "Error when evaluating the exception.rule rule:\n"
+#~ " %s \n"
+#~ "(%s)"
+#~ msgstr ""
+#~ "评估exception.rule规则时出错:\n"
+#~ " %s \n"
+#~ "(%s)"
+
+#~ msgid "Exceptions Rules"
+#~ msgstr "异常规则"
+
+#~ msgid ""
+#~ "By python code: allow to define any arbitrary check\n"
+#~ "By domain: limited to a selection by an odoo domain:\n"
+#~ "           performance can be better when exceptions            are "
+#~ "evaluated with several records"
+#~ msgstr ""
+#~ "通过python代码：允许定义任意检查\n"
+#~ "通过域: 仅限于odoo域的选择:\n"
+#~ "           在评估异常情况时           可以使用几种记录来改进性能"
+
+#~ msgid ""
+#~ "There is a problem of configuration, python code or domain is missing to "
+#~ "match the exception type."
+#~ msgstr "存在配置问题，缺少python代码或域以匹配异常类型。"
+
+#~ msgid "<code>time</code>: useful Python libraries"
+#~ msgstr "<code>time</code>: 有用的Python库"
