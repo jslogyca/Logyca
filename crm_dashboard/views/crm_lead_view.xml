@@ -8,7 +8,7 @@
             <xpath expr="//field[@name='team_id']" position="after">
                 <field name="date_follow" required="1" string='Último Contacto Cliente' />
                 <field name="follow_lead" widget="kanban_label_selection" string='Nivel de Seguimiento'
-                        options="{'classes': {'baja': 'default', 'baja': 'success', 'alta': 'danger', 'media': 'warning'}}"/>
+                        options="{'classes': {'baja': 'default', 'baja': 'danger', 'alta': 'success', 'media': 'warning'}}"/>
             </xpath>
             <xpath expr="//field[@name='priority']" position="replace">
                 <field name="priority" widget="priority" string='Probabilidad de Cierre'/>
@@ -26,6 +26,8 @@
                 <filter string="Mis Oportunidades" name="my_quotation" domain="[('user_id', '=', uid)]"/>
                 <separator/>
                 <filter string="Fecha Seguimiento" name="filter_follow_lead" date="follow_lead"/>
+                <separator/>
+                <filter string="Mercadeo" name="source_id" domain="[('source_id', '=', 140)]" />
                 <separator/>
                 <filter string="Probabilidad de Cierre Baja" name="Baja" domain="[('priority','=','0')]"/>
                 <filter string="Probabilidad de Cierre Media" name="Media" domain="[('priority','=','1')]"/>
