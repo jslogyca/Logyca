@@ -34,6 +34,7 @@ class BenefitApplication(models.Model):
         token = uuid.uuid4().hex
         if self.search_count([('access_token', '=', token)]) > 0:
             return self._default_access_token()
+        return token
 
     state = fields.Selection([('draft', 'Draft'),
                                     ('notified', 'Notificado'),
