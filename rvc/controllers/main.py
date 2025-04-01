@@ -57,7 +57,7 @@ class AcceptRvcBenefit(http.Controller):
             )
 
         # Primera aceptación del beneficio
-        if postulation_id.state == "notified" and postulation_id.acceptance_date is None:
+        if postulation_id.state == "notified" and postulation_id.acceptance_date is False:
             # Cambiar estado ANTES de procesar cualquier operación
             postulation_id.write({
                 "state": "confirm", 
