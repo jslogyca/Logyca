@@ -27,9 +27,15 @@ class BenefitApplication(models.Model):
 
     @api.model
     def _default_access_token(self):
-        return uuid.uuid4().hex
+        """
+        this function uses uuid4 to generate a random token
+        and uses recursion to garantee that the token is unique
+        """
+        token = uuid.uuid4().hex
+        if self.search_count([('access_token', '=', token)]) > 0:
+            return self._default_access_token()
 
-    state = fields.Selection([('draft', 'Draft'), 
+    state = fields.Selection([('draft', 'Draft'),
                                     ('notified', 'Notificado'),
                                     ('confirm', 'Aceptado'),
                                     ('rejected', 'Rechazado'),
