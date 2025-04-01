@@ -1,0 +1,44 @@
+<odoo>
+    <template id="rvc_benefit_already_delivered" name="Beneficio RVC Entregado">
+        <t t-call="web.layout">
+            <t t-set="title">Beneficio Entregado</t>
+            <head>
+                <style>
+                    .box {
+                        width: 550px;
+                        margin: 0 auto;
+                        font-family: Verdana, sans-serif;
+                        text-align: center;
+                        padding: 40px;
+                    }
+
+                    .text-blue {
+                        color: #002C6C;
+                        font-size: 20px;
+                        margin-top: 2em;
+                    }
+
+                    .spacer {
+                        margin: 2em 0;
+                    }
+
+                    .logo {
+                        width: 180px;
+                        display: block;
+                        margin: 0 auto;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="box">
+                    <img class="logo" src="/rvc/static/img/logo-gs1.png" alt="GS1 Logo"/>
+                    <div class="spacer"></div>
+                    <p class="text-blue">
+                        Este beneficio ya fue entregado previamente.<br/>
+                        No es necesario realizar ninguna acción adicional.
+                    </p>
+                </div>
+            </body>
+        </t>
+    </template>
+</odoo>

@@ -1,5 +1,5 @@
 <odoo>
-    <template id="accept_rvc_benefit_page_view" name="Aceptar Beneficio RVC">
+    <template id="notify_rvc_benefit_already_accepted" name="Notificación Beneficio RVC Ya Aceptado">
         <t t-call="web.layout">
             <head>
                 <style>
@@ -71,23 +71,23 @@
                     <img class="banner-full" src="/rvc/static/img/bannerestimadoclientegs1.png" alt="Banner Bienvenida" />
                     <div class="spacer"></div>
 
-                    <p class="text-orange">Gracias por aceptar tu beneficio RVC: Derechos de identificación</p>
+                    <p class="text-orange">Tu beneficio RVC ya fue aceptado</p>
                     <p class="text-gray">
-                        Es un placer informarte que tu empresa <strong><b t-esc="benefit_application.partner_id.partner_id.name"/></strong> ya hace parte de las Redes de Valor Colaborativas.
+                        Te informamos que el beneficio RVC: Derechos de identificación ya fue aceptado previamente el 
+                        <strong><t t-esc="benefit_application.date_acceptance.strftime('%d/%m/%Y a las %H:%M')"/></strong> por la empresa 
+                        <strong><b t-esc="benefit_application.partner_id.partner_id.name"/></strong>.
                     </p>
+
                     <p class="text-gray">
-                        Pronto recibirás vía correo electrónico el KIT de bienvenida con toda la información de los beneficios que tu empresa ha recibido, junto con las credenciales de acceso a la plataforma y los manuales respectivos para que puedas empezar a utilizarlos.
+                        Si ha pasado tiempo desde la aceptación y aún no has recibido una notificación de activación con los detalles para utilizar tu servicio, por favor comunícate con nosotros a través de los siguientes canales:
                     </p>
 
                     <div class="spacer"></div>
 
                     <p class="contact-text">
-                        Si tienes dudas o necesitas ayuda, contáctanos a
-                        <strong><a href="mailto:web@gs1co.org" class="text-blue">web@gs1co.org</a></strong>
-                        o por medio de nuestro canal de
-                        <strong><a href="https://api.whatsapp.com/send?phone=573009982929" target="_blank" class="text-blue">WhatsApp</a></strong>,
-                        marcando la <strong style="color: #F26334;">Opción 2 (Atención al cliente)</strong>,
-                        de lunes a viernes de 7:00 a.m a 4:30 p.m.
+                        📧 Correo: <strong><a href="mailto:web@gs1co.org" class="text-blue">web@gs1co.org</a></strong><br/>
+                        💬 WhatsApp: <strong><a href="https://api.whatsapp.com/send?phone=573009982929" target="_blank" class="text-blue">+57 300 9982929</a></strong> (Opción 2 - Atención al cliente)<br/>
+                        🕓 Horario: Lunes a viernes de 7:00 a.m. a 4:30 p.m.
                     </p>
 
                     <div class="spacer"></div>
@@ -95,7 +95,6 @@
                     <p class="text-blue" style="text-align: center;">
                         <a href="https://www.gs1costore.org" class="footer-link">www.gs1costore.org</a>
                     </p>
-
                 </div>
             </body>
         </t>

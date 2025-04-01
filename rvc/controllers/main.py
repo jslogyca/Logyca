@@ -21,6 +21,20 @@ class AcceptRvcBenefit(http.Controller):
             return request.not_found()
 
         for postulation_id in postulation_ids:
+            lang = postulation_id.partner_id.partner_id.lang or 'es_ES'
+            request.context = dict(request.context, lang=lang)
+
+            if postulation_id.state == "done":
+                return request.render(
+                    'rvc.rvc_benefit_already_delivered',
+                    {"benefit_application": postulation_id, "token": token}
+                )
+
+            if postulation_id.state == "confirm":
+                return request.render(
+                    'rvc.notify_rvc_benefit_already_accepted',
+                    {"benefit_application": postulation_id, "token": token}
+                )
 
             if postulation_id.state == "notified":
                 postulation_id.write(
@@ -37,9 +51,6 @@ class AcceptRvcBenefit(http.Controller):
 
                 if postulation_id.product_id.benefit_type == "colabora":
                     postulation_id.calculate_end_date_colabora()
-
-                lang = postulation_id.partner_id.partner_id.lang or 'es_ES'
-                request.context = dict(request.context, lang=lang)
 
                 return request.render(
                     'rvc.accept_rvc_benefit_page_view',
