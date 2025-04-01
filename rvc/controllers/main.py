@@ -18,9 +18,10 @@ class AcceptRvcBenefit(http.Controller):
         postulation_ids = (
             request.env["benefit.application"]
             .sudo()
-            .with_for_update()  # bloquear fila para evitar que se procese varias veces
             .search([("access_token", "=", token)])
+            .with_for_update()
         )
+
         if not postulation_ids:
             return request.not_found()
 
