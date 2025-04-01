@@ -3,179 +3,85 @@ from odoo import http
 from odoo.http import request
 from odoo.tools.translate import _
 from odoo.tools.misc import get_lang
-from logging import getLogger
-from pytz import timezone
 from datetime import datetime
-import psycopg2
-import time
+import logging
+from pytz import timezone
 
-_logger = getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 class AcceptRvcBenefit(http.Controller):
-    BOG_TIMEZONE = timezone('America/Bogota')
-    MAX_RETRIES = 5
-    RETRY_DELAY = 0.2  # segundos
 
     @http.route(
         "/rvc/accept_benefit/<string:token>", type="http", auth="public", website=True
     )
     def accept_benefit(self, token, **kwargs):
-        for attempt in range(self.MAX_RETRIES):
-            try:
-                return self._process_benefit_acceptance(token, attempt)
-            except psycopg2.errors.SerializationFailure as e:
-                self._handle_serialization_error(attempt, e)
-            except Exception as e:
-                return self._handle_general_error(e)
+        # Usamos cr.execute directamente para bloquear la fila para esta transacción
+        request.env.cr.execute("""
+            SELECT id, state, acceptance_date FROM benefit_application 
+            WHERE access_token = %s FOR UPDATE
+        """, (token,))
+        result = request.env.cr.dictfetchone()
 
-        # Si llegamos aquí es porque agotamos los reintentos
-        _logger.error(
-            "Se agotaron los %d reintentos para procesar el token %s",
-            self.MAX_RETRIES,
-            token
-        )
-        return self._render_service_unavailable()
-
-    def _process_benefit_acceptance(self, token, attempt):
-        """Procesa la solicitud de aceptación de beneficio"""
-        postulation_ids = self._get_benefit_applications(token)
-
-        if not postulation_ids:
+        if not result:
             return request.not_found()
 
-        for postulation in postulation_ids:
-            _logger.info(
-                "Intento %d/%d - Estado: %s",
-                attempt + 1,
-                self.MAX_RETRIES,
-                postulation.state
-            )
-            self._set_lang_context(postulation)
+        postulation_id = request.env['benefit.application'].sudo().browse(result['id'])
+        _logger.info("Procesando beneficio con estado: %s", postulation_id.state)
 
-            # Manejar según el estado actual
-            if postulation.state == "done":
-                return self._handle_done_state(postulation, token)
-
-            if postulation.state == "confirm":
-                return self._handle_confirm_state(postulation, token)
-
-            if postulation.state == "notified":
-                return self._handle_notified_state(postulation, token)
-
-        # Si llegamos aquí sin retornar, es que algo no encaja con los estados esperados
-        _logger.warning("Estado no manejado en benefit application: %s", postulation.state)
-        return request.redirect('/')
-
-    def _get_benefit_applications(self, token):
-        """Obtiene las solicitudes de beneficio según el token"""
-        return (
-            request.env["benefit.application"]
-            .sudo()
-            .search([("access_token", "=", token)])
-        )
-
-    def _set_lang_context(self, postulation):
-        """Configura el contexto del idioma basado en el socio"""
-        lang = postulation.partner_id.partner_id.lang or 'es_ES'
+        # Configurar contexto del idioma
+        lang = postulation_id.partner_id.partner_id.lang or 'es_ES'
         request.context = dict(request.context, lang=lang)
 
-    def _handle_done_state(self, postulation, token):
-        """Maneja el estado 'done' de la solicitud"""
-        return request.render(
-            'rvc.rvc_benefit_already_delivered',
-            {"benefit_application": postulation, "token": token}
-        )
+        # Beneficio ya entregado
+        if postulation_id.state == "done":
+            return request.render(
+                'rvc.rvc_benefit_already_delivered',
+                {"benefit_application": postulation_id, "token": token}
+            )
 
-    def _handle_confirm_state(self, postulation, token):
-        """Maneja el estado 'confirm' de la solicitud"""
-        formatted_date = postulation.acceptance_date\
-            .astimezone(self.BOG_TIMEZONE)\
-            .strftime('%d/%m/%Y a las %H:%M')
+        # Beneficio ya aceptado previamente
+        if postulation_id.state == "confirm":
+            # Formatear la fecha de aceptación
+            tz = timezone('America/Bogota')
+            formatted_date = (postulation_id.acceptance_date
+                            .astimezone(tz)
+                            .strftime('%d/%m/%Y a las %H:%M'))
 
-        return request.render(
-            'rvc.notify_rvc_benefit_already_accepted',
-            {
-                "benefit_application": postulation,
-                "token": token,
-                'formatted_acceptance_date': formatted_date
-            }
-        )
+            return request.render(
+                'rvc.notify_rvc_benefit_already_accepted',
+                {
+                    "benefit_application": postulation_id, 
+                    "token": token,
+                    "formatted_acceptance_date": formatted_date
+                }
+            )
 
-    def _handle_notified_state(self, postulation, token):
-        """Maneja el estado 'notified' de la solicitud"""
-        # Verificamos que el estado no haya cambiado
-        fresh_state = self._get_fresh_state(postulation.id)
-        if fresh_state != "notified":
-            _logger.warning("El estado cambió de notified a %s entre lecturas", fresh_state)
-            # Si ya no está en notified, redirigimos al manejador adecuado
-            if fresh_state == "confirm":
-                return self._handle_confirm_state(postulation, token)
-            elif fresh_state == "done":
-                return self._handle_done_state(postulation, token)
-            return request.redirect('/')
+        # Primera aceptación del beneficio
+        if postulation_id.state == "notified":
+            # Cambiar estado ANTES de procesar cualquier operación
+            postulation_id.write({
+                "state": "confirm", 
+                "acceptance_date": datetime.now()
+            })
 
-        # Guardamos el token y el ID del postulante ANTES de cambiar el estado
-        # para poder renderizar la vista correcta después
-        view_data = {"benefit_application": postulation, "token": token}
-        
-        # Cambiamos el estado
-        self._confirm_benefit_acceptance(postulation)
-        
-        # Renderizamos la vista de primera aceptación, no la de "ya aceptado"
-        return request.render('rvc.accept_rvc_benefit_page_view', view_data)
+            # Registrar en el historial
+            message = _(
+                f"{postulation_id.partner_id.partner_id.name} "
+                "<u><strong>ACEPTÓ</strong></u> el beneficio desde el correo electrónico."
+            )
+            postulation_id.message_post(body=message)
 
-    def _get_fresh_state(self, postulation_id):
-        """Obtiene el estado actual de la solicitud para evitar condiciones de carrera"""
-        return request.env["benefit.application"].sudo().browse(postulation_id).state
+            # Procesar adjuntos y fechas
+            postulation_id.attach_OM_2_partner(postulation_id)
 
-    def _confirm_benefit_acceptance(self, postulation):
-        """Confirma la aceptación del beneficio"""
-        postulation.write({
-            "state": "confirm",
-            "acceptance_date": datetime.now()
-        })
+            if postulation_id.product_id.benefit_type == "colabora":
+                postulation_id.calculate_end_date_colabora()
 
-        self._post_acceptance_message(postulation)
-        postulation.attach_OM_2_partner(postulation)
+            # Mostrar página de aceptación exitosa
+            return request.render(
+                'rvc.accept_rvc_benefit_page_view',
+                {"benefit_application": postulation_id, "token": token}
+            )
 
-        if postulation.product_id.benefit_type == "colabora":
-            postulation.calculate_end_date_colabora()
-
-    def _post_acceptance_message(self, postulation):
-        """Publica mensaje de aceptación en el muro de la solicitud"""
-        message = _(
-            f"{postulation.partner_id.partner_id.name} "
-            "<u><strong>ACEPTÓ</strong></u> el beneficio desde el correo electrónico."
-        )
-        postulation.message_post(body=message)
-
-    def _handle_serialization_error(self, attempt, exception):
-        """Maneja errores de serialización en la base de datos"""
-        _logger.warning(
-            "Retry %d/%d debido a error de serialización: %s", 
-            attempt + 1,
-            self.MAX_RETRIES,
-            exception
-        )
-        request.env.cr.rollback()
-        time.sleep(self.RETRY_DELAY)
-
-    def _handle_general_error(self, exception):
-        """Maneja errores generales"""
-        _logger.error(
-            "Error no manejado en la aceptación del beneficio: %s",
-            str(exception),
-            exc_info=True
-        )
-        # Reemplazamos la plantilla website.http_error con una respuesta más simple
-        return request.render('rvc.rvc_error_page', {
-            'error_title': _('Error interno del servidor'),
-            'error_message': _('Ha ocurrido un error. Por favor, inténtelo más tarde o contacte a soporte.')
-        }, status=500)
-
-    def _render_service_unavailable(self):
-        """Muestra página de servicio no disponible"""
-        return request.render('rvc.rvc_error_page', {
-            'error_title': _('Servicio no disponible'),
-            'error_message': _('Servicio temporalmente no disponible. Por favor, intente más tarde.')
-        }, status=503)
+        # Estado no reconocido
+        return request.redirect('/')
