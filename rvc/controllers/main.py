@@ -159,14 +159,15 @@ class AcceptRvcBenefit(http.Controller):
             str(exception),
             exc_info=True
         )
-        return request.render('website.http_error', {
-            'status_code': 500,
-            'status_message': 'Error interno del servidor'
-        })
+        # Reemplazamos la plantilla website.http_error con una respuesta más simple
+        return request.render('rvc.rvc_error_page', {
+            'error_title': _('Error interno del servidor'),
+            'error_message': _('Ha ocurrido un error. Por favor, inténtelo más tarde o contacte a soporte.')
+        }, status=500)
 
     def _render_service_unavailable(self):
         """Muestra página de servicio no disponible"""
-        return request.render('website.http_error', {
-            'status_code': 503,
-            'status_message': 'Servicio temporalmente no disponible. Por favor, intente más tarde.'
-        })
+        return request.render('rvc.rvc_error_page', {
+            'error_title': _('Servicio no disponible'),
+            'error_message': _('Servicio temporalmente no disponible. Por favor, intente más tarde.')
+        }, status=503)

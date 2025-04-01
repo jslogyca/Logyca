@@ -63,6 +63,7 @@
         'views/accept_benefit_template.xml',
         'views/notify_rvc_benefit_already_accepted.xml',
         'views/rvc_benefit_already_delivered.xml',
+        'views/rvc_acceptance_error_template.xml',
         'views/rvc_digital_card_views.xml',
         'views/res_partner_view.xml',
     ],

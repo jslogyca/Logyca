@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Plantilla genérica de error -->
+    <template id="rvc_error_page" name="RVC Error Page">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <div class="card">
+                            <div class="card-header bg-danger text-white">
+                                <h3><t t-esc="error_title"/></h3>
+                            </div>
+                            <div class="card-body">
+                                <p><t t-esc="error_message"/></p>
+                                <a href="/" class="btn btn-primary">Volver al inicio</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
