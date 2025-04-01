@@ -3,6 +3,7 @@ from odoo import http
 from odoo.http import request
 from odoo.tools.translate import _
 from odoo.tools.misc import get_lang
+from pytz import timezone
 from datetime import datetime
 
 
@@ -30,12 +31,6 @@ class AcceptRvcBenefit(http.Controller):
                     {"benefit_application": postulation_id, "token": token}
                 )
 
-            if postulation_id.state == "confirm":
-                return request.render(
-                    'rvc.notify_rvc_benefit_already_accepted',
-                    {"benefit_application": postulation_id, "token": token}
-                )
-
             if postulation_id.state == "notified":
                 postulation_id.write(
                     {"state": "confirm", "acceptance_date": datetime.now()}
@@ -56,4 +51,19 @@ class AcceptRvcBenefit(http.Controller):
                     'rvc.accept_rvc_benefit_page_view',
                     {"benefit_application": postulation_id, "token": token},
                     True #lazy rendering
+                )
+
+            if postulation_id.state == "confirm":
+                tz = timezone('America/Bogota')
+                formatted_date = postulation_id.acceptance_date\
+                    .astimezone(tz)\
+                    .strftime('%d/%m/%Y a las %H:%M')
+
+                return request.render(
+                    'rvc.notify_rvc_benefit_already_accepted',
+                    {
+                        "benefit_application": postulation_id,
+                        "token": token,
+                        'formatted_acceptance_date': formatted_date
+                    }
                 )

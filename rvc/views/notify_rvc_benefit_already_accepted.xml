@@ -74,8 +74,7 @@
                     <p class="text-orange">Tu beneficio RVC ya fue aceptado</p>
                     <p class="text-gray">
                         Te informamos que el beneficio RVC: Derechos de identificación ya fue aceptado previamente el 
-                        <strong><t t-esc="benefit_application.acceptance_date.strftime('%d/%m/%Y a las %H:%M')"/></strong> por la empresa 
-                        <strong><b t-esc="benefit_application.partner_id.partner_id.name"/></strong>.
+                        <strong><t t-esc="formatted_acceptance_date"/></strong> por la empresa <strong t-esc="benefit_application.partner_id.partner_id.name"/>.
                     </p>
 
                     <p class="text-gray">
