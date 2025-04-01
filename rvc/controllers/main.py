@@ -40,7 +40,7 @@ class AcceptRvcBenefit(http.Controller):
             )
 
         # Beneficio ya aceptado previamente
-        if postulation_id.state == "confirm":
+        if postulation_id.state == "confirm" and postulation_id.acceptance_date:
             # Formatear la fecha de aceptación
             tz = timezone('America/Bogota')
             formatted_date = (postulation_id.acceptance_date
@@ -57,7 +57,7 @@ class AcceptRvcBenefit(http.Controller):
             )
 
         # Primera aceptación del beneficio
-        if postulation_id.state == "notified":
+        if postulation_id.state == "notified" and postulation_id.acceptance_date is None:
             # Cambiar estado ANTES de procesar cualquier operación
             postulation_id.write({
                 "state": "confirm", 
