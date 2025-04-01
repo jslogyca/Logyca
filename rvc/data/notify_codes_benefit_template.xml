@@ -5,8 +5,8 @@
             <field name="name">Notificar Beneficio Derechos de Identificación RVC</field>
             <field name="model_id" ref="rvc.model_benefit_application"/>
             <field name="email_from">no-reply@gs1co.org</field>
-            <field name="email_to">${object.contact_email or object.email}</field>
-            <field name="lang">${object.partner_id.lang}</field>
+            <field name="email_to">{{ (object.contact_email or object.email) }}</field>
+            <field name="lang">{{ object.partner_id.lang or object.user_id.lang or user.lang }}</field>
             <field name="body_html" type="html">
                 <head>
                     <style>
