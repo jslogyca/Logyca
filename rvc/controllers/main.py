@@ -71,7 +71,6 @@ class AcceptRvcBenefit(http.Controller):
         return (
             request.env["benefit.application"]
             .sudo()
-            .with_for_update()
             .search([("access_token", "=", token)])
         )
 
