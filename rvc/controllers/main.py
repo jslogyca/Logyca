@@ -15,10 +15,10 @@ class AcceptRvcBenefit(http.Controller):
         "/rvc/accept_benefit/<string:token>", type="http", auth="public", website=True
     )
     def accept_benefit(self, token, **kwargs):
-
         postulation_ids = (
             request.env["benefit.application"]
             .sudo()
+            .with_for_update()  # bloquear fila para evitar que se procese varias veces
             .search([("access_token", "=", token)])
         )
         if not postulation_ids:
