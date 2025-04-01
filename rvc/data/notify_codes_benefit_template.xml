@@ -6,7 +6,7 @@
             <field name="model_id" ref="rvc.model_benefit_application"/>
             <field name="email_from">no-reply@gs1co.org</field>
             <field name="email_to">{{ (object.contact_email or object.email) }}</field>
-            <field name="lang">{{ object.partner_id.partner_id.lang or 'es_CO' }}</field>
+            <field name="lang">{{ object.partner_id.lang or 'es_CO' }}</field>
             <field name="body_html" type="html">
                 <head>
                     <style>
@@ -15,21 +15,21 @@
                             font-family: 'Roboto', sans-serif;
                             margin: auto !important;
                         }
-                
+
                         .banner {
                             display: block;
                             margin: 0 auto;
                             width: 50%;
                         }
-                
+
                         .banner_2 {
                             width: 100%;
                         }
-                
+
                         #text_blue {
                             color: #002c6c;
                         }
-                
+
                         #btn-suscribe {
                             background-color: #002b6c;
                             color: white;
@@ -37,82 +37,84 @@
                             border-radius: 10px;
                             text-decoration: none;
                         }
-                
+
                         #button {
                             margin: 2.5rem;
                             text-align: center;
                         }
-                
+
                         #text-center {
                             text-align: center;
                             margin-bottom: -13pt;
                         }
-                
+
                         #store_link {
                             text-align: center;
                             margin: 1em;
                             color: #002b6c;
                         }
-                
+
                         .justified {
                             text-align: justify;
                         }
-                
+
                         a {color: #002b6c;}
-                
+
                         p {font-size: 16px;}
-                
+
                         hr {margin: 3em;}
                     </style>
                 </head>
                 <body>
                     <div class="box">
-                        <img class="banner" src="https://ci5.googleusercontent.com/proxy/xlXynKNjNqZquWfF_1hslqmQ2lX9oUKsru8uHPvbXBhkZjUSrseJe2wKECjcyum7hCt3AmQSW9uPOeUGyB6dr3rlE_jUB8AEmJnUkmi4J_5JK3xgTbhVYkkuL2vFFBSR54CNrEGaVfjcP3mIla8BjaOI1lCLCOxq=s0-d-e1-ft#https://files.escala.com/public/53c5445e-cfd0-11ed-80e4-0e9807857d8a/logo-gs1-y-logyca-asociacion.png" alt="Banner" />
+                        <img class="banner" src="https://ci5.googleusercontent.com/proxy/xlXynKNjNqZquWfF_1hslqmQ2lX9oUKsru8uHPvbXBhkZjUSrseJe2wKECjcyum7hCt3AmQSW9uPOeUGyB6dr3rlE_jUB8AEmJnUkmi4J_5JK3xgTbhVYkkuL2vFFBSR54CNrEGaVfjcP3mIla8BjaOI1lCLCOxq=s0-d-e1-ft#https://files.escala.com/public/53c5445e-cfd0-11ed-80e4-0e9807857d8a/logo-gs1-y-logyca-asociacion.png" alt="Logo GS1 y LOGYCA" />
 
-                        <img class="banner_2" src="https://ci4.googleusercontent.com/proxy/iReu1QYZ-uWoGIxMqqC_XfvRscOxecxhBM3idJqk8wio6Z-gFhUnBgNF3f4WsV-Hmk2Naq730LbsAQByHA6Rpdv3fIKkDEriX-9L-eEJUIw9czoULiYXy3elXQbPDOtMiSIeOG07QJwJN3ZiHhDZYWe-5ggtGwOG=s0-d-e1-ft#https://files.escala.com/public/4b65466c-3d29-11ee-99cc-f6d3ae86907a/banner-html-oferta-mercantil.png" alt="Banner Image" />
+                        <img class="banner_2" src="https://ci4.googleusercontent.com/proxy/iReu1QYZ-uWoGIxMqqC_XfvRscOxecxhBM3idJqk8wio6Z-gFhUnBgNF3f4WsV-Hmk2Naq730LbsAQByHA6Rpdv3fIKkDEriX-9L-eEJUIw9czoULiYXy3elXQbPDOtMiSIeOG07QJwJN3ZiHhDZYWe-5ggtGwOG=s0-d-e1-ft#https://files.escala.com/public/4b65466c-3d29-11ee-99cc-f6d3ae86907a/banner-html-oferta-mercantil.png" alt="Banner oferta mercantil RVC" />
                         <br />
 
-                        <p class="justified">A continuación encontrarás el botón de aceptación para el derecho de uso de los Códigos de
-                            barras
-                            <strong>SIN COSTO</strong>, otorgados por el programa <strong> RVC </strong>(Redes de Valor Colaborativas) a
+                        <p class="justified">
+                            A continuación encontrarás el botón de aceptación para el derecho de uso de los Códigos de
+                            barras <strong>SIN COSTO</strong>, otorgados por el programa <strong>RVC</strong> (Redes de Valor Colaborativas) a
                             tu empresa.
                         </p>
 
-                        <p class="justified">Recuerda que <span id="text_blue">el <strong>plazo máximo</strong> para realizar la
-                                aceptación es de <strong>1 mes calendario</strong>
-                        </span>. Si al cabo de este tiempo no se realiza la
-                            aceptación, se entenderá como rechazado.</p>
+                        <p class="justified">
+                            Recuerda que <span id="text_blue">el <strong>plazo máximo</strong> para realizar la
+                            aceptación es de <strong>1 mes calendario</strong></span>. Si al cabo de este tiempo no se realiza la
+                            aceptación, se entenderá como rechazado.
+                        </p>
 
-                    <p class="justified">Si tienes inconvenientes con el botón, por favor da clic en el
+                        <p class="justified">
+                            Si tienes inconvenientes con el botón, por favor da clic en el
                             siguiente enlace o escríbenos al correo electrónico: <a href="mailto:aplicaciones@gs1co.org">aplicaciones@gs1co.org</a>.
-                    </p>
+                        </p>
 
-                    <p id="button">
-                        <a id="btn-suscribe" t-att-href="'/rvc/accept_benefit/' + object.access_token" target="_blank">
-                            Acepto el beneficio y la oferta mercantil con todas sus cláusulas
-                        </a>
-                    </p>
-
-                    <p id="text-center">
-                        <small>Si tienes inconvenientes con el botón anterior, por favor da clic en el siguiente
-                                enlace:
-                            <t t-set="access_url" t-value="'/rvc/accept_benefit/' + object.access_token"/>
-                            <a t-att-href="access_url">
-                                <t t-esc="access_url"/>
+                        <p id="button">
+                            <a id="btn-suscribe" t-att-href="'/rvc/accept_benefit/' + object.access_token" target="_blank">
+                                Acepto el beneficio y la oferta mercantil con todas sus cláusulas
                             </a>
-                        </small>
-                    </p>
+                        </p>
 
-                    <hr/>
-                    <h2 id="store_link">
-                        <a href="https://www.gs1costore.org">www.gs1costore.org</a>
-                    </h2>
-                </div>
-            </body>
-        </field>
-        <field name="report_template" ref="action_report_rvc"/>
-        <field name="report_name">Oferta Mercantil RVC</field>
-        <field name="auto_delete" eval="False"/>
-    </record>
-</data>
+                        <p id="text-center">
+                            <small>
+                                Si tienes inconvenientes con el botón anterior, por favor da clic en el siguiente enlace:
+                                <t t-set="access_url" t-value="'/rvc/accept_benefit/' + object.access_token"/>
+                                <a t-att-href="access_url">
+                                    <t t-esc="access_url"/>
+                                </a>
+                            </small>
+                        </p>
+
+                        <hr/>
+                        <h2 id="store_link">
+                            <a href="https://www.gs1costore.org">www.gs1costore.org</a>
+                        </h2>
+                    </div>
+                </body>
+            </field>
+            <field name="report_template" ref="action_report_rvc"/>
+            <field name="report_name">Oferta Mercantil RVC</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+    </data>
 </odoo>
