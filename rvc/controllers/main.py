@@ -107,13 +107,22 @@ class AcceptRvcBenefit(http.Controller):
         fresh_state = self._get_fresh_state(postulation.id)
         if fresh_state != "notified":
             _logger.warning("El estado cambió de notified a %s entre lecturas", fresh_state)
-            return None  # Esto hará que se continúe con la siguiente iteración
+            # Si ya no está en notified, redirigimos al manejador adecuado
+            if fresh_state == "confirm":
+                return self._handle_confirm_state(postulation, token)
+            elif fresh_state == "done":
+                return self._handle_done_state(postulation, token)
+            return request.redirect('/')
 
+        # Guardamos el token y el ID del postulante ANTES de cambiar el estado
+        # para poder renderizar la vista correcta después
+        view_data = {"benefit_application": postulation, "token": token}
+        
+        # Cambiamos el estado
         self._confirm_benefit_acceptance(postulation)
-        return request.render(
-            'rvc.accept_rvc_benefit_page_view',
-            {"benefit_application": postulation, "token": token}
-        )
+        
+        # Renderizamos la vista de primera aceptación, no la de "ya aceptado"
+        return request.render('rvc.accept_rvc_benefit_page_view', view_data)
 
     def _get_fresh_state(self, postulation_id):
         """Obtiene el estado actual de la solicitud para evitar condiciones de carrera"""
@@ -144,8 +153,8 @@ class AcceptRvcBenefit(http.Controller):
         """Maneja errores de serialización en la base de datos"""
         _logger.warning(
             "Retry %d/%d debido a error de serialización: %s", 
-            attempt + 1, 
-            self.MAX_RETRIES, 
+            attempt + 1,
+            self.MAX_RETRIES,
             exception
         )
         request.env.cr.rollback()
