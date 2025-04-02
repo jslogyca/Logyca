@@ -15,59 +15,62 @@ class AcceptRvcBenefit(http.Controller):
         "/rvc/accept_benefit/<string:token>",
         type="http",
         auth="public",
-        website=True,
-        multilang=False
+        website=True
     )
     def accept_benefit(self, token, **kwargs):
+        path = request.httprequest.path
 
-        postulation_ids = (
-            request.env["benefit.application"]
-            .sudo()
-            .search([("access_token", "=", token)])
-        )
-        if not postulation_ids:
-            return request.not_found()
+        if path.startswith('es_CO'):
 
-        for postulation_id in postulation_ids:
+            postulation_ids = (
+                request.env["benefit.application"]
+                .sudo()
+                .search([("access_token", "=", token)])
+            )
+            if not postulation_ids:
+                return request.not_found()
 
-            if postulation_id.state == "done":
-                return request.render(
-                    'rvc.rvc_benefit_already_delivered',
-                    {"benefit_application": postulation_id, "token": token}
-                )
+            for postulation_id in postulation_ids:
 
-            if postulation_id.state == "notified":
-                postulation_id.write(
-                    {"state": "confirm", "acceptance_date": datetime.now()}
-                )
-                message = _(
-                    f"{postulation_id.partner_id.partner_id.name} "
-                    "<u><strong>ACEPTÓ</strong></u> el beneficio desde el correo electrónico."
-                )
-                postulation_id.message_post(body=message)
+                if postulation_id.state == "done":
+                    return request.render(
+                        'rvc.rvc_benefit_already_delivered',
+                        {"benefit_application": postulation_id, "token": token}
+                    )
 
-                postulation_id.attach_OM_2_partner(postulation_id)
+                if postulation_id.state == "notified":
+                    postulation_id.write(
+                        {"state": "confirm", "acceptance_date": datetime.now()}
+                    )
+                    message = _(
+                        f"{postulation_id.partner_id.partner_id.name} "
+                        "<u><strong>ACEPTÓ</strong></u> el beneficio desde el correo electrónico."
+                    )
+                    postulation_id.message_post(body=message)
 
-                if postulation_id.product_id.benefit_type == "colabora":
-                    postulation_id.calculate_end_date_colabora()
+                    postulation_id.attach_OM_2_partner(postulation_id)
 
-                return request.render(
-                    'rvc.accept_rvc_benefit_page_view',
-                    {"benefit_application": postulation_id, "token": token},
-                    True
-                )
+                    if postulation_id.product_id.benefit_type == "colabora":
+                        postulation_id.calculate_end_date_colabora()
 
-            if postulation_id.state == "confirm":
-                tz = timezone('America/Bogota')
-                formatted_date = postulation_id.acceptance_date\
-                    .astimezone(tz)\
-                    .strftime('%d/%m/%Y a las %H:%M')
+                    return request.render(
+                        'rvc.accept_rvc_benefit_page_view',
+                        {"benefit_application": postulation_id, "token": token},
+                        True
+                    )
 
-                return request.render(
-                    'rvc.notify_rvc_benefit_already_accepted',
-                    {
-                        "benefit_application": postulation_id,
-                        "token": token,
-                        'formatted_acceptance_date': formatted_date
-                    }
-                )
+                if postulation_id.state == "confirm":
+                    tz = timezone('America/Bogota')
+                    formatted_date = postulation_id.acceptance_date\
+                        .astimezone(tz)\
+                        .strftime('%d/%m/%Y a las %H:%M')
+
+                    return request.render(
+                        'rvc.notify_rvc_benefit_already_accepted',
+                        {
+                            "benefit_application": postulation_id,
+                            "token": token,
+                            'formatted_acceptance_date': formatted_date
+                        }
+                    )
+        return request.not_found()
