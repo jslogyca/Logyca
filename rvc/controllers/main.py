@@ -19,10 +19,6 @@ class AcceptRvcBenefit(http.Controller):
         multilang=True
     )
     def accept_benefit(self, token, **kwargs):
-        path = request.httprequest.path
-
-        if not path.startswith(f'/{request.lang}'):
-            return None
 
         postulation_ids = (
             request.env["benefit.application"]
