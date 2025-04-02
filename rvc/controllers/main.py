@@ -12,15 +12,18 @@ _logger = logging.getLogger(__name__)
 class AcceptRvcBenefit(http.Controller):
 
     @http.route(
+        [
         "/rvc/accept_benefit/<string:token>",
+        "/<string:lang>/rvc/accept_benefit/<string:token>"
+        ],
         type="http",
         auth="public",
         website=True
     )
-    def accept_benefit(self, token, **kwargs):
+    def accept_benefit(self, token, lang=None, **kwargs):
         path = request.httprequest.path
 
-        if path.startswith('es_CO'):
+        if lang and path.startswith(f'/{lang}/'):
 
             postulation_ids = (
                 request.env["benefit.application"]
@@ -73,4 +76,7 @@ class AcceptRvcBenefit(http.Controller):
                             'formatted_acceptance_date': formatted_date
                         }
                     )
-        return request.not_found()
+        elif lang:
+            # Si hay un parámetro lang pero no estamos en la ruta con prefijo,
+            # podría ser una redirección; omitir procesamiento
+            return request.redirect(f"/rvc/accept_benefit/{token}")
