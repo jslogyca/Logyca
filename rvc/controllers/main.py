@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 class AcceptRvcBenefit(http.Controller):
 
     @http.route(
-        ["/rvc/accept_benefit/<string:token>", "/<lang>/rvc/accept_benefit/<string:token>"],
+        "/rvc/accept_benefit/<string:token>",
         type="http",
         auth="public",
         website=True,
@@ -21,12 +21,8 @@ class AcceptRvcBenefit(http.Controller):
     def accept_benefit(self, token, **kwargs):
         path = request.httprequest.path
 
-        if path.count('/es_CO') > 1 or path.count('/en_US') > 1:
-            _logger.warning("Evitando ejecución duplicada por redirección")
-            return request.redirect('/')
-
         if not path.startswith(f'/{request.lang}'):
-            return request.redirect(f'/{request.lang}/rvc/accept_benefit/{token}')
+            return None
 
         postulation_ids = (
             request.env["benefit.application"]
@@ -37,8 +33,6 @@ class AcceptRvcBenefit(http.Controller):
             return request.not_found()
 
         for postulation_id in postulation_ids:
-            lang = postulation_id.partner_id.partner_id.lang or 'es_ES'
-            request.context = dict(request.context, lang=lang)
 
             if postulation_id.state == "done":
                 return request.render(
