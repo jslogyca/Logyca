@@ -2,86 +2,82 @@
 from odoo import http
 from odoo.http import request
 from odoo.tools.translate import _
-from odoo.tools.misc import get_lang
+from pytz import timezone
 from datetime import datetime
 import logging
-from pytz import timezone
 
 _logger = logging.getLogger(__name__)
+
 
 class AcceptRvcBenefit(http.Controller):
 
     @http.route(
-        "/rvc/accept_benefit/<string:token>", type="http", auth="public", website=True
+        ["/rvc/accept_benefit/<string:token>", "/<lang>/rvc/accept_benefit/<string:token>"],
+        type="http",
+        auth="public",
+        website=True,
+        multilang=True
     )
     def accept_benefit(self, token, **kwargs):
-        # Usamos cr.execute directamente para bloquear la fila para esta transacción
-        request.env.cr.execute("""
-            SELECT id, state, acceptance_date FROM benefit_application 
-            WHERE access_token = %s FOR UPDATE
-        """, (token,))
-        result = request.env.cr.dictfetchone()
+        path = request.httprequest.path
 
-        if not result:
+        if path.count('/es_CO') > 1 or path.count('/en_US') > 1:
+            _logger.warning("Evitando ejecución duplicada por redirección")
+            return request.redirect('/')
+
+        if not path.startswith(f'/{request.lang}'):
+            return request.redirect(f'/{request.lang}/rvc/accept_benefit/{token}')
+
+        postulation_ids = (
+            request.env["benefit.application"]
+            .sudo()
+            .search([("access_token", "=", token)])
+        )
+        if not postulation_ids:
             return request.not_found()
 
-        postulation_id = request.env['benefit.application'].sudo().browse(result['id'])
-        _logger.info("Procesando beneficio con estado: %s", postulation_id.state)
+        for postulation_id in postulation_ids:
+            lang = postulation_id.partner_id.partner_id.lang or 'es_ES'
+            request.context = dict(request.context, lang=lang)
 
-        # Configurar contexto del idioma
-        lang = postulation_id.partner_id.partner_id.lang or 'es_ES'
-        request.context = dict(request.context, lang=lang)
+            if postulation_id.state == "done":
+                return request.render(
+                    'rvc.rvc_benefit_already_delivered',
+                    {"benefit_application": postulation_id, "token": token}
+                )
 
-        # Beneficio ya entregado
-        if postulation_id.state == "done":
-            return request.render(
-                'rvc.rvc_benefit_already_delivered',
-                {"benefit_application": postulation_id, "token": token}
-            )
+            if postulation_id.state == "notified":
+                postulation_id.write(
+                    {"state": "confirm", "acceptance_date": datetime.now()}
+                )
+                message = _(
+                    f"{postulation_id.partner_id.partner_id.name} "
+                    "<u><strong>ACEPTÓ</strong></u> el beneficio desde el correo electrónico."
+                )
+                postulation_id.message_post(body=message)
 
-        # Beneficio ya aceptado previamente
-        if postulation_id.state == "confirm" and postulation_id.acceptance_date:
-            # Formatear la fecha de aceptación
-            tz = timezone('America/Bogota')
-            formatted_date = (postulation_id.acceptance_date
-                            .astimezone(tz)
-                            .strftime('%d/%m/%Y a las %H:%M'))
+                postulation_id.attach_OM_2_partner(postulation_id)
 
-            return request.render(
-                'rvc.notify_rvc_benefit_already_accepted',
-                {
-                    "benefit_application": postulation_id, 
-                    "token": token,
-                    "formatted_acceptance_date": formatted_date
-                }
-            )
+                if postulation_id.product_id.benefit_type == "colabora":
+                    postulation_id.calculate_end_date_colabora()
 
-        # Primera aceptación del beneficio
-        if postulation_id.state == "notified" and postulation_id.acceptance_date is False:
-            # Cambiar estado ANTES de procesar cualquier operación
-            postulation_id.write({
-                "state": "confirm", 
-                "acceptance_date": datetime.now()
-            })
+                return request.render(
+                    'rvc.accept_rvc_benefit_page_view',
+                    {"benefit_application": postulation_id, "token": token},
+                    True
+                )
 
-            # Registrar en el historial
-            message = _(
-                f"{postulation_id.partner_id.partner_id.name} "
-                "<u><strong>ACEPTÓ</strong></u> el beneficio desde el correo electrónico."
-            )
-            postulation_id.message_post(body=message)
+            if postulation_id.state == "confirm":
+                tz = timezone('America/Bogota')
+                formatted_date = postulation_id.acceptance_date\
+                    .astimezone(tz)\
+                    .strftime('%d/%m/%Y a las %H:%M')
 
-            # Procesar adjuntos y fechas
-            postulation_id.attach_OM_2_partner(postulation_id)
-
-            if postulation_id.product_id.benefit_type == "colabora":
-                postulation_id.calculate_end_date_colabora()
-
-            # Mostrar página de aceptación exitosa
-            return request.render(
-                'rvc.accept_rvc_benefit_page_view',
-                {"benefit_application": postulation_id, "token": token}
-            )
-
-        # Estado no reconocido
-        return request.redirect('/')
+                return request.render(
+                    'rvc.notify_rvc_benefit_already_accepted',
+                    {
+                        "benefit_application": postulation_id,
+                        "token": token,
+                        'formatted_acceptance_date': formatted_date
+                    }
+                )
