@@ -16,7 +16,7 @@ class AcceptRvcBenefit(http.Controller):
         type="http",
         auth="public",
         website=True,
-        multilang=True
+        multilang=False
     )
     def accept_benefit(self, token, **kwargs):
 
