@@ -16,6 +16,7 @@ class AcceptRvcBenefit(http.Controller):
     )
     def accept_benefit(self, token, **kwargs):
         _logger.info("=== INICIANDO accept_benefit con token: %s ===", token)
+        _logger.info("Parámetros adicionales: %s", kwargs)
 
         postulation_ids = (
             request.env["benefit.application"]
@@ -34,10 +35,8 @@ class AcceptRvcBenefit(http.Controller):
                         postulation_id.id, postulation_id.state)
 
             if postulation_id.state == "done":
-                _logger.info(
-                    "La postulación ya está completada (estado: done), "
-                    "renderizando vista 'already_delivered'"
-                )
+                _logger.info("La postulación ya está completada (estado: done), "
+                            "renderizando vista 'already_delivered'")
                 return request.render(
                     "rvc.rvc_benefit_already_delivered",
                     {"benefit_application": postulation_id, "token": token},
@@ -54,26 +53,42 @@ class AcceptRvcBenefit(http.Controller):
             if postulation_id.state == "notified" and not already_processed:
                 _logger.info("ACTUALIZANDO postulación a estado 'confirm' (primera vez)")
 
-                postulation_id.write(
-                    {"state": "confirm", "acceptance_date": datetime.now()}
-                )
-                message = _(
-                    f"{postulation_id.partner_id.partner_id.name} "
-                    "<u><strong>ACEPTÓ</strong></u> el beneficio desde el correo electrónico."
-                )
-                postulation_id.message_post(body=message)
-                _logger.info("Mensaje publicado en el chatter")
+                try:
+                    # Crear un entorno nuevo con su propia transacción
+                    with request.env.cr.savepoint():
+                        postulation_id.write(
+                            {"state": "confirm", "acceptance_date": datetime.now()}
+                        )
+                        message = _(
+                            f"{postulation_id.partner_id.partner_id.name} "
+                            "<u><strong>ACEPTÓ</strong></u> el beneficio "
+                            "desde el correo electrónico."
+                        )
+                        postulation_id.message_post(body=message)
+                        _logger.info("Mensaje publicado en el chatter")
 
-                _logger.info("Ejecutando attach_OM_2_partner")
-                postulation_id.attach_OM_2_partner(postulation_id)
+                        _logger.info("Ejecutando attach_OM_2_partner")
+                        postulation_id.attach_OM_2_partner(postulation_id)
 
-                if postulation_id.product_id.benefit_type == "colabora":
-                    _logger.info("Calculando fecha fin para beneficio tipo 'colabora'")
-                    postulation_id.calculate_end_date_colabora()
+                        if postulation_id.product_id.benefit_type == "colabora":
+                            _logger.info("Calculando fecha fin para beneficio tipo 'colabora'")
+                            postulation_id.calculate_end_date_colabora()
 
-                # Marcar como procesado en la sesión
-                request.session[session_key] = True
-                _logger.info("Marcado como procesado en sesión: %s", session_key)
+                    # Si llegamos aquí, la transacción fue exitosa
+                    # Marcar como procesado en la sesión
+                    request.session[session_key] = True
+                    _logger.info("Marcado como procesado en sesión: %s", session_key)
+
+                except Exception as e:
+                    _logger.error("Error al procesar el beneficio: %s", str(e))
+                    # Verificar si ya fue procesado por otro proceso
+                    postulation_id.invalidate_cache()
+                    if postulation_id.state == "confirm":
+                        _logger.info("La postulación ya fue procesada por otra transacción")
+                        request.session[session_key] = True
+
+            # Recargar la postulación después de posibles cambios
+            postulation_id.invalidate_cache()
 
             # Preparar respuesta
             tz = timezone("America/Bogota")
@@ -86,9 +101,10 @@ class AcceptRvcBenefit(http.Controller):
             if postulation_id.state == "confirm":
                 view_to_render = (
                     "rvc.accept_rvc_benefit_page_view" 
-                    if not already_processed 
+                    if not already_processed
                     else "rvc.notify_rvc_benefit_already_accepted"
                 )
+
                 _logger.info("Renderizando vista: %s (¿Primera vez?: %s)",
                             view_to_render, not already_processed)
 
@@ -100,7 +116,8 @@ class AcceptRvcBenefit(http.Controller):
                         "formatted_acceptance_date": formatted_date,
                     },
                 )
-            _logger.warning("Estado inesperado: %s, no se renderiza ninguna vista específica",
+            else:
+                _logger.warning("Estado inesperado: %s, no se renderiza ninguna vista específica", 
                               postulation_id.state)
 
         _logger.warning("No se procesó ninguna postulación correctamente, retornando not_found")
