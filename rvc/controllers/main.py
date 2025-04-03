@@ -12,71 +12,58 @@ _logger = logging.getLogger(__name__)
 class AcceptRvcBenefit(http.Controller):
 
     @http.route(
-        [
-        "/rvc/accept_benefit/<string:token>",
-        "/<string:lang>/rvc/accept_benefit/<string:token>"
-        ],
-        type="http",
-        auth="public",
-        website=True
+        ["/rvc/accept_benefit/<string:token>"], type="http", auth="public", website=True
     )
-    def accept_benefit(self, token, lang=None, **kwargs):
-        path = request.httprequest.path
+    def accept_benefit(self, token, processed=None, **kwargs):
+        postulation_ids = (
+            request.env["benefit.application"]
+            .sudo()
+            .search([("access_token", "=", token)])
+        )
 
-        if lang and path.startswith(f'/{lang}/'):
+        if not postulation_ids:
+            return request.not_found()
 
-            postulation_ids = (
-                request.env["benefit.application"]
-                .sudo()
-                .search([("access_token", "=", token)])
-            )
-            if not postulation_ids:
-                return request.not_found()
+        for postulation_id in postulation_ids:
+            if postulation_id.state == "done":
+                return request.render(
+                    "rvc.rvc_benefit_already_delivered",
+                    {"benefit_application": postulation_id, "token": token},
+                )
 
-            for postulation_id in postulation_ids:
+            # Si el estado es "notified" y no ha sido procesado aún
+            if postulation_id.state == "notified" and not processed:
+                postulation_id.write(
+                    {"state": "confirm", "acceptance_date": datetime.now()}
+                )
+                message = _(
+                    f"{postulation_id.partner_id.partner_id.name} "
+                    "<u><strong>ACEPTÓ</strong></u> el beneficio desde el correo electrónico."
+                )
+                postulation_id.message_post(body=message)
 
-                if postulation_id.state == "done":
-                    return request.render(
-                        'rvc.rvc_benefit_already_delivered',
-                        {"benefit_application": postulation_id, "token": token}
-                    )
+                postulation_id.attach_OM_2_partner(postulation_id)
 
-                if postulation_id.state == "notified":
-                    postulation_id.write(
-                        {"state": "confirm", "acceptance_date": datetime.now()}
-                    )
-                    message = _(
-                        f"{postulation_id.partner_id.partner_id.name} "
-                        "<u><strong>ACEPTÓ</strong></u> el beneficio desde el correo electrónico."
-                    )
-                    postulation_id.message_post(body=message)
+                if postulation_id.product_id.benefit_type == "colabora":
+                    postulation_id.calculate_end_date_colabora()
 
-                    postulation_id.attach_OM_2_partner(postulation_id)
+                # Redirigir con el parámetro processed para evitar el doble procesamiento
+                return request.redirect(f"/rvc/accept_benefit/{token}?processed=1")
 
-                    if postulation_id.product_id.benefit_type == "colabora":
-                        postulation_id.calculate_end_date_colabora()
+            # Este bloque se ejecutará después de la redirección o si ya estaba en estado "confirm"
+            if postulation_id.state == "confirm":
+                tz = timezone("America/Bogota")
+                formatted_date = postulation_id.acceptance_date.astimezone(tz).strftime(
+                    "%d/%m/%Y a las %H:%M"
+                )
 
-                    return request.render(
-                        'rvc.accept_rvc_benefit_page_view',
-                        {"benefit_application": postulation_id, "token": token},
-                        True
-                    )
+                return request.render(
+                    "rvc.notify_rvc_benefit_already_accepted",
+                    {
+                        "benefit_application": postulation_id,
+                        "token": token,
+                        "formatted_acceptance_date": formatted_date,
+                    },
+                )
 
-                if postulation_id.state == "confirm":
-                    tz = timezone('America/Bogota')
-                    formatted_date = postulation_id.acceptance_date\
-                        .astimezone(tz)\
-                        .strftime('%d/%m/%Y a las %H:%M')
-
-                    return request.render(
-                        'rvc.notify_rvc_benefit_already_accepted',
-                        {
-                            "benefit_application": postulation_id,
-                            "token": token,
-                            'formatted_acceptance_date': formatted_date
-                        }
-                    )
-        elif lang:
-            # Si hay un parámetro lang pero no estamos en la ruta con prefijo,
-            # podría ser una redirección; omitir procesamiento
-            return request.redirect(f"/rvc/accept_benefit/{token}")
+        return request.not_found()
