@@ -42,7 +42,6 @@ class AcceptRvcBenefit(http.Controller):
 
         _logger.info("Clave de sesión: %s, ¿Ya procesado?: %s", session_key, already_processed)
 
-        # Si el estado es "notified" y no ha sido procesado
         if postulation_id.state == "notified" and not already_processed:
             try:
                 postulation_id.write(
@@ -67,7 +66,6 @@ class AcceptRvcBenefit(http.Controller):
             except Exception as e:
                 _logger.error("Error al procesar el beneficio: %s", str(e))
 
-        # Independientemente de procesamiento o errores, renderizar vista apropiada
         # Recargar registro para tener datos actualizados
         postulation_id.invalidate_cache()
         postulation_id = request.env["benefit.application"].sudo().browse(postulation_id.id)
@@ -101,7 +99,6 @@ class AcceptRvcBenefit(http.Controller):
                     },
                 )
 
-        # Si llegamos aquí, es un estado diferente (probablemente "notified")
         _logger.info("Renderizando vista estándar para estado: %s", postulation_id.state)
         return request.render(
             "rvc.accept_rvc_benefit_page_view",
