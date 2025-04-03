@@ -87,7 +87,22 @@ class AcceptRvcBenefit(http.Controller):
                     "token": token
                 }
             )
-        _logger.info("Renderizando vista de aceptación directamente")
+
+        # Determinar qué vista renderizar basado en el estado y si ya fue procesado
+        if postulation_id.state == "confirm":
+            if already_processed:
+                _logger.info("Renderizando vista de 'ya aceptado' (visita posterior)")
+                return request.render(
+                    "rvc.notify_rvc_benefit_already_accepted",
+                    {
+                        "benefit_application": postulation_id,
+                        "token": token,
+                        "formatted_acceptance_date": formatted_date
+                    },
+                )
+
+        # Si llegamos aquí, es un estado diferente (probablemente "notified")
+        _logger.info("Renderizando vista estándar para estado: %s", postulation_id.state)
         return request.render(
             "rvc.accept_rvc_benefit_page_view",
             {
