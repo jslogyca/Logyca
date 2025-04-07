@@ -391,11 +391,14 @@ class BenefitApplication(models.Model):
                 #     '\n\nPor favor deje el campo Código GLN vacío, le asignaremos uno en la entrega del beneficio.' % (tmp_code, str(partner_id.name))))
                 
     def _validate_bought_products(self):
+        bearer_token = self.get_token_gs1_co_api()
         for benefit_application in self:
             if self.get_odoo_url() == 'https://logyca.odoo.com':
-                url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+                # url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+                url = "https://app-msprefixcodesservice-prod.azurewebsites.net/api/code_reservation_service/get_code_summary_by_enterprise/%s" % (str(self.vat))
             else:
-                url = "https://app-asc-dev.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+                # url = "https://app-asc-dev.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+                url = "https://app-msprefixcodesservice-prod.azurewebsites.net/api/code_reservation_service/get_code_summary_by_enterprise/%s" % (str(self.vat))
 
             response = requests.get(url)
             if response.status_code == 200:
