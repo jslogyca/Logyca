@@ -165,10 +165,10 @@ class BenefitApplication(models.Model):
     def action_done(self):
         if self.state in ('confirm'):
             # si son codigos de productos validamos que no hayan productos comprados disponibles
-            if self.product_id.benefit_type == 'codigos' and self.codes_quantity > 0:
+            # if self.product_id.benefit_type == 'codigos' and self.codes_quantity > 0:
                 #requiere activar beneficio con el envío del kit?
-                if self.send_kit_with_no_benefit == False:
-                    self._validate_bought_products()
+                # if self.send_kit_with_no_benefit == False:
+                #     self._validate_bought_products()
 
             view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id
             result ={'name':_("Enviar Kit de Bienvenida"),'view_mode': 'form',
@@ -176,15 +176,15 @@ class BenefitApplication(models.Model):
                                 'type': 'ir.actions.act_window','nodestroy': True,'target': 'new'}
 
             # si son codigos de productos validamos que no hayan productos comprados disponibles
-            if (self.product_id.benefit_type == 'codigos' and
-                (self.codes_quantity > 0 or
-                 self.invoice_codes_quantity > 0 or
-                 self.glns_codes_quantity > 0)):
+            # if (self.product_id.benefit_type == 'codigos' and
+            #     (self.codes_quantity > 0 or
+            #      self.invoice_codes_quantity > 0 or
+            #      self.glns_codes_quantity > 0)):
 
                 #requiere activar beneficio con el envío del kit?
-                if self.send_kit_with_no_benefit is False:
-                    if self._validate_bought_products():
-                        return result
+                # if self.send_kit_with_no_benefit is False:
+                #     if self._validate_bought_products():
+                #         return result
             return result
 
     def action_forward_done(self):
