@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2022-08-23 14:07+0000\n"
+"PO-Revision-Date: 2023-04-03 13:22+0000\n"
 "Last-Translator: Bole <bole@dajmi5.com>\n"
 "Language-Team: none\n"
 "Language: hr\n"
@@ -15,12 +15,12 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #. module: account_move_print
 #: model_terms:ir.ui.view,arch_db:account_move_print.report_journal_entry_document
 msgid "<strong>Accounting Date:</strong>"
-msgstr "<strong>Računovodstveni datum:</strong>"
+msgstr "<strong>Knjigovodstveni datum:</strong>"
 
 #. module: account_move_print
 #: model_terms:ir.ui.view,arch_db:account_move_print.report_journal_entry_document
@@ -54,18 +54,13 @@ msgstr "Iznos u valuti"
 
 #. module: account_move_print
 #: model_terms:ir.ui.view,arch_db:account_move_print.report_journal_entry_document
-msgid "Analytic Account"
-msgstr "Analitički konto"
-
-#. module: account_move_print
-#: model_terms:ir.ui.view,arch_db:account_move_print.report_journal_entry_document
 msgid "Credit"
-msgstr ""
+msgstr "Potražno"
 
 #. module: account_move_print
 #: model_terms:ir.ui.view,arch_db:account_move_print.report_journal_entry_document
 msgid "Debit"
-msgstr ""
+msgstr "Dugovno"
 
 #. module: account_move_print
 #: model:ir.actions.report,name:account_move_print.action_report_journal_entries

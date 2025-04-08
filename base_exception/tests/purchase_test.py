@@ -1,65 +1,80 @@
 # Copyright 2016 Akretion Mourad EL HADJ MIMOUNE
+# Copyright 2020 Hibou Corp.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import api, fields, models
 
 
-class PurchaseTest(models.Model):
-    _inherit = 'base.exception'
-    _name = "base.exception.test.purchase"
-    _description = "Base Ecxeption Test Model"
+class ExceptionRule(models.Model):
+    _inherit = "exception.rule"
+    _name = "exception.rule"
 
-    rule_group = fields.Selection(
-        selection_add=[('test_base', 'test')],
-        default='test_base',
+    method = fields.Selection(
+        selection_add=[("exception_method_no_zip", "Purchase exception no zip")]
     )
-    name = fields.Char(required=True)
-    user_id = fields.Many2one('res.users', string='Responsible')
-    state = fields.Selection(
-        [('draft', 'New'), ('cancel', 'Cancelled'),
-         ('purchase', 'Purchase'),
-         ('to approve', 'To approve'), ('done', 'Done')],
-        string="Status", readonly=True, default='draft')
-    active = fields.Boolean(default=True)
-    partner_id = fields.Many2one('res.partner', string='Partner')
-    line_ids = fields.One2many(
-        'base.exception.test.purchase.line', 'lead_id')
-    amount_total = fields.Float(
-        compute='_compute_amount_total', store=True)
+    model = fields.Selection(
+        selection_add=[("base.exception.test.purchase", "Purchase Test")],
+        ondelete={"base.exception.test.purchase": "cascade"},
+    )
+    test_purchase_ids = fields.Many2many("base.exception.test.purchase")
 
-    @api.depends('line_ids')
-    def _compute_amount_total(cls):
-        for record in cls:
+
+class PurchaseTest(models.Model):
+    _inherit = "base.exception"
+    _name = "base.exception.test.purchase"
+    _description = "Base Exception Test Model"
+
+    name = fields.Char(required=True)
+    user_id = fields.Many2one("res.users", string="Responsible")
+    state = fields.Selection(
+        [
+            ("draft", "New"),
+            ("cancel", "Cancelled"),
+            ("purchase", "Purchase"),
+            ("to approve", "To approve"),
+            ("done", "Done"),
+        ],
+        string="Status",
+        readonly=True,
+        default="draft",
+    )
+    active = fields.Boolean(default=True)
+    partner_id = fields.Many2one("res.partner", string="Partner")
+    line_ids = fields.One2many("base.exception.test.purchase.line", "lead_id")
+    amount_total = fields.Float(compute="_compute_amount_total", store=True)
+
+    @api.depends("line_ids")
+    def _compute_amount_total(self):
+        for record in self:
             for line in record.line_ids:
                 record.amount_total += line.amount * line.qty
 
-    @api.constrains('ignore_exception', 'line_ids', 'state')
-    def test_purchase_check_exception(cls):
-        orders = cls.filtered(lambda s: s.state == 'purchase')
+    @api.constrains("ignore_exception", "line_ids", "state")
+    def test_purchase_check_exception(self):
+        orders = self.filtered(lambda s: s.state == "purchase")
         if orders:
             orders._check_exception()
 
-    @api.multi
-    def button_approve(cls, force=False):
-        cls.write({'state': 'to approve'})
+    def button_approve(self, force=False):
+        self.write({"state": "to approve"})
         return {}
 
-    @api.multi
-    def button_draft(cls):
-        cls.write({'state': 'draft'})
+    def button_draft(self):
+        self.write({"state": "draft"})
         return {}
 
-    @api.multi
-    def button_confirm(cls):
-        cls.write({'state': 'purchase'})
+    def button_confirm(self):
+        self.write({"state": "purchase"})
         return True
 
-    @api.multi
-    def button_cancel(cls):
-        cls.write({'state': 'cancel'})
+    def button_cancel(self):
+        self.write({"state": "cancel"})
 
-    def test_base_get_lines(cls):
-        cls.ensure_one()
-        return cls.line_ids
+    def exception_method_no_zip(self):
+        records_fail = self.env["base.exception.test.purchase"]
+        for rec in self:
+            if not rec.partner_id.zip:
+                records_fail += rec
+        return records_fail
 
 
 class LineTest(models.Model):
@@ -67,7 +82,20 @@ class LineTest(models.Model):
     _description = "Base Exception Test Model Line"
 
     name = fields.Char()
-    lead_id = fields.Many2one('base.exception.test.purchase',
-                              ondelete='cascade')
+    lead_id = fields.Many2one("base.exception.test.purchase", ondelete="cascade")
     qty = fields.Float()
     amount = fields.Float()
+
+
+class WizardTest(models.TransientModel):
+    _name = "exception.rule.confirm.test.purchase"
+    _inherit = "exception.rule.confirm"
+    _description = "Base Exception Test Model Confirm"
+
+    related_model_id = fields.Many2one("base.exception.test.purchase", "Purchase")
+
+    def action_confirm(self):
+        self.ensure_one()
+        if self.ignore:
+            self.related_model_id.ignore_exception = True
+        return super().action_confirm()

@@ -65,6 +65,7 @@ msgid "Display Name"
 msgstr "Görünen İsim"
 
 #. module: purchase_order_type
+#. odoo-python
 #: code:addons/purchase_order_type/models/purchase_order.py:0
 #, python-format
 msgid "Document's company and type's company mismatch"
@@ -91,11 +92,6 @@ msgstr "ID"
 #: model_terms:ir.ui.view,arch_db:purchase_order_type.view_purchase_order_type_search
 msgid "Incoterm"
 msgstr ""
-
-#. module: purchase_order_type
-#: model:ir.model.fields,field_description:purchase_order_type.field_purchase_order_type____last_update
-msgid "Last Modified on"
-msgstr "Son değişiklik"
 
 #. module: purchase_order_type
 #: model:ir.model.fields,field_description:purchase_order_type.field_purchase_order_type__write_uid
@@ -148,6 +144,7 @@ msgstr ""
 
 #. module: purchase_order_type
 #: model:ir.model.fields,field_description:purchase_order_type.field_purchase_order__order_type
+#: model_terms:ir.ui.view,arch_db:purchase_order_type.purchase_order_view_search
 #: model_terms:ir.ui.view,arch_db:purchase_order_type.view_purchase_order_filter
 #: model_terms:ir.ui.view,arch_db:purchase_order_type.view_purchase_order_type_form
 msgid "Type"
@@ -157,6 +154,9 @@ msgstr "Tipi"
 #: model:ir.model,name:purchase_order_type.model_purchase_order_type
 msgid "Type of purchase order"
 msgstr ""
+
+#~ msgid "Last Modified on"
+#~ msgstr "Son değişiklik"
 
 #~ msgid "Partner"
 #~ msgstr "İş Ortağı"

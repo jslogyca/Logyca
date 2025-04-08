@@ -75,7 +75,7 @@
         action="action_account_balance_partner_filter"
         sequence="1" />
 
-    <record id="action_account_auxiliar_filter" model="ir.actions.act_window">
+    <!-- <record id="action_account_auxiliar_filter" model="ir.actions.act_window">
         <field name="name">Auxiliar</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">account.auxiliar.filter</field>
@@ -87,6 +87,6 @@
         name="Auxiliar"
         parent="logyca_menus_report_financial"
         action="action_account_auxiliar_filter"
-        sequence="2" />
+        sequence="2" /> -->
 
 </odoo>

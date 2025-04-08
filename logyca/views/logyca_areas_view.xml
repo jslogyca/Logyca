@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="logyca_menu_action_areas" model="ir.actions.act_window">
+        <field name="name">Áreas</field>
+          <field name="res_model">logyca.areas</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear área
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_areas">
+      <field name="name">logyca list areas</field>
+      <field name="model">logyca.areas</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>                                              
+        </tree>
+      </field>
+    </record>
+    <menuitem name="Áreas" id="logyca.menu_areas" parent="logyca.menus_parameterization"  sequence="4" action="logyca_menu_action_areas"/>
+</odoo>

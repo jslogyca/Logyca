@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError, Warning
+from odoo.exceptions import ValidationError
 
 import xlwt
 import base64
@@ -24,7 +24,7 @@ class hr_holiday_book_report_wizard(models.TransientModel):
     def do_report(self):
         value = self.get_values()
         if not value:
-            raise Warning(_('!No hay resultados para los datos seleccionados¡'))
+            raise ValidationError(_('!No hay resultados para los datos seleccionados¡'))
         self.make_file(value)
 
         path = "/web/binary/download_document?"
@@ -161,7 +161,7 @@ class hr_holiday_book_report_wizard(models.TransientModel):
             self.data = out
             self.data_name = 'ReporteVacaciones' + '-' + str(date_file)
         except ValueError:
-            raise Warning('No se pudo generar el archivo')
+            raise ValidationError('No se pudo generar el archivo')
 
     def get_amount_holiday(self, contract_id, total_days):
         return (contract_id.wage/30) * total_days

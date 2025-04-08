@@ -39,7 +39,7 @@ class ProjectAllies(models.Model):
     active = fields.Boolean('Active', default=True)
     company_id = fields.Many2one('res.company', string='Company', required=True,
                                  default=lambda self: self.env.company)
-    partner_id = fields.Many2one('res.partner', string="Partner", domain=[("parent_id", "=", False)])
+    partner_id = fields.Many2one('res.partner', string="Partner", domain=[("parent_id", "!=", False)])
     user_loyalty_id = fields.Many2one('res.partner', string="Partner", domain="[('user_loyalty', '=', True)]")
     # user_loyalty_id = fields.Many2one('res.partner', string="Partner")
     vat = fields.Char('NIT')

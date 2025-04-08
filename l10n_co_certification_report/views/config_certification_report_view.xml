@@ -19,7 +19,7 @@
                         </group>
                         <group>
                             <field name="by_city" required="1" widget="toggle"/>
-                            <field name="city_id" attrs="{'invisible': [('by_city', '=', False)], 'required': [('by_city', '=', True)]}" />
+                            <field name="city_id" />
                         </group>
                     </group>
                     <notebook>

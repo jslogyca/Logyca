@@ -6,13 +6,12 @@
 		<field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
 		<field name="arch" type="xml">
 			<xpath expr="//button[@name='action_payslip_done']" position="after">
-				<button string="Update Input Employee" name="update_input_employee" type="object" states="draft" class="oe_highlight"/>
-				<button string="Cancel Payslip" name="action_payslip_cancel_done" type="object" states="done" class="oe_highlight"/>
+				<button string="Update Input Employee" name="update_input_employee" type="object" class="oe_highlight"/>
+				<button string="Cancel Payslip" name="action_payslip_cancel_done" type="object"  class="oe_highlight"/>
 			</xpath>
 			<xpath expr="//field[@name='credit_note']" position="after">
 				<field name="payroll_liquid" invisible="1"/>
-				<field name="reason_id" attrs="{'invisible': [('payroll_liquid','=',False)], 'required': [('payroll_liquid','=',True)], 
-														'readonly': [('state','!=','draft')]}"/>
+				<field name="reason_id" />
 			</xpath>
 			<xpath expr="//page[@name='account_info']" position="before">
 				<page string="General By Salary Rule">
@@ -51,8 +50,7 @@
 		<field name="inherit_id" ref="hr_payroll_account.hr_payslip_view_form"/>
 		<field name="arch" type="xml">
 			<xpath expr="//button[@name='action_payslip_done']" position="replace">
-				<button string="Create Draft Entry" name="action_payslip_done" type="object" 
-								attrs="{'invisible': [('state', 'not in', ('draft','verify'))]}" class="oe_highlight" context="{'payslip_generate_pdf': True}"/>
+				<button string="Create Draft Entry" name="action_payslip_done" type="object" class="oe_highlight" context="{'payslip_generate_pdf': True}"/>
 			</xpath>
 		</field>
 	</record>

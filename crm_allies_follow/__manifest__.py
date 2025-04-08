@@ -26,7 +26,7 @@
         "security/security.xml",
         "security/ir.model.access.csv",
         "views/follow_partner_loyalty_view.xml",
-        "views/res_partner_view.xml",
+        # "views/res_partner_view.xml",
     ],
     "qweb": [],
 }

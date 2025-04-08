@@ -15,8 +15,6 @@
     "depends": [
         "base",
         "account",
-        # "date_range",
-        # "accounting_pdf_reports",
     ],
     "description": """
 
