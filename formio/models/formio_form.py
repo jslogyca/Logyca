@@ -1,10 +1,8 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
-import ast
 import json
 import logging
-import re
 import uuid
 
 from dateutil.relativedelta import relativedelta
@@ -13,7 +11,7 @@ from odoo import api, fields, models, _
 from odoo.addons.base.models.res_partner import _tz_get
 from odoo.exceptions import AccessError, UserError
 
-from ..utils import get_field_selection_label
+from ..utils import get_field_selection_label, json_loads
 
 from .formio_builder import (
     STATE_DRAFT as BUILDER_STATE_DRAFT,
@@ -26,6 +24,7 @@ _logger = logging.getLogger(__name__)
 STATE_PENDING = 'PENDING'
 STATE_DRAFT = 'DRAFT'
 STATE_COMPLETE = 'COMPLETE'
+STATE_ERROR = 'ERROR'
 STATE_CANCEL = 'CANCEL'
 
 
@@ -59,10 +58,16 @@ class Form(models.Model):
         string='UUID')
     title = fields.Char(string='Title', required=True, index=True, tracking=True)
     state = fields.Selection(
-        [(STATE_PENDING, 'Pending'), (STATE_DRAFT, 'Draft'),
-         (STATE_COMPLETE, 'Completed'), (STATE_CANCEL, 'Canceled')],
-        string="State", default=STATE_PENDING, tracking=True, index=True)
-    display_state = fields.Char("Display State", compute='_compute_display_fields', store=False)
+        selection=[
+            (STATE_PENDING, 'Pending'),
+            (STATE_DRAFT, 'Draft'),
+            (STATE_ERROR, 'Error'),
+            (STATE_COMPLETE, 'Completed'),
+            (STATE_CANCEL, 'Canceled'),
+        ],
+        string='State', default=STATE_PENDING, tracking=True, index=True
+    )
+    display_state = fields.Char('Display State', compute='_compute_display_fields', store=False)
     kanban_group_state = fields.Selection(
         [('A', 'Pending'), ('B', 'Draft'), ('C', 'Completed'), ('D', 'Canceled')],
         compute='_compute_kanban_group_state', store=True)
@@ -95,6 +100,10 @@ class Form(models.Model):
         help='User who submitted the form.')
     submission_partner_id = fields.Many2one('res.partner', related='submission_user_id.partner_id', string='Submission Partner')
     submission_partner_name = fields.Char(related='submission_partner_id.name', string='Submission Partner Name')
+    submission_commercial_partner_id = fields.Many2one(
+        related='submission_user_id.partner_id.commercial_partner_id',
+        string='Submission Commercial Entity'
+    )
     submission_date = fields.Datetime(
         string='Submission Date', readonly=True, tracking=True,
         help='Datetime when the form was last submitted.')
@@ -102,31 +111,47 @@ class Form(models.Model):
     sequence = fields.Integer(help="Usefull when storing and listing forms in an ordered way")
     portal = fields.Boolean("Portal (Builder)", related='builder_id.portal', readonly=True, help="Form is accessible by assigned portal user")
     portal_share = fields.Boolean("Portal")
+    portal_save_draft_done_url = fields.Char(related='builder_id.portal_save_draft_done_url')
     portal_submit_done_url = fields.Char(related='builder_id.portal_submit_done_url')
     public = fields.Boolean("Public (Builder)", related='builder_id.public', readonly=True)
     public_share = fields.Boolean("Public", tracking=True, help="Share form in public? (with access expiration check).")
+    public_access_rule_type = fields.Selection(string='Public Access Rule Type', related='builder_id.public_access_rule_type')
     public_access_date_from = fields.Datetime(
         string='Public Access From', tracking=True, help='Datetime from when the form is public shared until it expires.')
     public_access_interval_number = fields.Integer(tracking=True)
     public_access_interval_type = fields.Selection(list(_interval_selection.items()), tracking=True)
     public_access = fields.Boolean("Public Access", compute='_compute_access', help="The Public Access check. Computed public access by checking whether (field) Public Access From has been expired.")
     public_create = fields.Boolean("Public Created", readonly=True, help="Form was public created")
+    public_save_draft_done_url = fields.Char(related='builder_id.public_save_draft_done_url')
     public_submit_done_url = fields.Char(related='builder_id.public_submit_done_url')
     show_title = fields.Boolean("Show Title")
     show_state = fields.Boolean("Show State")
     show_id = fields.Boolean("Show ID")
     show_uuid = fields.Boolean("Show UUID")
-    show_user_metadata = fields.Boolean("Show User Metadata")
+    show_user_metadata = fields.Boolean(string="Show User Metadata")
     iframe_resizer_body_margin = fields.Char(
         "iFrame Resizer bodyMargin",
         related="builder_id.iframe_resizer_body_margin",
     )
+    full_width = fields.Boolean(related='builder_id.full_width')
     languages = fields.One2many('res.lang', related='builder_id.languages', string='Languages')
     allow_unlink = fields.Boolean("Allow delete", compute='_compute_access')
     allow_force_update_state = fields.Boolean("Allow force update State", compute='_compute_access')
     readonly_submission_data = fields.Boolean("Data is readonly", compute='_compute_access')
-    allow_copy = fields.Boolean(string='Allow Copies', help='Allow copying form submissions.', tracking=True, default=True)
-    copy_to_current = fields.Boolean(string='Copy To Current', help='When copying a form, always link it to the current version of the builder instead of the original builder.', tracking=True, default=True)
+    allow_copy = fields.Boolean(
+        string="Allow Copies",
+        related="builder_id.form_allow_copy",
+        help="Allow copying form submissions.",
+    )
+    copy_to_current = fields.Boolean(
+        string="Copy To Current",
+        related="builder_id.form_copy_to_current",
+        help="When copying a form, always link it to the current version of the builder instead of the original builder.",
+    )
+    debug_mode = fields.Boolean(
+        string="Debug Mode",
+        related='builder_id.debug_mode'
+    )
 
     @api.model
     def default_get(self, fields):
@@ -135,11 +160,12 @@ class Form(models.Model):
         result['res_id'] = False
         return result
 
-    @api.model
-    def create(self, vals):
-        vals = self._prepare_create_vals(vals)
-        res = super(Form, self).create(vals)
-        res._after_create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            vals = self._prepare_create_vals(vals)
+        res = super().create(vals_list)
+        res._after_create()
         return res
 
     def write(self, vals):
@@ -158,7 +184,8 @@ class Form(models.Model):
                 partner = self.env['res.partner'].browse(vals.get('partner_id'))
                 if partner.tz:
                     vals['submission_timezone'] = partner.tz
-        self._after_write(vals)
+        if not self._context.get('no_after_write'):
+            self._after_write()
         return res
 
     def _prepare_create_vals(self, vals):
@@ -169,8 +196,6 @@ class Form(models.Model):
         vals['show_id'] = builder.show_form_id
         vals['show_uuid'] = builder.show_form_uuid
         vals['show_user_metadata'] = builder.show_form_user_metadata
-        vals['allow_copy'] = builder.form_allow_copy
-        vals['copy_to_current'] = builder.form_copy_to_current
 
         # access
         vals['portal_share'] = builder.portal
@@ -203,11 +228,13 @@ class Form(models.Model):
                 vals['submission_timezone'] = self.env.user.partner_id.tz
         return vals
 
-    def _after_create(self, vals):
-        self._process_api_components(vals)
+    def _after_create(self):
+        for rec in self:
+            rec._process_api_components()
 
-    def _after_write(self, vals):
-        self._process_api_components(vals)
+    def _after_write(self):
+        for rec in self:
+            rec._process_api_components()
 
     def _clear_res_fields(self):
         vals = {
@@ -220,22 +247,21 @@ class Form(models.Model):
         }
         self.write(vals)
 
-    def _process_api_components(self, vals):
-        if vals.get('submission_data') and self.builder_id.component_partner_email:
-            submission_data = self._decode_data(vals['submission_data'])
-
+    def _process_api_components(self):
+        _logger.warning('DEPRECATION _process_api_components: partner creation will be removed from Odoo 18')
+        if self.submission_data and self.builder_id.component_partner_email:
+            submission_data = json.loads(self.submission_data)
             if submission_data.get(self.builder_id.component_partner_email):
                 partner_email = submission_data.get(self.builder_id.component_partner_email)
                 partner_model = self.env['res.partner']
                 partner = partner_model.search([('email', '=', partner_email)])
-
                 if not partner:
                     # Only create partner, don't update fields if exist already!
                     default_partner_vals = {'email': partner_email}
                     partner_vals = self._prepare_partner_vals(submission_data, default_partner_vals)
                     partner = partner_model.create(partner_vals)
                 if len(partner) == 1:
-                    self.write({'partner_id': partner.id})
+                    self.with_context(no_after_write=True).write({'partner_id': partner.id})
                     if self.builder_id.component_partner_add_follower:
                         self.message_subscribe(partner_ids=partner.ids)
                 elif len(partner) > 1:
@@ -247,7 +273,11 @@ class Form(models.Model):
         return partner_vals
 
     def _get_builder_from_id(self, builder_id):
-        return self.env['formio.builder'].browse(builder_id)
+        """
+        Use `sudo` in to bypass any 'Administration/Access Rights' access error.
+        This is considered safe, because it's a low-level method.
+        """
+        return self.env["formio.builder"].sudo().browse(builder_id)
 
     @api.depends('uuid')
     def _compute_builder_id_domain(self):
@@ -295,8 +325,9 @@ class Form(models.Model):
                 form.allow_force_update_state = True
             elif self.env.user.has_group('formio.group_formio_admin'):
                 form.allow_force_update_state = True
-            elif form.builder_id.allow_force_update_state_group_ids and (
-                user_groups & form.builder_id.allow_force_update_state_group_ids
+            elif (
+                form.builder_id.allow_force_update_state_group_ids
+                and (user_groups & form.builder_id.allow_force_update_state_group_ids)
             ):
                 form.allow_force_update_state = True
             else:
@@ -305,7 +336,9 @@ class Form(models.Model):
             # readonly_submission_data
             if self.env.su:
                 form.readonly_submission_data = False
-            elif self.env.user.has_group('formio.group_formio_admin'):
+            elif not form.id and self.env.user.has_group('formio.group_formio_admin'):
+                form.readonly_submission_data = False
+            elif self.env.user.has_group('formio.group_formio_form_update'):
                 form.readonly_submission_data = False
             else:
                 form.readonly_submission_data = True
@@ -334,40 +367,39 @@ class Form(models.Model):
         for r in self:
             r.display_state = get_field_selection_label(r, 'state')
 
-    @api.depends('title')
-    def name_get(self):
-        res = []
+    def _compute_display_name(self):
         for r in self:
-            name = '{title} [{id}]'.format(
-                title=r.title, id=r.id
-            )
-            res.append((r.id, name))
-        return res
+            r.display_name = '{title} [{id}]'.format(title=r.title, id=r.id)
 
     def _decode_data(self, data):
         """ Convert data (str) to dictionary
 
-        json.loads(data) refuses identifies with single quotes.Use
-        ast.literal_eval() instead.
-
         :param str data: submission_data string
         :return str data: submission_data as dictionary
         """
-        try:
-            data = json.loads(data)
-        except:
-            data = ast.literal_eval(data)
+        data = json_loads(data)
         return data
 
     def after_submit(self):
-        """ Function is called everytime a form is submitted. """
-        pass
+        """ Method is called everytime a form is submitted. """
+        for action in self.builder_id.server_action_ids.sorted(key='sequence').filtered(
+            lambda a: a.formio_form_execute_after_action in ['submit', 'submit_save_draft']
+        ):
+            action.with_context(active_model=self._name, active_id=self.id).run()
 
     def after_save_draft(self):
-        """ Function is called everytime a form is save as draft. """
-        pass
+        """ Method is called everytime a form is save as draft. """
+        for action in self.builder_id.server_action_ids.sorted(key='sequence').filtered(
+            lambda a: a.formio_form_execute_after_action in ['save_draft', 'submit_save_draft']
+        ):
+            action.with_context(active_model=self._name, active_id=self.id).run()
 
     def action_view_formio(self):
+        # return {
+        #     "type": "ir.actions.act_url",
+        #     "url": self.url,
+        #     "target": "new"
+        # }
         return {
             "name": self.display_name,
             "type": "ir.actions.act_window",
@@ -433,7 +465,7 @@ class Form(models.Model):
             template_id = self.env.ref('formio.mail_invitation_internal_user').id
         ctx = dict(
             default_composition_mode='comment',
-            default_res_id=self.id,
+            default_res_ids=self.ids,
             default_model='formio.form',
             default_use_template=bool(template_id),
             default_template_id=template_id,
@@ -453,19 +485,6 @@ class Form(models.Model):
     def _default_uuid(self):
         return str(uuid.uuid4())
 
-    # @api.onchange('builder_id')
-    # def _onchange_builder_domain(self):
-    #     domain = [
-    #         '|', '&',
-    #         ('state', '=', BUILDER_STATE_CURRENT),
-    #         ('res_model_id', '=', False),
-    #         '&', ('state', '=', BUILDER_STATE_DRAFT), ('test_draft', '=', True)
-    #     ]
-    #     res = {
-    #         'domain': {'builder_id': domain}
-    #     }
-    #     return res
-
     @api.onchange('builder_id')
     def _onchange_builder(self):
         if not self.env.user.has_group('formio.group_formio_user_all_forms'):
@@ -481,7 +500,7 @@ class Form(models.Model):
         self.public_share = self.builder_id.public
         self.public_access_interval_number = self.builder_id.public_access_interval_number
         self.public_access_interval_type = self.builder_id.public_access_interval_type
-        
+
         if self.builder_id.public:
             self.public_access_date_from = fields.Datetime.now()
 
@@ -592,10 +611,12 @@ class Form(models.Model):
         Param = self.env['ir.config_parameter'].sudo()
         cdn_base_url = Param.get_param('formio.cdn_base_url')
         params = {
+            'cdn_base_url': cdn_base_url,
+            'portal_save_draft_done_url': self.portal_save_draft_done_url,
             'portal_submit_done_url': self.portal_submit_done_url,
+            'public_save_draft_done_url': self.public_save_draft_done_url,
             'public_submit_done_url': self.public_submit_done_url,
             'wizard_on_change_page_save_draft': self.builder_id.wizard and self.builder_id.wizard_on_change_page_save_draft,
-            'cdn_base_url': cdn_base_url
         }
         return params
 
@@ -603,7 +624,7 @@ class Form(models.Model):
         return {}
 
     def _generate_odoo_domain(self, domain=[], params={}):
-        return self.builder_id._generate_odoo_domain(domain, params)
+        return self.builder_id._generate_odoo_domain(domain=domain, params=params)
 
     def i18n_translations(self):
         i18n = self.builder_id.i18n_translations()

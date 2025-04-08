@@ -1,16 +1,21 @@
-# Copyright Nova Code (http://www.novacode.nl)
+# Copyright Nova Code (https://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
 {
     'name': 'Forms',
-    'version': '15.0.16.19',
     'summary': 'Form Builder for backend, portal, website and embedded forms, to collect any information you need for your business.',
+    'version': '17.0.6.0.11',
     'license': 'LGPL-3',
     'author': 'Nova Code',
-    'website': 'https://www.novacode.nl',
-    'live_test_url': 'https://demo15.novacode.nl',
+    'website': 'https://www.novaforms.app',
+    'live_test_url': 'https://demo17.novaforms.app',
     'category': 'Forms/Forms',
-    'depends': ['web', 'portal', 'mail'],
+    'depends': [
+        'base',
+        'mail',
+        'portal',
+        'web',
+    ],
     'application': True,
     'installable': True,
     'post_init_hook': 'post_init_hook',
@@ -21,10 +26,10 @@
         'data/formio_default_asset_css_data.xml',
         'data/formio_version_data.xml',
         'data/formio_asset_data.xml',
-        'data/formio_extra_asset_data.xml',
         'data/formio_default_version_data.xml',
         'data/ir_config_param.xml',
         'data/ir_cron_data.xml',
+        'data/ir_server_action.xml',
         'data/mail_activity_data.xml',
         'data/mail_template_data.xml',
         # translations
@@ -37,12 +42,14 @@
         'security/formio_security.xml',
         'security/ir_model_access.xml',
         'security/ir_rule.xml',
+        # wizards (before views)
+        'wizard/formio_builder_js_options_merge.xml',
         # views
         'views/formio_builder_js_options_views.xml',
         'views/formio_builder_translation_views.xml',
         'views/formio_builder_views.xml',
-        'views/formio_extra_asset_views.xml',
         'views/formio_form_views.xml',
+        'views/formio_license_views.xml',
         'views/formio_res_model_views.xml',
         'views/formio_translation_source_views.xml',
         'views/formio_translation_views.xml',
@@ -53,26 +60,27 @@
         'views/res_config_settings_views.xml',
         'views/res_lang_views.xml',
         'views/ir_actions_views.xml',
+        'views/ir_attachment_views.xml',
         'views/mail_activity_views.xml',
         # formio templates
         'views/formio_builder_templates.xml',
         'views/formio_form_templates.xml',
         'views/formio_portal_templates.xml',
         'views/formio_public_templates.xml',
-        # wizards
-        'wizard/formio_version_github_checker_wizard.xml'
+        # wizards (after views)
+        'wizard/formio_version_github_checker_wizard.xml',
     ],
     'assets': {
         'web.assets_backend': [
             # builder
-            'formio/static/src/css/formio_builder.css',
+            'formio/static/src/scss/formio_builder.scss',
+            'formio/static/src/js/views/formio_builder.xml',
             'formio/static/src/js/views/formio_builder.js',
             # form
-            'formio/static/src/css/formio_form.css',
+            'formio/static/src/scss/formio_form.scss',
+            'formio/static/src/js/views/formio_form.xml',
             'formio/static/src/js/views/formio_form.js',
             # misc
-            'formio/static/src/js/views/form_controller.js',
-            'formio/static/src/js/tours/formio.js',
             'formio/static/lib/iframe-resizer/iframeResizer.min.js'
         ],
         'web.assets_frontend': [
@@ -81,10 +89,8 @@
             'formio/static/src/js/formio_form_container.js'
         ],
         'web.assets_common': [
+            'formio/static/lib/noble-hashes.js',
             'formio/static/lib/iframe-resizer/iframeResizer.min.js',
-        ],
-        'web.assets_qweb': [
-            'formio/static/src/xml/formio.xml',
         ],
     },
     'demo': [

@@ -13,13 +13,19 @@ class Version(models.Model):
     name = fields.Char(
         "Name", required=True, tracking=True,
         help="""formio.js release/version.""")
+    formio_version_github_tag_id = fields.Many2one(
+        'formio.version.github.tag',
+        compute='_compute_formio_version_github_tag',
+        string='formio.js version'
+    )
     active = fields.Boolean(string="Active", default=True, tracking=True)
     sequence = fields.Integer()
     description = fields.Text("Description")
     is_dummy = fields.Boolean(string="Is Dummy (default version in demo data)", readonly=True)
-    translations = fields.Many2many('formio.translation', string='All Translations')
     translation_ids = fields.One2many('formio.version.translation', 'formio_version_id', string='Translations')
-    assets = fields.One2many('formio.version.asset', 'version_id', string='Assets (js, css)', domain=[('type', 'in', ['css', 'js'])])
+    assets = fields.One2many(
+        'formio.version.asset', 'version_id', string='Assets (js, css)',
+        domain=[('type', '!=', 'license')])
     css_assets = fields.One2many(
         'formio.version.asset', 'version_id', domain=[('type', '=', 'css')], copy=True,
         string='CSS Assets')
@@ -30,17 +36,23 @@ class Version(models.Model):
         'formio.version.asset', 'version_id',  domain=[('type', '=', 'license')], copy=True,
         string='License Assets')
 
+    def _compute_formio_version_github_tag(self):
+        GitHubTag = self.env['formio.version.github.tag']
+        for rec in self:
+            domain = [('formio_version_id', '=', rec.id)]
+            rec.formio_version_github_tag_id = GitHubTag.search(domain, limit=1).id
+
     def unlink(self):
         self.assets.unlink()
         domain = [('formio_version_id', 'in', self.ids)]
         self.env['formio.version.github.tag'].search(domain).write({'state': 'available'})
         return super(Version, self).unlink()
 
-    @api.model
-    def create(self, vals):
-        res = super(Version, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        res = super(Version, self).create(vals_list)
         self._update_versions_sequence()
-        if not res.is_dummy:
+        if res.filtered(lambda r: not r.is_dummy):
             self._archive_dummy_version()
         return res
 
@@ -49,6 +61,10 @@ class Version(models.Model):
         if 'name' in vals:
             self._update_versions_sequence()
         return res
+
+    def action_reset_download_install(self):
+        for rec in self:
+            rec.formio_version_github_tag_id.action_reset_installed()
 
     def action_add_base_translations(self):
         """ Actually this should be re-implemented to a wizard.
