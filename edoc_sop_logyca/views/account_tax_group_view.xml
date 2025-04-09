@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="account_tax_group_view_form" model="ir.ui.view">
+		<field name="name">account.tax.group.form</field>
+		<field name="model">account.tax.group</field>
+		<field name="inherit_id" ref="account_menu.view_account_tax_group_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//group[@id='name']" position="after">
+				<group id="einvoice" name="Einvoice">
+					<field name="tributo_id" />
+					<field name="code" />
+				</group>
+				<group>
+					<field name="property_tax_payable_account_id"/>
+					<field name="property_tax_receivable_account_id"/>
+					<field name="property_advance_tax_payment_account_id"/>							
+				</group>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="view_tax_tree_einvoice" model="ir.ui.view">
+		<field name="name">account.tax.tree.einvoice</field>
+		<field name="model">account.tax</field>
+		<field name="inherit_id" ref="account.view_tax_tree"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='active']" position="after">
+				<field name="tax_group_id" />
+			</xpath>
+		</field>
+	</record>
+
+</odoo>

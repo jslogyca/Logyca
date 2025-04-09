@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="form_send_ds_1" model="form.send.ds">
+            <field name="code">1</field>
+            <field name="name">Por operación</field>
+        </record>
+        <record id="form_send_ds_2" model="form.send.ds">
+            <field name="code">2</field>
+            <field name="name">Acumulado semanal</field>
+        </record>
+    </data>
+</odoo>

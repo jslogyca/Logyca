@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dian_resolution_tree" model="ir.ui.view">
+        <field name="name">ir.sequence.dian_resolution.tree</field>
+        <field name="model">ir.sequence.dian_resolution</field>
+        <field name="arch" type="xml">
+            <tree string="DIAN Resolutions" editable="bottom">
+                <field name="resolution_number" />
+                <field name="resolution_date" />
+                <field name="resolution_prefix" />
+                <field name="from_range" />
+                <field name="to_range" />
+                <field name="number_next" attrs="{'readonly': False}" />
+                <field name="date_from" />
+                <field name="date_to" />
+                <field name="technical_key" />
+                <field name="active_resolution" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_dian_resolution_form" model="ir.ui.view">
+        <field name="name">ir.sequence.dian_resolution.form</field>
+        <field name="model">ir.sequence.dian_resolution</field>
+        <field name="arch" type="xml">
+            <form string="DIAN Resolutions">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="resolution_number" />
+                            <field name="resolution_date" />
+                            <field name="resolution_prefix" />
+                        </group>
+                        <group>
+                            <field name="from_range" />
+                            <field name="to_range" />
+                            <field name="number_next" attrs="{'readonly': False}" />
+                            <field name="date_from" />
+                            <field name="date_to" />
+                            <field name="technical_key" />
+                            <field name="active_resolution" />
+                        </group>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_view_dian_resolution_ids" model="ir.actions.act_window">
+        <field name="name">DIAN Resolutions</field>
+        <field name="res_model">ir.sequence.dian_resolution</field>
+        <field name='view_mode'>tree,form</field>
+        <field name='view_id' ref='view_dian_resolution_tree'/>
+        <field name="domain">[('sequence_id','=', active_id)]</field>
+        <field name="context">{'default_sequence_id': active_id}</field>
+    </record>
+
+	<record id="sequence_view_form_fe" model="ir.ui.view">
+		<field name="name">ir.sequence.view.form.fe</field>
+		<field name="model">ir.sequence</field>
+		<field name="inherit_id" ref="base.sequence_view"/>
+		<field name="arch" type="xml">
+			<xpath expr="//form/sheet/notebook/page/group/group[1]" position="inside">
+				<field name="use_dian_control" />
+			</xpath>
+            <xpath expr="//field[@name='date_range_ids']" position="after">
+                <field name="dian_resolution_ids" attrs="{'invisible':[('use_dian_control','=',False)]}">
+                  <tree string="DIAN Resolutions" editable="top" default_order="id desc">
+                        <field name="resolution_number" />
+                        <field name="resolution_date" />
+                        <field name="resolution_prefix" />
+                        <field name="from_range" />
+                        <field name="to_range" />
+                        <field name="number_next" attrs="{'readonly': False}" />
+                        <field name="date_from" />
+                        <field name="date_to" />
+                        <field name="technical_key" />
+                        <!-- <button name="do_range_wizard" string="" type="object" icon="fa-chain" force_save="1" readonly="1"/> -->
+                        <field name="active_resolution" />
+                    </tree>
+                </field>
+            </xpath>
+		</field>
+	</record>
+</odoo>
