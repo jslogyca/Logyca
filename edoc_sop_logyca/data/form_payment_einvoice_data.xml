@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="form_payment_einvoice1" model="form.payment.einvoice">
+            <field name="code">1</field>
+            <field name="name">Contado</field>
+            <field name="type">1</field>
+        </record>
+        <record id="form_payment_einvoice2" model="form.payment.einvoice">
+            <field name="code">2</field>
+            <field name="name">Crédito</field>
+            <field name="type">2</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mode_payment_einvoice1" model="mode.payment.einvoice">
+            <field name="code">1</field>
+            <field name="name">Instrumento no definido</field>
+        </record>
+        <record id="mode_payment_einvoice2" model="mode.payment.einvoice">
+            <field name="code">2</field>
+            <field name="name">Crédito ACH</field>
+        </record>
+        <record id="mode_payment_einvoice3" model="mode.payment.einvoice">
+            <field name="code">3</field>
+            <field name="name">Débito ACH</field>
+        </record>
+        <record id="mode_payment_einvoice4" model="mode.payment.einvoice">
+            <field name="code">4</field>
+            <field name="name">Reversión débito de demanda ACH</field>
+        </record>
+        <record id="mode_payment_einvoice5" model="mode.payment.einvoice">
+            <field name="code">5</field>
+            <field name="name">Reversión crédito de demanda ACH</field>
+        </record>
+        <record id="mode_payment_einvoice6" model="mode.payment.einvoice">
+            <field name="code">6</field>
+            <field name="name">Crédito de demanda ACH</field>
+        </record>
+        <record id="mode_payment_einvoice7" model="mode.payment.einvoice">
+            <field name="code">7</field>
+            <field name="name">Débito de demanda ACH</field>
+        </record>
+        <record id="mode_payment_einvoice8" model="mode.payment.einvoice">
+            <field name="code">8</field>
+            <field name="name">Mantener</field>
+        </record>
+        <record id="mode_payment_einvoice9" model="mode.payment.einvoice">
+            <field name="code">9</field>
+            <field name="name">Clearing Nacional o Regional</field>
+        </record>
+        <record id="mode_payment_einvoice10" model="mode.payment.einvoice">
+            <field name="code">10</field>
+            <field name="name">Efectivo</field>
+        </record>
+        <record id="mode_payment_einvoice11" model="mode.payment.einvoice">
+            <field name="code">11</field>
+            <field name="name">Reversión Crédito Ahorro</field>
+        </record>
+        <record id="mode_payment_einvoice12" model="mode.payment.einvoice">
+            <field name="code">12</field>
+            <field name="name">Reversión Débito Ahorro</field>
+        </record>
+        <record id="mode_payment_einvoice13" model="mode.payment.einvoice">
+            <field name="code">13</field>
+            <field name="name">Crédito Ahorro</field>
+        </record>
+        <record id="mode_payment_einvoice14" model="mode.payment.einvoice">
+            <field name="code">14</field>
+            <field name="name">Débito Ahorro</field>
+        </record>
+        <record id="mode_payment_einvoice15" model="mode.payment.einvoice">
+            <field name="code">15</field>
+            <field name="name">Bookentry Crédito</field>
+        </record>
+        <record id="mode_payment_einvoice16" model="mode.payment.einvoice">
+            <field name="code">16</field>
+            <field name="name">Bookentry Débito</field>
+        </record>
+        <record id="mode_payment_einvoice17" model="mode.payment.einvoice">
+            <field name="code">17</field>
+            <field name="name">Concentración de la demanda en efectivo /Desembolso Crédito (CCD)</field>
+        </record>
+        <record id="mode_payment_einvoice18" model="mode.payment.einvoice">
+            <field name="code">18</field>
+            <field name="name">Concentración de la demanda en efectivo / Desembolso (CCD) débito</field>
+        </record>
+        <record id="mode_payment_einvoice19" model="mode.payment.einvoice">
+            <field name="code">19</field>
+            <field name="name">Crédito Pago negocio corporativo (CTP)</field>
+        </record>
+        <record id="mode_payment_einvoice20" model="mode.payment.einvoice">
+            <field name="code">20</field>
+            <field name="name">Cheque</field>
+        </record>
+        <record id="mode_payment_einvoice21" model="mode.payment.einvoice">
+            <field name="code">21</field>
+            <field name="name">Poyecto bancario</field>
+        </record>
+        <record id="mode_payment_einvoice22" model="mode.payment.einvoice">
+            <field name="code">22</field>
+            <field name="name">Proyecto bancario certificado</field>
+        </record>
+        <record id="mode_payment_einvoice23" model="mode.payment.einvoice">
+            <field name="code">23</field>
+            <field name="name">Cheque bancario</field>
+        </record>
+        <record id="mode_payment_einvoice24" model="mode.payment.einvoice">
+            <field name="code">24</field>
+            <field name="name">Nota cambiaria esperando aceptación</field>
+        </record>
+        <record id="mode_payment_einvoice25" model="mode.payment.einvoice">
+            <field name="code">25</field>
+            <field name="name">Cheque certificado</field>
+        </record>
+        <record id="mode_payment_einvoice26" model="mode.payment.einvoice">
+            <field name="code">26</field>
+            <field name="name">Cheque Local</field>
+        </record>
+        <record id="mode_payment_einvoice27" model="mode.payment.einvoice">
+            <field name="code">27</field>
+            <field name="name">Débito Pago Neogcio Corporativo (CTP)</field>
+        </record>
+        <record id="mode_payment_einvoice28" model="mode.payment.einvoice">
+            <field name="code">28</field>
+            <field name="name">Crédito Negocio Intercambio Corporativo (CTX)</field>
+        </record>
+        <record id="mode_payment_einvoice29" model="mode.payment.einvoice">
+            <field name="code">29</field>
+            <field name="name">Débito Negocio Intercambio Corporativo (CTX)</field>
+        </record>
+        <record id="mode_payment_einvoice30" model="mode.payment.einvoice">
+            <field name="code">30</field>
+            <field name="name">Transferencia Créditos</field>
+        </record>
+        <record id="mode_payment_einvoice31" model="mode.payment.einvoice">
+            <field name="code">31</field>
+            <field name="name">Transferencia Débito</field>
+        </record>
+        <record id="mode_payment_einvoice32" model="mode.payment.einvoice">
+            <field name="code">32</field>
+            <field name="name">Concentración Efectivo / Desembolso Crédito plus (CCD+)</field>
+        </record>
+        <record id="mode_payment_einvoice33" model="mode.payment.einvoice">
+            <field name="code">33</field>
+            <field name="name">Concentración Efectivo / Desembolso Débito plus (CCD+)</field>
+        </record>
+        <record id="mode_payment_einvoice34" model="mode.payment.einvoice">
+            <field name="code">34</field>
+            <field name="name">Pago y depósito pre acordado (PPD)</field>
+        </record>
+        <record id="mode_payment_einvoice35" model="mode.payment.einvoice">
+            <field name="code">35</field>
+            <field name="name">Concentración efectivo ahorros / Desembolso Crédito (CCD)</field>
+        </record>
+        <record id="mode_payment_einvoice36" model="mode.payment.einvoice">
+            <field name="code">36</field>
+            <field name="name">Concentración efectivo ahorros / Desembolso Drédito (CCD)</field>
+        </record>
+        <record id="mode_payment_einvoice37" model="mode.payment.einvoice">
+            <field name="code">37</field>
+            <field name="name">Pago Negocio Corporativo Ahorros Crédito (CTP)</field>
+        </record>
+        <record id="mode_payment_einvoice38" model="mode.payment.einvoice">
+            <field name="code">38</field>
+            <field name="name">Pago Neogcio Corporativo Ahorros Débito (CTP)</field>
+        </record>
+        <record id="mode_payment_einvoice39" model="mode.payment.einvoice">
+            <field name="code">39</field>
+            <field name="name">Crédito Negocio Intercambio Corporativo (CTX)</field>
+        </record>
+        <record id="mode_payment_einvoice40" model="mode.payment.einvoice">
+            <field name="code">40</field>
+            <field name="name">Débito Negocio Intercambio Corporativo (CTX)</field>
+        </record>
+        <record id="mode_payment_einvoice41" model="mode.payment.einvoice">
+            <field name="code">41</field>
+            <field name="name">Concentración efectivo/Desembolso Crédito plus (CCD+)</field>
+        </record>
+        <record id="mode_payment_einvoice42" model="mode.payment.einvoice">
+            <field name="code">42</field>
+            <field name="name">Consiganción bancaria</field>
+        </record>
+        <record id="mode_payment_einvoice43" model="mode.payment.einvoice">
+            <field name="code">43</field>
+            <field name="name">Concentración efectivo / Desembolso Débito plus (CCD+)</field>
+        </record>
+        <record id="mode_payment_einvoice44" model="mode.payment.einvoice">
+            <field name="code">44</field>
+            <field name="name">Nota cambiaria</field>
+        </record>
+        <record id="mode_payment_einvoice45" model="mode.payment.einvoice">
+            <field name="code">45</field>
+            <field name="name">Transferencia Crédito Bancario</field>
+        </record>
+        <record id="mode_payment_einvoice46" model="mode.payment.einvoice">
+            <field name="code">46</field>
+            <field name="name">Transferencia Débito Interbancario</field>
+        </record>
+        <record id="mode_payment_einvoice47" model="mode.payment.einvoice">
+            <field name="code">47</field>
+            <field name="name">Transferencia Débito Bancaria</field>
+        </record>
+        <record id="mode_payment_einvoice48" model="mode.payment.einvoice">
+            <field name="code">48</field>
+            <field name="name">Tarjeta Crédito</field>
+        </record>
+        <record id="mode_payment_einvoice49" model="mode.payment.einvoice">
+            <field name="code">49</field>
+            <field name="name">Tarjeta Débito</field>
+        </record>
+        <record id="mode_payment_einvoice50" model="mode.payment.einvoice">
+            <field name="code">50</field>
+            <field name="name">Postgiro</field>
+        </record>
+        <record id="mode_payment_einvoice50" model="mode.payment.einvoice">
+            <field name="code">50</field>
+            <field name="name">Postgiro</field>
+        </record>
+        <record id="mode_payment_einvoice51" model="mode.payment.einvoice">
+            <field name="code">51</field>
+            <field name="name">Telex estandar bancario francés</field>
+        </record>
+        <record id="mode_payment_einvoice52" model="mode.payment.einvoice">
+            <field name="code">52</field>
+            <field name="name">Pago comercial urgente</field>
+        </record>
+        <record id="mode_payment_einvoice53" model="mode.payment.einvoice">
+            <field name="code">53</field>
+            <field name="name">Pago Tesorería Urgente</field>
+        </record>
+        <record id="mode_payment_einvoice60" model="mode.payment.einvoice">
+            <field name="code">60</field>
+            <field name="name">Nota promisoria</field>
+        </record>
+        <record id="mode_payment_einvoice61" model="mode.payment.einvoice">
+            <field name="code">61</field>
+            <field name="name">Nota promisoria firmada por el acreedor</field>
+        </record>
+        <record id="mode_payment_einvoice64" model="mode.payment.einvoice">
+            <field name="code">64</field>
+            <field name="name">Nota promisoria firmada pro el banco</field>
+        </record>
+        <record id="mode_payment_einvoice65" model="mode.payment.einvoice">
+            <field name="code">65</field>
+            <field name="name">Nota promisoria firmada por un banco avalada por otro banco</field>
+        </record>
+        <record id="mode_payment_einvoice66" model="mode.payment.einvoice">
+            <field name="code">66</field>
+            <field name="name">Nota promisoria firmada</field>
+        </record>
+        <record id="mode_payment_einvoice67" model="mode.payment.einvoice">
+            <field name="code">67</field>
+            <field name="name">Nota promisoria firmada por un tercero avalada por un banco</field>
+        </record>
+        <record id="mode_payment_einvoice70" model="mode.payment.einvoice">
+            <field name="code">70</field>
+            <field name="name">Retiro de nota por el por el acreedor</field>
+        </record>
+        <record id="mode_payment_einvoice71" model="mode.payment.einvoice">
+            <field name="code">71</field>
+            <field name="name">Bonos</field>
+        </record>
+        <record id="mode_payment_einvoice72" model="mode.payment.einvoice">
+            <field name="code">72</field>
+            <field name="name">Vales</field>
+        </record>
+        <record id="mode_payment_einvoice74" model="mode.payment.einvoice">
+            <field name="code">74</field>
+            <field name="name">Retiro de nota por el por el acreedor sobre un banco</field>
+        </record>
+        <record id="mode_payment_einvoice76" model="mode.payment.einvoice">
+            <field name="code">76</field>
+            <field name="name">Retiro de nota por el acreedor</field>
+        </record>
+        <record id="mode_payment_einvoice77" model="mode.payment.einvoice">
+            <field name="code">77</field>
+            <field name="name">Retiro de una nota por el acreedor sobre un tercero</field>
+        </record>
+        <record id="mode_payment_einvoice78" model="mode.payment.einvoice">
+            <field name="code">78</field>
+            <field name="name">Retiro de una nota por el acreedor sobre un tercero avalada por un banco</field>
+        </record>
+        <record id="mode_payment_einvoice91" model="mode.payment.einvoice">
+            <field name="code">91</field>
+            <field name="name">Nota bancaria tranferible</field>
+        </record>
+        <record id="mode_payment_einvoice92" model="mode.payment.einvoice">
+            <field name="code">92</field>
+            <field name="name">Cheque local traferible</field>
+        </record>
+        <record id="mode_payment_einvoice93" model="mode.payment.einvoice">
+            <field name="code">93</field>
+            <field name="name">Giro referenciado</field>
+        </record>
+        <record id="mode_payment_einvoice93" model="mode.payment.einvoice">
+            <field name="code">93</field>
+            <field name="name">Giro</field>
+        </record>
+        <record id="mode_payment_einvoice94" model="mode.payment.einvoice">
+            <field name="code">94</field>
+            <field name="name">Giro urgente</field>
+        </record>
+        <record id="mode_payment_einvoice95" model="mode.payment.einvoice">
+            <field name="code">95</field>
+            <field name="name">Giro formato abierto</field>
+        </record>
+        <record id="mode_payment_einvoice96" model="mode.payment.einvoice">
+            <field name="code">96</field>
+            <field name="name">Método de pago solicitado no usuado</field>
+        </record>
+        <record id="mode_payment_einvoice97" model="mode.payment.einvoice">
+            <field name="code">97</field>
+            <field name="name">Clearing entre partners</field>
+        </record>
+        <record id="mode_payment_einvoice1111" model="mode.payment.einvoice">
+            <field name="code">ZZZ</field>
+            <field name="name">Acuerdo mutuo</field>
+        </record>
+    </data>
+</odoo>

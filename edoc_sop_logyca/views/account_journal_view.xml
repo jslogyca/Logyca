@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="view_account_journal_form_edoc" model="ir.ui.view">
+		<field name="name">account.journal.form.edoc</field>
+		<field name="model">account.journal</field>
+		<field name="inherit_id" ref="account.view_account_journal_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//form/sheet/notebook/page[@name='advanced_settings']" position="inside">
+				<group string="eInvoice" name="eInvoice" priority="1" attrs="{'invisible': [('type', 'not in', ('sale','purchase', 'sale_refund'))]}">
+					<field name="einvoice_journal" />
+					<field name="type_document_id" attrs="{'invisible': [('einvoice_journal', '=', False)]}"/>
+				</group>
+			</xpath>
+		</field>
+	</record>
+</odoo>
