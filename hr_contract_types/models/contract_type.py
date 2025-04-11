@@ -4,11 +4,8 @@ from odoo import api, fields, models, _
 
 
 class ContractType(models.Model):
-    _name = 'hr.contract.type'
-    _description = 'Contract Type'
-    _order = 'sequence, id'
+    _inherit = 'hr.contract.type'
 
-    name = fields.Char(string='Contract Type', required=True, help="Name")
     sequence = fields.Integer(help="Gives the sequence when displaying a list of Contract.", default=10)
 
 
