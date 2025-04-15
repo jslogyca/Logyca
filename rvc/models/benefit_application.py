@@ -218,7 +218,8 @@ class BenefitApplication(models.Model):
             #Antes de notificar al beneficiario validamos si beneficio es codigos
             # y si cantidad de codigos es mayor a cero
             # y si no tiene productos comprados disponibles
-            if self.product_id.benefit_type == 'codigos' and self._validate_qty_codes() and self._validate_bought_products():
+            # if self.product_id.benefit_type == 'codigos' and self._validate_qty_codes() and self._validate_bought_products():
+            if self.product_id.benefit_type == 'codigos' and self._validate_qty_codes():
                 if benefit_application.state in ('draft', 'notified'):
                     view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id
                     self.write({'state': 'notified', 'notification_date': datetime.now()})
