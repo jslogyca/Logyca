@@ -4,8 +4,14 @@
 from odoo import api, fields, models, tools, _
 from datetime import date, datetime, time, timedelta
 from dateutil.relativedelta import relativedelta
+from collections import defaultdict, Counter
 
 from odoo.tools import float_round, date_utils, convert_file, html2plaintext
+
+import logging
+import random
+import math
+import pytz
 
 
 def days_between(start_date, end_date):
@@ -38,46 +44,110 @@ class HrPayslip(models.Model):
 
     @api.depends('employee_id', 'contract_id', 'struct_id', 'date_from', 'date_to')
     def _compute_worked_days_line_ids(self):
-        if self.env.context.get('salary_simulation') or any(not p.date_to or not p.date_from for p in self):
+        if not self or self.env.context.get('salary_simulation'):
             return
         valid_slips = self.filtered(lambda p: p.employee_id and p.date_from and p.date_to and p.contract_id and p.struct_id)
-        # Make sure to reset invalid payslip's worked days line
-        invalid_slips = self - valid_slips
-        invalid_slips.worked_days_line_ids = [(5, False, False)]
         if not valid_slips:
             return
+        # Make sure to reset invalid payslip's worked days line
+        self.update({'worked_days_line_ids': [(5, 0, 0)]})
         # Ensure work entries are generated for all contracts
-        generate_from = min(p.date_from for p in self)
-        current_month_end = date_utils.end_of(fields.Date.today(), 'month')
-        generate_to = max(min(fields.Date.to_date(p.date_to), current_month_end) for p in valid_slips)
-        self.mapped('contract_id')._generate_work_entries(generate_from, generate_to)
+        generate_from = min(p.date_from for p in valid_slips) + relativedelta(days=-1)
+        generate_to = max(p.date_to for p in valid_slips) + relativedelta(days=1)
+        self.contract_id.generate_work_entries(generate_from, generate_to)
+
+        work_entries = self.env['hr.work.entry'].search([
+            ('date_stop', '<=', generate_to),
+            ('date_start', '>=', generate_from),
+            ('contract_id', 'in', self.contract_id.ids),
+        ])
+        work_entries_by_contract = defaultdict(lambda: self.env['hr.work.entry'])
+        for work_entry in work_entries:
+            work_entries_by_contract[work_entry.contract_id.id] += work_entry
 
         for slip in valid_slips:
-            slip.mapped('worked_days_line_ids').unlink()
-            if slip._origin.id:
-                slip_number = slip._origin.id
-            else:
-                slip_number = slip.id
+            if not slip.struct_id.use_worked_day_lines:
                 continue
 
-            for vals in slip._get_worked_day_lines():
-                self.env["hr.payslip.worked_days"].create(
-                    {
-                        "sequence": vals["sequence"],
-                        "work_entry_type_id": vals["work_entry_type_id"],
-                        "number_of_days": vals["number_of_days"],
-                        "number_of_hours": vals["number_of_hours"],
-                        "payslip_id": slip_number,
-                    }
-                )
-                slip.with_context(contract=True)._get_new_input_line_ids()
-                self.env.cr.commit()
+            # convert slip.date_to to a datetime with max time to compare correctly in filtered_domain.
+            slip_tz = pytz.timezone(slip.contract_id.resource_calendar_id.tz)
+            utc = pytz.timezone('UTC')
+            date_from = slip_tz.localize(datetime.combine(slip.date_from, time.min)).astimezone(utc).replace(tzinfo=None)
+            date_to = slip_tz.localize(datetime.combine(slip.date_to, time.max)).astimezone(utc).replace(tzinfo=None)
+            payslip_work_entries = work_entries_by_contract[slip.contract_id].filtered_domain([
+                ('date_stop', '<=', date_to),
+                ('date_start', '>=', date_from),
+            ])
+            payslip_work_entries._check_undefined_slots(slip.date_from, slip.date_to)
+            # YTI Note: We can't use a batched create here as the payslip may not exist
+            slip.update({'worked_days_line_ids': slip._get_new_worked_days_lines()})
+
+    # @api.depends('employee_id', 'contract_id', 'struct_id', 'date_from', 'date_to')
+    # def _compute_worked_days_line_ids(self):
+    #     if self.env.context.get('salary_simulation') or any(not p.date_to or not p.date_from for p in self):
+    #         return
+    #     valid_slips = self.filtered(lambda p: p.employee_id and p.date_from and p.date_to and p.contract_id and p.struct_id)
+    #     # Make sure to reset invalid payslip's worked days line
+    #     invalid_slips = self - valid_slips
+    #     invalid_slips.worked_days_line_ids = [(5, False, False)]
+    #     if not valid_slips:
+    #         return
+    #     # Ensure work entries are generated for all contracts
+    #     generate_from = min(p.date_from for p in self)
+    #     current_month_end = date_utils.end_of(fields.Date.today(), 'month')
+    #     generate_to = max(min(fields.Date.to_date(p.date_to), current_month_end) for p in valid_slips)
+    #     self.mapped('contract_id')._generate_work_entries(generate_from, generate_to)
+
+    #     for slip in valid_slips:
+    #         slip.mapped('worked_days_line_ids').unlink()
+    #         if slip._origin.id:
+    #             slip_number = slip._origin.id
+    #         else:
+    #             slip_number = slip.id
+    #             continue
+
+    #         for vals in slip._get_worked_day_lines():
+    #             self.env["hr.payslip.worked_days"].create(
+    #                 {
+    #                     "sequence": vals["sequence"],
+    #                     "work_entry_type_id": vals["work_entry_type_id"],
+    #                     "number_of_days": vals["number_of_days"],
+    #                     "number_of_hours": vals["number_of_hours"],
+    #                     "payslip_id": slip_number,
+    #                 }
+    #             )
+    #             slip.with_context(contract=True)._get_new_input_line_ids()
+    #             self.env.cr.commit()
+
+    # def _get_worked_day_lines_values(self, domain=None):
+    #     self.ensure_one()
+    #     res = []
+    #     hours_per_day = self._get_worked_day_lines_hours_per_day()
+    #     work_hours = self.contract_id._get_work_hours(self.date_from, self.date_to, domain=domain)
+    #     work_hours_ordered = sorted(work_hours.items(), key=lambda x: x[1])
+    #     biggest_work = work_hours_ordered[-1][0] if work_hours_ordered else 0
+    #     add_days_rounding = 0
+    #     for work_entry_type_id, hours in work_hours_ordered:
+    #         work_entry_type = self.env['hr.work.entry.type'].browse(work_entry_type_id)
+    #         days = round(hours / hours_per_day, 5) if hours_per_day else 0
+    #         if work_entry_type_id == biggest_work:
+    #             days += add_days_rounding
+    #         day_rounded = self._round_days(work_entry_type, days)
+    #         add_days_rounding += (days - day_rounded)
+    #         attendance_line = {
+    #             'sequence': work_entry_type.sequence,
+    #             'work_entry_type_id': work_entry_type_id,
+    #             'number_of_days': day_rounded,
+    #             'number_of_hours': hours,
+    #         }
+    #         res.append(attendance_line)
+    #     return res
 
     def _get_worked_day_lines_values(self, domain=None):
         self.ensure_one()
         res = []
         hours_per_day = self._get_worked_day_lines_hours_per_day()
-        work_hours = self.contract_id._get_work_hours(self.date_from, self.date_to, domain=domain)
+        work_hours = self.contract_id.get_work_hours(self.date_from, self.date_to, domain=domain)
         work_hours_ordered = sorted(work_hours.items(), key=lambda x: x[1])
         biggest_work = work_hours_ordered[-1][0] if work_hours_ordered else 0
         add_days_rounding = 0
@@ -95,7 +165,11 @@ class HrPayslip(models.Model):
                 'number_of_hours': hours,
             }
             res.append(attendance_line)
-        return res        
+
+        # Sort by Work Entry Type sequence
+        work_entry_type = self.env['hr.work.entry.type']
+        return sorted(res, key=lambda d: work_entry_type.browse(d['work_entry_type_id']).sequence)
+     
 
     def action_payslip_cancel_done(self):
         if self.filtered(lambda slip: slip.state == "done"):

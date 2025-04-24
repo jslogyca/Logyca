@@ -41,17 +41,13 @@ class ReportExcelEnforcement(models.Model):
             coalesce(a.date,'1900-01-01') as date,
             date_part('year',a.date) as year_fact,
             date_part('month',a.date)as mes_fact,
-            q.id as analytic_group_id,
-            p.id as analytic_group_two_id,
             a.ref as ref,
             j.id as company_id,
-            d.id  as cuenta_analitica,
             a.name as descripcion, 
             e.code as tipo_cuenta,
             f.id as product_id , 
             b.quantity as quantity, 
             i.id as partner_id,
-            coalesce(c.amount,b.balance*-1) as importe, 
             b.credit as credit,
             b.debit as debit
         """
@@ -62,8 +58,6 @@ class ReportExcelEnforcement(models.Model):
         from_str = """
             account_move a
                 inner join account_move_line b on a.id = b.move_id
-                left join account_analytic_line c on b.id = c.move_id
-                left join account_analytic_account d on c.account_id = d.id
                 left join account_account e on b.account_id = e.id
                 left join product_product f on f.id = b.product_id
                 left join product_variant_combination PVC on f.id = PVC.product_product_id
@@ -73,15 +67,11 @@ class ReportExcelEnforcement(models.Model):
                 left join uom_uom h on h.id = b.product_uom_id
                 left join res_partner i on i.id = b.partner_id
                 left join res_company j on j.id = a.company_id
-                left join account_analytic_line_tag_rel k on k.line_id  = c.id
-                left join account_analytic_tag l on l.id = k.tag_id
                 left join logyca_budget_group m on m.id = b.x_budget_group 
                 left join res_users n on n.id = b.create_uid 
                 left join res_users o on o.id = b.write_uid 
                 left join res_partner usu_crea on usu_crea.id = n.partner_id 
                 left join res_partner usu_mod on usu_mod.id = o.partner_id
-                left join account_analytic_group p on d.group_id = p.id
-                left join account_analytic_group q on p.parent_id = q.id
         """
 
         return from_str

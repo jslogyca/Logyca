@@ -6,32 +6,32 @@
         <field name="arch" type="xml">
             <form string="Request Loan">
                 <header>
-                    <button name="action_open" type="object" string="Done" states="draft" class="oe_highlight" groups="hr_payroll.group_hr_payroll_manager"/>
-                    <button name="action_draft" type="object" string="Draft" states="done" class="oe_highlight" groups="hr_payroll.group_hr_payroll_manager"/>
+                    <button name="action_open" type="object" string="Done" class="oe_highlight" groups="hr_payroll.group_hr_payroll_manager"/>
+                    <button name="action_draft" type="object" string="Draft" class="oe_highlight" groups="hr_payroll.group_hr_payroll_manager"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,open" />
                 </header>            
                 <sheet>
                     <group>
                         <group>
-                            <field name="name" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
-                            <field name="company_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="name" required="1"  />
+                            <field name="company_id" required="1"  />
                         </group>
                         <group>
-                            <field name="date_from" required="True" attrs="{'readonly': [('state', '!=', 'draft')]}" />
-                            <field name="date_to" required="True" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="date_from" required="True"  />
+                            <field name="date_to" required="True"  />
                         </group>
                     </group>
                     <notebook>
                         <page string="Request Loan Line">
-                            <field name="lines_ids" attrs="{'readonly': [('state', '!=', 'draft')]}" >
+                            <field name="lines_ids"  >
                                 <tree string="Request Loan Line" editable="bottom">
                                     <field name="request" required="1" />
-                                    <field name="loan_id" attrs="{'invisible': [('request', '=', 'new')], 'required': [('request', '=', 'shift')]}" />
+                                    <field name="loan_id"  />
                                     <field name="date_request" required="1" />
                                     <field name="employee_id" required="1" />
-                                    <field name="input_id" attrs="{'invisible': [('request', '=', 'shift')], 'required': [('request', '=', 'new')]}"/>
-                                    <field name="type_compute" attrs="{'invisible': [('request', '=', 'shift')], 'required': [('request', '=', 'new')]}"/>
-                                    <field name="date_from" attrs="{'invisible': [('request', '=', 'shift')], 'required': [('request', '=', 'new')]}"/>
+                                    <field name="input_id" />
+                                    <field name="type_compute" />
+                                    <field name="date_from" />
                                     <field name="loan_amount" required="1"/>
                                 </tree>
                             </field>
@@ -63,10 +63,10 @@
         <field name="view_id" ref="hr_request_loan_tree"/>
     </record>
 
-    <menuitem
+    <!-- <menuitem
         id="menu_hr_request_loan"
         name="Request Loan"
         action="action_hr_request_loan"
         parent="hr_payroll.menu_hr_payroll_root"
-        sequence="15" />
+        sequence="15" /> -->
 </odoo>

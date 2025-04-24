@@ -7,14 +7,21 @@
         <field name="model">tier.definition</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="sequence" widget="handle" />
                 <field name="model_id" />
                 <field name="name" />
                 <field name="review_type" />
                 <field name="reviewer_id" />
                 <field name="reviewer_group_id" />
                 <field name="reviewer_field_id" />
-                <field name="sequence" />
-                <field name="company_id" groups="base.group_multi_company" />
+                <field name="notify_on_create" optional="show" />
+                <field name="notify_on_pending" optional="show" />
+                <field name="has_comment" optional="hide" />
+                <field
+                    name="company_id"
+                    groups="base.group_multi_company"
+                    optional="hide"
+                />
                 <field name="active" />
             </tree>
         </field>
@@ -25,12 +32,12 @@
         <field name="arch" type="xml">
             <form string="Tier Definition">
                 <sheet>
-                    <div class="oe_button_box" name="button_box" />
+                    <div class="o_form_label" name="button_box" />
                     <widget
                         name="web_ribbon"
                         title="Archived"
                         bg_color="bg-danger"
-                        attrs="{'invisible': [('active', '=', True)]}"
+                        invisible="active"
                     />
                     <div class="oe_title">
                         <span class="oe_edit_only">Name</span>
@@ -48,17 +55,18 @@
                             <field name="model_id" options="{'no_create': True}" />
                             <field name="model" invisible="1" />
                             <field name="review_type" />
+                            <field name="allow_write_for_reviewer" />
                             <field
                                 name="reviewer_id"
-                                attrs="{'invisible': [('review_type', '!=', 'individual')]}"
+                                invisible="review_type != 'individual'"
                             />
                             <field
                                 name="reviewer_group_id"
-                                attrs="{'invisible': [('review_type', '!=', 'group')]}"
+                                invisible="review_type != 'group'"
                             />
                             <field
                                 name="reviewer_field_id"
-                                attrs="{'invisible': [('review_type', '!=', 'field')]}"
+                                invisible="review_type != 'field'"
                                 options="{'no_create': True}"
                             />
                             <field name="valid_reviewer_field_ids" invisible="1" />
@@ -70,16 +78,22 @@
                                 options="{'no_create': True}"
                             />
                             <field name="sequence" />
+
                             <field name="approve_sequence" />
-                            <label for="approve_sequence_bypass" invisible="1" />
+                            <label
+                                for="approve_sequence_bypass"
+                                class="o_form_label"
+                                invisible="approve_sequence == False"
+                            />
+
                             <div
                                 name="approve_sequence_bypass_div"
-                                class="o_row"
-                                attrs="{'invisible': [('approve_sequence', '=', False)]}"
+                                class="o_wrap_field d-flex d-sm-contents flex-column mb-3 mb-sm-0"
+                                invisible="approve_sequence == False"
                             >
                                 <field name="approve_sequence_bypass" />
                                 <span
-                                >Bypassed, if previous tier was validated by same reviewer</span>
+                                >Bypass, if previous tier was validated by same reviewer</span>
                             </div>
                         </group>
                     </group>
@@ -91,7 +105,7 @@
                                     name="definition_domain"
                                     widget="domain"
                                     options="{'model': 'model'}"
-                                    attrs="{'invisible': [('definition_type', '!=', 'domain')]}"
+                                    invisible="definition_type != 'domain'"
                                 />
                             </group>
                         </page>
@@ -99,6 +113,10 @@
                             <group name="more_option">
                                 <group name="notify">
                                     <field name="notify_on_create" />
+                                    <field name="notify_on_pending" />
+                                    <field name="notify_on_accepted" />
+                                    <field name="notify_on_rejected" />
+                                    <field name="notify_on_restarted" />
                                     <field name="has_comment" />
                                     <field name="notify_reminder_delay" />
                                 </group>
@@ -114,6 +132,7 @@
         <field name="model">tier.definition</field>
         <field name="arch" type="xml">
             <search>
+                <field name="name" />
                 <field name="model_id" />
                 <field name="reviewer_id" />
                 <field name="reviewer_group_id" />
@@ -151,5 +170,6 @@
         id="menu_tier_definition"
         parent="menu_tier_confirmation"
         action="tier_definition_action"
+        sequence="10"
     />
 </odoo>

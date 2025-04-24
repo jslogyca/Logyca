@@ -71,18 +71,10 @@ class SLAHelpdeskReport(models.Model):
                     T.close_hours AS ticket_close_hours,
                     EXTRACT(HOUR FROM (COALESCE(T.assign_date, NOW()) - T.create_date)) AS ticket_open_hours,
                     T.assign_hours AS ticket_assignation_hours,
-                    STA.is_close AS ticket_closed,
                     ST.sla_id,
                     SLA.stage_id AS sla_stage_id,
                     ST.deadline AS sla_deadline,
                     ST.reached_datetime AS sla_reached_datetime,
-                    ST.exceeded_days AS sla_exceeded_days,
-                    CASE
-                        WHEN ST.reached_datetime IS NOT NULL AND ST.reached_datetime < ST.deadline THEN 'reached'
-                        WHEN ST.reached_datetime IS NOT NULL AND ST.reached_datetime >= ST.deadline THEN 'failed'
-                        WHEN ST.reached_datetime IS NULL AND ST.deadline > NOW() THEN 'ongoing'
-                        ELSE 'failed'
-                    END AS sla_status,
                     ST.reached_datetime >= ST.deadline OR (ST.reached_datetime IS NULL AND ST.deadline < NOW() AT TIME ZONE 'UTC') AS sla_status_failed
                 FROM helpdesk_ticket T
                     LEFT JOIN helpdesk_stage STA ON (T.stage_id = STA.id)

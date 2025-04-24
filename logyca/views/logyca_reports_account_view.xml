@@ -6,17 +6,22 @@
         <field name="arch" type="xml">
             <form>
                 <sheet string="Reportes creados por LOGYCA para Contabilidad">
-                    <group col="4">
-                    <button name="get_excel" class="oe_highlight" type="object" string="Generar Excel"/>						
-                        <separator/>	
-                        <field name="name" modifiers="{&quot;required&quot;: true}"/>
-                        <field name="description" modifiers="{&quot;required&quot;: true}"/>
-                        <field name="columns" groups = "base.group_no_one" modifiers="{&quot;required&quot;: true}"/>
-                        <newline/>
+                    <group>
+                        <button name="get_excel" class="oe_highlight" type="object" string="Generar Excel"/>
+                        <group>
+                            <field name="x_ano_initial" modifiers="{&quot;required&quot;: true}"/>
+                            <field name="x_ano_finally" modifiers="{&quot;required&quot;: true}"/>
+                            <field name="x_month_initial" modifiers="{&quot;required&quot;: true}"/>
+                            <field name="x_month_finally" modifiers="{&quot;required&quot;: true}"/>
+                            <field name="name" modifiers="{&quot;required&quot;: true}"/>
+                            <field name="description" modifiers="{&quot;required&quot;: true}"/>
+                            <field name="columns" groups = "base.group_no_one" modifiers="{&quot;required&quot;: true}"/>
+                        </group>
+                        <group>
                             <field name="query" groups = "base.group_no_one" colspan="4" modifiers="{}"/>
-                        <newline/>
-                        <field name="excel_file_name" invisible="1"/>
-                        <field name="excel_file" filename="excel_file_name" invisible="1"/>	
+                            <field name="excel_file_name" invisible="1"/>
+                            <field name="excel_file" filename="excel_file_name" invisible="1"/>	
+                        </group>
                     </group>
                 </sheet>
             </form>
@@ -69,7 +74,7 @@
         <field name="context">{}</field>
     </record>
 
-    <menuitem id="menu_account_balance_partner_filter"
+    <menuitem id="menu_account_balance_partner_lg"
         name="Balance"
         parent="logyca_menus_report_financial"
         action="action_account_balance_partner_filter"

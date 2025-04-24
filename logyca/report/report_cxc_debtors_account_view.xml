@@ -127,43 +127,13 @@
             </graph>
         </field>
     </record> -->
-
-    <record id="report_cxc_debtors_account_dashboard" model="ir.ui.view">
-        <field name="name">report.cxc.debtors.account.dashboard</field>
-        <field name="model">report.cxc.debtors.account</field>
-        <field name="mode">primary</field>
-        <field name="arch" type="xml">
-            <dashboard>
-                <!-- <view type="graph" ref="logyca.report_cxc_debtors_account_graph"/> -->
-                <view type="graph" ref="logyca.report_cxc_debtors_account_user_graph"/>
-                <group>
-                    <group>
-                        <aggregate name="vendedor" string="RESPONSABLE" group_operator="count" field="vendedor_id" measure="__count__"/>
-                        <aggregate name="partner" string="RAZÓN SOCIAL" group_operator="count" field="partner_id" measure="__count__"/>
-                        <!-- <aggregate name="expected_revenue_aggregate" field="planned_revenue" string="Expected Revenue"/>
-                        <aggregate name="prorated_revenue_aggregate" field="expected_revenue" invisible="1"/>
-                        <formula name="prorated_revenue" string="Prorated Revenue" value="record.prorated_revenue_aggregate" widget="monetary"/>
-                        <formula name="deal_size" string="Average Deal Size" value="record.expected_revenue_aggregate / record.opportunities" widget="monetary"/>
-                        <aggregate name="days_to_assign" string="Days to Assign" field="day_open" group_operator="avg" value_label="days"/>
-                        <aggregate name="days_to_close" string="Days to Close" field="day_close" group_operator="avg" value_label="days"/>
-                        <aggregate name="days_exceeding_closing" string="Exceeding Close Days" field="days_exceeding_closing" group_operator="avg"/> -->
-                    </group>
-                    <group col="1">
-                        <widget name="pie_chart" title="TIPO DE CARTERA" attrs="{'groupby': 'type_debtors'}"/>
-                        <widget name="pie_chart" title="PRODUCTO" attrs="{'groupby': 'product_template_id'}"/>
-                    </group>
-                </group>
-                <view type="pivot" ref="logyca.report_cxc_debtors_account_pivot"/>
-                <!-- <view type="cohort" ref="crm_enterprise.crm_lead_view_cohort"/> -->
-            </dashboard>
-        </field>
-    </record>    
+ 
 
     <record id="action_report_cxc_debtors_account" model="ir.actions.act_window">
         <field name="name">Account Debtors Report</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">report.cxc.debtors.account</field>
-        <field name="view_mode">dashboard,graph,pivot,tree,form</field>
+        <field name="view_mode">graph,pivot,tree,form</field>
     </record>
 
     <menuitem

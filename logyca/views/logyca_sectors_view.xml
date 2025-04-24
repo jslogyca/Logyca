@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="logyca_menu_action_sectors" model="ir.actions.act_window">
+        <field name="name">Sectores</field>
+          <field name="res_model">logyca.sectors</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear sector
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_sectors">
+      <field name="name">logyca list sector</field>
+      <field name="model">logyca.sectors</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="code"/>                 
+          <field name="name"/>
+          <field name="macro_sector"/>             
+        </tree>
+      </field>
+    </record>
+
+    <menuitem name="Sectores" id="logyca.menu_sectors" parent="logyca.menus_parameterization"  sequence="1" action="logyca_menu_action_sectors"/>
+</odoo>

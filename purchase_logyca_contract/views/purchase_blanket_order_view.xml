@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="view_purchase_blanket_order_form_lg" model="ir.ui.view">
+		<field name="name">purchase.blanket.order.form.g</field>
+		<field name="model">purchase.blanket.order</field>
+		<field name="inherit_id" ref="purchase_blanket_order.view_purchase_blanket_order_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='company_id']" position="after">
+				<field name="order_type" options="{'no_create': True}"/>
+				<field name="duration_day" />
+				<field name="duration_month" />
+				<field name="url" widget="url" />
+			</xpath>
+		</field>
+	</record>
+	<record id="view_purchase_blanket_order_tree_lg" model="ir.ui.view">
+		<field name="name">purchase.blanket.order.tree.g</field>
+		<field name="model">purchase.blanket.order</field>
+		<field name="inherit_id" ref="purchase_blanket_order.view_purchase_blanket_order_tree"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='validity_date']" position="before">
+				<field name="date_start" />
+			</xpath>
+			<xpath expr="//field[@name='validity_date']" position="after">
+				<field name="duration_day" />
+				<field name="duration_month" />
+				<field name="order_type" />
+				<field name="amount_untaxed" />
+				<field name="amount_tax" />
+				<field name="amount_total" />
+			</xpath>
+		</field>
+	</record>
+</odoo>

@@ -63,6 +63,8 @@ class AccountMove(models.Model):
     x_payment_portal_theme = fields.Selection([('logyca', 'LOGYCA'), ('gs1', 'GS1')], string='Portal de Pagos',help="Indica en qué portal de pagos debe pagarse la factura")
     analytic_account_id = fields.Many2one('account.analytic.account', string='Red de Valor')
     reviewed_by = fields.Many2one('res.users', string='Revisado Por', help="Este campo aparece en el reporte de Soporte de Factura", default=False)
+    reviewed = fields.Boolean('Revisado', default=False)
+    reviewedt_date = fields.Date('Fecha Revisión')
 
     @api.depends('company_id', 'invoice_filter_type_domain')
     def _compute_suitable_journal_ids(self):
@@ -123,3 +125,5 @@ class AccountMove(models.Model):
 
     def action_reviewed_by(self):
         self.reviewed_by = self.env.user
+        self.reviewed = True
+        self.reviewedt_date = fields.Date.today()

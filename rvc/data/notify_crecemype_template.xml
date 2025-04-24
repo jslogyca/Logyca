@@ -4,8 +4,8 @@
         <record id="mail_template_notify_crecemype" model="mail.template">
             <field name="name">Notificar CRECEMYPE</field>
             <field name="model_id" ref="rvc.model_benefit_application"/>
-            <field name="email_from">no-reply@logyca.com</field>
-            <field name="email_to">{{ (object.contact_email or object.email) }}</field>
+            <field name="email_from">${(object.company_id.email or '')}</field>
+            <field name="email_to">${(object.email_employee|safe)}</field>
             <field name="body_html" type="html">
                 <head>
                     <style>

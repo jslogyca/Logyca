@@ -19,14 +19,14 @@
                             Porcentaje de la tarifa: <field name="percentage_textile_tariff" required="1"/>
                         </div>
                         <newline/>
-                        <button name="consult_companies" string="Consultar compañias" type="object" class="oe_highlight" style="margin:5px;" attrs="{'invisible': [('process_type', '=', '2')]}"/>
+                        <button name="consult_companies" string="Consultar compañias" type="object" class="oe_highlight" style="margin:5px;" />
                         <newline/>
-                        <field name="cant_thirdparties_miembros" force_save="1" readonly="1" attrs="{'invisible': [('process_type', '=', '2')]}"/>
-                        <field name="cant_thirdparties_clientes" force_save="1" readonly="1" attrs="{'invisible': [('process_type', '=', '2')]}"/>
-                        <field name="cant_thirdparties_textil" force_save="1" readonly="1" attrs="{'invisible': [('process_type', '=', '2')]}"/>
-                        <field name="cant_thirdparties_gtin_special" force_save="1" readonly="1" attrs="{'invisible': [('process_type', '=', '2')]}"/>
+                        <field name="cant_thirdparties_miembros" force_save="1" readonly="1" />
+                        <field name="cant_thirdparties_clientes" force_save="1" readonly="1" />
+                        <field name="cant_thirdparties_textil" force_save="1" readonly="1" />
+                        <field name="cant_thirdparties_gtin_special" force_save="1" readonly="1" />
                         <newline/>
-                        <field name="thirdparties" colspan="4" can_create="true" can_write="true" attrs="{'readonly': [('process_type', '=', '1')]}">
+                        <field name="thirdparties" colspan="4" can_create="true" can_write="true" >
                             <tree>
                                 <field name="name"/>
                                 <field name="vat"/>     

@@ -2,7 +2,7 @@
 
 {
     'name': 'l10n COL Loan Management',
-    'version': '14.0.1.0.0',
+    'version': '17.0.1.0.0',
     'summary': 'Manage Loan Human Resources',
     'description': """
         Helps you to manage Loan Human Resources of your company's staff.
