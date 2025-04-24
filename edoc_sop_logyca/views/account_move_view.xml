@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="account.view_move_form"></field>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='other_info']" position="after">
-                <page string="EDoc Sop" name="edoc_sop" attrs="{'invisible':[('move_type', '!=', 'in_invoice')]}">
+                <page string="EDoc Sop" name="edoc_sop" >
                     <group>
                         <group>
                             <field name="type_document_id" />
@@ -31,13 +31,13 @@
                     </field>
                     <group name="buttons" col="3">
                         <group>
-                            <button string="Do and Send Document Sop" name="action_ds_generate_move" type="object" class="oe_highlight" attrs="{'invisible':[('state_doc_sop', 'not in', ('no_send', 'draft', 'error'))]}" />
+                            <button string="Do and Send Document Sop" name="action_ds_generate_move" type="object" class="oe_highlight"  />
                         </group>
                         <group>
-                            <button string="XML Download DS" type="object" name="get_xml_ds_file" icon="fa-download" class="btn btn-primary" attrs="{'invisible':[('state_doc_sop', 'not in', ('send', 'done', 'error', 'no_send'))]}" />
+                            <button string="XML Download DS" type="object" name="get_xml_ds_file" icon="fa-download" class="btn btn-primary" />
                         </group>
                         <group>
-                            <button string="Validar" name="get_status_validation_ds" type="object" attrs="{'invisible':[('state_doc_sop', 'not in', ('send',))]}" class="oe_highlight" />
+                            <button string="Validar" name="get_status_validation_ds" type="object"  class="oe_highlight" />
                         </group>
                     </group>
                 </page>

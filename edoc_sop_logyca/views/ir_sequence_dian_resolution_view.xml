@@ -10,7 +10,7 @@
                 <field name="resolution_prefix" />
                 <field name="from_range" />
                 <field name="to_range" />
-                <field name="number_next" attrs="{'readonly': False}" />
+                <field name="number_next" />
                 <field name="date_from" />
                 <field name="date_to" />
                 <field name="technical_key" />
@@ -34,7 +34,7 @@
                         <group>
                             <field name="from_range" />
                             <field name="to_range" />
-                            <field name="number_next" attrs="{'readonly': False}" />
+                            <field name="number_next" />
                             <field name="date_from" />
                             <field name="date_to" />
                             <field name="technical_key" />
@@ -65,14 +65,14 @@
 				<field name="use_dian_control" />
 			</xpath>
             <xpath expr="//field[@name='date_range_ids']" position="after">
-                <field name="dian_resolution_ids" attrs="{'invisible':[('use_dian_control','=',False)]}">
+                <field name="dian_resolution_ids" >
                   <tree string="DIAN Resolutions" editable="top" default_order="id desc">
                         <field name="resolution_number" />
                         <field name="resolution_date" />
                         <field name="resolution_prefix" />
                         <field name="from_range" />
                         <field name="to_range" />
-                        <field name="number_next" attrs="{'readonly': False}" />
+                        <field name="number_next" />
                         <field name="date_from" />
                         <field name="date_to" />
                         <field name="technical_key" />
