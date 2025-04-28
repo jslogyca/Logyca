@@ -452,22 +452,15 @@ class AccountMove(models.Model):
                     invoice_list.append(move)
                     create_list.append(vals)
 
-        assets = self.env['account.asset'].create(create_list)
+        assets = self.env['account.asset'].with_context({}).create(create_list)
         for asset, vals, invoice, validate in zip(assets, create_list, invoice_list, auto_validate):
             if 'model_id' in vals:
                 asset._onchange_model_id()
-                # asset._onchange_method_period()
                 if validate:
                     asset.validate()
             if invoice:
-                asset_name = {
-                    'purchase': _('Asset'),
-                    'sale': _('Deferred revenue'),
-                    'expense': _('Deferred expense'),
-                }[asset.asset_type]
-                msg = _('%s created from invoice') % (asset_name)
-                msg += ': <a href=# data-oe-model=account.move data-oe-id=%d>%s</a>' % (invoice.id, invoice.name)
-                asset.message_post(body=msg)
+                asset.message_post(body=_('Asset created from invoice: %s', invoice._get_html_link()))
+                asset._post_non_deductible_tax_value()                
         return assets
     
 # Nota credito

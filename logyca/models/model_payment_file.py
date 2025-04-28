@@ -236,7 +236,7 @@ class comercial_report(models.Model):
 
             #Crear archivo        
             self.write({
-                'txt_file': base64.encodestring((content_txt).encode()),
+                'txt_file': base64.b64encode((content_txt).encode()),
                 #base64.encodestring((content).encode()).decode().strip()
                 'txt_file_name': filename,
             })

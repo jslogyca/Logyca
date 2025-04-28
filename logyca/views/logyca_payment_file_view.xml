@@ -21,7 +21,21 @@
                             <field name="description" />
                         </group>
                     </group>
-                    <field name="payment_ids" colspan="4" can_create="true" can_write="true" />
+                    <!-- <field name="payment_ids" colspan="4" can_create="true" can_write="true" /> -->
+                    <field name="payment_ids" view_mode="tree,form">
+                        <tree>
+                            <field name="date"/>
+                            <field name="name"/>
+                            <field name="journal_id"/>
+                            <field name="payment_method_line_id"/>
+                            <field name="partner_id"/>
+                            <field name="amount_signed"/>
+                            <field name="amount_company_currency_signed"/>
+                            <field name="state"/>
+                            <field name="ref"/>
+                            <button string="Asientos" class="oe_link alert-link" type="object" name="action_open_destination_journal" style="padding: 0; vertical-align: baseline;"></button>
+                        </tree>
+                    </field>                    
                     <button name="get_excel" string="Generar" type="object" class="oe_highlight"/>
                 </sheet>
             </form>
