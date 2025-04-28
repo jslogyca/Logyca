@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="type_tributos_view_form" model="ir.ui.view">
+		<field name="name">type.tributos.form</field>
+		<field name="model">type.tributos</field>
+		<field name="arch" type="xml">
+			<form string="Types of Tributos">
+				<sheet>
+					<group>
+						<group>
+							<field name="code" />
+							<field name="name" />
+						</group>
+						<group>
+							<field name="description" />
+							<field name="active" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="type_tributos_view_tree" model="ir.ui.view">
+		<field name="name">type.tributos.tree</field>
+		<field name="model">type.tributos</field>
+		<field name="arch" type="xml">
+			<tree string="Types of Obligation" >
+				<field name="code"/>
+				<field name="name"/>
+				<field name="description"/>
+				<field name="active"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_type_tributos" model="ir.actions.act_window">
+		<field name="name">Types of Tributos</field>
+		<field name="res_model">type.tributos</field>
+		<field name="view_mode">tree,form</field>
+	</record>	
+
+	<menuitem
+		id="hr_menu_type_tributos"
+		name="Types of Tributos"
+		action="action_type_tributos"
+		parent="l10n_co_mc_einvoice.account_menu_einvoice_management"
+		sequence="12"
+		groups="account.group_account_user"/>          
+</odoo>

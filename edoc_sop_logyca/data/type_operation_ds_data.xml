@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="type_operationds10" model="type.operation.ds">
+            <field name="code">10</field>
+            <field name="name">Residente</field>
+        </record>
+        <record id="type_operationds11" model="type.operation.ds">
+            <field name="code">11</field>
+            <field name="name">No Residente</field>
+        </record>
+    </data>
+</odoo>

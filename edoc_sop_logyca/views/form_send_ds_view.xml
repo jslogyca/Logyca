@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="form_send_ds_view_form" model="ir.ui.view">
+		<field name="name">form.send.ds.form</field>
+		<field name="model">form.send.ds</field>
+		<field name="arch" type="xml">
+			<form string="Forma de generación y transmisión">
+				<sheet>
+					<group>
+						<group>
+							<field name="name" />
+						</group>
+						<group>
+							<field name="code" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="form_send_ds_view_tree" model="ir.ui.view">
+		<field name="name">form.send.ds.tree</field>
+		<field name="model">form.send.ds</field>
+		<field name="arch" type="xml">
+			<tree string="Forma de generación y transmisión" >
+				<field name="code"/>
+				<field name="name"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_form_send_ds" model="ir.actions.act_window">
+		<field name="name">Forma de generación y transmisión</field>
+		<field name="res_model">form.send.ds</field>
+		<field name="view_mode">tree,form</field>
+	</record>	
+
+	<menuitem
+		id="hr_menu_form_send_ds"
+		name="Forma de generación y transmisión"
+		action="action_form_send_ds"
+		parent="l10n_co_mc_einvoice.account_menu_ds_parent"
+		sequence="5"
+		groups="account.group_account_user"/>          
+</odoo>

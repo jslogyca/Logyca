@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="type_tributos01" model="type.tributos">
+            <field name="code">01</field>
+            <field name="name">IVA</field>
+            <field name="description">Impuesto sobre la Ventas</field>
+        </record>
+        <record id="type_tributos02" model="type.tributos">
+            <field name="code">02</field>
+            <field name="name">IC</field>
+            <field name="description">Impuesto al Consumo Departamental Nominal</field>
+        </record>
+        <record id="type_tributos03" model="type.tributos">
+            <field name="code">03</field>
+            <field name="name">ICA</field>
+            <field name="description">Impuesto de Industria, Comercio y Aviso</field>
+        </record>
+        <record id="type_tributos04" model="type.tributos">
+            <field name="code">04</field>
+            <field name="name">INC</field>
+            <field name="description">Impuesto Nacional al Consumo</field>
+        </record>
+        <record id="type_tributos05" model="type.tributos">
+            <field name="code">05</field>
+            <field name="name">ReteIVA</field>
+            <field name="description">Retención sobre el IVA</field>
+        </record>
+        <record id="type_tributos06" model="type.tributos">
+            <field name="code">06</field>
+            <field name="name">ReteRenta</field>
+            <field name="description">Retención sobre Renta</field>
+        </record>
+        <record id="type_tributos07" model="type.tributos">
+            <field name="code">07</field>
+            <field name="name">ReteICA</field>
+            <field name="description">Retención sobre el ICA</field>
+        </record>
+        <record id="type_tributos08" model="type.tributos">
+            <field name="code">08</field>
+            <field name="name">IC Porcentual</field>
+            <field name="description">Impuesto al Consumo Departamental Porcentual</field>
+        </record>
+        <record id="type_tributos20" model="type.tributos">
+            <field name="code">20</field>
+            <field name="name">FtoHorticultura</field>
+            <field name="description">Cuota de Fomento Hortifrutícula</field>
+        </record>
+        <record id="type_tributos21" model="type.tributos">
+            <field name="code">21</field>
+            <field name="name">Timbre</field>
+            <field name="description">Impuesto de Timbre</field>
+        </record>
+        <record id="type_tributos22" model="type.tributos">
+            <field name="code">22</field>
+            <field name="name">INC Bolsas</field>
+            <field name="description">Impuesto Nacional al Consumo de Bolsa Plástica</field>
+        </record>
+        <record id="type_tributos23" model="type.tributos">
+            <field name="code">23</field>
+            <field name="name">INCarbono</field>
+            <field name="description">Impuesto Nacional del Carbono</field>
+        </record>
+        <record id="type_tributos24" model="type.tributos">
+            <field name="code">24</field>
+            <field name="name">INCombustibles</field>
+            <field name="description">Impuesto Nacional a los Combustibles</field>
+        </record>
+        <record id="type_tributos25" model="type.tributos">
+            <field name="code">25</field>
+            <field name="name">Sobretasa Combustibles</field>
+            <field name="description">Sobretasa a los combustibles</field>
+        </record>
+        <record id="type_tributos26" model="type.tributos">
+            <field name="code">26</field>
+            <field name="name">Sordicom</field>
+            <field name="description">Contribución minoristas (Combustibles)</field>
+        </record>
+        <record id="type_tributos30" model="type.tributos">
+            <field name="code">30</field>
+            <field name="name">IC Datos</field>
+            <field name="description">Impuesto al Consumo de Datos</field>
+        </record>
+        <record id="type_tributosZZ" model="type.tributos">
+            <field name="code">ZZ</field>
+            <field name="name">Nombre de la figura tributaria</field>
+            <field name="description">Otros tributos, tasas, contribuciones, y similares</field>
+        </record>
+    </data>
+</odoo>
+
+

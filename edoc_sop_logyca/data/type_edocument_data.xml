@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="type_edocumentfe5" model="type.edocument">
+            <field name="name">Documento soporte en adquisiciones efectuadas a sujetos no obligados a expedir factura o documento equivalente</field>
+            <field name="ecode">05</field>
+            <field name="display_type">document</field>
+            <field name="document_type">ds</field>
+        </record>
+
+        <record id="type_edocumentfe95" model="type.edocument">
+            <field name="name">Nota de ajuste al documento soporte en adquisiciones efectuadas a sujetos no obligados a expedir factura o documento equivalente</field>
+            <field name="ecode">95</field>
+            <field name="display_type">document</field>
+            <field name="document_type">nds</field>
+        </record>
+    </data>
+
+</odoo>

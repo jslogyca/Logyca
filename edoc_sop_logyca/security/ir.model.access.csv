@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_form_send_ds,form.send.ds,model_form_send_ds,edoc_sop_logyca.group_manager_edoc_sop,1,1,1,1
+access_type_operation_ds,type.operation.ds,model_type_operation_ds,edoc_sop_logyca.group_manager_edoc_sop,1,1,1,1
+access_type_edocument,type.edocument,model_type_edocument,edoc_sop_logyca.group_manager_edoc_sop,1,1,1,1
+access_type_tributos,type.tributos,model_type_tributos,edoc_sop_logyca.group_manager_edoc_sop,1,1,1,1
+access_ir_sequence_dian_resolution,ir.sequence.dian_resolution,model_ir_sequence_dian_resolution,edoc_sop_logyca.group_manager_edoc_sop,1,1,1,1
+access_mode_payment_einvoice,mode.payment.einvoice,model_mode_payment_einvoice,edoc_sop_logyca.group_manager_edoc_sop,1,1,1,1
+access_form_payment_einvoice,form.payment.einvoice,model_form_payment_einvoice,edoc_sop_logyca.group_manager_edoc_sop,1,1,1,1
+access_mode_payment_einvoice,mode.payment.einvoice,model_mode_payment_einvoice,edoc_sop_logyca.group_manager_edoc_sop,1,1,1,1
+access_eresponse_bugs,eresponse.bugs,model_eresponse_bugs,edoc_sop_logyca.group_manager_edoc_sop,1,1,1,1

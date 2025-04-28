@@ -14,7 +14,7 @@
                         domain="[('company_id', '=', company_id)]"/>
                 <field name="analytic_account_id" />
                 <field name="source_id" />
-                <field name="campaign_id"/>
+                <field name="campaign_id" string='Estrategía'/>
             </xpath>
             <xpath expr="//field[@name='tag_ids']" position="attributes">
                 <attribute name="invisible">True</attribute>
