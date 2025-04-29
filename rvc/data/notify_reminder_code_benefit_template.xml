@@ -178,7 +178,7 @@
                                                 <tbody>
                                                     <tr>
                                                     <td align="center" bgcolor="#f26334" role="presentation" valign="middle" style="border-collapse:collapse;border: medium; border-radius: 5px; cursor: auto; background-color: rgb(242, 99, 52);">
-                                                        <p style="display: inline-block; color: rgb(255, 255, 255); font-family: Verdana, Geneva, sans-serif; font-size: 16px; font-weight: 700; line-height: 20px; padding: 10px 20px; border-radius: 5px; margin: 5px;"><a href="'/rvc/accept_benefit/' + object.access_token" target="_blank" style="text-decoration: none; color: rgb(255, 255, 255);">ACEPTAR</a></p>
+                                                        <p style="display: inline-block; color: rgb(255, 255, 255); font-family: Verdana, Geneva, sans-serif; font-size: 16px; font-weight: 700; line-height: 20px; padding: 10px 20px; border-radius: 5px; margin: 5px;"><a t-att-href="'/rvc/accept_benefit/' + object.access_token" target="_blank" style="text-decoration: none; color: rgb(255, 255, 255);">ACEPTAR</a></p>
                                                     </td>
                                                     </tr>
                                                 </tbody>
