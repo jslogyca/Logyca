@@ -18,39 +18,44 @@ class AccountMoveLine(models.Model):
         if self.move_id.move_type== 'in_invoice' or self.move_id.move_type== 'in_refund': 
             company_id = self.product_id.company_id.id
 
-            if company_id and company_id == 1:
-                #servicios 1
-                if self.x_budget_group.lser_analytic_tag_ids:
-                    self.analytic_tag_ids = [(6,0, self.x_budget_group.lser_analytic_tag_ids.ids)]
-                    self.invoice_tag_ids = False
-                elif self.x_budget_group.invoice_tag_ids:
-                    self.invoice_tag_ids = self.x_budget_group.invoice_tag_ids.id
-                    self.analytic_tag_ids = [(5,0,0)]
-                else:
-                    self.analytic_tag_ids = [(5,0,0)]
-                    self.invoice_tag_ids = False
-            elif company_id and company_id == 2:
-                #asociación  2
-                if self.x_budget_group.iac_analytic_tag_ids:
-                    self.analytic_tag_ids = [(6,0, self.x_budget_group.iac_analytic_tag_ids.ids)]
-                    self.invoice_tag_ids = False
-                elif self.x_budget_group.iac_invoice_tag_ids:
-                    self.invoice_tag_ids = self.x_budget_group.iac_invoice_tag_ids.id
-                    self.analytic_tag_ids = [(5,0,0)]
-                else:
-                    self.analytic_tag_ids = [(5,0,0)]
-                    self.invoice_tag_ids = False
-            elif company_id and company_id == 3:
-                #investigación 3
-                if self.x_budget_group.log_analytic_tag_ids:
-                    self.analytic_tag_ids = [(6,0, self.x_budget_group.log_analytic_tag_ids.ids)]
-                    self.invoice_tag_ids = False
-                elif self.x_budget_group.log_invoice_tag_ids:
-                    self.invoice_tag_ids = self.x_budget_group.log_invoice_tag_ids.id
-                    self.analytic_tag_ids = [(5,0,0)]
-                else:
-                    self.analytic_tag_ids = [(5,0,0)]
-                    self.invoice_tag_ids = False
+            if self.x_budget_group:
+                self.analytic_distribution = self.x_budget_group.analytic_distribution
+            else:
+                self.analytic_distribution = False
+
+            # if company_id and company_id == 1:
+            #     #servicios 1
+            #     if self.x_budget_group.lser_analytic_tag_ids:
+            #         self.analytic_tag_ids = [(6,0, self.x_budget_group.lser_analytic_tag_ids.ids)]
+            #         self.invoice_tag_ids = False
+            #     elif self.x_budget_group.invoice_tag_ids:
+            #         self.invoice_tag_ids = self.x_budget_group.invoice_tag_ids.id
+            #         self.analytic_tag_ids = [(5,0,0)]
+            #     else:
+            #         self.analytic_tag_ids = [(5,0,0)]
+            #         self.invoice_tag_ids = False
+            # elif company_id and company_id == 2:
+            #     #asociación  2
+            #     if self.x_budget_group.iac_analytic_tag_ids:
+            #         self.analytic_tag_ids = [(6,0, self.x_budget_group.iac_analytic_tag_ids.ids)]
+            #         self.invoice_tag_ids = False
+            #     elif self.x_budget_group.iac_invoice_tag_ids:
+            #         self.invoice_tag_ids = self.x_budget_group.iac_invoice_tag_ids.id
+            #         self.analytic_tag_ids = [(5,0,0)]
+            #     else:
+            #         self.analytic_tag_ids = [(5,0,0)]
+            #         self.invoice_tag_ids = False
+            # elif company_id and company_id == 3:
+            #     #investigación 3
+            #     if self.x_budget_group.log_analytic_tag_ids:
+            #         self.analytic_tag_ids = [(6,0, self.x_budget_group.log_analytic_tag_ids.ids)]
+            #         self.invoice_tag_ids = False
+            #     elif self.x_budget_group.log_invoice_tag_ids:
+            #         self.invoice_tag_ids = self.x_budget_group.log_invoice_tag_ids.id
+            #         self.analytic_tag_ids = [(5,0,0)]
+            #     else:
+            #         self.analytic_tag_ids = [(5,0,0)]
+            #         self.invoice_tag_ids = False
 
 class AccountMove(models.Model):
     _inherit = 'account.move'

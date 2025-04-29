@@ -37,7 +37,7 @@
         'l10n_latam_base',
         'account_budget',
         'maintenance',
-        # 'l10n_co_edi',
+        'analytic',
     ],
     
     # always loaded 

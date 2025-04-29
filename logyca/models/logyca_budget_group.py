@@ -6,13 +6,14 @@ from odoo.exceptions import ValidationError, UserError
 
 class x_budget_group(models.Model):
     _name = 'logyca.budget_group'
+    _inherit = 'analytic.mixin'
     _description = 'Grupos presupuestal'
+    _check_company_auto = True
 
     code = fields.Char(string='Código', size=10, required=True)
     name = fields.Char(string='Nombre', required=True)
-    # lser_analytic_tag_ids = fields.Many2one('account.analytic.tag', string='Etiqueta analítica Logyca Servicios', domain="[('company_id', '=', 1)]")
-    # iac_analytic_tag_ids = fields.Many2one('account.analytic.tag', string='Etiqueta analítica Logyca Asociación', domain="[('company_id', '=', 2)]")
-    # log_analytic_tag_ids = fields.Many2one('account.analytic.tag', string='Etiqueta analítica Logyca Investigación', domain="[('company_id', '=', 3)]")
+    company_id = fields.Many2one('res.company', 'Company', required=True, index=True, default=lambda self: self.env.company.id)
+    by_default_group = fields.Boolean('Por Defecto', default=False)
 
     def name_get(self):
         return [(record.id, '%s - %s' %

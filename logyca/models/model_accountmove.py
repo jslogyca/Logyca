@@ -562,10 +562,14 @@ class AccountMoveLine(models.Model):
     #x_account_analytic_group_two = fields.Many2one(string='Grupo Analítico / Línea', store=True, readonly=True, related='x_account_analytic_group.parent_id', change_default=True)
     
     #Cuenta analitica 
-    @api.onchange('analytic_account_id')
-    def _onchange_analytic_account_id(self):
-        if self.analytic_account_id:
-            self.analytic_tag_ids = [(5,0,0)]
+    @api.onchange('product_id')
+    def _onchange_product_line(self):
+        for line in self:
+            if not line.analytic_distribution:
+                budget_group = self.env['logyca.budget_group'].search([('by_default_group', '=', True), 
+                                        ('company_id', '=', line.company_id.id)], order="id asc", limit=1)
+                if budget_group:
+                    line.x_budget_group = budget_group
             
     #Etiqueta analitica
     @api.onchange('analytic_tag_ids')

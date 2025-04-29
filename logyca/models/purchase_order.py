@@ -61,6 +61,12 @@ class PurchaseOrder(models.Model):
     #Validaciones antes de CONFIRMAR una orden de compra
     def button_confirm(self):
         for order_line in self.order_line:
+            if order_line.analytic_distribution and not order_line.x_budget_group:
+                budget_group = self.env['logyca.budget_group'].search([('by_default_group', '=', True), 
+                                        ('company_id', '=', order_line.company_id.id)], order="id asc", limit=1)
+                if budget_group:
+                    order_line.x_budget_group = budget_group
+            
             if not order_line.x_budget_group:
                 raise UserError(_("No se digito información el grupo presupuestal para el registro "+order_line.name+", por favor verificar."))
                 
@@ -68,20 +74,3 @@ class PurchaseOrder(models.Model):
             #     raise UserError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+order_line.name+", por favor verificar."))
             
         return super(PurchaseOrder, self).button_confirm()            
-    
-class PurchaseOrderLine(models.Model):
-    _inherit = 'purchase.order.line'
-    #Grupo de trabajo 
-    x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal')
-    
-    #Cuenta analitica 
-    @api.onchange('account_analytic_id')    
-    def _onchange_analytic_account_id(self):
-        if self.account_analytic_id:
-            self.analytic_tag_ids = [(5,0,0)]
-            
-    #Etiqueta analitica
-    @api.onchange('analytic_tag_ids')
-    def _onchange_analytic_tag_ids(self):
-        if self.analytic_tag_ids:
-            self.account_analytic_id = False
