@@ -33,7 +33,7 @@
                             <field name="amount_company_currency_signed"/>
                             <field name="state"/>
                             <field name="ref"/>
-                            <button string="Asientos" class="oe_link alert-link" type="object" name="action_open_destination_journal" style="padding: 0; vertical-align: baseline;"></button>
+                            <button name="action_read_payments" type="object" string="Asiento" class="float-end btn-secondary" invisible="state != 'posted'"/>
                         </tree>
                     </field>                    
                     <button name="get_excel" string="Generar" type="object" class="oe_highlight"/>

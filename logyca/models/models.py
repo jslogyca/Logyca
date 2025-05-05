@@ -26,6 +26,12 @@ class ProductTemplate(models.Model):
     x_scheme = fields.Integer(string='Esquema',tracking=True)
     x_type_document = fields.Integer(string='Tipo documento',tracking=True)
     x_date_validity = fields.Datetime(string='Fecha de expiración',tracking=True)
+    type_accountant = fields.Selection([
+        ('costo', 'Costo'),
+        ('gasto', 'Gasto'),
+        ('gastov', 'Gasto Comercial'),
+        ('na', 'No Aplica'),
+    ], string='Tipo Contable', copy=False, default='na')    
     
 class HelpDesk(models.Model):
     _inherit = 'helpdesk.ticket'

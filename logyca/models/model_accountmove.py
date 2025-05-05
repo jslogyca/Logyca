@@ -570,12 +570,6 @@ class AccountMoveLine(models.Model):
                 if budget_group:
                     line.x_budget_group = budget_group
             
-    #Etiqueta analitica
-    @api.onchange('analytic_tag_ids')
-    def _onchange_analytic_tag_ids(self):
-        if self.analytic_tag_ids:
-            self.analytic_account_id = False
-            
 # Reportes Contabilidad
 class AccountInvoiceReport(models.Model):
     _inherit = 'account.invoice.report'

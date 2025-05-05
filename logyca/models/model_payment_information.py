@@ -99,6 +99,17 @@ class AccountPayment(models.Model):
     _inherit = 'account.payment'
     x_payment_file = fields.Boolean(string='Reportado en archivo de pago')    
     x_description = fields.Text(string='Descripción')
+
+    def action_read_payments(self):
+        self.ensure_one()
+        return {
+            'name': self.move_id.display_name,
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'account.move',
+            'res_id': self.move_id.id,
+        }   
         
     def _prepare_payment_moves(self):
         all_move_vals = super(AccountPayment, self)._prepare_payment_moves()

@@ -69,8 +69,15 @@ class PurchaseOrder(models.Model):
             
             if not order_line.x_budget_group:
                 raise UserError(_("No se digito información el grupo presupuestal para el registro "+order_line.name+", por favor verificar."))
+
+            if order_line.analytic_distribution:
+                total = sum(order_line.analytic_distribution.values())
+                if total > 100:
+                    raise ValidationError(
+                        f"La distribución analítica en la línea con producto '{order_line.product_id.display_name}' supera el 100% (actual: {total:.2f}%)."
+                    )
                 
             # if not order_line.account_analytic_id and not order_line.analytic_tag_ids:
             #     raise UserError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+order_line.name+", por favor verificar."))
             
-        return super(PurchaseOrder, self).button_confirm()            
+        return super(PurchaseOrder, self).button_confirm()

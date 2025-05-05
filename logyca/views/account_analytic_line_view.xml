@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_account_analytic_line_filter_inherit_custom" model="ir.ui.view">
+            <field name="name">account.analytic.line.search.inherit.custom</field>
+            <field name="model">account.analytic.line</field>
+            <field name="inherit_id" ref="account.view_account_analytic_line_filter_inherit_account"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='auto_account_id']" position="after">
+                    <field name="move_line_id"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

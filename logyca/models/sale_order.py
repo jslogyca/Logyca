@@ -52,6 +52,20 @@ class SaleOrder(models.Model):
             
         invoice_vals['x_country_account_id'] = country_id        
         return invoice_vals
+
+    #Validaciones antes de CONFIRMAR una orden de compra
+    def action_confirm(self):
+        for order_line in self.order_line:
+            if not order_line.analytic_distribution:
+                raise UserError(_("No se digito información la Analítica para el registro "+order_line.name+", por favor verificar."))
+
+            if order_line.analytic_distribution:
+                total = sum(order_line.analytic_distribution.values())
+                if total > 100:
+                    raise ValidationError(
+                        f"La distribución analítica en la línea con producto '{order_line.product_id.display_name}' supera el 100% (actual: {total:.2f}%)."
+                    )            
+        return super(SaleOrder, self).action_confirm()        
     
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
