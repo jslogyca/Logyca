@@ -2,7 +2,7 @@
 
 <odoo>
     <template id="report_certification_add_periodo" inherit_id="l10n_co_reports.report_certification">
-        <xpath expr="//div[contains(@class, 'row')][div[t-out=\"partner['partner_id'].city\"]]" position="replace">
+        <xpath expr="//div[.//t[@t-out=&quot;partner['partner_id'].city&quot;]]" position="replace">
             <div class="row">
                 <div class="col-6">
                     Ciudad Tercero: <t t-out="partner['partner_id'].city"/>
