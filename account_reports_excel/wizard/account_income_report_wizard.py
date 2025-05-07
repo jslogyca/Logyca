@@ -22,23 +22,17 @@ class ReportIncomeReportWizard(models.TransientModel):
     def do_report(self):
         value = self.get_values(self.date_from, self.date_to)
         if not value:
-            raise Warning(_('!No hay resultados para los datos seleccionados¡'))
+            raise ValidationError(_('!No hay resultados para los datos seleccionados¡'))
         self.make_file(value)
 
-        path = "/web/binary/download_document?"
-        model = "report.income.report.wizard"
-        filename = self.data_name
-
-        url = path + "model={}&id={}&filename={}.xlsx".format(
-            model, self.id, filename)
+        if not self.data:
+            raise UserError("No se generó el archivo correctamente.")
 
         return {
-            'type' : 'ir.actions.act_url',
-            'url': url,
+            'type': 'ir.actions.act_url',
+            'url': f"/web/content?model=report.income.report.wizard&id={self.id}&field=data&filename_field=data_name&download=true",
             'target': 'self',
-            'tag': 'reload',
-        }           
-
+        }
 
     def get_values(self, date_from, date_to):
         value = []
@@ -60,13 +54,16 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     date_part('month',ma.date)as mes,
                                     date_part('year',ma.date)as year,
                                     ma.state,
-                                    ca.name
+                                    aaa.name->>'es_CO' AS analytic_account_name,
+                                    pla.name->>'es_CO' as plan
                                     from account_move m
                                     inner join account_move_line l on l.move_id=m.id
                                     inner join asset_move_line_rel aml on aml.line_id = l.id
                                     inner join account_asset a on a.id=aml.asset_id
                                     inner join account_move ma on ma.asset_id=a.id
-                                    inner join account_analytic_account ca on ca.id=a.account_analytic_id
+                                    JOIN LATERAL jsonb_each(a.analytic_distribution) AS dist(key, value) ON TRUE
+                                    LEFT JOIN account_analytic_account aaa ON aaa.id::text = key
+                                    INNER JOIN account_analytic_plan pla on pla.id=aaa.plan_id
                                     inner join res_company c on c.id=m.company_id
                                     inner join res_partner p on p.id=m.partner_id
                                     inner join res_users u on u.id=m.invoice_user_id
@@ -75,8 +72,8 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join product_product pp ON pp.id = l.product_id
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
                                     left join account_analytic_account red on red.id = m.analytic_account_id                                    
-                                    where l.exclude_from_invoice_tab is False and m.date between %s and %s and m.state='posted'
-                                    and a.asset_type = 'sale' and m.move_type in ('out_invoice')
+                                    where m.date between %s and %s and m.state='posted'
+                                    and m.move_type in ('out_invoice')
                                     order by p.id, m.id ''', 
                                     (date_from, date_to))
         
@@ -102,12 +99,15 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     date_part('month',i.date)as mes,
                                     date_part('year',i.date)as year,
                                     i.state,
-                                    ca.name
+                                    aaa.name->>'es_CO' AS analytic_account_name,
+                                    pla.name->>'es_CO' as plan
                                     from account_move_line l
                                     inner join account_move i on i.id=l.move_id
                                     left join asset_move_line_rel aml on aml.line_id = l.id
                                     left join account_asset a on a.id=aml.asset_id
-                                    left join account_analytic_account ca on ca.id=l.analytic_account_id
+                                    JOIN LATERAL jsonb_each(a.analytic_distribution) AS dist(key, value) ON TRUE
+                                    LEFT JOIN account_analytic_account aaa ON aaa.id::text = key
+                                    INNER JOIN account_analytic_plan pla on pla.id=aaa.plan_id
                                     inner join res_company c on c.id=i.company_id
                                     inner join res_partner p on p.id=i.partner_id
                                     inner join res_users u on u.id=i.invoice_user_id
@@ -116,7 +116,7 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join product_product pp ON pp.id = l.product_id
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
                                     left join account_analytic_account red on red.id = i.analytic_account_id                                    
-                                    where l.exclude_from_invoice_tab is False and i.date between %s and %s and i.state='posted'
+                                    where i.date between %s and %s and i.state='posted'
                                     and a.id is null and i.move_type in ('out_invoice')
                                     order by p.id, i.id ''', 
                                     (date_from, date_to))
@@ -297,10 +297,10 @@ class ReportIncomeReportWizard(models.TransientModel):
 
         try:
             wb.close()
-            out = base64.encodestring(buf.getvalue())
+            out = base64.b64encode(buf.getvalue())
             buf.close()
-            date_file = fields.Datetime.now()
+            safe_date = date_file.strftime('%Y-%m-%d_%H-%M-%S')
+            self.data_name = f'IngresoProyectado-{safe_date}.xlsx'
             self.data = out
-            self.data_name = 'IngresoProyectado' + '-' + str(date_file)
-        except ValueError:
-            raise Warning('No se pudo generar el archivo')
+        except Exception as e:
+            raise ValidationError(f'No se pudo generar el archivo: {e}')            
