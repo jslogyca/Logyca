@@ -15,6 +15,7 @@ import math
 class comercial_report(models.Model):
     _name = 'logyca.payment.file'
     _description = 'Archivo de pago'
+    _order = "create_date"
     
     type_file = fields.Selection([
                                         ('1', 'Archivo Plano'),

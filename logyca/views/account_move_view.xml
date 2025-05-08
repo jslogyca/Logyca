@@ -99,14 +99,14 @@
       </field>
     </record>
 
-    <!-- <record id="inherit_l10n_co_edi_form_view_account_move_reversal_hide_credit_code" model="ir.ui.view">
-        <field name="name">l10n.co.edi.form.account.move.reversal.inherit.hide.credit.code</field>
-        <field name="model">account.move.reversal</field>
-        <field name="inherit_id" ref="l10n_co_edi.form_view_account_move_reversal_inherit"/>
+    <record id="view_account_move_filter_v17" model="ir.ui.view">
+        <field name="name">account.move.filter.v17</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_move_filter"/>
         <field name="arch" type="xml">
-            <field name="l10n_co_edi_description_code_credit" position="attributes">
-                <attribute name="modifiers">{ "invisible": true }</attribute>
-            </field>
+            <xpath expr="//filter[@name='status']" position="after">
+                <filter string="Creado Por" name="create_uid" domain="[]" context="{'group_by': 'create_uid'}"/>
+            </xpath>
         </field>
-    </record> -->
+    </record>
 </odoo>
