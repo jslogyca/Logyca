@@ -8,7 +8,7 @@ from . import model_respartner
 from . import model_crmlead 
 from . import model_history 
 from . import model_reports
-from . import account_aged_partner_balance 
+# from . import account_aged_partner_balance 
 from . import model_balance_partner
 from . import model_auxiliar_report
 from . import model_comercial_reports 
