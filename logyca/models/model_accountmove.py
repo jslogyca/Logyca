@@ -637,7 +637,7 @@ class AccountAsset(models.Model):
     _inherit = 'account.asset'
     
     move_ids = fields.Many2one(related='original_move_line_ids.move_id', string='Movimiento Original', readonly=True, copy=False)
-    x_budget_group = fields.Many2one(string='Grupo presupuestal', readonly=True)
+    x_budget_group = fields.Many2one('logyca.budget_group', string='Grupo presupuestal', index=True, ondelete='restrict')
     x_partner = fields.Many2one('res.partner', string='Asociado')
     x_studio_accumulated_depreciation = fields.Float(string='Depreciación acumulada', default=0.0)
     x_studio_history_cost = fields.Float(string='Costo histórico', default=0.0)
