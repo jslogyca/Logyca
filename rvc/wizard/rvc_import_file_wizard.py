@@ -20,13 +20,16 @@ class RVCImportFileWizard(models.TransientModel):
 
     file_data = fields.Binary(string='File', required=True)
     filename = fields.Char(string='Name File')
-    benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'), 
+    benefit_type = fields.Selection([('codigos', 'Derechos de Identificación'),
                                     ('colabora', 'Logyca Colabora'),
-                                    ('analitica', 'Logyca Analítica')], string="Beneficio")
-    
+                                    ('analitica', 'Logyca Analítica'),
+                                    ('tarjeta_digital', 'Tarjeta Digital')], string="Beneficio")
+
     def validate_mail(self, email):
         if email:
-            match = re.match(r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', str(email.lower()))
+            pattern = r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*'
+            pattern += r'@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
+            match = re.match(pattern, str(email.lower()))
             if not match:
                 return False
         return True
@@ -319,6 +322,12 @@ class RVCImportFileWizard(models.TransientModel):
                             continue
                     else:
                         logging.warning("=================> no entra a la creacion de benefit.application")
+
+                elif self.benefit_type == 'tarjeta_digital':
+                    logging.debug("<==== tarjeta_digital ====>")
+                    # warning not implemented yet
+                    raise ValidationError('Esta funcionalidad está en proceso, por favor intente en unos días.')
+
                 else:
                     # Validar con el nit de la empresa beneficiaria que esté registrado en Odoo
                     partner_id=self.env['res.partner'].search([('vat','=',str(beneficiary_nit)), ('is_company','=',True)])
