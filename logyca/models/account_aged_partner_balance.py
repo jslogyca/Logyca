@@ -41,18 +41,13 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
                 query_res = query_res_lines[0] # We're grouping by id, so there is only 1 element in query_res_lines anyway
                 currency = self.env['res.currency'].browse(query_res['currency_id'][0]) if len(query_res['currency_id']) == 1 else None
                 expected_date = len(query_res['expected_date']) == 1 and query_res['expected_date'][0] or len(query_res['due_date']) == 1 and query_res['due_date'][0]
-                lang = self.env.context.get('lang', 'en_US')
-                account_code = query_res['account_code'][0] if query_res.get('account_code') else ''
-                account_name_translated = query_res['account_name'][0].get(lang) if isinstance(query_res['account_name'][0], dict) else query_res['account_name'][0]
-                account_name = f"{account_code} {account_name_translated}" if account_code and account_name_translated else None                
                 rslt.update({
                     'invoice_date': query_res['invoice_date'][0] if len(query_res['invoice_date']) == 1 else None,
                     'due_date': query_res['due_date'][0] if len(query_res['due_date']) == 1 else None,
                     'amount_currency': query_res['amount_currency'],
                     'currency_id': query_res['currency_id'][0] if len(query_res['currency_id']) == 1 else None,
                     'currency': currency.display_name if currency else None,
-                    # 'account_name': query_res['account_name'][0] if len(query_res['account_name']) == 1 else None,
-                    'account_name': account_name,
+                    'account_name': query_res['account_name'][0] if len(query_res['account_name']) == 1 else None,
                     'expected_date': expected_date or None,
                     'total': None,
                     'has_sublines': query_res['aml_count'] > 0,
@@ -123,7 +118,8 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
                 ARRAY_AGG(DISTINCT move.invoice_date) AS invoice_date,
                 ARRAY_AGG(DISTINCT COALESCE(account_move_line.date_maturity, account_move_line.date)) AS report_date,
                 ARRAY_AGG(DISTINCT account_move_line.expected_pay_date) AS expected_date,
-                ARRAY_AGG(DISTINCT account.name) AS account_name,                
+                ARRAY_AGG(DISTINCT account.name) AS account_name,
+                ARRAY_AGG(DISTINCT account.code || ' ' || COALESCE(account.name->>'es_CO', account.name->>'en_US')) AS account_name,
                 ARRAY_AGG(DISTINCT COALESCE(account_move_line.date_maturity, account_move_line.date)) AS due_date,
                 ARRAY_AGG(DISTINCT account_move_line.currency_id) AS currency_id,
                 COUNT(account_move_line.id) AS aml_count,
@@ -209,5 +205,5 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
 
             for grouping_key, query_res_lines in all_res_per_grouping_key.items():
                 rslt.append((grouping_key, build_result_dict(report, query_res_lines)))
-            print ('----------', rslt)
+
             return rslt
