@@ -329,7 +329,7 @@ class AccountMove(models.Model):
             print('oooo.....', invoice_line.product_id.x_is_deferred, invoice_line.deferred_start_date, invoice_line.deferred_end_date)
             if invoice_line.product_id.x_is_deferred and not invoice_line.deferred_start_date and not invoice_line.deferred_end_date:
                 raise ValidationError(_("Este producto esta marcado como diferido "+invoice_line.product_id.name+", por favor verificar la fecha de incio y final."))
-            if invoice_line.deferred_start_date and invoice_line.deferred_start_date < invoice_line.date:
+            if invoice_line.deferred_start_date and invoice_line.deferred_start_date < invoice_line.date and self.move_type == 'out_invoice':
                 raise ValidationError(_("La fecha inicial del diferido es menor a la factura "+str(invoice_line.date)+", por favor verificar ."))
             if not invoice_line.product_id.x_is_deferred and invoice_line.deferred_start_date and invoice_line.deferred_end_date:
                 raise ValidationError(_("Este producto no esta marcado como diferido "+invoice_line.product_id.name+", por favor verificar la fecha de incio y final, deben quedar vacias"))

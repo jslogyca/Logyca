@@ -26,8 +26,14 @@ class AccountAsset(models.Model):
 
     @api.onchange('acquisition_date')
     def _onchange_acquisition_date_set_prorata(self):
+        self._set_prorate_fields()
+
+    @api.depends('acquisition_date')
+    def _compute_prorate_defaults(self):
+        for record in self:
+            record._set_prorate_fields()
+
+    def _set_prorate_fields(self):
         if self.acquisition_date:
-            # Asigna el tipo de prorrateo
             self.prorata_computation_type = 'constant_periods'
-            # Define la fecha de prorrateo como el 01 del mes
-            self.prorata_date = self.acquisition_date.replace(day=1)
+            self.prorata_date = self.acquisition_date.replace(day=1)            
