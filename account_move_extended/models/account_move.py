@@ -9,8 +9,6 @@ from odoo import api, fields, models, _
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-
-    invoice_tag_ids = fields.Many2one('account.analytic.tag', string='Etiqueta Red de Valor')
     inter_company = fields.Boolean('Intercompany', related='product_id.product_tmpl_id.inter_company', readonly=True, store=True)
 
     @api.onchange('x_budget_group')
@@ -22,40 +20,6 @@ class AccountMoveLine(models.Model):
                 self.analytic_distribution = self.x_budget_group.analytic_distribution
             else:
                 self.analytic_distribution = False
-
-            # if company_id and company_id == 1:
-            #     #servicios 1
-            #     if self.x_budget_group.lser_analytic_tag_ids:
-            #         self.analytic_tag_ids = [(6,0, self.x_budget_group.lser_analytic_tag_ids.ids)]
-            #         self.invoice_tag_ids = False
-            #     elif self.x_budget_group.invoice_tag_ids:
-            #         self.invoice_tag_ids = self.x_budget_group.invoice_tag_ids.id
-            #         self.analytic_tag_ids = [(5,0,0)]
-            #     else:
-            #         self.analytic_tag_ids = [(5,0,0)]
-            #         self.invoice_tag_ids = False
-            # elif company_id and company_id == 2:
-            #     #asociación  2
-            #     if self.x_budget_group.iac_analytic_tag_ids:
-            #         self.analytic_tag_ids = [(6,0, self.x_budget_group.iac_analytic_tag_ids.ids)]
-            #         self.invoice_tag_ids = False
-            #     elif self.x_budget_group.iac_invoice_tag_ids:
-            #         self.invoice_tag_ids = self.x_budget_group.iac_invoice_tag_ids.id
-            #         self.analytic_tag_ids = [(5,0,0)]
-            #     else:
-            #         self.analytic_tag_ids = [(5,0,0)]
-            #         self.invoice_tag_ids = False
-            # elif company_id and company_id == 3:
-            #     #investigación 3
-            #     if self.x_budget_group.log_analytic_tag_ids:
-            #         self.analytic_tag_ids = [(6,0, self.x_budget_group.log_analytic_tag_ids.ids)]
-            #         self.invoice_tag_ids = False
-            #     elif self.x_budget_group.log_invoice_tag_ids:
-            #         self.invoice_tag_ids = self.x_budget_group.log_invoice_tag_ids.id
-            #         self.analytic_tag_ids = [(5,0,0)]
-            #     else:
-            #         self.analytic_tag_ids = [(5,0,0)]
-            #         self.invoice_tag_ids = False
 
 class AccountMove(models.Model):
     _inherit = 'account.move'

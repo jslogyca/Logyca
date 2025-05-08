@@ -336,7 +336,7 @@ class AccountMove(models.Model):
             if str(invoice_line.account_id.code).find("4", 0, 1) != -1 or str(invoice_line.account_id.code).find("5", 0, 1) != -1 or str(invoice_line.account_id.code).find("6", 0, 1) != -1:
                 # if not invoice_line.analytic_account_id and not invoice_line.analytic_tag_ids:
                 if not invoice_line.analytic_distribution:
-                    raise ValidationError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+invoice_line.name+", por favor verificar."))
+                    raise ValidationError(_("No1 se digito información analítica (Cuenta o Etiqueta) para el registro "+invoice_line.name+", por favor verificar."))
                 
         for line in self.line_ids:
             # payslip_id = self.env['hr.payslip'].search([('move_id', '=', line.move_id.id)], limit=1)
@@ -345,9 +345,8 @@ class AccountMove(models.Model):
             if not line.partner_id:
                 raise ValidationError(_("No se digito el tercero en la linea "+line.name+", por favor verificar."))
             if str(line.account_id.code).find("4", 0, 1) != -1 or str(line.account_id.code).find("5", 0, 1) != -1 or str(line.account_id.code).find("6", 0, 1) != -1:
-                # if not line.analytic_account_id and not line.analytic_tag_ids:
-                if not invoice_line.analytic_distribution:
-                    raise ValidationError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+line.name+", por favor verificar."))
+                if not line.analytic_distribution:
+                    raise ValidationError(_("No2 se digito información analítica (Cuenta o Etiqueta) para el registro "+line.name+", por favor verificar."))
         
         
         cant_contactsFE = 0
