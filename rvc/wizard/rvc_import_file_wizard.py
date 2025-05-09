@@ -36,31 +36,41 @@ class RVCImportFileWizard(models.TransientModel):
 
     def import_file(self):
         if not self.file_data:
-            raise ValidationError('No se encuentra un archivo, por favor cargue uno. \n\n Si no es posible cierre este asistente e intente de nuevo.')
+            raise ValidationError('No se encuentra un archivo, por favor cargue uno. \n\n'
+                               'Si no es posible cierre este asistente e intente de nuevo.')
 
         # valida que el archivo cargado se llame igual que la plantilla .xlsx
         if self.filename:
-            if self.benefit_type == 'codigos' and 'Plantilla_Beneficiarias_Identificacion' not in self.filename:
-                raise ValidationError('¡Error! ha seleccionado una plantilla equivocada. \n\n'\
-                    'Usted ha seleccionado beneficio Derechos de Identificación, pero su plantilla se llama "%s".\n\n'\
-                    'Por favor cargue la plantilla correspondiente.' % self.filename)
-            elif self.benefit_type == 'colabora' and 'Plantilla_Beneficiarias_Colabora' not in self.filename:
-                raise ValidationError('¡Error! ha seleccionado una plantilla equivocada. \n\n'\
-                    'Usted ha seleccionado beneficio Logyca Colabora, pero su plantilla se llama "%s".\n\n'\
-                    'Por favor cargue la plantilla correspondiente.' % self.filename)
-            elif self.benefit_type == 'analitica' and 'Plantilla_Beneficiarias_Analitica' not in self.filename:
-                raise ValidationError('¡Error! ha seleccionado una plantilla equivocada. \n\n'\
-                    'Usted ha seleccionado beneficio Logyca Analítica, pero su plantilla se llama "%s".\n\n'\
-                    'Por favor cargue la plantilla correspondiente.' % self.filename)
+            template_mapping = {
+            'codigos': 'Plantilla_Beneficiarias_Identificacion',
+            'colabora': 'Plantilla_Beneficiarias_Colabora',
+            'analitica': 'Plantilla_Beneficiarias_Analitica',
+            'tarjeta_digital': 'Plantilla_Beneficiarias_Tarjeta_Digital'
+            }
+
+            benefit_names = {
+            'codigos': 'Derechos de Identificación',
+            'colabora': 'Logyca Colabora',
+            'analitica': 'Logyca Analítica',
+            'tarjeta_digital': 'Tarjeta Digital'
+            }
+
+            expected_template = template_mapping.get(self.benefit_type)
+            if expected_template and expected_template not in self.filename:
+                msg = ('¡Error! ha seleccionado una plantilla equivocada.\n\n'
+                      f'Usted ha seleccionado beneficio {benefit_names.get(self.benefit_type)}, '
+                      f'pero su plantilla se llama "{self.filename}".\n\n'
+                      'Por favor cargue la plantilla correspondiente.')
+                raise ValidationError(msg)
 
         try:
             tmp_file = tempfile.NamedTemporaryFile(delete = False)
             tmp_file.write(base64.b64decode(self and self.file_data or _('Invalid file')))
             tmp_file.close()
             xls_tmp_file = xlrd.open_workbook(tmp_file.name)
-        except:
-            raise ValidationError('No se puede leer el archivo. Verifique que el formato sea el correcto.')
-            return False
+        except Exception as exc:
+            raise ValidationError(
+                'No se puede leer el archivo. Verifique que el formato sea el correcto.') from exc
 
         sheet = xls_tmp_file.sheet_by_name(xls_tmp_file.sheet_names()[0])
         record_list = [sheet.row_values(i) for i in range(sheet.nrows)]
@@ -409,7 +419,7 @@ class RVCImportFileWizard(models.TransientModel):
 
             raise ValidationError(msj)            
         obj_model = self.env['ir.model.data']
-        res = obj_model.get_object_reference('rvc', 'benefit_application_tree')
+        res = self.env.ref('rvc.benefit_application_tree')
 
         if not cre:
             raise UserError(_("No se importaron postulaciones a beneficios RVC."))
