@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, date, timedelta
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import ValidationError
 
 
 class HrEmployeeDocument(models.Model):
@@ -100,7 +100,7 @@ class HrEmployeeDocument(models.Model):
             if each.expiry_date:
                 exp_date = fields.Date.from_string(each.expiry_date)
                 if exp_date < date.today():
-                    raise Warning('Your Document Is Expired.')
+                    raise ValidationError('Your Document Is Expired.')
 
     name = fields.Char(string='Document Number', required=True, copy=False, help='You can give your'
                                                                                  'Document number.')

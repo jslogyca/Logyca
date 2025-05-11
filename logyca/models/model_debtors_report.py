@@ -94,7 +94,6 @@ class comercial_report(models.TransientModel):
                 t.name AS "EQUIPO DE VENTA",
                 am.x_debt_portfolio_monitoring AS "SEGUIMIENTO DE CARTERA",
                 to_char(am.x_last_contact_debtor,'YYYY/MM/DD') AS "FECHA DE SEGUIMIENTO ULTIMO CONTACTO",
-                dps.name AS "ESTADO DE CARTERA",
                 to_char(am.x_estimated_payment_date,'YYYY/MM/DD') AS "FECHA PROGRAMACIÓN PAGO"
             FROM   account_move am
                 INNER JOIN account_move_line aml on aml.move_id = am.id
@@ -102,7 +101,6 @@ class comercial_report(models.TransientModel):
                 LEFT JOIN account_analytic_account aaa ON aaa.id = am.analytic_account_id 
                 LEFT JOIN account_payment_term apt on apt.id = am.invoice_payment_term_id
                 LEFT join crm_team t on t.id=am.team_id
-                LEFT JOIN debtor_portfolio_status dps on dps.id=am.x_debtor_portfolio_status_id
                 LEFT JOIN res_partner rp ON rp.id = am.partner_id
                 LEFT JOIN res_partner rpp ON rpp.id = rp.parent_id
                 LEFT JOIN res_users ru ON ru.id = am.invoice_user_id

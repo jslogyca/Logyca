@@ -187,7 +187,8 @@ class x_reports_account(models.Model):
             #self.excel_file_name = filename
             
             self.write({
-                'excel_file': base64.encodestring(stream.getvalue()),
+                # 'excel_file': base64.encodestring(stream.getvalue()),
+                'excel_file': base64.b64encode(stream.getvalue()),
                 # Filename = <siren>FECYYYYMMDD where YYYMMDD is the closing date
                 'excel_file_name': filename,
             })

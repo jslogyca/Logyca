@@ -71,10 +71,6 @@ class ReportCXCDebtorsAccount(models.Model):
             CASE WHEN now() > am.invoice_date_due then 'VENCIDA ' || LEFT(TO_CHAR(am.date, 'YYYY-MM-DD'),4)  else 'NO VENCIDA' END AS type_debtors,
             rppp.id AS vendedor_id,
             t.id AS team_id,
-            am.x_debt_portfolio_monitoring AS x_debt_portfolio_monitoring,
-            am.x_last_contact_debtor AS x_last_contact_debtor,
-            dps.name AS x_debtor_portfolio_status_id,
-            am.x_estimated_payment_date AS x_estimated_payment_date,
             CASE WHEN (CASE WHEN now() > am.invoice_date_due 
             THEN DATE_PART('day', now() - am.invoice_date_due)
             ELSE 0 END)<=30
@@ -97,10 +93,8 @@ class ReportCXCDebtorsAccount(models.Model):
             account_move_line aml
                 INNER JOIN account_move am on aml.move_id = am.id
                 INNER JOIN res_company cc on cc.id=am.company_id
-                LEFT JOIN account_analytic_account aaa ON aaa.id = am.analytic_account_id 
                 LEFT JOIN account_payment_term apt on apt.id = am.invoice_payment_term_id
                 LEFT join crm_team t on t.id=am.team_id
-                LEFT JOIN debtor_portfolio_status dps on dps.id=am.x_debtor_portfolio_status_id
                 LEFT JOIN res_partner rp ON rp.id = am.partner_id
                 LEFT JOIN res_partner rpp ON rpp.id = rp.parent_id
                 LEFT JOIN res_users ru ON ru.id = am.invoice_user_id
@@ -119,7 +113,6 @@ class ReportCXCDebtorsAccount(models.Model):
                 and am.move_type in ('out_invoice', 'entry')
                 and (am.payment_state='not_paid' or am.payment_state='in_payment')
                 and (am.name LIKE 'FEC%' or am.name LIKE 'FAC%' or am.name LIKE 'FAM%' or am.name LIKE 'CXC%' or am.name LIKE 'FSIV%')
-                and aml.exclude_from_invoice_tab is False
                 ORDER BY number_move ASC
         """
         return group_by_str

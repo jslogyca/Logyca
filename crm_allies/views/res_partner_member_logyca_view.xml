@@ -107,7 +107,7 @@
         </field>
     </record>
 
-    <record id="res_partner_member_logyca_view_dashboard" model="ir.ui.view">
+    <!-- <record id="res_partner_member_logyca_view_dashboard" model="ir.ui.view">
         <field name="name">res.partner.member.logyca.view.dashboard</field>
         <field name="model">res.partner.member.logyca</field>
         <field name="mode">primary</field>
@@ -127,13 +127,13 @@
                 <view type="pivot" ref="crm_allies.res_partner_member_logyca_view_pivot"/>
             </dashboard>
         </field>
-    </record>
+    </record> -->
 
     <record id="action_res_partner_member_logyca" model="ir.actions.act_window">
         <field name="name">Miembros LOGYCA</field>
         <field name="res_model">res.partner.member.logyca</field>
-        <field name="view_mode">dashboard,tree,form,pivot,graph</field>
-        <field name="view_id" ref="res_partner_member_logyca_view_dashboard"/>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="view_id" ref="res_partner_member_logyca_view_tree"/>
     </record>
 
     <menuitem

@@ -41,7 +41,7 @@
                             <field name="issue_date"/>
                             <field name="expiry_date"/>
                             <field name="notification_type"/>
-                            <field name="before_days" attrs="{'invisible' : [('notification_type', '=', 'single')]}"/>
+                            <field name="before_days" />
                         </group>
                     </group>
                     <notebook>

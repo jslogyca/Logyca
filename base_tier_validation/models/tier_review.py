@@ -3,6 +3,8 @@
 
 import logging
 
+import pytz
+
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -15,12 +17,13 @@ class TierReview(models.Model):
 
     name = fields.Char(related="definition_id.name", readonly=True)
     status = fields.Selection(
-        selection=[
+        [
+            ("waiting", "Waiting"),
             ("pending", "Pending"),
             ("rejected", "Rejected"),
             ("approved", "Approved"),
         ],
-        default="pending",
+        default="waiting",
     )
     model = fields.Char(string="Related Document Model", index=True)
     res_id = fields.Integer(string="Related Document ID", index=True)
@@ -43,11 +46,15 @@ class TierReview(models.Model):
         compute="_compute_reviewer_ids",
         store=True,
     )
+    display_status = fields.Char(compute="_compute_display_status")
     sequence = fields.Integer(string="Tier")
     todo_by = fields.Char(compute="_compute_todo_by", store=True)
     done_by = fields.Many2one(comodel_name="res.users")
     requested_by = fields.Many2one(comodel_name="res.users")
     reviewed_date = fields.Datetime(string="Validation Date")
+    reviewed_formated_date = fields.Char(
+        string="Validation Formated Date", compute="_compute_reviewed_formated_date"
+    )
     has_comment = fields.Boolean(related="definition_id.has_comment", readonly=True)
     comment = fields.Char(string="Comments")
     can_review = fields.Boolean(
@@ -64,13 +71,50 @@ class TierReview(models.Model):
     )
     last_reminder_date = fields.Datetime(readonly=True)
 
+    @api.depends("status")
+    def _compute_display_status(self):
+        """
+        Compute the display status based on the current status value to get the
+        translated status value.
+        """
+        selection = self.fields_get(["status"])["status"]["selection"]
+        selection_dict = dict(selection)
+        for record in self:
+            record.display_status = selection_dict[record.status]
+
+    @api.depends_context("tz")
+    def _compute_reviewed_formated_date(self):
+        timezone = self._context.get("tz") or self.env.user.partner_id.tz or "UTC"
+        for review in self:
+            if not review.reviewed_date:
+                review.reviewed_formated_date = False
+                continue
+            reviewed_date_utc = pytz.timezone("UTC").localize(review.reviewed_date)
+            reviewed_date_tz = reviewed_date_utc.astimezone(pytz.timezone(timezone))
+            review.reviewed_formated_date = reviewed_date_tz.replace(tzinfo=None)
+
     @api.depends("definition_id.approve_sequence")
     def _compute_can_review(self):
+        reviews = self.filtered(lambda rev: rev.status in ["waiting", "pending"])
+        if reviews:
+            # get minimum sequence of all to prevent jumps
+            next_seq = min(reviews.mapped("sequence"))
+            for record in reviews:
+                # if approve by sequence, check sequence has been reached
+                if record.approve_sequence:
+                    if record.sequence == next_seq:
+                        record.status = "pending"
+                # if there is no approval sequence go directly to pending state
+                elif not record.approve_sequence:
+                    record.status = "pending"
+                if record.status == "pending":
+                    if record.definition_id.notify_on_pending:
+                        record._notify_pending_status(record)
         for record in self:
             record.can_review = record._can_review_value()
 
     def _can_review_value(self):
-        if self.status != "pending":
+        if self.status not in ("pending", "waiting"):
             return False
         if not self.approve_sequence:
             return True
@@ -102,7 +146,7 @@ class TierReview(models.Model):
                 todo_by = ", ".join(rec.reviewer_ids[:num_show].mapped("display_name"))
                 num_users = len(rec.reviewer_ids)
                 if num_users > num_show:
-                    todo_by = "{} (and {} more)".format(todo_by, num_users - num_show)
+                    todo_by = f"{todo_by} (and {num_users - num_show} more)"
             rec.todo_by = todo_by
 
     def _get_reviewers(self):
@@ -115,6 +159,11 @@ class TierReview(models.Model):
             if not reviewer_field or not reviewer_field._name == "res.users":
                 raise ValidationError(_("There are no res.users in the selected field"))
         return reviewer_field
+
+    def _notify_pending_status(self, review_ids):
+        """Method to call and reuse abstract notification method"""
+        resource = self.env[self.model].browse(self.res_id)
+        resource._notify_review_available(review_ids)
 
     def _get_reminder_notification_subtype(self):
         return "base_tier_validation.mt_tier_validation_reminder"
@@ -148,5 +197,5 @@ class TierReview(models.Model):
         record.activity_schedule(
             act_type_xmlid=self._get_reminder_activity_type(),
             note=self._notify_review_reminder_body(),
-            act_values={"user_id": self.reviewer_ids.id},
+            user_id=self.reviewer_ids.id,
         )

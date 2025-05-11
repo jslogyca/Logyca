@@ -1,31 +1,42 @@
-# Copyright Nova Code (http://www.novacode.nl)
+# Copyright Nova Code (https://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
 import json
 import logging
 
-from odoo import http, fields
+from odoo import fields, http, _
 from odoo.http import request
 from odoo.addons.portal.controllers.portal import CustomerPortal
 
 from ..models.formio_builder import STATE_CURRENT as BUILDER_STATE_CURRENT
-
 from ..models.formio_form import (
     STATE_DRAFT as FORM_STATE_DRAFT,
     STATE_COMPLETE as FORM_STATE_COMPLETE,
 )
 
-from .utils import generate_uuid4
+from .exceptions import FormioException
+
+from .utils import (
+    generate_uuid4,
+    log_form_submisssion,
+    update_dict_allowed_keys,
+    validate_csrf,
+)
 
 _logger = logging.getLogger(__name__)
 
 
 class FormioCustomerPortal(CustomerPortal):
 
-    def _prepare_portal_layout_values(self):
-        values = super(FormioCustomerPortal, self)._prepare_portal_layout_values()
-        domain = [('user_id', '=', request.env.user.id), ('builder_id.portal', '=', True)]
-        values['form_count'] = request.env['formio.form'].search_count(domain)
+    def _prepare_home_portal_values(self, counters):
+        values = super()._prepare_home_portal_values(counters)
+        if 'form_count' in counters:
+            domain = [('user_id', '=', request.env.user.id), ('builder_id.portal', '=', True)]
+            values['form_count'] = (
+                request.env['formio.form'].search_count(domain)
+                if request.env['formio.form'].check_access_rights('read', raise_exception=False)
+                else 0
+            )
         return values
 
     def _formio_form_prepare_portal_layout_values(self, **kwargs):
@@ -97,7 +108,7 @@ class FormioCustomerPortal(CustomerPortal):
     ####################
 
     @http.route(['/my/formio'], type='http', auth="user", website=True)
-    def portal_forms(self, sortby=None, search=None, search_in='content',  **kwargs):
+    def portal_forms(self, sortby=None, search=None, search_in='content', **kwargs):
         domain = [
             ('user_id', '=', request.env.user.id),
             ('portal_share', '=', True)
@@ -190,7 +201,7 @@ class FormioCustomerPortal(CustomerPortal):
     ######################
 
     @http.route('/formio/portal/form/<string:uuid>', type='http', auth='user', website=True)
-    def portal_form_root(self, uuid, **kwargs):
+    def portal_form_root(self, uuid):
         form = self._get_form(uuid, 'read')
         if not form:
             msg = 'Form UUID %s' % uuid
@@ -210,10 +221,10 @@ class FormioCustomerPortal(CustomerPortal):
 
         values = {
             'form': form,
-            'languages': languages,
+            # 'languages' already injected in rendering somehow
+            'form_languages': languages.sorted('name'),
             'formio_css_assets': form.builder_id.formio_css_assets,
             'formio_js_assets': form.builder_id.formio_js_assets,
-            'extra_assets': form.builder_id.extra_asset_ids,
             # uuid is used to disable assets (js, css) caching by hrefs
             'uuid': generate_uuid4()
         }
@@ -238,36 +249,32 @@ class FormioCustomerPortal(CustomerPortal):
 
     @http.route('/formio/portal/form/new/<string:builder_name>', type='http', auth='user', methods=['GET'], website=True)
     def portal_form_new_root(self, builder_name, **kwargs):
-        args = request.httprequest.args
-        if args.get('api') == 'getData':
-            return self._api_get_data(builder_name)
-        else:
-            builder = self._get_builder_name(builder_name)
-            if not builder:
-                msg = 'Form Builder (name) %s: not found' % builder_name
-                return request.not_found(msg)
-            elif not builder.portal:
-                msg = 'Form Builder (name) %s: not published on portal' % builder_name
-                return request.not_found(msg)
+        builder = self._get_builder_name(builder_name)
+        if not builder:
+            msg = 'Form Builder (name) %s: not found' % builder_name
+            return request.not_found(msg)
+        elif not builder.portal:
+            msg = 'Form Builder (name) %s: not published on portal' % builder_name
+            return request.not_found(msg)
 
-            values = {
-                'languages': builder.languages,
-                'builder': builder,
-                'formio_builder_uuid': builder.uuid,
-                'formio_css_assets': builder.formio_css_assets,
-                'formio_js_assets': builder.formio_js_assets,
-                'extra_assets': builder.extra_asset_ids,
-                # uuid is used to disable assets (js, css) caching by hrefs
-                'uuid': generate_uuid4()
-            }
-            return request.render('formio.formio_form_portal_new_embed', values)
+        values = {
+            'builder': builder,
+            # 'languages' already injected in rendering somehow
+            'form_languages': builder.languages,
+            'formio_builder_uuid': builder.uuid,
+            'formio_css_assets': builder.formio_css_assets,
+            'formio_js_assets': builder.formio_js_assets,
+            # uuid is used to disable assets (js, css) caching by hrefs
+            'uuid': generate_uuid4()
+        }
+        return request.render('formio.formio_form_portal_new_embed', values)
 
     #####################
     # Form - portal - new
     #####################
 
-    @http.route('/formio/portal/form/new/<string:builder_uuid>/config', type='json', auth='user', website=True)
-    def form_new_config(self, builder_uuid, **kwargs):
+    @http.route('/formio/portal/form/new/<string:builder_uuid>/config', type='http', auth='user', methods=['GET'], csrf=False, website=True)
+    def form_new_config(self, builder_uuid):
         builder = self._get_builder_uuid(builder_uuid)
         res = {'schema': {}, 'options': {}, 'params': {}}
 
@@ -275,45 +282,70 @@ class FormioCustomerPortal(CustomerPortal):
             return res
 
         if builder.schema:
-            res['schema'] = json.loads(builder.schema)
-            res['options'] = self._get_form_js_options(builder)
-            res['locales'] = self._get_form_js_locales(builder)
-            res['params'] = self._get_form_js_params(builder)
+            res['csrf_token'] = request.csrf_token()
+            try:
+                res['schema'] = json.loads(builder.schema)
+                res['options'] = self._get_form_js_options(builder)
+                res['locales'] = self._get_form_js_locales(builder)
+                res['params'] = self._get_form_js_params(builder)
+            except Exception as e:
+                formio_exception = FormioException(e)
+                error_message, error_traceback = formio_exception.render_exception_load()
+                res['error_message'] = error_message
+                if request.session.debug and request.env.user.has_group('base.group_user'):
+                    res['error_traceback'] = error_traceback
+        try:
+            args = request.httprequest.args
+            etl_odoo_config = builder.sudo()._etl_odoo_config(params=args.to_dict())
+            res['options'].update(etl_odoo_config.get('options', {}))
+        except Exception as e:
+            formio_exception = FormioException(e)
+            error_message, error_traceback = formio_exception.render_exception_load()
+            res['error_message'] = error_message
+            if request.session.debug and request.env.user.has_group('base.group_user'):
+                res['error_traceback'] = error_traceback
+        return request.make_json_response(res)
 
-        args = request.httprequest.args
-        etl_odoo_config = builder.sudo()._etl_odoo_config(params=args.to_dict())
-        res['options'].update(etl_odoo_config.get('options', {}))
-        return res
-
-    @http.route('/formio/portal/form/new/<string:builder_uuid>/submission', type='json', auth='user', website=True)
-    def form_new_submission(self, builder_uuid, **kwargs):
+    @http.route('/formio/portal/form/new/<string:builder_uuid>/submission', type='http', auth='user', methods=['GET'], csrf=False, website=True)
+    def form_new_submission(self, builder_uuid):
         builder = self._get_builder_uuid(builder_uuid)
 
         if not builder:
             _logger.info('formio.builder with UUID %s not found' % builder_uuid)
-            # TODO raise or set exception (in JSON resonse) ?
-            return
+            res = {'error_message': _('The form was not found.')}
+            return request.make_json_response(res)
 
         args = request.httprequest.args
-        submission_data = {}
-        etl_odoo_data = builder.sudo()._etl_odoo_data(params=args.to_dict())
-        submission_data.update(etl_odoo_data)
-        return json.dumps(submission_data)
+        submission_data = {'submission': {}}
+        try:
+            etl_odoo_data = builder.sudo()._etl_odoo_data(params=args.to_dict())
+            submission_data['submission'].update(etl_odoo_data)
+        except Exception as e:
+            formio_exception = FormioException(e)
+            error_message, error_traceback = formio_exception.render_exception_load()
+            submission_data['error_message'] = error_message
+            if request.session.debug and request.env.user.has_group('base.group_user'):
+                submission_data['error_traceback'] = error_traceback
+        return request.make_json_response(submission_data)
 
-    @http.route('/formio/portal/form/new/<string:builder_uuid>/submit', type='json', auth="user", methods=['POST'], website=True)
-    def form_new_submit(self, builder_uuid, **post):
+    @http.route('/formio/portal/form/new/<string:builder_uuid>/submit', type='http', auth="user", methods=['POST'], csrf=False, website=True)
+    def form_new_submit(self, builder_uuid, **kwargs):
         """ Form submit endpoint
 
         Note:
         In wizard mode, the submit endpoint shall be changed
         (frontend/JS code) to: /formio/form/<string:uuid>/submit
         """
+        self.validate_csrf()
+        res = {}
         builder = self._get_builder_uuid(builder_uuid)
 
         if not builder:
-            # TODO raise or set exception (in JSON resonse) ?
-            return
+            _logger.info('formio.builder with UUID %s not found' % builder_uuid)
+            res = {'error_message': _('The form was not found.')}
+            return request.make_json_response(res)
 
+        post = request.get_json_data()
         Form = request.env['formio.form']
         vals = {
             'builder_id': builder.id,
@@ -325,7 +357,9 @@ class FormioCustomerPortal(CustomerPortal):
             'portal_share': True
         }
 
-        save_draft = post.get('saveDraft') or (post['data'].get('saveDraft') and not post['data'].get('submit'))
+        save_draft = post.get('saveDraft') or (
+            post['data'].get('saveDraft') and not post['data'].get('submit')
+        )
 
         if save_draft:
             vals['state'] = FORM_STATE_DRAFT
@@ -333,112 +367,32 @@ class FormioCustomerPortal(CustomerPortal):
             vals['state'] = FORM_STATE_COMPLETE
 
         context = {'tracking_disable': True}
-        res = Form.with_context(**context).create(vals)
-
-        if vals.get('state') == FORM_STATE_COMPLETE:
-            res.after_submit()
-        elif vals.get('state') == FORM_STATE_DRAFT:
-            res.after_save_draft()
-        request.session['formio_last_form_uuid'] = res.uuid
-        return {'form_uuid': res.uuid}
-
-    @http.route('/formio/portal/form/new/<string:builder_name>/data')
-    def form_new_data(self, builder_name, **kwargs):
-        """ Get data dispatch URL.
-
-        DEPRECATED / CHANGE
-        ===================
-        Use the query string "?api=getData" in URL:
-        /formio/portal/form/new/<string:builder_name>?api=getData
-
-        EXAMPLE
-        =======
-        This example loads data into Select Component, whereby choices
-        are the Partner/Contact names with city "Sittard".
-
-        formio configuration (in "Data" tab)
-        -------------------------------------
-        - Data Source URL: /data
-        - Filter Query: model=res.partner&label=name&domain_fields=city&city=Sittard
-        """
-        msg = "The /data fetching URL %s will be deprecated and work with a minor change in Odoo version 16.0\nMore info on Wiki: %s" % (
-            "/formio/portal/form/new/<string:builder_name>/data",
-            "https://github.com/novacode-nl/odoo-formio/wiki/Populate-a-Select-Component-data-(options)-with-data-from-Odoo-model.field",
-        )
-        _logger.warning(msg)
-        return self._api_get_data(builder_name)
-
-    ############
-    # Misc utils
-    ############
-
-    def _api_get_data(self, builder_name):
-        """ Get data """
-        builder = self._get_builder_name(builder_name)
-        if not builder:
-            _logger.info('api=getData: Form Builder (name) %s is not found or allowed' % builder_name)
-            return []
-
-        args = request.httprequest.args
-
-        model = args.get('model')
-        # TODO: formio error?
-        if model is None:
-            _logger('model is missing in "Data Filter Query"')
-
-        label = args.get('label')
-        # TODO: formio error?
-        if label is None:
-            _logger.error('label is missing in "Data Filter Query"')
-
-        domain = []
-        domain_fields = args.getlist('domain_fields')
-        # domain_fields_op = args.getlist('domain_fields_operators')
-
-        for domain_field in domain_fields:
-            value = args.get(domain_field)
-
-            if value is not None:
-                filter = (domain_field, '=', value)
-                domain.append(filter)
-
-        if not domain:
-            domain = builder._generate_odoo_domain(domain, params=args.to_dict())
 
         try:
-            language = args.get('language')
-            if language:
-                lang = request.env['res.lang']._from_formio_ietf_code(language)
-                model_obj = request.env[model].with_context(lang=lang)
-            else:
-                model_obj = request.env[model]
-            # Bypass access rights restrictions - by configuration !
-            # Ensure the model_obj search_read can query by direct ir.rule domain.
-            # This also sets sudo() on the model_obj, if the ir.rule is present.
-            model_rule_id = args.get('model_rule_id')
-            model_rule_xmlid = args.get('model_rule_xmlid')
-            if model_rule_id and int(model_rule_id):
-                rule = request.env['ir.rule'].sudo().browse(int(model_rule_id))
-            elif model_rule_xmlid:
-                rule = request.env.ref(model_rule_xmlid).sudo()
-            else:
-                rule = False
-            if rule and rule.active and rule.model_id.model == model:
-                add_domain = rule._formio_compute_direct_domain(model, 'read')
-                if add_domain:
-                    domain += add_domain
-                    model_obj = model_obj.sudo()
-            # limit, order and query
-            limit = (args.get('limit') and int(args.get('limit'))) or None
-            order = args.get('sort') or model_obj._order + ', id'
-            records = model_obj.search_read(
-                domain=domain, fields=[label], limit=limit, order=order
-            )
-            data = json.dumps([{'id': r['id'], 'label': r[label]} for r in records])
-            return data
+            form = Form.with_context(**context).create(vals)
+            if vals.get('state') == FORM_STATE_COMPLETE:
+                form.after_submit()
+            elif vals.get('state') == FORM_STATE_DRAFT:
+                form.after_save_draft()
+            request.session['formio_last_form_uuid'] = form.uuid
+            # debug mode is checked/handled
+            log_form_submisssion(form)
         except Exception as e:
-            # TODO also raise or ensure exception to render in form?
-            _logger.error("Exception: %s" % e)
+            formio_exception = FormioException(e, form=form)
+            error_message, error_traceback = formio_exception.render_exception_submit()
+            res['error_message'] = error_message
+            if request.session.debug and request.env.user.has_group('base.group_user'):
+                res['error_traceback'] = error_traceback
+            form.write({'state': 'ERROR'})
+        res.update({
+            'form_uuid': form.uuid,
+            'submission_data': form.submission_data
+        })
+        return request.make_json_response(res)
+
+    #########
+    # Helpers
+    #########
 
     def _get_builder_uuid(self, builder_uuid):
         return request.env['formio.builder'].get_portal_builder_uuid(builder_uuid)
@@ -467,4 +421,17 @@ class FormioCustomerPortal(CustomerPortal):
         return builder._get_form_js_locales()
 
     def _get_form_js_params(self, builder):
-        return builder._get_portal_form_js_params()
+        params = builder._get_portal_form_js_params()
+        args = request.httprequest.args
+        args_dict = args.to_dict()
+        if bool(args_dict):
+            params = update_dict_allowed_keys(
+                params, args_dict, self._allowed_form_js_params_from_url(builder)
+            )
+        return params
+
+    def _allowed_form_js_params_from_url(self, builder):
+        return builder._allowed_form_js_params_from_url()
+
+    def validate_csrf(self):
+        validate_csrf(request)

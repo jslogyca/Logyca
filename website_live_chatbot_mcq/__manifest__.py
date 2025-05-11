@@ -27,7 +27,7 @@
     'author': "Geminate Consultancy Services",
     'company': "Geminate Consultancy Services",
     'website': "https://www.geminatecs.com",
-    'version': '13.0.0.1',
+    'version': '17.0.0.1',
     'license': 'Other proprietary',
     'depends': ['website_live_chatbot'],
     'data': [

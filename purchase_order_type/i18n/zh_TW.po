@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: purchase-workflow (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-19 07:43+0000\n"
-"PO-Revision-Date: 2016-03-08 10:17+0000\n"
-"Last-Translator: <>\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/oca/OCA-purchase-"
-"workflow-8-0/language/zh_TW/)\n"
+"PO-Revision-Date: 2024-08-09 21:58+0000\n"
+"Last-Translator: Andrew Shen <wildfootw@gmail.com>\n"
+"Language-Team: Chinese (Taiwan) (http://www.transifex.com/oca/"
+"OCA-purchase-workflow-8-0/language/zh_TW/)\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #. module: purchase_order_type
 #: model:ir.model.fields,field_description:purchase_order_type.field_purchase_order_type__active
@@ -26,7 +27,7 @@ msgstr "活躍"
 #. module: purchase_order_type
 #: model_terms:ir.ui.view,arch_db:purchase_order_type.view_purchase_order_type_form
 msgid "Archived"
-msgstr ""
+msgstr "封存"
 
 #. module: purchase_order_type
 #: model_terms:ir.actions.act_window,help:purchase_order_type.action_purchase_order_type_view
@@ -37,7 +38,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:purchase_order_type.field_purchase_order_type__company_id
 #: model_terms:ir.ui.view,arch_db:purchase_order_type.view_purchase_order_type_search
 msgid "Company"
-msgstr ""
+msgstr "公司"
 
 #. module: purchase_order_type
 #: model:ir.model,name:purchase_order_type.model_res_partner
@@ -65,6 +66,7 @@ msgid "Display Name"
 msgstr "顯示名稱"
 
 #. module: purchase_order_type
+#. odoo-python
 #: code:addons/purchase_order_type/models/purchase_order.py:0
 #, python-format
 msgid "Document's company and type's company mismatch"
@@ -91,11 +93,6 @@ msgstr "編號"
 #: model_terms:ir.ui.view,arch_db:purchase_order_type.view_purchase_order_type_search
 msgid "Incoterm"
 msgstr ""
-
-#. module: purchase_order_type
-#: model:ir.model.fields,field_description:purchase_order_type.field_purchase_order_type____last_update
-msgid "Last Modified on"
-msgstr "最後修改:"
 
 #. module: purchase_order_type
 #: model:ir.model.fields,field_description:purchase_order_type.field_purchase_order_type__write_uid
@@ -148,6 +145,7 @@ msgstr ""
 
 #. module: purchase_order_type
 #: model:ir.model.fields,field_description:purchase_order_type.field_purchase_order__order_type
+#: model_terms:ir.ui.view,arch_db:purchase_order_type.purchase_order_view_search
 #: model_terms:ir.ui.view,arch_db:purchase_order_type.view_purchase_order_filter
 #: model_terms:ir.ui.view,arch_db:purchase_order_type.view_purchase_order_type_form
 msgid "Type"
@@ -157,6 +155,9 @@ msgstr "類型"
 #: model:ir.model,name:purchase_order_type.model_purchase_order_type
 msgid "Type of purchase order"
 msgstr ""
+
+#~ msgid "Last Modified on"
+#~ msgstr "最後修改:"
 
 #~ msgid "Partner"
 #~ msgstr "夥伴"

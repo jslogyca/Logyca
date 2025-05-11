@@ -49,8 +49,7 @@ class ResMemberProductLogyca(models.Model):
 
     def _group_by(self):
         group_by_str = """
-                WHERE l.exclude_from_invoice_tab IS False
-                AND m.move_type='out_invoice'
+                WHERE m.move_type='out_invoice'
                 AND m.date between '2024-01-01' and '2025-12-31'
                 AND m.state='posted'
                 AND m.payment_state='paid'

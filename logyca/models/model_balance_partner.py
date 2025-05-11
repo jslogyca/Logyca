@@ -120,14 +120,14 @@ class AccountBalancePartnerReport(models.Model):
     def _select(self,date_filter):
         return '''
             SELECT
-                Row_Number() Over(Order By G.id,D.Cuenta_Nivel_1,D.Cuenta_Nivel_2,D.Cuenta_Nivel_3,D.Cuenta_Nivel_4,D.Cuenta_Nivel_5,C.display_name) as id,
+                Row_Number() Over(Order By G.id,D.Cuenta_Nivel_1,D.Cuenta_Nivel_2,D.Cuenta_Nivel_3,D.Cuenta_Nivel_4,D.Cuenta_Nivel_5,C.name) as id,
                 G.id as company_id,                
                 D.Cuenta_Nivel_1 as account_level_one,
                 D.Cuenta_Nivel_2 as account_level_two,
                 D.Cuenta_Nivel_3 as account_level_three,
                 D.Cuenta_Nivel_4 as account_level_four,
                 D.Cuenta_Nivel_5 as account_level_five,                
-                COALESCE(C.vat || ' | ' || C.display_name,'Tercero Vacio') as partner,
+                COALESCE(C.vat || ' | ' || C.name,'Tercero Vacio') as partner,
                 COALESCE(E.saldo_ant,0) as initial_balance,
                 SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
                 SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
@@ -185,7 +185,7 @@ class AccountBalancePartnerReport(models.Model):
                 D.Cuenta_Nivel_4,
                 D.Cuenta_Nivel_5,
                 C.vat,
-                C.display_name,
+                C.name,
                 E.saldo_ant
         '''
     

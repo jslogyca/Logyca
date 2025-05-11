@@ -9,8 +9,6 @@ from odoo import api, fields, models, _
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-
-    invoice_tag_ids = fields.Many2one('account.analytic.tag', string='Etiqueta Red de Valor')
     inter_company = fields.Boolean('Intercompany', related='product_id.product_tmpl_id.inter_company', readonly=True, store=True)
 
     @api.onchange('x_budget_group')
@@ -18,39 +16,10 @@ class AccountMoveLine(models.Model):
         if self.move_id.move_type== 'in_invoice' or self.move_id.move_type== 'in_refund': 
             company_id = self.product_id.company_id.id
 
-            if company_id and company_id == 1:
-                #servicios 1
-                if self.x_budget_group.lser_analytic_tag_ids:
-                    self.analytic_tag_ids = [(6,0, self.x_budget_group.lser_analytic_tag_ids.ids)]
-                    self.invoice_tag_ids = False
-                elif self.x_budget_group.invoice_tag_ids:
-                    self.invoice_tag_ids = self.x_budget_group.invoice_tag_ids.id
-                    self.analytic_tag_ids = [(5,0,0)]
-                else:
-                    self.analytic_tag_ids = [(5,0,0)]
-                    self.invoice_tag_ids = False
-            elif company_id and company_id == 2:
-                #asociación  2
-                if self.x_budget_group.iac_analytic_tag_ids:
-                    self.analytic_tag_ids = [(6,0, self.x_budget_group.iac_analytic_tag_ids.ids)]
-                    self.invoice_tag_ids = False
-                elif self.x_budget_group.iac_invoice_tag_ids:
-                    self.invoice_tag_ids = self.x_budget_group.iac_invoice_tag_ids.id
-                    self.analytic_tag_ids = [(5,0,0)]
-                else:
-                    self.analytic_tag_ids = [(5,0,0)]
-                    self.invoice_tag_ids = False
-            elif company_id and company_id == 3:
-                #investigación 3
-                if self.x_budget_group.log_analytic_tag_ids:
-                    self.analytic_tag_ids = [(6,0, self.x_budget_group.log_analytic_tag_ids.ids)]
-                    self.invoice_tag_ids = False
-                elif self.x_budget_group.log_invoice_tag_ids:
-                    self.invoice_tag_ids = self.x_budget_group.log_invoice_tag_ids.id
-                    self.analytic_tag_ids = [(5,0,0)]
-                else:
-                    self.analytic_tag_ids = [(5,0,0)]
-                    self.invoice_tag_ids = False
+            if self.x_budget_group:
+                self.analytic_distribution = self.x_budget_group.analytic_distribution
+            else:
+                self.analytic_distribution = False
 
 class AccountMove(models.Model):
     _inherit = 'account.move'
@@ -63,6 +32,8 @@ class AccountMove(models.Model):
     x_payment_portal_theme = fields.Selection([('logyca', 'LOGYCA'), ('gs1', 'GS1')], string='Portal de Pagos',help="Indica en qué portal de pagos debe pagarse la factura")
     analytic_account_id = fields.Many2one('account.analytic.account', string='Red de Valor')
     reviewed_by = fields.Many2one('res.users', string='Revisado Por', help="Este campo aparece en el reporte de Soporte de Factura", default=False)
+    reviewed = fields.Boolean('Revisado', default=False)
+    reviewedt_date = fields.Date('Fecha Revisión')
 
     @api.depends('company_id', 'invoice_filter_type_domain')
     def _compute_suitable_journal_ids(self):
@@ -123,3 +94,5 @@ class AccountMove(models.Model):
 
     def action_reviewed_by(self):
         self.reviewed_by = self.env.user
+        self.reviewed = True
+        self.reviewedt_date = fields.Date.today()

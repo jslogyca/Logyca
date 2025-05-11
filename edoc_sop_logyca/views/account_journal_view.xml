@@ -6,9 +6,9 @@
 		<field name="inherit_id" ref="account.view_account_journal_form"/>
 		<field name="arch" type="xml">
 			<xpath expr="//form/sheet/notebook/page[@name='advanced_settings']" position="inside">
-				<group string="eInvoice" name="eInvoice" priority="1" attrs="{'invisible': [('type', 'not in', ('sale','purchase', 'sale_refund'))]}">
+				<group string="eInvoice" name="eInvoice" priority="1" >
 					<field name="einvoice_journal" />
-					<field name="type_document_id" attrs="{'invisible': [('einvoice_journal', '=', False)]}"/>
+					<field name="type_document_id" />
 				</group>
 			</xpath>
 		</field>

@@ -1,31 +1,29 @@
-// Copyright Nova Code (http://www.novacode.nl)
+// Copyright Nova Code (https://www.novacode.nl)
 // See LICENSE file for full licensing details.
 
-import { OdooFormioForm } from "./formio_form.js";
+const { protectComponent, uuidv4 } = await import('./utils.js');
 
-/**
-FIX / WORKAROUND browser compatibility error.
-Wrap Component class and bootstrap into functions and put template in
-Component env.
+// random import path ensures no caching
+const pathBranding = "./branding.js?" + uuidv4();
+const pathForm = "./formio_form.js?" + uuidv4();
 
-OS/platform: browsers
-=====================
-- Mac: Safari 13.1
-- iOS: Safari, Firefox
+let { Branding } = await import(pathBranding);
+let { OdooFormioForm } = await import(pathForm);
 
-Error
-=====
-- Safari 13.1 on Mac experiences error:
-  unexpected token '='. expected an opening '(' before a method's parameter list
-- iOS not debugged yet. Dev Tools not present in browser.
-
-More info
-=========
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Browser_compatibility
-*/
+// use global owl
+// can't import from "@odoo/owl", because not an @odoo-module
+const { mount, whenReady, xml } = owl;
 
 function app() {
     class App extends OdooFormioForm {
+        static components = { Branding }
+        static template = xml`
+            <div t-name="App">
+                <div id="formio_form"></div>
+                <Branding getData="this.getData"/>
+            </div>
+        `;
+
         initForm() {
             if (!!document.getElementById('formio_form_uuid')) {
                 this.formUuid = document.getElementById('formio_form_uuid').value;
@@ -39,8 +37,36 @@ function app() {
             this.apiValidationUrl = this.apiUrl + '/validation';
         }
 
+        portalSaveDraftDoneUrl() {
+            return this.params.hasOwnProperty('portal_save_draft_done_url') && this.params.portal_save_draft_done_url;
+        }
+
         portalSubmitDoneUrl() {
             return this.params.hasOwnProperty('portal_submit_done_url') && this.params.portal_submit_done_url;
+        }
+
+        saveDraftDone(submission) {
+            if (submission.state == 'draft') {
+                if (this.isPortalUrl && this.portalSaveDraftDoneUrl()) {
+                    const params = {save_draft_done_url: this.portalSaveDraftDoneUrl()};
+                    if (window.self !== window.top) {
+                        window.parent.postMessage({odooFormioMessage: 'formioSaveDraftDone', params: params});
+                    }
+                    else {
+                        window.location = params.submit_done_url;
+                    }
+                }
+                else {
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 500);
+                }
+            }
+            else {
+                setTimeout(function() {
+                    window.location.reload();
+                }, 500);
+            }
         }
 
         submitDone(submission) {
@@ -66,17 +92,28 @@ function app() {
                 }, 500);
             }
         }
+
+        scrollParent() {
+            if (this.params.hasOwnProperty('scroll_into_view_selector')
+                && this.params.scroll_into_view_selector) {
+                const params = {
+                    scroll_into_view_selector: this.params.scroll_into_view_selector
+                };
+                window.parent.postMessage({odooFormioMessage: 'formioScrollIntoView', params: params});
+            }
+            else {
+                window.parent.postMessage({odooFormioMessage: 'formioScrollTop', params: {}});
+            }
+        }
     }
 
+    protectComponent(App);
     const app = new App();
-    app.mount(document.getElementById('formio_form_app'));
+    mount(App, document.getElementById('formio_form_app'));
 }
 
 async function start() {
-    const templates = await owl.utils.loadFile('/formio/static/src/js/form/backend_app.xml');
-    const env = { qweb: new owl.QWeb({templates})};
-    owl.Component.env = env;
-    await owl.utils.whenReady();
+    await whenReady();
     app();
 }
 

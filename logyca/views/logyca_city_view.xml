@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="logyca_menu_action_city" model="ir.actions.act_window">
+        <field name="name">Ciudad</field>
+          <field name="res_model">logyca.city</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear ciudad
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_city">
+      <field name="name">logyca list city</field>
+      <field name="model">logyca.city</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="state_id"/>
+          <field name="code"/>
+          <field name="name"/>          
+        </tree>
+      </field>
+    </record>
+
+    <menuitem 
+        name="Ciudades" 
+        id="logyca.menu_city" 
+        sequence="1" 
+        parent="logyca.menu_root" 
+        action="logyca_menu_action_city"/>
+
+</odoo>

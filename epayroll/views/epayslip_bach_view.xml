@@ -6,30 +6,26 @@
 		<field name="arch" type="xml">
 			<form string="Epayslip Bach">		
 				<header>
-						<button name="action_draft" id='action_draft_id' string='Draft' type="object" attrs='{"invisible":[("state", "!=", "cancel")]}'/>
+						<button name="action_draft" id='action_draft_id' string='Draft' type="object" />
 						
-						<button name="update_data" id='update_data' string='Update Data' type="object" attrs='{"invisible":[("state", "not in", ("draft"))]}' class="oe_highlight"/>  
+						<button name="update_data" id='update_data' string='Update Data' type="object"  class="oe_highlight"/>  
 					
-						<button name="action_sent" id='action_sent_id' string='Sent' attrs='{"invisible":[("state", "!=", "generated")]}' 
+						<button name="action_sent" id='action_sent_id' string='Sent'  
 											type="object"  class="oe_highlight"/>  
 
-						<button name="action_generate_epayslip_note" id='action_generate_epayslip_note' string='Generar Nota de Ajuste' attrs='{"invisible":[("state", "!=", "done")]}' 
+						<button name="action_generate_epayslip_note" id='action_generate_epayslip_note' string='Generar Nota de Ajuste' 
 											type="object"  class="oe_highlight"/>
 
 					<button name="action_cancel" 
 							id='action_cancel_id' 
 							string='Cancel' 
-							type="object" 
-							attrs="{'invisible':[('state', 'in', ['cancel', 'done', 'sent'])]}" />
+							type="object" />
 
 					<button string="Descargar XML" type="object"
-							name="get_xml_file"  
-							attrs="{'invisible':[('state', 'not in', ['sent', 'done', 'error'])]}"/>
+							name="get_xml_file"/>
 					
-					<button name="get_status_validation" id='get_status_validation_id' class="oe_highlight" string='Validar' type="object" attrs='{"invisible":[("state", "not in", ("sent", "error"))]}'/>
-					
-					<!-- <button name="send_xml" id='send_xml' string='Enviar' type="object" attrs='{"invisible":[("state", "not in", ("error", "sent"))]}'/> -->
-					
+					<button name="get_status_validation" id='get_status_validation_id' class="oe_highlight" string='Validar' type="object" />
+										
 					<field name = 'state'
 							widget='statusbar'
 							statusbar_visible='draft,generated,sent,cancel'
@@ -45,13 +41,13 @@
 					<group col="4">
 						<label for="start_date" string="Period"/>
 						<div>
-							<field name="start_date" attrs='{"readonly":[("state", "!=", "draft")]}' class="oe_inline"/> - <field name="finish_date" attrs='{"readonly":[("state", "!=", "draft")]}' class="oe_inline"/>
+							<field name="start_date"  class="oe_inline"/> - <field name="finish_date"  class="oe_inline"/>
 						</div>
-						<field name = 'contract_id' attrs='{"readonly":[("state", "!=", "draft")]}'/>
-						<field name = 'epayslip_bach_run_id' attrs='{"readonly":[("state", "!=", "draft")]}'/>
+						<field name = 'contract_id' />
+						<field name = 'epayslip_bach_run_id' />
 						<field name = 'document_type' invisible="1"/>
-						<field name = 'epayslip_origin' force_save="1" readonly="1" attrs='{"invisible":[("document_type", "!=", "payslip_ajuste")]}'/>
-						<field name = 'type_note_epayroll' attrs='{"invisible":[("document_type", "!=", "payslip_ajuste")]}'/>
+						<field name = 'epayslip_origin' force_save="1" readonly="1" />
+						<field name = 'type_note_epayroll' />
 						<field name = 'number' force_save="1" readonly="1"/>
 						<field name = 'sequence' force_save="1" readonly="1"/>
 						<field name = 'number_seq' force_save="1" readonly="1"/>						

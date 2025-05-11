@@ -64,10 +64,6 @@ class ReportExcelSaleProduct(models.Model):
             pt.id as product_template_id,
             ppt.id as product_id,
             c.id as company_id,
-            cta.id as analytic_account_red,
-            ctal.id as analytic_account_id,
-            gf.id as analytic_group_id,
-            gl.id as analytic_group_two_id,
             mc.id as currency_id,
             CASE WHEN m.move_type = 'out_refund' and l.amount_currency=0.0
             THEN (l.price_unit*-1)
@@ -143,10 +139,6 @@ class ReportExcelSaleProduct(models.Model):
                 inner join res_users u on u.id=m.invoice_user_id
                 inner join res_partner pu on pu.id=u.partner_id
                 inner join crm_team t on t.id=m.team_id
-                LEFT JOIN account_analytic_account cta on cta.id=m.analytic_account_id
-                LEFT JOIN account_analytic_account ctal on ctal.id=l.analytic_account_id      
-                LEFT join account_analytic_group gf on gf.id=l.x_account_analytic_group
-                LEFT join account_analytic_group gl on gl.id=l.x_account_analytic_group_two
                 INNER JOIN res_currency mc on mc.id=m.currency_id
         """
 
@@ -154,7 +146,7 @@ class ReportExcelSaleProduct(models.Model):
 
     def _group_by(self):
         group_by_str = """
-                WHERE m.move_type in ('out_invoice', 'out_refund') and m.state='posted' and exclude_from_invoice_tab is False
+                WHERE m.move_type in ('out_invoice', 'out_refund') and m.state='posted'
                 ORDER BY m.id DESC
         """
         return group_by_str

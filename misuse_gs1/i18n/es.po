@@ -6,14 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-21 20:50+0000\n"
-"PO-Revision-Date: 2025-03-21 20:50+0000\n"
+"POT-Creation-Date: 2025-02-27 18:08+0000\n"
+"PO-Revision-Date: 2025-02-27 18:08+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: misuse_gs1
+#: model_terms:ir.ui.view,arch_db:misuse_gs1.view_misuse_gs1_log_form
+msgid "Attachment"
+msgstr "Adjunto"
 
 #. module: misuse_gs1
 #: model:ir.model,name:misuse_gs1.model_misuse_gs1_log_attachment
@@ -36,33 +41,20 @@ msgid "Case status"
 msgstr "Estado del caso"
 
 #. module: misuse_gs1
-#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_followup__comments
-msgid "Comments"
-msgstr "Comentarios"
-
-#. module: misuse_gs1
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__create_uid
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__create_uid
-#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_followup__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: misuse_gs1
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__create_date
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__create_date
-#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_followup__create_date
-msgid "Created on"
-msgstr "Creado el"
-
-#. module: misuse_gs1
-#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_followup__create_date
 msgid "Created on"
 msgstr "Creado el"
 
 #. module: misuse_gs1
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__display_name
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__display_name
-#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_followup__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
@@ -72,52 +64,31 @@ msgid "End date"
 msgstr "Fecha fin"
 
 #. module: misuse_gs1
-#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__follow_up
-#: model_terms:ir.ui.view,arch_db:misuse_gs1.view_misuse_gs1_log_form
-msgid "Follow-up"
-msgstr "Seguimiento"
-
-#. module: misuse_gs1
-#: model:ir.model,name:misuse_gs1.model_misuse_gs1_log_followup
-msgid "Follow-up for Misuse GS1 Log"
-msgstr "Seguimiento de uso inadecuado GS1"
-
-#. module: misuse_gs1
-#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_followup__gs1_agent_email
-msgid "GS1 Agent Email"
-msgstr "Email del agente GS1"
-
-#. module: misuse_gs1
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__id
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__id
-#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_followup__id
 msgid "ID"
 msgstr "ID"
 
 #. module: misuse_gs1
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log____last_update
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment____last_update
-#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_followup____last_update
 msgid "Last Modified on"
 msgstr "Última modificación el"
 
 #. module: misuse_gs1
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__write_uid
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__write_uid
-#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_followup__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: misuse_gs1
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__write_date
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__write_date
-#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_followup__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: misuse_gs1
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__log_id
-#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_followup__misuse_log_followup_id
 msgid "Log"
 msgstr "Registro"
 
@@ -131,8 +102,8 @@ msgstr "Log de uso inadecuado GS1"
 
 #. module: misuse_gs1
 #: model:ir.model,name:misuse_gs1.model_misuse_gs1_log
-msgid "Misuse GS1 Log"
-msgstr "Trazabilidad uso inadecuado GS1"
+msgid "Misuse GS1 Log - trazabilidad del mal uso del sistema GS1"
+msgstr "Misuse GS1 Log - trazabilidad del mal uso del sistema GS1"
 
 #. module: misuse_gs1
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__misuse_type
@@ -153,6 +124,11 @@ msgstr "Empresa"
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log_attachment__path
 msgid "Path"
 msgstr "Ruta"
+
+#. module: misuse_gs1
+#: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__prefixes
+msgid "Prefixes"
+msgstr "Prefijos"
 
 #. module: misuse_gs1
 #: model:ir.model.fields,field_description:misuse_gs1.field_misuse_gs1_log__remaining_time

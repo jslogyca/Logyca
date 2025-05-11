@@ -8,6 +8,15 @@
 			<xpath expr="//page[@name='other_information']/group/group/field[@name='require_signature']" position="before">
                 <field name="x_origen" />
 			</xpath>
+			<xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='analytic_distribution']" position="replace">
+				<field name="analytic_distribution" widget="analytic_distribution" optional="show" groups="analytic.group_analytic_accounting" 
+					options="{'product_field': 'product_id', 'business_domain': 'sale_order', 'amount_field': 'price_subtotal'}"/>
+			</xpath>
+			<xpath expr="//form/sheet/notebook/page/field[@name='order_line']" position="before">
+				<div class="alert alert-info">
+					Seleccione su <strong>analítica</strong>, según su línea de negocio.
+				</div>			
+			</xpath>			
 		</field>
 	</record>
 

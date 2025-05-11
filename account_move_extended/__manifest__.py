@@ -26,7 +26,7 @@
         'security/account_move_extended_security.xml',
         'security/ir.model.access.csv',
         'views/account_sector_red_view.xml',
-        'views/report_certification.xml',
+        # 'views/report_certification.xml',
         'views/revenue_macro_sector_view.xml',
         'views/product_template_view.xml',
         'views/res_users_view.xml',
