@@ -10,7 +10,18 @@ class VersionAsset(models.Model):
     _order = 'sequence ASC'
 
     version_id = fields.Many2one('formio.version', string='formio.js version', ondelete='cascade')
-    type = fields.Selection([('js', 'js'), ('css', 'css'), ('license', 'license')], string='Type', required=True)
+    type = fields.Selection(
+        [
+            ("js", "JavaScript"),
+            ("css", "CSS"),
+            ("license", "License"),
+            ("eot", "EOT Font File"),
+            ("otf", "OTF Font File"),
+            ("svg", "SVG Font File"),
+            ("ttf", "TTF Font File"),
+            ("woff", "WOFF Font File"),
+            ("woff2", "WOFF2 Font File"),
+        ], string="Type", required=True)
     attachment_id = fields.Many2one(
         'ir.attachment', string="Attachment",
         required=True, ondelete='cascade', domain=[('res_model', '=', 'formio.version.asset')],
@@ -28,7 +39,8 @@ class VersionAsset(models.Model):
             elif r.attachment_type == 'binary':
                 r.url = '/web/content/{attachment_id}/{name}'.format(
                     attachment_id=r.attachment_id.id,
-                    name=r.attachment_id.name)
+                    name=r.attachment_id.name,
+                )
 
     def unlink(self):
         self.mapped('attachment_id').unlink()

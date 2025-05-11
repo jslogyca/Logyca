@@ -6,7 +6,7 @@
     'version': '1.1',
     'category': 'Accounting/Accounting',
     'website': 'https://logyca.com',
-    'author': 'LOGYCA',
+    'author': 'LOGYCA SERVICIOS',
     'license': 'LGPL-3',
     'application': False,
     'installable': True,
@@ -16,7 +16,7 @@
         ],
     'description': '''
 
-========================
+======================== Asset LOGYCA
 
 ''',    
     'data': [

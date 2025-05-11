@@ -1,18 +1,24 @@
-// Copyright Nova Code (http://www.novacode.nl)
+// Copyright Nova Code (https://www.novacode.nl)
 // See LICENSE file for full licensing details.
 
-const { Component } = owl;
-const { xml } = owl.tags;
-const { whenReady } = owl.utils;
-const { useState } = owl.hooks;
+// use global owl
+// can't import from "@odoo/owl", because not an @odoo-module
 
-const actions = {};
+const { Component, markup, onMounted, onWillStart, useState, xml } = owl;
 
-const initialState = {
-    auth: [],
-};
+const { protectComponent } = await import('./utils.js');
 
 export class OdooFormioForm extends Component {
+    setup() {
+        super.setup();
+        this.configUrl = null;
+        onMounted(() => {
+            this.loadForm();
+        });
+        onWillStart(() => {
+            this.initForm();
+        });
+    }
 
     constructor(parent, props) {
         super(parent, props);
@@ -22,6 +28,7 @@ export class OdooFormioForm extends Component {
         this.language = null;
         this.locales = {};
         this.params = {}; // extra params from Odoo backend
+        this.csrfToken = null;
 
         // by initForm
         this.builderUuid = null;
@@ -37,22 +44,24 @@ export class OdooFormioForm extends Component {
         this.apiValidationUrl = null;
         this.urlParams = new URLSearchParams(window.location.search);
 
-    }
-
-    willStart() {
-        this.initForm();
-    }
-
-    mounted() {
-        this.loadForm();
+        // init a promise
+        this.promiseQueue = new Promise((resolve) => resolve());
     }
 
     initForm() {
         // Implemented in specific (*_app.js) classes.
     }
 
+    saveDraftDone(submission) {
+        // Implemented in specific (*_app.js) classes.
+    }
+
     submitDone(submission) {
         // Implemented in specific (*_app.js) classes.
+    }
+
+    scrollParent() {
+        // Optionally implemented in specific (*_app.js) classes.
     }
 
     getDataUrl(compObj) {
@@ -81,27 +90,40 @@ export class OdooFormioForm extends Component {
         }
     }
 
-    wizardStateChange (form, submission) {
-        this.resetParentIFrame();
+    wizardStateChange(form) {
+        let self = this;
+        self.resetParentIFrame();
         // readOnly check also applies in server endpoint
-        const readOnly = 'readOnly' in this.options && this.options['readOnly'] == true;
-        if (this.params['wizard_on_change_page_save_draft'] && !readOnly) {
+        const readOnly = 'readOnly' in self.options && self.options['readOnly'] == true;
+        if (self.params['wizard_on_change_page_save_draft'] && !readOnly) {
             form.beforeSubmit();
             const data = {'data': form.data, 'saveDraft': true};
-            if (this.formUuid) {
-                data['form_uuid'] = this.formUuid;
-            }
 
             self.showOverlay();
 
-            $.jsonRpc.request(this.submitUrl, 'call', data).then(function(submission) {
-                if (typeof(submission) != 'undefined') {
-                    // Set properties to instruct the next calls to save (draft) the current form.
-                    this.formUuid = submission.form_uuid;
-                    this.submitUrl = this.wizardSubmitUrl + this.formUuid + '/submit';
-                }
-                self.hideOverlay();
+            // Fix compatibility with jQuery Promises.
+            //
+            // TODO NOW: when replaced $.ajax to native XHR, this
+            // extra (return) Promise ain't needed.
+            return new Promise(() => {
+                this.postData(this.submitUrl, data).then(function(submission) {
+                    if (typeof(submission) != 'undefined') {
+                        // Set properties to instruct the next calls to save (draft) the current form.
+                        this.formUuid = submission.form_uuid;
+                        this.submitUrl = this.wizardSubmitUrl + this.formUuid + '/submit';
+                    }
+                    self.hideOverlay();
+                    if (window.self !== window.top) {
+                        self.scrollParent();
+                    }
+                });
             });
+        }
+        else {
+            if (window.self !== window.top) {
+                self.scrollParent();
+            }
+            return null;
         }
     }
 
@@ -119,15 +141,37 @@ export class OdooFormioForm extends Component {
             }
         }
         self.showOverlay();
-        $.jsonRpc.request(configUrl, 'call', {}).then(function(result) {
+
+        self.getData(configUrl, {}).then(function(result) {
             if (!$.isEmptyObject(result)) {
-                self.schema = result.schema;
-                self.options = result.options;
+                const res = result;
+                self.schema = res.schema;
+                self.options = res.options;
                 self.language = self.options.language;
-                self.locales = result.locales;
+                self.locales = res.locales;
                 self.defaultLocaleShort = self.localeShort(self.language);
-                self.params = result.params;
+                self.params = res.params;
+                self.csrfToken = res.csrf_token;
                 self.createForm();
+            }
+            if (result.hasOwnProperty('error_message')) {
+                let error = $('#formio_form_server_error');
+                let errorMessage = $('#formio_form_server_error_message');
+                let errorTraceback = $('#formio_form_server_error_traceback');
+                errorMessage.html(result['error_message']);
+                if (result.hasOwnProperty('error_traceback')) {
+                    errorTraceback.html(result['error_traceback']);
+                    errorTraceback.removeClass('d-none');
+                }
+                error.removeClass('d-none');
+                // scroll embed and parent
+                window.scrollTo(0, 0);
+                window.parent.postMessage({odooFormioMessage: 'formioScrollTop', params: {}});
+                // disables action buttons (submit, saveDraft)
+                FormioUtils.eachComponent(form.components, (component) => {
+                    component.disabled = true;
+                }, true);
+                form.redraw();
             }
         });
     }
@@ -151,6 +195,7 @@ export class OdooFormioForm extends Component {
         const hasChanged = typeof changed !== 'undefined' && typeof changed.changed !== 'undefined';
         if (hasChanged) {
             if (changed.changed.component) {
+                self.ensureSubmissionMetadata(form);
                 const component = changed.changed.component;
                 const instance = changed.changed.instance;
                 if (component.properties.hasOwnProperty('change')) {
@@ -175,7 +220,8 @@ export class OdooFormioForm extends Component {
                             'instance': instanceData,
                             'value': changed.changed.value,
                         },
-                        'form_data': form.data
+                        'form_data': form.data,
+                        'lang_ietf_code': self.language
                     };
 
                     const changeOverlay = component.properties.hasOwnProperty('changeOverlay')
@@ -195,8 +241,8 @@ export class OdooFormioForm extends Component {
                         // TODO: when replaced $.ajax to native XHR, this
                         // extra (return) Promise ain't needed.
                         return new Promise((resolve) => {
-                            $.jsonRpc.request(apiUrl, 'call', {'data': data}).then(function(result) {
-                                form.submission = {'data': JSON.parse(result)};
+                            this.postData(apiUrl, data).then(function(result) {
+                                form.submission = {'data': result.values};
                                 overlayTimerPromise.then(() => {
                                     self.hideOverlay();
                                     resolve();
@@ -204,17 +250,43 @@ export class OdooFormioForm extends Component {
                             });
                         });
                     }
+                    else if (self.params.hasOwnProperty('overlay_api_change')
+                        && !!self.params['overlay_api_change'])
+                    {
+                        self.showOverlay();
+                        // Fix compatibility with jQuery Promises.
+                        //
+                        // TODO: when replaced $.ajax to native XHR, this
+                        // extra (return) Promise ain't needed.
+                        return new Promise((resolve) => {
+                            this.postData(apiUrl, data).then(function(result) {
+                                form.submission = {'data': result.values};
+                                if (!$.isEmptyObject(result.config) && !$.isEmptyObject(result.config.options)) {
+                                    form.options = {...form.options, ...result.config.options};
+                                }
+                                self.hideOverlay();
+                                resolve();
+                            });
+                        });
+                    }
                     else {
                         return new Promise((resolve) => {
-                            $.jsonRpc.request(apiUrl, 'call', {'data': data}).then(function(result) {
-                                form.submission = {'data': JSON.parse(result)};
+                            this.postData(apiUrl, data).then(function(result) {
+                                form.submission = {'data': result.values};
                                 resolve();
                             });
                         });
                     }
                 }
+                else {
+                    return null;
+                }
+            }
+            else {
+                return null;
             }
         }
+        return null;
     }
 
     /**
@@ -252,11 +324,92 @@ export class OdooFormioForm extends Component {
                     },
                     'form_data': form._data
                 };
-                $.jsonRpc.request(apiUrl, 'call', {'data': data}).then(function(result) {
-                    form.submission = {'data': JSON.parse(result)};
-                });
+
+                const blurOverlay = component.properties.hasOwnProperty('blurOverlay')
+                      && component.properties.blurOverlay;
+
+                if (blurOverlay) {
+                    // The overlayTimer(Promise) improves the UI/UX
+                    // feedback showing something (API) is processing.
+                    let overlayTimerPromise = new Promise((resolve) => {
+                        window.setTimeout(
+                            resolve, blurOverlay
+                        );
+                    });
+                    self.showOverlay();
+                    // Fix compatibility with jQuery Promises.
+                    //
+                    // TODO: when replaced $.ajax to native XHR, this
+                    // extra (return) Promise ain't needed.
+                    return new Promise((resolve) => {
+                        this.postData(apiUrl, data).then(function(result) {
+                            form.submission = {'data': result.values};
+                            overlayTimerPromise.then(() => {
+                                self.hideOverlay();
+                                resolve();
+                            });
+                        });
+                    });
+                }
+                else if (self.params.hasOwnProperty('overlay_api_change')
+                         && !!self.params['overlay_api_change'])
+                {
+                    self.showOverlay();
+                    // Fix compatibility with jQuery Promises.
+                    //
+                    // TODO: when replaced $.ajax to native XHR, this
+                    // extra (return) Promise ain't needed.
+                    return new Promise((resolve) => {
+                        this.postData(apiUrl, data).then(function(result) {
+                            form.submission = {'data': result.values};
+                            self.hideOverlay();
+                            resolve();
+                        });
+                    });
+                }
+                else {
+                    return new Promise((resolve) => {
+                        this.postData(apiUrl, data).then(function(result) {
+                            form.submission = {'data': result.values};
+                            resolve();
+                        });
+                    });
+                }
+            }
+            else {
+                return null;
             }
         }
+        else {
+            return null;
+        }
+        return null;
+    }
+
+    getData(url, data) {
+        return $.ajax(
+            {
+                url: url,
+                method: 'GET',
+                contentType: 'application/json',
+            }
+        );
+    }
+
+    postData(url, data) {
+        let dataPost = {...data};
+        if (this.formUuid) {
+            dataPost['form_uuid'] = this.formUuid;
+        }
+        dataPost['csrf_token'] = this.csrfToken;
+        return $.ajax(
+            {
+                url: url,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(dataPost)
+            }
+        );
     }
 
     createForm() {
@@ -266,6 +419,7 @@ export class OdooFormioForm extends Component {
             (window).flatpickr.localize((window).flatpickr.l10ns[self.defaultLocaleShort]);
         }
 
+        this.patchRequireLibary();
         if (Formio.hasOwnProperty('cdn')) {
 	    this.patchCDN();
 	    Formio.cdn.setBaseUrl(self.params['cdn_base_url']);
@@ -283,7 +437,7 @@ export class OdooFormioForm extends Component {
                     && !!self.params['hook_api_validation'])
                 {
                     const data = {'data': submission.data, 'lang_ietf_code': self.language};
-                    $.jsonRpc.request(self.apiValidationUrl, 'call', data).then(function(errors) {
+                    self.postData(self.apiValidationUrl, data).then(function(errors) {
                         if (!$.isEmptyObject(errors)) {
                             next(errors);
                         }
@@ -295,25 +449,25 @@ export class OdooFormioForm extends Component {
                 else {
                     next();
                 }
-            }
+            },
+            ...self['options']['hooks']
         };
         Formio.createForm(document.getElementById('formio_form'), self.schema, self.options).then(function(form) {
-            let loading = document.getElementById('formio_form_loading');
             let buttons = document.querySelectorAll('.formio_languages button');
 
-            if (loading) {
-                loading.style.display = 'none';
-            }
             buttons.forEach(function(btn) {
                 if (self.language === btn.lang) {
                     btn.classList.add('language_button_active');
                 };
             });
 
+            // TODO
+            // var  = document.createElement('div');
+
             window.setLanguage = function(lang, button) {
                 self.language = lang;
                 form.language = lang;
-                var buttons = document.querySelectorAll('.formio_languages button');
+                let buttons = document.querySelectorAll('.formio_languages button');
                 buttons.forEach(function(btn) {
                     btn.classList.remove('language_button_active');
                 });
@@ -327,17 +481,6 @@ export class OdooFormioForm extends Component {
                         compObj.filter = filterParams.toString();
                     }
                 });
-                // flatpickr (datetime) localization
-                if (window.flatpickr != undefined) {
-                    const localeShort = self.localeShort(lang);
-                    (window).flatpickr.localize((window).flatpickr.l10ns[localeShort]);
-                    form.everyComponent((component) => {
-                        if (component.type == 'datetime') {
-                            self.localizeComponent(component.component, form.language);
-                            component.redraw();
-                        }
-                    });
-                }
             };
 
             // Alter the data (Data Source) URL, prefix with Odoo controller endpoint.
@@ -366,7 +509,9 @@ export class OdooFormioForm extends Component {
                 // @param modified: Flag to determine if the change was
                 //   made by a human interaction, or programatic
                 if (changed.hasOwnProperty('changed')) {
-                    self.onChange(form, changed, flags, modified);
+                    self.promiseQueue.then(() => {
+                        self.onChange(form, changed, flags, modified);
+                    });
                 }
             });
 
@@ -375,112 +520,76 @@ export class OdooFormioForm extends Component {
                 //
                 // @param instance: The component instance.
                 if (instance) {
-                    self.onBlur(form, instance);
+                    self.promiseQueue.then(() => {
+                        self.onBlur(form, instance);
+                    });
                 }
             });
-
-            form.on('dataGridAddRow', function(component, row) {
-                if (!$.isEmptyObject(self.locales)) {
-                    let reloadComponents = [];
-                    FormioUtils.eachComponent(component.component.components, (componentObj) => {
-                        let localizedComponent = self.localizeComponent(componentObj, self.language);
-                        if (localizedComponent) {
-                            reloadComponents.push(componentObj);
-                        }
-                    }, true);
-                    if (reloadComponents.length > 0) {
-                        const localeShort = self.localeShort(self.language);
-                        form.everyComponent((component) => {
-                            for (let i=0; i < reloadComponents.length; i++) {
-                                let reloadComponent = reloadComponents[i];
-                                if (component.type == reloadComponent.type && component.key == reloadComponent.key) {
-                                    if (component.component.widget.language !== localeShort) {
-                                        component.component.widget.language = localeShort;
-                                        component.component.widget.locale = localeShort;
-                                        component.redraw();
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }
-            });
-
-            // TODO similar to 'dataGridAddRow'
-            // form.on('editGridAddRow', function(component, row) {});
-            // form.on('rowAdd', function(component, row) {});
 
             form.on('submit', function(submission) {
+                form.everyComponent((component) => {
+                    let compObj = component.component;
+                    if (self.hasComponentPropertySlurpValue(compObj)) {
+                        if (component.refs.hasOwnProperty('input')) {
+                            const elementId = component.refs.input[0].id;
+                            const slurpVal = $("#" + elementId).val();
+                            submission.data[component.key] = slurpVal;
+                        }
+                    }
+                });
                 const data = {'data': submission.data};
-                if (self.formUuid) {
-                    data['form_uuid'] = self.formUuid;
-                }
-                $.jsonRpc.request(self.submitUrl, 'call', data).then(function() {
-                    form.emit('submitDone', submission);
+                self.postData(self.submitUrl, data).then(function(res) {
+                    if (res.hasOwnProperty('error_message')) {
+                        let error = $('#formio_form_server_error');
+                        let errorMessage = $('#formio_form_server_error_message');
+                        let errorTraceback = $('#formio_form_server_error_traceback');
+                        errorMessage.html(res['error_message']);
+                        if (res.hasOwnProperty('error_traceback')) {
+                            errorTraceback.html(res['error_traceback']);
+                            errorTraceback.removeClass('d-none');
+                        }
+                        error.removeClass('d-none');
+                        // scroll embed and parent
+                        window.scrollTo(0, 0);
+                        window.parent.postMessage({odooFormioMessage: 'formioScrollTop', params: {}});
+                        // disables action buttons (submit, saveDraft)
+                        FormioUtils.eachComponent(form.components, (component) => {
+                            component.disabled = true;
+                        }, true);
+                        form.redraw();
+                    }
+                    else {
+                        form.emit('submitDone', submission);
+                    }
+                    self.hideOverlay();
                 });
             });
 
             form.on('submitDone', function(submission) {
-                self.submitDone(submission);
+                if (submission.state == 'draft') {
+                    self.saveDraftDone(submission);
+                }
+                else {
+                    self.submitDone(submission);
+                }
             });
 
             // wizard
-            form.on('wizardPageSelected', function(submission) {
-                self.resetParentIFrame();
-                // readOnly check also applies in server endpoint
-                const readOnly = 'readOnly' in self.options && self.options['readOnly'] == true;
-                if (self.params['wizard_on_change_page_save_draft'] && !readOnly) {
-                    const data = {'data': form.data, 'saveDraft': true};
-                    if (self.formUuid) {
-                        data['form_uuid'] = self.formUuid;
-                    }
-                    $.jsonRpc.request(self.submitUrl, 'call', data).then(function(submission) {
-                        if (typeof(submission) != 'undefined') {
-                            // Set properties to instruct the next calls to save (draft) the current form.
-                            self.formUuid = submission.form_uuid;
-                            self.submitUrl = self.wizardSubmitUrl + self.formUuid + '/submit';
-                        }
-                    });
-                }
-            });
-
-            form.on('prevPage', function(submission) {
-                self.resetParentIFrame();
-                // readOnly check also applies in server endpoint
-                const readOnly = 'readOnly' in self.options && self.options['readOnly'] == true;
-                if (self.params['wizard_on_change_page_save_draft'] && !readOnly) {
-                    const data = {'data': form.data, 'saveDraft': true};
-                    if (self.formUuid) {
-                        data['form_uuid'] = self.formUuid;
-                    }
-                    $.jsonRpc.request(self.submitUrl, 'call', data).then(function(submission) {
-                        if (typeof(submission) != 'undefined') {
-                            // Set properties to instruct the next calls to save (draft) the current form.
-                            self.formUuid = submission.form_uuid;
-                            self.submitUrl = self.wizardSubmitUrl + self.formUuid + '/submit';
-                        }
-                    });
-                }
-            });
-
-            form.on('nextPage', function(submission) {
-                self.resetParentIFrame();
-                // readOnly check also applies in server endpoint
-                const readOnly = 'readOnly' in self.options && self.options['readOnly'] == true;
-                if (self.params['wizard_on_change_page_save_draft'] && !readOnly) {
-                    const data = {'data': form.data, 'saveDraft': true};
-                    if (self.formUuid) {
-                        data['form_uuid'] = self.formUuid;
-                    }
-                    $.jsonRpc.request(self.submitUrl, 'call', data).then(function(submission) {
-                        if (typeof(submission) != 'undefined') {
-                            // Set properties to instruct the next calls to save (draft) the current form.
-                            self.formUuid = submission.form_uuid;
-                            self.submitUrl = self.wizardSubmitUrl + self.formUuid + '/submit';
-                        }
-                    });
-                }
-            });
+            form.on('wizardPageSelected', (submission) =>
+                self.promiseQueue.then(() => {
+                    self.wizardStateChange(form);
+                })
+            );
+            form.on('prevPage', (submission) =>
+                self.promiseQueue.then(() => {
+                    self.wizardStateChange(form);
+                })
+            );
+            form.on('nextPage', (submission) =>
+                self.promiseQueue.then(() => {
+                    self.wizardStateChange(form);
+                })
+            );
 
             // Set the Submission (data)
             // https://github.com/formio/formio.js/wiki/Form-Renderer#setting-the-submission
@@ -496,64 +605,33 @@ export class OdooFormioForm extends Component {
                         submissionUrl += '?' + params.toString();
                     }
                 }
-                $.jsonRpc.request(submissionUrl, 'call', {}).then(function(result) {
+                self.getData(submissionUrl, {}).then(function(result) {
                     if (!$.isEmptyObject(result)) {
-                        form.submission = {'data': JSON.parse(result)};
+                        form.submission = {'data': result['submission']};
+                    }
+                    if (result.hasOwnProperty('error_message')) {
+                        let error = $('#formio_form_server_error');
+                        let errorMessage = $('#formio_form_server_error_message');
+                        let errorTraceback = $('#formio_form_server_error_traceback');
+                        errorMessage.html(result['error_message']);
+                        if (result.hasOwnProperty('error_traceback')) {
+                            errorTraceback.html(result['error_traceback']);
+                            errorTraceback.removeClass('d-none');
+                        }
+                        error.removeClass('d-none');
+                        // scroll embed and parent
+                        window.scrollTo(0, 0);
+                        window.parent.postMessage({odooFormioMessage: 'formioScrollTop', params: {}});
+                        // disables action buttons (submit, saveDraft)
+                        FormioUtils.eachComponent(form.components, (component) => {
+                            component.disabled = true;
+                        }, true);
+                        form.redraw();
                     }
                     self.hideOverlay();
                 });
             }
         });
-    }
-
-    patchCDN() {
-	// CDN class is not exported, so patch it here because
-	// ckeditor's URLs are somewhat nonstandard.
-        //
-        // The patch implements a fallback for formio.js version
-        // <= 4.14.12, where CDN.buildUrl is not implemented, to
-        // patch CDN.updateUrls.
-        //
-	// When using an external CDN, we must also avoid loading the customized
-	// version of flatpickr, instead relying on the default version.
-        if (Formio.cdn.buildUrl !== undefined && typeof(Formio.cdn.buildUrl === 'function')) {
-            const oldBuildUrl = Formio.cdn.buildUrl.bind(Formio.cdn);
-            Formio.cdn.buildUrl = function(cdnUrl, lib, version) {
-                if (lib == 'ckeditor') {
-                    if (version == '19.0.0') {
-                        // Somehow 19.0.0 is missing?!
-                        version = '19.0.1';
-                    }
-                    return `${cdnUrl}/${lib}5/${version}`;
-                } else if (lib == 'flatpickr-formio') {
-                    return oldBuildUrl(cdnUrl, 'flatpickr', this.libs['flatpickr']);
-                } else {
-                    return oldBuildUrl(cdnUrl, lib, version);
-                }
-            };
-        } else {
-            const oldUpdateUrls = Formio.cdn.updateUrls.bind(Formio.cdn);
-            Formio.cdn.updateUrls = function() {
-                for (const lib in this.libs) {
-                    let version = this.libs[lib];
-                    if (version === '') {
-                        this[lib] = `${this.baseUrl}/${lib}`;
-                    }
-                    else if (lib == 'ckeditor') {
-                        if (version == '19.0.0') {
-                            // Somehow 19.0.0 is missing?!
-                            version = '19.0.1';
-                        }
-                        this[lib] = `${this.baseUrl}/${lib}5/${version}`;
-                    } else if (lib == 'flatpickr-formio') {
-                        const flatpickr_version = this.libs['flatpickr'];
-                        this[lib] = `${this.baseUrl}/flatpickr/${flatpickr_version}`;
-                    } else {
-                        this[lib] = `${this.baseUrl}/${lib}/${this.libs[lib]}`;
-                    }
-                }
-            };
-        }
     }
 
     patchRequireLibary() {
@@ -611,11 +689,68 @@ export class OdooFormioForm extends Component {
         };
     }
 
+    patchCDN() {
+        // CDN class is not exported, so patch it here because
+        // ckeditor's URLs are somewhat nonstandard.
+        //
+        // The patch also implements a fallback for formio.js version
+        // <= 4.14.12, where CDN.buildUrl is not implemented, to
+        // patch CDN.updateUrls.
+        //
+        // When using an external CDN, we must also avoid loading the customized
+        // version of flatpickr, instead relying on the default version.
+        if (Formio.cdn.buildUrl !== undefined && typeof(Formio.cdn.buildUrl === 'function')) {
+            const oldBuildUrl = Formio.cdn.buildUrl.bind(Formio.cdn);
+            Formio.cdn.buildUrl = function(cdnUrl, lib, version) {
+                if (lib == 'ckeditor') {
+                    if (version == '19.0.0') {
+                        // Somehow 19.0.0 is missing?!
+                        version = '19.0.1';
+                    }
+                    return `${cdnUrl}/${lib}5/${version}`;
+                } else if (lib == 'flatpickr-formio') {
+                    return oldBuildUrl(cdnUrl, 'flatpickr', this.libs['flatpickr']);
+                } else {
+                    return oldBuildUrl(cdnUrl, lib, version);
+                }
+            };
+        } else {
+            const oldUpdateUrls = Formio.cdn.updateUrls.bind(Formio.cdn);
+            Formio.cdn.updateUrls = function() {
+                for (const lib in this.libs) {
+                    let version = this.libs[lib];
+                    if (version === '') {
+                        this[lib] = `${this.baseUrl}/${lib}`;
+                    }
+                    else if (lib == 'ckeditor') {
+                        if (version == '19.0.0') {
+                            // Somehow 19.0.0 is missing?!
+                            version = '19.0.1';
+                        }
+                        this[lib] = `${this.baseUrl}/${lib}5/${version}`;
+                    } else if (lib == 'flatpickr-formio') {
+                        const flatpickr_version = this.libs['flatpickr'];
+                        this[lib] = `${this.baseUrl}/flatpickr/${flatpickr_version}`;
+                    } else {
+                        this[lib] = `${this.baseUrl}/${lib}/${this.libs[lib]}`;
+                    }
+                }
+            };
+        }
+    }
+
     hasComponentDataURL(component) {
         return component
             && component.hasOwnProperty('data')
             && component.data.hasOwnProperty('url')
             && !$.isEmptyObject(component.data.url);
+    }
+
+    hasComponentPropertySlurpValue(component) {
+        return component
+            && component.hasOwnProperty('properties')
+            && component.properties.hasOwnProperty('slurpValue')
+            && !$.isEmptyObject(component.properties.slurpValue);
     }
 
     localizeComponent(component, language) {
@@ -639,9 +774,33 @@ export class OdooFormioForm extends Component {
         if (this.locales.hasOwnProperty(language)) {
             return this.locales[language];
         }
+        else if (language == undefined) {
+            return 'default';
+        }
         else {
             // not really ok, but could work
             return language.slice(0, 2);
         }
     }
+
+    /**
+     * Ensure the submission always has default metadata and selectData.
+     *
+     * This is a workaround (formio.js 4.18.2, 4.19.3) to prevent the change
+     * event from crashing due to missing metadata.selectData.
+     * This affects the change event on a selectboxes component with URL as a
+     * Data Source Type.
+     *
+     * @param form: The form instance
+     */
+    ensureSubmissionMetadata(form) {
+        if (!form.submission.metadata) {
+            form.submission.metadata = {};
+        }
+        if (!form.submission.metadata.selectData) {
+            form.submission.metadata.selectData = {};
+        }
+    }
 }
+
+protectComponent(OdooFormioForm);

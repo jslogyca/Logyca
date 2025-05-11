@@ -38,6 +38,10 @@ class TierDefinition(models.Model):
             ("field", "Field in related record"),
         ],
     )
+    allow_write_for_reviewer = fields.Boolean(
+        string="Allow Write For Reviewers",
+        default=False,
+    )
     reviewer_id = fields.Many2one(comodel_name="res.users", string="Reviewer")
     reviewer_group_id = fields.Many2one(
         comodel_name="res.groups", string="Reviewer group"
@@ -67,7 +71,33 @@ class TierDefinition(models.Model):
         help="If set, all possible reviewers will be notified by email when "
         "this definition is triggered.",
     )
-    has_comment = fields.Boolean(string="Comment", default=False)
+    notify_on_pending = fields.Boolean(
+        string="Notify Reviewers on reaching Pending",
+        help="If set, all possible reviewers will be notified by email when "
+        "this status is reached."
+        "Usefull in an Approve by sequence scenario. "
+        "An notification request to review is sent out when it's their turn to review.",
+    )
+    notify_on_accepted = fields.Boolean(
+        string="Notify Reviewers on Accepted",
+        help="If set, reviewers will be notified by email when a review related "
+        "to this definition is accepted.",
+    )
+    notify_on_rejected = fields.Boolean(
+        string="Notify Reviewers on Rejected",
+        help="If set, reviewers will be notified by email when a review related "
+        "to this definition is rejected.",
+    )
+    notify_on_restarted = fields.Boolean(
+        string="Notify Reviewers on Restarted",
+        help="If set, reviewers will be notified by email when a reviews related "
+        "to this definition are restarted.",
+    )
+    has_comment = fields.Boolean(
+        string="Comment",
+        default=False,
+        help="If set, Allow the reviewer to leave a comment on the review.",
+    )
     notify_reminder_delay = fields.Integer(
         string="Send reminder message on pending reviews",
         help="Number of days after which a message must be posted to remind about "
@@ -79,7 +109,8 @@ class TierDefinition(models.Model):
         help="Approval order by the specified sequence number",
     )
     approve_sequence_bypass = fields.Boolean(
-        help="Bypassed (auto validated), if previous tier was validated by same reviewer",
+        help="Bypassed (auto validated), if previous tier was validated "
+        "by same reviewer",
     )
 
     @api.onchange("review_type")
@@ -90,8 +121,10 @@ class TierDefinition(models.Model):
     @api.depends("review_type", "model_id")
     def _compute_domain_reviewer_field(self):
         for rec in self:
-            rec.valid_reviewer_field_ids = self.env["ir.model.fields"].search(
-                [("model", "=", rec.model), ("relation", "=", "res.users")]
+            rec.valid_reviewer_field_ids = (
+                self.env["ir.model.fields"]
+                .sudo()
+                .search([("model", "=", rec.model), ("relation", "=", "res.users")])
             )
 
     def _get_review_needing_reminder(self):
@@ -105,7 +138,7 @@ class TierDefinition(models.Model):
         return self.env["tier.review"].search(
             [
                 ("definition_id", "=", self.id),
-                ("status", "=", "pending"),
+                ("status", "in", ["waiting", "pending"]),
                 "|",
                 "&",
                 ("create_date", "<", review_date),

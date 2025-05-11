@@ -185,7 +185,7 @@ class AccountAuxiliarReport(models.Model):
                 D.Cuenta_Nivel_3 as account_level_three,
                 D.Cuenta_Nivel_4 as account_level_four,
                 D.Cuenta_Nivel_5 as account_level_five,                
-                COALESCE(C.vat || ' | ' || C.display_name,'Tercero Vacio') as partner,
+                COALESCE(C.vat || ' | ' || C.name,'Tercero Vacio') as partner,
                 case when B."date"<'%s' then 'AA_SALDO INICIAL' else 'Factura: ' || B.move_name || ' | Fecha: ' || B."date" || ' | Referencia: ' || B."ref" || ' | Grupo presupuestal: ' || coalesce(h."name",'-') end as move,                   case when B."date"<'%s' then 'AA_SALDO INICIAL' else  B.move_name end as move_name,
                 case when B."date"<'%s' then CAST('%s' AS DATE) - CAST('1 days' AS INTERVAL) else  B."date" end as move_date,
                 case when B."date"<'%s' then 'AA_SALDO INICIAL' else  B."ref" end as move_ref,
@@ -204,8 +204,8 @@ class AccountAuxiliarReport(models.Model):
             LEFT JOIN (
                             SELECT 
                             COALESCE(e.code_prefix_start,substring(a.code for 1)) as Cuenta_Nivel_1,
-                            COALESCE(d.code_prefix_start,coalesce(c.code_prefix_start,coalesce(b.code_prefix_start,substring(a.code for 1)))) || ' - ' || coalesce(d."name",coalesce(c."name",coalesce(b."name",'')))  as Cuenta_Nivel_2,
-                            COALESCE(c.code_prefix_start,coalesce(b.code_prefix_start,substring(a.code for 1))) || ' - ' || coalesce(c."name",coalesce(b."name",'')) as Cuenta_Nivel_3,
+                            COALESCE(d.code_prefix_start,coalesce(c.code_prefix_start,coalesce(b.code_prefix_start,substring(a.code for 1)))) || ' - ' || coalesce(d."name",coalesce(c."name",coalesce(b."name",a."name")))  as Cuenta_Nivel_2,
+                            COALESCE(c.code_prefix_start,coalesce(b.code_prefix_start,substring(a.code for 1))) || ' - ' || coalesce(c."name",coalesce(b."name",a."name")) as Cuenta_Nivel_3,
                             COALESCE(b.code_prefix_start,substring(a.code for 1)) || ' - ' || COALESCE(b."name",a."name") as Cuenta_Nivel_4,
                             a.code || ' - ' || a."name" as Cuenta_Nivel_5,a.id 
                             FROM account_account a
@@ -277,7 +277,7 @@ class AccountAuxiliarReport(models.Model):
                     D.Cuenta_Nivel_4,
                     D.Cuenta_Nivel_5,
                     C.vat,
-                    C.display_name,
+                    C.name,
                     B.move_name,
                     B."date",
                     B."ref",

@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record id="view_country_state_tree_lg_inherit" model="ir.ui.view">
+        <field name="name">res.country.state.tree.lg.inherit</field>
+        <field name="model">res.country.state</field>
+        <field name="inherit_id" ref="base.view_country_state_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="x_code_dian"/>
+            </xpath>
+        </field>
+    </record>            
+</odoo>

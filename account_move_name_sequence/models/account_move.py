@@ -9,11 +9,14 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     name = fields.Char(compute="_compute_name_by_sequence")
-    # highest_name, sequence_prefix and sequence_number are not needed any more
+    # highest_name, sequence_prefix, sequence_number are not needed any more
     # -> compute=False to improve perf
     highest_name = fields.Char(compute=False)
     sequence_prefix = fields.Char(compute=False)
     sequence_number = fields.Integer(compute=False)
+    # made_sequence_hole is not relevant anymore (since based on sequence_prefix/number)
+    # -> compute=False to improve perf and to avoid displaying warning
+    made_sequence_hole = fields.Boolean(compute=False)
 
     _sql_constraints = [
         (
@@ -51,6 +54,7 @@ class AccountMove(models.Model):
                 # which applies on ir.sequence.date_range selection AND prefix
                 name = seq.with_context(ir_sequence_date=move.date).next_by_id()
             move.name = name
+        self._inverse_name()
 
     # We must by-pass this constraint of sequence.mixin
     def _constrains_date_sequence(self):
@@ -65,12 +69,24 @@ class AccountMove(models.Model):
             return False
         return super(AccountMove, invoices_other_sequences)._is_end_of_seq_chain()
 
-    def _post(self, soft=True):
-        self.flush()
-        return super()._post(soft=soft)
+    def _fetch_duplicate_supplier_reference(self, only_posted=False):
+        moves = self.filtered(lambda m: m.is_purchase_document() and m.ref)
+        if moves:
+            self.flush_model(["name", "journal_id", "move_type", "state"])
+        return super()._fetch_duplicate_supplier_reference(only_posted=only_posted)
 
-    def _get_last_sequence(self, relaxed=False, with_prefix=None, lock=True):
-        return super()._get_last_sequence(relaxed, None, lock)
+    def _get_last_sequence(self, relaxed=False, with_prefix=None):
+        return super()._get_last_sequence(relaxed, None)
+
+    @api.onchange("journal_id")
+    def _onchange_journal_id(self):
+        if not self.quick_edit_mode:
+            self.name = "/"
+            self._compute_name_by_sequence()
+
+    def _post(self, soft=True):
+        self.flush_recordset()
+        return super()._post(soft=soft)
 
     def _compute_name(self):
         """Overwrite account module method in order to

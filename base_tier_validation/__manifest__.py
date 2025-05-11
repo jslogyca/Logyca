@@ -1,9 +1,9 @@
-# Copyright 2017-19 ForgeFlow S.L. (https://www.forgeflow.com)
+# Copyright 2017-24 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 {
     "name": "Base Tier Validation",
     "summary": "Implement a validation process based on tiers.",
-    "version": "15.0.1.5.0",
+    "version": "17.0.2.3.3",
     "development_status": "Mature",
     "maintainers": ["LoisRForgeFlow"],
     "category": "Tools",
@@ -21,19 +21,18 @@
         "views/res_config_settings_views.xml",
         "views/tier_definition_view.xml",
         "views/tier_review_view.xml",
+        "views/tier_validation_exception_view.xml",
         "wizard/comment_wizard_view.xml",
         "templates/tier_validation_templates.xml",
     ],
     "assets": {
         "web.assets_backend": [
-            "/base_tier_validation/static/src/js/systray.js",
-            "/base_tier_validation/static/src/js/tier_review_widget.js",
-            "/base_tier_validation/static/src/scss/systray.scss",
-            "/base_tier_validation/static/src/scss/review.scss",
-        ],
-        "web.assets_qweb": [
-            "base_tier_validation/static/src/xml/systray.xml",
-            "base_tier_validation/static/src/xml/tier_review_template.xml",
+            "/base_tier_validation/static/src/components/tier_review_menu/tier_review_menu.esm.js",
+            "/base_tier_validation/static/src/components/tier_review_menu/tier_review_menu.xml",
+            "/base_tier_validation/static/src/components/tier_review_widget/tier_review_widget.esm.js",
+            "/base_tier_validation/static/src/components/tier_review_widget/tier_review_widget.scss",
+            "/base_tier_validation/static/src/components/tier_review_widget/tier_review_widget.xml",
+            "/base_tier_validation/static/src/js/services/tier_review_service.esm.js",
         ],
     },
 }

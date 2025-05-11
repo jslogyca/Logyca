@@ -26,6 +26,10 @@
                         <strong>Journal:</strong>
                         <p class="m-0" t-field="o.journal_id.name" />
                     </div>
+                    <div class="col-auto mw-100 mb-2" name="create_uid">
+                        <strong>Creado Por:</strong>
+                        <p class="m-0" t-field="o.create_uid.partner_id.name" />
+                    </div>                    
                     <div
                         class="col-auto mw-100 mb-2"
                         name="partner"
@@ -44,11 +48,6 @@
                                 <th name="th_account" class="text-left">Account</th>
                                 <th name="th_partner" class="text-left">Partner</th>
                                 <th name="th_label" class="text-left">Label</th>
-                                <th
-                                    name="th_analytic_account"
-                                    class="text-left"
-                                    groups="analytic.group_analytic_accounting"
-                                >Analytic Account</th>
                                 <th
                                     name="th_amount_currency"
                                     class="text-left"
@@ -84,45 +83,39 @@
                                         <span t-field="line.name" />
                                     </td>
                                     <td
-                                        name='tb_analytic'
-                                        groups="analytic.group_analytic_accounting"
-                                    >
-                                        <span t-field="line.analytic_account_id.name" />
-                                    </td>
-                                    <td
                                         name='tb_amount_currency'
                                         groups="base.group_multi_currency"
                                     >
                                         <t t-if="line.currency_id">
                                             <span
-                                                t-esc="line.amount_currency"
+                                                t-out="line.amount_currency"
                                                 t-options='{"widget": "monetary", "display_currency": line.currency_id}'
                                             />
                                         </t>
                                     </td>
                                     <td name='tb_debit'>
                                         <span
-                                            t-esc="line.debit"
+                                            t-out="line.debit"
                                             t-options='{"widget": "monetary", "display_currency": line.company_currency_id}'
                                         />
                                     </td>
                                     <td name='tb_credit'>
                                         <span
-                                            t-esc="line.credit"
+                                            t-out="line.credit"
                                             t-options='{"widget": "monetary", "display_currency": line.company_currency_id}'
                                         />
                                     </td>
                                     <td name='tb_originator_tax'>
                                         <span
                                             class="text-nowrap"
-                                            t-esc="line.tax_line_id.name"
+                                            t-out="line.tax_line_id.name"
                                         />
                                     </td>
                                     <td
                                         t-attf-class="text-left {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"
                                     >
                                         <span
-                                            t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_ids))"
+                                            t-out="', '.join(map(lambda x: (x.description or x.name), line.tax_ids))"
                                             id="line_tax_ids"
                                         />
                                     </td>
@@ -144,13 +137,13 @@
                                 />
                                 <td name='tf_debit'>
                                     <span
-                                        t-esc="total_debit"
+                                        t-out="total_debit"
                                         t-options='{"widget": "monetary", "display_currency": o.company_currency_id}'
                                     />
                                 </td>
                                 <td name='tf_credit'>
                                     <span
-                                        t-esc="total_credit"
+                                        t-out="total_credit"
                                         t-options='{"widget": "monetary", "display_currency": o.company_currency_id}'
                                     />
                                 </td>

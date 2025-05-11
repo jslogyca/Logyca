@@ -7,7 +7,7 @@
             <form string="Tarjeta Digital">
                 <sheet>
                     <group col="1" string="Tarjeta Digital">
-                        <h2><field name="partner_name" attrs="{'invisible':[('partner_name','=',False)]}"/></h2>
+                        <h2><field name="partner_name" /></h2>
                     </group>
                     <group>
                         <group string="Info. Básica">
@@ -26,7 +26,7 @@
                             <field name="qr_code" widget="image" width="30%"/>
                         </group>
                     </group>
-                    <group string="Descargar Tarjeta Digital" attrs="{'invisible':[('digital_card_img','=',False)]}">
+                    <group string="Descargar Tarjeta Digital" >
                         <field name="digital_card_img" widget="download" nolabel="1"/>
                     </group>
                     <group string="Descargar Tarjeta Digital">

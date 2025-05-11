@@ -26,7 +26,7 @@ Request Assignment LOGYCA
         "data/request_partner_assignment_type_data.xml",
         "views/request_partner_assignment_type_view.xml",
         "views/request_partner_code_assignment_view.xml",
-        "views/res_partner_view.xml",
+        # "views/res_partner_view.xml",
     ],
     "qweb": [],
 }

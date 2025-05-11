@@ -43,7 +43,7 @@
         'views/hr_electronictag_structure_view.xml',
         'views/ecertificate_view.xml',
         'views/res_company_view.xml',
-        'views/hr_salary_rule_view.xml',
+        # 'views/hr_salary_rule_view.xml',
         'wizard/hr_epayslips_by_employees_view.xml',
         'wizard/hr_epayslips_note_wizard_view.xml',
         'data/hr_sub_type_job_data.xml',

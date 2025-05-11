@@ -3,7 +3,7 @@
 
 {
     'name': 'CRM Kanban View',
-    'version': '15.0.1.0.0',
+    'version': '17.0.1.0.0',
     'sequence': 1,
     'summary': """
         New Design Kanban View, New Style Kanban View, Web Responsive Kanban View, Advanced Kanban View, 

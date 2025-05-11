@@ -26,7 +26,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/hr_payroll_account_config_view.xml',
-        'views/hr_payslip_run_view.xml',
+        # 'views/hr_payslip_run_view.xml',
         'views/hr_payroll_account_ss_view.xml',
         'views/hr_employee.xml',
     ],

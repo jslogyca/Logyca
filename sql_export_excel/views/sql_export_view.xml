@@ -8,23 +8,22 @@
             <field name="file_format" position="after">
                 <field
                     name="header"
-                    attrs="{'invisible': [('file_format', '=', 'csv')]}"
                 />
                 <field
                     name="attachment_id"
-                    attrs="{'invisible': [('file_format', '!=', 'excel')]}"
+                    
                 />
                 <field
                     name="sheet_position"
-                    attrs="{'invisible': [('attachment_id', '=', False)]}"
+                    
                 />
                 <field
                     name="row_position"
-                    attrs="{'invisible': [('attachment_id', '=', False)]}"
+                    
                 />
                 <field
                     name="col_position"
-                    attrs="{'invisible': [('attachment_id', '=', False)]}"
+                    
                 />
             </field>
         </field>

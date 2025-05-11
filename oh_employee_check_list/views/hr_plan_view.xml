@@ -10,15 +10,12 @@
                     <field name="on_board_type_check" invisible="1"/>
                     <field name="off_board_type_check" invisible="1"/>
                     <notebook>
-                        <page string="Checklists" name="checklist"
-                              attrs="{'invisible': [('check_type_check', '!=', True)]}">
+                        <page string="Checklists" name="checklist" >
                             <group string="Checklists">
-                                <group name="entry_checklist"
-                                       attrs="{'invisible': [('on_board_type_check', '!=', True)]}">
+                                <group name="entry_checklist" >
                                     <field name="entry_checklist_plan" widget="many2many_checkboxes"/>
                                 </group>
-                                <group name="exit_checklist"
-                                       attrs="{'invisible': [('off_board_type_check', '!=', True)]}">
+                                <group name="exit_checklist" >
                                     <field name="exit_checklist_plan" widget="many2many_checkboxes"/>
                                 </group>
                             </group>

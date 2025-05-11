@@ -22,7 +22,7 @@
 
 {
     'name': 'Open HRMS Employee Checklist',
-    'version': '15.0.1.0.0',
+    'version': '17.0.1.0.0',
     'summary': """Manages Employee's Entry & Exit Process""",
     'description': """This module is used to remembering the employee's entry and exit progress.""",
     'live_test_url': 'https://youtu.be/KV_Jb_9AGqU',
@@ -33,11 +33,11 @@
     'depends': ['base', 'oh_employee_documents_expiry', 'mail', 'hr'],
     'data': [
         'security/ir.model.access.csv',
-        'data/data.xml',
+        # 'data/data.xml',
         'views/employee_form_inherit_view.xml',
         'views/checklist_view.xml',
         'views/employee_check_list_view.xml',
-        'views/hr_plan_view.xml',
+        # 'views/hr_plan_view.xml',
     ],
     'images': ['static/description/banner.png'],
     'license': 'AGPL-3',

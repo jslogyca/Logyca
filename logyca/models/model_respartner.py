@@ -32,7 +32,7 @@ class ResPartner(models.Model):
     name = fields.Char(tracking=True)
     same_vat_partner_id = fields.Many2one('res.partner', string='Partner with same Tax ID', compute='_compute_no_same_vat_partner_id', store=False)
     x_type_thirdparty = fields.Many2many('logyca.type_thirdparty',string='Tipo de tercero',tracking=True, ondelete='restrict')
-    x_active_for_logyca = fields.Boolean(string='Activo', tracking=True)
+    x_active_for_logyca = fields.Boolean(string='Activo', tracking=True, default=True)
     x_document_type = fields.Selection([
                                         ('11', 'Registro civil de nacimiento'),
                                         ('12', 'Tarjeta de identidad'),
@@ -162,20 +162,10 @@ class ResPartner(models.Model):
 
     @api.onchange('x_active_for_logyca', 'active')
     def _onchange_active(self):
-        print('PPPPPPP', self.x_active_for_logyca, self.active)
         if self.x_active_for_logyca:
-            print('PPPPPPP 222222', self.x_active_for_logyca, self.active)
             self.active = True
         else:
-            print('PPPPPPP 3333333', self.x_active_for_logyca, self.active)
             self.active = False
-
-    # @api.onchange('x_active_for_logyca')
-    # def _onchange_active(self):    
-    #     if self.x_active_for_logyca:
-    #         self.active = True
-    #     else:
-    #         self.active = False        
 
     @api.depends('vat')
     def _compute_no_same_vat_partner_id(self):
@@ -267,21 +257,21 @@ class ResPartner(models.Model):
         name_contact = ""
         for record in self.child_ids:            
             ls_contacts = record.x_contact_type  
-
+            
             for i in ls_contacts:
                 if i.id == 3:
                     cant_contactsFE = cant_contactsFE + 1
                     name_contact = name_contact +" | "+record.name
-
+    
         if cant_contactsFE > 1:
             raise ValidationError(_('Tiene más de un contacto ('+name_contact+') de tipo facturación electrónica, por favor verificar.')) 
-
+        
         #Tipo de contacto representante ante LOGYCA
         cant_contactsRL = 0
         name_contact = ""
         for record in self.child_ids:            
             ls_contacts = record.x_contact_type  
-
+            
             for i in ls_contacts:
                 if i.id == 2:
                     cant_contactsRL = cant_contactsRL + 1
@@ -289,14 +279,7 @@ class ResPartner(models.Model):
 
         if cant_contactsRL > 1:
             raise ValidationError(_('Tiene más de un contacto ('+name_contact+') como Representante ante LOGYCA, por favor verificar.'))
-
-    #@api.constrains('x_active_for_logyca')
-    #def _validate_active_due(self):
-    #    if self.is_company:
-    #        if self.x_active_for_logyca == False:            
-    #            if self.total_due > 0:
-    #                raise UserError(_('El cliente ('+self.name+'). No puede ser archivado por que posee cartera.')) 
-
+                
     @api.constrains('x_tax_responsibilities')
     def _check_tax_responsibilities(self):
         #Responsabilidades Tributarias Validas para FE
@@ -309,24 +292,8 @@ class ResPartner(models.Model):
             if cant_RT == 0:
                     raise ValidationError(_('El cliente debe tener una Responsabilidad Tributaria válida para Facturación Electrónica.'))  
 
-    # @api.onchange('name')
-    # def _onchange_namecontact(self):
-    #     for record in self:
-    #         if record.name:
-    #             obj = self.search([('x_type_thirdparty','not in',[1,3]),('name','=',record.name)])
-    #             if obj:
-    #                 raise UserError(_('Ya existe un Contacto con ese nombre.'))
-
-class x_rvc_information(models.Model):
-    _name = 'logyca.rvc_information'
-    _description = 'RVC Information'
-
-    partner_id = fields.Many2one('res.partner',string='Cliente', required=True, ondelete='cascade')
-    types = fields.Selection([('gs1_identificacion', 'Derechos de identificación'),
-                              ('gs1_tarjeta_digital', 'Tarjeta digital GS1'),
-                              ('logyca_colabora', 'Logyca / COLABORA'),
-                              ('logyca_analitica', 'Logyca / ANALÍTICA'),
-                              ('logyca_crecemype', 'Logyca / CRECEMYPE'),
-                              ], string='Servicio', required=True)
-    activation_date = fields.Date(string="Fecha activación")
-    deactivation_date = fields.Date(string="Fecha finalización")
+    @api.model
+    def _run_vat_test(self, vat_number, default_country, partner_is_company=True):
+        # OVERRIDE account
+        check_result = None
+        return check_result

@@ -7,10 +7,10 @@
 		<field name="arch" type="xml">
             <xpath expr="//field[@name='email_cc']" position="after">
 				<field name="ticket_interno" invisible="1"/>
-				<field name="vat_partner" attrs="{'invisible': [('partner_id', '=', False)]}"/>
-				<field name="station_id" attrs="{'invisible': [('ticket_interno', '=', False)]}" />
-				<field name="subtype_id" attrs="{'invisible': [('ticket_interno', '=', False)]}" />
-				<field name="colabor_id" attrs="{'invisible': [('ticket_interno', '=', False)]}"/>
+				<field name="vat_partner" />
+				<field name="station_id"  />
+				<field name="subtype_id"  />
+				<field name="colabor_id" />
             </xpath>
 		</field>
 	 </record>

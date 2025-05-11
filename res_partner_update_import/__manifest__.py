@@ -3,7 +3,7 @@
 {
     'name': 'Partner Update Import',
     'summary': 'Description',
-    'version': '13.0.1.1.0',
+    'version': '17.0.1.1.0',
     'category': 'Accounting/Accounting',
     'website': 'https://logyca.com',
     'author': 'LOGYCA',

@@ -20,11 +20,11 @@
         'hr'
     ],
     'data': [
-        'data/mail_template.xml',
+        # 'data/mail_template.xml',
         'security/ir.model.access.csv',
         'views/hr_payroll.xml',
         'views/hr_employee_view.xml',
-        'views/hr_payslip_run_view.xml',
+        # 'views/hr_payslip_run_view.xml',
         'wizard/hr_payslip_wizard_view.xml',
         'wizard/hr_mass_payroll_wizard.xml',
     ],
