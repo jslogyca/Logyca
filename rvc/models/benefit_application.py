@@ -384,24 +384,24 @@ class BenefitApplication(models.Model):
                 #     '\n\nPor favor deje el campo Código GLN vacío, le asignaremos uno en la entrega del beneficio.' % (tmp_code, str(partner_id.name))))
                 
     def _validate_bought_products(self):
-        for benefit_application in self:
-            if self.get_odoo_url() == 'https://logyca.odoo.com':
-                url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
-            else:
-                url = "https://app-asc-dev.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+        # for benefit_application in self:
+        #     if self.get_odoo_url() == 'https://logyca.odoo.com':
+        #         url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+        #     else:
+        #         url = "https://app-asc-dev.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
 
-            response = requests.get(url)
-            if response.status_code == 200:
-                result = response.json()
-                response.close()
+        #     response = requests.get(url)
+        #     if response.status_code == 200:
+        #         result = response.json()
+        #         response.close()
 
-                if result.get('CodigosCompradosDisponiblesNPV') > 50:
-                     raise ValidationError(\
-                        _('¡Lo sentimos! La empresa %s tiene %s código(s) comprados disponibles.' % (str(self.partner_id.partner_id.vat) + '-' + str(self.partner_id.partner_id.name), str(result.get('CodigosCompradosDisponiblesNPV')))))
-            else:
-                raise ValidationError(\
-                        _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
-                            Inténtelo nuevamente o comuníquese con soporte. Error: %s' % (str(response))))
+        #         if result.get('CodigosCompradosDisponiblesNPV') > 50:
+        #              raise ValidationError(\
+        #                 _('¡Lo sentimos! La empresa %s tiene %s código(s) comprados disponibles.' % (str(self.partner_id.partner_id.vat) + '-' + str(self.partner_id.partner_id.name), str(result.get('CodigosCompradosDisponiblesNPV')))))
+        #     else:
+        #         raise ValidationError(\
+        #                 _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
+        #                     Inténtelo nuevamente o comuníquese con soporte. Error: %s' % (str(response))))
             return True
 
     def _validate_qty_codes(self):
