@@ -173,11 +173,11 @@
         <field name="context">{}</field>
     </record>
 
-    <menuitem id="menu_logyca_libro_mayor_report"
+    <!-- <menuitem id="menu_logyca_libro_mayor_report"
         name="Libro Mayor"
         parent="logyca_menus_report_financial"
         action="action_logyca_libro_mayor_report"
-        sequence="5" />    
+        sequence="5" />     -->
       
     <!-- Report Info History for partner VIEW -->    
     <!-- <record id="logyca_report_history_partner_form" model="ir.ui.view">

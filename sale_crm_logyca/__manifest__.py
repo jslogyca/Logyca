@@ -22,7 +22,7 @@
 
 ''',    
     'data': [
-        # 'views/crm_lead_view.xml',
+        'views/crm_lead_view.xml',
         'views/crm_team_member_view.xml',
         'views/crm_team_view.xml',
     ],
