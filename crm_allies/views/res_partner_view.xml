@@ -62,9 +62,13 @@
                 <field name="member_red_id" />
             </xpath>
             <xpath expr="//div[@class='o_kanban_tags_section oe_kanban_partner_categories']" position="after">
-                <field name="type_member" widget="kanban_label_selection" 
-                    options="{'classes': {'B': 'info', 'A': 'success', 'C': 'warning'}}"/>
-                <field name="member_red_id" />
+                <field name="type_member" widget="badge" 
+                            decoration-success="type_member == 'A'" 
+                            decoration-info="type_member == 'B'"
+                            decoration-warning="type_member == 'C'" />
+                <div>
+                    <field name="member_red_id" />
+                </div>
             </xpath>
         </field>
     </record>    

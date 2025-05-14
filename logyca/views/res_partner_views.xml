@@ -115,7 +115,7 @@
                     </group>
                 </page>                
             </xpath>
-            <xpath expr="//form[1]/sheet[1]/notebook[1]" position="after">
+            <!-- <xpath expr="//form[1]/sheet[1]/notebook[1]" position="after">
                 <notebook>
                     <page name="studio_page_s9FNl" string="Inf. Historica">
                         <group name="studio_group_s9FNl">
@@ -143,7 +143,26 @@
                         </group>
                     </page>
                 </notebook>
+            </xpath> -->
+        </field>
+    </record>
+    <record model="ir.ui.view" id="res_partner_kanban_view_typev17">
+        <field name="name">base.res.partner.kanban.view.typev17</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="x_type_thirdparty" />
+                <field name="vat" string='NIT'/>
+            </xpath>
+            <xpath expr="//div[@class='o_kanban_tags_section oe_kanban_partner_categories']" position="after">
+                <div>
+                    <field name="x_type_thirdparty" />
+                </div>
+                <div>
+                    <field name="vat" string='NIT'/>
+                </div>
             </xpath>
         </field>
-    </record>            
+    </record>
 </odoo>
