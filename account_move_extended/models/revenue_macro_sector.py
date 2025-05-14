@@ -39,6 +39,16 @@ class RevenueMacroSector(models.Model):
                                         ('3', 'Mediana'),
                                         ('4', 'Grande')
                                     ], string='Tamaño empresa')
+    display_name = fields.Char(
+        string="Nombre completo",
+        compute='_compute_display_name',
+        store=True)
+
+    @api.depends('amount', 'macro_sector')
+    def _compute_display_name(self):
+        for rec in self:
+            # concatena code y description, evitando 'None'
+            rec.display_name = f"{rec.amount or ''}"                                    
 
     def name_get(self):
         return [(type.id, '%s' % (type.amount)) for type in self]
