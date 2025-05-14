@@ -2,6 +2,7 @@
 
 from . import models
 from . import model_collaborative_group
+from . import logyca_budget_group
 from . import model_accountmove
 from . import account_account
 from . import model_respartner
@@ -42,7 +43,6 @@ from . import logyca_responsibilities_rut
 from . import logyca_contact_types
 from . import logyca_areas
 from . import logyca_job_title
-from . import logyca_budget_group
 from . import logyca_api_gateway
 from . import res_country_state
 from . import res_country
