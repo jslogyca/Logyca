@@ -36,10 +36,11 @@ class HrPayslip(models.Model):
     )
 
     def update_input_employee(self):
-        if not self.contract_id:
-            self.struct_id = False
-        self.with_context(contract=True)._get_new_input_line_ids()
-        self.with_context(contract=True)._compute_worked_days_line_ids()
+        for payslip in self:
+            if not payslip.contract_id:
+                payslip.struct_id = False
+            payslip.with_context(contract=True)._get_new_input_line_ids()
+            payslip.with_context(contract=True)._compute_worked_days_line_ids()
         return
 
     @api.depends('employee_id', 'contract_id', 'struct_id', 'date_from', 'date_to')
