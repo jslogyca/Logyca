@@ -6,8 +6,6 @@
         <field name="model">follow.partner.loyalty</field>
         <field name="arch" type="xml">
             <tree string="Follow Partner Loyalty" editable="bottom">
-                <field name="name" invisible="1"/>
-                <field name="check_loyalty" invisible="1"/>
                 <field name="date"/>
                 <field name="partner_id"/>
                 <field name="contact_partner" />
