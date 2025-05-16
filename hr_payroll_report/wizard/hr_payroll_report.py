@@ -45,7 +45,7 @@ class HrPayrollReportLG(models.TransientModel):
                             em.identification_id, \
                             em.name, \
                             to_char(co.date_start,'YYYY/MM/DD'), \
-                            jb.name, \
+                            jb.name->>'es_CO', \
                             st.name, \
                             ct.acc_number, \
                             bk.name, \
