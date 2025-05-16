@@ -48,6 +48,24 @@ class HrPayslip(models.Model):
         payslips.update_input_employee()
         payslips.compute_sheet()
 
+    def compute_sheet(self):
+        payslips = self.filtered(lambda slip: slip.state in ['draft', 'verify'])
+        # delete old payslip lines
+        payslips.line_ids.unlink()
+        # this guarantees consistent results
+        self.env.flush_all()
+        today = fields.Date.today()
+        for payslip in payslips:
+            number = payslip.number or self.env['ir.sequence'].next_by_code('salary.slip')
+            payslip.write({
+                'number': number,
+                'state': 'verify',
+                'compute_date': today
+            })
+            payslip.update_input_employee()
+        self.env['hr.payslip.line'].create(payslips._get_payslip_lines())
+        return True
+
     def update_input_employee(self):
         for payslip in self:
             if not payslip.contract_id:
