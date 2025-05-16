@@ -24,8 +24,8 @@
     </record>
 	<menuitem
 		id="menu_employee_payslip_lg"
-		name="Employees"
+		name="Empleados"
 		action="hr.open_view_employee_list_my"
 		parent="hr_work_entry_contract_enterprise.menu_hr_payroll_root"
-		sequence="1"/>
+		sequence="41"/>
 </odoo>

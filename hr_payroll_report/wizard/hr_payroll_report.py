@@ -24,19 +24,14 @@ class HrPayrollReportLG(models.TransientModel):
             raise Warning(_('!No hay resultados para los datos seleccionados¡'))
         self.make_file(value)
 
-        path = "/web/binary/download_document?"
-        model = "hr.payroll.report.lg"
-        filename = self.data_name
-        
-        url = path + "model={}&id={}&filename={}.xlsx".format(
-            model, self.id, filename)
+        if not self.data:
+            raise UserError("No se generó el archivo correctamente.")
 
         return {
-            'type' : 'ir.actions.act_url',
-            'url': url,
+            'type': 'ir.actions.act_url',
+            'url': f"/web/content?model=hr.payroll.report.lg&id={self.id}&field=data&filename_field=data_name&download=true",
             'target': 'self',
-            'tag': 'reload',
-        }
+        }       
         
     def get_values(self):
         value = []
