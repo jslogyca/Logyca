@@ -38,7 +38,7 @@ class HrPayrollReportLG(models.TransientModel):
         # Busca asientos contables 
         if self.payslip_run_id:
             
-            self._cr.execute(''' SELECT id, code, name FROM hr_salary_rule WHERE prenomina is True order by sequence_report''')
+            self._cr.execute(''' SELECT id, code, name->>'es_CO' FROM hr_salary_rule WHERE prenomina is True order by sequence_report''')
             rules_ids = self._cr.fetchall()
             
             query_header="select pr.name, \
