@@ -35,6 +35,19 @@ class HrPayslip(models.Model):
         states={"draft": [("readonly", False)]},
     )
 
+
+    def action_refresh_from_work_entries(self):
+        # Refresh the whole payslip in case the HR has modified some work entries
+        # after the payslip generation
+        if any(p.state not in ['draft', 'verify'] for p in self):
+            raise UserError(_('The payslips should be in Draft or Waiting state.'))
+        payslips = self.filtered(lambda p: not p.edited)
+        payslips.mapped('worked_days_line_ids').unlink()
+        payslips.mapped('line_ids').unlink()
+        payslips._compute_worked_days_line_ids()
+        payslips.update_input_employee()
+        payslips.compute_sheet()
+
     def update_input_employee(self):
         for payslip in self:
             if not payslip.contract_id:
