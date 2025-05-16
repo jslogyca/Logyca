@@ -5,6 +5,10 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"></field>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='mobile_phone']" position="before">
+                <field name="work_contact_id" required="1"/>
+                <field name="identification_id" required="1"/>
+            </xpath>
             <xpath expr="//page[@name='hr_settings']" position="after">
 				<page name="hr_entities" string="Entities" >
                     <group>
