@@ -1080,7 +1080,7 @@ msgstr "Origen"
 #: model:ir.model.fields,field_description:crm_allies.field_project_allies__user_loyalty_id
 #: model_terms:ir.ui.view,arch_db:crm_allies.benefits_membership_partner_filter
 msgid "Partner"
-msgstr "Miembro"
+msgstr "Responsable"
 
 #. module: crm_allies
 #: model:ir.model.fields.selection,name:crm_allies.selection__res_partner_member_logyca__x_company_size__6

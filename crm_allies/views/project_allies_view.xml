@@ -7,10 +7,10 @@
             <form string="Projects Allies">
                 <header>
                     <button name="cancel_project" string="Cancel Project" class="oe_highlight" type="object"  />
-                    <button name="open_project" string="Open Project" class="oe_highlight" type="object"  />
-                    <button name="done_project" string="Done Project" class="oe_highlight" type="object"  />
-                    <button name="draft_project" string="Draft Project" class="oe_highlight" type="object"  />
-                    <field name="state" widget="statusbar" statusbar_visible="draft,open,done"/>
+                    <button name="open_project" string="Open Project" class="oe_highlight" type="object" invisible="state != 'draft'" />
+                    <button name="done_project" string="Done Project" class="oe_highlight" type="object" invisible="state != 'open'" />
+                    <button name="draft_project" string="Draft Project" class="oe_highlight" type="object"  invisible="state != 'done'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,prioritized,open,done"/>
                 </header>
                 <sheet>
                     <group>
@@ -29,11 +29,11 @@
                             <field name="year_id" required="1"/>
                             <field name="object" required="1"/>
                             <field name="apply_amount" />
-                            <field name="total_amount" />
-                            <field name="reason_id" />
+                            <field name="total_amount" invisible="not apply_amount" />
+                            <field name="reason_id" invisible="state != 'done'"/>
                         </group>
                         <group>
-                            <field name="user_loyalty_id" required="1"/>
+                            <field name="user_loyalty_id" required="1" string="Responsable"/>
                             <field name="date" required="1"/>
                             <field name="date_open" />
                             <field name="date_done" />

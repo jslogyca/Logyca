@@ -37,16 +37,19 @@
                             <field name="member_red_id" />
                         </group>
                     </group>
-                    <!-- <field name="follow_ids" nolabel="1" force_save="1" readonly="1">
+                </page>
+                <page string="Proyectos" name="projects">
+                    <field name="projects_ids" nolabel="1" force_save="1" readonly="1">
                         <tree editable="bottom">
-                            <field name="date" />
+                            <field name="object" />
                             <field name="contact_partner" />
-                            <field name="job_partner" />
-                            <field name="phone_partner" />
-                            <field name="email_partner" />                            
-                            <field name="description" />
+                            <field name="year_id" />
+                            <field name="date" />
+                            <field name="date_open" />
+                            <field name="user_loyalty_id" required="1" string="Responsable"/>
+                            <field name="state" widget="badge" />
                         </tree>
-                    </field> -->
+                    </field>
                 </page>
             </xpath>
         </field>

@@ -47,7 +47,7 @@ class ResPartnerMemberLogyca(models.Model):
             p.type_member as type_member,
             p.member_red_id as member_red_id,
             p.x_city as city_id,
-            to_char(p.x_date_vinculation,'YYYY/MM/DD') AS x_date_vinculation,
+            p.x_date_vinculation AS x_date_vinculation,
             p.x_sector_id as x_sector_id,
             p.meet_loyalty as meet_loyalty,
             p.date_loyalty as date_loyalty,
