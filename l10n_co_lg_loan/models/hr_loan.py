@@ -43,6 +43,11 @@ class HrLoan(models.Model):
                 else:
                     self.write({'state': 'approve'})
 
+    @api.depends('employee_id')
+    def _compute_company_id(self):
+        for slip in self.filtered(lambda p: p.employee_id):
+            slip.company_id = slip.employee_id.company_id
+
     name = fields.Char(string="Loan Name", default="/", readonly=True, help="Name of the loan")
     date = fields.Date(string="Date", default=fields.Date.today(), readonly=True, help="Date")
     employee_id = fields.Many2one('hr.employee', string="Employee", required=True, help="Employee")
@@ -58,9 +63,10 @@ class HrLoan(models.Model):
                                                                                                              "the "
                                                                                                              "Done")
     loan_lines = fields.One2many('hr.loan.line', 'loan_id', string="Loan Line", index=True)
-    company_id = fields.Many2one('res.company', 'Company', readonly=True, help="Company",
-                                 default=lambda self: self.env.user.company_id,
-                                 states={'draft': [('readonly', False)]})
+    company_id = fields.Many2one(
+        'res.company', string='Company', copy=False, required=True,
+        compute='_compute_company_id', store=True, readonly=False,
+        default=lambda self: self.env.company)
     currency_id = fields.Many2one('res.currency', string='Currency', required=True, help="Currency",
                                   default=lambda self: self.env.user.company_id.currency_id)
     job_position = fields.Many2one('hr.job', related="employee_id.job_id", readonly=True, string="Job Position",
