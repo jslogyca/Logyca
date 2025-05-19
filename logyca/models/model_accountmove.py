@@ -567,6 +567,20 @@ class AccountMoveLine(models.Model):
                                         ('company_id', '=', line.company_id.id)], order="id asc", limit=1)
                 if budget_group:
                     line.x_budget_group = budget_group
+
+    @api.depends('x_budget_group')
+    def _compute_x_budget_group_id(self):
+        if self.x_budget_group:
+            self.analytic_distribution = self.x_budget_group.analytic_distribution
+        else:
+            self.analytic_distribution = False
+
+    @api.onchange('x_budget_group')
+    def _inverse_x_budget_group_id(self):
+        if self.x_budget_group:
+            self.analytic_distribution = self.x_budget_group.analytic_distribution
+        else:
+            self.analytic_distribution = False
             
 # Reportes Contabilidad
 class AccountInvoiceReport(models.Model):
