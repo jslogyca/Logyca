@@ -12,6 +12,7 @@
                             <field name="name"/>
                             <field name="by_default_group"/>
                             <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active" widget="boolean_toggle"/>
                         </group>
                         <group >
                             <field name="analytic_distribution" widget="analytic_distribution"
@@ -34,6 +35,7 @@
                         groups="analytic.group_analytic_accounting"
                         optional="show" />
                 <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
             </tree>
         </field>
     </record>
