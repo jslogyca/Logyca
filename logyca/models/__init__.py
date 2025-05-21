@@ -48,3 +48,4 @@ from . import res_country_state
 from . import res_country
 from . import purchase_order
 from . import sale_order
+from . import res_partner_bank

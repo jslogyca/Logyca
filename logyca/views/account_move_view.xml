@@ -67,6 +67,9 @@
 			<xpath expr="//form/sheet/notebook/page[@id='aml_tab']/field[@name='line_ids']/tree/field[@name='name']" position="replace">
                 <field name="name" widget="section_and_note_text" optional="show" string="Descripción"/>
 			</xpath>
+			<xpath expr="//form/sheet/notebook/page[@id='aml_tab']/field[@name='line_ids']/tree/field[@name='credit']" position="after">
+                <field name="tax_base_amount" readonly="false"/>
+			</xpath>
 			<xpath expr="//form/sheet/notebook/page[@id='invoice_tab']/field[@name='invoice_line_ids']/tree/field[@name='name']" position="replace">
                 <field name="name" widget="section_and_note_text" optional="show" string="Descripción"/>
 			</xpath>
