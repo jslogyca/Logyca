@@ -165,4 +165,14 @@
             </xpath>
         </field>
     </record>
+    <record id="res_partner_property_form_lgv17" model="ir.ui.view">
+        <field name="name">res.partner.property.form.lgv17</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account.view_partner_property_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='acc_holder_name']" position="after">
+                <field name="x_studio_tipo_de_cuenta"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>
