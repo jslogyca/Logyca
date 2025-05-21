@@ -48,7 +48,7 @@ class HrPayslip(models.Model):
                 "ref": slip.number,
                 "journal_id": slip.journal_id.id,
                 "date": date,
-                "partner_id": slip.employee_id.address_home_id.id,
+                "partner_id": slip.employee_id.work_contact_id.id,
             }
             for line in slip.line_ids:
                 amount = currency.round(slip.credit_note and -line.total or line.total)
@@ -72,7 +72,7 @@ class HrPayslip(models.Model):
                         {
                             "name": line.name,
                             "partner_id": line._get_partner_id(credit_account=False)
-                            or slip.employee_id.address_home_id.id,
+                            or slip.employee_id.work_contact_id.id,
                             "account_id": debit_account_id,
                             "journal_id": slip.journal_id.id,
                             "date": date,
@@ -94,7 +94,7 @@ class HrPayslip(models.Model):
                         {
                             "name": line.name,
                             "partner_id": line._get_partner_id(credit_account=True)
-                            or slip.employee_id.address_home_id.id,
+                            or slip.employee_id.work_contact_id.id,
                             "account_id": credit_account_id,
                             "journal_id": slip.journal_id.id,
                             "date": date,
@@ -124,7 +124,7 @@ class HrPayslip(models.Model):
                     0,
                     {
                         "name": _("Adjustment Entry"),
-                        "partner_id": slip.employee_id.address_home_id.id,
+                        "partner_id": slip.employee_id.work_contact_id.id,
                         "account_id": acc_id,
                         "journal_id": slip.journal_id.id,
                         "date": date,
@@ -149,7 +149,7 @@ class HrPayslip(models.Model):
                     0,
                     {
                         "name": _("Adjustment Entry"),
-                        "partner_id": slip.employee_id.address_home_id.id,
+                        "partner_id": slip.employee_id.work_contact_id.id,
                         "account_id": acc_id,
                         "journal_id": slip.journal_id.id,
                         "date": date,
