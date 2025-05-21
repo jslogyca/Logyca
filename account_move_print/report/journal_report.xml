@@ -47,7 +47,7 @@
                             <tr>
                                 <th name="th_account" class="text-left">Account</th>
                                 <th name="th_partner" class="text-left">Partner</th>
-                                <th name="th_label" class="text-left">Label</th>
+                                <th name="th_label" class="text-left">Descripción</th>
                                 <th
                                     name="th_amount_currency"
                                     class="text-left"

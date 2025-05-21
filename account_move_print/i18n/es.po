@@ -69,7 +69,7 @@ msgstr "Asientos contables"
 #. module: account_move_print
 #: model_terms:ir.ui.view,arch_db:account_move_print.report_journal_entry_document
 msgid "Label"
-msgstr "Etiqueta"
+msgstr "Descripción"
 
 #. module: account_move_print
 #: model_terms:ir.ui.view,arch_db:account_move_print.report_journal_entry_document
