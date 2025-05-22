@@ -57,6 +57,7 @@ class HrPayslip(models.Model):
 
                 analytic_salary_id = slip.budget_group_id.id or slip.employee_id.budget_group_id.id
                 analytic_slip_id = slip.budget_group_id or slip.employee_id.budget_group_id
+                analytic_distribution = slip.employee_id.budget_group_id.analytic_distribution
 
                 debit_account_id = self.get_account_salary(analytic_slip_id, line.salary_rule_id, 'debit')
                 credit_account_id = self.get_account_salary(analytic_slip_id, line.salary_rule_id, 'credit')
@@ -79,6 +80,7 @@ class HrPayslip(models.Model):
                             "debit": amount > 0.0 and amount or 0.0,
                             "credit": amount < 0.0 and -amount or 0.0,
                             "x_budget_group": analytic_salary_id,
+                            "analytic_distribution" : analytic_distribution,
                             "tax_line_id": False,
                             "tax_ids": tax_ids,
                             "tax_repartition_line_id": tax_repartition_line_id,
@@ -101,6 +103,7 @@ class HrPayslip(models.Model):
                             "debit": amount < 0.0 and -amount or 0.0,
                             "credit": amount > 0.0 and amount or 0.0,
                             "x_budget_group": analytic_salary_id,
+                            "analytic_distribution" : analytic_distribution,
                             "tax_line_id": False,
                             "tax_ids": tax_ids,
                             "tax_repartition_line_id": tax_repartition_line_id,
