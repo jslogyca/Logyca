@@ -113,6 +113,9 @@ class HrPayslip(models.Model):
                     credit_sum += credit_line[2]["credit"] - credit_line[2]["debit"]
 
             if currency.compare_amounts(credit_sum, debit_sum) == -1:
+                analytic_salary_id = slip.budget_group_id.id or slip.employee_id.budget_group_id.id
+                analytic_slip_id = slip.budget_group_id or slip.employee_id.budget_group_id
+                analytic_distribution = slip.employee_id.budget_group_id.analytic_distribution                
                 acc_id = slip.journal_id.default_account_id.id
                 if not acc_id:
                     raise UserError(
@@ -133,12 +136,17 @@ class HrPayslip(models.Model):
                         "date": date,
                         "debit": 0.0,
                         "credit": currency.round(debit_sum - credit_sum),
+                        "x_budget_group": analytic_salary_id,
+                        "analytic_distribution" : analytic_distribution,                        
                     },
                 )
                 line_ids.append(adjust_credit)
 
             elif currency.compare_amounts(debit_sum, credit_sum) == -1:
                 acc_id = slip.journal_id.default_account_id.id
+                analytic_salary_id = slip.budget_group_id.id or slip.employee_id.budget_group_id.id
+                analytic_slip_id = slip.budget_group_id or slip.employee_id.budget_group_id
+                analytic_distribution = slip.employee_id.budget_group_id.analytic_distribution                
                 if not acc_id:
                     raise UserError(
                         _(
