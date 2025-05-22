@@ -161,7 +161,7 @@ class HrPayslip(models.Model):
             move_dict["line_ids"] = line_ids
             move = self.env["account.move"].create(move_dict)
             slip.write({"move_id": move.id, "date": date})
-            move.post()
+            move.action_post()
             if not slip.name_move:
                 slip.name_move = move.name
             else:
