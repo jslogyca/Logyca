@@ -6,7 +6,7 @@
 		<field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
 		<field name="arch" type="xml">
 			<xpath expr="//button[@name='action_payslip_done']" position="after">
-				<button string="Update Input Employee" name="update_input_employee" type="object" class="oe_highlight"/>
+				<button string="Update Input Employee" name="update_input_employee" type="object" class="oe_highlight" invisible="state not in ('draft', 'verify')"/>
 				<button string="Cancel Payslip" name="action_payslip_cancel_done" type="object"  class="oe_highlight"/>
 			</xpath>
 			<xpath expr="//field[@name='credit_note']" position="after">
@@ -44,7 +44,7 @@
 			</xpath>
 		</field>
 	</record>
-	<record id="hr_payslip_view_form_up_account" model="ir.ui.view">
+	<!-- <record id="hr_payslip_view_form_up_account" model="ir.ui.view">
 		<field name="name">hr.payslip.view.form.up.account</field>
 		<field name="model">hr.payslip</field>
 		<field name="inherit_id" ref="hr_payroll_account.hr_payslip_view_form"/>
@@ -53,5 +53,5 @@
 				<button string="Create Draft Entry" name="action_payslip_done" type="object" class="oe_highlight" context="{'payslip_generate_pdf': True}"/>
 			</xpath>
 		</field>
-	</record>
+	</record> -->
 </odoo>
