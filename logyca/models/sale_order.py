@@ -40,18 +40,18 @@ class SaleOrder(models.Model):
             amount_total_conditional_discount = amount_total-conditional_discount
             record.x_amount_total_conditional_discount = amount_total_conditional_discount
     
-    # def _prepare_invoice(self):        
-    #     invoice_vals = super(SaleOrder, self)._prepare_invoice()        
-    #     self.ensure_one()
-    #     self = self.with_context(default_company_id=self.company_id.id, force_company=self.company_id.id)        
-    #     country_id = 0
-    #     if self.x_country_account_id:
-    #         country_id = self.x_country_account_id.id
-    #     else:
-    #         country_id = self.partner_invoice_id.country_id.id        
+    def _prepare_invoice(self):        
+        invoice_vals = super(SaleOrder, self)._prepare_invoice()        
+        self.ensure_one()
+        self = self.with_context(default_company_id=self.company_id.id, force_company=self.company_id.id)        
+        country_id = 0
+        if self.x_country_account_id:
+            country_id = self.x_country_account_id.id
+        else:
+            country_id = self.partner_invoice_id.country_id.id        
             
-    #     invoice_vals['x_country_account_id'] = country_id        
-    #     return invoice_vals
+        invoice_vals['x_country_account_id'] = country_id        
+        return invoice_vals
 
     #Validaciones antes de CONFIRMAR una orden de compra
     def action_confirm(self):
