@@ -137,7 +137,7 @@ class HrPayslip(models.Model):
                         "debit": 0.0,
                         "credit": currency.round(debit_sum - credit_sum),
                         "x_budget_group": analytic_salary_id,
-                        "analytic_distribution" : analytic_distribution,                        
+                        "analytic_distribution" : analytic_distribution,
                     },
                 )
                 line_ids.append(adjust_credit)
@@ -166,6 +166,8 @@ class HrPayslip(models.Model):
                         "date": date,
                         "debit": currency.round(credit_sum - debit_sum),
                         "credit": 0.0,
+                        "x_budget_group": analytic_salary_id,
+                        "analytic_distribution" : analytic_distribution,                        
                     },
                 )
                 line_ids.append(adjust_debit)
