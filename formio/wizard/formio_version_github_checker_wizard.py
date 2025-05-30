@@ -42,24 +42,29 @@ class VersionGitHubChecker(models.TransientModel):
             response = requests.get(f'https://api.github.com/repos/formio/formio.js/tags?per_page=100&page={i}', headers=headers)
             if response.status_code == 200:
                 tags = response.json()
-                # TODO BACKPORT from 17.0 (versions_to_register and used in check below)
-                # versions_to_register = Param.get_param('formio.versions_to_register').split(',')
+                versions_to_register = Param.get_param('formio.versions_to_register').split(',')
                 existing = self.env['formio.version.github.tag'].search([]).mapped('name')
                 for t in tags:
-                    if t['name'] not in existing:
+                    if (
+                        any([t['name'].startswith(v) for v in versions_to_register])
+                        and t['name'] not in existing
+                    ):
                         tag_vals = {
                             'name': t['name'],
                         }
                         res.append(tag_vals)
         return res
 
-    @api.model
-    def create(self, vals):
+    @api.model_create_multi
+    def create(self, vals_list):
         tags_vals_list = self.check_new_versions()
-        if tags_vals_list:
-            vals['available_version_github_tag_ids'] = [(False, False, tag_vals) for tag_vals in tags_vals_list]
-        return super(VersionGitHubChecker, self).create(vals)
-        
+        for vals in vals_list:
+            if tags_vals_list:
+                vals["available_version_github_tag_ids"] = [
+                    (False, False, tag_vals) for tag_vals in tags_vals_list
+                ]
+        return super(VersionGitHubChecker, self).create(vals_list)
+
     def action_register_available_versions(self):
         self.env['formio.version.github.tag'].check_and_register_available_versions()
         action = {

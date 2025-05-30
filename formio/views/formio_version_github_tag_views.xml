@@ -11,7 +11,7 @@ See LICENSE file for full licensing details. -->
                 <field name="name"/>
                 <field name="state"/>
                 <field name="create_date" optional="show"/>
-                <field name="install_date" optional="show"/>                
+                <field name="install_date" optional="show"/>
                 <field name="changelog_url" widget="url"/>
                 <field name="archive_url" widget="url" optional="hide"/>
             </tree>
@@ -26,13 +26,13 @@ See LICENSE file for full licensing details. -->
                 <header>
                     <button
                         name="action_download_install" type="object" string="Download and Install"
-                        attrs="{'invisible': [('formio_version_id', '!=', False)]}"
+                        invisible="formio_version_id != False"
                         confirm="Are you sure to download and install? This could take some time to load, please be patient."
                         class="btn-primary"/>
                     <button
-                        name="action_reset_installed" type="object" string="Reset (to download and install again)"
-                        attrs="{'invisible': [('formio_version_id', '=', False)]}"
-                        confirm="Are you sure to reset, to download and install again?"/>
+                        name="action_reset_installed" type="object" string="Reset (download and reinstall)"
+                        invisible="formio_version_id == False"
+                        confirm="Are you sure to reset (download and reinstall)?"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -46,9 +46,9 @@ See LICENSE file for full licensing details. -->
                             <field name="install_date"/>
                         </group>
                         <group colspan="2" name="urls">
-                            <field name="changelog_url" widget="url" attrs="{'invisible': [('changelog_url', '=', False)]}"/>
-                            <field name="archive_url" widget="url" attrs="{'invisible': [('archive_url', '=', False)]}"/>
-                        </group>                            
+                            <field name="changelog_url" widget="url" invisible="changelog_url == False"/>
+                            <field name="archive_url" widget="url" invisible="archive_url == False"/>
+                        </group>
                     </group>
                 </sheet>
                 <div class="oe_chatter" groups="formio.group_formio_admin">

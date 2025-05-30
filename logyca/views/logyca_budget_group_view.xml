@@ -10,11 +10,13 @@
                         <group >
                             <field name="code"/>
                             <field name="name"/>
+                            <field name="by_default_group"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active" widget="boolean_toggle"/>
                         </group>
                         <group >
-                            <field name="lser_analytic_tag_ids"/>
-                            <field name="iac_analytic_tag_ids"/>
-                            <field name="log_analytic_tag_ids"/>
+                            <field name="analytic_distribution" widget="analytic_distribution"
+                                    groups="analytic.group_analytic_accounting" />
                         </group>
                     </group>
                 </sheet>
@@ -29,9 +31,11 @@
             <tree string="Grupos presupuestal" >
                 <field name="code"/>
                 <field name="name"/>
-                <field name="lser_analytic_tag_ids"/>
-                <field name="iac_analytic_tag_ids"/>
-                <field name="log_analytic_tag_ids"/>
+                <field name="analytic_distribution" widget="analytic_distribution"
+                        groups="analytic.group_analytic_accounting"
+                        optional="show" />
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
             </tree>
         </field>
     </record>
@@ -46,9 +50,16 @@
 
     <menuitem id="menu_logyca_budget_group"
         name="Grupos presupuestal"
-        parent="main_menu_fact_mass_confg"
+        parent="logyca.menus_parameterization"
         action="action_logyca_budget_group"
         sequence="3"
         groups="group_invoice_mass"/>
+
+    <record id="budget_group_multi_company_rule" model="ir.rule">
+        <field name="name">Budget Group: Multi-company restriction</field>
+        <field name="model_id" ref="model_logyca_budget_group"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>        
 
 </odoo>

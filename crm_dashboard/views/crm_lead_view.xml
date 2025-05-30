@@ -5,37 +5,24 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_lead_view_form"></field>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='team_id']" position="after">
-                <field name="date_follow" required="1" string='Último Contacto Cliente' />
-                <field name="follow_lead" widget="kanban_label_selection" string='Nivel de Seguimiento'
-                        options="{'classes': {'baja': 'default', 'baja': 'danger', 'alta': 'success', 'media': 'warning'}}"/>
-            </xpath>
-            <xpath expr="//field[@name='priority']" position="replace">
-                <field name="priority" widget="priority" string='Probabilidad de Cierre'/>
-                <field name="risk_lead" widget="radio"/>
+            <xpath expr="//group[@name='lead_priority']" position="after">
+                <group name="lead_lg" invisible="type != 'opportunity'">
+                    <field name="team_id" required="1" />
+                    <field name="date_follow" required="1" string='Último Contacto Cliente'/>
+                    <field name="follow_lead" widget="badge" string='Nivel de Seguimiento'
+                            options="{'classes': {'baja': 'default', 'baja': 'success', 'alta': 'danger', 'media': 'warning'}}"/>
+                </group>
             </xpath>
         </field>
     </record>
+
     <record model="ir.ui.view" id="view_crm_case_opportunities_filter_lg_follow">
         <field name="name">crm.case.opportunities.filter.lg.follow</field>
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"></field>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='activity_state']" position="after">
-                <separator/>
-                <filter string="Mis Oportunidades" name="my_quotation" domain="[('user_id', '=', uid)]"/>
-                <separator/>
-                <filter string="Fecha Seguimiento" name="filter_follow_lead" date="follow_lead"/>
-                <separator/>
-                <filter string="Mercadeo" name="source_id" domain="[('source_id', '=', 140)]" />
-                <separator/>
-                <filter string="Probabilidad de Cierre Baja" name="Baja" domain="[('priority','=','0')]"/>
-                <filter string="Probabilidad de Cierre Media" name="Media" domain="[('priority','=','1')]"/>
-                <filter string="Probabilidad de Cierre Alta" name="Alta" domain="[('priority','in',('2','3'))]"/>
-                <separator/>
-                <filter string="Riesgo Bajo" name="Bajo" domain="[('risk_lead','=','bajo')]"/>
-                <filter string="Riesgo Medio" name="Medio" domain="[('risk_lead','=','medio')]"/>
-                <filter string="Riesgo Alto" name="Alto" domain="[('risk_lead','=','alto')]"/>
+                <field name="follow_lead" />
             </xpath>
         </field>
     </record>
@@ -45,20 +32,9 @@
         <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"></field>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='tag_ids']" position="after">
-                <div>
-                    <field name="date_follow" />
-                </div>
-                <div>
-                    <strong><span class="o_text_overflow">Nivel de Seguimiento</span></strong>
-                    <field name="follow_lead" widget="kanban_label_selection" 
-                            options="{'classes': {'baja': 'default', 'baja': 'danger', 'alta': 'success', 'media': 'warning'}}"/>
-
-                </div>
-                <div>
-                    <strong><span class="o_text_overflow">Riesgo</span></strong>
-                    <field name="risk_lead" widget="kanban_label_selection" 
-                            options="{'classes': {'bajo': 'success', 'bajo': 'success', 'alto': 'danger', 'medio': 'warning'}}"/>
-                </div>
+                <field name="date_follow" />
+                <field name="follow_lead" widget="kanban_label_selection" 
+                        options="{'classes': {'baja': 'default', 'baja': 'success', 'alta': 'danger', 'media': 'warning'}}"/>
             </xpath>
         </field>
     </record>

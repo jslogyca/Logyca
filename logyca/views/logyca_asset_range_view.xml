@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="logyca_menu_action_asset_range" model="ir.actions.act_window">
+        <field name="name">Rango de activos</field>
+          <field name="res_model">logyca.asset_range</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear rango de activos
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_asset_range">
+      <field name="name">logyca list asset range</field>
+      <field name="model">logyca.asset_range</field>
+      <field name="arch" type="xml">
+        <tree>      
+          <field name="id"/>                   
+          <field name="name"/>   
+          <field name="initial_value"/>                 
+          <field name="final_value"/>                                                        
+          <field name="active"/>   
+          <field name="assigned_codes"/>             
+        </tree>
+      </field>
+    </record>
+    <menuitem name="Rango de activos" id="logyca.menu_asset_range" parent="logyca.menus_parameterization"  sequence="9" action="logyca_menu_action_asset_range"/>
+</odoo>

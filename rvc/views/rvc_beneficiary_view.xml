@@ -6,17 +6,17 @@
 		<field name="arch" type="xml">
 			<form string="Empresas Patrocinada">
 				<header>
-                    <button name="deactivate_beneficiary" string="Desactivar" type="object" class="btn-primary" attrs="{'invisible': ['|',('id','=', False), ('active','=', False)]}" groups="rvc.group_rvc_manager"/>
-                    <button name="activate_beneficiary" string="Activar" type="object" class="btn-primary" attrs="{'invisible': ['|', ('id','=', False), ('active','=', True)]}" groups="rvc.group_rvc_manager"/>
+                    <button name="deactivate_beneficiary" string="Desactivar" type="object" class="btn-primary" groups="rvc.group_rvc_manager"/>
+                    <button name="activate_beneficiary" string="Activar" type="object" class="btn-primary" groups="rvc.group_rvc_manager"/>
 				</header>			
 				<sheet>
-					<widget name="web_ribbon" title="Archivada" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+					<widget name="web_ribbon" title="Archivada" bg_color="bg-danger" />
                     <h1>Registro de Empresa Beneficiaria</h1>
                     <group>
                         <group string="Buscar Empresa">
                             <field name="partner_id" nolabel="1" domain="['|', ('parent_id', '=', False),('is_company', '=', True)]"/>
                         </group>
-                        <group string="Buscar Contacto" attrs="{'invisible': [('partner_id', '=', False)]}">
+                        <group string="Buscar Contacto" >
                             <field name="contact_id" nolabel="1" domain="[('is_company', '=', False), ('parent_id', '=', partner_id)]"/>
                         </group>
 					</group>

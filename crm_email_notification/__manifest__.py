@@ -21,7 +21,7 @@
 ##############################################################################
 {
     'name': 'CRM Email Notification - MFH',
-    'version': '13.0.1.0',
+    'version': '17.0.1.0',
     'author': 'Ynext SpA',
     'maintainer': 'Ynext SpA',
     'website': 'http://www.ynext.cl',

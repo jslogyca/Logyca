@@ -19,12 +19,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: report_xlsx
-#: code:addons/report_xlsx/models/ir_report.py:0
-#, python-format
-msgid "%s model was not found"
-msgstr ""
-
-#. module: report_xlsx
 #: model:ir.model,name:report_xlsx.model_report_report_xlsx_abstract
 msgid "Abstract XLSX Report"
 msgstr ""

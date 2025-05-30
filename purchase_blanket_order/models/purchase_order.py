@@ -66,8 +66,18 @@ class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
 
     blanket_order_line = fields.Many2one(
-        comodel_name="purchase.blanket.order.line", copy=False
+        comodel_name="purchase.blanket.order.line",
+        copy=False,
+        domain="[('product_id', '=', product_id)]",
     )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        lines = super().create(vals_list)
+        for line in lines:
+            if not line.blanket_order_line:
+                line.with_context(assigned_from_creation=True).get_assigned_bo_line()
+        return lines
 
     def _get_assigned_bo_line(self, bo_lines):
         # We get the blanket order line with enough quantity and closest
@@ -75,14 +85,16 @@ class PurchaseOrderLine(models.Model):
         assigned_bo_line = False
         date_planned = fields.Date.from_string(self.date_planned) or date.today()
         date_delta = timedelta(days=365)
-        for line in bo_lines.filtered(lambda l: l.date_schedule):
+        for line in bo_lines.filtered(lambda line_item: line_item.date_schedule):
             date_schedule = fields.Date.from_string(line.date_schedule)
             if date_schedule and abs(date_schedule - date_planned) < date_delta:
                 assigned_bo_line = line
                 date_delta = abs(date_schedule - date_planned)
         if assigned_bo_line:
             return assigned_bo_line
-        non_date_bo_lines = bo_lines.filtered(lambda l: not l.date_schedule)
+        non_date_bo_lines = bo_lines.filtered(
+            lambda line_item: not line_item.date_schedule
+        )
         if non_date_bo_lines:
             return non_date_bo_lines[0]
 
@@ -126,11 +138,16 @@ class PurchaseOrderLine(models.Model):
             return self.get_assigned_bo_line()
         return res
 
-    @api.onchange("product_qty", "product_uom")
-    def _onchange_quantity(self):
-        res = super()._onchange_quantity()
-        if self.product_id and not self.env.context.get("skip_blanket_find", False):
-            return self.get_assigned_bo_line()
+    @api.depends("product_qty", "product_uom")
+    def _compute_price_unit_and_date_planned_and_name(self):
+        res = super()._compute_price_unit_and_date_planned_and_name()
+        for rec in self:
+            if (
+                rec.product_id
+                and not rec.env.context.get("skip_blanket_find", False)
+                and not rec.env.context.get("assigned_from_creation", False)
+            ):
+                return rec.get_assigned_bo_line()
         return res
 
     @api.onchange("blanket_order_line")
@@ -150,8 +167,11 @@ class PurchaseOrderLine(models.Model):
             if bol.taxes_id:
                 self.taxes_id = bol.taxes_id
         else:
-            self._compute_tax_id()
-            self.with_context(skip_blanket_find=True)._onchange_quantity()
+            if not self.env.context.get("assigned_from_creation", False):
+                self._compute_tax_id()
+                self.with_context(
+                    skip_blanket_find=True
+                )._compute_price_unit_and_date_planned_and_name()
 
     @api.constrains("date_planned")
     def check_date_planned(self):
@@ -161,6 +181,7 @@ class PurchaseOrderLine(models.Model):
                 line.blanket_order_line
                 and line.blanket_order_line.date_schedule
                 and line.blanket_order_line.date_schedule != date_planned
+                and not line.env.context.get("assigned_from_creation", False)
             ):
                 raise ValidationError(
                     _(

@@ -31,7 +31,7 @@
         'data/hr_payroll_data.xml',        
         'views/hr_payslip_input_type_view.xml',
         'views/hr_payslip_view.xml',
-        'views/hr_salary_rule_view.xml',
+        # 'views/hr_salary_rule_view.xml',
         'views/hr_payslip_line_view.xml',
         'views/hr_contract_view.xml',
         'views/hr_risk_view.xml',

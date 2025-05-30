@@ -16,6 +16,7 @@
                 <field name="user_id" />
                 <field name="partner_id" />
                 <field name="validity_date" />
+                <field name="activity_ids" widget="list_activity" />
                 <field name="state" />
             </tree>
         </field>
@@ -31,25 +32,25 @@
                         string="Create Purchase Order"
                         type="action"
                         class="btn-primary"
-                        attrs="{'invisible': [('state', '!=', 'open')]}"
+                        invisible="state != 'open'"
                     />
                     <button
                         name="set_to_draft"
-                        states="expired,done"
+                        invisible="state not in ('expired', 'done')"
                         string="To Draft"
                         class="btn-secondary"
                         type="object"
                     />
                     <button
                         name="action_cancel"
-                        states="open"
+                        invisible="state not in ('open')"
                         string="Cancel"
                         class="btn-secondary"
                         type="object"
                     />
                     <button
                         name="action_confirm"
-                        states="draft"
+                        invisible="state not in ('draft')"
                         string="Confirm"
                         class="btn-primary o_purchase_confirm"
                         type="object"
@@ -60,6 +61,7 @@
                         statusbar_visible="draft,open,expired"
                     />
                 </header>
+
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button
@@ -78,7 +80,7 @@
                             type="object"
                             name="action_view_purchase_blanket_order_line"
                             class="oe_stat_button"
-                            attrs="{'invisible':[('line_count', '=', 0)]}"
+                            invisible="line_count == 0"
                             icon="fa-list"
                         >
                             <field name="line_count" widget="statinfo" string="Lines" />
@@ -93,12 +95,12 @@
                         <group name="group_top_left">
                             <field
                                 name="partner_id"
-                                attrs="{'required': [('state', '=', 'draft')]}"
+                                required="state == 'draft'"
+                                readonly="state != 'draft'"
                                 context="{'res_partner_search_mode': 'supplier', 'show_address': 1}"
                                 options='{"always_reload": True}'
                             />
                             <field name="partner_ref" />
-                            <field name="payment_term_id" />
                         </group>
                         <group name="group_top_right">
                             <field
@@ -106,25 +108,29 @@
                                 groups="base.group_multi_currency"
                                 options="{'no_create': True}"
                             />
-                            <field name="user_id" />
+                            <field name="user_id" readonly="state != 'draft'" />
                             <field
                                 name="company_id"
                                 groups="base.group_multi_company"
                                 options="{'no_create': True}"
+                                readonly="state != 'draft'"
                             />
+                            <field name="company_id" invisible="1" />
                         </group>
                     </group>
                     <group name="group_bottom">
                         <group name="group_bottom_left">
                             <field
                                 name="date_start"
-                                attrs="{'required': [('state', '=', 'draft')]}"
+                                required="state == 'draft'"
+                                readonly="state != 'draft'"
                             />
                         </group>
                         <group name="group_bottom_right">
                             <field
                                 name="validity_date"
-                                attrs="{'required': [('state', '=', 'draft')]}"
+                                required="state == 'draft'"
+                                readonly="state != 'draft'"
                             />
                         </group>
                     </group>
@@ -132,7 +138,8 @@
                         <page string="Order Lines">
                             <field
                                 name="line_ids"
-                                attrs="{'readonly': [('state', 'in', ('open','expired'))]}"
+                                force_save="1"
+                                readonly="state in ('done', 'expired')"
                             >
                                 <tree editable="bottom">
                                     <field name="sequence" widget="handle" />
@@ -190,8 +197,26 @@
                                 name="note"
                                 class="oe_inline"
                                 placeholder="Setup default terms and conditions in your company settings."
+                                readonly="state != 'draft'"
                             />
                             <div class="oe_clear" />
+                        </page>
+                        <page name="other_info" string="Other Information">
+                            <group
+                                name="invoice_information"
+                                string="Invoice Information"
+                            >
+                                <field
+                                    name="payment_term_id"
+                                    readonly="state == 'done'"
+                                    options="{'no_create': True}"
+                                />
+                                <field
+                                    name="fiscal_position_id"
+                                    options="{'no_create': True}"
+                                    readonly="state == 'done'"
+                                />
+                            </group>
                         </page>
                     </notebook>
                 </sheet>
@@ -290,6 +315,7 @@
                 <field name="invoiced_uom_qty" />
                 <field name="received_uom_qty" />
                 <field name="remaining_uom_qty" />
+                <field name="activity_ids" widget="list_activity" />
             </tree>
         </field>
     </record>

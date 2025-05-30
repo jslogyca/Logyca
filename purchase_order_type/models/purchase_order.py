@@ -4,19 +4,18 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
-from odoo.addons.purchase.models.purchase import PurchaseOrder as Purchase
-
 
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
     order_type = fields.Many2one(
         comodel_name="purchase.order.type",
-        readonly=False,
-        states=Purchase.READONLY_STATES,
         string="Type",
         ondelete="restrict",
         domain="[('company_id', 'in', [False, company_id])]",
+        compute="_compute_partner_order_type",
+        store=True,
+        readonly=False,
     )
 
     @api.onchange("partner_id")
@@ -38,15 +37,18 @@ class PurchaseOrder(models.Model):
             if order.order_type.incoterm_id:
                 order.incoterm_id = order.order_type.incoterm_id.id
 
-    @api.model
-    def create(self, vals):
-        if vals.get("name", "/") == "/" and vals.get("order_type"):
-            purchase_type = self.env["purchase.order.type"].browse(vals["order_type"])
-            if purchase_type.sequence_id:
-                vals["name"] = purchase_type.sequence_id.next_by_id(
-                    sequence_date=vals.get("date_order")
+    @api.model_create_multi
+    def create(self, vals_list):
+        for values in vals_list:
+            if values.get("name", "/") == "/" and values.get("order_type"):
+                purchase_type = self.env["purchase.order.type"].browse(
+                    values["order_type"]
                 )
-        return super().create(vals)
+                if purchase_type.sequence_id:
+                    values["name"] = purchase_type.sequence_id.next_by_id(
+                        sequence_date=values.get("date_order")
+                    )
+        return super().create(vals_list)
 
     @api.constrains("company_id")
     def _check_po_type_company(self):
@@ -70,3 +72,13 @@ class PurchaseOrder(models.Model):
             and self.order_type.company_id not in [self.company_id, False]
         ):
             self.order_type = self._default_order_type()
+
+    @api.depends("partner_id")
+    def _compute_partner_order_type(self):
+        for record in self:
+            if record.partner_id and not record.order_type:
+                record.order_type = record.partner_id.purchase_type
+            elif record.partner_id and record.order_type:
+                record.order_type = record.order_type
+            else:
+                record.order_type = False

@@ -12,7 +12,7 @@
     # Check https://github.com/odoo/odoo/blob/13.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
     'category': 'Accounting & Finance',
-    'version': '13.0.0.0.1',
+    'version': '17.0.0.0.1',
     'installable': True,
 	'application': False,
 	'auto_install': False,

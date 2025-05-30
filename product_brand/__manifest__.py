@@ -8,7 +8,7 @@
 
 {
     'name': 'Product Brand Manager',
-    'version': '11.0.1.3.0',
+    'version': '17.0.1.3.0',
     'category': 'Product',
     'summary': "Product Brand Manager",
     'author': 'NetAndCo, Akretion, Prisnet Telecommunications SA, '

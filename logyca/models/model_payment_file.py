@@ -15,6 +15,7 @@ import math
 class comercial_report(models.Model):
     _name = 'logyca.payment.file'
     _description = 'Archivo de pago'
+    _order = "create_date desc"
     
     type_file = fields.Selection([
                                         ('1', 'Archivo Plano'),
@@ -236,7 +237,7 @@ class comercial_report(models.Model):
 
             #Crear archivo        
             self.write({
-                'txt_file': base64.encodestring((content_txt).encode()),
+                'txt_file': base64.b64encode((content_txt).encode()),
                 #base64.encodestring((content).encode()).decode().strip()
                 'txt_file_name': filename,
             })

@@ -71,7 +71,7 @@
         </field>
     </record>
 
-    <record id="res_member_removed_logyca_view_dashboard" model="ir.ui.view">
+    <!-- <record id="res_member_removed_logyca_view_dashboard" model="ir.ui.view">
         <field name="name">res.member.removed.logyca.view.dashboard</field>
         <field name="model">res.member.removed.logyca</field>
         <field name="mode">primary</field>
@@ -84,22 +84,18 @@
                     </group>
                     <group col="1">
                         <widget name="pie_chart" title="Por Tipo" attrs="{'groupby': 'type_member'}"/>
-                        <!-- <widget name="pie_chart" title="Por Ciudad" attrs="{'groupby': 'city_id'}"/> -->
                         <widget name="pie_chart" title="Desvinculado Por" attrs="{'groupby': 'x_reason_desvinculation'}"/>
-                        <!-- <widget name="pie_chart" title="Por Tipo de Vinculación" attrs="{'groupby': 'x_type_vinculation'}"/> -->
                     </group>
                 </group>
-                <!-- <view type="pivot" ref="crm_allies.res_member_removed_logyca_view_pivot"/> -->
-                <!-- <view type="cohort" ref="crm_enterprise.crm_lead_view_cohort"/> -->
             </dashboard>
         </field>
-    </record>
+    </record> -->
 
     <record id="action_res_member_removed_logyca" model="ir.actions.act_window">
         <field name="name">Miembros LOGYCA</field>
         <field name="res_model">res.member.removed.logyca</field>
-        <field name="view_mode">dashboard,tree,pivot,graph</field>
-        <field name="view_id" ref="res_member_removed_logyca_view_dashboard"/>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="view_id" ref="res_member_removed_logyca_view_tree"/>
     </record>
 
     <menuitem

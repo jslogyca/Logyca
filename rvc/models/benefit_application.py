@@ -27,16 +27,9 @@ class BenefitApplication(models.Model):
 
     @api.model
     def _default_access_token(self):
-        """
-        this function uses uuid4 to generate a random token
-        and uses recursion to garantee that the token is unique
-        """
-        token = uuid.uuid4().hex
-        if self.search_count([('access_token', '=', token)]) > 0:
-            return self._default_access_token()
-        return token
+        return uuid.uuid4().hex
 
-    state = fields.Selection([('draft', 'Draft'),
+    state = fields.Selection([('draft', 'Draft'), 
                                     ('notified', 'Notificado'),
                                     ('confirm', 'Aceptado'),
                                     ('rejected', 'Rechazado'),
@@ -165,10 +158,10 @@ class BenefitApplication(models.Model):
     def action_done(self):
         if self.state in ('confirm'):
             # si son codigos de productos validamos que no hayan productos comprados disponibles
-            # if self.product_id.benefit_type == 'codigos' and self.codes_quantity > 0:
+            if self.product_id.benefit_type == 'codigos' and self.codes_quantity > 0:
                 #requiere activar beneficio con el envío del kit?
-                # if self.send_kit_with_no_benefit == False:
-                #     self._validate_bought_products()
+                if self.send_kit_with_no_benefit == False:
+                    self._validate_bought_products()
 
             view_id = self.env.ref('rvc.rvc_template_email_done_wizard_form').id
             result ={'name':_("Enviar Kit de Bienvenida"),'view_mode': 'form',
@@ -176,15 +169,15 @@ class BenefitApplication(models.Model):
                                 'type': 'ir.actions.act_window','nodestroy': True,'target': 'new'}
 
             # si son codigos de productos validamos que no hayan productos comprados disponibles
-            # if (self.product_id.benefit_type == 'codigos' and
-            #     (self.codes_quantity > 0 or
-            #      self.invoice_codes_quantity > 0 or
-            #      self.glns_codes_quantity > 0)):
+            if (self.product_id.benefit_type == 'codigos' and
+                (self.codes_quantity > 0 or
+                 self.invoice_codes_quantity > 0 or
+                 self.glns_codes_quantity > 0)):
 
                 #requiere activar beneficio con el envío del kit?
-                # if self.send_kit_with_no_benefit is False:
-                #     if self._validate_bought_products():
-                #         return result
+                if self.send_kit_with_no_benefit is False:
+                    if self._validate_bought_products():
+                        return result
             return result
 
     def action_forward_done(self):
@@ -218,8 +211,7 @@ class BenefitApplication(models.Model):
             #Antes de notificar al beneficiario validamos si beneficio es codigos
             # y si cantidad de codigos es mayor a cero
             # y si no tiene productos comprados disponibles
-            # if self.product_id.benefit_type == 'codigos' and self._validate_qty_codes() and self._validate_bought_products():
-            if self.product_id.benefit_type == 'codigos' and self._validate_qty_codes():
+            if self.product_id.benefit_type == 'codigos' and self._validate_qty_codes() and self._validate_bought_products():
                 if benefit_application.state in ('draft', 'notified'):
                     view_id = self.env.ref('rvc.rvc_template_email_wizard_form').id
                     self.write({'state': 'notified', 'notification_date': datetime.now()})
@@ -392,27 +384,24 @@ class BenefitApplication(models.Model):
                 #     '\n\nPor favor deje el campo Código GLN vacío, le asignaremos uno en la entrega del beneficio.' % (tmp_code, str(partner_id.name))))
                 
     def _validate_bought_products(self):
-        bearer_token = self.get_token_gs1_co_api()
-        for benefit_application in self:
-            if self.get_odoo_url() == 'https://logyca.odoo.com':
-                # url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
-                url = "https://app-msprefixcodesservice-prod.azurewebsites.net/api/code_reservation_service/get_code_summary_by_enterprise/%s" % (str(self.vat))
-            else:
-                # url = "https://app-asc-dev.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
-                url = "https://app-msprefixcodesservice-prod.azurewebsites.net/api/code_reservation_service/get_code_summary_by_enterprise/%s" % (str(self.vat))
+        # for benefit_application in self:
+        #     if self.get_odoo_url() == 'https://logyca.odoo.com':
+        #         url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+        #     else:
+        #         url = "https://app-asc-dev.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
 
-            response = requests.get(url)
-            if response.status_code == 200:
-                result = response.json()
-                response.close()
+        #     response = requests.get(url)
+        #     if response.status_code == 200:
+        #         result = response.json()
+        #         response.close()
 
-                if result.get('CodigosCompradosDisponiblesNPV') > 50:
-                     raise ValidationError(\
-                        _('¡Lo sentimos! La empresa %s tiene %s código(s) comprados disponibles.' % (str(self.partner_id.partner_id.vat) + '-' + str(self.partner_id.partner_id.name), str(result.get('CodigosCompradosDisponiblesNPV')))))
-            else:
-                raise ValidationError(\
-                        _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
-                            Inténtelo nuevamente o comuníquese con soporte. Error: %s' % (str(response))))
+        #         if result.get('CodigosCompradosDisponiblesNPV') > 50:
+        #              raise ValidationError(\
+        #                 _('¡Lo sentimos! La empresa %s tiene %s código(s) comprados disponibles.' % (str(self.partner_id.partner_id.vat) + '-' + str(self.partner_id.partner_id.name), str(result.get('CodigosCompradosDisponiblesNPV')))))
+        #     else:
+        #         raise ValidationError(\
+        #                 _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
+        #                     Inténtelo nuevamente o comuníquese con soporte. Error: %s' % (str(response))))
             return True
 
     def _validate_qty_codes(self):

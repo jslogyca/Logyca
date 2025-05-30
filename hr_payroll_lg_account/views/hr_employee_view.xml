@@ -5,6 +5,10 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"></field>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='mobile_phone']" position="before">
+                <field name="work_contact_id" required="1"/>
+                <field name="identification_id" required="1"/>
+            </xpath>
             <xpath expr="//page[@name='hr_settings']" position="after">
 				<page name="hr_entities" string="Entities" >
                     <group>
@@ -24,8 +28,8 @@
     </record>
 	<menuitem
 		id="menu_employee_payslip_lg"
-		name="Employees"
+		name="Empleados"
 		action="hr.open_view_employee_list_my"
 		parent="hr_work_entry_contract_enterprise.menu_hr_payroll_root"
-		sequence="1"/>
+		sequence="41"/>
 </odoo>

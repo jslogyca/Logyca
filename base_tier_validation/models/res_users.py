@@ -20,37 +20,30 @@ class Users(models.Model):
         review_groups = self.env["tier.review"].read_group(domain, ["model"], ["model"])
         for review_group in review_groups:
             model = review_group["model"]
+            Model = self.env[model]
             reviews = self.env["tier.review"].search(review_group.get("__domain"))
-            if reviews:
+            # Skip Models not having Tier Validation enabled (example: was unistalled)
+            if reviews and hasattr(Model, "can_review"):
                 records = (
-                    self.env[model]
-                    .with_user(self.env.user)
+                    Model.with_user(self.env.user)
+                    .with_context(active_test=False)
                     .search([("id", "in", reviews.mapped("res_id"))])
                     .filtered(lambda x: not x.rejected and x.can_review)
                 )
-                if len(records):
+                # Excludes any cancelled records depending on the structure of the model
+                if self.env[model]._state_field in self.env[model]._fields:
+                    records = records.filtered(
+                        lambda x: x[x._state_field] != x._cancel_state
+                    )
+                if records:
                     record = self.env[model]
                     user_reviews[model] = {
+                        "id": records[0].id,
                         "name": record._description,
                         "model": model,
                         "active_field": "active" in record._fields,
                         "icon": modules.module.get_module_icon(record._original_module),
+                        "type": "tier_review",
                         "pending_count": len(records),
                     }
         return list(user_reviews.values())
-
-    @api.model
-    def get_reviews(self, data):
-        review_obj = self.env["tier.review"].with_context(lang=self.env.user.lang)
-        res = review_obj.search_read([("id", "in", data.get("res_ids"))])
-        for r in res:
-            # Get the translated status value.
-            r["display_status"] = dict(
-                review_obj.fields_get("status")["status"]["selection"]
-            ).get(r.get("status"))
-            # Convert to datetime timezone
-            if r["reviewed_date"]:
-                r["reviewed_date"] = fields.Datetime.context_timestamp(
-                    self, r["reviewed_date"]
-                )
-        return res

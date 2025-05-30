@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="logyca_menu_action_contact_types" model="ir.actions.act_window">
+        <field name="name">Tipos de contacto</field>
+          <field name="res_model">logyca.contact_types</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear tipo de contacto
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_contact_types">
+      <field name="name">logyca list contact_types</field>
+      <field name="model">logyca.contact_types</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="name"/>
+          <field name="color" widget="color_picker"/>
+          <field name="type_fe"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_contact_types_form">
+      <field name="name">logyca list contact_types_form</field>
+      <field name="model">logyca.contact_types</field>
+      <field name="arch" type="xml">
+        <form>                      
+          <sheet>
+              <group col="4">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="type_fe"/>
+                <field name="color" widget="color_picker"/>
+              </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+    <menuitem name="Tipos de contacto" id="logyca.menu_contact_types" parent="logyca.menus_parameterization"  sequence="3" action="logyca_menu_action_contact_types"/>
+</odoo>

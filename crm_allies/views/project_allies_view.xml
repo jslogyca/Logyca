@@ -6,11 +6,11 @@
         <field name="arch" type="xml">
             <form string="Projects Allies">
                 <header>
-                    <button name="cancel_project" string="Cancel Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'done')]}" />
-                    <button name="open_project" string="Open Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}" />
-                    <button name="done_project" string="Done Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'open')]}" />
-                    <button name="draft_project" string="Draft Project" class="oe_highlight" type="object" attrs="{'invisible': [('state', '!=', 'cancel')]}" />
-                    <field name="state" widget="statusbar" statusbar_visible="draft,open,done"/>
+                    <button name="cancel_project" string="Cancel Project" class="oe_highlight" type="object"  />
+                    <button name="open_project" string="Open Project" class="oe_highlight" type="object" invisible="state != 'draft'" />
+                    <button name="done_project" string="Done Project" class="oe_highlight" type="object" invisible="state != 'open'" />
+                    <button name="draft_project" string="Draft Project" class="oe_highlight" type="object"  invisible="state != 'done'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,prioritized,open,done"/>
                 </header>
                 <sheet>
                     <group>
@@ -29,11 +29,11 @@
                             <field name="year_id" required="1"/>
                             <field name="object" required="1"/>
                             <field name="apply_amount" />
-                            <field name="total_amount" attrs="{'required': [('apply_amount', '=', True)], 'invisible': [('apply_amount', '=', False)]}"/>
-                            <field name="reason_id" attrs="{'invisible': [('state', '!=', 'cancel')]}"/>
+                            <field name="total_amount" invisible="not apply_amount" />
+                            <field name="reason_id" invisible="state != 'done'"/>
                         </group>
                         <group>
-                            <field name="user_loyalty_id" required="1"/>
+                            <field name="user_loyalty_id" required="1" string="Responsable"/>
                             <field name="date" required="1"/>
                             <field name="date_open" />
                             <field name="date_done" />
@@ -132,7 +132,7 @@
         </field>
     </record>
 
-    <record id="project_allies_view_dashboard" model="ir.ui.view">
+    <!-- <record id="project_allies_view_dashboard" model="ir.ui.view">
         <field name="name">project.allies.view.dashboard</field>
         <field name="model">project.allies</field>
         <field name="mode">primary</field>
@@ -144,12 +144,6 @@
                         <aggregate name="object" string="Total de Proyectos" group_operator="count" field="id" measure="__count__"/>
                         <aggregate name="partner" string="Total Aliados" group_operator="count" field="partner_id" measure="__count__"/>
                         <formula name="prorated_total_amount" string="Total Proyectado Ingresos" value="record.total_amount" widget="monetary"/>
-                        <!-- <aggregate name="expected_revenue_aggregate" field="planned_revenue" string="Expected Revenue"/>
-                        <aggregate name="prorated_revenue_aggregate" field="expected_revenue" invisible="1"/>
-                        <formula name="deal_size" string="Average Deal Size" value="record.expected_revenue_aggregate / record.opportunities" widget="monetary"/>
-                        <aggregate name="days_to_assign" string="Days to Assign" field="day_open" group_operator="avg" value_label="days"/>
-                        <aggregate name="days_to_close" string="Days to Close" field="day_close" group_operator="avg" value_label="days"/>
-                        <aggregate name="days_exceeding_closing" string="Exceeding Close Days" field="days_exceeding_closing" group_operator="avg"/> -->
                     </group>
                     <group col="1">
                         <widget name="pie_chart" title="Proyectos por Año" attrs="{'groupby': 'year_id'}"/>
@@ -161,16 +155,15 @@
                     </group>
                 </group>
                 <view type="pivot" ref="crm_allies.project_allies_view_pivot"/>
-                <!-- <view type="cohort" ref="crm_enterprise.crm_lead_view_cohort"/> -->
             </dashboard>
         </field>
-    </record>
+    </record> -->
 
     <record id="action_project_allies" model="ir.actions.act_window">
         <field name="name">Proyectos de Fidelización</field>
         <field name="res_model">project.allies</field>
-        <field name="view_mode">dashboard,tree,form,pivot,graph</field>
-        <field name="view_id" ref="project_allies_view_dashboard"/>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="view_id" ref="project_allies_view_tree"/>
     </record>
 
     <menuitem

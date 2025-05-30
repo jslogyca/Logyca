@@ -90,8 +90,7 @@ class WizardAccountIncomeReport(models.TransientModel):
                     inner join account_move_line l on l.move_id=m.id
                     inner join account_asset a on a.id=l.asset_id
                     inner join account_move d on d.asset_id=a.id
-                    where l.exclude_from_invoice_tab is False 
-                    and to_char(m.date,'yyyymmdd') between '"""+self.date_start.strftime('%Y%m%d')+"""'
+                    where to_char(m.date,'yyyymmdd') between '"""+self.date_start.strftime('%Y%m%d')+"""'
                     and '"""+self.date_stop.strftime('%Y%m%d')+"""' and m.company_id = """+str(self.env.company.id)+"""
                     order by d.date asc """
 

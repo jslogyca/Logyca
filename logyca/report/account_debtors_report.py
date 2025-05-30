@@ -61,11 +61,7 @@ class AccountDebtorsReport(models.Model):
             SUBSTRING(TO_CHAR(am.invoice_date_due,'YYYY-MM-DD'),6,2) AS mes_fact,
             CASE WHEN now() > am.invoice_date_due then 'VENCIDA ' || LEFT(TO_CHAR(am.date, 'YYYY-MM-DD'),4)  else 'NO VENCIDA' END AS type_debtors,
             rppp.id AS vendedor_id,
-            t.id AS team_id,
-            am.x_debt_portfolio_monitoring AS x_debt_portfolio_monitoring,
-            to_char(am.x_last_contact_debtor,'YYYY/MM/DD') AS x_last_contact_debtor,
-            dps.name AS x_debtor_portfolio_status_id,
-            to_char(am.x_estimated_payment_date,'YYYY/MM/DD') AS x_estimated_payment_date
+            t.id AS team_id
 		"""
         return select_str
 
@@ -74,10 +70,8 @@ class AccountDebtorsReport(models.Model):
 
         from_str = """
             account_move am
-                LEFT JOIN account_analytic_account aaa ON aaa.id = am.analytic_account_id 
                 INNER JOIN account_payment_term apt on apt.id = am.invoice_payment_term_id
                 inner join crm_team t on t.id=am.team_id
-                LEFT JOIN debtor_portfolio_status dps on dps.id=am.x_debtor_portfolio_status_id
                 LEFT JOIN res_partner rp ON rp.id = am.partner_id
                 LEFT JOIN res_partner rpp ON rpp.id = rp.parent_id
                 LEFT JOIN res_users ru ON ru.id = am.invoice_user_id

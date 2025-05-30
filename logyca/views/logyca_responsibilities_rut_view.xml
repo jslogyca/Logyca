@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="logyca_menu_action_responsibilities_rut" model="ir.actions.act_window">
+        <field name="name">Responsabilidades RUT</field>
+          <field name="res_model">logyca.responsibilities_rut</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Crear responsabilidad RUT
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logyca.list_responsibilities_rut">
+      <field name="name">logyca list responsibilities_rut</field>
+      <field name="model">logyca.responsibilities_rut</field>
+      <field name="arch" type="xml">
+        <tree>                      
+          <field name="code"/>                 
+          <field name="description"/>   
+          <field name="valid_for_fe"/>                                   
+        </tree>
+      </field>
+    </record>
+
+    <menuitem name="Responsabilidades RUT" id="logyca.menu_responsibilities_rut" parent="logyca.menus_parameterization"  sequence="7" action="logyca_menu_action_responsibilities_rut"/>
+
+</odoo>

@@ -12,7 +12,8 @@ from io import BytesIO
 from zipfile import ZipFile
 from xml.dom import minidom
 
-import pem, xmlsig, logging
+# import pem, xmlsig, logging
+import xmlsig, logging
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -665,10 +666,10 @@ class EPayslipBach(models.Model):
             raise ValidationError(_('El empleado no tiene configurado el Tipo de contrato ' + ' - ' + self.employee_id.name))
         ('PRUEBAS', self.contract_id.wage, self.employee_id.id)
         Trabajador = SubElement(NominaIndividual, 'Trabajador',  TipoTrabajador=self.employee_id.ejob_id.code, SubTipoTrabajador=self.employee_id.sub_job_id.code,
-                                AltoRiesgoPension='false', TipoDocumento=self.employee_id.address_home_id.x_document_type, 
-                                NumeroDocumento=self.employee_id.address_home_id.vat,
-                                PrimerApellido=self.employee_id.address_home_id.x_first_lastname, SegundoApellido=self.employee_id.address_home_id.x_second_lastname or '', 
-                                PrimerNombre=self.employee_id.address_home_id.x_first_name, LugarTrabajoPais='CO',
+                                AltoRiesgoPension='false', TipoDocumento=self.employee_id.work_contact_id.x_document_type, 
+                                NumeroDocumento=self.employee_id.work_contact_id.vat,
+                                PrimerApellido=self.employee_id.work_contact_id.x_first_lastname, SegundoApellido=self.employee_id.work_contact_id.x_second_lastname or '', 
+                                PrimerNombre=self.employee_id.work_contact_id.x_first_name, LugarTrabajoPais='CO',
                                 LugarTrabajoDepartamentoEstado='11', 
                                 LugarTrabajoMunicipioCiudad='11001',
                                 SalarioIntegral='false', TipoContrato=self.contract_id.type_id.etype_id.code, LugarTrabajoDireccion=self.company_id.partner_id.street[0:100],

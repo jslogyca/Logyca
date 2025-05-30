@@ -35,12 +35,15 @@ class ProjectAllies(models.Model):
             last_order = max(record.advance_ids, key=lambda line: line.date, default=None)
             record.date_open = last_order.date if last_order else False
 
-    name = fields.Char('Name')
+    name = fields.Char(
+        string="Nombre completo",
+        compute='_compute_project_name',
+        store=True)    
     active = fields.Boolean('Active', default=True)
     company_id = fields.Many2one('res.company', string='Company', required=True,
                                  default=lambda self: self.env.company)
     partner_id = fields.Many2one('res.partner', string="Partner", domain=[("parent_id", "=", False)])
-    user_loyalty_id = fields.Many2one('res.partner', string="Partner", domain="[('user_loyalty', '=', True)]")
+    user_loyalty_id = fields.Many2one('res.partner', string="Responsable:", domain="[('user_loyalty', '=', True)]")
     # user_loyalty_id = fields.Many2one('res.partner', string="Partner")
     vat = fields.Char('NIT')
     year_id = fields.Many2one('account.fiscal.year', string="Year")
@@ -55,12 +58,13 @@ class ProjectAllies(models.Model):
     sub_type_allies = fields.Selection(related='partner_id.sub_type_allies', store=True)
     allies_user_id = fields.Many2one(related='partner_id.allies_user_id', store=True)
     state = fields.Selection([('draft', 'Draft'),
+                                ('prioritized', 'Prioritized'),
                                 ('open', 'Open'),
                                 ('done', 'Done'),
         ], string='Status', default='draft')
     apply_amount = fields.Boolean('Apply Amount', default=False)
     total_amount = fields.Float(string='Total Amount', default=0.00)
-    date_cancel = fields.Date(string='Date', default=fields.Date.context_today)
+    date_cancel = fields.Date(string='Fecha Cancelación', default=fields.Date.context_today)
     date_open = fields.Date(compute='_compute_last_date', string='Última Fecha de Contacto')
     date_done = fields.Date(string='Fecha Finalización', default=fields.Date.context_today)
     reason_id = fields.Many2one('reason.cancel.project', string='Reason')
@@ -88,9 +92,11 @@ class ProjectAllies(models.Model):
                 if help.partner_id.x_sector_id:
                     help.x_sector_id = help.partner_id.x_sector_id
 
-    def name_get(self):
-        return [(project.id, '%s - %s' %
-                 (project.partner_id.name, project.object)) for project in self]
+    @api.depends('partner_id', 'object')
+    def _compute_project_name(self):
+        for rec in self:
+            # concatena code y description, evitando 'None'
+            rec.name = f"{rec.partner_id.name or ''} - {rec.object or ''}"                 
 
     def save_detail_advance(self):
         return {

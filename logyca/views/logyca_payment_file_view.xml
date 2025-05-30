@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="logyca_payment_file_view_form" model="ir.ui.view">
+        <field name="name">logyca.payment.file.form</field>
+        <field name="model">logyca.payment.file</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet string="Archivo de pago">
+                    <group >
+                        <group >
+                            <field name="type_file"/>
+                            <field name="journal_id" />
+                            <field name="vat_payer" />
+                            <field name="payment_type" />
+                            <field name="account_type_debit" />
+                        </group>
+                        <group >
+                            <field name="account_debit" />			
+                            <field name="application" />
+                            <field name="sequence" />
+                            <field name="description" />
+                        </group>
+                    </group>
+                    <!-- <field name="payment_ids" colspan="4" can_create="true" can_write="true" /> -->
+                    <field name="payment_ids" view_mode="tree,form">
+                        <tree>
+                            <field name="date"/>
+                            <field name="name"/>
+                            <field name="journal_id"/>
+                            <field name="payment_method_line_id"/>
+                            <field name="partner_id"/>
+                            <field name="amount_signed"/>
+                            <field name="amount_company_currency_signed"/>
+                            <field name="state"/>
+                            <field name="ref"/>
+                            <button name="action_read_payments" type="object" string="Asiento" class="float-end btn-secondary" />
+                        </tree>
+                    </field>                    
+                    <button name="get_excel" string="Generar" type="object" class="oe_highlight"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="logyca_payment_file_view_tree" model="ir.ui.view">
+        <field name="name">logyca.payment.file.tree</field>
+        <field name="model">logyca.payment.file</field>
+        <field name="arch" type="xml">
+            <tree string="Archivo de pago" >
+                <field name="id" />
+                <field name="journal_id" />
+                <field name="description"/>
+                <field name="create_date" />
+                <field name="create_uid" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="logyca_payment_file_view_pivot" model="ir.ui.view">
+        <field name="name">logyca.payment.file.pivot</field>
+        <field name="model">logyca.payment.file</field>
+        <field name="arch" type="xml">
+            <pivot string="Archivo de pago">
+                <field name="create_date" type="col"/>
+                <field name="journal_id" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_logyca_payment_file" model="ir.actions.act_window">
+        <field name="name">Archivo de pago</field>
+        <field name="res_model">logyca.payment.file</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="view_id" ref="logyca_payment_file_view_tree"/>
+    </record>
+
+    <menuitem
+        id="menu_logyca_payment_file"
+        name="Archivo de pago"
+        action="action_logyca_payment_file"
+        parent="account.menu_finance_payables"
+        sequence="4"/>
+</odoo>

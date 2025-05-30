@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<odoo>
+	<record id="approval_request_view_formv17" model="ir.ui.view">
+		<field name="name">approval.request.view.form.v17</field>
+		<field name="model">approval.request</field>
+		<field name="inherit_id" ref="approvals.approval_request_view_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='request_owner_id']" position="after">
+                <field name="x_account_move_id" readonly="1" force_save="1"/>
+			</xpath>
+		</field>
+	</record>
+</odoo>
