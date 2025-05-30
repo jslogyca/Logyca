@@ -1299,27 +1299,30 @@ class BenefitApplication(models.Model):
             benefit_name = "LOGYCA / ANALÍTICA"    
         return benefit_name
 
-    def create_OM_attachment(self, template):
-        '''
-        Adjunta la Oferta Mercantil al kit de bienvenida cuando la postulación no se hace en Odoo.
-        '''
+    def attach_OM_2_partner(self, postulation_id):
+        """Adjunta la Oferta Mercantil en el tercero (Compañía o individual) que la acepta."""
+        if isinstance(postulation_id, int):
+            postulation_id = self.browse(postulation_id)
+        if not postulation_id or not postulation_id.exists():
+            raise UserError("El registro de postulación no existe.")
+
+        postulation_id.ensure_one()
+
+        # Obtener el reporte por XML ID de la acción, no por nombre de plantilla
         report = self.env.ref('rvc.action_report_rvc')
-        pdf_content, _ = report._render_qweb_pdf(self.id)
-        data_record = base64.b64encode(pdf_content)
-        ir_values = {
+        # Llamar _render_qweb_pdf con el ID del registro (en lista)
+        pdf_content, _ = report._render_qweb_pdf([postulation_id.id])
+
+        b64_pdf = base64.b64encode(pdf_content)
+
+        attachment = self.env['ir.attachment'].create({
             'name': "Oferta Mercantil RVC.pdf",
             'type': 'binary',
-            'datas': data_record,
-            'store_fname': "Oferta_Mercantil_RVC.pdf",
-            'mimetype': 'application/pdf',
-            'res_model': 'mail.template',
-            'res_id': template.id,
-        }
-        data_id = self.env['ir.attachment'].create(ir_values)
-        logging.info(f"==> create_OM_attachment 5 {data_id.ids}")
-        template.write({'attachment_ids': [(4, data_id.id)]})
-        logging.info(f"===> {template.attachment_ids}")
-        return template
+            'datas': b64_pdf,
+            'res_model': 'res.partner',
+            'res_id': postulation_id.partner_id.partner_id.id
+        })
+        return bool(attachment)
 
     def action_generate_digital_cards(self):
         cards_list = []
