@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="mail_template_welcome_kit_rvc" model="mail.template">
-        <field name="name">Kit de Bienvenida Derechos Identificación</field>
-        <field name="model">benefit.application</field>
-        <field name="subject">Kit de Bienvenida Derechos Identificación</field>
-        <field name="email_from">${object.company_id.email}</field>
-        <field name="email_to">${object.contact_email}</field>
-        <field name="body_html" type="html"><![CDATA[
+    <data noupdate="0">
+        <record id="mail_template_welcome_kit_rvc" model="mail.template">
+            <field name="name">Kit de Bienvenida Derechos Identificación</field>
+            <field name="model">benefit.application</field>
+            <field name="subject">Kit de Bienvenida Derechos Identificación</field>
+            <field name="email_from">${object.company_id.email}</field>
+            <field name="email_to">${object.contact_email}</field>
+            <field name="body_html" type="html"><![CDATA[
 <html>
 <head>
     <style>
@@ -142,10 +143,11 @@
     </div>
 </body>
 </html>
-        ]]></field>
-        <field name="report_template" ref="action_carta_bienv_codes_rvc"/>
-        <field name="report_name">Carta de Bienvenida RVC</field>
-        <field name="lang">${object.lang}</field>
-        <field name="auto_delete" eval="False"/>
-    </record>
+            ]]></field>
+            <field name="report_template" ref="action_carta_bienv_codes_rvc"/>
+            <field name="report_name">Carta de Bienvenida RVC</field>
+            <field name="lang">${object.lang}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+    </data>
 </odoo>
