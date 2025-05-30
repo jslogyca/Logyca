@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="0">
-
         <record id="mail_template_welcome_kit_rvc" model="mail.template">
             <field name="name">Kit de Bienvenida Derechos Identificación</field>
             <field name="model">benefit.application</field>
@@ -153,6 +152,5 @@
             <field name="lang">${object.lang}</field>
             <field name="auto_delete">False</field>
         </record>
-
     </data>
 </odoo>
