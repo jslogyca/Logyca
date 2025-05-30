@@ -1193,30 +1193,28 @@ class BenefitApplication(models.Model):
             raise ValidationError(e)
 
     def attach_OM_2_partner(self, postulation_id):
-        """ Ajunta la Oferta Mercantil en el tercero(Compañía o individual) que la acepta.
-
-            :param (obj,int) postulation_id: ID de benefit.application para generar el reporte
-            :return: True o False si se pudo o no adjuntar la OM
-        """
-
-        # si viene de la API de Odoo entrará por aquí puesto que manda el id
-        # de la postulación más no el objeto.
+        """Adjunta la Oferta Mercantil en el tercero (Compañía o individual) que la acepta."""
         if isinstance(postulation_id, int):
             postulation_id = self.browse(postulation_id)
+        if not postulation_id or not postulation_id.exists():
+            raise UserError("El registro de postulación no existe.")
 
-        pdf = self.env.ref('rvc.action_report_rvc')._render_qweb_pdf(postulation_id.id)
-        b64_pdf = base64.b64encode(pdf[0])
+        postulation_id.ensure_one()
+
+        # Usar el modelo ir.actions.report y pasar el XML ID del reporte y el ID del registro
+        report = self.env['ir.actions.report']._get_report_from_name('rvc.report_rvc_lang')
+        pdf_content, _ = report._render_qweb_pdf([postulation_id.id])
+
+        b64_pdf = base64.b64encode(pdf_content)
 
         attachment = self.env['ir.attachment'].create({
             'name': "Oferta Mercantil RVC.pdf",
             'type': 'binary',
             'datas': b64_pdf,
-            'res_model':'res.partner',
+            'res_model': 'res.partner',
             'res_id': postulation_id.partner_id.partner_id.id
         })
-        if not attachment:
-            return True 
-        return False
+        return bool(attachment)
 
     def calculate_end_date_colabora(self):
         next_year = fields.Date.today() + relativedelta(years=1)
