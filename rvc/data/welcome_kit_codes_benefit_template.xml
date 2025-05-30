@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="0">
+
         <record id="mail_template_welcome_kit_rvc" model="mail.template">
             <field name="name">Kit de Bienvenida Derechos Identificación</field>
-            <field name="model_id" ref="rvc.model_benefit_application"/>
+            <field name="model">rvc.benefit.application</field>
             <field name="subject">Kit de Bienvenida Derechos Identificación</field>
             <field name="email_from">no-reply@gs1co.org</field>
             <field name="email_to">{{ (object.contact_email or object.email) }}</field>
@@ -144,8 +145,6 @@
             </h1>
 
             <div class="footer text-center">
-                <span class="text-center">Copyright © 2024 Todos los derechos reservados</span>
-                <br/>
                 <span class="text-center">Bogotá, Cundinamarca, Colombia, CO , 110221,</span>
                 <br/>
                 <span class="text-center">
