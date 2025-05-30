@@ -1308,9 +1308,9 @@ class BenefitApplication(models.Model):
 
         postulation_id.ensure_one()
 
-        # Obtener el reporte por XML ID de la acción, no por nombre de plantilla
-        report = self.env.ref('rvc.action_report_rvc')
-        # Llamar _render_qweb_pdf con el ID del registro (en lista)
+        # Usar el nombre técnico del reporte (no el XML ID de la acción)
+        report_name = 'rvc.report_rvc_lang'  # Este es el nombre de plantilla QWeb
+        report = self.env['ir.actions.report']._get_report_from_name(report_name)
         pdf_content, _ = report._render_qweb_pdf([postulation_id.id])
 
         b64_pdf = base64.b64encode(pdf_content)
