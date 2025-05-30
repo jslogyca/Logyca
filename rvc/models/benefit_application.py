@@ -1305,10 +1305,8 @@ class BenefitApplication(models.Model):
         '''
         Adjunta la Oferta Mercantil al kit de bienvenida cuando la postulación no se hace en Odoo.
         '''
-
-        pdf_content, _ = self.env['ir.actions.report']._render_qweb_pdf(
-            'rvc.action_report_rvc', [self.id]
-        )
+        report = self.env.ref('rvc.action_report_rvc')
+        pdf_content, _ = report._render_qweb_pdf(self.id)
         data_record = base64.b64encode(pdf_content)
         ir_values = {
             'name': "Oferta Mercantil RVC.pdf",
@@ -1445,6 +1443,8 @@ class BenefitApplication(models.Model):
 
         # Codificar la URL en UTF-8
         encoded_url = url.encode('utf-8')
+
+
 
         img = base64.b64encode(requests.get(encoded_url).content)
         card.qr_code = img
