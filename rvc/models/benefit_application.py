@@ -1305,16 +1305,12 @@ class BenefitApplication(models.Model):
             postulation_id = self.browse(postulation_id)
         if not postulation_id or not postulation_id.exists():
             raise UserError("El registro de postulación no existe.")
-
         postulation_id.ensure_one()
 
-        # Usar el nombre técnico del reporte (no el XML ID de la acción)
-        report_name = 'rvc.report_rvc_lang'  # Este es el nombre de plantilla QWeb
-        report = self.env['ir.actions.report']._get_report_from_name(report_name)
-        pdf_content, _ = report._render_qweb_pdf([postulation_id.id])
+        report = self.env.ref('rvc.action_report_rvc')
+        pdf_content, _ = report._render_qweb_pdf(report, [postulation_id.id])
 
         b64_pdf = base64.b64encode(pdf_content)
-
         attachment = self.env['ir.attachment'].create({
             'name': "Oferta Mercantil RVC.pdf",
             'type': 'binary',
