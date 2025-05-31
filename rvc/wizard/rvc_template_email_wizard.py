@@ -4,6 +4,7 @@ from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import datetime
 from ..models.rvc_activations import RvcActivations
+from markupsafe import Markup
 import re
 import logging
 
@@ -61,8 +62,14 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 benefit_application._send_assing_crece_mype()
                 benefit_application._get_employe(benefit_application.email_employee)
             else:
-                benefit_application.message_post(body=_(\
-                        '%s <u><strong>ACEPTÓ</strong></u> el beneficio.' % str(benefit_application.partner_id.partner_id.name)))
+                benefit_application.message_post(
+                    body=Markup(
+                        _(
+                            '%s <u><strong>ACEPTÓ</strong></u> el beneficio.'
+                        ) % str(benefit_application.partner_id.partner_id.name)
+                    ),
+                    subtype_xmlid='mail.mt_comment'
+                )
 
                 if benefit_application.product_id.benefit_type == 'codigos':
                     benefit_application.attach_OM_2_partner(benefit_application)
