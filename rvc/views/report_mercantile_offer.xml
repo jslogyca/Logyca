@@ -2,19 +2,10 @@
 <odoo>
     <template id="report_rvc_mercantile_offer">
         <t t-call="web.html_container">
-            <t t-call-assets="web.report_assets_common"/>
-            <div class="header">
-                <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-            </div>
             <style>
-              @page { 
-                margin: 1cm; 
-              }
-              body, p, h2, h3, table, td, th, strong, span, a {
-                font-family: 'DejaVu Sans', 'Liberation Sans', Arial, sans-serif !important;
-              }
               p{
                 font-size: 10pt;
+                font-family: 'serif';
                 text-align: justify;
                 text-justify: auto;
               }
@@ -23,7 +14,7 @@
               }
             </style>
             <t t-foreach="inside_foreach_docs or docs" t-as="o">
-                <t t-set="o" t-value="o.with_context(lang='es_ES')"/>
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <div class="header">
                     <img src='https://stpaymentdev.blob.core.windows.net/imagesmail/gs1Banner.png' width="1480"/>
                 </div>
@@ -254,8 +245,8 @@
 </template>
 
 <template id="report_rvc_lang">
-    <t t-foreach="docs" t-as="o">
-        <t t-call="rvc.report_rvc_mercantile_offer" t-lang="'es_ES'"/>
-    </t>
+<t t-foreach="docs" t-as="o">
+<t t-call="rvc.report_rvc_mercantile_offer" t-lang="o.partner_id.sudo().partner_id.lang"/>
+</t>
 </template>
 </odoo>
