@@ -2,7 +2,10 @@
 <odoo>
     <template id="report_rvc_mercantile_offer">
         <t t-call="web.html_container">
+            <t t-set="lang" t-value="'es_ES'"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
             <style>
+              @charset "UTF-8";
               p{
                 font-size: 10pt;
                 font-family: 'serif';
@@ -14,21 +17,21 @@
               }
             </style>
             <t t-foreach="inside_foreach_docs or docs" t-as="o">
-                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <t t-set="o" t-value="o.with_context(lang='es_ES')"/>
                 <div class="header">
                     <img src='https://stpaymentdev.blob.core.windows.net/imagesmail/gs1Banner.png' width="1480"/>
                 </div>
                 <div class="page">
                     <div class="container">
                         <br/>
-                        <h2 style="text-align: center;">OFERTA MERCANTIL PARA LA CONCESIÓN DEL DERECHO AL USO DE CÓDIGOS DE IDENTIFICACIÓN DE PRODUCTO, RECAUDO Y/O GLN –</h2>
+                        <h2 style="text-align: center;">OFERTA MERCANTIL PARA LA CONCESI&#211;N DEL DERECHO AL USO DE C&#211;DIGOS DE IDENTIFICACI&#211;N DE PRODUCTO, RECAUDO Y/O GLN –</h2>
                         <h3 style="text-align: center;">Empresas beneficiarias del proyecto RVC</h3>
-                        <p>LEONEL PAVA CASILIMAS en calidad de Director Ejecutivo y Representante Legal de LOGYCA / ASOCIACION, entidad sin ánimo de lucro, con domicilio en Bogotá,
-                                con Personería Jurídica reconocida mediante Resolución Especial No. 1298 del diecinueve (19) de octubre de mil novecientos ochenta y ocho (1988), de la
-                                Alcaldía Mayor de Bogotá, D.C. representada en este acto, entidad que administra en Colombia el sistema estándar internacional de identificación GS1,
-                                quien en adelante se denominará EL OFERENTRE CONCEDENTE, se permite presentar la siguiente oferta mercantil, la cual se regula por la ley colombiana,
-                                el artículo 845 y siguientes del Código de Comercio y demás normas concordantes, de conformidad con las estipulaciones que a continuación se detallan</p>
-                        <p>Para todos los efectos del contrato de Concesión que se celebra por la aceptación de la presente oferta, el Aceptante se denominará CONCESIONARIA.</p>
+                        <p>LEONEL PAVA CASILIMAS en calidad de Director Ejecutivo y Representante Legal de LOGYCA / ASOCIACI&#211;N, entidad sin &#225;nimo de lucro, con domicilio en Bogot&#225;,
+                                con Personer&#237;a Jur&#237;dica reconocida mediante Resoluci&#243;n Especial No. 1298 del diecinueve (19) de octubre de mil novecientos ochenta y ocho (1988), de la
+                                Alcald&#237;a Mayor de Bogot&#225;, D.C. representada en este acto, entidad que administra en Colombia el sistema est&#225;ndar internacional de identificaci&#243;n GS1,
+                                quien en adelante se denominar&#225; EL OFERENTRE CONCEDENTE, se permite presentar la siguiente oferta mercantil, la cual se regula por la ley colombiana,
+                                el art&#237;culo 845 y siguientes del C&#243;digo de Comercio y dem&#225;s normas concordantes, de conformidad con las estipulaciones que a continuaci&#243;n se detallan</p>
+                        <p>Para todos los efectos del contrato de Concesi&#243;n que se celebra por la aceptaci&#243;n de la presente oferta, el Aceptante se denominar&#225; CONCESIONARIA.</p>
                         <h2>PRIMERA: OBJETO DE LA OFERTA.</h2>
                         <p>EL OFERENTE CONCEDENTE ofrece a <b>
                             <t class="text-uppercase" t-if="o.partner_id.partner_id.name" t-raw="o.partner_id.partner_id.name"/>
@@ -39,71 +42,71 @@
                         <span t-esc="o.partner_id.partner_id.vat"/>
                     </strong> LA CONCESIÓN para la utilización del SISTEMA GS1 y el derecho al uso del código 
                                 de identificación de Productos (GTIN- GLOBAL TRADE ITEM NUMBER), Código de Localización (GLN) y/o códigos de recaudo.</p>
-                <h2>SEGUNDA: IMPLICACIONES DE LA ACEPTACIÓN DE LA PRESENTE OFERTA: </h2>
-                <p>De ser aceptada pura y simplemente la presente oferta por parte de LA CONCESIONARIA para el derecho al uso del código de identificación de Productos 
-                                (GTIN- GLOBAL TRADE ITEM NUMBER), código de Localización (GLN) y/o códigos de recaudo, por medio de cualquiera de los medios previstos y aceptados 
-                                por EL OFERENTE CONCEDENTE, se perfeccionará la oferta mercantil propuesta en el presente documento y cada una de las partes así constituidas asumirán 
-                                obligaciones recíprocas.</p>
+                <h2>SEGUNDA: IMPLICACIONES DE LA ACEPTACI&#211;N DE LA PRESENTE OFERTA: </h2>
+                <p>De ser aceptada pura y simplemente la presente oferta por parte de LA CONCESIONARIA para el derecho al uso del c&#243;digo de identificaci&#243;n de Productos 
+                                (GTIN- GLOBAL TRADE ITEM NUMBER), c&#243;digo de Localizaci&#243;n (GLN) y/o c&#243;digos de recaudo, por medio de cualquiera de los medios previstos y aceptados 
+                                por EL OFERENTE CONCEDENTE, se perfeccionar&#225; la oferta mercantil propuesta en el presente documento y cada una de las partes as&#237; constituidas asumir&#225;n 
+                                obligaciones rec&#237;procas.</p>
                 <p>
-                    <strong>PARÁGRAFO:</strong>En consecuencia, de la aceptación y legalización de la presente oferta mercantil, el acuerdo que se celebre se encuentra exento del impuesto de timbre
-                                de conformidad con el artículo 530 del estatuto tributario.</p>
+                    <strong>PAR&#193;GRAFO:</strong>En consecuencia, de la aceptaci&#243;n y legalizaci&#243;n de la presente oferta mercantil, el acuerdo que se celebre se encuentra exento del impuesto de timbre
+                                de conformidad con el art&#237;culo 530 del estatuto tributario.</p>
                 <h2>TERCERA: OBLIGACIONES DEL CONCEDENTE: </h2>
 
                 <p>
-                    <strong>3.1</strong> Asignar usuario y contraseña para que LA CONCESIONARIA ingrese a la plataforma de asignación de códigos y asigne uno a uno los códigos
-                                de los productos que este requiera y tenga disponibles. <strong>3.2</strong> Brindar a solicitud de LA CONCESIONARIA, la información técnica básica necesaria
-                                para la asignación e impresión del código de identificación GS1, a través de la guía de identificación, que se encuentra en el siguiente 
+                    <strong>3.1</strong> Asignar usuario y contrase&#241;a para que LA CONCESIONARIA ingrese a la plataforma de asignaci&#243;n de c&#243;digos y asigne uno a uno los c&#243;digos
+                                de los productos que este requiera y tenga disponibles. <strong>3.2</strong> Brindar a solicitud de LA CONCESIONARIA, la informaci&#243;n t&#233;cnica b&#225;sica necesaria
+                                para la asignaci&#243;n e impresi&#243;n del c&#243;digo de identificaci&#243;n GS1, a trav&#233;s de la gu&#237;a de identificaci&#243;n, que se encuentra en el siguiente 
                     <a target="new" href="https://bit.ly/3o54pEL">enlace</a>. 
-                    <strong>3.3</strong> Brindar el soporte técnico básico, que requiera el cliente, mediante correo electrónico (web@gs1co.org) o llamada telefónica a las líneas de atención al cliente. 
-                    <strong>3.4</strong> Verificar la calidad de impresión del código o paquete de códigos, durante los 3 meses siguientes a la adquisición. GS1 Colombia emitirá dicha certificación 
-                                de calidad de la impresión de las etiquetas impresas siempre y cuando la empresa envíe las muestras físicas de las mismas a GS1 Colombia, en la ciudad de Bogotá, al área de Soporte 
-                                y Verificaciones. La primera verificación será gratuita, las siguientes, deberán comprarse, como un servicio adicional en 
+                    <strong>3.3</strong> Brindar el soporte t&#233;cnico b&#225;sico, que requiera el cliente, mediante correo electr&#243;nico (web@gs1co.org) o llamada telef&#243;nica a las l&#237;neas de atenci&#243;n al cliente. 
+                    <strong>3.4</strong> Verificar la calidad de impresi&#243;n del c&#243;digo o paquete de c&#243;digos, durante los 3 meses siguientes a la adquisici&#243;n. GS1 Colombia emitir&#225; dicha certificaci&#243;n 
+                                de calidad de la impresi&#243;n de las etiquetas impresas siempre y cuando la empresa env&#237;e las muestras f&#237;sicas de las mismas a GS1 Colombia, en la ciudad de Bogot&#225;, al &#225;rea de Soporte 
+                                y Verificaciones. La primera verificaci&#243;n ser&#225; gratuita, las siguientes, deber&#225;n comprarse, como un servicio adicional en 
                     <a target="new" href="https://www.gs1costore.org">www.gs1costore.org</a>.  
-                    <strong>3.5</strong> Entregar por 99 años el derecho al uso de las identificaciones asignadas a los productos registrados.</p>
+                    <strong>3.5</strong> Entregar por 99 a&#241;os el derecho al uso de las identificaciones asignadas a los productos registrados.</p>
                 <h2>CUARTA: OBLIGACIONES DE LA CONCESIONARIA:</h2>
                 <p>
                     <strong>4.1</strong> Utilizar el SISTEMA GS1 de acuerdo con la moral y las buenas costumbres.
-                    <strong>4.2</strong> Durante todo el tiempo de vigencia del contrato de concesión que se celebra por la aceptación de la presente oferta, se obliga a cumplir 
-                                con los reglamentos que para el uso del SISTEMA GS1 adopte EL OFERENTE CONCEDENTE, los cuales hacen parte del contrato de concesión. <strong>4.3</strong> 
-                                A asignar los códigos de los productos marcados con el SISTEMA GS1 antes de su comercialización, a través de la plataforma que EL OFERENTE CONCEDENTE disponga 
-                                para tal fin. <strong>4.4</strong> LA CONCESIONARIA a la que se le han asignado códigos de empresa, o localización está obligada a informar a EL OFERENTE 
-                                CONCEDENTE los códigos asignados antes de la comercialización de los productos marcados con el SISTEMA GS1, de acuerdo con los procedimientos y canales 
+                    <strong>4.2</strong> Durante todo el tiempo de vigencia del contrato de concesi&#243;n que se celebra por la aceptaci&#243;n de la presente oferta, se obliga a cumplir 
+                                con los reglamentos que para el uso del SISTEMA GS1 adopte EL OFERENTE CONCEDENTE, los cuales hacen parte del contrato de concesi&#243;n. <strong>4.3</strong> 
+                                A asignar los c&#243;digos de los productos marcados con el SISTEMA GS1 antes de su comercializaci&#243;n, a trav&#233;s de la plataforma que EL OFERENTE CONCEDENTE disponga 
+                                para tal fin. <strong>4.4</strong> LA CONCESIONARIA a la que se le han asignado c&#243;digos de empresa, o localizaci&#243;n est&#225; obligada a informar a EL OFERENTE 
+                                CONCEDENTE los c&#243;digos asignados antes de la comercializaci&#243;n de los productos marcados con el SISTEMA GS1, de acuerdo con los procedimientos y canales 
                                 establecidos por EL OFERENTE CONCEDENTE para tal fin. <strong>4.5</strong> A No utilizar el SISTEMA GS1, si siendo intermediario en la venta de productos de 
-                                terceros, los mismos no tienen o han perdido el derecho al uso del SISTEMA GS1 conferido por EL OFERENTE CONCEDENTE y/o por cualquier organización nacional 
-                                perteneciente a GS1 AISBL. <strong>4.6</strong> LA CONCESIONARIA que sea un productor o dueño de marca y haya perdido el derecho al uso del SISTEMA GS1 que le 
-                                otorgó EL OFERENTE CONCEDENTE, se obliga a no marcar ni comercializar productos identificados con el SISTEMA GS1 a partir del tercer mes siguiente a la pérdida 
-                                de la concesión. <strong>4.7</strong> No introducir modificaciones o imitar el SISTEMA GS1. <strong>4.8</strong> No hacer uso de los códigos asignados a LA CONCESIONARIA, 
-                                inmediatamente termine el contrato que se celebra por la aceptación de la presente oferta. <strong>4.9</strong> No usar códigos del SISTEMA GS1, cuya concesión no 
-                                le haya sido otorgada por EL OFERENTE CONCEDENTE. En el evento de incumplir la presente obligación, La CONCESIONARIA deberá pagar los derechos económicos por el 
-                                uso indebido a que hubiere lugar, por el periodo o periodos en que lo utilizó. Igualmente, quedará obligada a reconocer los perjuicios que llegaré a causar por la 
-                                indebida utilización y a pagar la sanción de que trata la novena estipulación de la presente oferta mercantil y a cesar el uso indebido del código o códigos, desde 
-                                el momento que así se lo requiera EL OFERENTE CONCEDENTE. <strong>4.10</strong> Si LA CONCESIONARIA utiliza códigos de barras GS1 para identificar dispositivos médicos, 
-                                por sus siglas en ingles UDI -Unique Device Identification- en el mercado de Estados Unidos de América USA, se obliga a reportarlos y mantener actualizada dicha 
-                                información, mediante el diligenciamiento de la "DECLARACIÓN UDI" en formulario que la CONCEDENTE proporcionará para tal fin y que hará parte de este contrato.</p>
-                <h2>QUINTA: CESIÓN:</h2>
-                <p>Una vez haya sido aceptada la presente oferta mercantil de Concesión, este contrato no podrá ser cedido por LA CONCESIONARIA sin previa autorización por escrito de 
-                            EL OFERENTE CONCEDENTE. La inobservancia a la anterior obligación dará lugar a la terminación del contrato de concesión que se perfecciona por la aceptación de esta oferta mercantil.</p>
-                <h2>SEXTA: FECHA DE VIGENCIA, TÉRMINO DE DURACIÓN Y RENOVACIÓN:</h2>
-                <p> El contrato de concesión que se perfeccione por la aceptación de la presente oferta mercantil rige a partir de la fecha de aceptación y TENDRA VIGENCIA DE 99 AÑOS.</p>
-                <h2>SÉPTIMA: TERMINACIÓN DEL CONTRATO DE CONCESIÓN:</h2>
+                                terceros, los mismos no tienen o han perdido el derecho al uso del SISTEMA GS1 conferido por EL OFERENTE CONCEDENTE y/o por cualquier organizaci&#243;n nacional 
+                                perteneciente a GS1 AISBL. <strong>4.6</strong> LA CONCESIONARIA que sea un productor o due&#241;o de marca y haya perdido el derecho al uso del SISTEMA GS1 que le 
+                                otorg&#243; EL OFERENTE CONCEDENTE, se obliga a no marcar ni comercializar productos identificados con el SISTEMA GS1 a partir del tercer mes siguiente a la p&#233;rdida 
+                                de la concesi&#243;n. <strong>4.7</strong> No introducir modificaciones o imitar el SISTEMA GS1. <strong>4.8</strong> No hacer uso de los c&#243;digos asignados a LA CONCESIONARIA, 
+                                inmediatamente termine el contrato que se celebra por la aceptaci&#243;n de la presente oferta. <strong>4.9</strong> No usar c&#243;digos del SISTEMA GS1, cuya concesi&#243;n no 
+                                le haya sido otorgada por EL OFERENTE CONCEDENTE. En el evento de incumplir la presente obligaci&#243;n, La CONCESIONARIA deber&#225; pagar los derechos econ&#243;micos por el 
+                                uso indebido a que hubiere lugar, por el periodo o periodos en que lo utiliz&#243;. Igualmente, quedar&#225; obligada a reconocer los perjuicios que llegar&#233; a causar por la 
+                                indebida utilizaci&#243;n y a pagar la sanci&#243;n de que trata la novena estipulaci&#243;n de la presente oferta mercantil y a cesar el uso indebido del c&#243;digo o c&#243;digos, desde 
+                                el momento que as&#237; se lo requiera EL OFERENTE CONCEDENTE. <strong>4.10</strong> Si LA CONCESIONARIA utiliza c&#243;digos de barras GS1 para identificar dispositivos m&#233;dicos, 
+                                por sus siglas en ingles UDI -Unique Device Identification- en el mercado de Estados Unidos de Am&#233;rica USA, se obliga a reportarlos y mantener actualizada dicha 
+                                informaci&#243;n, mediante el diligenciamiento de la "DECLARACI&#211;N UDI" en formulario que la CONCEDENTE proporcionar&#225; para tal fin y que har&#225; parte de este contrato.</p>
+                <h2>QUINTA: CESI&#211;N:</h2>
+                <p>Una vez haya sido aceptada la presente oferta mercantil de Concesi&#243;n, este contrato no podr&#225; ser cedido por LA CONCESIONARIA sin previa autorizaci&#243;n por escrito de 
+                            EL OFERENTE CONCEDENTE. La inobservancia a la anterior obligaci&#243;n dar&#225; lugar a la terminaci&#243;n del contrato de concesi&#243;n que se perfecciona por la aceptaci&#243;n de esta oferta mercantil.</p>
+                <h2>SEXTA: FECHA DE VIGENCIA, T&#201;RMINO DE DURACI&#211;N Y RENOVACI&#211;N:</h2>
+                <p> El contrato de concesi&#243;n que se perfeccione por la aceptaci&#243;n de la presente oferta mercantil rige a partir de la fecha de aceptaci&#243;n y TENDR&#193; VIGENCIA DE 99 A&#209;OS.</p>
+                <h2>S&#201;PTIMA: TERMINACI&#211;N DEL CONTRATO DE CONCESI&#211;N:</h2>
                 <p>
-                    <strong>7.1</strong> Se terminará por expiración de su término de vigencia.
-                    <strong>7.2</strong> Cualquiera de las partes podrá dar por terminado el contrato de concesión que se celebra por la aceptación de la presente oferta mercantil, 
-                                por el incumplimiento de cualquiera de las obligaciones del contrato de concesión a cargo de la otra aparte, en un plazo no menor de treinta (30) días contados a partir 
-                                de la notificación del incumplimiento a menos que la parte que incumplió incumplimiento o haya dado garantías suficientes a juicio de la parte cumplida de lo que subsanará 
-                            dentro del mismo plazo. <strong>7.3</strong> CAUSAL DE TERMINACION ESPECIAL DEL CONTRATO: EL OFERENTE CONCEDENTE Podrá dar por terminado el contrato de manera anticipada, sin preaviso ni 
-                            indemnización alguna, si durante el plazo de vigencia del Contrato: a) EL OFERENTE CONCEDENTE, sus administradores, socios y/o accionistas llegaren a resultar vinculados en 
-                            una investigación de cualquier tipo (penal, administrativa, etc.) relacionada con actividades ilícitas, corrupción, soborno, lavado de dinero o financiamiento del terrorismo o 
-                            tráfico de armas, o fuesen formalmente incluidos en listas de control como las de la ONU, OFAC (Office of Foreign Assets Control), FBI así en Colombia no se hubiere iniciado la 
-                            investigación penal. Ó b) LA CONCESIONARIA suministra información falsa y/o incompleta en el proceso de vinculación a EL OFERENTE CONCEDENTE en el marco de sus procesos de monitoreo 
-                            de transacciones, o se niegue a actualizar la información pese a los requerimientos que en tal sentido se le solicite.</p>
+                    <strong>7.1</strong> Se terminar&#225; por expiraci&#243;n de su t&#233;rmino de vigencia.
+                    <strong>7.2</strong> Cualquiera de las partes podr&#225; dar por terminado el contrato de concesi&#243;n que se celebra por la aceptaci&#243;n de la presente oferta mercantil, 
+                                por el incumplimiento de cualquiera de las obligaciones del contrato de concesi&#243;n a cargo de la otra aparte, en un plazo no menor de treinta (30) d&#237;as contados a partir 
+                                de la notificaci&#243;n del incumplimiento a menos que la parte que incumpli&#243; incumplimiento o haya dado garant&#237;as suficientes a juicio de la parte cumplida de lo que subsan&#225; 
+                            dentro del mismo plazo. <strong>7.3</strong> CAUSAL DE TERMINACION ESPECIAL DEL CONTRATO: EL OFERENTE CONCEDENTE Podr&#225; dar por terminado el contrato de manera anticipada, sin preaviso ni 
+                            indemnizaci&#243;n alguna, si durante el plazo de vigencia del Contrato: a) EL OFERENTE CONCEDENTE, sus administradores, socios y/o accionistas llegaren a resultar vinculados en 
+                            una investigaci&#243;n de cualquier tipo (penal, administrativa, etc.) relacionada con actividades il&#237;citas, corrupci&#243;n, soborno, lavado de dinero o financiamiento del terrorismo o 
+                            tr&#225;fico de armas, o fuesen formalmente incluidos en listas de control como las de la ONU, OFAC (Office of Foreign Assets Control), FBI as&#237; en Colombia no se hubiere iniciado la 
+                            investigaci&#243;n penal. &#211; b) LA CONCESIONARIA suministra informaci&#243;n falsa y/o incompleta en el proceso de vinculaci&#243;n a EL OFERENTE CONCEDENTE en el marco de sus procesos de monitoreo 
+                            de transacciones, o se niegue a actualizar la informaci&#243;n pese a los requerimientos que en tal sentido se le solicite.</p>
 
                 <p>
-                    <strong>PARÁGRAFO:</strong> A la terminación del presente contrato sobrevivirán, y LA CONCESIONARIA continuará obligada al cumplimiento de las obligaciones previstas de la cláusula 
+                    <strong>PAR&#193;GRAFO:</strong> A la terminaci&#243;n del presente contrato sobrevivir&#225;n, y LA CONCESIONARIA continuar&#225; obligada al cumplimiento de las obligaciones previstas de la cl&#225;usula 
                             cuarta numerales: 4.3, 4.4, 4.5 y 4.6 de la presente oferta mercantil.</p>
                 <h2>OCTAVA: CLAUSULA PENAL:</h2>
-                <p>El incumplimiento o violación de cualquiera de las obligaciones del presente Contrato de Concesión por parte de la CONCESIONARIA, la constituirá en deudora de EL OFERENTE CONCEDENTE, 
-                            por una suma ajustada en salarios mínimos legales mensuales vigentes (SMLMV), dependiendo del nivel de activos de cada compañía como se contempla en la siguiente tabla de rangos:
+                <p>El incumplimiento o violaci&#243;n de cualquiera de las obligaciones del presente Contrato de Concesi&#243;n por parte de la CONCESIONARIA, la constituir&#225; en deudora de EL OFERENTE CONCEDENTE, 
+                            por una suma ajustada en salarios m&#237;nimos legales mensuales vigentes (SMLMV), dependiendo del nivel de activos de cada compa&#241;&#237;a como se contempla en la siguiente tabla de rangos:
                     <br/>
                     <table border="1" style="margin: 0 auto; text-align:center; font-size:11px">
                         <tr>
@@ -176,49 +179,49 @@
                     </table>
                 </p>
                 <h2>NOVENA: CLAUSULA COMPROMISORIA:</h2>
-                <p>Toda controversia o diferencia relacionada con la presente oferta mercantil, sus anexos y su ejecución, será resuelta por un Tribunal de Arbitramento, integrado por tres (3) árbitros 
-                            designados por la Cámara de Comercio de Bogotá en la que las partes delegan esta facultad. Cuando se presenten controversias en relación con este contrato o su ejecución cualquiera de 
-                            las partes podrá solicitar por escrito a la Cámara de Comercio de Bogotá que designe los árbitros a fin de integrar el tribunal. La Cámara de Comercio de Bogotá elegirá por sorteo los árbitros 
-                            de entre los árbitros inscritos en las listas que lleva el Centro de Arbitraje y Conciliación Mercantiles de dicha Cámara. El tribunal así constituido fallará en derecho y se sujetará a lo 
-                            dispuesto por el Decreto 2279 de 1989 y por la Ley 23 de 1.991 en todo lo relativo a impedimentos, recusaciones, instalación, regulación de gastos, honorarios, etc.</p>
-                <h2>DÉCIMA: SISTEMA DE ADMINISTRACIÓN DE RIESGO DE LAVADO DE ACTIVOS Y DE LA FINANCIACIÓN DEL TERRORISMO, SARLAFT:</h2>
-                <p>La CONCESIONARIA por la aceptación de la presente oferta mercantil quedará sujeta a las políticas de autocontrol y gestión del riesgo de lavado de activos y financiación del terrorismo de 
-                            EL OFERENTE CONCEDENTE, en cumplimiento del deber legal que le asiste en relación con la cooperación para la prevención del lavado de activos, la financiación del terrorismo y cualquier otro 
-                            delito conexo contemplado en normas nacionales e internacionales. En consecuencia, LA CONCESIONARIA quedará sujeta a las siguientes condiciones:</p>
+                <p>Toda controversia o diferencia relacionada con la presente oferta mercantil, sus anexos y su ejecuci&#243;n, ser&#225; resuelta por un Tribunal de Arbitramento, integrado por tres (3) &#225;rbitros 
+                            designados por la C&#225;mara de Comercio de Bogot&#225; en la que las partes delegan esta facultad. Cuando se presenten controversias en relaci&#243;n con este contrato o su ejecuci&#243;n cualquiera de 
+                            las partes podr&#225; solicitar por escrito a la C&#225;mara de Comercio de Bogot&#225; que designe los &#225;rbitros a fin de integrar el tribunal. La C&#225;mara de Comercio de Bogot&#225; elegir&#225; por sorteo los &#225;rbitros 
+                            de entre los &#225;rbitros inscritos en las listas que lleva el Centro de Arbitraje y Conciliaci&#243;n Mercantiles de dicha C&#225;mara. El tribunal as&#237; constituido fallar&#225; en derecho y se sujetar&#225; a lo 
+                            dispuesto por el Decreto 2279 de 1989 y por la Ley 23 de 1.991 en todo lo relativo a impedimentos, recusaciones, instalaci&#243;n, regulaci&#243;n de gastos, honorarios, etc.</p>
+                <h2>D&#201;CIMA: SISTEMA DE ADMINISTRACI&#211;N DE RIESGO DE LAVADO DE ACTIVOS Y DE LA FINANCIACI&#211;N DEL TERRORISMO, SARLAFT:</h2>
+                <p>La CONCESIONARIA por la aceptaci&#243;n de la presente oferta mercantil quedar&#225; sujeta a las pol&#237;ticas de autocontrol y gesti&#243;n del riesgo de lavado de activos y financiaci&#243;n del terrorismo de 
+                            EL OFERENTE CONCEDENTE, en cumplimiento del deber legal que le asiste en relaci&#243;n con la cooperaci&#243;n para la prevenci&#243;n del lavado de activos, la financiaci&#243;n del terrorismo y cualquier otro 
+                            delito conexo contemplado en normas nacionales e internacionales. En consecuencia, LA CONCESIONARIA quedar&#225; sujeta a las siguientes condiciones:</p>
                 <p>
-                    <strong>10.1</strong> Que su patrimonio y las fuentes económicas que permiten el desarrollo de su objeto social, no provenga de actividades ilícitas, tales como narcotráfico, testaferrato, 
-                            enriquecimiento ilícito, terrorismo, lavado de activos, tráfico de estupefacientes, secuestro extorsivo y/o trata de personas, entre otros delitos conexos.</p>
+                    <strong>10.1</strong> Que su patrimonio y las fuentes econ&#243;micas que permiten el desarrollo de su objeto social, no provenga de actividades il&#237;citas, tales como narcotr&#225;fico, testaferrato, 
+                            enriquecimiento il&#237;cito, terrorismo, lavado de activos, tr&#225;fico de estupefacientes, secuestro extorsivo y/o trata de personas, entre otros delitos conexos.</p>
                 <p>
-                    <strong>10.2</strong> Que de contar con presencia en países considerados paraísos fiscales, países sancionados por la OFAC y países no cooperantes, observará las normas y preceptos que la 
-                            ley establece y entregará cuando EL OFERENTE CONCEDENTE lo defina, la información necesaria para las consultas iniciales (antes de la vinculación) y posterior verificación cada vez que se realice 
-                            una actualización sobre las mismas, según las políticas y procedimientos que al respecto tenga definidos EL OFERENTE CONCEDENTE. En caso de que la ejecución de este contrato demande la presencia 
-                            de subcontratistas, se le aplicarán las mismas consideraciones de la presente cláusula.</p>
+                    <strong>10.2</strong> Que de contar con presencia en pa&#237;ses considerados para&#237;sos fiscales, pa&#237;ses sancionados por la OFAC y pa&#237;ses no cooperantes, observar&#225; las normas y preceptos que la 
+                            ley establece y entregar&#225; cuando EL OFERENTE CONCEDENTE lo defina, la informaci&#243;n necesaria para las consultas iniciales (antes de la vinculaci&#243;n) y posterior verificaci&#243;n cada vez que se realice 
+                            una actualizaci&#243;n sobre las mismas, seg&#250;n las pol&#237;ticas y procedimientos que al respecto tenga definidos EL OFERENTE CONCEDENTE. En caso de que la ejecuci&#243;n de este contrato demande la presencia 
+                            de subcontratistas, se le aplicar&#225;n las mismas consideraciones de la presente cl&#225;usula.</p>
                 <p>
                     <strong>10.3</strong> Que ni LA CONCESIONARIA, ni sus gestores, accionistas, representante legal o directivos, se encuentran incluidos dentro de alguna de las listas restrictivas por 
-                            actividades de lavado de activos y financiación o vínculos con el narcotráfico y terrorismo, ni tiene procesos judiciales en curso en los cuales se encuentre en calidad de demandante o demandado 
+                            actividades de lavado de activos y financiaci&#243;n o v&#237;nculos con el narcotr&#225;fico y terrorismo, ni tiene procesos judiciales en curso en los cuales se encuentre en calidad de demandante o demandado 
                             respecto de EL OFERENTE CONCEDENTE.</p>
                 <p>
-                    <strong>10.4</strong> Que durante la vigencia del contrato que se celebra por la aceptación de la presente oferta, se someterán a las regulaciones nacionales sobre SARLAFT, y darán cumplimiento 
-                            a las mismas, con el fin de prevenir y evitar cualquier situación relacionada con el lavado de activos, captación ilegal, y demás actividades prohibidas en materia económica y de servicios.</p>
+                    <strong>10.4</strong> Que durante la vigencia del contrato que se celebra por la aceptaci&#243;n de la presente oferta, se someter&#225;n a las regulaciones nacionales sobre SARLAFT, y dar&#225;n cumplimiento 
+                            a las mismas, con el fin de prevenir y evitar cualquier situaci&#243;n relacionada con el lavado de activos, captaci&#243;n ilegal, y dem&#225;s actividades prohibidas en materia econ&#243;mica y de servicios.</p>
                 <p>
-                    <strong>10.5</strong> Que, por la aceptación de la presente oferta mercantil, aceptan las políticas establecidas en el Manual de Políticas de autocontrol y gestión del riesgo de lavado de activos 
-                            y financiación del terrorismo de LOGYCA / ASOCIACIÓN, el cual puede ser consultado en el siguiente 
+                    <strong>10.5</strong> Que, por la aceptaci&#243;n de la presente oferta mercantil, aceptan las pol&#237;ticas establecidas en el Manual de Pol&#237;ticas de autocontrol y gesti&#243;n del riesgo de lavado de activos 
+                            y financiaci&#243;n del terrorismo de LOGYCA / ASOCIACI&#211;N, el cual puede ser consultado en el siguiente 
                     <a target="new" href="https://bit.ly/2XAjpPp">enlace</a>.
                 </p>
                 <p>
-                    <strong>10.6</strong> Que la información aportada verbalmente y por escrito a EL OFERENTE CONCEDENTE, relacionada con el sistema para la administración del riesgo del lavado de activos y financiación 
-                            del terrorismo SARLAFT, es veraz y verificable, y se obligan a actualizarla cuando así se les solicite.</p>
+                    <strong>10.6</strong> Que la informaci&#243;n aportada verbalmente y por escrito a EL OFERENTE CONCEDENTE, relacionada con el sistema para la administraci&#243;n del riesgo del lavado de activos y financiaci&#243;n 
+                            del terrorismo SARLAFT, es veraz y verificable, y se obligan a actualizarla cuando as&#237; se les solicite.</p>
 
-                <h2>DÉCIMA PRIMERA: NOTIFICACIONES:</h2>
-                <p>Para efectos de las notificaciones de que trata la presente oferta mercantil y el contrato de concesión que se celebra por la aceptación de la misma, EL OFERENTE CONCEDENTE recibirá notificaciones en 
+                <h2>D&#201;CIMA PRIMERA: NOTIFICACIONES:</h2>
+                <p>Para efectos de las notificaciones de que trata la presente oferta mercantil y el contrato de concesi&#243;n que se celebra por la aceptaci&#243;n de la misma, EL OFERENTE CONCEDENTE recibir&#225; notificaciones en 
                     <a href="mailto:web@gs1co.org">web@gs1co.org</a>.
                 </p>
 
-                <h2>DÉCIMA SEGUNDA: VIGENCIA DE LA OFERTA MERCANTIL:</h2>
-                <p>La presente oferta mercantil tiene una vigencia de treinta (30) días hábiles, transcurridos los cuales sin que haya sido 
-                                ceptada en los términos previstos en el numeral segundo de la presente oferta se entenderá como rechazada.
+                <h2>D&#201;CIMA SEGUNDA: VIGENCIA DE LA OFERTA MERCANTIL:</h2>
+                <p>La presente oferta mercantil tiene una vigencia de treinta (30) d&#237;as h&#225;biles, transcurridos los cuales sin que haya sido 
+                                aceptada en los t&#233;rminos previstos en el numeral segundo de la presente oferta se entender&#225; como rechazada.
                                 
-                                Para constancia se firma la presente el día <span t-esc="o.today_date_spanish()"/>
+                                Para constancia se firma la presente el d&#237;a <span t-esc="o.today_date_spanish()"/>
 .</p>
                 <br/>
                 <div class="signature">
@@ -246,7 +249,7 @@
 
 <template id="report_rvc_lang">
 <t t-foreach="docs" t-as="o">
-<t t-call="rvc.report_rvc_mercantile_offer" t-lang="o.partner_id.sudo().partner_id.lang"/>
+<t t-call="rvc.report_rvc_mercantile_offer" t-lang="'es_ES'"/>
 </t>
 </template>
 </odoo>
