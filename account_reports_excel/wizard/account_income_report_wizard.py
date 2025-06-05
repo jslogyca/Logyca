@@ -22,7 +22,7 @@ class ReportIncomeReportWizard(models.TransientModel):
     def do_report(self):
         value = self.get_values(self.date_from, self.date_to)
         if not value:
-            raise ValidationError(_('!No hay resultados para los datos seleccionados¡'))
+            raise ValidationError(_('!No hay resultados para los datos seleccionadoooooos¡'))
         self.make_file(value)
 
         if not self.data:
@@ -39,31 +39,27 @@ class ReportIncomeReportWizard(models.TransientModel):
         self._cr.execute(''' select p.vat,
                                     p.name,
                                     m.name,
-                                    pt.name,
-                                    red.name,
+                                    pt.name->>'es_CO',
+                                    red.name->>'es_CO',
                                     m.amount_untaxed, 
                                     to_char(m.date,'DD/MM/YYYY'),
                                     date_part('month',m.date)as mes_fact,
                                     date_part('year',m.date)as year_fact,
                                     c.name as company_id,
                                     up.name,
-                                    team.name,
+                                    team.name->>'es_CO',
                                     ma.name,
                                     ma.amount_total, 
                                     to_char(ma.date,'DD/MM/YYYY'),
                                     date_part('month',ma.date)as mes,
                                     date_part('year',ma.date)as year,
                                     ma.state,
-                                    aaa.name->>'es_CO' AS analytic_account_name,
+                                    red.name->>'es_CO' AS analytic_account_name,
                                     pla.name->>'es_CO' as plan
                                     from account_move m
                                     inner join account_move_line l on l.move_id=m.id
-                                    inner join asset_move_line_rel aml on aml.line_id = l.id
-                                    inner join account_asset a on a.id=aml.asset_id
-                                    inner join account_move ma on ma.asset_id=a.id
-                                    JOIN LATERAL jsonb_each(a.analytic_distribution) AS dist(key, value) ON TRUE
-                                    LEFT JOIN account_analytic_account aaa ON aaa.id::text = key
-                                    INNER JOIN account_analytic_plan pla on pla.id=aaa.plan_id
+                                    inner join account_move_deferred_rel aml on aml.original_move_id=m.id
+                                    inner join account_move ma on ma.id=aml.deferred_move_id
                                     inner join res_company c on c.id=m.company_id
                                     inner join res_partner p on p.id=m.partner_id
                                     inner join res_users u on u.id=m.invoice_user_id
@@ -71,7 +67,8 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join crm_team team on team.id=m.team_id
                                     inner join product_product pp ON pp.id = l.product_id
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
-                                    left join account_analytic_account red on red.id = m.analytic_account_id                                    
+                                    left join account_analytic_account red on red.id = m.analytic_account_id
+                                    INNER JOIN account_analytic_plan pla on pla.id=red.plan_id                                   
                                     where m.date between %s and %s and m.state='posted'
                                     and m.move_type in ('out_invoice')
                                     order by p.id, m.id ''', 
