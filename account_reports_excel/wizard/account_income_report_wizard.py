@@ -68,7 +68,7 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join product_product pp ON pp.id = l.product_id
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
                                     left join account_analytic_account red on red.id = m.analytic_account_id
-                                    INNER JOIN account_analytic_plan pla on pla.id=red.plan_id                                   
+                                    left JOIN account_analytic_plan pla on pla.id=red.plan_id                                   
                                     where m.date between %s and %s and m.state='posted'
                                     and m.move_type in ('out_invoice')
                                     order by p.id, m.id ''', 
