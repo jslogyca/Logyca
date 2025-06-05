@@ -328,8 +328,8 @@ class AccountMove(models.Model):
             #     continue
             if invoice_line.product_id.x_is_deferred and not invoice_line.deferred_start_date and not invoice_line.deferred_end_date and self.move_type == 'out_invoice':
                 raise ValidationError(_("Este producto esta marcado como diferido "+invoice_line.product_id.name+", por favor verificar la fecha de incio y final."))
-            if invoice_line.deferred_start_date and invoice_line.deferred_start_date < invoice_line.date and self.move_type == 'out_invoice':
-                raise ValidationError(_("La fecha inicial del diferido es menor a la factura "+str(invoice_line.date)+", por favor verificar ."))
+            # if invoice_line.deferred_start_date and invoice_line.deferred_start_date < invoice_line.date and self.move_type == 'out_invoice':
+            #     raise ValidationError(_("La fecha inicial del diferido es menor a la factura "+str(invoice_line.date)+", por favor verificar ."))
             if not invoice_line.product_id.x_is_deferred and invoice_line.deferred_start_date and invoice_line.deferred_end_date and self.move_type == 'out_invoice':
                 raise ValidationError(_("Este producto no esta marcado como diferido "+invoice_line.product_id.name+", por favor verificar la fecha de incio y final, deben quedar vacias"))
             if str(invoice_line.account_id.code).find("4", 0, 1) != -1 or str(invoice_line.account_id.code).find("5", 0, 1) != -1 or str(invoice_line.account_id.code).find("6", 0, 1) != -1:
@@ -362,9 +362,9 @@ class AccountMove(models.Model):
                 raise ValidationError(_('No se dígito información para el campo Plazos de pago, por favor verificar.'))                 
             
             #Fecha de factura
-            if (self.date != fields.Date.context_today(self)) and (self.invoice_date != fields.Date.context_today(self)):
+            # if (self.date != fields.Date.context_today(self)) and (self.invoice_date != fields.Date.context_today(self)):
                 #https://poncesoft.blogspot.com/2017/07/consulta-de-fecha-actual-traves-de-la.html - LINK DE APOYO
-                raise ValidationError(_('La fecha de la factura no puede ser diferente a la fecha actual, por favor verificar.'))     
+                # raise ValidationError(_('La fecha de la factura no puede ser diferente a la fecha actual, por favor verificar.'))     
             
             for line in self.invoice_line_ids:
                 # if not line.analytic_account_id:
