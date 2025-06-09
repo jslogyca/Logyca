@@ -39,7 +39,11 @@ class ReportIncomeReportWizard(models.TransientModel):
         self._cr.execute(''' select p.vat,
                                     p.name,
                                     m.name,
-                                    pt.name->>'es_CO',
+                                    (select pt.name->>'es_CO'
+                                    from account_move_line l
+                                    inner join product_product pp ON pp.id = l.product_id
+                                    inner join product_template pt on pp.product_tmpl_id = pt.id
+                                    where l.move_id=m.id limit 1),
                                     red.name->>'es_CO',
                                     m.amount_untaxed, 
                                     to_char(m.date,'DD/MM/YYYY'),
@@ -57,7 +61,6 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     red.name->>'es_CO' AS analytic_account_name,
                                     pla.name->>'es_CO' as plan
                                     from account_move m
-                                    inner join account_move_line l on l.move_id=m.id
                                     inner join account_move_deferred_rel aml on aml.original_move_id=m.id
                                     inner join account_move ma on ma.id=aml.deferred_move_id
                                     inner join res_company c on c.id=m.company_id
@@ -65,8 +68,6 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join res_users u on u.id=m.invoice_user_id
                                     inner join res_partner up on up.id=u.partner_id
                                     inner join crm_team team on team.id=m.team_id
-                                    inner join product_product pp ON pp.id = l.product_id
-                                    inner join product_template pt on pp.product_tmpl_id = pt.id
                                     left join account_analytic_account red on red.id = m.analytic_account_id
                                     left JOIN account_analytic_plan pla on pla.id=red.plan_id                                   
                                     where m.date between %s and %s and m.state='posted'
