@@ -10,18 +10,23 @@
                         string="Notificar al Beneficiario" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 					<button name="action_confirm" type="object" string="Confirm" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 					<button name="action_notified" type="object"  string="Volver a notificar" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-					<button name="action_reminder" type="object"  string="Enviar Recortadorio" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-				 	<button name="action_done" type="object" string="Enviar Kit de Bienvenida" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-				 	<button name="action_forward_done" type="object" string="Enviar Kit Nuevamente" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_reminder" type="object"  string="Enviar Recortadorio" class="oe_highlight"
+							groups="rvc.group_rvc_manager" invisible="state != 'notified'"/>
+				 	<button name="action_done" type="object" string="Enviar Kit de Bienvenida" class="oe_highlight" 
+							groups="rvc.group_rvc_manager" invisible="state != 'confirm'"/>
+				 	<button name="action_forward_done" type="object" string="Enviar Kit Nuevamente" class="oe_highlight" 
+							groups="rvc.group_rvc_manager" invisible="state != 'confirm'"/>
 					<button name="action_rejected" type="object"  string="Rejected" class="oe_highlight" groups="rvc.group_rvc_manager"/>
                     <button name="action_generate_digital_cards" type="object" string="Generar Tarjetas Digitales" class="oe_highlight"
-                        groups="rvc.group_rvc_manager" />
-                    <button name="action_new_credentials" type="object" string="Re-Asignar Credenciales" class="oe_highlight" groups="rvc.group_rvc_manager" />
-					<button name="action_reactivate" type="object" string="Re-activar Postulación" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+                        groups="rvc.group_rvc_manager" invisible="state != 'confirm'"/>
+                    <button name="action_new_credentials" type="object" string="Re-Asignar Credenciales" class="oe_highlight" 
+							groups="rvc.group_rvc_manager" invisible="state != 'done'"/>
+					<button name="action_reactivate" type="object" string="Re-activar Postulación" class="oe_highlight" 
+							groups="rvc.group_rvc_manager" invisible="state != 'done'"/>
 					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />
 					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary"
                      groups="rvc.group_rvc_manager"/>
-					<button string="Update Crecemype" name="action_application_done" type="object" class="oe_highlight" />					 
+					<button string="Update Crecemype" name="action_application_done" type="object" class="oe_highlight" invisible="state != 'done'"/>					 
 				</header>			
 				<sheet>
                     <h1>Postulación a Beneficio RVC</h1>

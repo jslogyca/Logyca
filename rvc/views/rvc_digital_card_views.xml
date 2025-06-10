@@ -23,7 +23,7 @@
                             <field name="url_website" widget="url"/>
                             <field name="url_facebook" widget="url"/>
                             <field name="url_instagram" widget="url"/>
-                            <field name="qr_code" widget="image" width="30%"/>
+                            <field name="qr_code" widget="image" options="{'width': 30}"/>
                         </group>
                     </group>
                     <group string="Descargar Tarjeta Digital" >

@@ -34,6 +34,10 @@
                                     <i class="fa fa-download"></i> <span>Plantilla Beneficio Colabora</span>
                                 </a>
                                 <br/>
+                                <a href="/rvc/static/xls/Plantilla_Beneficiarias_Tarjeta_Digital.xlsx" aria-label="Download" title="Descargar">
+                                    <i class="fa fa-download"></i> <span>Plantilla Tarjeta Digital</span>
+                                </a>
+                                <br/>
                             </div>
                         </group>
                     </group>
