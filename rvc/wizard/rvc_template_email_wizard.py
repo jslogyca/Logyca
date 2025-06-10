@@ -54,6 +54,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
 
 
     def action_confirm(self):
+        print('TARJETA')
         context = dict(self._context or {})
         active_id = context.get('active_ids', False)
         benefit_application = self.env['benefit.application'].browse(active_id)
