@@ -86,7 +86,7 @@ class libro_diario_report(models.TransientModel):
         date_filter_next = str(x_ano)+'-'+str(x_month)+'-01'
         
         query_account_levelone = '''
-            SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            SELECT code_cuenta::text,'' as Code_Documento,name_cuenta::text,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
             Select
                 A.code,LevelAccount.LevelOne as Code_Cuenta,
@@ -157,7 +157,7 @@ class libro_diario_report(models.TransientModel):
 
         
         query_account_leveltwo = '''
-            SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            SELECT code_cuenta::text,''::text as Code_Documento,name_cuenta::text,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
             Select
                 A.code,LevelAccount.LevelTwo as Code_Cuenta,LevelAccount.LevelTwoName as Name_Cuenta,
@@ -218,7 +218,7 @@ class libro_diario_report(models.TransientModel):
                 date_filter,date_filter_next)
         
         query_account_levelthree = '''
-            SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            SELECT code_cuenta::text,''::text as Code_Documento,name_cuenta::text,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
             Select
                 A.code,LevelAccount.LevelThree as Code_Cuenta,LevelAccount.LevelThreeName as Name_Cuenta,
@@ -281,7 +281,7 @@ class libro_diario_report(models.TransientModel):
         
 
         query_account_levelfour = '''
-            SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            SELECT code_cuenta::text,''::text as Code_Documento,name_cuenta::text,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
             Select
                 A.code,LevelAccount.LevelFour as Code_Cuenta,LevelAccount.LevelFourName as Name_Cuenta,
@@ -291,7 +291,7 @@ class libro_diario_report(models.TransientModel):
                 COALESCE(D.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
                 FROM (
                         select distinct 
-                                coalesce(B.code_prefix_start,'') as LevelFour,coalesce(B."name",'') as LevelFourName
+                                coalesce(B.code_prefix_start,'') as LevelFour,coalesce(B."name",'null'::jsonb) as LevelFourName
                         From account_group A
                         left join account_group b on a.id = b.parent_id
                         where (array_length(string_to_array(a.code_prefix_start, '/'), 1) - 1)  = 1 and a.code_prefix_start is not null    
@@ -344,7 +344,7 @@ class libro_diario_report(models.TransientModel):
         
         query_account = '''
             SELECT
-            D.code as Code_Cuenta,'' as Code_Documento,D."name" as Name_Cuenta,
+            D.code::text as Code_Cuenta,''::text as Code_Documento,D.name::text as Name_Cuenta,
             COALESCE(E.saldo_ant,0) as initial_balance,
             SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
             SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
@@ -394,8 +394,8 @@ class libro_diario_report(models.TransientModel):
         
         query_journal = '''
             SELECT
-            D.code as Code_Cuenta,--D."name" as Name_Cuenta,
-            C.code as Code_Documento,C."name" as Name_Documento,
+            D.code::text as Code_Cuenta,--D.name::text as Name_Cuenta,
+            C.code as Code_Documento,C.name::text as Name_Documento,
             COALESCE(E.saldo_ant,0) as initial_balance,
             SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
             SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
