@@ -167,7 +167,7 @@ class libro_diario_report(models.TransientModel):
                 COALESCE(D.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
                 FROM (
                         select distinct 
-                                A.code_prefix_start as LevelTwo,A."name" as LevelTwoName					
+                                A.code_prefix_start as LevelTwo,A.name->>'en_US' as LevelTwoName					
                         From account_group A
                         left join account_group b on a.id = b.parent_id
                         where (array_length(string_to_array(a.code_prefix_start, '/'), 1))  = 1 and a.code_prefix_start is not null    
@@ -228,7 +228,7 @@ class libro_diario_report(models.TransientModel):
                 COALESCE(D.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
                 FROM (
                         select distinct 
-                                coalesce(B.code_prefix_start,'') as LevelThree,coalesce(B."name",'null'::jsonb) as LevelThreeName
+                                coalesce(B.code_prefix_start,'') as LevelThree,coalesce(B.name->>'en_US',''::text) as LevelThreeName
                         From account_group A
                         left join account_group b on a.id = b.parent_id
                         where (array_length(string_to_array(a.code_prefix_start, '/'), 1))  = 1 and a.code_prefix_start is not null    
@@ -291,7 +291,7 @@ class libro_diario_report(models.TransientModel):
                 COALESCE(D.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
                 FROM (
                         select distinct 
-                                coalesce(B.code_prefix_start,'') as LevelFour,coalesce(B."name",'null'::jsonb) as LevelFourName
+                                coalesce(B.code_prefix_start,'') as LevelFour,coalesce(B.name->>'en_US',''::text) as LevelFourName
                         From account_group A
                         left join account_group b on a.id = b.parent_id
                         where (array_length(string_to_array(a.code_prefix_start, '/'), 1) - 1)  = 1 and a.code_prefix_start is not null    
@@ -344,7 +344,7 @@ class libro_diario_report(models.TransientModel):
         
         query_account = '''
             SELECT
-            D.code::text as Code_Cuenta,''::text as Code_Documento,D.name::text as Name_Cuenta,
+            D.code::text as Code_Cuenta,''::text as Code_Documento,D.name->>'en_US' as Name_Cuenta,
             COALESCE(E.saldo_ant,0) as initial_balance,
             SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
             SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
