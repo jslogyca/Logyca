@@ -395,7 +395,7 @@ class libro_diario_report(models.TransientModel):
         query_journal = '''
             SELECT
             D.code::text as Code_Cuenta,--D.name::text as Name_Cuenta,
-            C.code as Code_Documento,C.name::text as Name_Documento,
+            C.code as Code_Documento,C.name->>'en_US' as Name_Documento,
             COALESCE(E.saldo_ant,0) as initial_balance,
             SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
             SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
