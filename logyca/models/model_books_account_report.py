@@ -120,18 +120,18 @@ class libro_diario_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
@@ -182,18 +182,18 @@ class libro_diario_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
@@ -243,18 +243,18 @@ class libro_diario_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
@@ -306,18 +306,18 @@ class libro_diario_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
@@ -358,19 +358,19 @@ class libro_diario_report(models.TransientModel):
                         FROM account_move_line l
                         INNER JOIN account_account c on c.id=l.account_id
                         WHERE
-                            CASE
-                                WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 1 THEN "date" < '%s'
-                                WHEN user_type_id = 2 THEN "date" < '%s'
-                                WHEN user_type_id = 3 THEN "date" < '%s'
-                                WHEN user_type_id = 5 THEN "date" < '%s'
-                                WHEN user_type_id = 8 THEN "date" < '%s'
-                                WHEN user_type_id = 9 THEN "date" < '%s'
-                                WHEN user_type_id = 11 THEN "date" < '%s'
+                            CASE                                
+                                WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                WHEN account_type = 'equity' THEN "date" < '%s'
                                 ELSE "date" < '%s'
                             END
                         and parent_state = 'posted' group by account_id
@@ -411,18 +411,18 @@ class libro_diario_report(models.TransientModel):
                         INNER JOIN account_account c on c.id=l.account_id
                         WHERE
                             CASE
-                                WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 1 THEN "date" < '%s'
-                                WHEN user_type_id = 2 THEN "date" < '%s'
-                                WHEN user_type_id = 3 THEN "date" < '%s'
-                                WHEN user_type_id = 5 THEN "date" < '%s'
-                                WHEN user_type_id = 8 THEN "date" < '%s'
-                                WHEN user_type_id = 9 THEN "date" < '%s'
-                                WHEN user_type_id = 11 THEN "date" < '%s'
+                                WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                WHEN account_type = 'equity' THEN "date" < '%s'
                                 ELSE "date" < '%s'
                             END
                         and parent_state = 'posted' group by journal_id,account_id
@@ -681,18 +681,18 @@ class libro_mayor_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE 
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
@@ -742,18 +742,18 @@ class libro_mayor_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE 
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
@@ -803,18 +803,18 @@ class libro_mayor_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE 
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
