@@ -19,5 +19,6 @@ class HrContributionRegister(models.Model):
                                                 ('fond_pens', 'Fondo de Pensiones'),
                                                 ('fond_censa', 'Fondo de Cesantías'),
                                                 ('arl', 'ARL'),
-                                                ('caja', 'Caja de Compensación'),], string='Type Reg Contribution')
+                                                ('caja', 'Caja de Compensación'),
+                                                ('accai', 'ACCAI'),], string='Type Reg Contribution')
 
