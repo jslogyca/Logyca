@@ -37,7 +37,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
                         template=template,
                         record=benefit_application,
                         email_values=email_values,
-                        report_ref='rvc.action_report_mercantile_offer',
+                        report_ref='rvc.action_report_rvc',
                         attachment_name_template='Oferta_Mercantil_RVC_{partner_vat}.pdf',
                         access_link=access_link,
                         require_attachment=True
