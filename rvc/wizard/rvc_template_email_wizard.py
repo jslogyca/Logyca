@@ -37,8 +37,8 @@ class RVCTemplateEmailWizard(models.TransientModel):
                         template=template,
                         record=benefit_application,
                         email_values=email_values,
-                        report_ref='rvc.action_report_rvc',
-                        attachment_name_template='Oferta_Mercantil_RVC_{partner_name}.pdf',
+                        report_ref='rvc.action_report_mercantile_offer',
+                        attachment_name_template='Oferta_Mercantil_RVC_{partner_vat}.pdf',
                         access_link=access_link,
                         require_attachment=True
                     )
@@ -311,35 +311,49 @@ class RVCTemplateEmailWizard(models.TransientModel):
     def _generate_and_attach_report(self, report_ref, record, attachment_name_template=None):
         """
         Function to generate a PDF report and create an attachment
-
-        Args:
-            report_ref (str): XML reference of the report (e.g.: 'rvc.action_report_rvc')
-            record (recordset): Record for which to generate the report
-            attachment_name_template (str): Template for the file name.
-                                          If not provided, uses the report name
-
-        Returns:
-            ir.attachment: The created attachment or False if error
         """
         try:
+            # Ensure we have a single record
+            record.ensure_one()
+
             # Get the report action
             report_action = self.env.ref(report_ref)
 
-            # Generate PDF (Odoo 18 compatible)
-            pdf_content, pdf_format = report_action._render_qweb_pdf(record.ids)
+            # Verify report exists
+            if not report_action.exists():
+                logging.error("Report does not exist: %s", report_ref)
+                return False
+
+            # Generate PDF
+            pdf_content, _ = self.env['ir.actions.report']._render_qweb_pdf(
+                report_action, [record.id]
+            )
+
+            if not pdf_content:
+                logging.error("PDF content is empty for report %s", report_ref)
+                return False
 
             # Encode in base64
             pdf_base64 = base64.b64encode(pdf_content)
 
-            # Generate file name
+            # Generate safe file name
             if attachment_name_template:
-                attachment_name = attachment_name_template.format(
-                    partner_name=record.partner_id.partner_id.name.replace('/', '_'),
-                    record_id=record.id,
-                    report_name=report_action.name
-                )
+                try:
+                    partner_vat = record.partner_id.partner_id.vat or 'Unknown'
+                    # Clean VAT for filesystem compatibility
+                    partner_vat = re.sub(r'[^\w\s-]', '', str(partner_vat)).strip()
+                    partner_vat = re.sub(r'[-\s]+', '_', partner_vat)
+
+                    attachment_name = attachment_name_template.format(
+                        partner_vat=partner_vat,
+                        record_id=record.id,
+                        report_name=report_action.name or 'Report'
+                    )
+                except Exception as name_error:
+                    logging.warning("Error formatting attachment name: %s", str(name_error))
+                    attachment_name = f'Report_{record.id}.pdf'
             else:
-                attachment_name = f'{report_action.name}_{record.id}.pdf'
+                attachment_name = f'{report_action.name or "Report"}_{record.id}.pdf'
 
             # Create attachment
             attachment = self.env['ir.attachment'].create({
@@ -351,6 +365,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
                 'mimetype': 'application/pdf',
             })
 
+            logging.info("Successfully generated PDF attachment: %s", attachment_name)
             return attachment
 
         except Exception as e:
