@@ -16,7 +16,7 @@
                         </group>
                     </sheet>
                     <footer>
-                        <button string="Notificar" name="action_reason_desactive" type="object" default_focus="1" class="oe_highlight"/>
+                        <button string="Notificar" name="action_notify" type="object" default_focus="1" class="oe_highlight"/>
                         <button string="Cancelar" special="cancel" class="oe_highlight"/>
                     </footer>
                 </form>
