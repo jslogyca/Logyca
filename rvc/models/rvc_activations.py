@@ -61,7 +61,12 @@ class RvcActivations(models.AbstractModel):
             headers=headers,
             timeout=10,
         )
-        response_json = response.json()
+
+        if response.status_code == 200 and response.text.strip():
+            response_json = response.json()
+        else:
+            raise UserError(f"Error en la activación: respuesta vacía o inválida del servicio. Código HTTP: {response.status_code}")
+
         logging.info(
             "Postulation %d\nLogyca Colabora activation response: %s",
             postulation.id,
