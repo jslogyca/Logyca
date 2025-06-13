@@ -4,7 +4,7 @@
         <t t-call="web.html_container">
             <style>
               p{
-                font-size: 10pt;
+                font-size: 9pt;
                 font-family: 'serif';
                 text-align: justify;
                 text-justify: auto;
@@ -14,19 +14,20 @@
               }
             </style>
             <t t-foreach="inside_foreach_docs or docs" t-as="o">
-                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <t t-set="o" t-value="o.with_context(lang='es_CO')"/>
+                <meta charset="UTF-8"/>
                 <div class="header">
                     <img src='https://stpaymentdev.blob.core.windows.net/imagesmail/gs1Banner.png' width="1480"/>
                 </div>
                 <div class="page">
                     <div class="container">
                         <br/>
-                        <h2 style="text-align: center;">OFERTA MERCANTIL PARA LA CONCESIÓN DEL DERECHO AL USO DE CÓDIGOS DE IDENTIFICACIÓN DE PRODUCTO, RECAUDO Y/O GLN –</h2>
+                        <h2 style="text-align: center;">OFERTA MERCANTIL PARA LA CONCESIÓN DEL DERECHO AL USO DE CÓDIGOS DE IDENTIFICACIÓN DE PRODUCTO, RECAUDO Y/O GLN</h2>
                         <h3 style="text-align: center;">Empresas beneficiarias del proyecto RVC</h3>
-                        <p>LEONEL PAVA CASILIMAS en calidad de Director Ejecutivo y Representante Legal de LOGYCA / ASOCIACION, entidad sin ánimo de lucro, con domicilio en Bogotá,
+                        <p>LEONEL PAVA CASILIMAS en calidad de Director Ejecutivo y Representante Legal de LOGYCA / ASOCIACIÓN, entidad sin ánimo de lucro, con domicilio en Bogotá,
                                 con Personería Jurídica reconocida mediante Resolución Especial No. 1298 del diecinueve (19) de octubre de mil novecientos ochenta y ocho (1988), de la
                                 Alcaldía Mayor de Bogotá, D.C. representada en este acto, entidad que administra en Colombia el sistema estándar internacional de identificación GS1,
-                                quien en adelante se denominará EL OFERENTRE CONCEDENTE, se permite presentar la siguiente oferta mercantil, la cual se regula por la ley colombiana,
+                                quien en adelante se denominará EL OFERENTE CONCEDENTE, se permite presentar la siguiente oferta mercantil, la cual se regula por la ley colombiana,
                                 el artículo 845 y siguientes del Código de Comercio y demás normas concordantes, de conformidad con las estipulaciones que a continuación se detallan</p>
                         <p>Para todos los efectos del contrato de Concesión que se celebra por la aceptación de la presente oferta, el Aceptante se denominará CONCESIONARIA.</p>
                         <h2>PRIMERA: OBJETO DE LA OFERTA.</h2>
@@ -45,7 +46,7 @@
                                 por EL OFERENTE CONCEDENTE, se perfeccionará la oferta mercantil propuesta en el presente documento y cada una de las partes así constituidas asumirán 
                                 obligaciones recíprocas.</p>
                 <p>
-                    <strong>PARÁGRAFO:</strong>En consecuencia, de la aceptación y legalización de la presente oferta mercantil, el acuerdo que se celebre se encuentra exento del impuesto de timbre
+                    <strong>PARÁGRAFO:</strong> En consecuencia, de la aceptación y legalización de la presente oferta mercantil, el acuerdo que se celebre se encuentra exento del impuesto de timbre
                                 de conformidad con el artículo 530 del estatuto tributario.</p>
                 <h2>TERCERA: OBLIGACIONES DEL CONCEDENTE: </h2>
 
@@ -75,23 +76,23 @@
                                 de la concesión. <strong>4.7</strong> No introducir modificaciones o imitar el SISTEMA GS1. <strong>4.8</strong> No hacer uso de los códigos asignados a LA CONCESIONARIA, 
                                 inmediatamente termine el contrato que se celebra por la aceptación de la presente oferta. <strong>4.9</strong> No usar códigos del SISTEMA GS1, cuya concesión no 
                                 le haya sido otorgada por EL OFERENTE CONCEDENTE. En el evento de incumplir la presente obligación, La CONCESIONARIA deberá pagar los derechos económicos por el 
-                                uso indebido a que hubiere lugar, por el periodo o periodos en que lo utilizó. Igualmente, quedará obligada a reconocer los perjuicios que llegaré a causar por la 
+                                uso indebido a que hubiere lugar, por el periodo o periodos en que lo utilizó. Igualmente, quedará obligada a reconocer los perjuicios que llegare a causar por la 
                                 indebida utilización y a pagar la sanción de que trata la novena estipulación de la presente oferta mercantil y a cesar el uso indebido del código o códigos, desde 
                                 el momento que así se lo requiera EL OFERENTE CONCEDENTE. <strong>4.10</strong> Si LA CONCESIONARIA utiliza códigos de barras GS1 para identificar dispositivos médicos, 
-                                por sus siglas en ingles UDI -Unique Device Identification- en el mercado de Estados Unidos de América USA, se obliga a reportarlos y mantener actualizada dicha 
+                                por sus siglas en inglés UDI -Unique Device Identification- en el mercado de Estados Unidos de América USA, se obliga a reportarlos y mantener actualizada dicha 
                                 información, mediante el diligenciamiento de la "DECLARACIÓN UDI" en formulario que la CONCEDENTE proporcionará para tal fin y que hará parte de este contrato.</p>
                 <h2>QUINTA: CESIÓN:</h2>
                 <p>Una vez haya sido aceptada la presente oferta mercantil de Concesión, este contrato no podrá ser cedido por LA CONCESIONARIA sin previa autorización por escrito de 
                             EL OFERENTE CONCEDENTE. La inobservancia a la anterior obligación dará lugar a la terminación del contrato de concesión que se perfecciona por la aceptación de esta oferta mercantil.</p>
                 <h2>SEXTA: FECHA DE VIGENCIA, TÉRMINO DE DURACIÓN Y RENOVACIÓN:</h2>
-                <p> El contrato de concesión que se perfeccione por la aceptación de la presente oferta mercantil rige a partir de la fecha de aceptación y TENDRA VIGENCIA DE 99 AÑOS.</p>
+                <p> El contrato de concesión que se perfeccione por la aceptación de la presente oferta mercantil rige a partir de la fecha de aceptación y TENDRÁ VIGENCIA DE 99 AÑOS.</p>
                 <h2>SÉPTIMA: TERMINACIÓN DEL CONTRATO DE CONCESIÓN:</h2>
                 <p>
                     <strong>7.1</strong> Se terminará por expiración de su término de vigencia.
                     <strong>7.2</strong> Cualquiera de las partes podrá dar por terminado el contrato de concesión que se celebra por la aceptación de la presente oferta mercantil, 
-                                por el incumplimiento de cualquiera de las obligaciones del contrato de concesión a cargo de la otra aparte, en un plazo no menor de treinta (30) días contados a partir 
-                                de la notificación del incumplimiento a menos que la parte que incumplió incumplimiento o haya dado garantías suficientes a juicio de la parte cumplida de lo que subsanará 
-                            dentro del mismo plazo. <strong>7.3</strong> CAUSAL DE TERMINACION ESPECIAL DEL CONTRATO: EL OFERENTE CONCEDENTE Podrá dar por terminado el contrato de manera anticipada, sin preaviso ni 
+                                por el incumplimiento de cualquiera de las obligaciones del contrato de concesión a cargo de la otra parte, en un plazo no menor de treinta (30) días contados a partir 
+                                de la notificación del incumplimiento a menos que la parte que incumplió haya dado garantías suficientes a juicio de la parte cumplida de que lo subsanará 
+                            dentro del mismo plazo. <strong>7.3</strong> CAUSAL DE TERMINACIÓN ESPECIAL DEL CONTRATO: EL OFERENTE CONCEDENTE Podrá dar por terminado el contrato de manera anticipada, sin preaviso ni 
                             indemnización alguna, si durante el plazo de vigencia del Contrato: a) EL OFERENTE CONCEDENTE, sus administradores, socios y/o accionistas llegaren a resultar vinculados en 
                             una investigación de cualquier tipo (penal, administrativa, etc.) relacionada con actividades ilícitas, corrupción, soborno, lavado de dinero o financiamiento del terrorismo o 
                             tráfico de armas, o fuesen formalmente incluidos en listas de control como las de la ONU, OFAC (Office of Foreign Assets Control), FBI así en Colombia no se hubiere iniciado la 
@@ -216,10 +217,9 @@
 
                 <h2>DÉCIMA SEGUNDA: VIGENCIA DE LA OFERTA MERCANTIL:</h2>
                 <p>La presente oferta mercantil tiene una vigencia de treinta (30) días hábiles, transcurridos los cuales sin que haya sido 
-                                ceptada en los términos previstos en el numeral segundo de la presente oferta se entenderá como rechazada.
+                                aceptada en los términos previstos en el numeral segundo de la presente oferta se entenderá como rechazada.
                                 
-                                Para constancia se firma la presente el día <span t-esc="o.today_date_spanish()"/>
-.</p>
+                                Para constancia se firma la presente el día <span t-esc="o.today_date_spanish()"/>.</p>
                 <br/>
                 <div class="signature">
                     <div class="row">
@@ -246,7 +246,7 @@
 
 <template id="report_rvc_lang">
 <t t-foreach="docs" t-as="o">
-<t t-call="rvc.report_rvc_mercantile_offer" t-lang="o.partner_id.sudo().partner_id.lang"/>
+<t t-call="rvc.report_rvc_mercantile_offer" t-lang="'es_CO'"/>
 </t>
 </template>
 </odoo>
