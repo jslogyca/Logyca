@@ -27,6 +27,7 @@
         'security/ir.model.access.csv',
         'wizard/report_excel_sale_product_wizard_view.xml',
         'wizard/account_income_report_wizard_view.xml',
+        'wizard/account_expense_report_wizard_view.xml',
         'report/account_income_report_view.xml',
         'report/report_excel_sale_product_view.xml',
         'report/report_excel_enforcement_view.xml',

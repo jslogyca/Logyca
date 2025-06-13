@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_expense_report_wizard_view" model="ir.ui.view">
+        <field name="name">account.expense.report.wizard.form</field>
+        <field name="model">account.expense.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date_from" required="1"/>
+                        </group>
+                        <group>
+                            <field name="date_to" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Generar" name="do_report" type="object" default_focus="1" class="oe_highlight"/>
+                    <button string="Cancelar" special="cancel" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_expense_report_wizard_view" model="ir.actions.act_window">
+        <field name="name">Gastos Proyectados</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.expense.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="account_expense_report_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_account_expense_report_wizard"
+        name="Gastos Proyectados"
+        parent="account_reports_excel.menu_report_excel_sale_product_root"
+        action="action_account_expense_report_wizard_view"
+        sequence="6"
+        groups="account_reports_excel.group_report_invoice_manager" />
+
+
+
+</odoo>
