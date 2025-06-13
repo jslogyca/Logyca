@@ -147,7 +147,7 @@ class AccountExpenseReportWizard(models.TransientModel):
         title_head.set_font_size(10)
         
         user = self.env['res.users'].browse(self._uid)
-        ws.write(0, 0, 'INGRESOS PROYECTADOS', title_head)
+        ws.write(0, 0, 'GASTOS PROYECTADOS', title_head)
         ws.write(1, 0, str(user.company_id.name), title_head)
         ws.write(3, 0, 'Fecha Inicio', title_head)
         ws.write(3, 1, str(self.date_from))
@@ -298,7 +298,7 @@ class AccountExpenseReportWizard(models.TransientModel):
             out = base64.b64encode(buf.getvalue())
             buf.close()
             safe_date = date_file.strftime('%Y-%m-%d_%H-%M-%S')
-            self.data_name = f'IngresoProyectado-{safe_date}.xlsx'
+            self.data_name = f'GastosProyectado-{safe_date}.xlsx'
             self.data = out
         except Exception as e:
             raise ValidationError(f'No se pudo generar el archivo: {e}')            
