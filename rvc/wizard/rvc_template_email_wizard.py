@@ -7,6 +7,7 @@ from ..models.rvc_activations import RvcActivations
 from markupsafe import Markup
 import re
 import logging
+import base64
 
 
 class RVCTemplateEmailWizard(models.TransientModel):
@@ -18,7 +19,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
     email_credentials = fields.Char(string="Email Credenciales")
     date_done_cons = fields.Date(string='Date Solución', default=fields.Date.context_today)
     
-    def action_reason_desactive(self):
+    def action_notify(self):
         context = dict(self._context or {})
         active_id = context.get('active_ids', False)
         benefit_application = self.env['benefit.application'].browse(active_id)
@@ -26,12 +27,23 @@ class RVCTemplateEmailWizard(models.TransientModel):
             partner=self.env['res.partner'].search([('id','=',benefit_application.partner_id.partner_id.id)])
             if partner and benefit_application.contact_email:
 
-                # notificar Derechos de Identificación
+                # Notify Identification Rights
                 if benefit_application.product_id.code == '01':
                     access_link = partner._notify_get_action_link('view')
                     template = self.env.ref('rvc.mail_template_notify_benefit_codes')
                     subject = "Beneficio Derechos de Identificación"
-                    template.with_context(url=access_link).send_mail(benefit_application.id, force_send=False, email_values={'subject': subject})
+
+                    email_values = {'subject': subject}
+                    self._send_mail_with_attachment(
+                        template=template,
+                        record=benefit_application,
+                        email_values=email_values,
+                        report_ref='rvc.action_report_rvc',
+                        attachment_name_template='Oferta_Mercantil_RVC_{partner_vat}.pdf',
+                        access_link=access_link,
+                        require_attachment=True
+                    )
+
                     benefit_application.write({'state': 'notified', 'notification_date': datetime.now()})
 
                 # notificar Logyca/colabora para los que tienen GLN
@@ -288,7 +300,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
         for rec in self:
             if rec.email_credentials is not False:
                 logging.info(rec.email_credentials)
-                match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', str(rec.email_credentials).lower())
+                match = re.match(r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', str(rec.email_credentials).lower())
 
                 if match is None:
                     raise UserError(f"El email '{str(rec.email_credentials).lower()}' NO es válido. Por favor verifíquelo.")
@@ -302,6 +314,145 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     if benefit_application.product_id.benefit_type == 'colabora':
                         benefit_application.assign_credentials_colabora(re_assign=True, re_assign_email=rec.email_credentials)
         return True
+
+    def _generate_and_attach_report(self, report_ref, record, attachment_name_template=None):
+        """
+        Function to generate a PDF report and create an attachment
+        """
+        try:
+            # Ensure we have a single record
+            record.ensure_one()
+
+            # Get the report action
+            report_action = self.env.ref(report_ref)
+
+            # Verify report exists
+            if not report_action.exists():
+                logging.error("Report does not exist: %s", report_ref)
+                return False
+
+            # Generate PDF
+            pdf_content, _ = self.env['ir.actions.report']._render_qweb_pdf(
+                report_action, [record.id]
+            )
+
+            if not pdf_content:
+                logging.error("PDF content is empty for report %s", report_ref)
+                return False
+
+            # Encode in base64
+            pdf_base64 = base64.b64encode(pdf_content)
+
+            # Generate safe file name
+            if attachment_name_template:
+                try:
+                    partner_vat = record.partner_id.partner_id.vat or 'Unknown'
+                    # Clean VAT for filesystem compatibility
+                    partner_vat = re.sub(r'[^\w\s-]', '', str(partner_vat)).strip()
+                    partner_vat = re.sub(r'[-\s]+', '_', partner_vat)
+
+                    attachment_name = attachment_name_template.format(
+                        partner_vat=partner_vat,
+                        record_id=record.id,
+                        report_name=report_action.name or 'Report'
+                    )
+                except Exception as name_error:
+                    logging.warning("Error formatting attachment name: %s", str(name_error))
+                    attachment_name = f'Report_{record.id}.pdf'
+            else:
+                attachment_name = f'{report_action.name or "Report"}_{record.id}.pdf'
+
+            # Create attachment
+            attachment = self.env['ir.attachment'].create({
+                'name': attachment_name,
+                'type': 'binary',
+                'datas': pdf_base64,
+                'res_model': record._name,
+                'res_id': record.id,
+                'mimetype': 'application/pdf',
+            })
+
+            logging.info("Successfully generated PDF attachment: %s", attachment_name)
+            return attachment
+
+        except Exception as e:
+            logging.error("Error generating PDF report %s: %s", report_ref, str(e))
+            return False
+
+    def _send_mail_with_attachment(self, template, record, email_values, report_ref=None,
+                                   attachment_name_template=None, access_link=None,
+                                   require_attachment=False):
+        """
+        Reusable function to send email with optional/required attachment
+
+        Args:
+            template (mail.template): Email template to send
+            record (recordset): Related record
+            email_values (dict): Additional values for the email
+            report_ref (str): Reference of the report to attach (optional)
+            attachment_name_template (str): Template for file name (optional)
+            access_link (str): Access link for context (optional)
+            require_attachment (bool): If True, fails if attachment cannot be generated
+
+        Returns:
+            bool: True if sent successfully
+
+        Raises:
+            UserError: If require_attachment=True and attachment generation fails
+        """
+        try:
+            # Prepare context
+            context = {}
+            if access_link:
+                context['url'] = access_link
+
+            # If report is required, try to generate attachment
+            if report_ref:
+                attachment = self._generate_and_attach_report(
+                    report_ref,
+                    record,
+                    attachment_name_template
+                )
+
+                if attachment:
+                    # Add attachment to email_values
+                    if 'attachment_ids' not in email_values:
+                        email_values['attachment_ids'] = []
+                    email_values['attachment_ids'].append((4, attachment.id))
+                elif require_attachment:
+                    # If attachment is required and generation failed, raise error
+                    attachment_name = attachment_name_template or 'PDF report'
+                    if attachment_name_template:
+                        attachment_name = attachment_name_template.format(
+                            partner_name=record.partner_id.partner_id.name,
+                            record_id=record.id,
+                            report_name='report'
+                        )
+                    raise UserError(_(
+                        'Could not send email because the required attachment could not be generated: %s. '
+                        'Please verify that the report is correctly configured.' % attachment_name
+                    ))
+
+            # Send email
+            template.with_context(**context).send_mail(
+                record.id,
+                force_send=False,
+                email_values=email_values
+            )
+
+            return True
+
+        except UserError:
+            # Re-raise UserError so it's shown to the user
+            raise
+        except Exception as e:
+            logging.error("Error sending email with template %s: %s", template.id, str(e))
+            if require_attachment and report_ref:
+                # If attachment is required and there's an error, raise specific UserError
+                raise UserError(_(
+                    'Could not send email due to a system error: %s' % str(e)
+                ))
+            return False
 
     def action_application_done(self):
         context = dict(self._context or {})

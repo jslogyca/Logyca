@@ -1205,6 +1205,11 @@ class BenefitApplication(models.Model):
         report = self.env['ir.actions.report']._get_report_from_name('rvc.report_rvc_lang')
         pdf_content, _ = report._render_qweb_pdf([postulation_id.id])
 
+        report_action = self.env.ref('rvc.action_report_rvc')
+        pdf_content, _ = self.env['ir.actions.report']._render_qweb_pdf(
+            report_action, [postulation_id.id]
+        )
+
         b64_pdf = base64.b64encode(pdf_content)
 
         attachment = self.env['ir.attachment'].create({
@@ -1214,7 +1219,10 @@ class BenefitApplication(models.Model):
             'res_model': 'res.partner',
             'res_id': postulation_id.partner_id.partner_id.id
         })
-        return bool(attachment)
+
+        if attachment:
+            return True 
+        return False
 
     def calculate_end_date_colabora(self):
         next_year = fields.Date.today() + relativedelta(years=1)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <template id="accept_rvc_benefit_page_view" name="Aceptar Beneficio RVC">
+    <template id="already_accepted_rvc_benefit_page_view" name="Beneficio RVC Ya Aceptado">
         <div class="container" style="width: 550px; margin: 0 auto;">
         <div>
         <table border="0" cellspacing="0" cellpadding="0" align="center">
@@ -58,13 +58,13 @@
                                             <tr>
                                                 <td>
                                                     <div style="margin-top: 20px;">
-                                                        <div style="font-family:Verdana;font-size: 18px; color: #F26334; text-align: center;"><strong>Gracias por aceptar tu beneficio RVC: Derechos de identificación</strong></div>
+                                                        <div style="font-family:Verdana;font-size: 18px; color: #F26334; text-align: center;"><strong>Beneficio RVC ya aceptado previamente</strong></div>
                                                         <div> </div>
                                                         <br/>
-                                                        <div style="font-family:Verdana;font-size: 18px; color: #454545; text-align: justify;">Es un placer informarte que tu empresa <strong><b t-esc="benefit_application.partner_id.partner_id.name"></b></strong> ya hace parte de las Redes de Valor Colaborativas.</div>
+                                                        <div style="font-family:Verdana;font-size: 18px; color: #454545; text-align: justify;">Tu empresa <strong><b t-esc="benefit_application.partner_id.partner_id.name"></b></strong> ya aceptó este beneficio RVC el <strong><b t-esc="benefit_application.acceptance_date.strftime('%d de %B de %Y a las %H:%M') if benefit_application.acceptance_date else 'fecha no disponible'"></b></strong>.</div>
                                                         <div> </div>
                                                         <br/>
-                                                        <div style="font-family:Verdana;font-size: 18px; color: #454545; text-align: justify;">Pronto recibirás vía correo electrónico el KIT de bienvenida con toda la información de los beneficios que tu empresa ha recibido, junto con las credenciales de acceso a la plataforma y los manuales respectivos para que puedas empezar a utilizarlos.</div>
+                                                        <div style="font-family:Verdana;font-size: 18px; color: #454545; text-align: justify;">Si necesitas más información sobre tu beneficio o tienes alguna consulta, no dudes en contactarnos.</div>
                                                     </div>
                                                 </td>
                                             </tr>

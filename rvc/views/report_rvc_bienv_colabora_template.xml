@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <template id="report_rvc_bienv_colabora_template">
         <t t-call="web.html_container">
             <t t-foreach="inside_foreach_docs or docs" t-as="o">
-                    <t t-set="o" t-value="o.with_context(lang=o.partner_id.partner_id.lang or o.env.lang)"/>
+                    <t t-set="o" t-value="o.with_context(lang='es_CO')"/>
+                    <meta charset="UTF-8"/>
                     <style>
                       p{
                         font-size: 10pt;
@@ -24,7 +25,7 @@
                             <t t-if="o.partner_id">
                                 <span t-field="o.partner_id.partner_id.vat"/>
                             </t></p>
-                            <p>Raciban un cordial saludo.</p><br/>
+                            <p>Reciban un cordial saludo.</p><br/>
                             <p>Desde el año 2015, LOGYCA dio inicio al programa de <strong>Redes de Valor Colaborativas - RVC</strong>, iniciativa de 
                                 fortalecimiento empresarial liderada por nuestros miembros, que busca mejorar la eficiencia y competitividad 
                                 sostenible de las <strong>micro y pequeñas empresas.</strong></p>
@@ -59,8 +60,7 @@
 
     <template id="report_rvc_bienv_colabora">
         <t t-foreach="docs" t-as="o">
-            <!-- <t t-set="inside_foreach_docs" t-value="o"/> -->
-            <t t-call="rvc.report_rvc_bienv_colabora_template" t-lang="o.partner_id.sudo().partner_id.lang"/>
+            <t t-call="rvc.report_rvc_bienv_colabora_template" t-lang="'es_CO'"/>
         </t>
     </template>
 </odoo>

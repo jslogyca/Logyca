@@ -1,163 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="0">
+    <data>
         <record id="mail_template_welcome_kit_rvc" model="mail.template">
             <field name="name">Kit de Bienvenida Derechos Identificación</field>
             <field name="model">rvc.benefit.application</field>
             <field name="subject">Kit de Bienvenida Derechos Identificación</field>
             <field name="email_from">no-reply@gs1co.org</field>
-            <field name="email_to">{{ (object.contact_email or object.email) }}</field>
+            <field name="email_to">{{ object.contact_email or object.email or '' }}</field>
+            <field name="lang">es_CO</field>
             <field name="body_html" type="html">
-                <head>
-                    <style>
-                    .box {
-                        width: 600px;
-                        font-family: 'Roboto', sans-serif;
-                        margin: auto;
-                        background-color: white;
-                    }
-                
-                    .banner {
-                        display: block;
-                        width: 50%;
-                        margin: 0 auto;
-                    }
-                
-                    .welcome {
-                        background-color: #fc4c02;
-                        color: #ffffff;
-                        text-align: center;
-                    }
-                
-                    #container-documentation {
-                        color: white;
-                        background-color: #002b6c;
-                    }
-                
-                    #container-edx-course {
-                        background-color: #c5c5c5;
-                    }
-                
-                    .container {
-                
-                        text-align: center;
-                        padding: 20px;
-                    }
-                
-                    #btn-suscribe {
-                        background-color: #fc4c02;
-                        color: white;
-                        padding: 10px;
-                        border-radius: 10px;
-                        text-decoration: none;
-                    }
-                
-                    #button {
-                        margin-top: 30px;
-                        text-align: center;
-                    }
-                
-                    .text-center {
-                        text-align: center;
-                    }
-                
-                    .column {
-                        display: inline-block;
-                        width: 48%;
-                        vertical-align: top;
-                    }
-                
-                    a {
-                        color: #002b6c;
-                    }
-                
-                    p {
-                        font-size: 15px;
-                    }
-                
-                    #justified {
-                        text-align: justify;
-                    }
-                
-                    hr {
-                        border: 2px dashed #002b6c;
-                        margin: 2em 0em;
-                    }
-                
-                    .footer{
-                        margin-bottom: 5em;
-                    }
-                    </style>
-                </head>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+    <div style="width: 600px; font-family: 'Roboto', 'Arial', sans-serif; margin: auto; background-color: white;">
+        <img style="display: block; width: 50%; margin: 0 auto;" 
+             src="https://files.escala.com/public/53c5445e-cfd0-11ed-80e4-0e9807857d8a/logo-gs1-y-logyca-asociacion.png" 
+             alt="Logo GS1 y LOGYCA" />
+        <img style="display: block; width: 100%; margin: 0 auto;" 
+             src="https://files.escala.com/public/4b65466c-3d29-11ee-99cc-f6d3ae86907a/banner-html-oferta-mercantil.png" 
+             alt="Banner oferta mercantil RVC" />
+        
+        <br />
+        <h2 style="text-align: center; color: #002b6c; margin: 1em 0;">{{ object.partner_id.name }}</h2>
 
-                <body>
-                    <div class="box">
-                        <img class="banner" src="https://ci5.googleusercontent.com/proxy/xlXynKNjNqZquWfF_1hslqmQ2lX9oUKsru8uHPvbXBhkZjUSrseJe2wKECjcyum7hCt3AmQSW9uPOeUGyB6dr3rlE_jUB8AEmJnUkmi4J_5JK3xgTbhVYkkuL2vFFBSR54CNrEGaVfjcP3mIla8BjaOI1lCLCOxq=s0-d-e1-ft#https://files.escala.com/public/53c5445e-cfd0-11ed-80e4-0e9807857d8a/logo-gs1-y-logyca-asociacion.png" alt="Banner" />
+        <p style="text-align: justify; font-size: 15px; line-height: 1.5;">
+            Te informamos que se realizó la activación de {{ object.codes_count }} códigos de barras, los cuales deberás asignar mediante nuestra
+            <strong><a href="https://www.gs1coidentificacion.org/" target="_blank" style="color: #002b6c;">plataforma de identificación (aquí)</a></strong>.
+        </p>
 
-                        <img class="" src="https://ci4.googleusercontent.com/proxy/iReu1QYZ-uWoGIxMqqC_XfvRscOxecxhBM3idJqk8wio6Z-gFhUnBgNF3f4WsV-Hmk2Naq730LbsAQByHA6Rpdv3fIKkDEriX-9L-eEJUIw9czoULiYXy3elXQbPDOtMiSIeOG07QJwJN3ZiHhDZYWe-5ggtGwOG=s0-d-e1-ft#https://files.escala.com/public/4b65466c-3d29-11ee-99cc-f6d3ae86907a/banner-html-oferta-mercantil.png" alt="Banner Image" />
-                        <br />
+        <p style="text-align: justify; font-size: 15px; line-height: 1.5;">
+            Tus credenciales de acceso fueron enviadas desde el correo <strong>aplicaciones@gs1co.org</strong>, por favor revisa en la bandeja de correos no deseados en caso de no visualizarlo en tu bandeja de entrada.
+        </p>
 
-                        <br />
-                        <h2>${object.partner_id.partner_id.name}</h2>
+        <p style="text-align: justify; font-size: 15px; line-height: 1.5;">
+            Recuerda que en caso de que ya tengas una cuenta y no recuerdes tu contraseña, por favor utiliza la opción <strong>"Restablecer contraseña"</strong> para restaurarla.
+        </p>
 
-                        <p class="justified">Te informamos que se realizó la activación de ${object.codes_count} códigos de barras, los cuales deberás
-                            asignar mediante nuestra <strong>
-                            <a href="https://www.gs1coidentificacion.org/" target="_blank">plataforma de identificación (aquí).</a>
-                        </strong>
-                    </p>
-
-                    <p class="justified">Tus credenciales de acceso fueron enviadas desde el correo
-                        <strong>aplicaciones@gs1co.org</strong>, por favor revisa en la bandeja de correos no deseados en caso de no
-                            visualizarlo en tu bandeja de entrada.
-                    </p>
-
-                    <p class="justified">Recuerda que en caso de que ya tengas una cuenta y no recuerdes tu contraseña, por favor utiliza la opción <strong>"Restablecer contraseña"</strong> para restaurarla.
-                    </p>
-
-                    <div id="container-documentation" class="container">
-                        <p class="justified">
-                            <strong>Ten presente el siguiente material<br/>
-para asignar correctamente tus códigos de barras</strong>
-                        </p>
-                        <p id="button">
-                            <a id="btn-suscribe" href="https://www.youtube.com/playlist?list=PLJBWy0uN7d94U5SwPGz_jcUcW5830_ysE" target="_blank">Manual de usuario</a>
-                        </p>
-                        <p id="button">
-                            <a id="btn-suscribe" href="https://gs1co.org/soluciones/identificacion" target="_blank">Tipos de Identificación</a>
-                        </p>
-                    </div>
-                    <br />
-                    <div id="container-edx-course" class="container">
-                        <p>Es importante hacer buen uso del sistema GS1 y evitar cláusulas penales.<br/>
-                        Para esto, debes capacitarte en el curso <strong>SIN COSTO</strong> de Identificación de producto con códigos de barras.</p>
-                    <p id="button">
-                        <a id="btn-suscribe" href="https://www.edx.org/es/learn/product-design/logyca-identificacion-de-producto-con-codigos-de-barras" target="_blank">Inscríbete Aquí</a>
-                    </p>
-                </div>
-
-                <hr />
-                <h2 class="text-center">Si requieres soporte sobre este beneficio<br />
-                Escríbenos 📬 a <a href="mailto:web@gs1co.org">web@gs1co.org</a>
-            </h2>
-            <hr />
-            <h1 class="text-center">
-                <a href="https://www.gs1costore.org/" target="_blank" style="color: #002b6c;">https://www.gs1costore.org/</a>
-            </h1>
-
-            <div class="footer text-center">
-                <span class="text-center">Bogotá, Cundinamarca, Colombia, CO , 110221,</span>
-                <br/>
-                <span class="text-center">
-                    <small>
-                        <a href="https://u28913144.ct.sendgrid.net/asm/?user_id=28913144&amp;data=dy5Fqk0d-1mU7wwSIq7Wln0A5Ck-1pP1cbEvAg1pH3doMDAwdTAwMJkAiqgrDI9DDdWuxN07c2beh3OpE8e0vyrc8-dP5ucbWLBttrB67EaTkXq4ppvcvsHfBOR1T39AgyhH8043G0CwyjfgLS5A7pvKpso7mmorg8t1f6PKHJrqsmey8ZQJbSfiC4vxSg3v9W2wnBz7PU2ozx8AHXbuQQ8CsRS1i9rZ_87UTF12H0tpUqp2LQgS9NAxY2bWSIHjfyBF5k6U5yg6NMjlysnlXLXgAZsFCIprMA7UY9pGVQTk1pgO-ReRKpZQNFFvXMBR7X30oP2wnFNnig4VCIzEBYNC7BsKiap0QH4d_rNbbkJ4Z_KXvVsYm3tdXnoPmWtGVLkAbcDgNTYVpbjaU6x3IQtb8IQl0yS4gWarq7nYsEoa7om8UFpoUre3mKwK1wuQMVgSz3FDUcA9bgxj6-o-s_pser4Pyn9mKFiJFoZiGR1JJlGCL2O_w7rfOm4MQ9njTXlSjYlpGqf5CG9v_zJ5fkUseqj6kaOlvq_rwNEYktOcfTEUF2O6n3WID62OJhQ9yXVvvb5HsYkMeCaQAzDX_Iy6gMMyOzWnUX1Fqlq4Fso-QugjvV2B5HLH17gZ_JbJReCwjw41CKo=">Manejar Suscripción</a>
-                    </small>
-                </span>
-            </div>
+        <div style="color: white; background-color: #002b6c; text-align: center; padding: 20px; margin: 2em 0;">
+            <p style="text-align: justify; font-size: 15px; margin: 0 0 1em 0;">
+                <strong>Ten presente el siguiente material<br/>para asignar correctamente tus códigos de barras</strong>
+            </p>
+            <p style="margin-top: 30px; text-align: center;">
+                <a style="background-color: #fc4c02; color: white; padding: 10px; border-radius: 10px; text-decoration: none; display: inline-block;" 
+                   href="https://www.youtube.com/playlist?list=PLJBWy0uN7d94U5SwPGz_jcUcW5830_ysE" 
+                   target="_blank">Manual de usuario</a>
+            </p>
+            <p style="margin-top: 30px; text-align: center;">
+                <a style="background-color: #fc4c02; color: white; padding: 10px; border-radius: 10px; text-decoration: none; display: inline-block;" 
+                   href="https://gs1co.org/soluciones/identificacion" 
+                   target="_blank">Tipos de Identificación</a>
+            </p>
         </div>
-    </body>
-</field>
-<field name="lang">${object.lang}</field>
-<field name="auto_delete" eval="False"/>
-</record>
-</data>
+
+        <br />
+        <div style="background-color: #c5c5c5; text-align: center; padding: 20px; margin: 2em 0;">
+            <p style="font-size: 15px; margin: 0 0 1em 0; color: #333;">
+                Es importante hacer buen uso del sistema GS1 y evitar cláusulas penales.<br/>
+                Para esto, debes capacitarte en el curso <strong>SIN COSTO</strong> de Identificación de producto con códigos de barras.
+            </p>
+            <p style="margin-top: 30px; text-align: center;">
+                <a style="background-color: #fc4c02; color: white; padding: 10px; border-radius: 10px; text-decoration: none; display: inline-block;" 
+                   href="https://www.edx.org/es/learn/product-design/logyca-identificacion-de-producto-con-codigos-de-barras" 
+                   target="_blank">Inscríbete Aquí</a>
+            </p>
+        </div>
+
+        <hr style="border: 2px dashed #002b6c; margin: 2em 0;" />
+        
+        <h2 style="text-align: center; color: #002b6c; margin: 1em 0;">
+            Si requieres soporte sobre este beneficio<br/>
+            Escríbenos 📬 a <a href="mailto:web@gs1co.org" style="color: #002b6c;">web@gs1co.org</a>
+        </h2>
+        
+        <hr style="border: 2px dashed #002b6c; margin: 2em 0;" />
+
+        <h1 style="text-align: center; margin: 1em 0;">
+            <a href="https://www.gs1costore.org/" target="_blank" style="color: #002b6c;">https://www.gs1costore.org/</a>
+        </h1>
+
+        <div style="text-align: center; margin-bottom: 5em; font-size: 14px; color: #666;">
+            <span>Copyright © 2025 Todos los derechos reservados</span>
+            <br/>
+            <span>Bogotá, Cundinamarca, Colombia, CO , 110221</span>
+        </div>
+    </div>
+</body>
+</html></field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+    </data>
 </odoo>
