@@ -15,9 +15,10 @@
                         <group>
                             <field name="partner_eps"/>
                             <field name="partner_fond_pens"/>
-                            <field name="partner_fond_censa"/>
+                            <field name="partner_accai_pens"/>
                         </group>
                         <group>
+                            <field name="partner_fond_censa"/>
                             <field name="partner_arl"/>
                             <field name="partner_caja"/>
                         </group>

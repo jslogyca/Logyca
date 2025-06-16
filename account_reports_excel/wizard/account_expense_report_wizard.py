@@ -9,9 +9,9 @@ import xlsxwriter
 import requests
 
 
-class ReportIncomeReportWizard(models.TransientModel):
-    _name = 'report.income.report.wizard'
-    _description = 'Report Income Report Wizard'
+class AccountExpenseReportWizard(models.TransientModel):
+    _name = 'account.expense.report.wizard'
+    _description = 'Report Expense Report Wizard'
 
     date_from = fields.Date(string='Fecha de Inicio')
     date_to = fields.Date(string='Fecha Fin')
@@ -22,7 +22,7 @@ class ReportIncomeReportWizard(models.TransientModel):
     def do_report(self):
         value = self.get_values(self.date_from, self.date_to)
         if not value:
-            raise ValidationError(_('!No hay resultados para los datos seleccionadoooooos¡'))
+            raise ValidationError(_('!No hay resultados para los datos seleccionados¡'))
         self.make_file(value)
 
         if not self.data:
@@ -30,7 +30,7 @@ class ReportIncomeReportWizard(models.TransientModel):
 
         return {
             'type': 'ir.actions.act_url',
-            'url': f"/web/content?model=report.income.report.wizard&id={self.id}&field=data&filename_field=data_name&download=true",
+            'url': f"/web/content?model=account.expense.report.wizard&id={self.id}&field=data&filename_field=data_name&download=true",
             'target': 'self',
         }
 
@@ -71,7 +71,7 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     left join account_analytic_account red on red.id = m.analytic_account_id
                                     left JOIN account_analytic_plan pla on pla.id=red.plan_id                                   
                                     where m.date between %s and %s and m.state='posted'
-                                    and m.move_type in ('out_invoice')
+                                    and m.move_type in ('in_invoice')
                                     order by p.id, m.id ''', 
                                     (date_from, date_to))
         
@@ -115,7 +115,7 @@ class ReportIncomeReportWizard(models.TransientModel):
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
                                     left join account_analytic_account red on red.id = i.analytic_account_id                                    
                                     where i.date between %s and %s and i.state='posted'
-                                    and a.id is null and i.move_type in ('out_invoice')
+                                    and a.id is null and i.move_type in ('in_invoice')
                                     order by p.id, i.id ''', 
                                     (date_from, date_to))
         
@@ -147,7 +147,7 @@ class ReportIncomeReportWizard(models.TransientModel):
         title_head.set_font_size(10)
         
         user = self.env['res.users'].browse(self._uid)
-        ws.write(0, 0, 'INGRESOS PROYECTADOS', title_head)
+        ws.write(0, 0, 'GASTOS PROYECTADOS', title_head)
         ws.write(1, 0, str(user.company_id.name), title_head)
         ws.write(3, 0, 'Fecha Inicio', title_head)
         ws.write(3, 1, str(self.date_from))
@@ -298,7 +298,7 @@ class ReportIncomeReportWizard(models.TransientModel):
             out = base64.b64encode(buf.getvalue())
             buf.close()
             safe_date = date_file.strftime('%Y-%m-%d_%H-%M-%S')
-            self.data_name = f'IngresoProyectado-{safe_date}.xlsx'
+            self.data_name = f'GastosProyectado-{safe_date}.xlsx'
             self.data = out
         except Exception as e:
             raise ValidationError(f'No se pudo generar el archivo: {e}')            

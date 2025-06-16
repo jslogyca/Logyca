@@ -5,6 +5,7 @@ from .rvc_activations_services import RvcActivationServices
 from datetime import date
 from .enums import OriginsEnum, SkuRvcProductsEnum
 from .dto import Order_InputDTO, OrderDetail_InputDTO, DigitalCard_InputDTO
+from odoo.exceptions import ValidationError, UserError
 
 class RvcActivations(models.AbstractModel):
     _name = 'rvc.activations'
@@ -61,7 +62,12 @@ class RvcActivations(models.AbstractModel):
             headers=headers,
             timeout=10,
         )
-        response_json = response.json()
+
+        if response.status_code == 200 and response.text.strip():
+            response_json = response.json()
+        else:
+            raise ValidationError(f"Error en la activación: respuesta vacía o inválida del servicio. Código HTTP: {response.status_code}")
+
         logging.info(
             "Postulation %d\nLogyca Colabora activation response: %s",
             postulation.id,

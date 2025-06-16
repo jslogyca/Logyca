@@ -86,7 +86,7 @@ class libro_diario_report(models.TransientModel):
         date_filter_next = str(x_ano)+'-'+str(x_month)+'-01'
         
         query_account_levelone = '''
-            SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            SELECT code_cuenta::text,'' as Code_Documento,name_cuenta::text,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
             Select
                 A.code,LevelAccount.LevelOne as Code_Cuenta,
@@ -120,18 +120,18 @@ class libro_diario_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
@@ -157,7 +157,7 @@ class libro_diario_report(models.TransientModel):
 
         
         query_account_leveltwo = '''
-            SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            SELECT code_cuenta::text,''::text as Code_Documento,name_cuenta::text,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
             Select
                 A.code,LevelAccount.LevelTwo as Code_Cuenta,LevelAccount.LevelTwoName as Name_Cuenta,
@@ -167,7 +167,7 @@ class libro_diario_report(models.TransientModel):
                 COALESCE(D.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
                 FROM (
                         select distinct 
-                                A.code_prefix_start as LevelTwo,A."name" as LevelTwoName					
+                                A.code_prefix_start as LevelTwo,A.name->>'en_US' as LevelTwoName					
                         From account_group A
                         left join account_group b on a.id = b.parent_id
                         where (array_length(string_to_array(a.code_prefix_start, '/'), 1))  = 1 and a.code_prefix_start is not null    
@@ -182,18 +182,18 @@ class libro_diario_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
@@ -218,7 +218,7 @@ class libro_diario_report(models.TransientModel):
                 date_filter,date_filter_next)
         
         query_account_levelthree = '''
-            SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            SELECT code_cuenta::text,''::text as Code_Documento,name_cuenta::text,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
             Select
                 A.code,LevelAccount.LevelThree as Code_Cuenta,LevelAccount.LevelThreeName as Name_Cuenta,
@@ -228,7 +228,7 @@ class libro_diario_report(models.TransientModel):
                 COALESCE(D.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
                 FROM (
                         select distinct 
-                                coalesce(B.code_prefix_start,'') as LevelThree,coalesce(B."name",'') as LevelThreeName
+                                coalesce(B.code_prefix_start,'') as LevelThree,coalesce(B.name->>'en_US',''::text) as LevelThreeName
                         From account_group A
                         left join account_group b on a.id = b.parent_id
                         where (array_length(string_to_array(a.code_prefix_start, '/'), 1))  = 1 and a.code_prefix_start is not null    
@@ -243,18 +243,18 @@ class libro_diario_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
@@ -281,7 +281,7 @@ class libro_diario_report(models.TransientModel):
         
 
         query_account_levelfour = '''
-            SELECT code_cuenta,'' as Code_Documento,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            SELECT code_cuenta::text,''::text as Code_Documento,name_cuenta::text,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
             Select
                 A.code,LevelAccount.LevelFour as Code_Cuenta,LevelAccount.LevelFourName as Name_Cuenta,
@@ -291,7 +291,7 @@ class libro_diario_report(models.TransientModel):
                 COALESCE(D.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
                 FROM (
                         select distinct 
-                                coalesce(B.code_prefix_start,'') as LevelFour,coalesce(B."name",'') as LevelFourName
+                                coalesce(B.code_prefix_start,'') as LevelFour,coalesce(B.name->>'en_US',''::text) as LevelFourName
                         From account_group A
                         left join account_group b on a.id = b.parent_id
                         where (array_length(string_to_array(a.code_prefix_start, '/'), 1) - 1)  = 1 and a.code_prefix_start is not null    
@@ -306,18 +306,18 @@ class libro_diario_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
@@ -344,7 +344,7 @@ class libro_diario_report(models.TransientModel):
         
         query_account = '''
             SELECT
-            D.code as Code_Cuenta,'' as Code_Documento,D."name" as Name_Cuenta,
+            D.code::text as Code_Cuenta,''::text as Code_Documento,D.name->>'en_US' as Name_Cuenta,
             COALESCE(E.saldo_ant,0) as initial_balance,
             SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
             SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
@@ -358,19 +358,19 @@ class libro_diario_report(models.TransientModel):
                         FROM account_move_line l
                         INNER JOIN account_account c on c.id=l.account_id
                         WHERE
-                            CASE
-                                WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 1 THEN "date" < '%s'
-                                WHEN user_type_id = 2 THEN "date" < '%s'
-                                WHEN user_type_id = 3 THEN "date" < '%s'
-                                WHEN user_type_id = 5 THEN "date" < '%s'
-                                WHEN user_type_id = 8 THEN "date" < '%s'
-                                WHEN user_type_id = 9 THEN "date" < '%s'
-                                WHEN user_type_id = 11 THEN "date" < '%s'
+                            CASE                                
+                                WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                WHEN account_type = 'equity' THEN "date" < '%s'
                                 ELSE "date" < '%s'
                             END
                         and parent_state = 'posted' group by account_id
@@ -394,8 +394,8 @@ class libro_diario_report(models.TransientModel):
         
         query_journal = '''
             SELECT
-            D.code as Code_Cuenta,--D."name" as Name_Cuenta,
-            C.code as Code_Documento,C."name" as Name_Documento,
+            D.code::text as Code_Cuenta,--D.name::text as Name_Cuenta,
+            C.code as Code_Documento,C.name->>'en_US' as Name_Documento,
             COALESCE(E.saldo_ant,0) as initial_balance,
             SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
             SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
@@ -411,18 +411,18 @@ class libro_diario_report(models.TransientModel):
                         INNER JOIN account_account c on c.id=l.account_id
                         WHERE
                             CASE
-                                WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                WHEN user_type_id = 1 THEN "date" < '%s'
-                                WHEN user_type_id = 2 THEN "date" < '%s'
-                                WHEN user_type_id = 3 THEN "date" < '%s'
-                                WHEN user_type_id = 5 THEN "date" < '%s'
-                                WHEN user_type_id = 8 THEN "date" < '%s'
-                                WHEN user_type_id = 9 THEN "date" < '%s'
-                                WHEN user_type_id = 11 THEN "date" < '%s'
+                                WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                WHEN account_type = 'equity' THEN "date" < '%s'
                                 ELSE "date" < '%s'
                             END
                         and parent_state = 'posted' group by journal_id,account_id
@@ -572,7 +572,7 @@ class libro_diario_report(models.TransientModel):
         #c.save()        
            
         self.write({
-            'pdf_file': base64.encodestring(pdf.getvalue()),
+            'pdf_file': base64.b64encode(pdf.getvalue()),
             'pdf_file_name': filename,
         })
             
@@ -645,10 +645,10 @@ class libro_mayor_report(models.TransientModel):
         
         
         query_account_levelone = '''
-            SELECT code_cuenta,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            SELECT code_cuenta::text,name_cuenta::text,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
             Select
-                A.code,LevelAccount.LevelOne as Code_Cuenta,
+                A.code::text,LevelAccount.LevelOne::text as Code_Cuenta,
                 Case when LevelAccount.LevelOne = '1' then 'ACTIVO'
                      when LevelAccount.LevelOne = '2' then 'PASIVO'
                      when LevelAccount.LevelOne = '3' then 'PATRIMONIO'
@@ -658,7 +658,7 @@ class libro_mayor_report(models.TransientModel):
                      when LevelAccount.LevelOne = '7' then 'COSTO DE PRODUCCION'
                      when LevelAccount.LevelOne = '8' then 'CUENTAS DE ORDEN DEUDORAS'
                      when LevelAccount.LevelOne = '9' then 'CUENTAS DE ORDEN ACREEDORAS'
-                else '' end as Name_Cuenta,
+                else '' END::text as Name_Cuenta,
                 COALESCE(D.saldo_ant,0) as initial_balance,
                 SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
                 SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
@@ -681,18 +681,18 @@ class libro_mayor_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE 
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
@@ -717,17 +717,17 @@ class libro_mayor_report(models.TransientModel):
                 date_filter,date_filter_next)
 
         query_account_leveltwo = '''
-            SELECT code_cuenta,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            SELECT code_cuenta::text,name_cuenta::text,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
             Select
-                A.code,LevelAccount.LevelTwo as Code_Cuenta,LevelAccount.LevelTwoName as Name_Cuenta,
+                A.code::text,LevelAccount.LevelTwo::text as Code_Cuenta,LevelAccount.LevelTwoName::text as Name_Cuenta,
                 COALESCE(D.saldo_ant,0) as initial_balance,
                 SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
                 SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
                 COALESCE(D.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
                 FROM (
                         select distinct 
-                                A.code_prefix_start as LevelTwo,A."name" as LevelTwoName
+                                A.code_prefix_start as LevelTwo,A.name->>'en_US' as LevelTwoName
                         From account_group A
                         left join account_group b on a.id = b.parent_id
                         where (array_length(string_to_array(a.code_prefix_start, '/'), 1))  = 1 and a.code_prefix_start is not null
@@ -742,18 +742,18 @@ class libro_mayor_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE 
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
@@ -778,17 +778,19 @@ class libro_mayor_report(models.TransientModel):
                 date_filter,date_filter_next)
         
         query_account_levelthree = '''
-            SELECT code_cuenta,name_cuenta,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
+            SELECT code_cuenta::text,name_cuenta::text,Sum(initial_balance) as initial_balance,Sum(debit) as debit,Sum(credit) as credit,Sum(new_balance) as new_balance 
             From (
             Select
-                A.code,LevelAccount.LevelThree as Code_Cuenta,LevelAccount.LevelThreeName as Name_Cuenta,
+                A.code::text,LevelAccount.LevelThree::text as Code_Cuenta,
+                LevelAccount.LevelThreeName::text as Name_Cuenta,
                 COALESCE(D.saldo_ant,0) as initial_balance,
                 SUM(case when B."date" >= '%s' then B.debit else 0 end) as debit,
                 SUM(case when B."date" >= '%s' then B.credit else 0 end) as credit,
                 COALESCE(D.saldo_ant,0)+SUM((case when B."date" >= '%s' then B.debit else 0 end - case when B."date" >= '%s' then B.credit else 0 end)) as new_balance
                 FROM (
                         select distinct 
-                                coalesce(B.code_prefix_start,'') as LevelThree,coalesce(B."name",'') as LevelThreeName
+                                coalesce(B.code_prefix_start,'') as LevelThree,
+                                coalesce(B.name->>'en_US',''::text) as LevelThreeName
                         From account_group A
                         left join account_group b on a.id = b.parent_id
                         where (array_length(string_to_array(a.code_prefix_start, '/'), 1))  = 1 and a.code_prefix_start is not null    
@@ -803,18 +805,18 @@ class libro_mayor_report(models.TransientModel):
                             INNER JOIN account_account c on c.id=l.account_id
                             WHERE 
                                 CASE
-                                    WHEN user_type_id = 13 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 14 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 15 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 16 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 17 THEN "date" >= '%s' and "date" < '%s'
-                                    WHEN user_type_id = 1 THEN "date" < '%s'
-                                    WHEN user_type_id = 2 THEN "date" < '%s'
-                                    WHEN user_type_id = 3 THEN "date" < '%s'
-                                    WHEN user_type_id = 5 THEN "date" < '%s'
-                                    WHEN user_type_id = 8 THEN "date" < '%s'
-                                    WHEN user_type_id = 9 THEN "date" < '%s'
-                                    WHEN user_type_id = 11 THEN "date" < '%s'
+                                    WHEN account_type = 'income' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'income_other' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_depreciation' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'expense_direct_cost' THEN "date" >= '%s' and "date" < '%s'
+                                    WHEN account_type = 'asset_receivable' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_payable' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_cash' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_current' THEN "date" < '%s'
+                                    WHEN account_type = 'asset_fixed' THEN "date" < '%s'
+                                    WHEN account_type = 'liability_current' THEN "date" < '%s'
+                                    WHEN account_type = 'equity' THEN "date" < '%s'
                                     ELSE "date" < '%s'
                                 END
                             and parent_state = 'posted' group by account_id
@@ -841,7 +843,7 @@ class libro_mayor_report(models.TransientModel):
         
          #Consulta final
         query = '''
-            Select code_cuenta,name_cuenta,initial_balance,debit,credit,new_balance 
+            Select code_cuenta::text,name_cuenta::text,initial_balance,debit,credit,new_balance 
             From
             (
                 %s
@@ -970,7 +972,7 @@ class libro_mayor_report(models.TransientModel):
         #c.save()        
            
         self.write({
-            'pdf_file': base64.encodestring(pdf.getvalue()),
+            'pdf_file': base64.b64encode(pdf.getvalue()),
             'pdf_file_name': filename,
         })
             
