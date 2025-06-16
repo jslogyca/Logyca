@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <template id="accept_rvc_benefit_page_view" name="Aceptar Beneficio RVC">
-        <!-- <t t-call="web.frontend_layout"> -->
-            <div class="container" style="width: 550px; margin: 0 auto;">
+        <div class="container" style="width: 550px; margin: 0 auto;">
         <div>
         <table border="0" cellspacing="0" cellpadding="0" align="center">
             <tbody>
@@ -182,44 +181,7 @@
         </table>
         </div>
         <div>
-        <br/>
-        <br/>
-        <table border="0" cellspacing="0" cellpadding="0" align="center">
-            <tbody>
-                <tr>
-                    <td>
-                    <div>
-                        <table border="0" cellspacing="0" cellpadding="0" align="center">
-                            <tbody>
-                                <tr>
-                                <td>
-                                    <div class="mj-column-per-100 mj-outlook-group-fix" style="font-family:Verdana;font-size: 12px; color: rgb(177, 177, 177);">
-                                        <table border="0" width="100%" cellspacing="0" cellpadding="0">
-                                            <tbody>
-                                            <tr>
-                                                <td align="center">
-                                                    <div>Copyright  <span class="escala-element-custom-field" data-field="year">2023</span> Todos los derechos reservados</div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center">
-                                                    <div><span class="escala-element-custom-field" data-field="company_data">GS1, Avenida El Dorado N 92 -32 Modulo G5 Piso 5, Bogotá, CO_110 , CO, +57 3009982929</span></div>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
         </div>
     </div>
-        <!-- </t> -->
     </template>
 </odoo>

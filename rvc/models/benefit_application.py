@@ -1204,8 +1204,12 @@ class BenefitApplication(models.Model):
         if isinstance(postulation_id, int):
             postulation_id = self.browse(postulation_id)
 
-        pdf = self.env.ref('rvc.action_report_rvc')._render_qweb_pdf(postulation_id.id)
-        b64_pdf = base64.b64encode(pdf[0])
+        report_action = self.env.ref('rvc.action_report_rvc')
+        pdf_content, _ = self.env['ir.actions.report']._render_qweb_pdf(
+            report_action, [postulation_id.id]
+        )
+
+        b64_pdf = base64.b64encode(pdf_content)
 
         attachment = self.env['ir.attachment'].create({
             'name': "Oferta Mercantil RVC.pdf",
@@ -1214,7 +1218,8 @@ class BenefitApplication(models.Model):
             'res_model':'res.partner',
             'res_id': postulation_id.partner_id.partner_id.id
         })
-        if not attachment:
+
+        if attachment:
             return True 
         return False
 
