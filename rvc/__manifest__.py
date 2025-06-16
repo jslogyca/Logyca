@@ -61,6 +61,7 @@
         'views/report_rvc_bienv_codes_template.xml',
         'views/report_rvc_bienv_colabora_template.xml',
         'views/accept_benefit_template.xml',
+        'views/already_accepted_benefit_template.xml',
         'views/reject_benefit_template.xml',
         'views/rvc_digital_card_views.xml',
         'views/res_partner_view.xml',

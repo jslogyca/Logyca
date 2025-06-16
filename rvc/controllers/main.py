@@ -32,3 +32,11 @@ class AcceptRvcBenefit(http.Controller):
                     'benefit_application': postulation_id,
                     'token': token
                 }, headers={'Content-Language': lang})
+
+            # If the benefit was already accepted previously (state 'confirm' or 'done')
+            elif postulation_id.state in ['confirm', 'done']:
+                lang = postulation_id.partner_id.partner_id.lang
+                return request.render('rvc.already_accepted_rvc_benefit_page_view', {
+                    'benefit_application': postulation_id,
+                    'token': token
+                }, headers={'Content-Language': lang})
