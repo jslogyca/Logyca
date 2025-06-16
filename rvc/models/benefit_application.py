@@ -1201,7 +1201,6 @@ class BenefitApplication(models.Model):
 
         postulation_id.ensure_one()
 
-        # Usar el modelo ir.actions.report y pasar el XML ID del reporte y el ID del registro
         report = self.env['ir.actions.report']._get_report_from_name('rvc.report_rvc_lang')
         pdf_content, _ = report._render_qweb_pdf([postulation_id.id])
 
@@ -1306,27 +1305,6 @@ class BenefitApplication(models.Model):
         elif self.benefit_type == 'analitica':
             benefit_name = "LOGYCA / ANALÍTICA"    
         return benefit_name
-
-    def attach_OM_2_partner(self, postulation_id):
-        """Adjunta la Oferta Mercantil en el tercero (Compañía o individual) que la acepta."""
-        if isinstance(postulation_id, int):
-            postulation_id = self.browse(postulation_id)
-        if not postulation_id or not postulation_id.exists():
-            raise UserError("El registro de postulación no existe.")
-        postulation_id.ensure_one()
-
-        report = self.env.ref('rvc.action_report_rvc')
-        pdf_content, _ = report._render_qweb_pdf(report, [postulation_id.id])
-
-        b64_pdf = base64.b64encode(pdf_content)
-        attachment = self.env['ir.attachment'].create({
-            'name': "Oferta Mercantil RVC.pdf",
-            'type': 'binary',
-            'datas': b64_pdf,
-            'res_model': 'res.partner',
-            'res_id': postulation_id.partner_id.partner_id.id
-        })
-        return bool(attachment)
 
     def action_generate_digital_cards(self):
         cards_list = []
