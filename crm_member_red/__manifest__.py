@@ -15,6 +15,7 @@
     "depends": [
         "base",
         "contacts",
+        "crm",
     ],
     "description": """
 
@@ -25,6 +26,7 @@
         "security/security.xml",
         "security/ir.model.access.csv",
         "data/logyca_member_red_data.xml",
+        "views/crm_lead_view.xml",
     ],
     "qweb": [],
 }
