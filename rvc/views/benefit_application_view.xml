@@ -6,30 +6,32 @@
 		<field name="arch" type="xml">
 			<form string="Postulación a Beneficios">
 				<header>
-				 	<button name="action_notified" type="object"
+					<button name="action_notified" type="object" invisible="benefit_type == 'tarjeta_digital' or state != 'draft'"
                         string="Notificar al Beneficiario" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-					<button name="action_confirm" type="object" string="Confirm" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-					<button name="action_notified" type="object"  string="Volver a notificar" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-					<button name="action_reminder" type="object"  string="Enviar Recortadorio" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-				 	<button name="action_done" type="object" string="Enviar Kit de Bienvenida" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-				 	<button name="action_forward_done" type="object" string="Enviar Kit Nuevamente" class="oe_highlight" groups="rvc.group_rvc_manager"/>
-					<button name="action_rejected" type="object"  string="Rejected" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_confirm" type="object" invisible="state not in ['draft', 'notified']" string="Confirm" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_notified" type="object" invisible="state != 'notified'" string="Volver a notificar" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_reminder" type="object" invisible="state != 'notified'" string="Enviar Recortadorio" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_done" type="object" invisible="state != 'confirm'" string="Enviar Kit de Bienvenida" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_forward_done" type="object" invisible="state != 'done'" string="Enviar Kit Nuevamente" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+					<button name="action_rejected" type="object" invisible="state != 'notified'" string="Rejected" class="oe_highlight" groups="rvc.group_rvc_manager"/>
                     <button name="action_generate_digital_cards" type="object" string="Generar Tarjetas Digitales" class="oe_highlight"
-                        groups="rvc.group_rvc_manager" />
-                    <button name="action_new_credentials" type="object" string="Re-Asignar Credenciales" class="oe_highlight" groups="rvc.group_rvc_manager" />
-					<button name="action_reactivate" type="object" string="Re-activar Postulación" class="oe_highlight" groups="rvc.group_rvc_manager"/>
+                        groups="rvc.group_rvc_manager" invisible="benefit_type != 'tarjeta_digital' or state not in ['confirm', 'done']"/>
+                    <button name="action_new_credentials" type="object" string="Re-Asignar Credenciales" class="oe_highlight" groups="rvc.group_rvc_manager"
+                        invisible="benefit_type not in ['colabora', 'codigos'] or state != 'done'"/>
+					<button name="action_reactivate" type="object" invisible="state not in ['rejected', 'cancel']" string="Re-activar Postulación" class="oe_highlight" groups="rvc.group_rvc_manager"/>
 					<field name="state" widget="statusbar" statusbar_visible="draft,notified,confirm,done,rejected,cancel" />
 					<button name="action_cancel" type="object" string="Cancel" class="btn-secondary"
-                     groups="rvc.group_rvc_manager"/>
-					<button string="Update Crecemype" name="action_application_done" type="object" class="oe_highlight" />					 
+                     invisible="not id or state in ['rejected', 'cancel', 'done']" groups="rvc.group_rvc_manager"/>
+					<button string="Update Crecemype" name="action_application_done" type="object" class="oe_highlight"
+								invisible="benefit_type != 'crece_mype'" />
 				</header>			
 				<sheet>
                     <h1>Postulación a Beneficio RVC</h1>
 					<group>
 						<group string="Beneficiario">
-							<field name="partner_id" />
-							<field name="vat" />
-							<field name="contact_name" />
+							<field name="partner_id" readonly="state != 'draft'" />
+							<field name="vat" readonly="state != 'draft'" />
+							<field name="contact_name" required="state == 'draft'" />
 							<field name="contact_phone"/>
 							<field name="contact_email"/>
 							<field name="contact_position" />
@@ -51,7 +53,7 @@
 							<field name="renewal" />
 							<field name="email_colabora" />
 							<field name="end_date_colabora" />
-							<button name="validate_has_colabora" type="object" string="ESTADO ACTUAL LOGYCA / COLABORA" icon="fa-truck" groups="rvc.group_rvc_manager" />
+							<button name="validate_has_colabora" type="object" string="ESTADO ACTUAL LOGYCA / COLABORA" icon="fa-question-circle" groups="rvc.group_rvc_manager" />
                             <field name="offered_service_id" />
                             <field name="partner_address" />
                             <field name="question_answered" />
