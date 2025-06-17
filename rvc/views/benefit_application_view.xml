@@ -40,24 +40,25 @@
 							<field name="product_id" />
 							<field name="benefit_type" invisible="1"/>
                             <field name="gln" />
-                            <field name="crecemype_theme_id" invisible="benefit_type!='crece_mype'"/>
-							<field name="crecemype_question" invisible="benefit_type!='crece_mype'"/>
-							<field name="email_employee" invisible="benefit_type!='crece_mype'"/>
-							<field name="employee_id" invisible="benefit_type!='crece_mype'"/>
-							<field name="name_employee" invisible="benefit_type!='crece_mype'"/>
-							<field name="date_done_cons" force_save="1" readonly="1" invisible="benefit_type!='crece_mype'"/>
-							<field name="email_company" invisible="benefit_type!='crece_mype'"/>
-							<field name="product_benefit" invisible="benefit_type!='crece_mype'"/>
-							<field name="canal" />
-							<field name="colabora_level" />
-							<field name="renewal" />
-							<field name="email_colabora" />
-							<field name="end_date_colabora" />
-							<button name="validate_has_colabora" type="object" string="ESTADO ACTUAL LOGYCA / COLABORA" icon="fa-question-circle" groups="rvc.group_rvc_manager" />
-                            <field name="offered_service_id" />
-                            <field name="partner_address" />
-                            <field name="question_answered" />
-							<field name="delivery_date" />
+                            <field name="crecemype_theme_id" invisible="benefit_type != 'crece_mype'"/>
+                            <field name="crecemype_question" invisible="benefit_type != 'crece_mype'"/>
+                            <field name="email_employee" invisible="benefit_type != 'crece_mype'"/>
+                            <field name="employee_id" invisible="benefit_type != 'crece_mype'"/>
+                            <field name="name_employee" invisible="benefit_type != 'crece_mype'"/>
+                            <field name="date_done_cons" force_save="1" readonly="1" invisible="benefit_type != 'crece_mype'"/>
+                            <field name="email_company" invisible="benefit_type != 'crece_mype'"/>
+                            <field name="product_benefit" invisible="benefit_type != 'crece_mype'"/>
+                            <field name="canal" invisible="benefit_type != 'crece_mype'"/>
+                            <field name="colabora_level" invisible="benefit_type != 'colabora'"/>
+                            <field name="renewal" invisible="benefit_type != 'colabora'"/>
+                            <field name="email_colabora" invisible="benefit_type != 'colabora'"/>
+                            <field name="end_date_colabora" invisible="benefit_type != 'colabora'"/>
+                            <button name="validate_has_colabora" type="object" string="ESTADO ACTUAL LOGYCA / COLABORA" 
+                                icon="fa-question-circle" groups="rvc.group_rvc_manager" invisible="benefit_type != 'colabora'"/>
+                            <field name="offered_service_id" invisible="benefit_type != 'tarjeta_digital'"/>
+                            <field name="partner_address" invisible="benefit_type != 'tarjeta_digital'"/>
+                            <field name="question_answered" invisible="benefit_type != 'crece_mype'"/>
+                            <field name="delivery_date" />
 							<br/><br/>
                             <h2 style="color:#666666" invisible="benefit_type!='codigos'">Cantidad Códigos</h2>
                             <br/>
