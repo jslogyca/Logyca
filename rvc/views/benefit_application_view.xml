@@ -85,10 +85,11 @@
                                     icon="fa-download"></button>
                             </tree>
                         </field>
-					</group>Veo el error de sintaxis XML. El problema está en la línea 52 donde hay un conflicto de merge de Git que no se resolvió correctamente. Necesito limpiar el código XML:
-
-
-                            <field name="id" invisible="1"/>
+					</group>
+					<group>
+						<group string="Halonador">
+							<field name="parent_id" />
+							<field name="id" invisible="1"/>
 						</group>
 						<group string="Auditoría GS1" >
 							<field name="whatsapp_number_trail" readonly="1"/>
@@ -149,7 +150,7 @@
                 <filter string="Notificadas" name="notified" domain="[('state', '=', 'notified')]"/>
                 <filter string="Aceptadas" name="confirm" domain="[('state', '=', 'confirm')]"/>
                 <filter string="Rechazadas" name="rejected" domain="[('state', '=', 'rejected')]"/>
-                <filter string="Canceladas" name="notified" domain="[('state', '=', 'cancel')]"/>
+                <filter string="Canceladas" name="cancel" domain="[('state', '=', 'cancel')]"/>
                 <filter string="En Hecho" name="done" domain="[('state', '=', 'done')]"/>
 
                 <group expand="1" string="Agrupar por">
