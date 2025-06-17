@@ -49,17 +49,6 @@
 							<field name="email_company" invisible="benefit_type!='crece_mype'"/>
 							<field name="product_benefit" invisible="benefit_type!='crece_mype'"/>
 							<field name="canal" />
-<<<<<<< HEAD
-							<field name="colabora_level" invisible="benefit_type!='colabora'"/>
-							<field name="renewal" invisible="benefit_type!='colabora'"/>
-							<field name="email_colabora" invisible="benefit_type!='colabora'"/>
-							<field name="end_date_colabora" invisible="benefit_type!='colabora'"/>
-							<button name="validate_has_colabora" type="object" string="ESTADO ACTUAL LOGYCA / COLABORA" 
-										icon="fa-truck" groups="rvc.group_rvc_manager" invisible="benefit_type!='colabora'"/>
-                            <field name="offered_service_id" invisible="benefit_type!='tarjeta_digital'"/>
-                            <field name="partner_address" invisible="benefit_type!='tarjeta_digital'"/>
-                            <field name="question_answered" invisible="benefit_type!='crece_mype'"/>
-=======
 							<field name="colabora_level" />
 							<field name="renewal" />
 							<field name="email_colabora" />
@@ -68,7 +57,6 @@
                             <field name="offered_service_id" />
                             <field name="partner_address" />
                             <field name="question_answered" />
->>>>>>> 6cb6ff0... [FIX] RVC: benefit.application button conditions migrated from odoo 15 to odoo 18
 							<field name="delivery_date" />
 							<br/><br/>
                             <h2 style="color:#666666" invisible="benefit_type!='codigos'">Cantidad Códigos</h2>
@@ -97,10 +85,9 @@
                                     icon="fa-download"></button>
                             </tree>
                         </field>
-					</group>
-					<group>
-						<group string="Halonador">
-							<field name="parent_id" />
+					</group>Veo el error de sintaxis XML. El problema está en la línea 52 donde hay un conflicto de merge de Git que no se resolvió correctamente. Necesito limpiar el código XML:
+
+
                             <field name="id" invisible="1"/>
 						</group>
 						<group string="Auditoría GS1" >
