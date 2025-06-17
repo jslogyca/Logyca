@@ -91,6 +91,7 @@
         'views/res_partner_bank_view.xml',
         'views/crm_lead_view.xml',
         'views/crm_stage_view.xml',
+        'views/account_invoice_report_view.xml',
     ], 
     
 }
