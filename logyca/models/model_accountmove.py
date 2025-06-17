@@ -60,6 +60,7 @@ class AccountMove(models.Model):
     reason = fields.Selection([('1', 'Devolución de servicio'),
                               ('2', 'Diferencia del precio real y el importe cobrado'),
                               ('3', 'Se emitió una factura por error de tercero')], string='Motivo')
+    sector_id =  fields.Many2one('logyca.sectors', string ='Sector', tracking=True)
 
     def open_approval_request_view(self):
         return {
@@ -251,7 +252,8 @@ class AccountMove(models.Model):
             
             if country_id != 0:
                 values = {
-                        'x_country_account_id': country_id ,                
+                        'x_country_account_id': country_id ,
+                        'sector_id': partner.x_sector_id,
                     }
                 self.update(values)
     
@@ -262,7 +264,8 @@ class AccountMove(models.Model):
         partner = self.env['res.partner'].browse(self.partner_id.id)
         
         values = {
-                'x_country_account_id': partner.country_id ,                
+                'x_country_account_id': partner.country_id ,
+                'sector_id': partner.x_sector_id,
             }
         self.update(values)
     
@@ -586,16 +589,31 @@ class AccountMoveLine(models.Model):
 class AccountInvoiceReport(models.Model):
     _inherit = 'account.invoice.report'
     
-    # #NIT del asociado
-    # x_vat = fields.Char(string='NIT Asociado', store=True, readonly=True)
-    # #Grupo Analitico
-    # x_account_analytic_group = fields.Many2one('account.analytic.group', string='Grupo Analítico / Familia', readonly=True)
-    # x_account_analytic_group_two = fields.Many2one('account.analytic.group', string='Grupo Analítico / Línea', readonly=True)
-    # #Categoria de producto
-    # product_categ_id_fam = fields.Many2one('product.category', string='Categoría de Producto / Familia', readonly=True)
-    # product_categ_id_lin = fields.Many2one('product.category', string='Categoría de Producto / Línea', readonly=True)
-    # #Red de valor
-    # x_analytic_account_id = fields.Many2one('account.analytic.account', string='Red de Valor', readonly=True)
+    #NIT del asociado
+    x_vat = fields.Char(string='NIT Asociado', store=True, readonly=True)
+    analytic_account_id = fields.Many2one('account.analytic.account', string='Analítica', readonly=True)
+    plan_id = fields.Many2one('account.analytic.plan', string='Línea Analítica', readonly=True)
+    sector_id =  fields.Many2one('logyca.sectors', string ='Sector', tracking=True)
+
+
+    def _select(self):
+        select_str = super(AccountInvoiceReport, self)._select()
+        select_str += """
+            , partner.vat as x_vat
+            , aaa.id as analytic_account_id
+            , plan.id as plan_id
+            , partner.x_sector_id as sector_id
+            """
+        return select_str
+
+    def _from(self):
+        from_str = super(AccountInvoiceReport, self)._from()
+        from_str += """
+            JOIN LATERAL jsonb_each(line.analytic_distribution) AS dist(key, value) ON TRUE
+            LEFT JOIN account_analytic_account aaa ON aaa.id::text = key
+            INNER JOIN account_analytic_plan plan on plan.id=aaa.plan_id
+            """
+        return from_str
         
     # def _select(self):
     #     add_select = '''
