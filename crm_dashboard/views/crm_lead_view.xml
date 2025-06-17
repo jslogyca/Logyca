@@ -10,7 +10,8 @@
                     <field name="team_id" required="1" />
                     <field name="date_follow" required="1" string='Último Contacto Cliente'/>
                     <field name="follow_lead" widget="badge" string='Nivel de Seguimiento'
-                            options="{'classes': {'baja': 'default', 'baja': 'success', 'alta': 'danger', 'media': 'warning'}}"/>
+                            options="{'classes': {'alta': 'default', 'baja': 'danger', 'alta': 'success', 'media': 'warning'}}"/>
+                    <field name="risk_lead" widget="radio"/>
                 </group>
             </xpath>
         </field>
@@ -23,6 +24,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='activity_state']" position="after">
                 <field name="follow_lead" />
+                <field name="risk_lead" />
             </xpath>
         </field>
     </record>
@@ -35,6 +37,7 @@
                 <field name="date_follow" />
                 <field name="follow_lead" widget="kanban_label_selection" 
                         options="{'classes': {'baja': 'default', 'baja': 'success', 'alta': 'danger', 'media': 'warning'}}"/>
+                <field name="risk_lead" widget="badge" options="{'style': 'color'}"/>            
             </xpath>
         </field>
     </record>

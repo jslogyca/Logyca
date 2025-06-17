@@ -10,6 +10,7 @@ class CrmLead(models.Model):
     x_contact_job_title = fields.Many2one('logyca.job_title', string='Cargo', tracking=True)
     x_contact_area = fields.Many2one('logyca.areas', string='Área', tracking=True)
     x_analytic_account_id =  fields.Many2one('account.analytic.account', string ='Cuenta Análitica', tracking=True)
+    sector_id =  fields.Many2one('logyca.sectors', string ='Sector', tracking=True)
     # x_analytic_account_family = fields.Many2one( string ='Familia Análitica', related = 'x_analytic_account_id.group_id', readonly = True, store = True )
     # x_analytic_account_line = fields.Many2one( string ='Línea Análitica', related = 'x_analytic_account_family.parent_id', readonly = True, store = True )
     
@@ -29,8 +30,16 @@ class CrmLead(models.Model):
         stage_id = self._stage_find(domain=[('is_lose', '=', True)])
         """ Lost semantic: probability = 0 or active = False """
         result = self.write({'stage_id':stage_id.id, 'active': False, 'probability': 0, 'automated_probability': 0, **additional_values})
-        self._rebuild_pls_frequency_table_threshold()
         return result
+
+    @api.depends('partner_id')
+    def _compute_title(self):
+        # Llamar a la lógica original
+        super()._compute_title()
+        # Lógica adicional: ejemplo, registrar log si no hay título
+        for lead in self:
+            if lead.partner_id:
+                lead.sector_id = lead.partner_id.x_sector_id      
     
 class CrmStage(models.Model):   
     _inherit = 'crm.stage'
