@@ -40,6 +40,7 @@
                 <field name="create_uid" string="Creado por"/>
                 <field name="ref" />
                 <field name="x_num_order_purchase" />
+                <field name="sector_id" />
 			</xpath>
 			<xpath expr="//field[@name='reversed_entry_id']" position="after">
                 <field name="reason"
