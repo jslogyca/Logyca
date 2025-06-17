@@ -74,6 +74,12 @@ class CRMLead(models.Model):
                                 ('medio', 'Medio'),
                                 ('alto', 'Alto')], string='Riesgo', default='bajo')
 
+    def write(self, vals):
+        # Actualiza date_follow con la fecha actual si no está explícitamente definido
+        if 'date_follow' not in vals:
+            vals['date_follow'] = fields.Datetime.now()
+        return super(CRMLead, self).write(vals)                                
+
     @api.model
     def _get_currency(self):
         currency_array = [self.env.user.company_id.currency_id.symbol,

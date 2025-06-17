@@ -89,6 +89,8 @@
         'views/account_analytic_line_view.xml',
         'views/approval_request_view.xml',
         'views/res_partner_bank_view.xml',
+        'views/crm_lead_view.xml',
+        'views/crm_stage_view.xml',
     ], 
     
 }

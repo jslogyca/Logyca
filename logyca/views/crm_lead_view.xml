@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="crm_lead_view_form_red" model="ir.ui.view">
+            <field name="name">crm.lead.view.form.red</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='lead_priority']" position="after">
+                    <group name="lead_red" >
+                        <field name="sector_id" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_crm_case_opportunities_filter_sector">
+            <field name="name">crm.case.opportunities.filter.sector</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"></field>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='saleschannel']" position="after">
+                    <filter string="Sector" name="sector_id" context="{'group_by':'sector_id'}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
