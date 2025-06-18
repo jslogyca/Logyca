@@ -1201,9 +1201,6 @@ class BenefitApplication(models.Model):
 
         postulation_id.ensure_one()
 
-        report = self.env['ir.actions.report']._get_report_from_name('rvc.report_rvc_lang')
-        pdf_content, _ = report._render_qweb_pdf([postulation_id.id])
-
         report_action = self.env.ref('rvc.action_report_rvc')
         pdf_content, _ = self.env['ir.actions.report']._render_qweb_pdf(
             report_action, [postulation_id.id]
