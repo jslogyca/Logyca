@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_partner_form_gs1_sale">
+        <field name="name">res.partner.form.gs1.sale</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='website']" position="after">
+                <field name="second_gs1" widget="boolean_toggle" />
+                <field name="date_second_gs1" force_saveinvisible="1" force_save="1" />
+                <button name="check_second_gs1"
+                        type="object"
+                        icon="fa-calendar"
+                        string="Segundo Comunicado"
+                        aria-label="Segundo Comunicado"
+                        class="float-end" />                
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="res_partner_kanban_view_gs1_sale">
+        <field name="name">base.res.partner.kanban.view.gs1.sale</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="second_gs1" />
+            </xpath>
+            <xpath expr="//div[@class='o_kanban_tags_section oe_kanban_partner_categories']" position="after">
+                <div>
+                    <field name="second_gs1" />
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
