@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <xpath expr="//span[@name='address_name']" position="before">
-                <field name="x_type_thirdparty" widget="many2many_checkboxes" />
+                <field name="x_type_thirdparty" widget="many2many_checkboxes" required="1"/>
                 <field name="x_first_name" invisible="is_company" />
                 <field name="x_second_name" invisible="is_company" />
                 <field name="x_first_lastname" invisible="is_company" />
@@ -16,6 +16,15 @@
             <!-- <xpath expr="//field[@name='vat']" position="before">
                 <field name="x_document_type" />
             </xpath> -->
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='email']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='country_id']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
             <xpath expr="//field[@name='vat']" position="after">
                 <field name="x_digit_verification" />
             </xpath>
