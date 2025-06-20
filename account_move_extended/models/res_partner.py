@@ -83,6 +83,7 @@ class ResPartner(models.Model):
                 raise ValidationError(msg)
 
     def write(self, values):
+        print('WRITEEERR', values)
         if not self.env.user.has_group('account_move_extended.account_move_manager_main_partner'):
             raise ValidationError(_('You are not authorized to change the company, please contact'))
         return super(ResPartner, self).write(values)
