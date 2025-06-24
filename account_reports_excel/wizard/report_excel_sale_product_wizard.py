@@ -63,7 +63,10 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     date_part('month',m.invoice_date)as mes_fact,
                                     date_part('year',m.invoice_date)as year_fact,
                                     m.invoice_origin,
-                                    pt.name->>'es_CO' AS nombre_producto,
+                                    CASE WHEN pt.name->>'es_CO' is not null
+                                    THEN pt.name->>'es_CO'
+                                    ELSE pt.name->>'en_US'
+                                    END as nombre_producto,
                                     c.name as company,
                                     cta.name,
                                     aaa.name->>'es_CO' AS analytic_account_name,
@@ -157,7 +160,10 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     date_part('month',m.invoice_date)as mes_fact,
                                     date_part('year',m.invoice_date)as year_fact,
                                     m.invoice_origin,
-                                    pt.name->>'es_CO' AS nombre_producto,
+                                    CASE WHEN pt.name->>'es_CO' is not null
+                                    THEN pt.name->>'es_CO'
+                                    ELSE pt.name->>'en_US'
+                                    END as nombre_producto,
                                     c.name as company,
                                     cta.name,
                                     aaa.name->>'es_CO' AS analytic_account_name,
@@ -258,7 +264,10 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     date_part('month',m.invoice_date)as mes_fact,
                                     date_part('year',m.invoice_date)as year_fact,
                                     m.invoice_origin,
-                                    pt.name->>'es_CO' AS nombre_producto,
+                                    CASE WHEN pt.name->>'es_CO' is not null
+                                    THEN pt.name->>'es_CO'
+                                    ELSE pt.name->>'en_US'
+                                    END as nombre_producto,
                                     c.name as company,
                                     cta.name,
                                     aaa.name->>'es_CO' AS analytic_account_name,
@@ -352,7 +361,10 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     date_part('month',m.invoice_date)as mes_fact,
                                     date_part('year',m.invoice_date)as year_fact,
                                     m.invoice_origin,
-                                    pt.name->>'es_CO' AS nombre_producto,
+                                    CASE WHEN pt.name->>'es_CO' is not null
+                                    THEN pt.name->>'es_CO'
+                                    ELSE pt.name->>'en_US'
+                                    END as nombre_producto,
                                     c.name as company,
                                     cta.name,
                                     aaa.name->>'es_CO' AS analytic_account_name,
