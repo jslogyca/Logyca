@@ -22,6 +22,7 @@ class ResPartnerMemberLogyca(models.Model):
     member_red_id = fields.Many2one('logyca.member.red', string='Red de Valor')
     x_sector_id = fields.Many2one('logyca.sectors', string='Sector')
     city_id = fields.Many2one('logyca.city', string='Ciudad')
+    city = fields.Many2one('res.city', string='Ciudad')
     x_date_vinculation = fields.Date('Fecha de Vinculación')
     meet_loyalty = fields.Selection([("SI", "SI"),
                                 ("NO", "NO")], default="NO", string='Reunión Fidelización')    
@@ -35,6 +36,10 @@ class ResPartnerMemberLogyca(models.Model):
                                 ("4", "Grande"),
                                 ("5", "Micro"),
                                 ("6", "Pequeña")], string='Tamaño')
+    date_init_member_test = fields.Date(string='Inicio Periodo de Prueba Membresía')
+    date_end_member_test = fields.Date(string='Final Periodo de Prueba Membresía')
+    free_member_association = fields.Boolean(string='Free Member',
+        help="Select if you want to give free membership.", default=False)
 
     def _select(self):
         select_str = """
@@ -46,14 +51,17 @@ class ResPartnerMemberLogyca(models.Model):
             vp.id as x_type_vinculation,
             p.type_member as type_member,
             p.member_red_id as member_red_id,
-            p.x_city as city_id,
+            p.city_id as city,
             p.x_date_vinculation AS x_date_vinculation,
             p.x_sector_id as x_sector_id,
             p.meet_loyalty as meet_loyalty,
             p.date_loyalty as date_loyalty,
             p.description_loyalty as description_loyalty,
             1 as sale_order_count,
-            p.x_company_size as x_company_size
+            p.x_company_size as x_company_size,
+            p.date_init_member_test as date_init_member_test,
+            p.date_end_member_test as date_end_member_test,
+            P.free_member_association AS free_member_association
 		"""
         return select_str
 
@@ -70,7 +78,7 @@ class ResPartnerMemberLogyca(models.Model):
 
     def _group_by(self):
         group_by_str = """
-                WHERE vp.id in (1,11,20,22)
+                WHERE vp.member IS TRUE
                 AND p.x_active_vinculation IS True
                 ORDER BY vp.id DESC
         """

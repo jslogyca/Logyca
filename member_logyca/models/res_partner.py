@@ -10,6 +10,11 @@ from odoo.exceptions import ValidationError
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
+    free_member_association = fields.Boolean(string='Free Member',
+        help="Select if you want to give free membership.", default=False)
+    date_init_member_test = fields.Date(string='Inicio Periodo de Prueba Membresía', default=fields.Date.context_today)
+    date_end_member_test = fields.Date(string='Final Periodo de Prueba Membresía', default=fields.Date.context_today)
+
     def activ_member_tyb(self):
         return {
             'name': 'Activar Membresía TYB',
