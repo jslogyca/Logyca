@@ -12,7 +12,10 @@ class SalesOrder(models.Model):
 
     def action_confirm(self):
         res = super(SalesOrder, self).action_confirm()
-        self.partner_id.sale_gs1_id = self.id
-        self.partner_id.second_gs1 = True
-        self.partner_id.date_second_gs1 = self.create_date
+        for order in self:
+            order.partner_id.sudo().write({
+                'sale_gs1_id': order.id,
+                'second_gs1': True,
+                'date_second_gs1': order.create_date,
+            })        
         return res

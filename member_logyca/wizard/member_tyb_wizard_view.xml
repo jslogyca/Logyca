@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="member_tyb_wizard_view_form" model="ir.ui.view">
+        <field name="name">project.allies.wizard.view.form</field>
+        <field name="model">member.tyb.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group string="Activar Membresía TYB" style="border: 1px solid #cccccc; width: 100%; background: #ffffff; text-align:center">
+                        <group style="margin: 10px;width: 90%">
+                            <field name="date" />
+                        </group>
+                        <group style="margin: 10px;width: 90%">
+                            <field name="macro_sector" required="1" />
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="save_detail_advance" string="Guardar" type="object" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel" class="oe_link"/>                    
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

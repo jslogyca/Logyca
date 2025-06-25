@@ -84,6 +84,13 @@ class ResPartner(models.Model):
 
     def write(self, values):
         print('WRITEEERR', values)
+        # Si estamos actualizando la orden GS1, saltamos la comprobación de grupo
+        if 'sale_gs1_id' in values:
+            return super(ResPartner, self).write(values)        
+        if 'second_gs1' in values:
+            return super(ResPartner, self).write(values)        
+        if 'date_second_gs1' in values:
+            return super(ResPartner, self).write(values)        
         if not self.env.user.has_group('account_move_extended.account_move_manager_main_partner'):
             raise ValidationError(_('You are not authorized to change the company, please contact'))
         return super(ResPartner, self).write(values)
