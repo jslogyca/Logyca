@@ -23,20 +23,29 @@ class MemberTYBWizard(models.TransientModel):
         # 1) Tipo de vinculación
         obj_type_vinculation = self.env['logyca.vinculation_types'].search(
             [('membertyb', '=', True)], order="id asc", limit=1)
+        types_vinculation = self.env['logyca.vinculation_types'].search(
+            [('member', '=', True)], order="id asc")
 
         # 2) Obtener el partner activo
         partner = self.env['res.partner'].browse(self._context.get('active_id'))
+        date_end = self.date + relativedelta(months=3)
         if partner:
+            print('vincualc', tuple(partner.x_type_vinculation.ids))
+            print('vincualc222222', tuple(types_vinculation.ids))
+            if tuple(partner.x_type_vinculation.ids) in tuple(types_vinculation.ids):
+                raise ValidationError(_('You cannot create recursive associated members.'))
             # 3) Marcar vinculación en partner
             partner_vals = {
                 'x_active_vinculation': True,
                 'x_date_vinculation': self.date,
                 'x_type_vinculation': obj_type_vinculation,
+                'free_member_association': True,
+                'date_init_member_test': self.date,
+                'date_end_member_test': date_end,
             }
             partner.write(partner_vals)
 
             # 4) Crear la orden de venta
-            date_end = self.date + relativedelta(months=3)
             sale_vals = {
                 'partner_id': partner.id,
                 'client_order_ref': 'Membresía TYB',

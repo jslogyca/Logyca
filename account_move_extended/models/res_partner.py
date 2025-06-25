@@ -91,6 +91,18 @@ class ResPartner(models.Model):
             return super(ResPartner, self).write(values)        
         if 'date_second_gs1' in values:
             return super(ResPartner, self).write(values)        
+        if 'x_active_vinculation' in values:
+            return super(ResPartner, self).write(values)        
+        if 'x_date_vinculation' in values:
+            return super(ResPartner, self).write(values)        
+        if 'x_type_vinculation' in values:
+            return super(ResPartner, self).write(values)        
+        if 'free_member_association' in values:
+            return super(ResPartner, self).write(values)        
+        if 'date_init_member_test' in values:
+            return super(ResPartner, self).write(values)        
+        if 'date_end_member_test' in values:
+            return super(ResPartner, self).write(values)        
         if not self.env.user.has_group('account_move_extended.account_move_manager_main_partner'):
             raise ValidationError(_('You are not authorized to change the company, please contact'))
         return super(ResPartner, self).write(values)

@@ -18,7 +18,7 @@
                         <group>
                             <field name="partner_id" string='Aliado'/>
                             <field name="vat" force_save="1" readonly="1"/>
-                            <field name="city_id" force_save="1" readonly="1"/>
+                            <field name="city" force_save="1" readonly="1"/>
                             <field name="x_type_vinculation" />
                             <field name="x_date_vinculation" required="1" />
                             <field name="x_company_size" required="1" />
@@ -29,7 +29,10 @@
                             <field name="member_red_id" force_save="1" readonly="1"/>
                             <field name="meet_loyalty" force_save="1" readonly="1"/>
                             <field name="date_loyalty" force_save="1" readonly="1"/>
-                            <field name="description_loyalty" force_save="1" readonly="1" widget="text"/>                            
+                            <field name="description_loyalty" force_save="1" readonly="1" widget="text"/>
+                            <field name="free_member_association" force_save="1" readonly="1" />
+                            <field name="date_init_member_test" force_save="1" readonly="1" />
+                            <field name="date_end_member_test" force_save="1" readonly="1" />
                         </group>
                     </group>
                 </sheet>
@@ -50,7 +53,7 @@
                 <field name="type_member" widget="badge"/>
                 <field name="member_red_id" />
                 <field name="x_sector_id" />
-                <field name="city_id" />
+                <field name="city" />
                 <field name="meet_loyalty" />
                 <field name="date_loyalty" />
                 <field name="description_loyalty" />
@@ -67,12 +70,12 @@
                 <field name="x_type_vinculation"/>
                 <field name="type_member"/>
                 <field name="member_red_id"/>
-                <field name="city_id"/>
+                <field name="city"/>
                 <separator/>
                 <filter name="x_date_vinculation" string="Fecha Vinculación" date="x_date_vinculation"/>
                 <separator/>
                 <group expand="0" string="Group By">
-                    <filter string="Ciudad" name="groupy_by_city_id" domain="[]" context="{'group_by': 'city_id'}"/>
+                    <filter string="Ciudad" name="groupy_by_city" domain="[]" context="{'group_by': 'city'}"/>
                     <filter string="Red de Valor" name="groupy_by_member_red_id" domain="[]" context="{'group_by': 'member_red_id'}"/>
                     <filter string="Tipo" name="groupy_by_type_member" domain="[]" context="{'group_by': 'type_member'}"/>
                     <separator/>
@@ -107,32 +110,18 @@
         </field>
     </record>
 
-    <!-- <record id="res_partner_member_logyca_view_dashboard" model="ir.ui.view">
-        <field name="name">res.partner.member.logyca.view.dashboard</field>
-        <field name="model">res.partner.member.logyca</field>
-        <field name="mode">primary</field>
-        <field name="arch" type="xml">
-            <dashboard>
-                <view type="graph" ref="crm_allies.res_partner_member_logyca_view_graph"/>
-                <group>
-                    <group>
-                        <aggregate name="partner" string="Total Miembros" group_operator="count" field="partner_id" measure="__count__"/>
-                    </group>
-                    <group col="1">
-                        <widget name="pie_chart" title="Por Tamaño" attrs="{'groupby': 'x_company_size'}"/>
-                        <widget name="pie_chart" title="Reunión de Fidelización" attrs="{'groupby': 'meet_loyalty'}"/>
-                        <widget name="pie_chart" title="Por Red de Valor" attrs="{'groupby': 'member_red_id'}"/>
-                    </group>
-                </group>
-                <view type="pivot" ref="crm_allies.res_partner_member_logyca_view_pivot"/>
-            </dashboard>
-        </field>
-    </record> -->
-
     <record id="action_res_partner_member_logyca" model="ir.actions.act_window">
         <field name="name">Miembros LOGYCA</field>
         <field name="res_model">res.partner.member.logyca</field>
         <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="view_id" ref="res_partner_member_logyca_view_tree"/>
+    </record>
+
+    <record id="action_partner_member_association_test" model="ir.actions.act_window">
+        <field name="name">Miembros En Periodo de Prueba</field>
+        <field name="res_model">res.partner.member.logyca</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="context">{"search_default_all_members": 1, "default_free_member_association": True}</field>
         <field name="view_id" ref="res_partner_member_logyca_view_tree"/>
     </record>
 
@@ -147,6 +136,34 @@
         name="Miembros LOGYCA"
         action="action_res_partner_member_logyca"
         parent="account_menu_benefits_membership_lg"
-        sequence="0"/>    
+        sequence="0"/>
+
+    <menuitem 
+        name="Miembros" 
+        id="menu_member_association" 
+        sequence="15" 
+        groups="crm_allies.group_manager_crm_allies"
+        web_icon="crm_allies,static/description/icon_member.png"/>
+
+    <menuitem
+        id="menu_member_association_logyca"
+        name="Miembros LOGYCA"
+        action="action_res_partner_member_logyca"
+        parent="menu_member_association"
+        sequence="0"/>
+
+    <menuitem
+        id="menu_member_association_logyca_test"
+        name="Miembros En Periodo de Prueba"
+        action="action_partner_member_association_test"
+        parent="menu_member_association"
+        sequence="1"/>
+
+    <menuitem
+        id="menu_member_association_logyca_test"
+        name="Miembros TYB"
+        action="action_res_partner_member_logyca"
+        parent="menu_member_association"
+        sequence="2"/>
 
 </odoo>
