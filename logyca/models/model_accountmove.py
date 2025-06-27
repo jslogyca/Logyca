@@ -337,6 +337,12 @@ class AccountMove(models.Model):
                 raise ValidationError(_("Este producto no esta marcado como diferido "+invoice_line.product_id.name+", por favor verificar la fecha de incio y final, deben quedar vacias"))
             if str(invoice_line.account_id.code).find("4", 0, 1) != -1 or str(invoice_line.account_id.code).find("5", 0, 1) != -1 or str(invoice_line.account_id.code).find("6", 0, 1) != -1:
                 # if not invoice_line.analytic_account_id and not invoice_line.analytic_tag_ids:
+                if invoice_line.analytic_distribution:
+                    total = sum(invoice_line.analytic_distribution.values())
+                    if total > 100:
+                        raise ValidationError(
+                            f"La distribución analítica en la línea con producto '{invoice_line.product_id.display_name}' supera el 100% (actual: {total:.2f}%)."
+                        )
                 if not invoice_line.analytic_distribution:
                     raise ValidationError(_("No1 se digito información analítica (Cuenta o Etiqueta) para el registro "+invoice_line.name+", por favor verificar."))
                 
