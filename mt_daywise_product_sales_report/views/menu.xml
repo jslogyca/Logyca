@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <menuitem id="sub_menu_sale_report"
+                name="Sales Analysis"
+                parent="sale.menu_sale_report"
+                action="sale.action_order_report_all"
+                groups="sales_team.group_sale_manager"
+                sequence="40" />
+</odoo>

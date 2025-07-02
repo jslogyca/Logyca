@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="daily_sales_report_wizard_view_tree" model="ir.ui.view">
+        <field name="name">daily.sales.report.wizard.view.tree</field>
+        <field name="model">daily.sales.report.wizard</field>
+        <field name="arch" type="xml">
+            <tree string="Tasks Analysis" create="0" multi_edit="0" export_xlsx="0">
+                <field name="product_name" string="Product Name" />
+
+                <field name="sunday" string="Sunday" sum="Total Qty" />
+                <field name="monday" string="Monday" sum="Total Qty" />
+                <field name="tuesday" string="Tuesday" sum="Total Qty" />
+                <field name="wednesday" string="Wednesday" sum="Total Qty" />
+                <field name="thursday" string="Thursday" sum="Total Qty" />
+                <field name="friday" string="Friday" sum="Total Qty" />
+                <field name="saturday" string="Saturday" sum="Total Qty" />
+                <field name="total" string="Total" sum="Total Qty" decoration-bf="1"/>
+            </tree>
+        </field>
+    </record>
+    <record id="daily_sales_report_wizard_form" model="ir.ui.view">
+        <field name="name">daily.sales.report.wizard.view.form</field>
+        <field name="model">daily.sales.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group col="1">
+                        <field string="Start Date" name="from_date" />
+                    </group>
+                    <group>
+                        <field string="End Date" name="to_date" />
+                    </group>
+                </group>
+                <footer>
+                    <button name="get_daily_sales_report_wizard" string="View"
+                        type="object" class="btn-primary" />
+                    <button name="get_daily_sales_report_print" string="Print PDF"
+                        type="object" class="btn-primary" />
+                    <button name="get_daily_sales_excel_report" string="Print XLSX"
+                        type="object" class="btn-primary" />
+                    <button name="cancel_button" string="Cancel"
+                        special="cancel"/>                        
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="daily_sales_report_wizard_view_search" model="ir.ui.view">
+        <field name="name">daily.sales.report.wizard.view.search</field>
+        <field name="model">daily.sales.report.wizard</field>
+        <field name="arch" type="xml">
+            <search string="">
+                <field name="product_name" />
+            </search>
+        </field>
+    </record>
+    <record id="action_daily_sales_report" model="ir.actions.act_window">
+        <field name="name">Daily Sales Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">daily.sales.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="daily_sales_report_wizard_form" />
+        <field name="target">new</field>
+    </record>
+    <menuitem
+        id="daily_sales_report_menu"
+        parent="sale.menu_sale_report"
+        name="Daily Sales Report"
+        action="action_daily_sales_report"
+        sequence="40" />
+</odoo>

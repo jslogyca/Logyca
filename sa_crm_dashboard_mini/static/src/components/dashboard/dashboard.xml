@@ -1,0 +1,266 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!-- In this file don't use the <odoo> tag. -->
+
+<template>
+    <t t-name="sa_crm_dashboard_mini.SaCrmDashboard">
+        <div class="border-bottom bg-view" t-if="!state.isHidden">
+            <div t-if="!state.isCollapsed" class="o_dashboard_banner align-items-start flex-column flex-lg-row flex-shrink-0 d-flex py-2">
+                <div class="w-100">
+                    <table class="o_dashboard_banner_table table table-sm table-borderless h-100 px-1 mb-0 text-center" style="table-layout: fixed; width: 100%;">
+                        <tbody>
+                            <tr t-if="env.isSmall">
+                                <td colspan="2">
+                                    <h3 class="o_highlight float-start" t-if="state.dashboardValues.filters">Pipeline</h3>
+                                    <h3 class="o_highlight float-start" t-if="!state.dashboardValues.filters">My Pipeline</h3>
+                                </td>
+                            </tr>
+                            <tr class="h-100">
+                                <td class="o_text py-1 px-1 text-start align-middle">
+                                    <h3 class="o_highlight"  t-if="!env.isSmall and state.dashboardValues.filters">Pipeline</h3>
+                                    <h3 class="o_highlight"  t-if="!env.isSmall and !state.dashboardValues.filters">My Pipeline</h3>
+
+                                    <t t-if="!state.dashboardValues.filters">This Month</t>
+                                    <t t-else=""><t t-out="state.dashboardValues.valsA.label"/></t>
+                                </td>
+
+                                <td class="p-0 px-1">
+                                    <a title="Open Opportunities" t-attf-class="btn btn-primary w-100 h-100 p-2 text-capitalize fw-normal" style="color: #fff;" t-on-click="ChangeSearchVals" filter_name="open_opportunities">
+                                        <h2 class="mb-0 text-reset" t-out="state.dashboardValues.valsA.open_count"/>
+                                        Open
+                                    </a>
+                                </td>
+
+                                <td class="p-0 px-1">
+                                    <a title="Average Expected Revenue" t-attf-class="btn btn-primary w-100 h-100 p-2 text-capitalize fw-normal" style="color: #fff;">
+                                        <h2 class="mb-0 text-reset" t-out="state.dashboardValues.valsA.avg_deal_size"/>
+                                        Avg E/R
+                                    </a>
+                                </td>
+
+                                <td class="p-0 px-1">
+                                    <a title="Days To Close" t-attf-class="btn btn-primary w-100 h-100 p-2 text-capitalize fw-normal" style="color: #fff;">
+                                        <h2 class="mb-0 text-reset" t-out="state.dashboardValues.valsA.avg_days_to_win"/>
+                                        Days To Win
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <tr class="h-100" t-if="state.dashboardValues.valsB">
+                                <td class="o_text py-2 px-1 text-start align-middle">
+                                    <t t-if="!state.dashboardValues.filters">Last Month</t>
+                                    <t t-else=""><t t-out="state.dashboardValues.valsB.label"/></t>
+                                </td>
+
+                                <td class="p-1 px-1">
+                                    <a class="btn btn-secondary w-100 h-100 p-2 text-capitalize fw-normal">
+                                        <div class="d-block fs-5" t-out="state.dashboardValues.valsB.open_count"  t-on-click="ChangeSearchVals" filter_name="open_opportunities"/>
+                                    </a>
+                                </td>
+
+                                <td class="p-1 px-1">
+                                    <a class="btn btn-secondary w-100 h-100 p-2 text-capitalize fw-normal">
+                                        <div class="d-block fs-5" t-out="state.dashboardValues.valsB.avg_deal_size"/>
+                                    </a>
+                                </td>
+
+                                <td class="p-1 px-1">
+                                    <a class="btn btn-secondary w-100 h-100 p-2 text-capitalize fw-normal">
+                                        <div class="d-block fs-5" t-out="state.dashboardValues.valsB.avg_days_to_win"/>
+                                    </a>
+                                </td>
+                            </tr>
+                            <!-- Third Row for Change Indicator -->
+                            <tr class="h-100" t-if="state.dashboardValues.change">
+                                <td class="o_text py-1 px-1 text-start align-middle">
+                                </td>
+                                <!-- Open Change -->
+                                <td class="p-1 px-1">
+                                    <span class="d-block fs-5 fw-bold text-success" 
+                                        t-if="state.dashboardValues.change.open_change > 0">
+                                        ▲ <t t-out="state.dashboardValues.change.open_change"/>%
+                                    </span>
+                                    <span class="d-block fs-5 fw-bold text-danger" 
+                                        t-if="state.dashboardValues.change.open_change &lt; 0">
+                                        ▼ <t t-out="state.dashboardValues.change.open_change"/>%
+                                    </span>
+                                    <span class="d-block fs-5 fw-bold text-muted" 
+                                        t-if="state.dashboardValues.change.open_change == 0">
+                                        <t t-out="state.dashboardValues.change.open_change"/>%
+                                    </span>
+                                </td>
+
+                                <!-- Average Deal Size Change -->
+                                <td class="p-1 px-1">
+                                    <span class="d-block fs-5 fw-bold text-success" 
+                                        t-if="state.dashboardValues.change.avg_deal_size_change > 0">
+                                        ▲ <t t-out="state.dashboardValues.change.avg_deal_size_change"/>%
+                                    </span>
+                                    <span class="d-block fs-5 fw-bold text-danger" 
+                                        t-if="state.dashboardValues.change.avg_deal_size_change &lt; 0">
+                                        ▼ <t t-out="state.dashboardValues.change.avg_deal_size_change"/>%
+                                    </span>
+                                    <span class="d-block fs-5 fw-bold text-muted" 
+                                        t-if="state.dashboardValues.change.avg_deal_size_change == 0">
+                                        <t t-out="state.dashboardValues.change.avg_deal_size_change"/>%
+                                    </span>
+                                </td>
+
+                                <!-- Days to Win Change -->
+                                <td class="p-1 px-1">
+                                    <span class="d-block fs-5 fw-bold text-success" 
+                                        t-if="state.dashboardValues.change.days_to_win_change > 0">
+                                        ▲ <t t-out="state.dashboardValues.change.days_to_win_change"/>%
+                                    </span>
+                                    <span class="d-block fs-5 fw-bold text-danger" 
+                                        t-if="state.dashboardValues.change.days_to_win_change &lt; 0">
+                                        ▼ <t t-out="state.dashboardValues.change.days_to_win_change"/>%
+                                    </span>
+                                    <span class="d-block fs-5 fw-bold text-muted" 
+                                        t-if="state.dashboardValues.change.days_to_win_change == 0">
+                                        <t t-out="state.dashboardValues.change.days_to_win_change"/>%
+                                    </span>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Repeat similar structure for Performance table -->
+
+                <div class="w-100 mt-3 mt-lg-0">
+                    <table class="o_dashboard_banner_table table table-sm table-borderless h-100 px-1 mb-0 text-center" style="table-layout: fixed; width: 100%;">
+                        <tbody>
+                            <tr t-if="env.isSmall">
+                                <td colspan="2">
+                                    <h3 class="o_highlight float-start" t-if="state.dashboardValues.filters">Performance</h3>
+                                    <h3 class="o_highlight float-start" t-if="!state.dashboardValues.filters">My Performance</h3>
+                                </td>
+                            </tr>
+
+                            <tr class="h-100">
+                                <td class="o_text py-1 px-1 text-start align-middle">
+                                    <h3 class="o_highlight"  t-if="!env.isSmall and state.dashboardValues.filters">Performance</h3>
+                                    <h3 class="o_highlight"  t-if="!env.isSmall and !state.dashboardValues.filters">My Performance</h3>
+                                    <t t-if="!state.dashboardValues.filters">This Month</t>
+                                    <t t-else=""><t t-out="state.dashboardValues.valsA.label"/></t>
+                                </td>
+
+                                <td class="p-0 px-1">
+                                    <a title="Won Opportunities" t-attf-class="btn btn-primary w-100 h-100 p-2 text-capitalize fw-normal" style="color: #fff;" t-on-click="ChangeSearchVals" filter_name="won">
+                                        <h2 class="mb-0 text-reset" t-out="state.dashboardValues.valsA.won_count"/>
+                                        Won
+                                    </a>
+                                </td>
+
+                                <td class="p-0 px-1">
+                                    <a title="Closed Revenue" t-attf-class="btn btn-primary w-100 h-100 p-2 text-capitalize fw-normal">
+                                        <h2 class="mb-0 text-reset" t-out="state.dashboardValues.valsA.closed_amount"/>
+                                        Closed
+                                    </a>
+                                </td>
+
+                                <td class="p-0 px-1">
+                                    <a title="Closing Rate" t-attf-class="btn btn-primary w-100 h-100 p-2 text-capitalize fw-normal" style="color: #fff;">
+                                        <h2 class="mb-0 text-reset" t-out="state.dashboardValues.valsA.close_rate"/>
+                                        Closing Rate
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr class="h-100" t-if="state.dashboardValues.valsB">
+                                <td class="o_text py-2 px-1 text-start align-middle">
+                                    <t t-if="!state.dashboardValues.filters">Last Month</t>
+                                    <t t-else=""><t t-out="state.dashboardValues.valsB.label"/></t>
+                                </td>
+
+                                <td class="p-1 px-1">
+                                    <a class="btn btn-secondary w-100 h-100 p-2 text-capitalize fw-normal" t-on-click="ChangeSearchVals" filter_name="won">
+                                        <div class="d-block fs-5" t-out="state.dashboardValues.valsB.won_count" />
+                                    </a>
+                                </td>
+
+                                <td class="p-1 px-1">
+                                    <a class="btn btn-secondary w-100 h-100 p-2 text-capitalize fw-normal">
+                                        <div class="d-block fs-5" t-out="state.dashboardValues.valsB.closed_amount"/>
+                                    </a>
+                                </td>
+
+                                <td class="p-1 px-1">
+                                    <a class="btn btn-secondary w-100 h-100 p-2 text-capitalize fw-normal">
+                                        <div class="d-block fs-5" t-out="state.dashboardValues.valsB.close_rate"/>
+                                    </a>
+                                </td>
+                            </tr>
+                            <!-- Third Row for Change Indicator -->
+                            <tr class="h-100" t-if="state.dashboardValues.change">
+
+                                <td class="o_text py-1 px-1 text-start align-middle">
+                                </td>
+                                
+                                <!-- Won Change -->
+                                <td class="p-1 px-1">
+                                    <span class="d-block fs-5 fw-bold text-success" 
+                                        t-if="state.dashboardValues.change.won_change > 0">
+                                        ▲ <t t-out="state.dashboardValues.change.won_change"/>%
+                                    </span>
+                                    <span class="d-block fs-5 fw-bold text-danger" 
+                                        t-if="state.dashboardValues.change.won_change &lt; 0">
+                                        ▼ <t t-out="state.dashboardValues.change.won_change"/>%
+                                    </span>
+                                    <span class="d-block fs-5 fw-bold text-muted" 
+                                        t-if="state.dashboardValues.change.won_change == 0">
+                                        <t t-out="state.dashboardValues.change.won_change"/>%
+                                    </span>
+                                </td>
+
+                                <!-- Closed Change -->
+                                <td class="p-1 px-1">
+                                    <span class="d-block fs-5 fw-bold text-success" 
+                                        t-if="state.dashboardValues.change.closed_change > 0">
+                                        ▲ <t t-out="state.dashboardValues.change.closed_change"/>%
+                                    </span>
+                                    <span class="d-block fs-5 fw-bold text-danger" 
+                                        t-if="state.dashboardValues.change.closed_change &lt; 0">
+                                        ▼ <t t-out="state.dashboardValues.change.closed_change"/>%
+                                    </span>
+                                    <span class="d-block fs-5 fw-bold text-muted" 
+                                        t-if="state.dashboardValues.change.closed_change == 0">
+                                        <t t-out="state.dashboardValues.change.closed_change"/>%
+                                    </span>
+                                </td>
+
+                                <!-- Close Rate Change -->
+                                <td class="p-1 px-1">
+                                    <span class="d-block fs-5 fw-bold text-success" 
+                                        t-if="state.dashboardValues.change.close_rate_change > 0">
+                                        ▲ <t t-out="state.dashboardValues.change.close_rate_change"/>%
+                                    </span>
+                                    <span class="d-block fs-5 fw-bold text-danger" 
+                                        t-if="state.dashboardValues.change.close_rate_change &lt; 0">
+                                        ▼ <t t-out="state.dashboardValues.change.close_rate_change"/>%
+                                    </span>
+                                    <span class="d-block fs-5 fw-bold text-muted" 
+                                        t-if="state.dashboardValues.change.close_rate_change == 0">
+                                        <t t-out="state.dashboardValues.change.close_rate_change"/>%
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="text-center mt-1">
+                <button  t-on-click="toggleFiltersWizard" class="btn btn-secondary m-1" style="border-radius:40px;" t-if="!state.isCollapsed">
+                    <i class="fa fa-filter" title="Apply Filters"></i>
+                </button>
+
+                <button t-on-click="toggleCollapse" class="btn btn-secondary m-1" style="border-radius:40px;">
+                    <i t-if="state.isCollapsed" class="fa fa-arrow-down"></i>
+                    <i t-if="!state.isCollapsed" class="fa fa-arrow-up"></i>
+                </button>
+            </div>
+        </div>
+    </t>
+</template>
