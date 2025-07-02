@@ -13,6 +13,7 @@
                 <field name="phone_partner" />
                 <field name="email_partner" />
                 <field name="description" />
+                <field name="check_loyalty" invisible="1"/>
             </tree>
         </field>
     </record>

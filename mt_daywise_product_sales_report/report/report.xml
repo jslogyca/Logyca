@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_daywise_saleorder" model="ir.actions.report">
+        <field name="name">Day Wise Sales Report</field>
+        <field name="model">daily.sales.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mt_daywise_product_sales_report.report_daywise_saleorder_new</field>
+        <field name="report_file">mt_daywise_product_sales_report.report_daywise_saleorder_new</field>
+        <field name="print_report_name">'%s' % object.name</field>
+    </record>
+
+</odoo>
