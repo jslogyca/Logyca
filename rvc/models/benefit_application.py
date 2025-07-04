@@ -261,6 +261,9 @@ class BenefitApplication(models.Model):
                 #este método es generico y permite saber si es apto por tamaño de empresa
                 self._validate_company_size()
 
+                # validar si está desvinculada
+                self._validate_unlinked_partner(beneficiary.partner_id)
+
                 #validar si producto rvc es codigos
                 if product_id.code == '01':
 
@@ -297,6 +300,46 @@ class BenefitApplication(models.Model):
                     validation = '%s no aplica para el beneficio. Es miembro o cliente CE' %\
                             (partner_id.vat + '-' + str(partner_id.name.strip()))
                     raise ValidationError(str(validation))
+        return True
+
+    def _validate_unlinked_partner(self, partner_id):
+        """
+        Valida si la empresa está desvinculada en el CRM de Odoo.
+
+        Args:
+            partner_id: Partner a validar
+
+        Returns:
+            bool: True si la validación es exitosa
+
+        Raises:
+            ValidationError: Si la empresa está desvinculada
+        """
+        # Validar entrada
+        if not partner_id or not partner_id.x_type_vinculation:
+            return True
+
+        # Código para "No tiene vinculación"
+        NO_VINCULATION_CODE = '12'
+
+        # Verificar si tiene vinculación válida
+        has_valid_vinculation = any(
+            vinculation.code != NO_VINCULATION_CODE
+            for vinculation in partner_id.x_type_vinculation
+        )
+
+        # Si no tiene vinculación válida Y tiene datos de desvinculación
+        if (not has_valid_vinculation and
+            partner_id.x_reason_desvinculation and
+            partner_id.x_date_decoupling):
+
+            company_identifier = f"{partner_id.vat}-{partner_id.name.strip()}"
+            error_message = (
+                f"{company_identifier} no aplica para el beneficio. "
+                "Es una empresa DESVINCULADA."
+            )
+            raise ValidationError(error_message)
+
         return True
 
     def _get_employe(self, email):
@@ -384,25 +427,75 @@ class BenefitApplication(models.Model):
                 #     '\n\nPor favor deje el campo Código GLN vacío, le asignaremos uno en la entrega del beneficio.' % (tmp_code, str(partner_id.name))))
                 
     def _validate_bought_products(self):
-        # for benefit_application in self:
-        #     if self.get_odoo_url() == 'https://logyca.odoo.com':
-        #         url = "https://app-asignacioncodigoslogyca-prod-v1.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
-        #     else:
-        #         url = "https://app-asc-dev.azurewebsites.net/codes/CodigosByEmpresa/?Nit=%s&EsPesoVariable=False&TraerCodigosReservados=True" % (str(self.vat))
+        """
+        Valida si la empresa ha consumido más del 80% de sus códigos NPV comprados.
+        Si es así, lanza un ValidationError.
+        """
+        # Obtener token de autenticación
+        token = self._get_token_sso()
+        if not token:
+            raise ValidationError(_('No se pudo obtener el token de autenticación para validar códigos comprados.\
+                Inténtelo nuevamente o comuníquese con soporte.'))
 
-        #     response = requests.get(url)
-        #     if response.status_code == 200:
-        #         result = response.json()
-        #         response.close()
+        # Determinar URL según el entorno
+        if self.get_odoo_url() == 'https://logyca.odoo.com':
+            url = f"https://app-msprefixcodesservice-prod.azurewebsites.net/api/code_reservation_service/get_code_summary_by_enterprise/{str(self.vat)}"
+        else:
+            url = f"https://app-msprefixcodesservice-dev.azurewebsites.net/api/code_reservation_service/get_code_summary_by_enterprise/{str(self.vat)}"
 
-        #         if result.get('CodigosCompradosDisponiblesNPV') > 50:
-        #              raise ValidationError(\
-        #                 _('¡Lo sentimos! La empresa %s tiene %s código(s) comprados disponibles.' % (str(self.partner_id.partner_id.vat) + '-' + str(self.partner_id.partner_id.name), str(result.get('CodigosCompradosDisponiblesNPV')))))
-        #     else:
-        #         raise ValidationError(\
-        #                 _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
-        #                     Inténtelo nuevamente o comuníquese con soporte. Error: %s' % (str(response))))
-            return True
+        # Configurar headers con el token
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {token}'
+        }
+
+        try:
+            response = requests.get(url, headers=headers)
+
+            if response.status_code == 200:
+                result = response.json()
+                response.close()
+
+                # Verificar si la respuesta tiene errores
+                if result.get('dataError', True) or result.get('apiException', {}).get('isError', True):
+                    error_message = result.get('apiException', {}).get('message', 'Error desconocido')
+                    raise ValidationError(_('Error al obtener información de códigos: %s' % error_message))
+
+                # Obtener datos del objeto resultado
+                result_object = result.get('resultObject', {})
+                total_npv_codes = result_object.get('total_npv_codes_purchased', 0)
+                available_npv_codes = result_object.get('total_available_npv_codes_purchased', 0)
+
+                # Validar que tenemos datos válidos
+                if total_npv_codes == 0:
+                    # Si no tiene códigos comprados, permitir el beneficio
+                    return True
+
+                # Calcular porcentaje de códigos disponibles
+                percentage_available = (available_npv_codes / total_npv_codes) * 100
+
+                # Si tiene más del 20% disponible (menos del 80% consumido), denegar el beneficio
+                if percentage_available > 20:
+                    raise ValidationError(
+                        _('¡Lo sentimos! La empresa %s tiene %s código(s) comprados disponibles.' % (
+                            str(self.partner_id.partner_id.vat) + '-' + str(self.partner_id.partner_id.name),
+                            str(available_npv_codes)
+                        ))
+                    )
+
+                return True
+
+            else:
+                raise ValidationError(
+                    _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
+                        Inténtelo nuevamente o comuníquese con soporte. Error: %s' % str(response.status_code))
+                )
+
+        except requests.exceptions.RequestException as e:
+            raise ValidationError(
+                _('Error de conexión al validar códigos comprados.\
+                    Inténtelo nuevamente o comuníquese con soporte. Error: %s' % str(e))
+            )
 
     def _validate_qty_codes(self):
         for rec in self:
@@ -623,8 +716,8 @@ class BenefitApplication(models.Model):
 
         return False
 
-    def get_token_gs1_co_api(self):
-        """ token auth in gs1coidentificat****.org
+    def _get_token_sso(self):
+        """ token auth in SSO
 
         Returns:
             [str]: token for api access or False
@@ -661,7 +754,7 @@ class BenefitApplication(models.Model):
         return False
 
     def assign_credentials_gs1codes(self, re_assign=False, re_assign_email=None):
-        bearer_token = self.get_token_gs1_co_api()
+        bearer_token = self._get_token_sso()
         today_date = datetime.now()
 
         if bearer_token or bearer_token[0]:
