@@ -261,11 +261,11 @@ class BenefitApplication(models.Model):
                 #este método es generico y permite saber si es apto por tamaño de empresa
                 self._validate_company_size()
 
-                # validar si está desvinculada
-                self._validate_unlinked_partner(beneficiary.partner_id)
-
                 #validar si producto rvc es codigos
                 if product_id.code == '01':
+
+                    # validar si está desvinculada
+                    self._validate_unlinked_partner(beneficiary.partner_id)
 
                     # validar si es miembro o cliente
                     self._validate_member_or_client(beneficiary.partner_id)
