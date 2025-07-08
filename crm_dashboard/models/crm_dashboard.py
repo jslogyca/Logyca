@@ -73,6 +73,16 @@ class CRMLead(models.Model):
     risk_lead = fields.Selection([('bajo', 'Bajo'), 
                                 ('medio', 'Medio'),
                                 ('alto', 'Alto')], string='Riesgo', default='bajo')
+    priority = fields.Selection(
+        [
+            ('0', 'Baja'),
+            ('1', 'Media'),
+            ('2', 'Alta'),
+        ],
+        string='Priority',
+        index=True,
+        default='1',  # aqui '1' corresponde a 'Media'
+    )                                
 
     def write(self, vals):
         # Actualiza date_follow con la fecha actual si no está explícitamente definido

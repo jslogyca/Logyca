@@ -15,6 +15,7 @@
         'sale',
         'product',
         'sales_team',
+        'crm_enterprise',
         ],
     'description': '''
 
