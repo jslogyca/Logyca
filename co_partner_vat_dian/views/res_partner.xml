@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">RES PARTNER DIAN BUTTON</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="vat" position="after">
+                <button type="object" name="search_nit_dian" string="Buscar en la DIAN" help="Buscar en la DIAN" class="btn btn-primary"/>
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -9,12 +9,13 @@
                 <group name="lead_lg_pro" invisible="type != 'opportunity'">
                     <field name="product_id"
                             optional="show" required="1"
-                            domain="[('company_id', '=', company_id)]"/>
+                            domain="[('company_id', 'in', (False, company_id))]"/>
                     <field name="product_two_id"
                             optional="show" string='Producto 2'
-                            domain="[('company_id', '=', company_id)]"/>
-                    <field name="analytic_account_id" />
-                    <field name="source_id" />
+                            domain="[('company_id', 'in', (False, company_id))]"/>
+                    <field name="analytic_account_id" force_save="1" readonly="1"/>
+                    <field name="source_id" required="1"/>
+                    <field name="campaign_id" options="{'create_name_field': 'title'}"/>
                     <field name="lost_alert" invisible="1"/>
                     <!-- <field name="lost_reason_id" invisible="lost_alert = False" /> -->
                 </group>
@@ -25,13 +26,9 @@
             <xpath expr="//field[@name='date_deadline']" position="attributes">
                 <attribute name="required">True</attribute>
             </xpath>            
-            <!-- <xpath expr="//field[@name='lost_reason']" position="replace">
-                <field name="lost_alert" invisible="1"/>
-                <field name="lost_reason" attrs="{'invisible': [('lost_alert', '=', False)]}"/>
-            </xpath>             -->
-            <!-- <xpath expr="//widget[@name='web_ribbon']" position="replace">
-                <widget name="web_ribbon" title="Lost" bg_color="bg-danger" />
-            </xpath> -->
+            <xpath expr="//field[@name='priority']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
             <xpath expr="//button[@name='toggle_active']" position="replace">
                 <button name="toggle_active" string="Restore" type="object" data-hotkey="z" />
             </xpath>
@@ -54,12 +51,21 @@
                 <field name="product_two_id" />
                 <field name="analytic_account_id" />
             </xpath>
-            <xpath expr="//filter[@name='close_date']" position="after">
-                <filter string="Cierre Esperado" name="date_deadline" date="date_deadline"/>
+            <xpath expr="//filter[@name='close_date']" position="before">
+                <filter string="Fecha de Cierre" name="date_deadline" date="date_deadline"/>
+            </xpath>
+            <xpath expr="//filter[@name='close_date']" position="replace">
+                <filter string="Fecha de Facturación / Perdida" name="close_date" date="date_closed"/>
             </xpath>
             <xpath expr="//filter[@name='saleschannel']" position="after">
                 <filter string="Analytic Account" name="analytic_account_id" context="{'group_by':'analytic_account_id'}"/>
                 <filter string="Producto" name="product_id" context="{'group_by':'product_id'}"/>
+            </xpath>
+            <xpath expr="//filter[@name='inactive']" position="before">
+                <filter string="Probabilidad Baja" name="priority" domain="[('priority', '=', '0')]"/>
+                <filter string="Probabilidad Media" name="priority" domain="[('priority', '=', '1')]"/>
+                <filter string="Probabilidad Alta" name="priority" domain="[('priority', 'in', ('2','3'))]"/>
+                <separator/>
             </xpath>
         </field>
     </record>
@@ -81,8 +87,14 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="after">
                 <field name="create_date" optional="show"/>
-                <field name="date_deadline" optional="show"/>
-                <field name="date_closed" optional="show"/>
+                <field name="date_deadline" />
+                <field name="day_close_alert" invisible="True" optional="hide"/>
+                <field name="day_close" />
+                <field name="days_exceeded" />
+            </xpath>
+
+            <xpath expr="//field[@name='stage_id']" position="after">
+                <field name="date_closed" />
             </xpath>
         </field>
     </record>
