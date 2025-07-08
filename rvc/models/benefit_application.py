@@ -137,7 +137,6 @@ class BenefitApplication(models.Model):
                     'target': 'new',
                     'domain': '[]'
                 }
-                self.write({'state': 'confirm'})
 
     def action_new_credentials(self):
         for benefit_application in self:
@@ -1097,122 +1096,88 @@ class BenefitApplication(models.Model):
             self.send_reminder_benefit_expiration(postulation)
 
     def _cron_send_welcome_kit(self):
-        """  Acción planificada que envía kits de bienvenida a las postulaciones Aceptadas. """
+        """Acción planificada que activa servicios RVC para las postulaciones Aceptadas."""
 
-        logging.warning("==> Iniciando cron de enviar kits de bienvenida ...")
-        product_identi = self.env['product.rvc'].search([('benefit_type','=','codigos')],limit=1)
+        logging.warning("==> Iniciando cron de activación de servicios RVC ...")
+
         if not self:
             counter = 0
-            self = self.search([('state', '=', 'confirm'), ('codes_quantity', '<', 100),
-                                ('product_id', '=', product_identi.id), 
-                                ('origin', 'in', ['tienda', 'chatbot', 'odoo'])], order="id asc")
+            # Buscar postulaciones en estado 'confirm' que necesiten activación
+            self = self.search([
+                ('state', '=', 'confirm'),
+                ('codes_quantity', '<=', 1000),
+                ('origin', '=', 'odoo')
+            ], order="id asc")
 
             for postulation_id in self:
-                counter =+ 1
-                # limitamos el envío de kits para no saturar el servidor.
-                if counter < 30:
-                    if postulation_id.partner_id.contact_email:
-                        access_link = postulation_id.partner_id.partner_id._notify_get_action_link('view')
+                # Limitamos la activación para no saturar el servidor
+                if counter >= 30:
+                    logging.warning("====> Cron alcanzó el límite de activaciones, esperando la próxima ejecución para procesar más...")
+                    break
 
-                        if postulation_id.product_id.benefit_type == 'codigos':
-                            #para sellers éxito se envía otro kit de bienvenida
-                            if postulation_id.is_seller:
-                                try:
-                                    if postulation_id._validate_bought_products():
-                                        template = self.env.ref('rvc.mail_template_welcome_kit_rvc_seller')
-                                except:
-                                    continue
-                            else:
-                                try:
-                                    if postulation_id._validate_bought_products():
-                                        template = self.env.ref('rvc.mail_template_welcome_kit_rvc')
-                                except:
-                                    continue
-                        elif postulation_id.product_id.benefit_type == 'colabora':
-                            try:
-                                template = self.env.ref('rvc.mail_template_welcome_kit_colabora_rvc')
-                            except:
-                                continue
-                        elif postulation_id.product_id.benefit_type == 'tarjeta_digital':
-                            template = self.env.ref('rvc.mail_template_welcome_kit_digital_card_rvc')
+                # Validar que tenga email de contacto
+                if not postulation_id.partner_id.contact_email:
+                    postulation_id.message_post(body=_('🚫 No se pudo activar el beneficio porque la empresa no tiene email de contacto.'))
+                    counter += 1
+                    continue
 
-                        # adjuntar la OM al kit de bienvenida si no se postuló desde Odoo 
-                        if postulation_id.origin != 'odoo':
-                            #se usa para eliminar los adjuntos de la plantilla de correo
-                            template.attachment_ids = [(5,)]
-                            template= postulation_id.create_OM_attachment(template)
-                        else:
-                            template.attachment_ids = False
-
-                        # Se envía kit de bienvenida
-                        # excepto si es tarjeta digital, en ese caso el beneficio se activa primero y DESPUÉS enviamos kit con 
-                        # la funcion send_digital_cards_bearer()
-                        try:
-                            if postulation_id.product_id.benefit_type != 'tarjeta_digital':
-                                template.with_context(url=access_link).send_mail(postulation_id.id, force_send=True)
-                                #se usa para eliminar los adjuntos de la plantilla de correo
-                                template.attachment_ids = [(5,)]
-                        except:
-                            postulation_id.message_post(body=_(\
-                            'No se pudo <strong>Enviar</strong></u> el kit de bienvenida del beneficio %s.' % str(postulation_id.product_id.benefit_type)))
-
-                        if not postulation_id.gln:
-                            # si no tiene GLN, asignamos uno.
-                            if postulation_id._validate_gln() == False and postulation_id.glns_codes_quantity == 0:
-                                postulation_id.assignate_gln_code()
-
-                        if postulation_id.product_id.benefit_type == 'codigos':
-                            # codigos glns
-                            if postulation_id.glns_codes_quantity > 0:
-                                if postulation_id.send_kit_with_no_benefit is False:
-                                    if postulation_id.assignate_gln_code(postulation_id.glns_codes_quantity):
-                                        postulation_id.assign_credentials_gs1codes()
-                                else:
-                                    postulation_id.assign_credentials_gs1codes()
-                            # codigos recaudo
-                            if postulation_id.invoice_codes_quantity > 0:
-                                if postulation_id.send_kit_with_no_benefit is False:
-                                    if postulation_id.assign_invoice_codes():
-                                        postulation_id.assign_credentials_gs1codes()
-                                else:
-                                    postulation_id.assign_credentials_gs1codes()
-                            # codigos producto
-                            if postulation_id.codes_quantity > 0:
-                                if postulation_id.send_kit_with_no_benefit is False:
-                                    if postulation_id.assign_identification_codes():
-                                        postulation_id.assign_credentials_gs1codes()
-                                else:
-                                    postulation_id.assign_credentials_gs1codes()
-
-                            # Agregar tipo de vinculacion al tercero
-                            postulation_id.add_vinculation_partner()
-
-                        elif postulation_id.product_id.benefit_type == 'colabora':
-                            # Activar colabora
-                            if postulation_id.assign_colabora():
-                                postulation_id.assign_credentials_colabora()
-                        
-                        elif postulation_id.product_id.benefit_type == 'tarjeta_digital':
-                            if postulation_id.digital_card_ids:
-                                postulation_id.send_digital_cards_bearer(template)
-                            else:
-                                raise ValidationError(_('¡Error! No hay tarjetas digitales para generar 😔.\n\nPara solicitarlas: \n'\
-                                                        '1. Active el modo edición yendo al botón EDITAR del lado superior izquierdo.\n'\
-                                                        '2. Vaya a la sección de Tarjetas Digitales.\n'\
-                                                        '3. Pulse la opción "Agregar línea."'))
-
-                        # Actualizar Contacto y Empresa
-                        postulation_id.update_contact(postulation_id.partner_id)
-                        if postulation_id.parent_id:
-                            postulation_id.update_company(postulation_id)
-
-                        postulation_id.write({'state': 'done', 'delivery_date': datetime.now()})
+                # Validar si tiene aún códigos disponibles (para rechazar la postulación)
+                # la empresa debe haber consumido o asignado sus codigos disponibles para pedir más
+                if postulation_id.product_id.benefit_type == 'codigos':
+                    try:
+                        postulation_id._validate_bought_products()
+                    except ValidationError:
+                        postulation_id.message_post(body=_(
+                            '🚫 No se pudo activar porque la empresa %s tiene códigos disponibles por asignar. La postulación se marca como rechazada.' %
+                            (str(postulation_id.partner_id.partner_id.vat) + '-' + str(postulation_id.partner_id.partner_id.name))
+                        ))
+                        postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
                         counter += 1
-                    else:
-                        raise ValidationError(_('La empresa seleccionada no tiene email.'))
-                    self.env.cr.commit()
-                else:
-                    logging.exception("====> Cron alcanzó el límite de kits a enviar, esperando la próxima ejecución para enviar más...")
+                        continue
+
+                # Activar servicios usando rvc.activations
+                activated = False
+                try:
+                    if postulation_id.product_id.benefit_type == 'codigos':
+                        activated = self.env['rvc.activations'].activate_gs1_codes(postulation_id)
+                        if activated:
+                            postulation_id.message_post(body=_('✅ Se activó correctamente el beneficio de Códigos GS1.'))
+                        else:
+                            postulation_id.message_post(body=_('🚫 No se pudo activar el beneficio de Códigos GS1.'))
+
+                    elif postulation_id.product_id.benefit_type == 'colabora':
+                        activated = self.env['rvc.activations'].activate_logyca_colabora(postulation_id)
+                        if activated:
+                            postulation_id.message_post(body=_('✅ Se activó correctamente el beneficio LOGYCA / COLABORA.'))
+                        else:
+                            postulation_id.message_post(body=_('🚫 No se pudo activar el beneficio LOGYCA / COLABORA.'))
+
+                    elif postulation_id.product_id.benefit_type == 'tarjeta_digital':
+                        if postulation_id.digital_card_ids:
+                            activated = self.env['rvc.activations'].activate_digital_cards(postulation_id)
+                            if activated:
+                                postulation_id.message_post(body=_('✅ Se activó correctamente el beneficio de Tarjetas Digitales.'))
+                            else:
+                                postulation_id.message_post(body=_('🚫 No se pudo activar el beneficio de Tarjetas Digitales.'))
+                        else:
+                            postulation_id.message_post(body=_(
+                                '🚫 No se pudo activar el beneficio de Tarjetas Digitales porque no hay tarjetas configuradas.'
+                            ))
+
+                    # Si se activó correctamente, cambiar estado a 'done'
+                    if activated:
+                        postulation_id.write({'state': 'done', 'delivery_date': datetime.now()})
+
+                except Exception as e:
+                    postulation_id.message_post(body=_(
+                        '🚫 Error inesperado al activar el beneficio %s: %s' %
+                        (postulation_id.product_id.benefit_type, str(e))
+                    ))
+                    logging.exception("Error en cron de activación para postulación %s: %s", postulation_id.id, str(e))
+
+                counter += 1
+
+        logging.warning("==> Finalizando cron de activación de servicios RVC. Procesados: %s registros", counter)
 
     def _cron_mark_as_rejected(self):
         logging.warning("==> Iniciando cron de marcar postulaciones como rechazadas ...")
