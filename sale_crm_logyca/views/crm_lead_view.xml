@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="crm.crm_lead_view_form"></field>
         <field name="arch" type="xml">
             <xpath expr="//group[@name='lead_priority']" position="after">
-                <group name="lead_lg_pro" invisible="type != 'opportunity'">
+                <group name="lead_lg_pro" >
                     <field name="product_id"
                             optional="show" required="1"
                             domain="[('company_id', 'in', (False, company_id))]"/>
