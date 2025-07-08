@@ -1,0 +1,65 @@
+<odoo>
+    <record id="view_sa_crm_filters_wizard_form" model="ir.ui.view">
+        <field name="name">sa.crm.filters.wizard.form</field>
+        <field name="model">sa.crm.filters.wizard</field>
+        <field name="arch" type="xml">
+            <form string="CRM Filters Wizard">
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                    </group>
+                    <group>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+
+                <group>
+                    <group>
+                        <field name="salesperson"/>
+                    </group>
+                    <group>
+                        <field name="salesteam"/>
+                    </group>
+                </group>
+
+                <group>
+                    <field name="model_id" invisible="1"/>
+                    <field name="domain" widget="domain" options="{'model': 'model_id'}"/>
+                </group>
+
+                <separator string="Compare With"/>
+                <group>
+                    <group>
+                        <field name="compare_date_from"/>
+                    </group>
+                    <group>
+                        <field name="compare_date_to"/>
+                    </group>
+                </group>
+                <group>
+                    <group>
+                        <field name="compare_salesperson"/>
+                    </group>
+                    <group>
+                        <field name="compare_salesteam"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="compare_domain" widget="domain" options="{'model': 'model_id'}"/>
+                </group>
+
+
+                <footer>
+                    <button string="Filter" type="object" class="btn-primary" name="action_filter"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_open_sa_crm_filters_wizard" model="ir.actions.act_window">
+        <field name="name">Dashboard Filters</field>
+        <field name="res_model">sa.crm.filters.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

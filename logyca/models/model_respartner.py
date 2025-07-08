@@ -30,7 +30,8 @@ class ResPartner(models.Model):
 
     #INFORMACION BASICA
     name = fields.Char(tracking=True)
-    same_vat_partner_id = fields.Many2one('res.partner', string='Partner with same Tax ID', compute='_compute_no_same_vat_partner_id', store=False)
+    # same_vat_partner_id = fields.Many2one('res.partner', string='Partner with same Tax ID', compute='_compute_no_same_vat_partner_id', store=False)
+    same_vat_partner_id = fields.Many2one('res.partner', string='Partner with same Tax ID', store=False)
     x_type_thirdparty = fields.Many2many('logyca.type_thirdparty',string='Tipo de tercero',tracking=True, ondelete='restrict')
     x_active_for_logyca = fields.Boolean(string='Activo', tracking=True, default=True)
     x_document_type = fields.Selection([
@@ -167,10 +168,10 @@ class ResPartner(models.Model):
         else:
             self.active = False
 
-    @api.depends('vat')
-    def _compute_no_same_vat_partner_id(self):
-        for partner in self:
-            partner.same_vat_partner_id = ""
+    # @api.depends('vat')
+    # def _compute_no_same_vat_partner_id(self):
+    #     for partner in self:
+    #         partner.same_vat_partner_id = ""
 
     @api.depends('vat')
     def _compute_verification_digit(self):
@@ -199,7 +200,30 @@ class ResPartner(models.Model):
                 except ValueError:
                     self.x_digit_verification = False
             else:
-                self.x_digit_verification = False
+                self.x_digit_verification = 0
+
+            if partner.vat and partner.l10n_latam_identification_type_id.description == '31' and len(partner.vat) <= len(multiplication_factors):
+                number = 0
+                padded_vat = partner.vat
+
+                while len(padded_vat) < len(multiplication_factors):
+                    padded_vat = '0' + padded_vat
+
+                # if there is a single non-integer in vat the verification code should be False
+                try:
+                    for index, vat_number in enumerate(padded_vat):
+                        number += int(vat_number) * multiplication_factors[index]
+
+                    number %= 11
+
+                    if number < 2:
+                        self.x_digit_verification = number
+                    else:
+                        self.x_digit_verification = 11 - number
+                except ValueError:
+                    self.x_digit_verification = False
+            else:
+                self.x_digit_verification = 0
 
     #---------------Search
     @api.model

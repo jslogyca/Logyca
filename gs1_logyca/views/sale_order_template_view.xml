@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="sale_order_template_form_gs1_sale">
+        <field name="name">sale.order.template.form.gs1.sale</field>
+        <field name="model">sale.order.template</field>
+        <field name="inherit_id" ref="sale_management.sale_order_template_view_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='journal_id']" position="after">
+                <field name="second_gs1" widget="boolean_toggle" />               
+            </xpath>
+        </field>
+    </record>
+</odoo>

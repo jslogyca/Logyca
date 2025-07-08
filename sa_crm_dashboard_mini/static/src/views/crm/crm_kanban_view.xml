@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="sa_crm_dashboard_mini.SaCrmMiniDashboardKanbanView" t-inherit="web.KanbanRenderer" t-inherit-mode="primary">
+        <xpath expr="//div[hasclass('o_kanban_renderer')]" position="before">
+            <SaCrmDashboard />
+        </xpath>
+    </t>
+</templates>

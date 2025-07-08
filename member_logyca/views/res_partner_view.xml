@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_partner_form_membertyb">
+        <field name="name">res.partner.form.membertyb</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="logyca.view_partner_not_contacted_again_inherit"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='x_reason_desvinculation_text']" position="after">
+                <field name="free_member_association" force_save="1" readonly="1" invisible="not free_member_association"/>
+                <field name="date_init_member_test" force_save="1" readonly="1" invisible="not free_member_association"/>
+                <field name="date_end_member_test" force_save="1" readonly="1" invisible="not free_member_association"/>
+                <button name="activ_member_tyb"
+                        type="object"
+                        icon="fa-calendar"
+                        string="Activar Membresía TYB"
+                        aria-label="Activar Membresía TYB"
+                        class="float-end"
+                        invisible="free_member_association" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

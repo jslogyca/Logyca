@@ -8,3 +8,5 @@ class x_vinculation_types(models.Model):
     _inherit = 'logyca.vinculation_types'
 
     tag_id = fields.Many2one('res.partner.category', string='Categotía')
+    member = fields.Boolean(string='Member',
+        help="Select if you want to give membership.")

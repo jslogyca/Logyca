@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_daywise_saleorder_new">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t class="page">
+                    <div class="oe_structure" />
+                    <center>
+                        <b>
+                            <h3>Day Wise Product Sales Report</h3>
+                        </b>
+                    </center>
+                    <t t-if="start_date and end_date">
+                        <center>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center" t-esc="start_date"></td>
+                                        <td class="text-center">To</td>
+                                        <td class="text-center" t-esc="end_date"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </center>
+                    </t>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Sunday</th>
+                                <th>Monday</th>
+                                <th>Tuesday</th>
+                                <th>Wednesday</th>
+                                <th>Thursday</th>
+                                <th>Friday</th>
+                                <th>Saturday</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-if="form">
+                                <tr t-foreach="form" t-as="order">
+                                    <td>
+                                        <span t-esc="order['product_name']" />
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="order['sunday']" />
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="order['monday']" />
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="order['tuesday']" />
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="order['wednesday']" />
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="order['thursday']" />
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="order['friday']" />
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="order['saturday']" />
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="order['total']" />
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-else="">
+                                <tr>
+                                    <td class="text-center" colspan="9"><br />No Data.<br /><br /></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

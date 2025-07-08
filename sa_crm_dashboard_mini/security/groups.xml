@@ -1,0 +1,12 @@
+<odoo>
+
+    <record id="module_sa_crm_min_dashboard"  model="ir.module.category">
+        <field name="name">CRM Mini Dashboard</field>
+        <field name="description">CRM Mini Dashboard</field>
+    </record>
+
+    <record id="group_sa_crm_min_dashboard" model="res.groups">
+        <field name="name">View CRM Dashboard</field>
+        <field name="category_id" ref="module_sa_crm_min_dashboard"/>
+    </record>
+</odoo>

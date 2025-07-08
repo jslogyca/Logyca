@@ -113,4 +113,18 @@
             </xpath>
         </field>
     </record>
+
+    <record id="account_move_line_filter_acc_root" model="ir.ui.view">
+        <field name="name">account.move.line.filter.acc.root</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='account_id']" position="after">
+                <field name="account_root_id"/>
+            </xpath>
+            <xpath expr="//filter[@name='group_by_account']" position="after">
+                <filter string="Account Root" name="group_by_account_root" domain="[]" context="{'group_by': 'account_root_id'}"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>

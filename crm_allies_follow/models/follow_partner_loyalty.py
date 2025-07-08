@@ -7,6 +7,7 @@ from odoo.exceptions import ValidationError, UserError
 class FollowPartnerLoyalty(models.Model):
     _name = 'follow.partner.loyalty'
     _description = 'Follow Partner Loyalty'
+    _order = 'id desc, date desc'
 
     name = fields.Char('Name')
     date = fields.Date(string='Fecha de Fidelización', default=fields.Date.context_today)
@@ -22,7 +23,7 @@ class FollowPartnerLoyalty(models.Model):
         return [(follow.id, '%s - %s' %
                  (follow.partner_id.name, follow.date)) for follow in self]
 
-    @api.depends('partner_id', 'description')
+    @api.depends('partner_id', 'description', 'date', 'check_loyalty')
     def _get_check_loyalty(self):
         for move in self:
             if move.partner_id:

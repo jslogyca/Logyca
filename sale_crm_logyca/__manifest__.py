@@ -15,6 +15,7 @@
         'sale',
         'product',
         'sales_team',
+        'crm_enterprise',
         ],
     'description': '''
 
@@ -25,6 +26,7 @@
         'views/crm_lead_view.xml',
         'views/crm_team_member_view.xml',
         'views/crm_team_view.xml',
+        'views/sale_order_view.xml',
     ],
     'qweb': [
     ]
