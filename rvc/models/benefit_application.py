@@ -1286,21 +1286,45 @@ class BenefitApplication(models.Model):
 
     def send_notification_benefit(self):
         for benefit_admon in self:
-            partner=self.env['res.partner'].search([('id','=',benefit_admon.partner_id.partner_id.id)])
+            partner = self.env['res.partner'].search(
+                [('id', '=', benefit_admon.partner_id.partner_id.id)]
+            )
             if partner and benefit_admon.partner_id.contact_email:
                 # notificar Derechos de Identificación
                 if benefit_admon.product_id.code == '01':
                     access_link = partner._notify_get_action_link('view')
                     subject = "Beneficio Derechos de Identificación"
                     template = self.env.ref('rvc.mail_template_notify_benefit_codes')
-                    template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False, email_values={'subject': subject})
+
+                    email_values = {'subject': subject}
+                    wizard = self.env['rvc.template.email.wizard']
+                    wizard.send_mail_with_attachment(
+                        template=template,
+                        record=benefit_admon,
+                        email_values=email_values,
+                        report_ref='rvc.action_report_rvc',
+                        attachment_name_template='Oferta_Mercantil_RVC_{partner_vat}.pdf',
+                        access_link=access_link,
+                        require_attachment=True
+                    )
+
                     benefit_admon.write({'state': 'notified', 'notification_date': datetime.now()})
                 # notificar Logyca / Colabora
                 if benefit_admon.product_id.code == '02':
                     access_link = partner._notify_get_action_link('view')
                     subject = "Beneficio Plataforma LOGYCA / COLABORA"
                     template = self.env.ref('rvc.mail_template_notify_benefit_colabora')
-                    template.with_context(url=access_link).send_mail(benefit_admon.id, force_send=False, email_values={'subject': subject})
+
+                    email_values = {'subject': subject}
+                    wizard = self.env['rvc.template.email.wizard']
+                    wizard.send_mail_with_attachment(
+                        template=template,
+                        record=benefit_admon,
+                        email_values=email_values,
+                        access_link=access_link,
+                        require_attachment=True
+                    )
+
                     benefit_admon.write({'state': 'notified', 'notification_date': datetime.now()})
 
     def get_odoo_url(self):
