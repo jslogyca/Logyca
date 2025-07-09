@@ -34,7 +34,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
                     subject = "Beneficio Derechos de Identificación"
 
                     email_values = {'subject': subject}
-                    self._send_mail_with_attachment(
+                    self.send_mail_with_attachment(
                         template=template,
                         record=benefit_application,
                         email_values=email_values,
@@ -380,7 +380,7 @@ class RVCTemplateEmailWizard(models.TransientModel):
             logging.error("Error generating PDF report %s: %s", report_ref, str(e))
             return False
 
-    def _send_mail_with_attachment(self, template, record, email_values, report_ref=None,
+    def send_mail_with_attachment(self, template, record, email_values, report_ref=None,
                                    attachment_name_template=None, access_link=None,
                                    require_attachment=False):
         """
@@ -430,8 +430,9 @@ class RVCTemplateEmailWizard(models.TransientModel):
                             report_name='report'
                         )
                     raise UserError(_(
-                        'Could not send email because the required attachment could not be generated: %s. '
-                        'Please verify that the report is correctly configured.' % attachment_name
+                        f'Could not send email because the required attachment '
+                        f'could not be generated: {attachment_name}. '
+                        'Please verify that the report is correctly configured.'
                     ))
 
             # Send email

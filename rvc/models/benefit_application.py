@@ -1246,42 +1246,41 @@ class BenefitApplication(models.Model):
             ('notification_date', '<=', fiveDays),
             ('state', '=', 'notified')
         ])
-        
-        postulation_counter = 0
+
         for postulation in postulations_ids:
             if postulation.reminder_count == 3:
-                postulation.message_post(body=_('La postulación se marcó como rechazada dado que se notificó recordatorio '\
-                    'en tres (3) oportunidades y no se aceptó el beneficio por parte de la empresa.'))
+                postulation.message_post(
+                    body=_(
+                        'La postulación se marcó como rechazada dado que se notificó '
+                        'recordatorio en tres (3) oportunidades y no se aceptó el beneficio '
+                        'por parte de la empresa.'
+                    )
+                )
                 postulation.state = 'rejected'
 
             self.send_reminder_benefit_expiration(postulation)
 
     def send_reminder_benefit_expiration(self,postulation):
         try:
-            vals = {
-                'subject': '[LOGYCA] RECORDATORIO: Beneficio ' + postulation._get_benefit_name(),
-                'body_html': '<p>Recibe un cordial saludo,<p><p><strong style="color:#00b398;">¡NO PIERDAS EL BENEFICIO DE ' + postulation._get_benefit_name().upper() + ' SIN COSTO!</strong></p> '\
-                    '<p>Estas a un paso de finalizar tu proceso. Para adquirir el beneficio por favor da clic en el botón ACEPTO EL BENEFICIO y llegará a '\
-                    'tu correo el Kit de bienvenida y las credenciales de la plataforma de asignación.</p>'\
-                    '<p>Si no requieres este beneficio o no deseas continuar con el proceso, por favor da clic en el botón RECHAZAR EL BENEFICIO.<p>'
-                    '<p style="margin-top: 0px; margin-bottom: 0px; overflow: hidden; text-align: left;"> <br/>'
-                '<div style="">'
-                    '<a style="margin: 16px 0px 16px 0px; background-color:#00b398; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:16px;" href="/rvc/accept_benefit/%s"><strong>ACEPTO EL BENEFICIO</strong></a>'
-                    '&#160;'
-                    '<a style="margin: 16px 0px 16px 0px; background-color:#fc4c02; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:16px;" href="/rvc/reject_benefit/%s"><strong>RECHAZAR EL BENEFICIO</strong></a>'
-                '</div></br>'
-                    '<h3 style="color:#fc4c02 !important;text-decoration: underline;">'\
-                    'Si no has sido notificado con anterioridad, escríbenos a <a href="mailto:fsalamanca@logyca.com">fsalamanca@logyca.com</a>.</h3></br></br><p>Atentamente,</p><p>LOGYCA.</p>' % (postulation.access_token,postulation.access_token),
-                'email_to': postulation.contact_email
-            }
-            partner=self.env['res.partner'].search([('id','=',postulation.partner_id.partner_id.id)])
-            # mail_id = self.env['mail.mail'].create(vals)
-            # mail_id.sudo().send()
+            partner = self.env['res.partner'].search(
+                [('id', '=', postulation.partner_id.partner_id.id)]
+            )
 
             access_link = partner._notify_get_action_link('view')
             subject = "Tienes pendiente aceptar tus codigos de barras sin costo"
             template = self.env.ref('rvc.mail_template_notify_reminder_code_benefit')
-            template.with_context(url=access_link).send_mail(postulation.id, force_send=False, email_values={'subject': subject})
+
+            email_values = {'subject': subject}
+            wizard = self.env['rvc.template.email.wizard']
+            wizard.send_mail_with_attachment(
+                template=template,
+                record=postulation,
+                email_values=email_values,
+                report_ref='rvc.action_report_rvc',
+                attachment_name_template='Oferta_Mercantil_RVC_{partner_vat}.pdf',
+                access_link=access_link,
+                require_attachment=True
+            )
 
             #sumar una unidad a la cantidad de recordatorios enviados
             #sirve para enviar únicamente 3 recordatorios por postulación.
