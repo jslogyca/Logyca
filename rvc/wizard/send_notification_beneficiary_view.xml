@@ -39,7 +39,7 @@
                     'res_model': 'send.notification.beneficiary',
                     'view_mode': 'form',
                     'target': 'new',
-                    'context': {'active_ids': context.get('active_ids'), 'active_model': 'benefit.application'}
+                    'context': {'active_ids': env.context.get('active_ids'), 'active_model': 'benefit.application'}
                 }
             </field>
         </record>
