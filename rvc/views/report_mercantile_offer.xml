@@ -3,74 +3,15 @@
     <template id="report_rvc_mercantile_offer">
         <t t-call="web.html_container">
             <style>
-                @page {
-                    size: letter;
-                    margin: 15mm 12mm 15mm 12mm;
-                    /* Reducir márgenes para más espacio */
-                }
-                
-                body {
-                    font-family: serif;
-                    font-size: 9pt;
-                    line-height: 1.3;
-                }
-                
-                /* Evitar cortes en elementos clave */
-                .page-break-avoid {
-                    page-break-inside: avoid;
-                    break-inside: avoid;
-                    -webkit-column-break-inside: avoid;
-                }
-                
-                /* Forzar salto de página */
-                .page-break-before {
-                    page-break-before: always;
-                    break-before: page;
-                }
-                
-                /* Configuración específica para secciones */
-                h2 {
-                    page-break-after: avoid;
-                    break-after: avoid;
-                    page-break-inside: avoid;
-                    break-inside: avoid;
-                    margin-top: 12pt;
-                    margin-bottom: 6pt;
-                }
-                
-                p {
-                    orphans: 3;
-                    widows: 3;
-                    page-break-inside: avoid;
-                    break-inside: avoid;
-                    margin-bottom: 8pt;
-                }
-                
-                /* Tabla sin cortes */
-                table {
-                    page-break-inside: avoid;
-                    break-inside: avoid;
-                }
-                
-                /* Firma siempre junta */
-                .signature {
-                    page-break-inside: avoid;
-                    break-inside: avoid;
-                    margin-top: 20pt;
-                }
-                
-                /* Contenedor principal */
-                .container {
-                    padding: 0;
-                    margin: 0;
-                }
-                
-                /* Evitar huérfanas y viudas */
-                .clause-section {
-                    page-break-inside: avoid;
-                    break-inside: avoid;
-                    margin-bottom: 12pt;
-                }
+              p{
+                font-size: 9pt;
+                font-family: 'serif';
+                text-align: justify;
+                text-justify: auto;
+              }
+              h2{
+                font-size: 1em;
+              }
             </style>
             <t t-foreach="inside_foreach_docs or docs" t-as="o">
                 <t t-set="o" t-value="o.with_context(lang='es_CO')"/>
@@ -89,42 +30,37 @@
                                 quien en adelante se denominará EL OFERENTE CONCEDENTE, se permite presentar la siguiente oferta mercantil, la cual se regula por la ley colombiana,
                                 el artículo 845 y siguientes del Código de Comercio y demás normas concordantes, de conformidad con las estipulaciones que a continuación se detallan</p>
                         <p>Para todos los efectos del contrato de Concesión que se celebra por la aceptación de la presente oferta, el Aceptante se denominará CONCESIONARIA.</p>
-                        <div class="clause-section page-break-avoid">
-                            <h2>PRIMERA: OBJETO DE LA OFERTA.</h2>
-                            <p>EL OFERENTE CONCEDENTE ofrece a <b>
-                                <t class="text-uppercase" t-if="o.partner_id.partner_id.name" t-raw="o.partner_id.partner_id.name"/>
-                                <t class="text-uppercase oe_inline" t-if="o.partner_id.partner_id.name == ''" t-raw="o.partner_id.partner_id.x_first_name"></t>
-                                <t class="text-uppercase oe_inline" t-if="o.partner_id.partner_id.name == ''" t-raw="o.partner_id.partner_id.x_first_lastname"/>
-                            </b>
-                                    , identificado(a) con CC/NIT <strong>
-                            <span t-esc="o.partner_id.partner_id.vat"/>
-                        </strong> LA CONCESIÓN para la utilización del SISTEMA GS1 y el derecho al uso del código 
-                                    de identificación de Productos (GTIN- GLOBAL TRADE ITEM NUMBER), Código de Localización (GLN) y/o códigos de recaudo.</p>
-                        </div>
-                        <div class="clause-section page-break-avoid">
-                            <h2>SEGUNDA: IMPLICACIONES DE LA ACEPTACIÓN DE LA PRESENTE OFERTA: </h2>
-                            <p>De ser aceptada pura y simplemente la presente oferta por parte de LA CONCESIONARIA para el derecho al uso del código de identificación de Productos 
-                                    (GTIN- GLOBAL TRADE ITEM NUMBER), código de Localización (GLN) y/o códigos de recaudo, por medio de cualquiera de los medios previstos y aceptados 
-                                    por EL OFERENTE CONCEDENTE, se perfeccionará la oferta mercantil propuesta en el presente documento y cada una de las partes así constituidas asumirán 
-                                    obligaciones recíprocas.</p>
-                            <p>
-                                <strong>PARÁGRAFO:</strong> En consecuencia, de la aceptación y legalización de la presente oferta mercantil, el acuerdo que se celebre se encuentra exento del impuesto de timbre
-                                    de conformidad con el artículo 530 del estatuto tributario.</p>
-                        </div>
-                        <div class="clause-section page-break-avoid">
-                            <h2>TERCERA: OBLIGACIONES DEL CONCEDENTE: </h2>
-                            <p>
-                                <strong>3.1</strong> Asignar usuario y contraseña para que LA CONCESIONARIA ingrese a la plataforma de asignación de códigos y asigne uno a uno los códigos
-                                    de los productos que este requiera y tenga disponibles. <strong>3.2</strong> Brindar a solicitud de LA CONCESIONARIA, la información técnica básica necesaria
-                                    para la asignación e impresión del código de identificación GS1, a través de la guía de identificación, que se encuentra en el siguiente 
-                        <a target="new" href="https://bit.ly/3o54pEL">enlace</a>. 
-                        <strong>3.3</strong> Brindar el soporte técnico básico, que requiera el cliente, mediante correo electrónico (web@gs1co.org) o llamada telefónica a las líneas de atención al cliente. 
-                        <strong>3.4</strong> Verificar la calidad de impresión del código o paquete de códigos, durante los 3 meses siguientes a la adquisición. GS1 Colombia emitirá dicha certificación 
-                                    de calidad de la impresión de las etiquetas impresas siempre y cuando la empresa envíe las muestras físicas de las mismas a GS1 Colombia, en la ciudad de Bogotá, al área de Soporte 
-                                    y Verificaciones. La primera verificación será gratuita, las siguientes, deberán comprarse, como un servicio adicional en 
-                        <a target="new" href="https://www.gs1costore.org">www.gs1costore.org</a>.  
-                        <strong>3.5</strong> Entregar por 99 años el derecho al uso de las identificaciones asignadas a los productos registrados.</p>
-                        </div>
+                        <h2>PRIMERA: OBJETO DE LA OFERTA.</h2>
+                        <p>EL OFERENTE CONCEDENTE ofrece a <b>
+                            <t class="text-uppercase" t-if="o.partner_id.partner_id.name" t-raw="o.partner_id.partner_id.name"/>
+                            <t class="text-uppercase oe_inline" t-if="o.partner_id.partner_id.name == ''" t-raw="o.partner_id.partner_id.x_first_name"></t>
+                            <t class="text-uppercase oe_inline" t-if="o.partner_id.partner_id.name == ''" t-raw="o.partner_id.partner_id.x_first_lastname"/>
+                        </b>
+                                , identificado(a) con CC/NIT <strong>
+                        <span t-esc="o.partner_id.partner_id.vat"/>
+                    </strong> LA CONCESIÓN para la utilización del SISTEMA GS1 y el derecho al uso del código 
+                                de identificación de Productos (GTIN- GLOBAL TRADE ITEM NUMBER), Código de Localización (GLN) y/o códigos de recaudo.</p>
+                <h2>SEGUNDA: IMPLICACIONES DE LA ACEPTACIÓN DE LA PRESENTE OFERTA: </h2>
+                <p>De ser aceptada pura y simplemente la presente oferta por parte de LA CONCESIONARIA para el derecho al uso del código de identificación de Productos 
+                                (GTIN- GLOBAL TRADE ITEM NUMBER), código de Localización (GLN) y/o códigos de recaudo, por medio de cualquiera de los medios previstos y aceptados 
+                                por EL OFERENTE CONCEDENTE, se perfeccionará la oferta mercantil propuesta en el presente documento y cada una de las partes así constituidas asumirán 
+                                obligaciones recíprocas.</p>
+                <p>
+                    <strong>PARÁGRAFO:</strong> En consecuencia, de la aceptación y legalización de la presente oferta mercantil, el acuerdo que se celebre se encuentra exento del impuesto de timbre
+                                de conformidad con el artículo 530 del estatuto tributario.</p>
+                <h2>TERCERA: OBLIGACIONES DEL CONCEDENTE: </h2>
+
+                <p>
+                    <strong>3.1</strong> Asignar usuario y contraseña para que LA CONCESIONARIA ingrese a la plataforma de asignación de códigos y asigne uno a uno los códigos
+                                de los productos que este requiera y tenga disponibles. <strong>3.2</strong> Brindar a solicitud de LA CONCESIONARIA, la información técnica básica necesaria
+                                para la asignación e impresión del código de identificación GS1, a través de la guía de identificación, que se encuentra en el siguiente 
+                    <a target="new" href="https://bit.ly/3o54pEL">enlace</a>. 
+                    <strong>3.3</strong> Brindar el soporte técnico básico, que requiera el cliente, mediante correo electrónico (web@gs1co.org) o llamada telefónica a las líneas de atención al cliente. 
+                    <strong>3.4</strong> Verificar la calidad de impresión del código o paquete de códigos, durante los 3 meses siguientes a la adquisición. GS1 Colombia emitirá dicha certificación 
+                                de calidad de la impresión de las etiquetas impresas siempre y cuando la empresa envíe las muestras físicas de las mismas a GS1 Colombia, en la ciudad de Bogotá, al área de Soporte 
+                                y Verificaciones. La primera verificación será gratuita, las siguientes, deberán comprarse, como un servicio adicional en 
+                    <a target="new" href="https://www.gs1costore.org">www.gs1costore.org</a>.  
+                    <strong>3.5</strong> Entregar por 99 años el derecho al uso de las identificaciones asignadas a los productos registrados.</p>
                 <h2>CUARTA: OBLIGACIONES DE LA CONCESIONARIA:</h2>
                 <p>
                     <strong>4.1</strong> Utilizar el SISTEMA GS1 de acuerdo con la moral y las buenas costumbres.
@@ -145,15 +81,11 @@
                                 el momento que así se lo requiera EL OFERENTE CONCEDENTE. <strong>4.10</strong> Si LA CONCESIONARIA utiliza códigos de barras GS1 para identificar dispositivos médicos, 
                                 por sus siglas en inglés UDI -Unique Device Identification- en el mercado de Estados Unidos de América USA, se obliga a reportarlos y mantener actualizada dicha 
                                 información, mediante el diligenciamiento de la "DECLARACIÓN UDI" en formulario que la CONCEDENTE proporcionará para tal fin y que hará parte de este contrato.</p>
-                        <div class="clause-section page-break-avoid">
-                            <h2>QUINTA: CESIÓN:</h2>
-                            <p>Una vez haya sido aceptada la presente oferta mercantil de Concesión, este contrato no podrá ser cedido por LA CONCESIONARIA sin previa autorización por escrito de 
-                                EL OFERENTE CONCEDENTE. La inobservancia a la anterior obligación dará lugar a la terminación del contrato de concesión que se perfecciona por la aceptación de esta oferta mercantil.</p>
-                        </div>
-                        <div class="clause-section page-break-avoid">
-                            <h2>SEXTA: FECHA DE VIGENCIA, TÉRMINO DE DURACIÓN Y RENOVACIÓN:</h2>
-                            <p> El contrato de concesión que se perfeccione por la aceptación de la presente oferta mercantil rige a partir de la fecha de aceptación y TENDRÁ VIGENCIA DE 99 AÑOS.</p>
-                        </div>
+                <h2>QUINTA: CESIÓN:</h2>
+                <p>Una vez haya sido aceptada la presente oferta mercantil de Concesión, este contrato no podrá ser cedido por LA CONCESIONARIA sin previa autorización por escrito de 
+                            EL OFERENTE CONCEDENTE. La inobservancia a la anterior obligación dará lugar a la terminación del contrato de concesión que se perfecciona por la aceptación de esta oferta mercantil.</p>
+                <h2>SEXTA: FECHA DE VIGENCIA, TÉRMINO DE DURACIÓN Y RENOVACIÓN:</h2>
+                <p> El contrato de concesión que se perfeccione por la aceptación de la presente oferta mercantil rige a partir de la fecha de aceptación y TENDRÁ VIGENCIA DE 99 AÑOS.</p>
                 <h2>SÉPTIMA: TERMINACIÓN DEL CONTRATO DE CONCESIÓN:</h2>
                 <p>
                     <strong>7.1</strong> Se terminará por expiración de su término de vigencia.
@@ -170,134 +102,124 @@
                 <p>
                     <strong>PARÁGRAFO:</strong> A la terminación del presente contrato sobrevivirán, y LA CONCESIONARIA continuará obligada al cumplimiento de las obligaciones previstas de la cláusula 
                             cuarta numerales: 4.3, 4.4, 4.5 y 4.6 de la presente oferta mercantil.</p>
-                        <div class="clause-section page-break-avoid">
-                            <h2>OCTAVA: CLAUSULA PENAL:</h2>
-                            <p>El incumplimiento o violación de cualquiera de las obligaciones del presente Contrato de Concesión por parte de la CONCESIONARIA, la constituirá en deudora de EL OFERENTE CONCEDENTE, 
-                                por una suma ajustada en salarios mínimos legales mensuales vigentes (SMLMV), dependiendo del nivel de activos de cada compañía como se contempla en la siguiente tabla de rangos:
-                        <br/>
-                        <table border="1" style="margin: 0 auto; text-align:center; font-size:11px">
-                            <tr>
-                                <td colspan="2">
-                                    <strong>RANGOS DE ACTIVOS EN MILLONES DE PESOS</strong>
-                                </td>
-                                <td>
-                                    <strong>SLM POR RANGO DE ACTIVOS</strong>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>-</td>
-                                <td>9.9</td>
-                                <td>0.54</td>
-                            </tr>
-                            <tr>
-                                <td>10.0</td>
-                                <td>24.9</td>
-                                <td>1.05</td>
-                            </tr>
-                            <tr>
-                                <td>25.0</td>
-                                <td>49.9</td>
-                                <td>1.59</td>
-                            </tr>
-                            <tr>
-                                <td>50.0</td>
-                                <td>99.9</td>
-                                <td>2.10</td>
-                            </tr>
-                            <tr>
-                                <td>100.0</td>
-                                <td>249.9</td>
-                                <td>4.20</td>
-                            </tr>
-                            <tr>
-                                <td>250.0</td>
-                                <td>499.9</td>
-                                <td>6.32</td>
-                            </tr>
-                            <tr>
-                                <td>500.0</td>
-                                <td>749.9</td>
-                                <td>8.42</td>
-                            </tr>
-                            <tr>
-                                <td>750.0</td>
-                                <td>999.9</td>
-                                <td>10.53</td>
-                            </tr>
-                            <tr>
-                                <td>1.000.0</td>
-                                <td>2.499.9</td>
-                                <td>12.63</td>
-                            </tr>
-                            <tr>
-                                <td>2.500.0</td>
-                                <td>4.999.9</td>
-                                <td>13.90</td>
-                            </tr>
-                            <tr>
-                                <td>5.000.0</td>
-                                <td>9.999.9</td>
-                                <td>16.22</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">10.000 en adelante</td>
-                                <td>20.00</td>
-                            </tr>
-                        </table>
-                        </p>
-                        </div>
-                        <div class="clause-section page-break-avoid">
-                            <h2>NOVENA: CLAUSULA COMPROMISORIA:</h2>
-                            <p>Toda controversia o diferencia relacionada con la presente oferta mercantil, sus anexos y su ejecución, será resuelta por un Tribunal de Arbitramento, integrado por tres (3) árbitros 
-                                designados por la Cámara de Comercio de Bogotá en la que las partes delegan esta facultad. Cuando se presenten controversias en relación con este contrato o su ejecución cualquiera de 
-                                las partes podrá solicitar por escrito a la Cámara de Comercio de Bogotá que designe los árbitros a fin de integrar el tribunal. La Cámara de Comercio de Bogotá elegirá por sorteo los árbitros 
-                                de entre los árbitros inscritos en las listas que lleva el Centro de Arbitraje y Conciliación Mercantiles de dicha Cámara. El tribunal así constituido fallará en derecho y se sujetará a lo 
-                                dispuesto por el Decreto 2279 de 1989 y por la Ley 23 de 1.991 en todo lo relativo a impedimentos, recusaciones, instalación, regulación de gastos, honorarios, etc.</p>
-                        </div>
-                        <div class="clause-section page-break-avoid">
-                            <h2>DÉCIMA: SISTEMA DE ADMINISTRACIÓN DE RIESGO DE LAVADO DE ACTIVOS Y DE LA FINANCIACIÓN DEL TERRORISMO, SARLAFT:</h2>
-                            <p>La CONCESIONARIA por la aceptación de la presente oferta mercantil quedará sujeta a las políticas de autocontrol y gestión del riesgo de lavado de activos y financiación del terrorismo de 
-                                EL OFERENTE CONCEDENTE, en cumplimiento del deber legal que le asiste en relación con la cooperación para la prevención del lavado de activos, la financiación del terrorismo y cualquier otro 
-                                delito conexo contemplado en normas nacionales e internacionales. En consecuencia, LA CONCESIONARIA quedará sujeta a las siguientes condiciones:</p>
-                            <p>
-                                <strong>10.1</strong> Que su patrimonio y las fuentes económicas que permiten el desarrollo de su objeto social, no provenga de actividades ilícitas, tales como narcotráfico, testaferrato, 
-                                enriquecimiento ilícito, terrorismo, lavado de activos, tráfico de estupefacientes, secuestro extorsivo y/o trata de personas, entre otros delitos conexos.</p>
-                            <p>
-                                <strong>10.2</strong> Que de contar con presencia en países considerados paraísos fiscales, países sancionados por la OFAC y países no cooperantes, observará las normas y preceptos que la 
-                                ley establece y entregará cuando EL OFERENTE CONCEDENTE lo defina, la información necesaria para las consultas iniciales (antes de la vinculación) y posterior verificación cada vez que se realice 
-                                una actualización sobre las mismas, según las políticas y procedimientos que al respecto tenga definidos EL OFERENTE CONCEDENTE. En caso de que la ejecución de este contrato demande la presencia 
-                                de subcontratistas, se le aplicarán las mismas consideraciones de la presente cláusula.</p>
-                            <p>
-                                <strong>10.3</strong> Que ni LA CONCESIONARIA, ni sus gestores, accionistas, representante legal o directivos, se encuentran incluidos dentro de alguna de las listas restrictivas por 
-                                actividades de lavado de activos y financiación o vínculos con el narcotráfico y terrorismo, ni tiene procesos judiciales en curso en los cuales se encuentre en calidad de demandante o demandado 
-                                respecto de EL OFERENTE CONCEDENTE.</p>
-                            <p>
-                                <strong>10.4</strong> Que durante la vigencia del contrato que se celebra por la aceptación de la presente oferta, se someterán a las regulaciones nacionales sobre SARLAFT, y darán cumplimiento 
-                                a las mismas, con el fin de prevenir y evitar cualquier situación relacionada con el lavado de activos, captación ilegal, y demás actividades prohibidas en materia económica y de servicios.</p>
-                            <p>
-                                <strong>10.5</strong> Que, por la aceptación de la presente oferta mercantil, aceptan las políticas establecidas en el Manual de Políticas de autocontrol y gestión del riesgo de lavado de activos 
-                                y financiación del terrorismo de LOGYCA / ASOCIACIÓN, el cual puede ser consultado en el siguiente 
-                        <a target="new" href="https://bit.ly/2XAjpPp">enlace</a>.
-                        </p>
-                        <p>
-                            <strong>10.6</strong> Que la información aportada verbalmente y por escrito a EL OFERENTE CONCEDENTE, relacionada con el sistema para la administración del riesgo del lavado de activos y financiación 
+                <h2>OCTAVA: CLAUSULA PENAL:</h2>
+                <p>El incumplimiento o violación de cualquiera de las obligaciones del presente Contrato de Concesión por parte de la CONCESIONARIA, la constituirá en deudora de EL OFERENTE CONCEDENTE, 
+                            por una suma ajustada en salarios mínimos legales mensuales vigentes (SMLMV), dependiendo del nivel de activos de cada compañía como se contempla en la siguiente tabla de rangos:
+                    <br/>
+                    <table border="1" style="margin: 0 auto; text-align:center; font-size:11px">
+                        <tr>
+                            <td colspan="2">
+                                <strong>RANGOS DE ACTIVOS EN MILLONES DE PESOS</strong>
+                            </td>
+                            <td>
+                                <strong>SLM POR RANGO DE ACTIVOS</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>-</td>
+                            <td>9.9</td>
+                            <td>0.54</td>
+                        </tr>
+                        <tr>
+                            <td>10.0</td>
+                            <td>24.9</td>
+                            <td>1.05</td>
+                        </tr>
+                        <tr>
+                            <td>25.0</td>
+                            <td>49.9</td>
+                            <td>1.59</td>
+                        </tr>
+                        <tr>
+                            <td>50.0</td>
+                            <td>99.9</td>
+                            <td>2.10</td>
+                        </tr>
+                        <tr>
+                            <td>100.0</td>
+                            <td>249.9</td>
+                            <td>4.20</td>
+                        </tr>
+                        <tr>
+                            <td>250.0</td>
+                            <td>499.9</td>
+                            <td>6.32</td>
+                        </tr>
+                        <tr>
+                            <td>500.0</td>
+                            <td>749.9</td>
+                            <td>8.42</td>
+                        </tr>
+                        <tr>
+                            <td>750.0</td>
+                            <td>999.9</td>
+                            <td>10.53</td>
+                        </tr>
+                        <tr>
+                            <td>1.000.0</td>
+                            <td>2.499.9</td>
+                            <td>12.63</td>
+                        </tr>
+                        <tr>
+                            <td>2.500.0</td>
+                            <td>4.999.9</td>
+                            <td>13.90</td>
+                        </tr>
+                        <tr>
+                            <td>5.000.0</td>
+                            <td>9.999.9</td>
+                            <td>16.22</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">10.000 en adelante</td>
+                            <td>20.00</td>
+                        </tr>
+                    </table>
+                </p>
+                <h2>NOVENA: CLAUSULA COMPROMISORIA:</h2>
+                <p>Toda controversia o diferencia relacionada con la presente oferta mercantil, sus anexos y su ejecución, será resuelta por un Tribunal de Arbitramento, integrado por tres (3) árbitros 
+                            designados por la Cámara de Comercio de Bogotá en la que las partes delegan esta facultad. Cuando se presenten controversias en relación con este contrato o su ejecución cualquiera de 
+                            las partes podrá solicitar por escrito a la Cámara de Comercio de Bogotá que designe los árbitros a fin de integrar el tribunal. La Cámara de Comercio de Bogotá elegirá por sorteo los árbitros 
+                            de entre los árbitros inscritos en las listas que lleva el Centro de Arbitraje y Conciliación Mercantiles de dicha Cámara. El tribunal así constituido fallará en derecho y se sujetará a lo 
+                            dispuesto por el Decreto 2279 de 1989 y por la Ley 23 de 1.991 en todo lo relativo a impedimentos, recusaciones, instalación, regulación de gastos, honorarios, etc.</p>
+                <h2>DÉCIMA: SISTEMA DE ADMINISTRACIÓN DE RIESGO DE LAVADO DE ACTIVOS Y DE LA FINANCIACIÓN DEL TERRORISMO, SARLAFT:</h2>
+                <p>La CONCESIONARIA por la aceptación de la presente oferta mercantil quedará sujeta a las políticas de autocontrol y gestión del riesgo de lavado de activos y financiación del terrorismo de 
+                            EL OFERENTE CONCEDENTE, en cumplimiento del deber legal que le asiste en relación con la cooperación para la prevención del lavado de activos, la financiación del terrorismo y cualquier otro 
+                            delito conexo contemplado en normas nacionales e internacionales. En consecuencia, LA CONCESIONARIA quedará sujeta a las siguientes condiciones:</p>
+                <p>
+                    <strong>10.1</strong> Que su patrimonio y las fuentes económicas que permiten el desarrollo de su objeto social, no provenga de actividades ilícitas, tales como narcotráfico, testaferrato, 
+                            enriquecimiento ilícito, terrorismo, lavado de activos, tráfico de estupefacientes, secuestro extorsivo y/o trata de personas, entre otros delitos conexos.</p>
+                <p>
+                    <strong>10.2</strong> Que de contar con presencia en países considerados paraísos fiscales, países sancionados por la OFAC y países no cooperantes, observará las normas y preceptos que la 
+                            ley establece y entregará cuando EL OFERENTE CONCEDENTE lo defina, la información necesaria para las consultas iniciales (antes de la vinculación) y posterior verificación cada vez que se realice 
+                            una actualización sobre las mismas, según las políticas y procedimientos que al respecto tenga definidos EL OFERENTE CONCEDENTE. En caso de que la ejecución de este contrato demande la presencia 
+                            de subcontratistas, se le aplicarán las mismas consideraciones de la presente cláusula.</p>
+                <p>
+                    <strong>10.3</strong> Que ni LA CONCESIONARIA, ni sus gestores, accionistas, representante legal o directivos, se encuentran incluidos dentro de alguna de las listas restrictivas por 
+                            actividades de lavado de activos y financiación o vínculos con el narcotráfico y terrorismo, ni tiene procesos judiciales en curso en los cuales se encuentre en calidad de demandante o demandado 
+                            respecto de EL OFERENTE CONCEDENTE.</p>
+                <p>
+                    <strong>10.4</strong> Que durante la vigencia del contrato que se celebra por la aceptación de la presente oferta, se someterán a las regulaciones nacionales sobre SARLAFT, y darán cumplimiento 
+                            a las mismas, con el fin de prevenir y evitar cualquier situación relacionada con el lavado de activos, captación ilegal, y demás actividades prohibidas en materia económica y de servicios.</p>
+                <p>
+                    <strong>10.5</strong> Que, por la aceptación de la presente oferta mercantil, aceptan las políticas establecidas en el Manual de Políticas de autocontrol y gestión del riesgo de lavado de activos 
+                            y financiación del terrorismo de LOGYCA / ASOCIACIÓN, el cual puede ser consultado en el siguiente 
+                    <a target="new" href="https://bit.ly/2XAjpPp">enlace</a>.
+                </p>
+                <p>
+                    <strong>10.6</strong> Que la información aportada verbalmente y por escrito a EL OFERENTE CONCEDENTE, relacionada con el sistema para la administración del riesgo del lavado de activos y financiación 
                             del terrorismo SARLAFT, es veraz y verificable, y se obligan a actualizarla cuando así se les solicite.</p>
-                        </div>
 
-                        <div class="clause-section page-break-avoid">
-                            <h2>DÉCIMA PRIMERA: NOTIFICACIONES:</h2>
-                            <p>Para efectos de las notificaciones de que trata la presente oferta mercantil y el contrato de concesión que se celebra por la aceptación de la misma, EL OFERENTE CONCEDENTE recibirá notificaciones en 
-                        <a href="mailto:web@gs1co.org">web@gs1co.org</a>.
-                        </p>
-                        </div>
+                <h2>DÉCIMA PRIMERA: NOTIFICACIONES:</h2>
+                <p>Para efectos de las notificaciones de que trata la presente oferta mercantil y el contrato de concesión que se celebra por la aceptación de la misma, EL OFERENTE CONCEDENTE recibirá notificaciones en 
+                    <a href="mailto:web@gs1co.org">web@gs1co.org</a>.
+                </p>
 
-                        <div class="clause-section page-break-avoid">
-                            <h2>DÉCIMA SEGUNDA: VIGENCIA DE LA OFERTA MERCANTIL:</h2>
-                            <p>La presente oferta mercantil tiene una vigencia de treinta (30) días hábiles, transcurridos los cuales sin que haya sido 
-                                    aceptada en los términos previstos en el numeral segundo de la presente oferta se entenderá como rechazada.
-                                    
-                                    Para constancia se firma la presente el día <span t-esc="o.today_date_spanish()"/>.</p>
-                        </div>
+                <h2>DÉCIMA SEGUNDA: VIGENCIA DE LA OFERTA MERCANTIL:</h2>
+                <p>La presente oferta mercantil tiene una vigencia de treinta (30) días hábiles, transcurridos los cuales sin que haya sido 
+                                aceptada en los términos previstos en el numeral segundo de la presente oferta se entenderá como rechazada.
+                                
+                                Para constancia se firma la presente el día <span t-esc="o.today_date_spanish()"/>.</p>
                 <br/>
                 <div class="signature">
                     <div class="row">
