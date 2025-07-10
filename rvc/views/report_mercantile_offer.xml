@@ -15,16 +15,50 @@
               h2{
                 font-size: 1em;
               }
+
+              .header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: auto;
+                height: 120px;
+                z-index: 1000;
+                overflow: hidden;
+              }
+
+              .page {
+                margin-top: 1px; /* Debe ser mayor que la altura del header */
+                padding-top: 20px;
+              }
+
+              /* Para impresión */
+              @page {
+                margin-top: 120px;
+                margin-bottom: 50px;
+              }
+
+              @media print {
+                .header {
+                  position: fixed;
+                  top: 0;
+                }
+                .page {
+                  margin-top: 0;
+                  padding-top: 0;
+                }
+              }
             </style>
             <t t-foreach="inside_foreach_docs or docs" t-as="o">
                 <t t-set="o" t-value="o.with_context(lang='es_CO')"/>
                 <meta charset="UTF-8"/>
+
                 <div class="header">
-                    <img src='https://stpaymentdev.blob.core.windows.net/imagesmail/gs1Banner.png' width="1480"/>
+                    <img src='https://stpaymentdev.blob.core.windows.net/imagesmail/gs1Banner.png'
+                         style="max-width:100% ; max-height: 120px; object-fit: scale-down; margin-left: -65px; margin-right: auto;"/>
                 </div>
+
                 <div class="page">
                     <div class="container">
-                        <br/>
                         <h2 style="text-align: center;">OFERTA MERCANTIL PARA LA CONCESIÓN DEL DERECHO AL USO DE CÓDIGOS DE IDENTIFICACIÓN DE PRODUCTO, RECAUDO Y/O GLN</h2>
                         <h3 style="text-align: center;">Empresas beneficiarias del proyecto RVC</h3>
                         <p>LEONEL PAVA CASILIMAS en calidad de Director Ejecutivo y Representante Legal de LOGYCA / ASOCIACIÓN, entidad sin ánimo de lucro, con domicilio en Bogotá,
@@ -109,7 +143,7 @@
                 <p>El incumplimiento o violaci&#243;n de cualquiera de las obligaciones del presente Contrato de Concesi&#243;n por parte de la CONCESIONARIA, la constituir&#225; en deudora de EL OFERENTE CONCEDENTE, 
                             por una suma ajustada en salarios m&#237;nimos legales mensuales vigentes (SMLMV), dependiendo del nivel de activos de cada compa&#241;&#237;a como se contempla en la siguiente tabla de rangos:
                     <br/>
-                    <table border="1" style="margin: 0 auto; text-align:center; font-size:11px">
+                    <table border="1" style="margin: 20px auto; text-align:center; font-size:11px">
                         <tr>
                             <td colspan="2">
                                 <strong>RANGOS DE ACTIVOS EN MILLONES DE PESOS</strong>
