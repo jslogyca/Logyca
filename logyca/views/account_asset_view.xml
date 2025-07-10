@@ -15,18 +15,20 @@
             <xpath expr="//field[@name='acquisition_date']" position="after">
                 <field name="x_partner"/>
             </xpath>            
-			<!-- <xpath expr="//form/sheet/group/group[3]" position="after">
-                <group name="studio_group_Nyh91">
-                    <group name="studio_group_Nyh91_left" string="Inf. Historica (Hasta abril de 2020)">
-                        <field name="x_studio_history_cost" string="Costo histórico"/>
-                        <field name="x_studio_fecha_de_compra_his" string="Fecha de Compra (Histórica)"/>
-                        <field name="x_studio_date_depreciation" string="Fecha depreciación total"/>
-                        <field name="x_studio_ussefull_life" string="Vida útil " placeholder="En meses" help="Vida útil original en meses"/>
-                        <field name="x_studio_deprecieted_periods" string="Periodos depreciados"/>
-                        <field name="x_studio_accumulated_depreciation" string="Depreciación acumulada"/>
+			<xpath expr="//page[@name='main_page']" position="after">
+                <page string="Inf. Historica" name="inf_hist_page">
+                    <group name="studio_group_Nyh91">
+                        <group name="studio_group_Nyh91_left" string="Inf. Historica (Hasta abril de 2020)">
+                            <field name="x_studio_history_cost" string="Costo histórico"/>
+                            <field name="x_studio_fecha_de_compra_his" string="Fecha de Compra (Histórica)"/>
+                            <field name="x_studio_date_depreciation" string="Fecha depreciación total"/>
+                            <field name="x_studio_ussefull_life" string="Vida útil " placeholder="En meses" help="Vida útil original en meses"/>
+                            <field name="x_studio_deprecieted_periods" string="Periodos depreciados"/>
+                            <field name="x_studio_accumulated_depreciation" string="Depreciación acumulada"/>
+                        </group>
                     </group>
-                </group>
-			</xpath> -->
+                </page>
+			</xpath>
 		</field>
 	</record>
 </odoo>
