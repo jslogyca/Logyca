@@ -424,7 +424,7 @@ class BenefitApplication(models.Model):
                 # raise ValidationError(\
                 #     _('El Código GLN "%s" es inválido. La empresa "%s" no tiene código(s) GLN registrados.'\
                 #     '\n\nPor favor deje el campo Código GLN vacío, le asignaremos uno en la entrega del beneficio.' % (tmp_code, str(partner_id.name))))
-                
+
     def _validate_bought_products(self):
         """
         Valida si la empresa ha consumido más del 80% de sus códigos NPV comprados.
@@ -433,14 +433,26 @@ class BenefitApplication(models.Model):
         # Obtener token de autenticación
         token = self._get_token_sso()
         if not token:
-            raise ValidationError(_('No se pudo obtener el token de autenticación para validar códigos comprados.\
-                Inténtelo nuevamente o comuníquese con soporte.'))
+            raise ValidationError(
+                _(
+                    'No se pudo obtener el token de autenticación para validar códigos comprados. '
+                    'Inténtelo nuevamente o comuníquese con soporte.'
+                )
+            )
 
         # Determinar URL según el entorno
         if self.get_odoo_url() == 'https://logyca.odoo.com':
-            url = f"https://app-msprefixcodesservice-prod.azurewebsites.net/api/code_reservation_service/get_code_summary_by_enterprise/{str(self.vat)}"
+            url = (
+                "https://app-msprefixcodesservice-prod.azurewebsites.net/api/"
+                "code_reservation_service/get_code_summary_by_enterprise/"
+                f"{str(self.vat)}"
+            )
         else:
-            url = f"https://app-msprefixcodesservice-dev.azurewebsites.net/api/code_reservation_service/get_code_summary_by_enterprise/{str(self.vat)}"
+            url = (
+                "https://app-msprefixcodesservice-dev.azurewebsites.net/api/"
+                "code_reservation_service/get_code_summary_by_enterprise/"
+                f"{str(self.vat)}"
+            )
 
         # Configurar headers con el token
         headers = {
@@ -456,9 +468,17 @@ class BenefitApplication(models.Model):
                 response.close()
 
                 # Verificar si la respuesta tiene errores
-                if result.get('dataError', True) or result.get('apiException', {}).get('isError', True):
-                    error_message = result.get('apiException', {}).get('message', 'Error desconocido')
-                    raise ValidationError(_('Error al obtener información de códigos: %s' % error_message))
+                if result.get('dataError', True) or \
+                result.get('apiException', {}).get('isError', True):
+                    error_message = result.get('apiException', {}).get(
+                        'message', 'Error desconocido'
+                    )
+                    raise ValidationError(
+                        _(
+                            f"Error al obtener información de códigos: "
+                            f"{error_message}"
+                        )
+                    )
 
                 # Obtener datos del objeto resultado
                 result_object = result.get('resultObject', {})
@@ -470,31 +490,55 @@ class BenefitApplication(models.Model):
                     # Si no tiene códigos comprados, permitir el beneficio
                     return True
 
-                # Calcular porcentaje de códigos disponibles
-                percentage_available = (available_npv_codes / total_npv_codes) * 100
+                # Aplicar reglas de validación según el total de códigos comprados
+                vat_name = f"{self.partner_id.partner_id.vat}-{self.partner_id.partner_id.name}"
 
-                # Si tiene más del 20% disponible (menos del 80% consumido), denegar el beneficio
-                if percentage_available > 20:
-                    raise ValidationError(
-                        _('¡Lo sentimos! La empresa %s tiene %s código(s) comprados disponibles.' % (
-                            str(self.partner_id.partner_id.vat) + '-' + str(self.partner_id.partner_id.name),
-                            str(available_npv_codes)
-                        ))
-                    )
+                if total_npv_codes > 50:
+                    # Para empresas con más de 50 códigos totales:
+                    # aplicar regla del 80% (más del 20% disponible)
+                    percentage_available = (available_npv_codes / total_npv_codes) * 100
+
+                    if percentage_available > 20:
+                        msg = (
+                            f"¡Lo sentimos! La empresa {vat_name} tiene "
+                            f"{available_npv_codes} código(s) comprados disponibles "
+                            f"({percentage_available:.1f}% del total de "
+                            f"{total_npv_codes} códigos). "
+                            "Debe consumir al menos el 80% de sus códigos antes de solicitar más."
+                        )
+                        raise ValidationError(_(msg))
+                else:
+                    # Para empresas con 50 códigos totales o menos:
+                    # validar que tenga menos de 10 códigos disponibles
+                    if available_npv_codes >= 10:
+                        msg = (
+                            f"¡Lo sentimos! La empresa {vat_name} tiene "
+                            f"{available_npv_codes} código(s) comprados disponibles "
+                            f"de un total de {total_npv_codes} códigos. "
+                            f"Debe tener menos de 10 códigos disponibles para solicitar más."
+                        )
+                        raise ValidationError(_(msg))
 
                 return True
 
             else:
                 raise ValidationError(
-                    _('No se pudo validar si la empresa seleccionada tiene códigos comprados disponibles.\
-                        Inténtelo nuevamente o comuníquese con soporte. Error: %s' % str(response.status_code))
+                    _(
+                        "No se pudo validar si la empresa seleccionada tiene "
+                        "códigos comprados disponibles. "
+                        "Inténtelo nuevamente o comuníquese con soporte. "
+                        f"Error: {response.status_code}"
+                    )
                 )
 
         except requests.exceptions.RequestException as e:
             raise ValidationError(
-                _('Error de conexión al validar códigos comprados.\
-                    Inténtelo nuevamente o comuníquese con soporte. Error: %s' % str(e))
-            )
+                _(
+                    'Error de conexión al validar códigos comprados. '
+                    'Inténtelo nuevamente o comuníquese con soporte. '
+                    f'Error: {str(e)}'
+                )
+            ) from e
 
     def _validate_qty_codes(self):
         for rec in self:
