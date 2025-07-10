@@ -1,0 +1,62 @@
+# -*- coding: utf-8 -*-
+
+from odoo import tools
+from odoo import api, fields, models
+import logging
+_logger = logging.getLogger(__name__)
+
+
+class ReportDiffMoveLine(models.Model):
+    _name = "report.diff.move.line"
+    _auto = False
+    _description = "Diferencia en Cambio"
+
+    id = fields.Integer('ID')
+    move_id = fields.Many2one('account.move', 'Asiento', readonly=True)
+    line_id = fields.Many2one('account.move.line', 'Apunte', readonly=True)
+    account_id = fields.Many2one('account.account', 'Cuenta', readonly=True)
+    amount_currency = fields.Float(string='Importe en divisa')
+    balance = fields.Float(string='Balance')
+    date = fields.Date('Fecha')
+
+    def _select(self):
+        select_str = """
+            select 
+            l.id as id,
+            l.move_id as move_id,
+            l.id as line_id,
+            l.account_id as account_id,
+            l.amount_currency as amount_currency,
+            l.balance as balance,
+            l.date as date
+		"""
+        return select_str
+
+
+    def _from(self):
+
+        from_str = """
+            account_move_line l
+        """
+
+        return from_str
+
+    def _group_by(self):
+        group_by_str = """
+                WHERE parent_state='posted'
+                ORDER BY l.id DESC
+        """
+        return group_by_str
+
+
+    def init(self):
+        tools.drop_view_if_exists(self.env.cr, self._table)
+        sql = """CREATE or REPLACE VIEW %s as (
+            %s
+            FROM  %s 
+            %s
+            )""" % (self._table, self._select(), self._from(), self._group_by())
+
+        # _logger.info(sql)
+        print('SQL', sql)
+        self.env.cr.execute(sql)
