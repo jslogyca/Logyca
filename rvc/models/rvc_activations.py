@@ -87,7 +87,7 @@ class RvcActivations(models.AbstractModel):
         """Maps a rvc postulation into a gs1 codes activation request"""
 
         logging.debug("Activating GS1 Codes for postulation %d", postulation.id)
-        token = postulation.get_token_gs1_co_api()
+        token = postulation.get_token_sso()
         logging.debug("Token: %s", token)
 
         skus, quantities = self.env['rvc.activation.services'] \

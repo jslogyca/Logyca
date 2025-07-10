@@ -431,7 +431,7 @@ class BenefitApplication(models.Model):
         Si es así, lanza un ValidationError.
         """
         # Obtener token de autenticación
-        token = self._get_token_sso()
+        token = self.get_token_sso()
         if not token:
             raise ValidationError(
                 _(
@@ -759,7 +759,7 @@ class BenefitApplication(models.Model):
 
         return False
 
-    def _get_token_sso(self):
+    def get_token_sso(self):
         """ token auth in SSO
 
         Returns:
@@ -797,7 +797,7 @@ class BenefitApplication(models.Model):
         return False
 
     def assign_credentials_gs1codes(self, re_assign=False, re_assign_email=None):
-        bearer_token = self._get_token_sso()
+        bearer_token = self.get_token_sso()
         today_date = datetime.now()
 
         if bearer_token or bearer_token[0]:
