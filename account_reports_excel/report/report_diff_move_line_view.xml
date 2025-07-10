@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="report_diff_move_line_search" model="ir.ui.view">
+        <field name="name">report.diff.move.line.search</field>
+        <field name="model">report.diff.move.line</field>
+        <field name="arch" type="xml">
+            <search string="Diferencia en Cambio">
+                <field name="id"/>
+                <field name="move_id"/>
+                <field name="line_id"/>
+                <field name="account_id"/>
+                <field name="partner_id"/>
+                <field name="date"/>
+                <separator/>
+                <filter name="company_id" string="LOGYCA / SERVICIOS" domain="[('company_id','=',1)]"/>
+                <filter name="company_id" string="LOGYCA / ASOCIACIÓN" domain="[('company_id','=',2)]"/>
+                <filter name="company_id" string="FUNDACIÓN" domain="[('company_id','=',3)]"/>
+                <filter name="date" string="Fecha" date="date"/>
+                <separator/>
+                <group  string="Filtros">
+                    <filter string="Hoy" name="today_invoices" help="today invoices."
+                        domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="Fecha" name="date"/>
+                    <filter string="Este Mes" name="this_month_invoices" help="this month invoices."
+                        domain="[('date', '&lt;', (context_today()+relativedelta(months=1)).strftime('%Y-%m-01')), 
+                        ('date','&gt;=',context_today().strftime('%Y-%m-01'))]"/>
+                    <filter string="Este Año" name="this_year_invoices" help="this year invoices."
+                        domain="[('date','&lt;=', time.strftime('%Y-12-31')),('date','&gt;=',time.strftime('%Y-01-01'))]"/>                        
+                </group>         
+                <separator/>
+                <group expand="0" string="Agrupar Por:">
+                    <filter name="move_id" string="Asiento" context="{'group_by':'move_id'}"/>
+                    <filter name="date" string="Fecha" context="{'group_by':'date'}"/>
+                    <filter name="line_id" string="Apunte" context="{'group_by':'line_id'}"/>
+                </group>                    
+            </search>
+        </field>
+    </record>
+
+    <record id="report_diff_move_line_tree" model="ir.ui.view">
+        <field name="name">report.diff.move.line.tree</field>
+        <field name="model">report.diff.move.line</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0" delete="0" string="Diferencia en Cambio">
+                <field name="line_id"/>
+                <field name="move_id"/>
+                <field name="account_id"/>
+                <field name="partner_id"/>
+                <field name="amount_currency"/>
+                <field name="balance"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="report_diff_move_line_pivot" model="ir.ui.view">
+        <field name="model">report.diff.move.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Diferencia en Cambio" disable_linking="True">
+                <field name="account_id" type="row"/>
+                <field name="date" type="col"/>
+                <field name="amount_currency" type="measure" />
+                <field name="balance" type="measure" />
+            </pivot>            
+        </field>
+    </record>
+
+    <record id="action_report_diff_move_line" model="ir.actions.act_window">
+        <field name="name">Diferencia en Cambio</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">report.diff.move.line</field>
+        <field name="view_mode">pivot,tree</field>
+    </record>
+
+    <menuitem
+        id="report_diff_move_line_menu"
+        name="Diferencia en Cambio"
+        action="action_report_diff_move_line"
+        parent="account.menu_finance_entries_accounting_miscellaneous" 
+        sequence="55" />    
+</odoo>
