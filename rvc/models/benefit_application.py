@@ -1225,16 +1225,52 @@ class BenefitApplication(models.Model):
 
     def _cron_mark_as_rejected(self):
         logging.warning("==> Iniciando cron de marcar postulaciones como rechazadas ...")
-
         postulations = self.search([
             ('state', '=', 'notified'),
             ('notification_date', '<', datetime.now() - relativedelta(days=31))
         ])
-
+        logging.warning(
+            "==> Se encontraron %s postulaciones para marcar como rechazadas",
+            len(postulations)
+        )
+        counter = 0
         for postulation_id in postulations:
-            postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
-            postulation_id.message_post(body=_('La postulación se marcó como rechazada dado que pasaron '\
-                'más de 30 días desde su notificación y no fue aceptado el beneficio.'))
+            try:
+                logging.info(
+                    "==> Procesando postulación ID: %s - Empresa: %s-%s",
+                    postulation_id.id,
+                    postulation_id.partner_id.partner_id.vat,
+                    postulation_id.partner_id.partner_id.name
+                )
+                postulation_id.write({
+                    'state': 'rejected',
+                    'rejection_date': datetime.now()
+                })
+                postulation_id.message_post(
+                    body=_(
+                        'La postulación se marcó como rechazada dado que pasaron más de 30 días '
+                        'desde su notificación y no fue aceptado el beneficio.'
+                    )
+                )
+                logging.info(
+                    "==> Postulación ID: %s marcada como rechazada exitosamente",
+                    postulation_id.id
+                )
+                counter += 1
+            except Exception as e:
+                logging.exception(
+                    "==> Error al procesar postulación ID: %s - Error: %s",
+                    postulation_id.id, str(e)
+                )
+                postulation_id.message_post(
+                    body=_(
+                        f'Error al marcar la postulación como rechazada: {str(e)}'
+                    )
+                )
+        logging.warning(
+            "==> Finalizando cron de marcar postulaciones como rechazadas. "
+            "Procesados: %s registros", counter
+        )
 
     @api.model
     def _cron_benefit_expiration_reminder(self):
