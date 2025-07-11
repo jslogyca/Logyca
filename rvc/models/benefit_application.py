@@ -1129,7 +1129,6 @@ class BenefitApplication(models.Model):
 
     def action_reminder(self):
         """ This function allows you to notify by email if the application is non accepted."""
-        fiveDays = fields.datetime.now() - timedelta(days=5)
         postulation = self
 
         if postulation.reminder_count == 3:
@@ -1144,104 +1143,134 @@ class BenefitApplication(models.Model):
 
         logging.warning("==> Iniciando cron de activación de servicios RVC ...")
 
-        if not self:
-            counter = 0
-            # Buscar postulaciones en estado 'confirm' que necesiten activación
-            self = self.search([
-                ('state', '=', 'confirm'),
-                ('codes_quantity', '<=', 1000),
-                ('origin', '=', 'odoo')
-            ], order="id asc")
+        # Buscar postulaciones en estado 'confirm' que necesiten activación
+        postulations = self.search([
+            ('state', '=', 'confirm'),
+            ('codes_quantity', '<=', 1000),
+            ('origin', '=', 'odoo')
+        ], order="id asc")
 
-            for postulation_id in self:
-                # Limitamos la activación para no saturar el servidor
-                if counter >= 30:
-                    logging.warning("====> Cron alcanzó el límite de activaciones, esperando la próxima ejecución para procesar más...")
-                    break
+        for postulation_id in postulations:
+            # Limitamos la activación para no saturar el servidor
+            if counter >= 30:
+                logging.warning(
+                    "====> Cron alcanzó el límite de activaciones, "
+                    "esperando la próxima ejecución para procesar más..."
+                )
+                break
 
-                # Validar que tenga email de contacto
-                if not postulation_id.partner_id.contact_email:
-                    postulation_id.message_post(body=_('🚫 No se pudo activar el beneficio porque la empresa no tiene email de contacto.'))
+            # Validar que tenga email de contacto
+            if not postulation_id.partner_id.contact_email:
+                postulation_id.message_post(
+                    body=_(
+                        '🚫 No se pudo activar el beneficio porque la empresa '
+                        'no tiene email de contacto.'
+                    )
+                )
+                counter += 1
+                continue
+
+            # Validar si tiene aún códigos disponibles (para rechazar la postulación)
+            # la empresa debe haber consumido o asignado sus codigos disponibles para pedir más
+            if postulation_id.product_id.benefit_type == 'codigos':
+                try:
+                    postulation_id._validate_bought_products()
+                except ValidationError:
+                    postulation_id.message_post(
+                        body=_(
+                            '🚫 No se pudo activar porque la empresa '
+                            f'{postulation_id.partner_id.partner_id.vat}-'
+                            f'{postulation_id.partner_id.partner_id.name} '
+                            'tiene códigos disponibles por asignar. '
+                            'La postulación se marca como rechazada.'
+                        )
+                    )
+                    postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
                     counter += 1
                     continue
 
-                # Validar si tiene aún códigos disponibles (para rechazar la postulación)
-                # la empresa debe haber consumido o asignado sus codigos disponibles para pedir más
+            # Activar servicios usando rvc.activations
+            activated = False
+            try:
                 if postulation_id.product_id.benefit_type == 'codigos':
-                    try:
-                        postulation_id._validate_bought_products()
-                    except ValidationError:
-                        postulation_id.message_post(body=_(
-                            '🚫 No se pudo activar porque la empresa %s tiene códigos disponibles por asignar. La postulación se marca como rechazada.' %
-                            (str(postulation_id.partner_id.partner_id.vat) + '-' + str(postulation_id.partner_id.partner_id.name))
-                        ))
-                        postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
-                        counter += 1
-                        continue
-
-                # Activar servicios usando rvc.activations
-                activated = False
-                try:
-                    if postulation_id.product_id.benefit_type == 'codigos':
-                        activated = self.env['rvc.activations'].activate_gs1_codes(postulation_id)
-                        if activated:
-                            postulation_id.message_post(body=_('✅ Se activó correctamente el beneficio de Códigos GS1.'))
-                        else:
-                            postulation_id.message_post(body=_('🚫 No se pudo activar el beneficio de Códigos GS1.'))
-
-                    elif postulation_id.product_id.benefit_type == 'colabora':
-                        activated = self.env['rvc.activations'].activate_logyca_colabora(postulation_id)
-                        if activated:
-                            postulation_id.message_post(body=_('✅ Se activó correctamente el beneficio LOGYCA / COLABORA.'))
-                        else:
-                            postulation_id.message_post(body=_('🚫 No se pudo activar el beneficio LOGYCA / COLABORA.'))
-
-                    elif postulation_id.product_id.benefit_type == 'tarjeta_digital':
-                        if postulation_id.digital_card_ids:
-                            activated = self.env['rvc.activations'].activate_digital_cards(postulation_id)
-                            if activated:
-                                postulation_id.message_post(body=_('✅ Se activó correctamente el beneficio de Tarjetas Digitales.'))
-                            else:
-                                postulation_id.message_post(body=_('🚫 No se pudo activar el beneficio de Tarjetas Digitales.'))
-                        else:
-                            postulation_id.message_post(body=_(
-                                '🚫 No se pudo activar el beneficio de Tarjetas Digitales porque no hay tarjetas configuradas.'
-                            ))
-
-                    # Si se activó correctamente, cambiar estado a 'done'
+                    activated = self.env['rvc.activations'].activate_gs1_codes(postulation_id)
                     if activated:
-                        postulation_id.write({'state': 'done', 'delivery_date': datetime.now()})
+                        postulation_id.message_post(body=_('✅ Se activó correctamente el beneficio de Códigos GS1.'))
+                    else:
+                        postulation_id.message_post(body=_('🚫 No se pudo activar el beneficio de Códigos GS1.'))
 
-                except Exception as e:
-                    postulation_id.message_post(body=_(
-                        '🚫 Error inesperado al activar el beneficio %s: %s' %
-                        (postulation_id.product_id.benefit_type, str(e))
-                    ))
-                    logging.exception("Error en cron de activación para postulación %s: %s", postulation_id.id, str(e))
+                elif postulation_id.product_id.benefit_type == 'colabora':
+                    activated = self.env['rvc.activations'].activate_logyca_colabora(postulation_id)
+                    if activated:
+                        postulation_id.message_post(body=_('✅ Se activó correctamente el beneficio LOGYCA / COLABORA.'))
+                    else:
+                        postulation_id.message_post(body=_('🚫 No se pudo activar el beneficio LOGYCA / COLABORA.'))
 
-                counter += 1
+                elif postulation_id.product_id.benefit_type == 'tarjeta_digital':
+                    if postulation_id.digital_card_ids:
+                        activated = self.env['rvc.activations'].activate_digital_cards(postulation_id)
+                        if activated:
+                            postulation_id.message_post(body=_('✅ Se activó correctamente el beneficio de Tarjetas Digitales.'))
+                        else:
+                            postulation_id.message_post(body=_('🚫 No se pudo activar el beneficio de Tarjetas Digitales.'))
+                    else:
+                        postulation_id.message_post(body=_(
+                            '🚫 No se pudo activar el beneficio de Tarjetas Digitales porque no hay tarjetas configuradas.'
+                        ))
 
-        logging.warning("==> Finalizando cron de activación de servicios RVC. Procesados: %s registros", counter)
+                # Si se activó correctamente, cambiar estado a 'done'
+                if activated:
+                    postulation_id.write({'state': 'done', 'delivery_date': datetime.now()})
+
+            except Exception as e:
+                postulation_id.message_post(
+                    body=_(
+                        '🚫 Error inesperado al activar el beneficio {}: {}'
+                    ).format(
+                        postulation_id.product_id.benefit_type,
+                        str(e)
+                    )
+                )
+                logging.exception(
+                    "Error en cron de activación para postulación %s: %s",
+                    postulation_id.id,
+                    str(e)
+                )
+
+            counter += 1
+
+        logging.warning(
+            "==> Finalizando cron de activación de servicios RVC. "
+            "Procesados: %s registros",
+            counter
+        )
 
     def _cron_mark_as_rejected(self):
         logging.warning("==> Iniciando cron de marcar postulaciones como rechazadas ...")
+
         postulations = self.search([
             ('state', '=', 'notified'),
             ('notification_date', '<', datetime.now() - relativedelta(days=31))
         ])
+
         logging.warning(
             "==> Se encontraron %s postulaciones para marcar como rechazadas",
             len(postulations)
         )
+
         counter = 0
         for postulation_id in postulations:
             try:
+                vat = postulation_id.partner_id.partner_id.vat
+                name = postulation_id.partner_id.partner_id.name
+
                 logging.info(
                     "==> Procesando postulación ID: %s - Empresa: %s-%s",
                     postulation_id.id,
-                    postulation_id.partner_id.partner_id.vat,
-                    postulation_id.partner_id.partner_id.name
+                    vat,
+                    name
                 )
+
                 postulation_id.write({
                     'state': 'rejected',
                     'rejection_date': datetime.now()
@@ -1252,21 +1281,23 @@ class BenefitApplication(models.Model):
                         'desde su notificación y no fue aceptado el beneficio.'
                     )
                 )
+
                 logging.info(
                     "==> Postulación ID: %s marcada como rechazada exitosamente",
                     postulation_id.id
                 )
                 counter += 1
+
             except Exception as e:
                 logging.exception(
                     "==> Error al procesar postulación ID: %s - Error: %s",
-                    postulation_id.id, str(e)
+                    postulation_id.id,
+                    str(e)
                 )
                 postulation_id.message_post(
-                    body=_(
-                        f'Error al marcar la postulación como rechazada: {str(e)}'
-                    )
+                    body=_(f'Error al marcar la postulación como rechazada: {str(e)}')
                 )
+
         logging.warning(
             "==> Finalizando cron de marcar postulaciones como rechazadas. "
             "Procesados: %s registros", counter
@@ -1277,26 +1308,89 @@ class BenefitApplication(models.Model):
         """ 
             This function allows you to notify by email if the application is non accepted.
         """
+        logging.warning("==> Iniciando cron de recordatorios de expiración de beneficios ...")
 
-        fiveDays = fields.datetime.now() - timedelta(days=5)
+        five_days_prior: datetime = fields.datetime.now() - timedelta(days=5)
         # Get all postulations with more than 5 days of notified
         postulations_ids = self.search([
-            ('notification_date', '<=', fiveDays),
+            ('notification_date', '<=', five_days_prior),
             ('state', '=', 'notified')
         ])
 
+        logging.warning(
+            "==> Se encontraron %d postulaciones para enviar recordatorios",
+            len(postulations_ids)
+        )
+
+        counter = 0
+        rejected_counter = 0
+
         for postulation in postulations_ids:
-            if postulation.reminder_count == 3:
+            try:
+                vat = postulation.partner_id.partner_id.vat
+                name = postulation.partner_id.partner_id.name
+                reminder_count = postulation.reminder_count
+
+                logging.info(
+                    "==> Procesando postulación ID: %s - Empresa: %s-%s - "
+                    "Recordatorios enviados: %s",
+                    postulation.id, vat, name, reminder_count
+                )
+
+                if postulation.reminder_count == 3:
+                    logging.info(
+                        "==> Postulación ID: %s alcanzó el límite de 3 recordatorios, "
+                        "marcando como rechazada",
+                        postulation.id
+                    )
+                    postulation.message_post(
+                        body=_(
+                            'La postulación se marcó como rechazada dado que se notificó '
+                            'recordatorio en tres (3) oportunidades y no se aceptó el beneficio '
+                            'por parte de la empresa.'
+                        )
+                    )
+                    postulation.state = 'rejected'
+                    rejected_counter += 1
+                    logging.info(
+                        "==> Postulación ID: %s marcada como rechazada "
+                        "por exceso de recordatorios",
+                        postulation.id
+                    )
+                else:
+                    next_reminder = postulation.reminder_count + 1
+                    logging.info(
+                        "==> Enviando recordatorio %d/3 para postulación ID: %s",
+                        next_reminder, postulation.id
+                    )
+                    self.send_reminder_benefit_expiration(postulation)
+                    logging.info(
+                        "==> Recordatorio enviado exitosamente para "
+                        "postulación ID: %s",
+                        postulation.id
+                    )
+
+                counter += 1
+
+            except Exception as e:
+                logging.exception(
+                    "==> Error al procesar recordatorio para postulación ID: %s - "
+                    "Error: %s",
+                    postulation.id,
+                    str(e)
+                )
                 postulation.message_post(
                     body=_(
-                        'La postulación se marcó como rechazada dado que se notificó '
-                        'recordatorio en tres (3) oportunidades y no se aceptó el beneficio '
-                        'por parte de la empresa.'
-                    )
+                        'Error al procesar recordatorio de beneficio: %s'
+                    ) % str(e)
                 )
-                postulation.state = 'rejected'
 
-            self.send_reminder_benefit_expiration(postulation)
+        logging.warning(
+            "==> Finalizando cron de recordatorios de expiración. "
+            "Procesados: %d registros, Rechazados: %d",
+            counter,
+            rejected_counter
+        )
 
     def send_reminder_benefit_expiration(self,postulation):
         try:
