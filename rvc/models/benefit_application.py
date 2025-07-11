@@ -1226,13 +1226,15 @@ class BenefitApplication(models.Model):
     def _cron_mark_as_rejected(self):
         logging.warning("==> Iniciando cron de marcar postulaciones como rechazadas ...")
 
-        if not self:
-            self = self.search([('state', '=', 'notified'), ('notification_date', '<', datetime.now() - relativedelta(days=31))])  
-            
-            for postulation_id in self:
-                postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
-                postulation_id.message_post(body=_('La postulación se marcó como rechazada dado que pasaron '\
-                    'más de 30 días desde su notificación y no fue aceptado el beneficio.'))
+        postulations = self.search([
+            ('state', '=', 'notified'),
+            ('notification_date', '<', datetime.now() - relativedelta(days=31))
+        ])
+
+        for postulation_id in postulations:
+            postulation_id.write({'state': 'rejected', 'rejection_date': datetime.now()})
+            postulation_id.message_post(body=_('La postulación se marcó como rechazada dado que pasaron '\
+                'más de 30 días desde su notificación y no fue aceptado el beneficio.'))
 
     @api.model
     def _cron_benefit_expiration_reminder(self):
