@@ -521,6 +521,36 @@ class BenefitApplication(models.Model):
 
                 return True
 
+            elif response.status_code == 500:
+                # Verificar si es un error 500 con mensaje específico de NIT no encontrado
+                try:
+                    result = response.json()
+                    result_message = result.get('resultMessage', '')
+
+                    # Si el NIT no fue encontrado, permitir el beneficio
+                    if result_message == "El NIT no fue encontrado":
+                        response.close()
+                        return True
+                    else:
+                        # Si es otro tipo de error 500, lanzar excepción
+                        response.close()
+                        raise ValidationError(
+                            _(
+                                "Error interno del servidor al validar códigos comprados. "
+                                "Inténtelo nuevamente o comuníquese con soporte. "
+                                f"Error: {response.status_code} - {result_message}"
+                            )
+                        )
+                except (ValueError, KeyError) as exc:
+                    # Si no se puede parsear el JSON o no tiene la estructura esperada
+                    response.close()
+                    raise ValidationError(
+                        _(
+                            "Error interno del servidor al validar códigos comprados. "
+                            "Inténtelo nuevamente o comuníquese con soporte. "
+                            f"Error: {response.status_code}"
+                        )
+                    ) from exc
             else:
                 raise ValidationError(
                     _(
