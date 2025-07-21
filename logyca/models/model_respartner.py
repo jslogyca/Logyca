@@ -171,12 +171,13 @@ class ResPartner(models.Model):
 
     @api.depends('x_active_for_logyca', 'active', 'active_logyca')
     def _depends_active(self):
-        if self.x_active_for_logyca:
-            self.active = True
-            self.active_logyca = True
-        else:
-            self.active = False
-            self.active_logyca = False
+        for partner in self:
+            if partner.x_active_for_logyca:
+                partner.active = True
+                partner.active_logyca = True
+            else:
+                partner.active = False
+                partner.active_logyca = False
 
     @api.depends('vat')
     def _compute_verification_digit(self):
