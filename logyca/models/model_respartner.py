@@ -34,6 +34,7 @@ class ResPartner(models.Model):
     same_vat_partner_id = fields.Many2one('res.partner', string='Partner with same Tax ID', store=False)
     x_type_thirdparty = fields.Many2many('logyca.type_thirdparty',string='Tipo de tercero',tracking=True, ondelete='restrict')
     x_active_for_logyca = fields.Boolean(string='Activo', tracking=True, default=True)
+    active_logyca = fields.Boolean(string='Activo', tracking=True, default=True, compute='_depends_active')
     x_document_type = fields.Selection([
                                         ('11', 'Registro civil de nacimiento'),
                                         ('12', 'Tarjeta de identidad'),
@@ -168,10 +169,14 @@ class ResPartner(models.Model):
         else:
             self.active = False
 
-    # @api.depends('vat')
-    # def _compute_no_same_vat_partner_id(self):
-    #     for partner in self:
-    #         partner.same_vat_partner_id = ""
+    @api.depends('x_active_for_logyca', 'active', 'active_logyca')
+    def _depends_active(self):
+        if self.x_active_for_logyca:
+            self.active = True
+            self.active_logyca = True
+        else:
+            self.active = False
+            self.active_logyca = False
 
     @api.depends('vat')
     def _compute_verification_digit(self):

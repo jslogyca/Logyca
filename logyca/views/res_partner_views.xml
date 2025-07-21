@@ -71,8 +71,9 @@
                 <field name="x_collaborative_group_ids" widget="many2many_tags"/>
                 <field name="x_is_member_directive"/>
                 <field name="x_is_on_board_of_directors"/>
-                <field name="x_active_for_logyca" widget="boolean_toggle"/>
-                <field name="active" widget="boolean_toggle"/>
+                <field name="x_active_for_logyca" />
+                <field name="active_logyca" invisible="1"/>
+                <field name="active" force_save="1" readonly="1" invisible="1"/>
             </xpath>
 
             <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='mobile']" position="after">
