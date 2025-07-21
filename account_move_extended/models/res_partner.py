@@ -112,6 +112,8 @@ class ResPartner(models.Model):
             return super(ResPartner, self).write(values)
         if 'description_loyalty' in values:
             return super(ResPartner, self).write(values)
+        if 'active' in values:
+            return super(ResPartner, self).write(values)
         if not self.env.user.has_group('account_move_extended.account_move_manager_main_partner'):
             raise ValidationError(_('You are not authorized to change the company, please contact'))
         return super(ResPartner, self).write(values)
