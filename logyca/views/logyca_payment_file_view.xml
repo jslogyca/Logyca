@@ -29,8 +29,8 @@
                             <field name="journal_id"/>
                             <field name="payment_method_line_id"/>
                             <field name="partner_id"/>
-                            <field name="amount_signed"/>
-                            <field name="amount_company_currency_signed"/>
+                            <field name="amount_signed" sum="Total"/>
+                            <field name="amount_company_currency_signed" sum="Total"/>
                             <field name="state"/>
                             <field name="ref"/>
                             <button name="action_read_payments" type="object" string="Asiento" class="float-end btn-secondary" />

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="purchase_order_form_blanket_lg">
+        <field name="name">purchase.order.form.blanket.lg</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='currency_id']" position="after">
+                <field name="type_blanket_id" readonly="state != 'draft'"/>
+                <field name="blanket_order_id" force_save="1" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
