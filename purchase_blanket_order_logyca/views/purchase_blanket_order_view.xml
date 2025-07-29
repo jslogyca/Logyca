@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="purchase_blanket_order_form_lg">
+        <field name="name">purchase.blanket.order.form.lg</field>
+        <field name="model">purchase.blanket.order</field>
+        <field name="inherit_id" ref="purchase_blanket_order.view_purchase_blanket_order_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_view_moves"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-money-bill"
+                >
+                    <field
+                        name="moves_count"
+                        widget="statinfo"
+                        string="Moves"
+                    />
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='partner_ref']" position="after">
+                <field name="type_blanket_id"  readonly="state != 'draft'"/>
+                <field name="total_amount"  invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="budget_group_id" required="1" readonly="state != 'draft'"/>
+                <field name="analytic_distribution" widget="analytic_distribution"
+                        groups="analytic.group_analytic_accounting" readonly="state != 'draft'"/>
+            </xpath>
+            <xpath expr="//group[@name='group_bottom']" position="before">
+                <group name="group_approver">
+                    <group name="group_approver_left">
+                        <field
+                            name="user_approver_id"
+                            force_save="1" readonly="1" />
+                    </group>
+                    <group name="group_approver_right">
+                        <field
+                            name="approver_date"
+                            force_save="1" readonly="1" />
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//group[@name='group_bottom']" position="after">
+                <group name="group_simulation_text">
+                    <group name="group_simulation_left">
+                        <field name="simulation_text" nolabel="1" readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
