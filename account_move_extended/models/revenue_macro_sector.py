@@ -19,9 +19,11 @@ class RevenueMacroSector(models.Model):
     amount = fields.Char('Ingresos')
     amount_start = fields.Float('Ingresos Iniciales')
     amount_end = fields.Float('Ingresos Finales')
-    size_sector_int = fields.Selection([('micro1', 'Micro 1'),
+    size_sector_int = fields.Selection([('micro', 'Micro'),
+                                        ('micro1', 'Micro 1'),
                                         ('micro2', 'Micro 2'),
                                         ('micro3', 'Micro 3'), 
+                                        ('pequena1', 'Pequeña 1'),
                                         ('pequena1', 'Pequeña 1'),
                                         ('pequena2', 'Pequeña 2'),
                                         ('pequena3', 'Pequeña 3'),
@@ -43,6 +45,8 @@ class RevenueMacroSector(models.Model):
         string="Nombre completo",
         compute='_compute_display_name',
         store=True)
+    amount_history = fields.Char('Rango Anterior')
+    date_history = fields.Char('Fecha Última actualización')
 
     @api.depends('amount', 'macro_sector')
     def _compute_display_name(self):
