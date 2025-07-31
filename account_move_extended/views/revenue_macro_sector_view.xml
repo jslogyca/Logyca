@@ -9,11 +9,13 @@
                 <group>
                     <group>
                         <field name="macro_sector" required="True"/>
-                    </group>
-                    <group>
                         <field name="amount" required="True"/>
                         <field name="amount_start" required="True"/>
-                        <field name="amount_end" required="True"/>
+                        <field name="amount_end" required="True"/>                       
+                    </group>
+                    <group>
+                        <field name="amount_history" force_save="1" readonly="1"/>
+                        <field name="date_history" force_save="1" readonly="1"/>
                         <field name="size_sector_int" required="True"/>
                         <field name="x_company_size" required="True"/>
                     </group>
