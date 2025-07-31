@@ -47,6 +47,7 @@ class RevenueMacroSector(models.Model):
         store=True)
     amount_history = fields.Char('Rango Anterior')
     date_history = fields.Char('Fecha Última actualización')
+    active = fields.Boolean(default=True, help="Set active to false to hide the Group without removing it.")
 
     @api.depends('amount', 'macro_sector')
     def _compute_display_name(self):
