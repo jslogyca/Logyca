@@ -18,6 +18,7 @@
                         <field name="date_history" force_save="1" readonly="1"/>
                         <field name="size_sector_int" required="True"/>
                         <field name="x_company_size" required="True"/>
+                        <field name="active" widget="boolean_toggle"/>
                     </group>
                 </group>
                 </sheet>
