@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="type_purchase_blanket_single" model="purchase.blanket.order.type">
+            <field name="name">Blanket Order</field>
+            <field name="sequence">3</field>
+            <field name="quantity_copy">none</field>
+        </record>
+    </data>
+</odoo>

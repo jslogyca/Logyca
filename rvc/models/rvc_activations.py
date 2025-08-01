@@ -15,7 +15,8 @@ class RvcActivations(models.AbstractModel):
         """Maps a rvc postulation into a logyca colabora activation request"""
 
         logging.debug("Activating Logyca / Colabora for postulation %d", postulation.id)
-        token = postulation.get_token_gs1_co_api()
+        # token = postulation.get_token_gs1_co_api()
+        token = postulation.get_token_sso()
         logging.debug("Token: %s", token)
 
         colabora_level_sku = self.env['rvc.activation.services'] \
@@ -156,7 +157,8 @@ class RvcActivations(models.AbstractModel):
         """Maps a rvc postulation into a digital cards activation request"""
 
         logging.debug("Activating Digital Cards for postulation %d", postulation.id)
-        token = postulation.get_token_gs1_co_api()
+        # token = postulation.get_token_gs1_co_api()
+        token = postulation.get_token_sso()
         logging.debug("Token: %s", token)
 
         digital_cards = []

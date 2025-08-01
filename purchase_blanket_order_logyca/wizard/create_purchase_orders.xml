@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_create_purchase_order_lg">
+        <field name="name">view.create.purchase.order.lg</field>
+        <field name="model">purchase.blanket.order.wizard</field>
+        <field name="inherit_id" ref="purchase_blanket_order.view_create_purchase_order"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='line_ids']" position="before">
+                <group>
+                    <field colspan="2" name="notes" nolabel="1" placeholder="Define your terms and conditions ..."/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
