@@ -1,7 +1,8 @@
 import logging
 import re
 from odoo import models, fields, api
-from odoo.tools import formataddr, split_email_with_name
+from odoo.tools import formataddr
+from email.utils import parseaddr
 
 _logger = logging.getLogger(__name__)
 
@@ -121,7 +122,7 @@ class MailMail(models.Model):
         for mail in self:
             selected_server = mail._get_outgoing_server_by_rules()
             if selected_server and mail.mail_server_id != selected_server:
-                original_name = split_email_with_name(mail.email_from)[0]
+                original_name, _ = parseaddr(mail.email_from)
                 new_email_from = formataddr(
                     (
                         original_name or selected_server.name,
