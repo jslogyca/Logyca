@@ -14,6 +14,7 @@
         'logyca',
         'contacts',
         'sale',
+        'website_sale',
         ],
     'description': '''
 
@@ -23,8 +24,10 @@
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
+        'views/sale_order_template.xml',
         'views/res_partner_view.xml',
         'views/sale_order_view.xml',
+        'views/checkout_templates_view.xml',
         'wizard/member_tyb_wizard_view.xml',
     ],
     'qweb': [

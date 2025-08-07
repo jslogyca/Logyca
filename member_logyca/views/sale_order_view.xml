@@ -10,6 +10,8 @@
                     <field name="date_init_member_test" force_save="1" readonly="1"/>
                     <field name="date_end_member_test" force_save="1" readonly="1"/>
                     <field name="free_member" force_save="1" readonly="1"/>
+                    <button class="oe_stat_button" name="action_order_member" type="object" icon="fa-pencil-square-o" help="Membresía">
+                    </button>                    
                 </group>
             </xpath>
         </field>
