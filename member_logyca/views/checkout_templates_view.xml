@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- Herencia para agregar campo rango_type en checkout -->
+  <data>
+      <template id="logyca_website_sale_rango_type_lg" inherit_id="website_sale.address">
+        <xpath expr="//form[@action='/shop/address']/div[contains(@class, 'row')]" position="inside">
+          <div class="col-lg-6 mb-2">
+            <div t-attf-class="#{error.get('rango_type') and 'o_has_error'} form-group">
+              <label class="col-form-label" for="rango_type">Rango de ingresos</label>
+              <select name="rango_type" id="rango_type"
+                      class="form-control #{error.get('rango_type') and 'is-invalid' or ''}">
+                <option value="">— Seleccione —</option>
+                <option t-att-value="'comercio'"  t-att-selected="checkout.get('rango_type')=='comercio'">
+                  COMERCIO - DE $1 A $2.229.451.431
+                </option>
+                <option t-att-value="'manu'"      t-att-selected="checkout.get('rango_type')=='manu'">
+                  MANUFACTURA - DE $1 A $1.173.413.837
+                </option>
+                <option t-att-value="'service'"   t-att-selected="checkout.get('rango_type')=='service'">
+                  SERVICIO - DE $1 A  $1.642.769.412
+                </option>
+                <option t-att-value="'other'"     t-att-selected="checkout.get('rango_type')=='other'">
+                  MAYOR A  $2.229.451.431
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mb-2">
+            <div t-attf-class="#{error.get('how_findout') and 'o_has_error'} form-group">
+              <label class="col-form-label" for="how_findout">¿Cómo te enteraste?</label>
+              <select name="how_findout" id="how_findout"
+                      class="form-control #{error.get('how_findout') and 'is-invalid' or ''}">
+                <option value="">— Seleccione —</option>
+                <option t-att-value="'asesor1'"
+                        t-att-selected="checkout.get('how_findout')=='asesor1'">
+                  Asesor Naomis Murgas
+                </option>
+                <option t-att-value="'asesor2'"
+                        t-att-selected="checkout.get('how_findout')=='asesor2'">
+                  Asesor Cristian Andres Vargas
+                </option>
+                <option t-att-value="'web'"
+                        t-att-selected="checkout.get('how_findout')=='web'">
+                  Sitio Web
+                </option>
+                <option t-att-value="'aliado'"
+                        t-att-selected="checkout.get('how_findout')=='aliado'">
+                  Aliado
+                </option>
+              </select>
+            </div>
+          </div>
+        <t t-set="sectors" t-value="request.env['logyca.sectors'].sudo().search([])"/>
+        <!-- Campo Sector -->
+        <div class="col-lg-6 mb-2">
+          <div t-attf-class="#{error.get('x_sector_id') and 'o_has_error'} form-group">
+            <label class="col-form-label" for="x_sector_id">Sector</label>
+            <select name="x_sector_id" id="x_sector_id"
+                    class="form-control #{error.get('x_sector_id') and 'is-invalid' or ''}">
+              <option value="">— Seleccione —</option>
+              <t t-foreach="sectors" t-as="s">
+                <option t-att-value="s.id"
+                        t-att-selected="checkout.get('x_sector_id') and int(checkout.get('x_sector_id'))==s.id">
+                  <t t-esc="s.name"/>
+                </option>
+              </t>
+            </select>
+          </div>
+        </div>
+        </xpath>
+    </template>
+  </data>
+</odoo>
+

@@ -14,6 +14,18 @@ class ResPartner(models.Model):
         help="Select if you want to give free membership.", default=False)
     date_init_member_test = fields.Date(string='Inicio Periodo de Prueba Membresía', default=fields.Date.context_today)
     date_end_member_test = fields.Date(string='Final Periodo de Prueba Membresía', default=fields.Date.context_today)
+    rango_type = fields.Selection([
+        ('comercio', 'COMERCIO - DE $1 A $2.229.451.431'),
+        ('manu', 'MANUFACTURA - DE $1 A $1.173.413.837'),
+        ('service', 'SERVICIO - DE $1 A  $1.642.769.412'),
+        ('other', 'MAYOR A  $2.229.451.431'),
+    ], string="Rango de Ingresos")
+    how_findout = fields.Selection([
+        ('asesor1', 'Asesor Naomis Murgas'),
+        ('asesor2', 'Asesor Cristian Andres Vargas'),
+        ('web', 'Sitio Web'),
+        ('aliado', 'Aliado'),
+    ], string="Cómo te enteraste?")
 
     def activ_member_tyb(self):
         return {

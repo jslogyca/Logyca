@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mail_template_member_welcome" model="mail.template">
+            <field name="name">Correo Bienvenida Miembro Gratuito</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="subject">¡Bienvenido {{ object.partner_id.name }}!</field>
+            <field name="email_from">${(user.email_formatted or 'info@tudominio.com')}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="description">Bienvenida automática para miembros Try and Buy</field>
+            <field name="body_html" type="html">
+  <body style="margin:0;padding:0;background:#f2f2f2;font-family:Arial,sans-serif;">
+    <center>
+      <div style="max-width:600px;margin:auto;background:#fff;">
+        <table width="100%" cellspacing="0" cellpadding="0" style="background-color:#002857;">
+          <tr>
+            <td style="text-align:center;padding:20px;">
+              <img src="https://logyca.org/email/logo-blanco.png" width="180" alt="LOGYCA"/>
+            </td>
+          </tr>
+        </table>
+        <table width="100%" cellspacing="0" cellpadding="0">
+          <tr>
+            <td style="padding:40px 30px 20px;color:#333;font-size:14px;">
+              <p>Hola <strong>''' + object.partner_id.name + '''</strong>,</p>
+              <p>Te damos la bienvenida a <strong>LOGYCA / ASOCIACIÓN</strong> como nuevo miembro Try and Buy.</p>
+              <p>Tu membresía gratuita estará activa hasta el <strong>''' + (object.date_init_member_test + timedelta(days=90)).strftime('%d/%m/%Y') + '''</strong>, durante la cual podrás acceder a:</p>
+              <ul>
+                <li>Asesoría personalizada en logística colaborativa</li>
+                <li>Acceso a contenido especializado</li>
+                <li>Participación en espacios de relacionamiento empresarial</li>
+                <li>Herramientas que impulsan tu negocio</li>
+              </ul>
+              <p>En los próximos días, uno de nuestros asesores se comunicará contigo para brindarte una inducción.</p>
+              <p>Gracias por confiar en nosotros.<br/>¡Bienvenido a la comunidad LOGYCA!</p>
+              <p>Equipo LOGYCA / ASOCIACIÓN</p>
+            </td>
+          </tr>
+        </table>
+        <table width="100%" cellspacing="0" cellpadding="0">
+          <tr>
+            <td style="text-align:center;padding:20px;">
+              <img src="https://logyca.org/email/banner-bienvenida.png" style="max-width:540px;width:100%;" alt="Banner de bienvenida"/>
+            </td>
+          </tr>
+        </table>
+        <table width="100%" cellspacing="0" cellpadding="0" style="background-color:#002857;">
+          <tr>
+            <td style="padding:20px;text-align:center;color:#fff;font-size:12px;">
+              LOGYCA / ASOCIACIÓN — Bogotá, Colombia<br/>
+              <a href="mailto:info@logyca.org" style="color:#ffffff;">info@logyca.org</a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </center>
+  </body>
+
+
+                <!-- <table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 0px; background-color: white; color: #454748; border-collapse:separate;">
+                <tbody>
+                    <tr>
+                        <td align="center" style="min-width: 590px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 0px 0px 0px; border-collapse:separate;">
+                                <tr>
+                                    <td valign="top" style="font-size: 13px;">
+                                        <h1 style="color:#A9A9A9;">THERE'S SOMETHING IN YOUR CART.</h1>
+                                        Would you like to complete your purchase?<br/><br/>
+                                        <t t-set="company" t-value="object.company_id or object.user_id.company_id or user.company_id"/>
+                                        <div style="text-align: center;"><strong>Thank you for shopping with <t t-out="company.name or ''">My Company (San Francisco)</t>!</strong></div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+                </table> -->
+            </field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="False"/>            
+        </record>
+    </data>
+</odoo>
