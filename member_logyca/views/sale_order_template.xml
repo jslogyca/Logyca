@@ -9,72 +9,123 @@
             <field name="partner_to">{{ object.partner_id.id }}</field>
             <field name="description">Bienvenida automática para miembros Try and Buy</field>
             <field name="body_html" type="html">
-  <body style="margin:0;padding:0;background:#f2f2f2;font-family:Arial,sans-serif;">
-    <center>
-      <div style="max-width:600px;margin:auto;background:#fff;">
-        <table width="100%" cellspacing="0" cellpadding="0" style="background-color:#002857;">
-          <tr>
-            <td style="text-align:center;padding:20px;">
-              <img src="https://logyca.org/email/logo-blanco.png" width="180" alt="LOGYCA"/>
-            </td>
-          </tr>
-        </table>
-        <table width="100%" cellspacing="0" cellpadding="0">
-          <tr>
-            <td style="padding:40px 30px 20px;color:#333;font-size:14px;">
-              <p>Hola <strong>''' + object.partner_id.name + '''</strong>,</p>
-              <p>Te damos la bienvenida a <strong>LOGYCA / ASOCIACIÓN</strong> como nuevo miembro Try and Buy.</p>
-              <p>Tu membresía gratuita estará activa hasta el <strong>''' + (object.date_init_member_test + timedelta(days=90)).strftime('%d/%m/%Y') + '''</strong>, durante la cual podrás acceder a:</p>
-              <ul>
-                <li>Asesoría personalizada en logística colaborativa</li>
-                <li>Acceso a contenido especializado</li>
-                <li>Participación en espacios de relacionamiento empresarial</li>
-                <li>Herramientas que impulsan tu negocio</li>
-              </ul>
-              <p>En los próximos días, uno de nuestros asesores se comunicará contigo para brindarte una inducción.</p>
-              <p>Gracias por confiar en nosotros.<br/>¡Bienvenido a la comunidad LOGYCA!</p>
-              <p>Equipo LOGYCA / ASOCIACIÓN</p>
-            </td>
-          </tr>
-        </table>
-        <table width="100%" cellspacing="0" cellpadding="0">
-          <tr>
-            <td style="text-align:center;padding:20px;">
-              <img src="https://logyca.org/email/banner-bienvenida.png" style="max-width:540px;width:100%;" alt="Banner de bienvenida"/>
-            </td>
-          </tr>
-        </table>
-        <table width="100%" cellspacing="0" cellpadding="0" style="background-color:#002857;">
-          <tr>
-            <td style="padding:20px;text-align:center;color:#fff;font-size:12px;">
-              LOGYCA / ASOCIACIÓN — Bogotá, Colombia<br/>
-              <a href="mailto:info@logyca.org" style="color:#ffffff;">info@logyca.org</a>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </center>
-  </body>
-
-
-                <!-- <table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 0px; background-color: white; color: #454748; border-collapse:separate;">
-                <tbody>
+              <body style="margin:0;padding:0;background:#f2f2f2;font-family:Arial,sans-serif;">
+                <div style="max-width:600px; margin:auto; background:#ffffff; font-family:Arial,Helvetica,sans-serif; color:#706B6D;">
+                  <!-- Banner -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                     <tr>
-                        <td align="center" style="min-width: 590px;">
-                            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 0px 0px 0px; border-collapse:separate;">
-                                <tr>
-                                    <td valign="top" style="font-size: 13px;">
-                                        <h1 style="color:#A9A9A9;">THERE'S SOMETHING IN YOUR CART.</h1>
-                                        Would you like to complete your purchase?<br/><br/>
-                                        <t t-set="company" t-value="object.company_id or object.user_id.company_id or user.company_id"/>
-                                        <div style="text-align: center;"><strong>Thank you for shopping with <t t-out="company.name or ''">My Company (San Francisco)</t>!</strong></div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
+                      <td><img src="https://files.escala.com/public/a0e72353-14a3-11f0-84af-1590bce576a8/banner-bienvenida-miembros-3.gif"
+                              alt="Bienvenido" style="width:100%; height:auto; display:block;"/></td>
                     </tr>
-                </tbody>
-                </table> -->
+                  </table>
+
+                  <!-- Intro -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                    <tr>
+                      <td style="padding:20px;">
+                        <h2 style="margin:0 0 10px; color:#00B398; font-size:22px;">¡Hola <t t-out="object.partner_id.name"></t></h2>
+                        <p style="margin:0 0 14px; line-height:1.6;">
+                          Hoy iniciamos un camino juntos; estamos muy emocionados por todo lo que podemos construir contigo
+                          y porque descubras todo el valor y las oportunidades que te esperan. ¡Gracias por confiar en nosotros!
+                        </p>
+                        <p style="margin:0; line-height:1.6;">
+                          Desde ahora haces parte de un espacio diseñado para
+                          <strong>impulsar la colaboración, el crecimiento y la transformación empresarial</strong>.
+                          Estamos listos para acompañarte en cada paso.
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <!-- Imagen secundaria + infografía -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                    <tr>
+                      <td><img src="https://files.escala.com/public/ad325e6c-04e1-11f0-adfe-8574ba61f7ad/banner-html-fidelizacion-renovacion.png"
+                              alt="Fidelización" style="width:100%; height:auto; display:block;"/></td>
+                    </tr>
+                    <tr>
+                      <td><img src="https://files.escala.com/public/c5f6ea6e-576c-11f0-af79-c96f1763f79d/infografia-fidelizacion-2025-06-26-2.jpg"
+                              alt="Infografía" style="width:100%; height:auto; display:block;"/></td>
+                    </tr>
+                  </table>
+
+                  <!-- CTA de agendamiento -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                    <tr>
+                      <td style="padding:18px 20px 8px; text-align:center;">
+                        <p style="margin:0 0 10px; line-height:1.6; font-size:16px; color:#51534A;">
+                          <span style="color:#FC4C02;"><strong>Queremos acompañarte desde el primer paso</strong></span>,
+                          agenda una sesión personalizada y conoce todo lo que tu membresía puede hacer por el crecimiento de tu negocio.
+                        </p>
+                        <a href="https://outlook.office365.com/book/ConocelosbeneficiosdetumembresaLOGYCA@logyca.com/"
+                          target="_blank"
+                          style="display:inline-block; background:#00B398; color:#ffffff; text-decoration:none; padding:12px 22px; border-radius:8px; font-weight:700;">
+                          Agendar sesión
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <!-- Título sección beneficios -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                    <tr>
+                      <td style="padding:12px; text-align:center;">
+                        <span style="display:inline-block; background:#00B398; color:#ffffff; font-weight:700; font-size:18px; padding:10px 24px; border-radius:12px;">
+                          ¿Cómo utilizar tus beneficios?
+                        </span>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <!-- Pasos -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                    <tr>
+                      <td style="padding:12px 20px; font-size:14px; line-height:1.6;">
+                        <ol style="margin:0; padding-left:20px;">
+                          <li>Accede a nuestro <a href="https://miembros.logyca.org/" target="_blank" style="color:#FC4C02; text-decoration:none;"><strong>portal exclusivo de miembros</strong></a>.</li>
+                          <li>Regístrate en <a href="https://miembros.logyca.org/user/register" target="_blank" style="color:#FC4C02; text-decoration:none;"><strong>solo unos minutos aquí</strong></a>.</li>
+                          <li><strong>Explora tus Beneficios:</strong> navega por el portal y comienza a aprovecharlos.</li>
+                        </ol>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <!-- Bloque Ten presente -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background:#F6F6F6;">
+                    <tr>
+                      <td style="padding:14px; text-align:center;">
+                        <span style="display:inline-block; background:#EEEEEE; color:#FC4C02; font-weight:700; font-size:18px; padding:10px 24px; border-radius:12px;">
+                          💡 Ten presente
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding:10px 22px; font-size:14px; line-height:1.6;">
+                        <p style="margin:0 0 10px;"><strong>1.</strong> Beneficios vigentes de tu membresía <a href="https://www.figma.com/proto/LHwYpDiUHX2vxma5hDfJdh/Nueva-Oferta-General-de-Membres%C3%ADas-2025?page-id=&amp;node-id=170-128" target="_blank" style="color:#00B398; text-decoration:none;"><strong>AQUÍ</strong></a>.</p>
+                        <p style="margin:0 0 10px;"><strong>2.</strong> Resoluciones vigentes <a href="https://miembros.logyca.org/documentacion/informes-de-gestion-resoluciones-y-estatutos" target="_blank" style="color:#FC4C02; text-decoration:none;"><strong>AQUÍ</strong></a>.</p>
+                        <p style="margin:0;"><strong>3.</strong> El periodo de prueba de tu membresía es de tres meses. <a href="https://logyca.org/terminos-y-condiciones-membresia-try-and-buy" target="_blank" style="color:#FC4C02; text-decoration:none;"><strong>Consulta Términos y Condiciones</strong></a>.</p>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <!-- Nota + sitio -->
+                  <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                    <tr>
+                      <td style="padding:18px 20px 6px; font-size:12px; color:#706B6D;">
+                        <em>*Como compañía vinculada bajo la modalidad de MIEMBRO, tu compañía debe realizar un pago anual por concepto de Aporte Patrimonial Actividades – ECR, el cual permite la renovación y continuidad en el uso de los beneficios asociados.</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding:6px 20px 20px; text-align:center;">
+                        <a href="https://logyca.org/?utm_source=email_marketing&amp;utm_medium=email_marketing&amp;utm_campaign=email_marketing&amp;utm_id=email_marketing"
+                          target="_blank" style="color:#FC4C02; font-size:24px; text-decoration:none;">
+                          www.<strong>logyca</strong>.org
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </body>
             </field>
             <field name="lang">{{ object.partner_id.lang }}</field>
             <field name="auto_delete" eval="False"/>            

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="email_template_sale_order_loyalty" model="mail.template">
+            <field name="name">Nuevo Miembro Try and Buy - Periodo de Prueba</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="subject">{{ object.company_id.name }} {{ object.state in ('draft', 'sent') and (ctx.get('proforma') and 'Proforma' or 'Quotation') or 'Order' }} (Ref {{ object.name or 'n/a' }})</field>
+            <field name="email_to">fidelizacion@logyca.com</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="description">Nuevo Miembro Try and Buy - Periodo de Prueba</field>
+            <field name="body_html" type="html">
+              <div style="max-width:600px;margin:auto;background:#ffffff;font-family:Arial,Helvetica,sans-serif;color:#333;">
+                <!-- Header -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                  <tr>
+                    <td style="padding:16px 0;text-align:center;">
+                      <span style="display:inline-block;background:#00B398;color:#fff;font-weight:700;font-size:16px;padding:8px 16px;border-radius:10px;">
+                        Nuevo miembro Try &amp; Buy en periodo de prueba
+                      </span>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Intro -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                  <tr>
+                    <td style="padding:0 16px 8px 16px;">
+                      <p style="margin:0 0 10px;line-height:1.5;">
+                        Hola equipo de Fidelización,
+                      </p>
+                      <p style="margin:0;line-height:1.6;">
+                        Se ha registrado un nuevo miembro en modalidad <strong>Try &amp; Buy</strong>. A continuación el resumen:
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Datos del miembro -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;border:1px solid #eee;">
+                  <tr>
+                    <td style="padding:10px 12px;background:#EEEEEE;font-weight:bold;width:42%;">Miembro / Empresa</td>
+                    <td style="padding:10px 12px;"><t t-out="object.partner_id.name"/></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 12px;background:#EEEEEE;font-weight:bold;">NIT</td>
+                    <td style="padding:10px 12px;"><t t-out="object.partner_id.vat"/></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 12px;background:#EEEEEE;font-weight:bold;">Email</td>
+                    <td style="padding:10px 12px;"><t t-out="object.partner_id.email"/></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 12px;background:#EEEEEE;font-weight:bold;">Teléfono</td>
+                    <td style="padding:10px 12px;"><t t-out="object.partner_id.phone"/></td>
+                  </tr>
+                </table>
+
+                <!-- Periodo de prueba -->
+                <!-- <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:12px;border:1px solid #eee;">
+                  <tr>
+                    <td style="padding:10px 12px;background:#EEEEEE;font-weight:bold;width:42%;">Inicio periodo de prueba</td>
+                    <td style="padding:10px 12px;">
+                      <t t-set="trial_start" t-value="getattr(object, 'date_init_member_test', False) or object.create_date"/>
+                      <t t-out="format_date(trial_start)"/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 12px;background:#EEEEEE;font-weight:bold;">Fin periodo de prueba</td>
+                    <td style="padding:10px 12px;">
+                      <t t-if="getattr(object, 'date_end_member_test', False)">
+                        <t t-out="format_date(object.date_end_member_test)"/>
+                      </t>
+                      <t t-if="not getattr(object, 'date_end_member_test', False)">
+                        3 meses desde el inicio
+                      </t>
+                    </td>
+                  </tr>
+                </table> -->
+
+                <!-- Acciones sugeridas -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:14px;">
+                  <tr>
+                    <td style="padding:0 16px;">
+                      <p style="margin:0 0 10px;line-height:1.6;">
+                        <strong>Acciones sugeridas:</strong>
+                      </p>
+                      <ul style="margin:0;padding-left:18px;line-height:1.6;">
+                        <li>Contactar al miembro para onboarding y activación de beneficios.</li>
+                        <li>Invitar a sesión personalizada:
+                          <a href="https://outlook.office365.com/book/ConocelosbeneficiosdetumembresaLOGYCA@logyca.com/" target="_blank" style="color:#00B398;text-decoration:none;"><u>Agendar</u></a>.
+                        </li>
+                        <li>Verificar documentación de membresía y segmentación.</li>
+                      </ul>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Footer simple -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:16px;">
+                  <tr>
+                    <td style="padding:12px 16px;color:#777;font-size:12px;text-align:center;border-top:1px solid #eee;">
+                      Notificación automática • LOGYCA
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </field>
+            <field name="report_template_ids" eval="[(4, ref('sale.action_report_saleorder'))]"/>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

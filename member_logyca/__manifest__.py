@@ -28,6 +28,7 @@
         'views/res_partner_view.xml',
         'views/sale_order_view.xml',
         'views/checkout_templates_view.xml',
+        'views/sale_order_loyalty_template.xml',
         'wizard/member_tyb_wizard_view.xml',
     ],
     'qweb': [
