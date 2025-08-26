@@ -25,7 +25,7 @@ access_logyca_payment_file,logyca.payment.file,model_logyca_payment_file,,1,1,1,
 access_logyca_flatfile_payroll,logyca.flatfile.payroll,model_logyca_flatfile_payroll,,1,1,1,1
 access_logyca_homologationfile_payroll,logyca.homologationfile.payroll,model_logyca_homologationfile_payroll,,1,1,1,1
 access_logyca_rvc_information,logyca.rvc_information,model_logyca_rvc_information,,1,1,1,1
-access_logyca_payment_information,logyca.payment.information,model_logyca_payment_information,,1,1,1,1
+access_logyca_payment_information,logyca.payment.information,base.group_user,1,1,1,1
 access_logyca_payment_methods,logyca.payment.methods,model_logyca_payment_methods,,1,1,1,1
 access_massive_invoicing_smlv,massive.invoicing.smlv,model_massive_invoicing_smlv,,1,1,1,1
 access_massive_invoicing_companies,massive.invoicing.companies,model_massive_invoicing_companies,,1,1,1,1
