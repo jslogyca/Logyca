@@ -37,9 +37,9 @@ class PaymentInformation(models.Model):
     _description = 'Información de pago'
 
     partner_id = fields.Many2one('res.partner', string='Cliente', ondelete='restrict', required=True)
-    move_name = fields.Char(string='N° Factura', required=True)
+    ref = fields.Char(string='N° Factura', required=True)
     move_id = fields.Many2one('account.move', string='Factura', compute='_account_move_id',readonly=True)
-    amount_total = fields.Float(string='Valor recaudado',required = True)
+    amount = fields.Float(string='Valor recaudado',required = True)
     way_to_pay = fields.Char(string='Código forma de pago', required=True)
     date = fields.Date(string='Fecha de pago')
     payment_completed = fields.Boolean(string='Pago procesado')
@@ -50,10 +50,10 @@ class PaymentInformation(models.Model):
             result.append((record.id, "Información de pago - {}".format(record.move_id.name)))
         return result    
     
-    @api.depends('move_name')
+    @api.depends('ref')
     def _account_move_id(self):
         for record in self:
-            obj_account_move = self.env['account.move'].search([('name', 'like', record.move_name),('commercial_partner_id.id','=',record.partner_id.id),('state','=','posted')])
+            obj_account_move = self.env['account.move'].search([('name', 'like', record.ref),('commercial_partner_id.id','=',record.partner_id.id),('state','=','posted')])
             record.move_id = obj_account_move.id
             #for move in obj_account_move:
             #record.move_id = move.id
