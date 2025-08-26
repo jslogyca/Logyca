@@ -35,15 +35,15 @@ class PaymentMethods(models.Model):
 class PaymentInformation(models.Model):
     _name = 'logyca.payment.information'
     _description = 'Información de pago'
-    
+
     partner_id = fields.Many2one('res.partner', string='Cliente', ondelete='restrict', required=True)
     move_name = fields.Char(string='N° Factura', required=True)
     move_id = fields.Many2one('account.move', string='Factura', compute='_account_move_id',readonly=True)
     amount_total = fields.Float(string='Valor recaudado',required = True)
     way_to_pay = fields.Char(string='Código forma de pago', required=True)
-    date_payment = fields.Date(string='Fecha de pago')
-    payment_completed = fields.Boolean(string='Pago procesado')    
-    
+    date = fields.Date(string='Fecha de pago')
+    payment_completed = fields.Boolean(string='Pago procesado')
+
     def name_get(self):
         result = []
         for record in self:            
@@ -79,18 +79,18 @@ class PaymentInformation(models.Model):
                     'partner_id': partner_id,
                     'journal_id': method.journal_convenio.id,
                     'payment_method_id': 1, # Manual
-                    'amount': self.move_id.amount_residual,
+                    'amount_total': self.move_id.amount_residual,
                     'currency_id': self.move_id.currency_id.id,
-                    'payment_date': self.date_payment,
+                    'date': self.date,
                     'communication': self.move_id.name,
                     'invoice_ids': [(6, 0, [self.move_id.id])],
                 }
                 obj_payment_id = self.env['account.payment'].create(payment)
-                move_payment = obj_payment_id.post()
+                obj_payment_id.post()
                 #Asignar el dato del recibo de pago
                 obj_bank = self.env['account.move.line'].search([('payment_id', '=', obj_payment_id.id)], limit=1)
                 x_receipt_payment = obj_bank.move_id.name
-                self.env['account.move'].search([('id', '=', self.move_id.id)]).write({'x_receipt_payment':x_receipt_payment})                
+                self.env['account.move'].search([('id', '=', self.move_id.id)]).write({'x_receipt_payment':x_receipt_payment})
         else:
             raise ValidationError(_("Pago ya procesado, por favor verificar"))
             
