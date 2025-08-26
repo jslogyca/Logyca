@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- SARLAFT Option List View -->
+        <record id="view_sarlaft_option_list" model="ir.ui.view">
+            <field name="name">sarlaft.option.list</field>
+            <field name="model">sarlaft.option</field>
+            <field name="arch" type="xml">
+                <list string="SARLAFT Option" editable="bottom">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="active"  optional="hide"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- SARLAFT Option Search View -->
+        <record id="view_sarlaft_option_search" model="ir.ui.view">
+            <field name="name">sarlaft.option.search</field>
+            <field name="model">sarlaft.option</field>
+            <field name="arch" type="xml">
+                <search string="SARLAFT Option">
+                    <field name="name" filter_domain="['|', ('name', 'ilike', self), ('description', 'ilike', self)]"/>
+                    <separator/>
+                    <filter name="active" string="Active"
+                            domain="[('active', '=', True)]"/>
+                    <filter name="inactive" string="Inactive"
+                            domain="[('active', '=', False)]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- SARLAFT Option Action -->
+        <record id="action_sarlaft_option" model="ir.actions.act_window">
+            <field name="name">SARLAFT Option</field>
+            <field name="res_model">sarlaft.option</field>
+            <field name="view_mode">list</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first SARLAFT option record
+                </p>
+                <p>
+                    Record SARLAFT options for tracking, for example: "No incident" or "With incident".
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

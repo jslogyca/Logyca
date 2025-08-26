@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- SARLAFT Tracking Menu -->
+        <menuitem id="menu_sarlaft_tracking_root"
+                  name="SARLAFT"
+                  parent="contacts.menu_contacts"
+                  sequence="10"
+                  groups="group_sarlaft_read"/>
+
+        <menuitem id="menu_sarlaft_tracking"
+                  name="Records"
+                  parent="menu_sarlaft_tracking_root"
+                  action="action_sarlaft_tracking"
+                  sequence="10"
+                  groups="group_sarlaft_read"/>
+
+        <menuitem id="menu_sarlaft_option"
+                  name="Options"
+                  parent="menu_sarlaft_tracking_root"
+                  action="action_sarlaft_option"
+                  sequence="10"
+                  groups="group_sarlaft_admin"/>
+
+    </data>
+</odoo>
