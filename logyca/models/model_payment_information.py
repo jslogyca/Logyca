@@ -55,9 +55,7 @@ class PaymentInformation(models.Model):
         for record in self:
             obj_account_move = self.env['account.move'].search([('name', 'like', record.ref),('commercial_partner_id.id','=',record.partner_id.id),('state','=','posted')])
             record.move_id = obj_account_move.id
-            #for move in obj_account_move:
-            #record.move_id = move.id
-                
+
     #Proceso de liquidación de Recaudo
     def create_collection_liquidation(self):
         if self.payment_completed == False:
@@ -65,12 +63,6 @@ class PaymentInformation(models.Model):
             obj_payment_method = self.env['logyca.payment.methods'].search([('way_to_pay', '=', self.way_to_pay),('company_id','=',self.move_id.company_id.id)])
 
             for method in obj_payment_method:
-                # -----------------1.Crear Pago
-                #Tercero
-                #partner_id = 0
-                #if method.partner_id:
-                #    partner_id = method.partner_id.id
-                #else:
                 partner_id = self.move_id.commercial_partner_id.id
                 #Pago
                 payment = {
@@ -83,7 +75,7 @@ class PaymentInformation(models.Model):
                     'currency_id': self.move_id.currency_id.id,
                     'date': self.date,
                     'ref': self.move_id.name,
-                    'invoice_ids': [(6, 0, [self.move_id.id])],
+                    'move_id': self.move_id.id,
                 }
                 obj_payment_id = self.env['account.payment'].create(payment)
                 obj_payment_id.post()
@@ -93,7 +85,7 @@ class PaymentInformation(models.Model):
                 self.env['account.move'].search([('id', '=', self.move_id.id)]).write({'x_receipt_payment':x_receipt_payment})
         else:
             raise ValidationError(_("Pago ya procesado, por favor verificar"))
-            
+
 #Pagos
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
