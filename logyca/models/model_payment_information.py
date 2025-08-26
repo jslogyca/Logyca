@@ -79,10 +79,10 @@ class PaymentInformation(models.Model):
                     'partner_id': partner_id,
                     'journal_id': method.journal_convenio.id,
                     'payment_method_id': 1, # Manual
-                    'amount_total': self.move_id.amount_residual,
+                    'amount': self.move_id.amount_residual,
                     'currency_id': self.move_id.currency_id.id,
                     'date': self.date,
-                    'communication': self.move_id.name,
+                    'ref': self.move_id.name,
                     'invoice_ids': [(6, 0, [self.move_id.id])],
                 }
                 obj_payment_id = self.env['account.payment'].create(payment)
