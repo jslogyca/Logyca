@@ -29,8 +29,9 @@
                             <field name="journal_id"/>
                             <field name="payment_method_line_id"/>
                             <field name="partner_id"/>
-                            <field name="amount_signed" sum="Total"/>
-                            <field name="amount_company_currency_signed" sum="Total"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount_signed" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Total"/>
+                            <field name="amount_company_currency_signed" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Total Company"/>
                             <field name="state"/>
                             <field name="ref"/>
                             <button name="action_read_payments" type="object" string="Asiento" class="float-end btn-secondary" />
