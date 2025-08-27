@@ -87,7 +87,11 @@ class PaymentInformation(models.Model):
                 # 3. Conciliación
                 self._reconcile_payment_with_invoice(obj_payment_id, self.move_id)
 
-                # 4. Asignar recibo de pago
+                # 4. Verificar si el pago está completo
+                if self._is_payment_complete(obj_payment_id, self.move_id):
+                    self.payment_completed = True
+
+                # 5. Asignar recibo de pago
                 obj_bank = self.env['account.move.line'].search(
                     [('payment_id', '=', obj_payment_id.id)],
                     limit=1
@@ -142,6 +146,15 @@ class PaymentInformation(models.Model):
             _logger.warning("Error en conciliación automática: %s", str(e))
             # No detener el proceso por errores de conciliación
             return False
+
+    def _is_payment_complete(self, payment, invoice):
+        """Verifica si el pago está completamente procesado y conciliado"""
+        return all([
+            invoice.payment_state == 'paid',  # Factura pagada
+            invoice.amount_residual == 0,     # Sin saldo pendiente
+            payment.state == 'posted',        # Pago confirmado
+            payment.is_reconciled,            # Pago conciliado
+        ])
 
 #Pagos
 class AccountPayment(models.Model):
