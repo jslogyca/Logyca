@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+from logging import getLogger
+
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
-from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 
+_logger = getLogger(__name__)
 
 # Modelo para guardar las formas de pago con su respectiva parametrizacion contable
 class PaymentMethods(models.Model):
@@ -76,14 +78,70 @@ class PaymentInformation(models.Model):
                     'date': self.date,
                     'ref': self.move_id.name
                 }
+                # 1. Crear el pago
                 obj_payment_id = self.env['account.payment'].create(payment)
+
+                # 2. Confirmar el pago (esto crea el asiento contable)
                 obj_payment_id.action_post()
-                #Asignar el dato del recibo de pago
-                obj_bank = self.env['account.move.line'].search([('payment_id', '=', obj_payment_id.id)], limit=1)
+
+                # 3. Conciliación
+                self._reconcile_payment_with_invoice(obj_payment_id, self.move_id)
+
+                # 4. Asignar recibo de pago
+                obj_bank = self.env['account.move.line'].search(
+                    [('payment_id', '=', obj_payment_id.id)],
+                    limit=1
+                )
                 x_receipt_payment = obj_bank.move_id.name
-                self.env['account.move'].search([('id', '=', self.move_id.id)]).write({'x_receipt_payment':x_receipt_payment})
+                self.env['account.move'].search(
+                    [('id', '=', self.move_id.id)]
+                ).write({
+                    'x_receipt_payment': x_receipt_payment
+                })
         else:
             raise ValidationError(_("Pago ya procesado, por favor verificar"))
+
+    def _reconcile_payment_with_invoice(self, payment, invoice):
+        """
+        Concilia automáticamente un pago con una factura
+
+        Args:
+            payment (account.payment): El objeto de pago creado
+            invoice (account.move): La factura a conciliar
+
+        Returns:
+            bool: True si la conciliación fue exitosa
+        """
+        try:
+            # PASO 1: Obtener todas las líneas contables relevantes
+            # Combinamos las líneas del pago y la factura
+            lines = (payment.move_id.line_ids | invoice.line_ids).filtered(
+                lambda l: l.account_id.account_type in ('asset_receivable', 'liability_payable')
+                        and not l.reconciled
+                        and l.partner_id == invoice.partner_id
+            )
+
+            # PASO 2: Verificar si hay líneas para conciliar
+            if not lines:
+                # No hay nada que conciliar (puede ser normal en algunos casos)
+                return True
+
+            # PASO 3: Agrupar por cuenta contable y conciliar
+            for account in lines.mapped('account_id'):
+                # Filtrar líneas de la cuenta específica
+                to_rec = lines.filtered(lambda l, a=account: l.account_id == a)
+
+                # Solo conciliar si hay al menos 2 líneas (débito y crédito)
+                if len(to_rec) >= 2:
+                    to_rec.reconcile()
+
+            return True
+
+        except Exception as e:
+            # Log del error para debugging
+            _logger.warning("Error en conciliación automática: %s", str(e))
+            # No detener el proceso por errores de conciliación
+            return False
 
 #Pagos
 class AccountPayment(models.Model):
@@ -253,6 +311,3 @@ class AccountPayment(models.Model):
                     if item[2].get('account_id') == obj_discount_account.id:
                         obj_move.write({'x_discount_payment':True})
             return all_move_vals
-        
-        
-            
