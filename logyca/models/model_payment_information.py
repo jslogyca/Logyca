@@ -77,7 +77,7 @@ class PaymentInformation(models.Model):
                     'ref': self.move_id.name
                 }
                 obj_payment_id = self.env['account.payment'].create(payment)
-                obj_payment_id.post()
+                obj_payment_id.action_post()
                 #Asignar el dato del recibo de pago
                 obj_bank = self.env['account.move.line'].search([('payment_id', '=', obj_payment_id.id)], limit=1)
                 x_receipt_payment = obj_bank.move_id.name
