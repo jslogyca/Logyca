@@ -232,14 +232,29 @@ class ResPartner(models.Model):
                 self.x_digit_verification = 0
 
     #---------------Search
+    # @api.model
+    # def name_search(self, name='', args=None, operator='ilike', limit=100):
+    #     if self._context.get('search_by_vat', False):
+    #         if name:
+    #             args = args if args else []
+    #             args.extend(['|', ['name', 'ilike', name], ['vat', 'ilike', name]])
+    #             name = ''
+    #     return super(ResPartner, self).name_search(name=name, args=args, operator=operator, limit=limit)
+
     @api.model
     def name_search(self, name='', args=None, operator='ilike', limit=100):
-        if self._context.get('search_by_vat', False):
-            if name:
-                args = args if args else []
-                args.extend(['|', ['name', 'ilike', name], ['vat', 'ilike', name]])
-                name = ''
-        return super(ResPartner, self).name_search(name=name, args=args, operator=operator, limit=limit)
+        """
+        Restringe la lista de selección (Many2one) a empresas 'raíz'
+        (partners sin parent_id). Si en el contexto viene
+        `show_partner_contacts=True`, NO aplica el filtro (útil para excepciones).
+        """
+        args = list(args or [])
+        if not self.env.context.get('show_partner_contacts', False):
+            args.append(('parent_id', '=', False))
+            # Si prefieres cubrir también empresas mal configuradas:
+            # args = expression.AND([args, ['|', ('is_company', '=', True), ('parent_id', '=', False)]])
+        return super().name_search(name=name, args=args, operator=operator, limit=limit)
+
 
     #-----------Validaciones
     @api.constrains('vat')
