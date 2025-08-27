@@ -74,8 +74,7 @@ class PaymentInformation(models.Model):
                     'amount': self.move_id.amount_residual,
                     'currency_id': self.move_id.currency_id.id,
                     'date': self.date,
-                    'ref': self.move_id.name,
-                    'move_id': self.move_id.id,
+                    'ref': self.move_id.name
                 }
                 obj_payment_id = self.env['account.payment'].create(payment)
                 obj_payment_id.post()
