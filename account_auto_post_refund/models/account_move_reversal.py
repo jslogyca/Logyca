@@ -15,6 +15,7 @@ class AccountMoveReversal(models.TransientModel):
             default_values = {
                 'ref': 'Reversión de: ' + move.name or '',
                 'date': self.date or fields.Date.context_today(self),
+                'invoice_date': move.invoice_date or fields.Date.context_today(self),
                 'journal_id': self.journal_id.id or move.journal_id.id,
             }
             default_values_list.append(default_values)
