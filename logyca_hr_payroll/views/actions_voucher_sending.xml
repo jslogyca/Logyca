@@ -1,0 +1,189 @@
+<odoo>
+    <data>
+        <!-- Proceso de generar archivo plano de pago nómina -->
+
+
+        <!-- Crear record rule para filtrar las compañias-->
+        <record id="rule_hr_voucher_sending_company" model="ir.rule">
+            <field name="name">Permisos compañia Comprobantes de nómina</field>
+            <field name="model_id" ref="model_hr_voucher_sending" />
+            <field name="domain_force">['|','|','|',('payslip_run_id.company_id','=',False),('payslip_run_id.company_id',
+                'in', company_ids),('payslip_id.company_id','=',False),('payslip_id.company_id',
+                'in', company_ids)]</field>
+        </record>
+
+        <record id="hr_voucher_sending_form" model="ir.ui.view">
+            <field name="name">Comprobantes de Nómina</field>
+            <field name="model">hr.voucher.sending</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="generate_voucher" 
+                                string="Generar Comprobantes" 
+                                type="object"
+                                class="btn-primary"
+                                data-hotkey="g"/>
+                        
+                        <button name="generate_voucher_failed" 
+                                string="Reprocesar Fallidos"
+                                type="object"
+                                invisible="not vouchers_failed_ids"
+                                data-hotkey="r"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Comprobantes de Nómina</h1>
+                        </div>
+                        
+                        <group>
+                            <field name="generation_type" widget="radio" options="{'horizontal': true}"/>
+                            <field name="subject" placeholder="Asunto del correo"/>
+                        </group>
+    
+                        <group>
+                            <field name="payslip_run_id" 
+                                   invisible="generation_type == 'individual'"
+                                   required="generation_type == 'lote'"
+                                   options="{'no_create': true}"/>
+                            <field name="employee_id" 
+                                   invisible="generation_type == 'lote'"
+                                   required="generation_type == 'individual'"
+                                   options="{'no_create': true}"/>
+                            <field name="payslip_id" 
+                                   invisible="generation_type == 'lote'"
+                                   required="generation_type == 'individual'"
+                                   options="{'no_create': true}"/>
+                        </group>
+    
+                        <!-- Alert para comprobantes fallidos -->
+                        <div invisible="not vouchers_failed_ids" role="alert" class="alert alert-warning">
+                            <div class="o_horizontal_separator">Atención</div>
+                            <p>Existen comprobantes que no se pudieron procesar. 
+                               Revise la pestaña de "Comprobantes Fallidos" para más detalles.</p>
+                        </div>
+    
+                        <notebook>
+                            <page string="Correos Enviados" name="sent_emails">
+                                <field name="mail_mail_ids" readonly="1" colspan="2">
+                                    <tree>
+                                        <field name="create_date" string="Fecha Envío"/>
+                                        <field name="subject" string="Asunto"/>
+                                        <field name="email_to" string="Destinatario"/>
+                                        <field name="recipient_ids" widget="many2many_tags"/>
+                                        <field name="state" decoration-success="state == 'sent'" 
+                                               decoration-warning="state == 'outgoing'"
+                                               decoration-danger="state == 'exception'"/>
+                                        <button name="send" string="Reenviar" type="object" 
+                                                icon="fa-paper-plane" class="btn btn-link"
+                                                invisible="state == 'sent'"/>
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="subject"/>
+                                                    <field name="email_to"/>
+                                                    <field name="email_from"/>
+                                                    <field name="recipient_ids" widget="many2many_tags"/>
+                                                </group>
+                                                <group>
+                                                    <field name="state"/>
+                                                    <field name="create_date"/>
+                                                    <field name="failure_reason" invisible="state != 'exception'"/>
+                                                </group>
+                                            </group>
+                                            <notebook>
+                                                <page string="Contenido" name="email_content">
+                                                    <field name="body_html" widget="html"/>
+                                                </page>
+                                                <page string="Adjuntos" name="attachments">
+                                                    <field name="attachment_ids"/>
+                                                </page>
+                                            </notebook>
+                                        </sheet>
+                                    </form>
+                                </field>
+                                <group class="oe_subtotal_footer">
+                                    <field name="mail_mail_count" string="Total Correos"/>
+                                    <field name="mail_mail_sent_count" string="Enviados"/>
+                                    <field name="mail_mail_failed_count" string="Fallidos"/>
+                                </group>
+                            </page>
+    
+                            <page string="Comprobantes Fallidos" name="failed_vouchers">
+                                <field name="vouchers_failed_ids" readonly="1" colspan="2">
+                                    <tree>
+                                        <field name="payslip_id"/>
+                                        <field name="description"/>
+                                        <field name="create_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    
+        <record id="hr_voucher_sending_tree" model="ir.ui.view">
+            <field name="name">Comprobantes de nómina</field>
+            <field name="model">hr.voucher.sending</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="create_date"/>
+                    <field name="generation_type"/>
+                    <field name="payslip_run_id"/>
+                    <field name="payslip_id"/>
+                    <field name="subject"/>
+                    <field name="create_uid" widget="many2one_avatar_user"/>
+                    <field name="mail_mail_count" string="Total Correos"/>
+                    <field name="mail_mail_sent_count" string="Enviados"/>
+                    <field name="mail_mail_failed_count" string="Fallidos"/>
+                </tree>
+            </field>
+        </record>
+    
+        <record id="hr_payslip_voucher_generation_search" model="ir.ui.view">
+            <field name="name">Búsqueda de Comprobantes</field>
+            <field name="model">hr.voucher.sending</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="subject"/>
+                    <field name="payslip_run_id"/>
+                    <field name="payslip_id"/>
+                    <field name="mail_mail_ids" string="Correos"/>
+                    <filter string="Lote" name="batch" domain="[('generation_type', '=', 'lote')]"/>
+                    <filter string="Individual" name="individual" domain="[('generation_type', '=', 'individual')]"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter string="Tipo de Generación" name="generation_type" 
+                                context="{'group_by': 'generation_type'}"/>
+                        <filter string="Lote de Nómina" name="payslip_run" 
+                                context="{'group_by': 'payslip_run_id'}"/>
+                        <filter string="Fecha Creación" name="create_date" 
+                                context="{'group_by': 'create_date:month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    
+        <record id="action_hr_voucher_sending" model="ir.actions.act_window">
+            <field name="name">Generación de Comprobantes</field>
+            <field name="res_model">hr.voucher.sending</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="hr_payslip_voucher_generation_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Genere comprobantes de nómina para sus empleados
+                </p>
+                <p>
+                    Puede generar comprobantes por lotes o individualmente y enviarlos por correo electrónico.
+                </p>
+            </field>
+        </record>
+        <menuitem name="Comprobantes de nómina" 
+                    id="logyca_hr_payroll.menu_payroll_voucher_sending" 
+                    parent="hr_payroll.menu_hr_payroll_payslips" 
+                    action="action_hr_voucher_sending" sequence="90"/>        
+    </data>
+</odoo>
+      

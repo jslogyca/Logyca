@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="hr_report_absenteeism_history_action" model="ir.actions.report">
+           <field name="name">Historico de Ausentismos</field>
+           <field name="model">hr.report.absenteeism.history</field>
+           <field name="report_type">qweb-pdf</field>
+           <field name="report_name">lavish_hr_payroll.hr_report_absenteeism_history</field>
+           <field name="report_file">lavish_hr_payroll.hr_report_absenteeism_history</field>
+           <field name="binding_model_id" ref="model_hr_report_absenteeism_history"/>
+        </record>
+</odoo>

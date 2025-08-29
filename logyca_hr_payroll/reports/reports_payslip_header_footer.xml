@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="liquidacion_template_format" model="report.paperformat">
+            <field name="name">Liquidaciones Formato</field>
+            <field name="default" eval="True"/>
+            <field name="format">Letter</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">20</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="report_liquidacion_template_action" model="ir.actions.report">
+           <field name="name">Comprobante de Nómina</field>
+           <field name="model">hr.payslip</field>
+           <field name="report_type">qweb-pdf</field>
+           <field name="report_name">lavish_hr_payroll.reports_payslip_header_footer_template_final</field>
+           <field name="report_file">lavish_hr_payroll.reports_payslip_header_footer_template_final</field>
+           <field name="binding_model_id" ref="model_hr_payslip"/>
+        </record>
+
+        <record id="report_liquidacion_template_action" model="ir.actions.report">
+            <field name="paperformat_id" ref="lavish_hr_payroll.liquidacion_template_format"/>
+        </record>
+        
+</odoo>

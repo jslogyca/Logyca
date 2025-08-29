@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_voucher_sending,hr.voucher.sending,model_hr_voucher_sending,hr_payroll.group_hr_payroll_user,1,1,1,1
+access_hr_voucher_sending_failed,hr.voucher.sending.failed,model_hr_voucher_sending_failed,hr_payroll.group_hr_payroll_user,1,1,1,1

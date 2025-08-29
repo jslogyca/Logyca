@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>  
+    <template id="report_liquidacion_cesantias_prima_document">
+        <t t-set="o" t-value="o.with_context(lang=o.employee_id.work_contact_id.lang or o.env.lang)"/>
+        <div class="row">
+            <t t-if="o.struct_id.process == 'prima'">
+                <div class="col-md-12 text-center">
+                    <strong>LIQUIDACION DE PRIMA</strong>
+                </div>
+            </t>
+            <t t-if="o.struct_id.process == 'cesantias'">
+                <div class="col-md-12 text-center">
+                    <strong>LIQUIDACION DE CESANTÍAS</strong>
+                </div>
+            </t>
+            <t t-if="o.struct_id.process == 'intereses_cesantias'">
+                <div class="col-md-12 text-center">
+                    <strong>LIQUIDACION DE INTERESES DE CESANTÍAS</strong>
+                </div>
+            </t>
+        </div>
+        <div class="page" style="font-style: normal; font-size: 12px;">
+            <div class="oe_structure"/>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-6">
+                    <table style="width:100%;">
+                        <tr style="border: 1px solid black;">
+                            <td>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;"><b>
+                                    Identidad</b> :<span t-field="o.employee_id.identification_id"/></p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;"><b>Empleado</b>
+                                    :<span t-field="o.employee_id.name"/></p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;"><b>Fecha
+                                    Ingreso</b> :<span t-field="o.contract_id.date_start"/></p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;"><b>Cargo</b>
+                                    :<span t-field="o.employee_id.job_id.name"/></p>
+                            </td>
+                            <td>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;"><b>Tipo
+                                    contrato</b> :<span t-field="o.contract_id.contract_type"/></p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;"><b>Sucursal</b>
+                                    :<span t-field="o.employee_id.branch_id.name"/></p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;"><b>Salario
+                                    basico</b> :<span t-field="o.contract_id.wage"/></p>
+                            </td>
+                            <td>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;"><b>Desde</b>
+                                    :<span t-field="o.date_from"/></p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;"><b>Hasta</b>
+                                    :<span t-field="o.date_to"/></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-9">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Concepto</th>
+                                <th>Base</th>
+                                <th>Cantidad</th>
+                                <th class="text-right">Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody">
+                            <t t-set="value_neto" t-value="0"> </t>
+                            <tr t-foreach="o.line_ids" t-as="l">
+                                <span t-if="not l.category_id.name in ['Neto','Bruto']">
+                                    <td>
+                                        <span t-field="l.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="l.amount_base" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.company_id.currency_id}"/>
+                                    </td>
+                                    <td>
+                                        <t t-if="l.salary_rule_id.display_days_worked == True">
+                                            <span t-esc="sum([i.number_of_days for i in o.worked_days_line_ids.filtered(lambda x: x.code == 'WORK100')])"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-field="l.quantity"/>
+                                        </t>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="l.total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.company_id.currency_id}"/>
+                                    </td>
+                                    <t t-set="value_neto" t-value="value_neto + l.total"> </t>
+                                </span>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-6">
+                    <table class="table">
+                        <tr>
+                            <td style="width: 70%">
+                                <p align="justify">
+                                    <span t-if="cp_template.caption" t-esc="cp_template.caption"/>
+                                </p>
+                            </td>
+                            <td style="width: 30%">
+                                <table class="table table-condensed">
+                                    <tr class="border-black">
+                                        <td>
+                                            <strong>DEVENGOS</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="o.line_ids.filtered(lambda line: line.code == 'TOTALDEV').total" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>DEDUCCIONES</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="o.line_ids.filtered(lambda line: line.code == 'TOTALDED').total" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-black">
+                                        <td>
+                                            <strong>NETO A PAGAR</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="o.line_ids.filtered(lambda line: line.code == 'NET').total" t-options="{'widget': 'monetary', 'precision': 0, 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-justify" colspan="2">
+                                            <span t-esc="o.contract_id.get_amount_text(o.line_ids.filtered(lambda line: line.code == 'NET').total).lower().capitalize()"/>
+                                            pesos </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="report_liquidacion_cesantias_prima">
+         <t t-foreach="docs" t-as="o">
+            <t t-set="inside_foreach_docs" t-value="o"/>
+            <t t-call="lavish_hr_payroll.report_liquidacion_cesantias_prima_document" t-lang="o.employee_id.work_contact_id.lang"/>
+        </t>
+    </template>
+
+</odoo>

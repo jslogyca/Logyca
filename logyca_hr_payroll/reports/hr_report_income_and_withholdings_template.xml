@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="hr_report_income_and_withholdings_document">
+        <t t-call="web.html_container">
+            <t t-foreach="inside_foreach_docs or docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <style>
+                        th, td{
+                        padding: 0px !important;
+                        border: 1px solid #335E8B;
+                        }
+                        .th_report{
+                        padding: 0px 0px 20px 0px !important;
+                        }
+                        .border_report{
+                        border: 1px solid #335E8B;
+                        }
+                        .width_items{
+                        width:2% !important;
+                        text-align:center;
+                        }
+                        .width_values{
+                        width:15% !important;
+                        }
+                        .rotate {
+                        text-align: center;
+                        white-space: nowrap;
+                        vertical-align: middle;
+                        width: 1.5em;
+                        }
+                        .rotate div {
+                        -moz-transform: rotate(-90.0deg); /* FF3.5+ */
+                        -o-transform: rotate(-90.0deg); /* Opera 10.5 */
+                        -webkit-transform: rotate(-90.0deg); /* Saf3.1+, Chrome */
+                        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083); /* IE6,IE7 */
+                        -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)"; /* IE8 */
+                        margin-left: -10em;
+                        margin-right: -10em;
+                        }
+                    </style>
+                    <span t-esc="o.struct_report_income_and_withholdings"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="hr_report_income_and_withholdings">
+        <t t-foreach="docs" t-as="o">
+            <t t-set="inside_foreach_docs" t-value="o"/>
+            <t t-call="lavish_hr_payroll.hr_report_income_and_withholdings_document"/>
+        </t>
+    </template>
+</odoo>
