@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="report_payroll_lavish_action" model="ir.actions.report">
+           <field name="name">Informe de Liquidación</field>
+           <field name="model">hr.payroll.report.lavish.filter</field>
+           <field name="report_type">qweb-pdf</field>
+           <field name="report_name">lavish_hr_payroll.report_payroll_lavish</field>
+           <field name="report_file">lavish_hr_payroll.report_payroll_lavish</field>
+           <field name="binding_model_id" ref="lavish_hr_payroll.model_hr_payroll_report_lavish_filter"/>
+        </record>
+
+        <template id="lavish_hr_payroll.report_payroll_lavish">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.basic_layout">
+                        <style>
+                            #table-report {
+                                font-size: 6px;
+                            }
+                        </style>
+                        <div class="page">
+                            <span t-esc="doc.pdf_report_payroll"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <record id="report_payroll_lavish_paperformat" model="report.paperformat">
+            <field name="name">Formato Informe de Liquidación lavish</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">1</field>
+            <field name="margin_bottom">1</field>
+            <field name="margin_left">1</field>
+            <field name="margin_right">1</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">80</field>
+        </record>
+
+        <record id="report_payroll_lavish_action" model="ir.actions.report">
+            <field name="paperformat_id" ref="lavish_hr_payroll.report_payroll_lavish_paperformat"/>
+        </record>
+
+    </data>
+</odoo>

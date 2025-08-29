@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>  
+<template id="report_liquidacion_final_document">
+        <head>
+            <style>
+                .clearfix:after {
+                content: "";
+                display: table;
+                clear: both;
+                }
+                .table-wrapper {
+                width: 50%;
+                float: left;
+                }
+            </style>
+        </head>
+        <t t-set="o" t-value="o.with_context(lang=o.employee_id.work_contact_id.lang or o.env.lang)"/>
+        <div class="row" style="text-align: center;">
+            <div class="col-3">
+                <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 90px; float: center;  " alt="Logo"/>
+            </div>
+            <div class="col-6">
+                <h6>
+                    <strong>LIQUIDACION DE CONTRATO LABORAL</strong>
+                </h6>
+            </div>
+        </div>
+        <div class="page" style="font-style: normal; font-size: 12px;">
+            <div class="oe_structure"/>
+            <div class="row">
+                <style>
+                    th, td{
+                    padding-bottom: 1px !important;
+                    padding-top: 1px !important;
+                    }
+                </style>
+                <div class="col-md-6 col-md-offset-6" style="background-color: #f8f9fa; padding: 10px; border-radius: 10px;">
+                    <table style="width:100%;">
+                        <tr>
+                            <td>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;">
+                                    <b>Empleado</b> : <span t-field="o.employee_id.name"/>
+                                </p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;">
+                                    <b>Identidad</b> : <span t-field="o.employee_id.identification_id"/>
+                                </p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;">
+                                    <b>Fecha Ingreso</b> : <span t-field="o.contract_id.date_start"/>
+                                </p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;">
+                                    <b>Fecha retiro</b> : <span t-field="o.date_liquidacion"/>
+                                </p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;">
+                                    <b>Dias Laborados</b> : <span t-esc="o.dias360(o.contract_id.date_start,o.date_liquidacion)"/>
+                                </p>
+                            </td>
+                            <td>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;">
+                                    <b>Tipo contrato</b> : <span t-field="o.contract_id.contract_type"/>
+                                </p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;">
+                                    <b>Fecha Ult cesantias</b> : <span t-field="o.date_cesantias"/>
+                                </p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;">
+                                    <b>Fecha Ult prima</b> : <span t-field="o.date_prima"/>
+                                </p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;">
+                                    <b>Fecha Ult vacaciones</b>: <span t-field="o.date_vacaciones"/>
+                                </p>
+                            </td>
+                            <td>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;">
+                                    <b>Sucursal</b> : <span t-field="o.employee_id.branch_id.name"/>
+                                </p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;">
+                                    <b>Salario basico</b> : <span t-field="o.contract_id.wage"/>
+                                </p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;">
+                                    <b>Cargo</b> : <span t-field="o.employee_id.job_id.name"/>
+                                </p>
+                                <p style="line-height:15px;margin:10px;font-size: 100%;">
+                                    <b>Motivo retiro</b> : <span t-field="o.reason_retiro"/>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <br/>
+            <!--<h6 style="text-align:center;">
+                <b>RESUMEN DEL PAGO</b>
+            </h6>
+            <table class="table table-sm table-bordered" style="border-radius: 5px; -webkit-border-radius: 5px;">
+                <thead>
+                    <tr class="font-weight-bold bg-light" style="border-radius: 5px; -webkit-border-radius: 5px;">
+                        <th>CONCEPTO</th>
+                        <th>CANT.</th>
+                        <th>TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="sorted_lines" t-value="sorted(o.line_ids, key=lambda l: l.salary_rule_id.sequence)"/>
+                    <t t-set="current_category" t-value="''"/>
+                    <t t-set="total_quantity" t-value="0"/>
+                    <t t-set="total_value" t-value="0"/>
+                    <t t-set="grand_total_quantity" t-value="0"/>
+                    <t t-set="grand_total_value" t-value="0"/>
+                    <t t-foreach="sorted_lines" t-as="line">
+                        <span t-if="not line.category_id.name in ['Neto','Bruto'] and line.salary_rule_id.appears_on_payslip">
+                            <t t-if="line.category_id.name != current_category">
+                                <t t-if="current_category and current_category not in ['Neto', 'Bruto']">
+                                    <tr t-attf-class="{{ 'font-weight-bold bg-light' if current_category.upper().startswith('TOTAL') else '' }}">
+                                        <td style="width: 20%">
+                                            <span t-esc="current_category"/>
+                                        </td>
+                                        <td style="width: 7%">
+                                            <span t-esc="total_quantity"/>
+                                        </td>
+                                        <td style="width: 14%">
+                                            <span t-esc="total_value" t-options="{'widget': 'monetary', 'precision': 0, 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-set="grand_total_quantity" t-value="grand_total_quantity + (total_quantity if total_value &gt;= 0 else -total_quantity)"/>
+                                <t t-set="grand_total_value" t-value="grand_total_value + (total_value if total_value &gt;= 0 else -total_value)"/>
+                                <t t-set="current_category" t-value="line.category_id.name"/>
+                                <t t-set="total_quantity" t-value="0"/>
+                                <t t-set="total_value" t-value="0"/>
+                            </t>
+                            <t t-set="total_quantity" t-value="total_quantity + line.quantity"/>
+                            <t t-set="total_value" t-value="total_value + line.total"/>
+                        </span>
+                    </t>
+                </tbody>
+                <tfoot class="font-weight-bold bg-light">
+                    <tr>
+                        <td>
+                            <b>TOTAL A PAGAR</b>
+                        </td>
+                        <td/>
+                        <td>
+                            <b>
+                                <span t-esc="o.line_ids.filtered(lambda line: line.code == 'NET').total +  o.line_ids.filtered(lambda line: line.code == 'NETO').total" t-options="{'widget': 'monetary', 'precision': 0, 'display_currency': o.company_id.currency_id}"/>
+                            </b>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>-->
+            <h6 style="text-align:center;">
+                <b>DETALLE NÓMINA</b>
+            </h6>
+            <t t-set="groups" t-value="{                 'Devengos y Sueldo': ('DEV_SALARIAL', 'BASIC','COMISIONES','INDEM'),                 'Deducciones y Retenciones': ('DEDUCCIONES', 'EM','SSOCIAL'),                 'Horas extras y recargos': ('HEYREC',),                 'Devengos No Salariales': ('DEV_NO_SALARIAL','AUX'),                 'Licencias e Incapacidades': ('LICENCIA_MATERNIDAD', 'LICENCIA_NO_REMUNERADA', 'AUS','ACCIDENTE_TRABAJO','LICENCIA_REMUNERADA', 'INCAPACIDAD'),                 'Prestaciones' : ('PRESTACIONES_SOCIALES','PRIMA')             }"/>
+            <div class="table-container" style="border-radius: 5px;">
+                <t t-foreach="groups.items()" t-as="group">
+                    <t t-set="group_name" t-value="group[0]"/>
+                    <t t-set="group_categories" t-value="group[1]"/>
+                    <t t-set="group_lines" t-value="o.line_ids.filtered(lambda l: l.category_id.code in group_categories  and l.salary_rule_id.appears_on_payslip)"/>
+                    <t t-if="group_lines">
+                        <div class="table-wrapper">
+                            <h6 style="text-align:center;">
+                                <b t-esc="group_name"/>
+                            </h6>
+                            <table class="table table-sm table-bordered" style="border-radius: 5px;">
+                                <thead class="font-weight-bold bg-light">
+                                    <tr class="font-weight-bold bg-light">
+                                        <th>CONCEPTO</th>
+                                        <th>CANT.</th>
+                                        <th>TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="border-radius: 5px;">
+                                    <tr t-foreach="group_lines" t-as="line">
+                                        <td style="width: 20%">
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        <td style="width: 7%">
+                                            <t t-if="line.salary_rule_id.display_days_worked == True">
+                                                <span t-esc="sum([i.number_of_days for i in o.worked_days_line_ids.filtered(lambda x: x.code == 'WORK100')])"/>
+                                            </t>
+                                            <t t-elif="line.code == 'VACCONTRATO'">
+                                                <span t-esc="line.quantity*0.0417"/>
+                                            </t>
+                                            <t t-else="">
+                                                <span t-field="line.quantity"/>
+                                            </t>
+                                        </td>
+                                        <td style="width: 14%">
+                                            <span t-esc="line.total" t-options="{'widget': 'monetary', 'precision': 0, 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="font-weight-bold bg-light">
+                                        <td>
+                                            <b>Total</b>
+                                        </td>
+                                        <td/>
+                                        <td>
+                                            <b>
+                                                <span t-esc="sum(line.total for line in group_lines)" t-options="{'widget': 'monetary', 'precision': 0, 'display_currency': o.company_id.currency_id}"/>
+                                            </b>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-6">
+                    <table class="table">
+                        <tr>
+                            <td style="width: 70%">
+                                <!--<p align="justify">
+                                    <span t-if="cp_template.caption" t-esc="cp_template.caption"/>
+                                </p>-->
+                            </td>
+                            <td style="width: 30%">
+                                <table class="table table-condensed">
+                                    <tr class="border-black" style="font-size:15px;">
+                                        <td>
+                                            <strong>NETO A PAGAR</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="o.line_ids.filtered(lambda line: line.code == 'NET').total +  o.line_ids.filtered(lambda line: line.code == 'NETO').total" t-options="{'widget': 'monetary', 'precision': 0, 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-justify" colspan="2" style="font-size:15px;">
+                                            <span t-esc="o.contract_id.get_amount_text(o.line_ids.filtered(lambda line: line.code == 'NET').total + o.line_ids.filtered(lambda line: line.code == 'NETO').total).lower().capitalize()"/>
+                                            pesos </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="report_liquidacion_final">
+         <t t-foreach="docs" t-as="o">
+            <t t-set="inside_foreach_docs" t-value="o"/>
+            <t t-call="lavish_hr_payroll.report_liquidacion_final_document" t-lang="o.employee_id.work_contact_id.lang"/>
+        </t>
+    </template>
+
+</odoo>

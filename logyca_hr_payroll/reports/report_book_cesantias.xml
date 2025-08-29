@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="book_cesantias" model="report.paperformat">
+            <field name="name">Libro Cesantías</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">60</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>    
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="report_book_cesantias_action" model="ir.actions.report">
+           <field name="name">Libro de Cesantías</field>
+           <field name="model">hr.contract</field>
+           <field name="report_type">qweb-pdf</field>
+           <field name="report_name">lavish_hr_payroll.report_book_cesantias</field>
+           <field name="report_file">lavish_hr_payroll.report_book_cesantias</field>
+           <field name="binding_model_id" ref="model_hr_contract"/>
+        </record>
+
+        <record id="report_book_cesantias_action" model="ir.actions.report">
+            <field name="paperformat_id" ref="lavish_hr_payroll.book_cesantias"/>
+        </record>
+</odoo>
