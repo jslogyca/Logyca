@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_book_cesantias_document">
+        <t t-call="web.html_container">
+            <t t-foreach="inside_foreach_docs or docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <strong>LIBRO DE CESANTÍAS</strong>
+                        </div>
+                    </div>
+                    <br/><br/>                    
+                    <div class="page" style="font-style: normal; font-size: 12px;">
+                        <div class="oe_structure">
+                            <div class="row">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr style="border:none;">
+                                            <th colspan="7" style="border:none;">
+                                                <span t-esc="o.employee_id.identification_id"/> - <span t-esc="o.employee_id.name"/>
+                                            </th>                                            
+                                        </tr>                                        
+                                        <tr style="border: 1px solid black;">
+                                            <td style="width: 10%">
+                                                <b>Causación Inicial</b>
+                                            </td>
+                                            <td style="width: 10%">
+                                                <b>Causación final</b>
+                                            </td>
+                                            <td style="width: 10%">
+                                                <b>Fecha de corte</b>
+                                            </td>
+                                            <td style="width: 10%">
+                                                <b>Unidades Trabajadas</b>
+                                            </td>
+                                            <td style="width: 10%">
+                                                <b>Valor Base</b>
+                                            </td>
+                                            <td style="width: 10%">
+                                                <b>Valor Liquidado</b>
+                                            </td>
+                                            <td style="width: 10%">
+                                                <b>Valor Int. Cesantías</b>
+                                            </td>                                        
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="o.get_info_book_cesantias()" t-as="info">
+                                            <td><span t-esc="info.initial_accrual_date"/></td>
+                                            <td><span t-esc="info.final_accrual_date"/></td>
+                                            <td><span t-esc="info.settlement_date"/></td>                                            
+                                            <td><span t-esc="info.time"/></td>
+                                            <td><span t-esc="info.base_value"/></td>
+                                            <td><span t-esc="info.severance_value"/></td>
+                                            <td><span t-esc="info.severance_interest_value"/></td>                                            
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_book_cesantias">
+        <t t-foreach="docs" t-as="o">
+            <t t-set="inside_foreach_docs" t-value="o"/>
+            <t t-call="lavish_hr_payroll.report_book_cesantias_document"/>
+        </t>
+    </template>
+</odoo>

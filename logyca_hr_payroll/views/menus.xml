@@ -1,0 +1,94 @@
+<odoo>
+    <data>
+        <!-- Actualizar entradas de trabajo -->
+        <menuitem name="Actualizar entradas de trabajo" id="lavish_hr_payroll.menu_payroll_refresh_work_entry" parent="hr_work_entry_contract_enterprise.menu_hr_payroll_work_entries_root" action="action_hr_work_entry_refresh" sequence="60"/>
+        <!-- Menu TIPOS HORAS EXTRA -->
+        <menuitem name="Tipos horas extra" id="lavish_hr_employee.menu_type_overtime" parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration" action="hr_type_overtime_action"/>
+        <!-- Menu NOVEDADES -->
+        <menuitem name="Novedades" id="lavish_hr_payroll.menu_payroll_lavish_novelties" parent="hr_payroll.menu_hr_payroll_payslips" sequence="60"/>
+            <!-- Menu POR CONCEPTOS DIFERENTES -->
+            <menuitem name="Por conceptos diferentes" id="lavish_hr_payroll.menu_novelties_different_concepts" parent="lavish_hr_payroll.menu_payroll_lavish_novelties" sequence="1" action="action_hr_novelties_different_concepts"/>                        
+            <!-- Menu HORAS EXTRA -->
+            <menuitem id="menu_hr_novelty_massive_creation"
+              name="Creación Masiva de novedades"
+              parent="lavish_hr_payroll.menu_payroll_lavish_novelties"
+              action="action_hr_novelty_massive_wizard"
+              sequence="10"/>
+            <menuitem name="Horas extra" id="lavish_hr_payroll.menu_overtime" parent="lavish_hr_payroll.menu_payroll_lavish_novelties" sequence="2" action="hr_overtime_action"/>
+            <menuitem id="menu_hr_loans_root"
+                    name="Préstamos"
+                    parent="lavish_hr_payroll.menu_payroll_lavish_novelties" 
+                    sequence="75"/>
+            <menuitem id="menu_hr_loans"
+                name="Préstamos"
+                parent="menu_hr_loans_root"
+                action="action_hr_prestamo_request"
+                sequence="1"/>
+            <menuitem id="menu_loan_category"
+                name="Categorías"
+                parent="menu_hr_loans_root"
+                action="action_loan_category"
+                sequence="2"/>
+
+            <!-- Menu NOVEDADES INDEPENDIENTES -->
+            <!-- <menuitem name="Independientes" id="lavish_hr_payroll.menu_novelties_independents" parent="lavish_hr_payroll.menu_payroll_lavish_novelties" sequence="3" action="action_hr_novelties_independents"/> -->
+        <!-- Menu PRESTAMOS -->
+                <!-- Menu RETENCION EN LA FUENTE -->
+        <menuitem name="Ausencias" id="menu_hr_holidays_root" parent="hr_payroll.menu_hr_payroll_payslips"  sequence="6"/>
+        <menuitem name="Ausencias"
+                  id="menu_hr_holidays_leave_extender"
+                  parent="lavish_hr_payroll.menu_hr_holidays_root"
+                  action="action_hr_holidays_views"
+                  sequence="10"/>
+        <menuitem name="Retención" id="lavish_hr_payroll.menu_retention" parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration"/>
+        <menuitem name="Cálculo RteFte Ordinario" id="lavish_hr_payroll.menu_calculation_rtefte_ordinary" parent="lavish_hr_payroll.menu_retention" action="action_hr_calculation_rtefte_ordinary" sequence="0"/>                                       
+        <menuitem name="Tipos de impuesto" id="lavish_hr_payroll.menu_type_tax_retention" parent="lavish_hr_payroll.menu_retention" action="action_hr_type_tax_retention" sequence="1"/>                                
+        <menuitem name="Reglas de deducción tributaria" id="lavish_hr_payroll.menu_concepts_deduction_retention" parent="lavish_hr_payroll.menu_retention" action="action_hr_concepts_deduction_retention" sequence="2"/> 
+        <!-- Menu Archivo plano de pago de nómina - Copia de seguridad -->
+        <!-- <menuitem name="Copias de seguridad" id="lavish_hr_payroll.menu_backups" parent="lavish_erp.menu_root" sequence="10"/>                                 -->
+        <!-- <menuitem name="Archivo plano de pago de nómina" id="lavish_hr_payroll.menu_payroll_flat_file_backup" parent="lavish_hr_payroll.menu_backups" action="action_lavish_payroll_flat_file_backup" sequence="1"/>                                 -->
+        <!-- Menu Informe de nómina lavish -->
+        <menuitem name="Liquidación" id="lavish_hr_payroll.menu_payroll_report" parent="hr_payroll.menu_hr_payroll_report" action="action_hr_payroll_report_lavish_filter" sequence="20"/>
+        <menuitem name="Reporte acumulados" id="lavish_hr_payroll.hr_accumulated_reports" parent="hr_payroll.menu_hr_payroll_report" action="action_hr_accumulated_reports" sequence="21"/>
+        <!-- Elemento de menú para Generar Reporte -->
+        <menuitem id="menu_hr_report_2276_exogena_wizard" name="Generar Reporte Exógena 2276" parent="hr_payroll.menu_hr_payroll_report" action="action_hr_report_2276_exogena_wizard" sequence="20"/>        <!-- <menuitem name="Reporte Consolidados" id="lavish_hr_payroll.hr_consolidated_reports" parent="hr_payroll.menu_hr_payroll_report" action="action_hr_consolidated_reports" sequence="21"/> -->
+        <menuitem name="Reporte libro de vacaciones" id="lavish_hr_payroll.hr_vacation_book" parent="hr_payroll.menu_hr_payroll_report" action="action_hr_vacation_book_reports" sequence="21"/>
+        <menuitem name="Detalle de Nómina" id="lavish_hr_payroll.menu_details_payrolls" parent="hr_payroll.menu_hr_payroll_report" action="action_hr_payslip_line_report" sequence="21"/>
+        <menuitem name="Reporte Auditoria" id="lavish_hr_payroll.hr_auditing_reports" parent="hr_payroll.menu_hr_payroll_report" action="action_hr_auditing_reports" sequence="22"/>
+        <!-- Menus de Nóminas -->
+        <menuitem name="Liquidaciones" id="lavish_hr_payroll.menu_payroll_initial" parent="hr_payroll.menu_hr_payroll_payslips" sequence="0"/>
+            <menuitem name="Lotes" id="hr_payroll.menu_hr_payslip_run" parent="lavish_hr_payroll.menu_payroll_initial" sequence="1"/>
+            <menuitem name="A pagar" id="hr_payroll.menu_hr_payroll_employee_payslips_to_pay" parent="lavish_hr_payroll.menu_payroll_initial" sequence="2"/>
+            <menuitem name="Todas las Nóminas" id="hr_payroll.menu_hr_payroll_employee_payslips" parent="lavish_hr_payroll.menu_payroll_initial" sequence="3"/>
+        <!-- Menu Historicos -->
+        <menuitem name="Historicos" id="lavish_hr_payroll.menu_payroll_history" parent="hr_payroll.menu_hr_payroll_payslips" sequence="1"/>            
+            <menuitem name="Historico de vacaciones" id="lavish_hr_payroll.menu_payroll_history_vacation" parent="lavish_hr_payroll.menu_payroll_history" action="action_hr_vacation" sequence="1"/>
+            <menuitem name="Historico de cesantías" id="lavish_hr_payroll.menu_payroll_hr_history_cesantias" parent="lavish_hr_payroll.menu_payroll_history" action="hr_history_cesantias_action" sequence="3"/>
+            <menuitem name="Historico de prima" id="lavish_hr_payroll.menu_payroll_hr_history_prima" parent="lavish_hr_payroll.menu_payroll_history" action="hr_history_prima_action" sequence="5"/>
+        <!-- Menu Pagos -->
+        <menuitem name="Pagos" id="lavish_hr_payroll.menu_payroll_payment" parent="hr_payroll.menu_hr_payroll_payslips" sequence="2"/>
+            <menuitem name="Archivo plano de pago" id="lavish_hr_payroll.menu_payroll_flat_file" parent="lavish_hr_payroll.menu_payroll_payment" action="action_hr_payroll_flat_file" sequence="1"/> 
+            <menuitem name="Contabilización del pago" id="lavish_hr_payroll.menu_payroll_posting" parent="lavish_hr_payroll.menu_payroll_payment" action="action_hr_payroll_posting" sequence="2"/> 
+        <!-- Menu Pagos Contabilidad -->
+        <menuitem name="Pagos Nómina" id="lavish_hr_payroll.menu_payroll_payment_account" parent="account.menu_finance_payables" sequence="35"/>
+            <menuitem name="Archivo plano de pago" id="lavish_hr_payroll.menu_payroll_flat_file_account" parent="lavish_hr_payroll.menu_payroll_payment_account" action="action_hr_payroll_flat_file" sequence="1"/> 
+            <menuitem name="Contabilización del pago" id="lavish_hr_payroll.menu_payroll_posting_account" parent="lavish_hr_payroll.menu_payroll_payment_account" action="action_hr_payroll_posting" sequence="2"/> 
+
+        <!-- Menu Comprobantes de nómina -->
+        <menuitem name="Comprobantes de nómina" id="lavish_hr_payroll.menu_payroll_voucher_sending" parent="hr_payroll.menu_hr_payroll_payslips" action="action_hr_voucher_sending" sequence="3"/>
+        <!-- Menu Acumulados de nómina -->
+        <menuitem name="Acumulados" id="lavish_hr_payroll.menu_payroll_accumulated" parent="hr_payroll.menu_hr_payroll_payslips" action="action_hr_accumulated_payroll" sequence="4"/>
+        <!-- Menu Diagnosticos Ausencias -->
+        <menuitem name="Diagnosticos Ausencias" id="lavish_hr_payroll.menu_hr_leave_diagnostic" parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration" action="action_hr_leave_diagnostic"/>
+        <!-- Menu Configuración plantillas reportes de liquidación-->
+        <menuitem name="Configuración plantillas reportes de liquidación" id="lavish_hr_payroll.menu_hr_payslip_reports_template" parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration" action="action_hr_payslip_reports_template"/>
+        <!-- Elemento de menú para Configuración de Reglas -->
+        <menuitem id="menu_hr_config_rule_exogena" name="Configuración de Reglas Exógena 2276" parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration"  action="action_hr_config_rule_exogena" sequence="10"/>
+        <!-- Reporte Historico de Ausentismos-->
+        <menuitem name="Historico de Ausentismos" id="lavish_hr_payroll.hr_report_absenteeism_history_template" parent="hr_holidays.menu_hr_holidays_report" action="action_hr_report_absenteeism_history" sequence="5"/>
+        <!-- Menu traslado de entidades-->
+        <menuitem name="Traslado de Entidades" id="lavish_hr_payroll.hr_transfers_of_entities" parent="hr_payroll.menu_hr_payroll_employees_root" action="action_hr_transfers_of_entities" sequence="60"/>
+        <!-- Menu Certificado ingreso y retenciones-->
+        <menuitem name="Certificado ingreso y retenciones" id="lavish_hr_payroll.hr_withholding_and_income_certificate" parent="hr_payroll.menu_hr_payroll_report" action="action_hr_withholding_and_income_certificate"/>
+    </data>
+</odoo>
