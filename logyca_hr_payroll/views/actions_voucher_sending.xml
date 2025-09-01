@@ -29,8 +29,29 @@
                                 type="object"
                                 invisible="not vouchers_failed_ids"
                                 data-hotkey="r"/>
+
+                        <button name="send_voucher" 
+                                string="Enviar Comprobantes"
+                                type="object"
+                                invisible="mail_mail_pend_count == 0"
+                                data-hotkey="r"/>
                     </header>
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button
+                                name="action_view_mail_lines"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-list-alt"
+                            >
+                                <field
+                                    name="mail_mail_pdf_count"
+                                    widget="statinfo"
+                                    string="PDF"
+                                />
+                            </button>
+                        </div>
+
                         <div class="oe_title">
                             <h1>Comprobantes de Nómina</h1>
                         </div>
@@ -68,8 +89,10 @@
                                     <tree>
                                         <field name="create_date" string="Fecha Envío"/>
                                         <field name="subject" string="Asunto"/>
+                                        <field name="payslip_id" string="Nómina"/>
                                         <field name="email_to" string="Destinatario"/>
                                         <field name="recipient_ids" widget="many2many_tags"/>
+                                        <field name="attachment_ids" widget="many2many_tags"/>
                                         <field name="state" decoration-success="state == 'sent'" 
                                                decoration-warning="state == 'outgoing'"
                                                decoration-danger="state == 'exception'"/>
@@ -107,6 +130,7 @@
                                     <field name="mail_mail_count" string="Total Correos"/>
                                     <field name="mail_mail_sent_count" string="Enviados"/>
                                     <field name="mail_mail_failed_count" string="Fallidos"/>
+                                    <field name="mail_mail_pend_count" string="Pendiente por Enviar"/>
                                 </group>
                             </page>
     
@@ -154,6 +178,8 @@
                     <field name="mail_mail_ids" string="Correos"/>
                     <filter string="Lote" name="batch" domain="[('generation_type', '=', 'lote')]"/>
                     <filter string="Individual" name="individual" domain="[('generation_type', '=', 'individual')]"/>
+                    <separator/>
+                    <filter string="Fecha" name="date_filcreate_dateter" date="create_date" default_period="last_month"/>
                     <group expand="0" string="Agrupar Por">
                         <filter string="Tipo de Generación" name="generation_type" 
                                 context="{'group_by': 'generation_type'}"/>
@@ -181,9 +207,149 @@
             </field>
         </record>
         <menuitem name="Comprobantes de nómina" 
-                    id="logyca_hr_payroll.menu_payroll_voucher_sending" 
+                    id="logyca_hr_payroll.menu_payroll_voucher_parent" 
                     parent="hr_payroll.menu_hr_payroll_payslips" 
-                    action="action_hr_voucher_sending" sequence="90"/>        
+                    sequence="90"/>
+
+        <menuitem name="Procesamiento Comprobantes de nómina" 
+                    id="logyca_hr_payroll.menu_payroll_voucher_sending" 
+                    parent="logyca_hr_payroll.menu_payroll_voucher_parent" 
+                    action="action_hr_voucher_sending" sequence="1"/>
+
+        <record id="mail_mail_tree_voucher" model="ir.ui.view">
+            <field name="name">mail.mail.tree.voucher</field>
+            <field name="model">mail.mail</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="create_date" string="Fecha Envío"/>
+                    <field name="subject" string="Asunto"/>
+                    <field name="payslip_id" string="Nómina"/>
+                    <field name="email_to" string="Destinatario"/>
+                    <field name="recipient_ids" widget="many2many_tags"/>
+                    <field name="attachment_ids" widget="many2many_tags"/>
+                    <field name="state" decoration-success="state == 'sent'" 
+                            decoration-warning="state == 'outgoing'"
+                            decoration-danger="state == 'exception'"/>
+                    <button name="send" string="Reenviar" type="object" 
+                            icon="fa-paper-plane" class="btn btn-link"
+                            invisible="state == 'sent'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_mail_mail_voucher" model="ir.actions.act_window">
+            <field name="name">Comprobantes de nómina por Empleado</field>
+            <field name="res_model">mail.mail</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('payroll_voucher', '=', True)]</field>
+            <field name="view_id" ref="mail_mail_tree_voucher"/>
+            <!-- <field name="search_view_id" ref="hr_payslip_voucher_generation_search"/> -->
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Genere comprobantes de nómina para sus empleados
+                </p>
+                <p>
+                    Puede generar comprobantes por lotes o individualmente y enviarlos por correo electrónico.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Comprobantes de nómina por Empleado" 
+                    id="logyca_hr_payroll.menu_mail_mail_voucher_sending" 
+                    parent="logyca_hr_payroll.menu_payroll_voucher_parent"
+                    action="action_mail_mail_voucher" sequence="2"/>
+
+        <record id="hr_voucher_sending_line_tree" model="ir.ui.view">
+            <field name="name">hr.voucher.sending.line.tree</field>
+            <field name="model">hr.voucher.sending.line</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="create_date" string="Fecha Envío"/>
+                    <field name="voucher_id" />
+                    <field name="mail_id" />
+                    <field name="payslip_id" string="Nómina"/>
+                    <field name="state" decoration-success="state == 'sent'" 
+                            decoration-warning="state == 'outgoing'"
+                            decoration-danger="state == 'exception'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_voucher_sending_line_form" model="ir.ui.view">
+            <field name="name">hr.voucher.sending.line.form</field>
+            <field name="model">hr.voucher.sending.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="create_date" string="Fecha Envío"/>
+                                <field name="voucher_id" />
+                                <field name="mail_id" />
+                            </group>
+                            <group>
+                                <field name="payslip_id" string="Nómina"/>
+                                <field name="attachment_id"
+                                        domain="[('type','=','binary'), ('mimetype','=','application/pdf')]"
+                                        options="{'no_create_edit': True}"/>
+
+                                <!-- Visor PDF -->
+                                <field name="attachment_mimetype" invisible="1"/>
+                                <field name="attachment_pdf"
+                                        filename="attachment_pdf_name"
+                                        widget="pdf_viewer"
+                                        style="height:70vh;"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="hr_voucher_sending_line_search" model="ir.ui.view">
+            <field name="name">Búsqueda de Comprobantes por Correo</field>
+            <field name="model">hr.voucher.sending.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="voucher_id"/>
+                    <field name="payslip_id"/>
+                    <field name="attachment_id" string="PDF"/>
+                    <field name="employee_id" string="Empleado"/>
+                    <field name="create_date" string="Fecha"/>
+                    <separator/>
+                    <filter string="Fecha" name="date_filcreate_dateter" date="create_date" default_period="last_month"/>             
+                    <filter string="Por Enviar" name="state" domain="[('state', '=', 'outgoing')]"/>
+                    <filter string="Enviado" name="state" domain="[('state', '=', 'sent')]"/>
+                    <filter string="Error en la entrega" name="state" domain="[('state', '=', 'exception')]"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter string="Procesamiento de Envio" name="voucher_id" 
+                                context="{'group_by': 'voucher_id'}"/>
+                        <filter string="Estado" name="state" 
+                                context="{'group_by': 'state'}"/>
+                        <filter string="Fecha Creación" name="create_date" 
+                                context="{'group_by': 'create_date:month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="action_hr_voucher_sending_line" model="ir.actions.act_window">
+            <field name="name">Comprobantes de nómina por Empleado por correo</field>
+            <field name="res_model">hr.voucher.sending.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="hr_voucher_sending_line_tree"/>
+            <!-- <field name="search_view_id" ref="hr_payslip_voucher_generation_search"/> -->
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Genere comprobantes de nómina para sus empleados
+                </p>
+                <p>
+                    Puede generar comprobantes por lotes o individualmente y enviarlos por correo electrónico.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Comprobantes de nómina por Empleado por correo" 
+                    id="logyca_hr_payroll.menu_hr_voucher_sending_line" 
+                    parent="logyca_hr_payroll.menu_payroll_voucher_parent"
+                    action="action_hr_voucher_sending_line" sequence="3"/>        
     </data>
 </odoo>
-      
