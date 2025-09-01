@@ -21,15 +21,38 @@ class mail_mail(models.Model):
 
     payroll_voucher = fields.Boolean(string='Email para comprobante de nómina')
     payroll_voucher_id = fields.Many2one('hr.voucher.sending', string='Ejecución comprobantes de nómina')
+    payslip_id = fields.Many2one('hr.payslip',string='Nómina')
 
 class hr_voucher_sending_failed(models.Model):
     _name = 'hr.voucher.sending.failed'
     _description = 'Ejecución comprobantes de nómina Fallidos'
     
     voucher_id = fields.Many2one('hr.voucher.sending', 'Ejecución comprobantes')
-    payslip_id = fields.Many2one('hr.payslip',string='Nómina')    
+    payslip_id = fields.Many2one('hr.payslip',string='Nómina')
     employee_id = fields.Many2one(related='payslip_id.employee_id', string='Empleado')
     description = fields.Char('Mensaje')
+
+class PayslipVoucherSendingLine(models.Model):
+    _name = 'hr.voucher.sending.line'
+    _description = 'Ejecución comprobantes de nómina por correo'
+
+    voucher_id = fields.Many2one('hr.voucher.sending', 'Ejecución comprobantes')
+    mail_id = fields.Many2one('mail.mail',string='Mail')
+    attachment_id = fields.Many2one('ir.attachment',string='PDF')
+    attachment_pdf = fields.Binary(
+        string="PDF",
+        related='attachment_id.datas',
+        readonly=True)
+    attachment_pdf_name = fields.Char(
+        string="Nombre del archivo",
+        related='attachment_id.name',
+        readonly=True)
+    attachment_mimetype = fields.Char(
+        related='attachment_id.mimetype',
+        readonly=True)    
+    payslip_id = fields.Many2one(related='mail_id.payslip_id', string='Nómina')
+    employee_id = fields.Many2one(related='payslip_id.employee_id', string='Empleado')
+    state = fields.Selection(related='mail_id.state')
 
 class PayslipVoucherSending(models.Model):
     _name = 'hr.voucher.sending'
@@ -47,17 +70,26 @@ class PayslipVoucherSending(models.Model):
     payslip_id = fields.Many2one('hr.payslip',string='Nómina', domain="[('employee_id','=',[employee_id])]")
     vouchers_failed_ids = fields.One2many('hr.voucher.sending.failed', 'voucher_id', string='Failed Vouchers')
     mail_mail_ids = fields.One2many('mail.mail','payroll_voucher_id','Correos electrónicos')
+    mail_line_ids = fields.One2many('hr.voucher.sending.line','voucher_id','Correos electrónicos por correo')
     txt_status_process = fields.Text(string='Estado del proceso')
     mail_mail_count = fields.Integer(string='Total Correos', compute='_compute_mail_counts')
     mail_mail_sent_count = fields.Integer(string='Enviados', compute='_compute_mail_counts')
     mail_mail_failed_count = fields.Integer(string='Fallidos', compute='_compute_mail_counts')
+    mail_mail_pend_count = fields.Integer(string='Pendientes', compute='_compute_mail_counts')
+    mail_mail_pdf_count = fields.Integer(string='PDF', compute='_compute_mail_counts')
+
+    def name_get(self):
+        return [(voucher.id, '%s - %s' %
+                 (voucher.subject, voucher.send_type)) for voucher in self]
 
     @api.depends('mail_mail_ids', 'mail_mail_ids.state')
     def _compute_mail_counts(self):
         for record in self:
             record.mail_mail_count = len(record.mail_mail_ids)
+            record.mail_mail_pdf_count = len(record.mail_line_ids)
             record.mail_mail_sent_count = len(record.mail_mail_ids.filtered(lambda m: m.state == 'sent'))
             record.mail_mail_failed_count = len(record.mail_mail_ids.filtered(lambda m: m.state == 'exception'))
+            record.mail_mail_pend_count = len(record.mail_mail_ids.filtered(lambda m: m.state in ('exception', 'outgoing')))
 
     @contextmanager
     def _get_new_env(self):
@@ -78,8 +110,10 @@ class PayslipVoucherSending(models.Model):
     def _compute_mail_counts(self):
         for record in self:
             record.mail_mail_count = len(record.mail_mail_ids)
+            record.mail_mail_pdf_count = len(record.mail_line_ids)
             record.mail_mail_sent_count = len(record.mail_mail_ids.filtered(lambda m: m.state == 'sent'))
             record.mail_mail_failed_count = len(record.mail_mail_ids.filtered(lambda m: m.state == 'exception'))
+            record.mail_mail_pend_count = len(record.mail_mail_ids.filtered(lambda m: m.state in ('exception', 'outgoing')))
 
     def _create_pdf_attachment(self, env, payslip, pdf_content: bytes) -> int:
         """Create an attachment for the payslip PDF."""
@@ -115,10 +149,18 @@ class PayslipVoucherSending(models.Model):
             'body_html': message.encode('utf-8'),
             'payroll_voucher': True,
             'payroll_voucher_id': self.id,
+            'payslip_id': payslip.id,
             'attachment_ids': [(6, 0, [attachment_id])],
             'recipient_ids': [(6, 0, [partner_id])] if partner_id else [],
             'model': 'hr.payslip',
             'res_id': payslip.id,
+        }
+
+    def _prepare_line_email_values(self, mail_id, payslip, attachment_id: int) -> dict:        
+        return {
+            'voucher_id': self.id,
+            'mail_id': mail_id.id,
+            'attachment_id': attachment_id,
         }
 
     def _process_payslip(self, env, payslip_id: int) -> None:
@@ -138,7 +180,9 @@ class PayslipVoucherSending(models.Model):
                 attachment_id = self._create_pdf_attachment(env, payslip, pdf_content)
                 email_vals = self._prepare_email_values(payslip, attachment_id)
                 email = env['mail.mail'].create(email_vals)
-                email.send()
+                email_line_vals = self._prepare_line_email_values(email, payslip, attachment_id)
+                email = env['hr.voucher.sending.line'].create(email_line_vals)
+                # email.send()
 
         except Exception as e:
             env.cr.rollback()
@@ -213,8 +257,34 @@ class PayslipVoucherSending(models.Model):
             process_time = (datetime.now() - start_time).total_seconds() / 60
             _logger.info(f"Failed voucher regeneration completed in {process_time:.2f} minutes")
 
+    def send_voucher(self):
+        self.env.flush_all()
+        self.vouchers_failed_ids.unlink()
+        start_time = datetime.now()
 
+        try:
+            for record in self:
+                mail_mail_outgoing = record.mail_mail_ids.filtered(lambda m: m.state in ('outgoing', 'exception'))
+                if mail_mail_outgoing:
+                    for mail in mail_mail_outgoing:
+                        mail.send()
+        except Exception as e:
+            _logger.error(f"Error in voucher generation: {str(e)}")
+            raise UserError(f"Error al generar Correos: {str(e)}")
 
+        finally:
+            process_time = (datetime.now() - start_time).total_seconds() / 60
+            _logger.info(f"Voucher generation completed in {process_time:.2f} minutes")
 
-    
-    
+    def _get_mail_lines(self):
+        return self.mapped("mail_line_ids")
+
+    def action_view_mail_lines(self):
+        purchase_orders = self._get_mail_lines()
+        action = self.env["ir.actions.actions"]._for_xml_id("logyca_hr_payroll.action_hr_voucher_sending_line")
+        if len(purchase_orders) > 0:
+            action["domain"] = [("id", "in", purchase_orders.ids)]
+            action["context"] = [("id", "in", purchase_orders.ids)]
+        else:
+            action = {"type": "ir.actions.act_window_close"}
+        return action
