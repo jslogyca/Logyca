@@ -72,7 +72,7 @@ class BlanketOrderWizard(models.TransientModel):
                     {
                         "partner_ref": self.blanket_order_id.partner_ref,
                         "origin": self.blanket_order_id.name,
-                        "notes": self.notes + ' - ' + self.blanket_order_id.note,
+                        "notes": (self.notes or '') + ' - ' + (self.blanket_order_id.note or ''),
                     }
                 )
             order_vals.update(

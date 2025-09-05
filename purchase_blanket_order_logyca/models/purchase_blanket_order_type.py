@@ -25,3 +25,5 @@ class PurchaseBlanketOrderType(models.Model):
         ('copy', 'Use lines of agreement'), ('none', 'Do not create RfQ lines automatically')],
         string='Lines', required=True, default='copy')
     active = fields.Boolean(default=True, help="Set active to false to hide the Purchase Agreement Types without removing it.")
+    approval_type = fields.Selection([('by_contract', 'Por Contrato'), 
+                                        ('by_order', 'Por Orden')], string='Tipo de Aprobación', required=True, default='by_order')
