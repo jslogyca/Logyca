@@ -21,6 +21,7 @@
             </xpath>
             <xpath expr="//field[@name='partner_ref']" position="after">
                 <field name="type_blanket_id"  readonly="state != 'draft'"/>
+                <field name="approval_type" />
                 <field name="total_amount"  invisible="1"/>
             </xpath>
             <xpath expr="//field[@name='user_id']" position="after">
@@ -47,7 +48,26 @@
                     <group name="group_simulation_left">
                         <field name="simulation_text" nolabel="1" readonly="1"/>
                     </group>
+                    <group name="group_simulation_righ">
+                        <field name="months_duration" force_save="1" readonly="1"/>
+                    </group>
                 </group>
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="purchase_blanket_order_tree_lg">
+        <field name="name">purchase.blanket.order.tree.lg</field>
+        <field name="model">purchase.blanket.order</field>
+        <field name="inherit_id" ref="purchase_blanket_order.view_purchase_blanket_order_tree"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='activity_ids']" position="after">
+                <field name="user_id"/>
+                <field name="currency_id"/>
+                <field name="analytic_distribution" widget="analytic_distribution"/>
+                <field name="type_blanket_id"  readonly="state != 'draft'"/>
+                <field name="amount_untaxed"  widget="monetary" options="{'currency_field': 'currency_id'}" sum="Total del Contrato"/>
+                <field name="amount_invoice"  widget="monetary" options="{'currency_field': 'currency_id'}" sum="Total Facturado"/>
+                <field name="amount_invoice_pend"  widget="monetary" options="{'currency_field': 'currency_id'}" sum="Pendiente por Facturar"/>
             </xpath>
         </field>
     </record>

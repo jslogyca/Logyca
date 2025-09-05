@@ -40,6 +40,39 @@ class PurchaseBlanketOrder(models.Model):
     approver_date = fields.Date('Date Approver', tracking=True)
     total_amount = fields.Boolean(compute='_compute_invoice_all')
     moves_count = fields.Integer(compute="_compute_moves_count")
+    months_duration = fields.Integer(
+        string='Meses de vigencia',
+        compute='_compute_months_duration',
+        store=True,
+        help='Meses entre fecha de inicio y fecha de vigencia/validez.'
+    )
+    approval_type = fields.Selection(related='type_blanket_id.approval_type')
+
+    @api.depends('date_start', 'validity_date')
+    def _compute_months_duration(self):
+        for rec in self:
+            rec.months_duration = 0
+            if not rec.date_start or not rec.validity_date:
+                continue
+
+            # Normalizar a date (opción simple)
+            start = fields.Date.to_date(rec.date_start)          # siempre date
+            end = fields.Date.to_date(rec.validity_date)         # toma solo la parte de fecha
+
+            # Si prefieres respetar zona horaria del usuario para el Datetime:
+            # if isinstance(rec.validity_date, datetime):
+            #     end_dt = fields.Datetime.context_timestamp(rec, rec.validity_date)
+            #     end = end_dt.date()
+
+            if end < start:
+                continue
+
+            rd = relativedelta(end, start)
+            months = rd.years * 12 + rd.months
+            # Redondear meses parciales hacia arriba (opcional):
+            # if rd.days > 0:
+            #     months += 1
+            rec.months_duration = months 
     
     @api.depends("line_ids.price_total")
     def _compute_invoice_all(self):
@@ -47,11 +80,11 @@ class PurchaseBlanketOrder(models.Model):
             amount_invoice = 0.0
             invoice_ids = order._get_purchase_orders()
             invoice_ids = invoice_ids.filtered(lambda inv: inv.invoice_status == 'invoiced')
-            amount_invoice = sum(invoice.amount_total or 0.0 for invoice in invoice_ids)
-            amount_invoice_pend = order.amount_total - amount_invoice
-            if order.amount_total:
-                percent_invoiced = (order.amount_invoice / order.amount_total) * 100
-                percent_pend_invoiced = (order.amount_invoice_pend / order.amount_total) * 100                
+            amount_invoice = sum(invoice.amount_untaxed or 0.0 for invoice in invoice_ids)
+            amount_invoice_pend = order.amount_untaxed - amount_invoice
+            if order.amount_untaxed:
+                percent_invoiced = (order.amount_invoice / order.amount_untaxed) * 100
+                percent_pend_invoiced = (order.amount_invoice_pend / order.amount_untaxed) * 100                
             else:
                 percent_invoiced = 0.0
                 percent_pend_invoiced = 0.0
@@ -66,12 +99,12 @@ class PurchaseBlanketOrder(models.Model):
                 }
             )    
 
-    @api.depends('amount_total', 'amount_invoice')
+    @api.depends('amount_untaxed', 'amount_invoice')
     def _compute_percent_invoiced(self):
         for record in self:
-            if record.amount_total:
-                record.percent_invoiced = (record.amount_invoice / record.amount_total) * 100
-                record.percent_pend_invoiced = (record.amount_invoice_pend / record.amount_total) * 100                
+            if record.amount_untaxed:
+                record.percent_invoiced = (record.amount_invoice / record.amount_untaxed) * 100
+                record.percent_pend_invoiced = (record.amount_invoice_pend / record.amount_untaxed) * 100                
             else:
                 record.percent_invoiced = 0.0
                 record.percent_pend_invoiced = 0.0
@@ -87,7 +120,7 @@ class PurchaseBlanketOrder(models.Model):
         else:
             self.analytic_distribution = False
 
-    @api.depends('amount_invoice', 'amount_total')
+    @api.depends('amount_invoice', 'amount_untaxed')
     def _compute_simulation_details(self):
         for record in self:
             simulation_text = record._generate_simulation_text()
@@ -96,7 +129,7 @@ class PurchaseBlanketOrder(models.Model):
     def _generate_simulation_text(self):
         """Genera el texto detallado de la simulación enfocado en valores"""
         self.ensure_one()
-        amount_invoice = self.amount_total
+        amount_invoice = self.amount_untaxed
 
         return f"""
         <div style="font-family: system-ui; max-width: 800px; line-height: 1.6;">
@@ -104,7 +137,7 @@ class PurchaseBlanketOrder(models.Model):
                 <div style="flex: 1; padding: 15px; background-color: #f8f9fa; border-radius: 4px; border: 1px solid #dee2e6;">
                     <div style="font-size: 0.9em; color: #6c757d;">Total del Contrato</div>
                     <div style="font-size: 1.4em; font-weight: bold; color: #212529; margin: 8px 0;">
-                        ${self.amount_total:,.2f}
+                        ${self.amount_untaxed:,.2f}
                     </div>
                     <div style="font-size: 0.8em; color: #6c757d;">
                         {self.name == '15' and '100%' or self.name == '0' and '50%' or 'No aplica'}
