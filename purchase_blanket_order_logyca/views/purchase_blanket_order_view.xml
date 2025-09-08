@@ -22,6 +22,7 @@
             <xpath expr="//field[@name='partner_ref']" position="after">
                 <field name="type_blanket_id"  readonly="state != 'draft'"/>
                 <field name="approval_type" />
+                <field name="type_amount" />
                 <field name="total_amount"  invisible="1"/>
             </xpath>
             <xpath expr="//field[@name='user_id']" position="after">
@@ -50,6 +51,14 @@
                     </group>
                     <group name="group_simulation_righ">
                         <field name="months_duration" force_save="1" readonly="1"/>
+                    </group>
+                </group>
+                <group name="group_iva_text">
+                    <group name="group_iva_left">
+                        <field name="higher_iva" />
+                        <field name="higher_iva_tariff" invisible="higher_iva == False"/>
+                        <field name="amount_higher_iva" invisible="1"/>
+                        <field name="simulation_text_iva" nolabel="1" readonly="1"/>
                     </group>
                 </group>
             </xpath>

@@ -21,6 +21,7 @@ class PurchaseBlanketOrder(models.Model):
     amount_invoice_pend = fields.Monetary(
         string="Total Pendiente", store=True, readonly=True, compute="_compute_invoice_all")
     simulation_text = fields.Html('Detalle de Simulación', compute='_compute_simulation_details')
+    simulation_text_iva = fields.Html('Detalle de Simulación', compute='_compute_simulation_detail_iva')
     percent_invoiced = fields.Float(
         string="Porcentaje Facturado (%)",
         compute="_compute_percent_invoiced",
@@ -47,6 +48,13 @@ class PurchaseBlanketOrder(models.Model):
         help='Meses entre fecha de inicio y fecha de vigencia/validez.'
     )
     approval_type = fields.Selection(related='type_blanket_id.approval_type')
+    higher_iva = fields.Boolean('Mayor Valor del IVA', default=False)
+    higher_iva_tariff = fields.Selection([('5', '5%'), 
+                                        ('19', '19%'),
+                                        ('0', '0%'), ], string='Tarifa IVA', default='0')
+    amount_higher_iva = fields.Monetary(string="Total Pendiente", store=True, readonly=True, compute="_compute_invoice_all")
+    type_amount = fields.Selection([('by_contract', 'Por Contracto'), 
+                                        ('by_budget', 'Por Presupuesto')], string='Tipo de Cobro', default='by_contract')
 
     @api.depends('date_start', 'validity_date')
     def _compute_months_duration(self):
@@ -77,14 +85,27 @@ class PurchaseBlanketOrder(models.Model):
     @api.depends("line_ids.price_total")
     def _compute_invoice_all(self):
         for order in self:
+            amount_untaxed = 0.0
+            for line in order.line_ids:
+                amount_untaxed += line.price_subtotal
             amount_invoice = 0.0
             invoice_ids = order._get_purchase_orders()
             invoice_ids = invoice_ids.filtered(lambda inv: inv.invoice_status == 'invoiced')
             amount_invoice = sum(invoice.amount_untaxed or 0.0 for invoice in invoice_ids)
-            amount_invoice_pend = order.amount_untaxed - amount_invoice
+            amount_invoice_pend = amount_untaxed - amount_invoice
+            if order.higher_iva and order.higher_iva_tariff:
+                if order.higher_iva_tariff == '5':
+                    amount_higher_iva = ((amount_untaxed)*5)/100
+                elif order.higher_iva_tariff == '19':
+                    amount_higher_iva = ((amount_untaxed)*19)/100
+                else:
+                    amount_higher_iva = 0.0
+            else:
+                amount_higher_iva = 0.0
+            amount_untaxed = amount_untaxed + amount_higher_iva
             if order.amount_untaxed:
-                percent_invoiced = (order.amount_invoice / order.amount_untaxed) * 100
-                percent_pend_invoiced = (order.amount_invoice_pend / order.amount_untaxed) * 100                
+                percent_invoiced = (order.amount_invoice / amount_untaxed) * 100
+                percent_pend_invoiced = (order.amount_invoice_pend / amount_untaxed) * 100                
             else:
                 percent_invoiced = 0.0
                 percent_pend_invoiced = 0.0
@@ -93,6 +114,8 @@ class PurchaseBlanketOrder(models.Model):
                 {
                     "amount_invoice": amount_invoice,
                     "amount_invoice_pend": amount_invoice_pend,
+                    "amount_higher_iva": amount_higher_iva,
+                    "amount_untaxed": amount_untaxed,
                     "total_amount": True,
                     "percent_invoiced": percent_invoiced,
                     "percent_pend_invoiced": percent_pend_invoiced,
@@ -125,6 +148,30 @@ class PurchaseBlanketOrder(models.Model):
         for record in self:
             simulation_text = record._generate_simulation_text()
             record.simulation_text = simulation_text
+
+    @api.depends('higher_iva', 'higher_iva_tariff', 'amount_higher_iva', 'amount_invoice', 'amount_untaxed')
+    def _compute_simulation_detail_iva(self):
+        for record in self:
+            simulation_text_iva = record._generate_simulation_text_iva()
+            record.simulation_text_iva = simulation_text_iva
+
+    def _generate_simulation_text_iva(self):
+        """Genera el texto detallado de la simulación enfocado en valores IVA"""
+        self.ensure_one()
+        amount_higher_iva = self.amount_higher_iva
+
+        return f"""
+        <div style="font-family: system-ui; max-width: 800px; line-height: 1.6;">
+            <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                <div style="flex: 1; padding: 15px; background-color: #f8f9fa; border-radius: 4px; border: 1px solid #dee2e6;">
+                    <div style="font-size: 0.9em; color: #6c757d;">Mayor valor del IVA</div>
+                    <div style="font-size: 1.4em; font-weight: bold; color: #212529; margin: 8px 0;">
+                        ${self.amount_higher_iva:,.2f}
+                    </div>
+                </div>
+            </div>
+        </div>
+        """
 
     def _generate_simulation_text(self):
         """Genera el texto detallado de la simulación enfocado en valores"""
