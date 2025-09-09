@@ -41,7 +41,7 @@
                 parent="main_menu_fact_mass" 
                 sequence="1" />
 
-            <!-- <menuitem
+            <menuitem
                 id="main_menu_fact_mass_ejec_proc"
                 name="Ejecución Proceso"
                 parent="main_menu_fact_mass"
@@ -82,6 +82,6 @@
                 name="Reporte CXC Facturación Masiva"
                 parent="main_menu_fact_mass_report"
                 action="action_massive_invoicing_report_cxc"
-                sequence="3" /> -->
+                sequence="3" />
     </data>
 </odoo>
