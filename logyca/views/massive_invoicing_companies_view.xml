@@ -6,38 +6,42 @@
         <field name="arch" type="xml">
             <form>
                 <sheet string="Massive Invoicing - Companies for invoicing">
-                    <group col="4">
-                        <field name="name" required="1" />
-                        <field name="process_type" required="1" widget="radio"/>
-                        <field name="expiration_date" required="1"/>
-                        <field name="url_enpoint_code_assignment" required="1"/>
-                        <newline/>
-                        <b>Parametros empresas textileras</b>
-                        <div style="padding:5px;border:solid;">                        
-                            Capacidad de códigos: <field name="textile_code_capability" required="1"/>
-                            <br/>
-                            Porcentaje de la tarifa: <field name="percentage_textile_tariff" required="1"/>
-                        </div>
-                        <newline/>
-                        <button name="consult_companies" string="Consultar compañias" type="object" class="oe_highlight" style="margin:5px;" />
-                        <newline/>
-                        <field name="cant_thirdparties_miembros" force_save="1" readonly="1" />
-                        <field name="cant_thirdparties_clientes" force_save="1" readonly="1" />
-                        <field name="cant_thirdparties_textil" force_save="1" readonly="1" />
-                        <field name="cant_thirdparties_gtin_special" force_save="1" readonly="1" />
-                        <newline/>
-                        <field name="thirdparties" colspan="4" can_create="true" can_write="true" >
-                            <tree>
-                                <field name="name"/>
-                                <field name="vat"/>     
-                                <field name="x_date_vinculation"/>                                        
-                                <field name="x_type_vinculation" widget="many2many_tags"/>                                        
-                                <field name="x_sector_id"/>                                        
-                            </tree>
-                        </field>
-                        <newline/>
-                        <separator/>
+                    <group>
+                        <group>
+                            <field name="name" required="1" />
+                            <field name="process_type" required="1" widget="radio"/>
+                            <field name="expiration_date" required="1"/>
+                            <field name="url_enpoint_code_assignment" required="1"/>
+                            <newline/>
+                            <b>Parametros empresas textileras</b>
+                            <div style="padding:5px;border:solid;">                        
+                                Capacidad de códigos: <field name="textile_code_capability" required="1"/>
+                                <br/>
+                                Porcentaje de la tarifa: <field name="percentage_textile_tariff" required="1"/>
+                            </div>
+                            <newline/>
+                            <button name="consult_companies" string="Consultar compañias" type="object" class="oe_highlight" style="margin:5px;" />
+                            <newline/>
+                        </group>
+                        <group>
+                            <field name="cant_thirdparties_miembros" force_save="1" readonly="1" />
+                            <field name="cant_thirdparties_clientes" force_save="1" readonly="1" />
+                            <field name="cant_thirdparties_textil" force_save="1" readonly="1" />
+                            <field name="cant_thirdparties_gtin_special" force_save="1" readonly="1" />
+                        </group>
                     </group>
+                    <newline/>
+                    <field name="thirdparties" colspan="2" can_create="true" can_write="true" >
+                        <tree>
+                            <field name="name"/>
+                            <field name="vat"/>     
+                            <field name="x_date_vinculation"/>                                        
+                            <field name="x_type_vinculation" widget="many2many_tags"/>                                        
+                            <field name="x_sector_id"/>                                        
+                        </tree>
+                    </field>
+                    <newline/>
+                    <separator/>                    
                 </sheet>
             </form>
         </field>
