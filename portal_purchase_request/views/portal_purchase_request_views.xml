@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="view_portal_purchase_request_tree" model="ir.ui.view">
+    <field name="name">portal.purchase.request.tree</field>
+    <field name="model">portal.purchase.request</field>
+    <field name="arch" type="xml">
+      <list string="Purchase Request" sample="1" decoration-muted="state in ['cancelled','rejected']">
+        <field name="name"/>
+        <field name="collaborator_id"/>
+        <field name="request_date"/>
+        <field name="request_type"/>
+        <field
+          name="state"
+          decoration-success="state == 'completed'"
+          decoration-info="state in ['to_invoice','in_process']"
+          decoration-warning="state == 'draft'"
+          decoration-danger="state == 'rejected'"
+          widget="badge"
+        />
+      </list>
+    </field>
+  </record>
+
+  <record id="view_portal_purchase_request_search" model="ir.ui.view">
+    <field name="name">portal.purchase.request.search</field>
+    <field name="model">portal.purchase.request</field>
+    <field name="arch" type="xml">
+      <search string="Purchase Requests">
+        <field name="name" string="Reference"/>
+        <field name="collaborator_id"/>
+        <field name="team_id"/>
+        <field name="request_type"/>
+        <field name="partner_id"/>
+        <field name="asset_responsible_id"/>
+        <field name="reviewed_by_id"/>
+        <separator/>
+        <filter string="My Requests" name="filter_my_requests" domain="[('collaborator_id.user_id','=', uid)]"/>
+        <filter string="To Approve" name="filter_to_approve" domain="[('approve_ids.user_id','=', uid)]"/>
+        <separator/>
+        <filter string="Draft" name="filter_state_draft" domain="[('state','=','draft')]"/>
+        <filter string="In Process" name="filter_state_in_process" domain="[('state','=','in_process')]"/>
+        <filter string="To Invoice" name="filter_state_to_invoice" domain="[('state','=','to_invoice')]"/>
+        <filter string="Rejected" name="filter_state_rejected" domain="[('state','=','rejected')]"/>
+        <filter string="Cancelled" name="filter_state_cancelled" domain="[('state','=','cancelled')]"/>
+        <filter string="Completed" name="filter_state_completed" domain="[('state','=','completed')]"/>
+        <separator/>
+        <filter string="Asset Purchase" name="filter_type_asset_purchase" domain="[('request_type','=','asset_purchase')]"/>
+        <filter string="Service Request" name="filter_type_service_request" domain="[('request_type','=','service_request')]"/>
+        <filter string="Quotation" name="filter_type_quotation" domain="[('request_type','=','quotation')]"/>
+        <filter string="Policy" name="filter_type_policy" domain="[('request_type','=','policy')]"/>
+        <group expand="0" string="Group By" colspan="16">
+          <filter string="State" name="group_by_state" context="{'group_by':'state'}"/>
+          <filter string="Request Type" name="group_by_request_type" context="{'group_by':'request_type'}"/>
+          <filter string="Collaborator" name="group_by_collaborator" context="{'group_by':'collaborator_id'}"/>
+          <filter string="Division" name="group_by_division" context="{'group_by':'division_id'}"/>
+          <filter string="Team" name="group_by_team" context="{'group_by':'team_id'}"/>
+          <filter string="Vendor" name="group_by_partner" context="{'group_by':'partner_id'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <record id="view_portal_purchase_request_form" model="ir.ui.view">
+    <field name="name">portal.purchase.request.form</field>
+    <field name="model">portal.purchase.request</field>
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button name="action_approve" string="Approve" type="object" class="btn-primary" invisible="state != 'draft'"/>
+          <button name="action_create_purchase_order" string="Create Purchase Order" type="object" class="btn-primary" invisible="state not in ['in_process', 'to_invoice']" groups="portal_purchase_request.group_purchase_request_manager"/>
+          <button name="action_reject" string="Reject" type="object" invisible="state not in ['draft', 'in_process']"/>
+          <button name="action_cancel" string="Cancel" type="object" invisible="state in ['cancelled', 'completed']"/>
+          <button name="action_to_draft" string="To draft" type="object" invisible="state != 'cancelled'"/>
+          <field name="state" widget="statusbar" readonly="1"/>
+        </header>
+        <sheet>
+          <div class="oe_button_box" name="button_box">
+            <button name="action_view_purchase_orders" type="object" class="oe_stat_button" icon="fa-shopping-cart" invisible="purchase_order_count == 0">
+              <field name="purchase_order_count" widget="statinfo" string="Purchase Orders"/>
+              <field name="purchase_order_ids" invisible="1"/>
+            </button>
+          </div>
+          <div class="oe_title">
+            <h1 class="d-flex">
+              <field name="name" readonly="1"/>
+            </h1>
+          </div>
+          <group name="request_info">
+            <group name="request_info_left">
+              <field name="collaborator_id"/>
+              <field name="division_id"/>
+              <field name="team_id"/>
+            </group>
+            <group name="request_info_right">
+              <field name="request_date"/>
+              <field name="request_type"/>
+              <field name="partner_id"/>
+              <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+            </group>
+          </group>
+          <group name="project_info">
+            <group name="project_info" string="Project Information">
+              <field name="project_start_date" string="Planned Date" widget="daterange" options="{&quot;end_date_field&quot;: &quot;project_end_date&quot;, &quot;always_range&quot;: &quot;1&quot;}" required="project_start_date"/>
+              <label for="project_total_value"/>
+              <div name="amount_div" class="o_row">
+                <field name="project_total_value" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="state != 'draft'"/>
+                <field name="currency_id" options="{'no_create': True, 'no_open': True}" required="1" readonly="state != 'draft'" groups="base.group_multi_currency"/>
+              </div>
+              <field name="payment_agreement"/>
+              <field name="execution_place"/>
+              <field name="budget_group_id" options="{'no_create': True, 'no_open': True}"/>
+              <field name="analytic_distribution" widget="analytic_distribution" groups="analytic.group_analytic_accounting"/>
+            </group>
+            <group name="product_info" string="Product Information">
+              <field name="product_line_ids" readonly="state != 'draft'" nolabel="1">
+                <list editable="bottom">
+                  <field name="description"/>
+                  <field name="quantity"/>
+                </list>
+              </field>
+            </group>
+            <group name="project_approval" string="Approval Data">
+              <field name="asset_responsible_id" readonly="state != 'draft'"/>
+              <field name="approve_ids" widget="many2many_tags" readonly="state != 'draft'"/>
+              <field name="completion_date" invisible="not completion_date"/>
+              <field name="reviewed_by_id" invisible="not reviewed_by_id"/>
+              <field name="reason"/>
+            </group>
+          </group>
+        </sheet>
+        <chatter/>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_portal_purchase_request_tree" model="ir.actions.act_window">
+    <field name="name">Portal Requests</field>
+    <field name="res_model">portal.purchase.request</field>
+    <field name="view_mode">list,form</field>
+    <field name="help">Purchase request management</field>
+  </record>
+</odoo>

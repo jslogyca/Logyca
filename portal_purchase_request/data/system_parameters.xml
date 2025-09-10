@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- System Parameter for maximum file size -->
+    <record id="portal_request_max_file_size" model="ir.config_parameter">
+        <field name="key">portal_purchase_request.max_file_size_mb</field>
+        <field name="value">10</field>
+    </record>
+
+</odoo>

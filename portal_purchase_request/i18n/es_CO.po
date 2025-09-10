@@ -1,0 +1,1537 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* portal_purchase_request
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-10 21:56+0000\n"
+"PO-Revision-Date: 2025-09-10 16:59-0500\n"
+"Last-Translator: Cristiam Carreño <cristiamcarreno@gmail.com>\n"
+"Language-Team: \n"
+"Language: es_CO\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.7\n"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "0 MB of"
+msgstr "0 MB de"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<i class=\"fa fa-calendar mr-2\"/>Project Information"
+msgstr "<i class=\"fa fa-calendar mr-2\"/>Información del proyecto"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_success
+msgid ""
+"<i class=\"fa fa-check-circle mr-2\"/>\n"
+"                  Purchase Request Submitted Successfully"
+msgstr ""
+"<i class=\"fa fa-check-circle mr-2\"/>\n"
+"                  Solicitud de compra enviada"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<i class=\"fa fa-info-circle mr-2\"/>Basic Information"
+msgstr "<i class=\"fa fa-info-circle mr-2\"/>Información básica"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"<i class=\"fa fa-list mr-2\"/>Product Lines *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Add one or more product/service lines. Provide a description and quantity for each line.\"/>"
+msgstr ""
+"<i class=\"fa fa-list mr-2\"/>Líneas de productos\n"
+"                         <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Agregue una o más líneas de productos/servicios. Proporcione una descripción y cantidad para cada línea.\"/>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<i class=\"fa fa-paper-plane mr-2\"/>Submit Purchase Request"
+msgstr "<i class=\"fa fa-paper-plane mr-2\"/>Enviar solicitud de compra"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<i class=\"fa fa-paperclip mr-2\"/>File Attachments"
+msgstr "<i class=\"fa fa-paperclip mr-2\"/>Archivos adjuntos"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list
+msgid ""
+"<i class=\"fa fa-plus me-1\" aria-hidden=\"true\"/>\n"
+"                Create Request"
+msgstr ""
+"<i class=\"fa fa-plus me-1\" aria-hidden=\"true\"/>\n"
+"                Crear solicitud"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_success
+msgid "<i class=\"fa fa-plus mr-2\"/>Create Another Request"
+msgstr "<i class=\"fa fa-plus mr-2\"/>Crear otra solicitud"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"<i class=\"fa fa-shopping-cart mr-2\"/>\n"
+"                      Purchase Request Form"
+msgstr ""
+"<i class=\"fa fa-shopping-cart mr-2\"/>\n"
+"                      Formulario de solicitud de compra"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<i class=\"fa fa-sticky-note mr-2\"/>Additional Notes"
+msgstr "<i class=\"fa fa-sticky-note mr-2\"/>Notas adicionales"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<i class=\"fa fa-users mr-2\"/>Approvers *"
+msgstr "<i class=\"fa fa-users mr-2\"/>Aprobadores *"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<option value=\"\">Select Asset Responsible</option>"
+msgstr "<option value=\"\">Seleccionar responsable del activo</option>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<option value=\"\">Select Budget Group</option>"
+msgstr "<option value=\"\">Seleccionar grupo presupuestal</option>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<option value=\"\">Select Currency</option>"
+msgstr "<option value=\"\">Seleccionar moneda</option>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<option value=\"\">Select Division</option>"
+msgstr "<option value=\"\">Seleccionar Razón social</option>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<option value=\"\">Select Request Type</option>"
+msgstr "<option value=\"\">Seleccionar tipo de solicitud</option>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<option value=\"\">Select Team</option>"
+msgstr "<option value=\"\">Seleccionar equipo</option>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<option value=\"\">Select Vendor</option>"
+msgstr "<option value=\"\">Seleccionar proveedor</option>"
+
+#. module: portal_purchase_request
+#: model:mail.template,body_html:portal_purchase_request.email_template_purchase_request_manager_notification
+msgid ""
+"<p>A purchase request has been approved:</p>\n"
+"            <p><strong>Reference:</strong> <t t-esc=\"object.name\"/></p>\n"
+"            <p><strong>Requested by:</strong> <t t-esc=\"object.collaborator_id.name\"/></p>\n"
+"            <p><strong>Request Date:</strong> <t t-esc=\"object.request_date\"/></p>\n"
+"            <br/>\n"
+"            <div style=\"text-align: center; margin: 20px 0;\">\n"
+"                <a t-attf-href=\"/purchase_request/view?access_token={{ object.access_token }}&amp;id={{ object.id }}\" style=\"padding: 10px 20px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px; display: inline-block;\">\n"
+"                   View Request Details\n"
+"                </a>\n"
+"            </div>\n"
+"\n"
+"        "
+msgstr ""
+"<p>Se ha aprobado una solicitud de compra:</p>\n"
+"            <p><strong>Referencia:</strong> <t t-esc=\"object.name\"/></p>\n"
+"            <p><strong>Solicitado por:</strong> <t t-esc=\"object.collaborator_id.name\"/></p>\n"
+"            <p><strong>Fecha de solicitud:</strong> <t t-esc=\"object.request_date\"/></p>\n"
+"            <br/>\n"
+"            <div style=\"text-align: center; margin: 20px 0;\">\n"
+"                <a t-attf-href=\"/purchase_request/view?access_token={{ object.access_token }}&amp;id={{ object.id }}\" style=\"padding: 10px 20px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px; display: inline-block;\">\n"
+"                   Ver detalles de la solicitud\n"
+"                </a>\n"
+"            </div>\n"
+"\n"
+"        "
+
+#. module: portal_purchase_request
+#: model:mail.template,body_html:portal_purchase_request.email_template_purchase_request_state_change
+msgid ""
+"<p>The request <t t-esc=\"object.name\"/> has changed its state to <t t-esc=\"object.state\"/>.</p>\n"
+"            <br/>\n"
+"            <div style=\"text-align: center; margin: 20px 0;\">\n"
+"                <a t-attf-href=\"/purchase_request/view?access_token={{ object.access_token }}&amp;id={{ object.id }}\" style=\"padding: 10px 20px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px; display: inline-block;\">\n"
+"                   View Request\n"
+"                </a>\n"
+"            </div>\n"
+"        "
+msgstr ""
+"<p>La solicitud <t t-esc=\"object.name\"/> ha cambiado su estado a <t t-esc=\"object.state\"/>.</p>\n"
+"            <br/>\n"
+"            <div style=\"text-align: center; margin: 20px 0;\">\n"
+"                <a t-attf-href=\"/purchase_request/view?access_token={{ object.access_token }}&amp;id={{ object.id }}\" style=\"padding: 10px 20px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px; display: inline-block;\">\n"
+"                   Ver solicitud\n"
+"                </a>\n"
+"            </div>\n"
+"        "
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<small class=\"form-text text-muted\">Search and click to add approvers. Click the × on tags to remove them.</small>"
+msgstr "<small class=\"form-text text-muted\">Busca y haz clic para añadir aprobadores. Haz clic en la × de una etiqueta para eliminarla.</small>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list
+msgid "<span class=\"badge bg-danger rounded-pill\">Rejected</span>"
+msgstr "<span class=\"badge bg-danger rounded-pill\">Rechazado</span>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list
+msgid "<span class=\"badge bg-info rounded-pill\">In Process</span>"
+msgstr "<span class=\"badge bg-info rounded-pill\">En proceso</span>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list
+msgid "<span class=\"badge bg-info rounded-pill\">To Invoice</span>"
+msgstr "<span class=\"badge bg-info rounded-pill\">Por facturar</span>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list
+msgid "<span class=\"badge bg-light rounded-pill text-dark\">Cancelled</span>"
+msgstr "<span class=\"badge bg-light rounded-pill text-dark\">Cancelada</span>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list
+msgid "<span class=\"badge bg-success rounded-pill\">Completed</span>"
+msgstr "<span class=\"badge bg-success rounded-pill\">Terminada</span>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list
+msgid "<span class=\"badge bg-warning rounded-pill text-dark\">Draft</span>"
+msgstr "<span class=\"badge bg-warning rounded-pill text-dark\">Borrador</span>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<span class=\"input-group-text\">to</span>"
+msgstr "<span class=\"input-group-text\">a</span>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_create_purchase_order_wizard_form
+msgid ""
+"<span>\n"
+"                        This wizard allows you to create a purchase order for the required products listed in the table.\n"
+"                    </span><br/>\n"
+"                    <span>\n"
+"                        You can remove products if needed, but at least one must remain.\n"
+"                    </span><br/>\n"
+"                    <span>\n"
+"                        Default values are loaded from the purchase request, however, you can adjust them according to the purchase needs.\n"
+"                    </span>"
+msgstr ""
+"<span>\n"
+"                        Este asistente le permite crear una orden de compra para los productos requeridos enumerados en la tabla.\n"
+"                    </span><br/>\n"
+"                    <span>\n"
+"                        Puedes quitar productos si es necesario, pero al menos uno debe permanecer.\n"
+"                    </span><br/>\n"
+"                    <span>\n"
+"                        Los valores predeterminados se cargan desde la solicitud de compra, sin embargo, puedes ajustarlos según las necesidades de compra.\n"
+"                    </span>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<span>Status:</span>"
+msgstr "<span>Estado:</span>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Analytic distribution:</strong>"
+msgstr "<strong>Distribución analítica:</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Basic information</strong>"
+msgstr "<strong>Información básica</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Budget Group:</strong><br/>"
+msgstr "<strong>Grupo Presupuestal:</strong><br/>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Collaborator:</strong>"
+msgstr "<strong>Colaborador:</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Collaborator:</strong><br/>"
+msgstr "<strong>Colaborador:</strong><br/>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Completion Date:</strong><br/>"
+msgstr "<strong>Fecha de finalización:</strong><br/>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Division:</strong>"
+msgstr "<strong>Razón social:</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>End Date:</strong>"
+msgstr "<strong>Fecha de finalización:</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Execution Place:</strong>"
+msgstr "<strong>Lugar de ejecución:</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<strong>For Individual:</strong> Tax ID (RUT), copy of ID card, and bank certification"
+msgstr "<strong>Para personas físicas:</strong> Rut, copia de cédula de identidad y certificación bancaria"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<strong>For Legal Entity:</strong> Tax ID (RUT), Chamber of Commerce registration, and bank certification"
+msgstr "<strong>Para Personas Jurídicas:</strong> RUT, registro en la Cámara de Comercio y certificación bancaria"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list
+msgid "<strong>No purchase requests found.</strong>"
+msgstr "<strong>No se encontraron solicitudes de compra.</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Notes</strong>"
+msgstr "<strong>Notas</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Payment Agreement:</strong>"
+msgstr "<strong>Acuerdo de pago:</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "<strong>Please attach the following documents when applicable:</strong>"
+msgstr "<strong>Adjunte los siguientes documentos cuando corresponda:</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Project information</strong>"
+msgstr "<strong>Información del proyecto</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_success
+msgid "<strong>Reference Number:</strong>"
+msgstr "<strong>Número de referencia:</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Request Date:</strong>"
+msgstr "<strong>Fecha de solicitud:</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Request type:</strong><br/>"
+msgstr "<strong>Tipo de solicitud:</strong><br/>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Reviewed By:</strong><br/>"
+msgstr "<strong>Revisado por:</strong><br/>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Start Date:</strong>"
+msgstr "<strong>Fecha de inicio:</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_success
+msgid "<strong>Status:</strong>"
+msgstr "<strong>Estado:</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Team:</strong>"
+msgstr "<strong>Equipo:</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Total Value:</strong>"
+msgstr "<strong>Valor total:</strong>"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "<strong>Vendor:</strong>"
+msgstr "<strong>Proveedor:</strong>"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__access_token
+msgid "Access Token"
+msgstr "Token de acceso"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__access_warning
+msgid "Access warning"
+msgstr "Advertencia de acceso"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__message_needaction
+msgid "Action Needed"
+msgstr "Acción necesaria"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__activity_ids
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "Decorador excepción de actividad"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__activity_state
+msgid "Activity State"
+msgstr "Estado de actividad"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Icono de tipo de actividad"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "Additional notes or comments..."
+msgstr "Notas o comentarios adicionales..."
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__analytic_distribution model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__analytic_distribution
+msgid "Analytic Distribution"
+msgstr "Distribución analítica"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__analytic_precision model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__analytic_precision
+msgid "Analytic Precision"
+msgstr "Precisión analítica"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_form
+msgid "Approval Data"
+msgstr "Datos de aprobación"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_form
+msgid "Approve"
+msgstr "Aprobar"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__approve_ids
+msgid "Approvers"
+msgstr "Aprobadores"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0 model:ir.model.fields.selection,name:portal_purchase_request.selection__portal_purchase_request__request_type__asset_purchase model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Asset Purchase"
+msgstr "Compra de activos"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__asset_responsible_id
+msgid "Asset Responsible"
+msgstr "Responsable del activo"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"Asset Responsible *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Select the person responsible for managing the asset. This is required for asset purchases.\"/>"
+msgstr ""
+"Responsable del activo *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Seleccione al responsable de la gestión del activo. Esto es obligatorio para la compra de activos.\"/>"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0 model:ir.model.fields.selection,name:portal_purchase_request.selection__portal_purchase_request__request_type__quotation
+msgid "Asset/Service Quotation"
+msgstr "Cotización de activos/servicios"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "At least one approver is required"
+msgstr "Se requiere al menos un aprobador"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "At least one attachment is required"
+msgstr "Se requiere al menos un archivo adjunto"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "At least one leader must approve the request."
+msgstr "Al menos un líder debe aprobar la solicitud."
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "At least one product line is required"
+msgstr "Se requiere al menos una línea de productos"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"Attach Files *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Attach supporting documents (contract, terms, ID, bank certification, etc.). Total file size must not exceed the maximum shown.\"/>"
+msgstr ""
+"Adjuntar archivos *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Adjunte documentos de respaldo (contrato, condiciones, documento de identidad, certificado bancario, etc.). El tamaño total del archivo no debe exceder el máximo indicado.\"/>"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__message_attachment_count
+msgid "Attachment Count"
+msgstr "Cantidad de archivos adjuntos"
+
+#. module: portal_purchase_request
+#: model:res.groups,name:portal_purchase_request.group_back_purchase_request_user
+msgid "Backend / Purchase Requests"
+msgstr "Solicitudes de compra/backend"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__budget_group_id model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__budget_group_id
+msgid "Budget Group"
+msgstr "Grupo Presupuestal"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"Budget Group *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Select the appropriate budget category for this project.\"/>"
+msgstr ""
+"Grupo Presupuestal *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Seleccione la categoría de presupuesto adecuada para este proyecto.\"/>"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Budget Group is required"
+msgstr "Se requiere grupo presupuestal"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_create_purchase_order_wizard_form model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_form
+msgid "Cancel"
+msgstr "Cancelado"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields.selection,name:portal_purchase_request.selection__portal_purchase_request__state__cancelled model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Cancelled"
+msgstr "Cancelado"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/purchase_order.py:0
+msgid "Cancelled by another purchase order confirmation from the same request."
+msgstr "Cancelado por confirmación de otra orden de compra de la misma solicitud."
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__collaborator_id model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Collaborator"
+msgstr "Colaborador"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"Collaborator *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Start typing to search employees. The current logged-in employee is prefilled when available.\"/>"
+msgstr ""
+"Colaborador *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Empiece a escribir para buscar empleados. El empleado que ha iniciado sesión se rellena automáticamente cuando esté disponible.\"/>"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0 code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "Collaborator cannot be one of the approvers."
+msgstr "El colaborador no puede ser uno de los aprobadores."
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Collaborator is required"
+msgstr "Se requiere colaborador"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "Communication history"
+msgstr "Historia de la comunicación"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__division_id
+msgid "Company name"
+msgstr "Razón social"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,help:portal_purchase_request.field_portal_purchase_request__division_id
+msgid "Company name of the company through which the service/purchase is performed."
+msgstr "Razón social de la empresa a través de la cual se realiza el servicio/compra."
+
+#. module: portal_purchase_request
+#: model:ir.model.fields.selection,name:portal_purchase_request.selection__portal_purchase_request__state__completed model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Completed"
+msgstr "Terminado"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__completion_date
+msgid "Completion Date"
+msgstr "Fecha de finalización"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "Contract Terms and Conditions"
+msgstr "Términos y condiciones del contrato"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "Contract or Offer"
+msgstr "Contrato u Oferta"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0 model_terms:ir.ui.view,arch_db:portal_purchase_request.view_create_purchase_order_wizard_form model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_form
+msgid "Create Purchase Order"
+msgstr "Crear orden de compra"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__create_uid model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request_line__create_uid model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__create_uid
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__create_date model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request_line__create_date model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__create_date
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__currency_id model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__currency_id model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__currency_id
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Currency is required"
+msgstr "Se requiere moneda"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,help:portal_purchase_request.field_portal_purchase_request__access_url
+msgid "Customer Portal URL"
+msgstr "URL del portal del cliente"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list
+msgid "Date"
+msgstr "Fecha"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request_line__description model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__name model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "Description"
+msgstr "Descripción"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__display_name model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request_line__display_name model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__display_name
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__display_name
+msgid "Display Name"
+msgstr "Nombre"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__distribution_analytic_account_ids model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__distribution_analytic_account_ids
+msgid "Distribution Analytic Account"
+msgstr "Cuenta analítica de distribución"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Division"
+msgstr "Razón social"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"Division *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Select the company division that will be charged for this request.\"/>"
+msgstr ""
+"Razón social *\n"
+"                         <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Seleccione la Razón social de la empresa a la que se le cobrará esta solicitud.\"/>"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Division is required"
+msgstr "Se requiere Razón social"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields.selection,name:portal_purchase_request.selection__portal_purchase_request__state__draft model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "End Date"
+msgstr "Fecha de finalización"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Error creating purchase request: %s"
+msgstr "Error al crear solicitud de compra: %s"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__execution_place
+msgid "Execution Place"
+msgstr "Lugar de ejecución"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"Execution Place *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Specify the location where the work or delivery will take place.\"/>"
+msgstr ""
+"Lugar de ejecución *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Especifique el lugar donde se realizará el trabajo o la entrega.\"/>"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Execution place is required"
+msgstr "Se requiere lugar de ejecución"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_my_home_purchase_request
+msgid "Follow your Purchase Requests"
+msgstr "Seguimiento de sus solicitudes de compra"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__message_follower_ids
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Seguidores (Terceros)"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,help:portal_purchase_request.field_portal_purchase_request__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font awesome icon e.g. fa-tasks"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__has_message
+msgid "Has Message"
+msgstr "Tiene mensaje"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__id model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request_line__id model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__id
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__activity_exception_icon
+msgid "Icon"
+msgstr "Icono"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,help:portal_purchase_request.field_portal_purchase_request__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "Icono para indicar una actividad de excepción."
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,help:portal_purchase_request.field_portal_purchase_request__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Si está marcada, los mensajes nuevos requieren su atención."
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,help:portal_purchase_request.field_portal_purchase_request__message_has_error model:ir.model.fields,help:portal_purchase_request.field_portal_purchase_request__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Si está marcada, algunos mensajes tendrán un error de entrega."
+
+#. module: portal_purchase_request
+#: model:ir.model.fields.selection,name:portal_purchase_request.selection__portal_purchase_request__state__in_process model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "In Process"
+msgstr "Un proceso"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Invalid date format"
+msgstr "Formato de fecha no válido"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Invalid numeric value"
+msgstr "Valor numérico no válido"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Invalid quantity"
+msgstr "Cantidad no válida"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__message_is_follower
+msgid "Is Follower"
+msgstr "Es seguidor"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__write_uid model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request_line__write_uid model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__write_uid
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__write_date model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request_line__write_date model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__write_date
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "MB"
+msgstr "MB"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "MB used. <span class=\"attachments-remaining\">0 MB</span> remaining."
+msgstr "MB utilizados. <span class=\"attachments-remaining\">0 MB</span> restantes."
+
+#. module: portal_purchase_request
+#: model:mail.template,name:portal_purchase_request.email_template_purchase_request_manager_notification
+msgid "Manager Notification - Purchase Request"
+msgstr "Notificación al gerente - Solicitud de compra"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "Maximum total file size:"
+msgstr "Tamaño máximo total de archivo:"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__message_has_error
+msgid "Message Delivery error"
+msgstr "Error en la entrega del mensaje"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__message_ids
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "Fecha límite de mi actividad"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list
+msgid "My Purchase Requests"
+msgstr "Mis solicitudes de compra"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "My Requests"
+msgstr "Mis solicitudes"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Name"
+msgstr "Nombre"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "New purchase request created: %s"
+msgstr "Nueva solicitud de compra creada: %s"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Newest"
+msgstr "El más nuevo"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__activity_calendar_event_id
+msgid "Next Activity Calendar Event"
+msgstr "Próximo evento del calendario de actividades"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Fecha límite para la próxima actividad"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__activity_summary
+msgid "Next Activity Summary"
+msgstr "Resumen de la próxima actividad"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__activity_type_id
+msgid "Next Activity Type"
+msgstr "Siguiente tipo de actividad"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__notes model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "Notes"
+msgstr "Notas"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Número de acciones"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__message_has_error_counter
+msgid "Number of errors"
+msgstr "Número de errores"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,help:portal_purchase_request.field_portal_purchase_request__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "Número de mensajes que requieren acción"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,help:portal_purchase_request.field_portal_purchase_request__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Número de mensajes con error de entrega"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "Only cancelled requests can be set to draft"
+msgstr "Sólo las solicitudes canceladas se pueden marcar como borrador"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__payment_agreement
+msgid "Payment Agreement"
+msgstr "Acuerdo de pago"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"Payment Agreement *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Describe the payment terms or agreement for this purchase.\"/>"
+msgstr ""
+"Acuerdo de pago *\n"
+"                         <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Describa las condiciones o el acuerdo de pago para esta compra.\"/>"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Payment agreement is required"
+msgstr "Se requiere acuerdo de pago"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_form
+msgid "Planned Date"
+msgstr "Fecha planificada"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid ""
+"Please fix the following errors:\n"
+"\n"
+msgstr ""
+"Por favor corrija los siguientes errores:\n"
+"\n"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Please select at least one approver"
+msgstr "Por favor seleccione al menos un aprobador"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Policy"
+msgstr "Solicitud de póliza"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0 model:ir.model.fields.selection,name:portal_purchase_request.selection__portal_purchase_request__request_type__policy
+msgid "Policy Request"
+msgstr "Solicitud de póliza"
+
+#. module: portal_purchase_request
+#: model:res.groups,name:portal_purchase_request.group_portal_purchase_request_portal
+msgid "Portal / Purchase Requests"
+msgstr "Portal / Solicitudes de compra"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__access_url
+msgid "Portal Access URL"
+msgstr "URL de acceso al portal"
+
+#. module: portal_purchase_request
+#: model:ir.model,name:portal_purchase_request.model_portal_purchase_request
+msgid "Portal Purchase Request"
+msgstr "Solicitud de compra portal"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order__portal_request_id model_terms:ir.ui.view,arch_db:portal_purchase_request.purchase_order_view_search
+msgid "Portal Request"
+msgstr "Solicitud de compra"
+
+#. module: portal_purchase_request
+#: model:ir.actions.act_window,name:portal_purchase_request.action_portal_purchase_request_tree model:ir.ui.menu,name:portal_purchase_request.menu_purchase_request
+msgid "Portal Requests"
+msgstr "Solicitudes de compra"
+
+#. module: portal_purchase_request
+#: model:ir.model,name:portal_purchase_request.model_portal_purchase_request_line
+msgid "Portal purchase request line"
+msgstr "Línea de solicitud de compra portal"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "Product Description"
+msgstr "Descripción del Producto"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_form
+msgid "Product Information"
+msgstr "Información del producto"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__product_line_ids model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__line_ids
+msgid "Products"
+msgstr "Productos"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_create_purchase_order_wizard_form
+msgid "Products to Purchase"
+msgstr "Productos para comprar"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"Project Date Range *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Choose the project start and end dates using the date pickers.\"/>"
+msgstr ""
+"Rango de fechas del proyecto *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Seleccione las fechas de inicio y fin del proyecto con los selectores de fechas.\"/>"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__project_end_date
+msgid "Project End Date"
+msgstr "Fecha de finalización del proyecto"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_form
+msgid "Project Information"
+msgstr "Información del proyecto"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__project_start_date
+msgid "Project Start Date"
+msgstr "Fecha de inicio del proyecto"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__project_total_value
+msgid "Project Total Value"
+msgstr "Valor total del proyecto"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"Project Total Value *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Enter the estimated total cost for the project and select the currency.\"/>"
+msgstr ""
+"Valor total del proyecto *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Ingrese el costo total estimado del proyecto y seleccione la moneda.\"/>"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Project dates are required"
+msgstr "Se requieren fechas del proyecto"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Project end date is required"
+msgstr "Se requieren fechas del proyecto"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Project start date is required"
+msgstr "Se requiere fecha de inicio del proyecto"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0 code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "Project start date must be before the end date."
+msgstr "La fecha de inicio del proyecto debe ser anterior a la fecha de finalización."
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Project total value and currency are required"
+msgstr "Se requiere el valor total del proyecto y la moneda"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Project total value is required"
+msgstr "Se requiere el valor total del proyecto"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0 code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "Project total value must be positive and greater than zero."
+msgstr "El valor total del proyecto debe ser positivo y mayor que cero."
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_create_purchase_order_wizard_form
+msgid "Purchase Information"
+msgstr "Información de compra"
+
+#. module: portal_purchase_request
+#: model:res.groups,name:portal_purchase_request.group_purchase_request_manager
+msgid "Purchase Manager (Notifications)"
+msgstr "Gestor de compras (Notificaciones)"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0 code:addons/portal_purchase_request/wizard/create_purchase_order_wizard.py:0 model:ir.model,name:portal_purchase_request.model_purchase_order
+msgid "Purchase Order"
+msgstr "Orden de compra"
+
+#. module: portal_purchase_request
+#: model:ir.model,name:portal_purchase_request.model_purchase_order_wizard
+msgid "Purchase Order Wizard"
+msgstr "Asistente de órdenes de compra"
+
+#. module: portal_purchase_request
+#: model:ir.model,name:portal_purchase_request.model_purchase_order_wizard_line
+msgid "Purchase Order Wizard Line"
+msgstr "Línea del asistente de órdenes de compra"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0 model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__purchase_order_ids model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_form
+msgid "Purchase Orders"
+msgstr "Órdenes de compra"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__purchase_order_count
+msgid "Purchase Orders Count"
+msgstr "Error al recuperar el recuento de archivos"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__purchase_request_id model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_tree
+msgid "Purchase Request"
+msgstr "Solicitud de compra"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_my_home_purchase_request model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_breadcrumbs model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Purchase Requests"
+msgstr "Solicitudes de compra"
+
+#. module: portal_purchase_request
+#: model_terms:ir.actions.act_window,help:portal_purchase_request.action_portal_purchase_request_tree
+msgid "Purchase request management"
+msgstr "Gestión de solicitudes de compra"
+
+#. module: portal_purchase_request
+#: model:res.groups,name:portal_purchase_request.group_purchase_request_admin
+msgid "Purchases / Purchase Request Administrator"
+msgstr "Compras / Administrador de solicitudes de compra"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request_line__quantity model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__product_qty model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Quantity is required when description is provided"
+msgstr "Se requiere cantidad cuando se proporciona una descripción"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Quantity must be greater than zero"
+msgstr "La cantidad debe ser mayor que cero"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request_line.py:0 code:addons/portal_purchase_request/wizard/create_purchase_order_wizard.py:0
+msgid "Quantity must be positive and greater than zero."
+msgstr "La cantidad debe ser positiva y mayor que cero."
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Quotation"
+msgstr "Cotización"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__rating_ids
+msgid "Ratings"
+msgstr "Calificaciones"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__reason
+msgid "Reason"
+msgstr "Razón"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__name model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Reference"
+msgstr "Referencia"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_form
+msgid "Reject"
+msgstr "Rechazar"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields.selection,name:portal_purchase_request.selection__portal_purchase_request__state__rejected model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Rejected"
+msgstr "Rechazado"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request_line__request_id model:website.menu,name:portal_purchase_request.website_menu_purchase_request
+msgid "Request"
+msgstr "Solicitud"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__request_date
+msgid "Request Date"
+msgstr "Fecha de solicitud"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_create_purchase_order_wizard_form
+msgid "Request Information"
+msgstr "Información de la Solicitud"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_portal_view
+msgid "Request Lines"
+msgstr "Líneas de solicitud"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__request_line_ids
+msgid "Request Products"
+msgstr "Solicitar productos"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__request_type model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Request Type"
+msgstr "Tipo de solicitud"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"Request Type *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Choose the type of request: Asset Purchase, Service Request, Quotation or Policy Request.\"/>"
+msgstr ""
+"Tipo de solicitud *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Seleccione el tipo de solicitud: Compra de activos, Solicitud de servicio, Cotización o Solicitud de póliza.\"/>"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "Request approved: %s"
+msgstr "Solicitud aprobada: %s"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "Request cancelled: %s - %s"
+msgstr "Solicitud cancelada: %s - %s"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "Request rejected: %s - %s"
+msgstr "Solicitud rechazada: %s - %s"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Request type is required"
+msgstr "El tipo de solicitud es obligatorio"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__activity_user_id
+msgid "Responsible User"
+msgstr "ID de usuario o correo electrónico"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__reviewed_by_id
+msgid "Reviewed By"
+msgstr "Revisado por"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "Error de entrega de SMS"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "Search and select approvers..."
+msgstr "Buscar y seleccionar aprobadores..."
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "Search and select collaborator..."
+msgstr "Buscar y seleccionar colaborador..."
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"Select Approvers *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Search and add one or more employees who will approve this request. The collaborator cannot be an approver.\"/>"
+msgstr ""
+"Seleccionar aprobadores *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Buscar y agregar uno o más empleados que aprobarán esta solicitud. El colaborador no puede ser aprobador.\"/>"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0 model:ir.model.fields.selection,name:portal_purchase_request.selection__portal_purchase_request__request_type__service_request model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Service Request"
+msgstr "Solicitud de servicio"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid "Start Date"
+msgstr "Fecha de inicio"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "State"
+msgstr "Estado"
+
+#. module: portal_purchase_request
+#: model:mail.template,name:portal_purchase_request.email_template_purchase_request_state_change
+msgid "State Change - Purchase Request"
+msgstr "Estado"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__state model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list
+msgid "Status"
+msgstr "Estado"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,help:portal_purchase_request.field_portal_purchase_request__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"Estado según actividades\n"
+"Vencido: La fecha de vencimiento ya pasó\n"
+"Hoy: La fecha de la actividad es hoy\n"
+"Planificado: Actividades futuras."
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__price_subtotal model_terms:ir.ui.view,arch_db:portal_purchase_request.view_create_purchase_order_wizard_form
+msgid "Subtotal"
+msgstr "Subtotal"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_success
+msgid "Success!"
+msgstr "¡Exitoso!"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__taxes_ids
+msgid "Taxes"
+msgstr "Impuestos"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__team_id model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Team"
+msgstr "Equipo"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"Team *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Select the team or job position related to this request.\"/>"
+msgstr ""
+"Equipo *\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Seleccione el equipo o puesto relacionado con esta solicitud.\"/>"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Team is required"
+msgstr "Se requiere equipo"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "To Approve"
+msgstr "Por aprobar"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields.selection,name:portal_purchase_request.selection__portal_purchase_request__state__to_invoice model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "To Invoice"
+msgstr "Para facturar"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_form
+msgid "To draft"
+msgstr "Borrador"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__price_total model_terms:ir.ui.view,arch_db:portal_purchase_request.view_create_purchase_order_wizard_form
+msgid "Total"
+msgstr "Total"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/controllers/main.py:0
+msgid "Total file size exceeds maximum allowed size of %s MB"
+msgstr "El tamaño total del archivo excede el tamaño máximo permitido de %s MB"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,help:portal_purchase_request.field_portal_purchase_request__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "Tipo de actividad de excepción registrada."
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__price_unit
+msgid "Unit Price"
+msgstr "Precio unitario"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/wizard/create_purchase_order_wizard.py:0
+msgid "Unit price cannot be negative."
+msgstr "El precio unitario no puede ser negativo."
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__partner_id model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard__partner_id model_terms:ir.ui.view,arch_db:portal_purchase_request.view_portal_purchase_request_search
+msgid "Vendor"
+msgstr "Proveedor"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_form
+msgid ""
+"Vendor\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Select the supplier or vendor if already known. This field is optional.\"/>"
+msgstr ""
+"Proveedor\n"
+"                          <i class=\"fa fa-info-circle text-muted ms-1\" tabindex=\"0\" role=\"button\" data-bs-toggle=\"popover\" data-bs-trigger=\"focus\" data-bs-content=\"Seleccione el proveedor si ya lo conoce. Este campo es opcional.\"/>"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_portal_purchase_request__website_message_ids
+msgid "Website Messages"
+msgstr "Mensajes del sitio web"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,help:portal_purchase_request.field_portal_purchase_request__website_message_ids
+msgid "Website communication history"
+msgstr "Historial de comunicación del sitio web"
+
+#. module: portal_purchase_request
+#: model:ir.model.fields,field_description:portal_purchase_request.field_purchase_order_wizard_line__wizard_id
+msgid "Wizard"
+msgstr "Asistente"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "You are not authorized to reject this request"
+msgstr "No está autorizado a rechazar esta solicitud."
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "You cannot cancel a confirmed purchase order: %s"
+msgstr "No se puede cancelar una orden de compra confirmada: %s"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "You cannot modify a purchase request that is not in draft, in process, or to invoice state."
+msgstr "No se puede modificar una solicitud de compra que no esté en borrador, en proceso o en estado por facturar."
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.portal_purchase_request_list
+msgid "You don't have any purchase requests yet."
+msgstr "Aún no tienes ninguna solicitud de compra."
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "You must add at least one product line to approve the request"
+msgstr "Debe agregar al menos una línea de producto para aprobar la solicitud"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "You must provide a reason for cancellation"
+msgstr "Debe proporcionar un motivo para la cancelación"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/models/portal_purchase_request.py:0
+msgid "You must provide a reason for rejection"
+msgstr "Debe proporcionar un motivo para el rechazo"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/wizard/create_purchase_order_wizard.py:0
+msgid "You must select at least one product to create a purchase order.\n"
+msgstr "Debe seleccionar al menos un producto para crear una orden de compra.\n"
+
+#. module: portal_purchase_request
+#. odoo-python
+#: code:addons/portal_purchase_request/wizard/create_purchase_order_wizard.py:0
+msgid "You must select at least one request line.\n"
+msgstr "Debe seleccionar al menos una línea de solicitud.\n"
+
+#. module: portal_purchase_request
+#: model_terms:ir.ui.view,arch_db:portal_purchase_request.public_purchase_request_success
+msgid "Your purchase request has been submitted successfully."
+msgstr "Su solicitud de compra ha sido enviada exitosamente."
+
+#. module: portal_purchase_request
+#: model:mail.template,subject:portal_purchase_request.email_template_purchase_request_manager_notification
+msgid "[Request] Approved Purchase Request: ${object.name}"
+msgstr "[Solicitud] Solicitud de compra aprobada: ${object.name}"
+
+#. module: portal_purchase_request
+#: model:mail.template,subject:portal_purchase_request.email_template_purchase_request_state_change
+msgid "[Request] State changed: ${object.name}"
+msgstr "[Solicitud] Estado ha cambiado: ${object.name}"

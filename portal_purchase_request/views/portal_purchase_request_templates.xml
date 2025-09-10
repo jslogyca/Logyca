@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Public Purchase Request Form -->
+  <template id="public_purchase_request_form" name="Public Purchase Request Form">
+    <t t-call="website.layout">
+      <t t-set="head">
+        <link rel="stylesheet" href="/portal_purchase_request/static/src/css/purchase_request_form.css"/>
+      </t>
+      <div class="purchase-request-form">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-10">
+              <div class="card purchase-request-card">
+                <div class="card-header text-white">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0">
+                      <i class="fa fa-shopping-cart mr-2"></i>
+                      Purchase Request Form
+                    </h3>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <t t-if="errors.get('general')">
+                    <div class="alert alert-danger" role="alert">
+                      <i class="fa fa-exclamation-triangle mr-2"></i>
+                      <span t-esc="errors['general']"/>
+                    </div>
+                  </t>
+                  <form method="post" action="/purchase-request/new" class="needs-validation" enctype="multipart/form-data" novalidate="novalidate">
+                    <script type="application/json" id="analytic-accounts-data" t-esc="json.dumps(analytic_accounts_map)"></script>
+                    <div class="row mb-4">
+                      <div class="col-12">
+                        <h5 class="text-primary border-bottom pb-2">
+                          <i class="fa fa-info-circle mr-2"></i>Basic Information
+                        </h5>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="collaborator_id_widget" class="form-label">Collaborator *
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Start typing to search employees. The current logged-in employee is prefilled when available."></i>
+                        </label>
+                        <div class="collaborator-container">
+                          <input type="text" id="collaborator_id_widget" class="form-control" placeholder="Search and select collaborator..." autocomplete="off" required="required"/>
+                          <div class="collaborator-dropdown" style="display:none;"></div>
+                          <input type="hidden" name="collaborator_id" id="collaborator_id" t-att-value="form_data.get('collaborator_id', '')"/>
+                        </div>
+                        <t t-if="errors.get('collaborator_id')">
+                          <div class="invalid-feedback d-block">
+                            <span t-esc="errors['collaborator_id']"/>
+                          </div>
+                        </t>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="division_id" class="form-label">Division *
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Select the company division that will be charged for this request."></i>
+                        </label>
+                        <select name="division_id" id="division_id" t-attf-class="form-select#{' is-invalid' if errors.get('division_id') else ''}" required="required">
+                          <option value="">Select Division</option>
+                          <t t-foreach="companies" t-as="company">
+                            <option t-att-value="company.id"
+                              t-att-selected="'selected' if form_data.get('division_id') == str(company.id) else None"
+                              t-esc="company.name"></option>
+                          </t>
+                        </select>
+                        <t t-if="errors.get('division_id')">
+                          <div class="invalid-feedback d-block">
+                            <span t-esc="errors['division_id']"/>
+                          </div>
+                        </t>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="team_id" class="form-label">Team *
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Select the team or job position related to this request."></i>
+                        </label>
+                        <select name="team_id" id="team_id" t-attf-class="form-select#{' is-invalid' if errors.get('team_id') else ''}" required="required">
+                          <option value="">Select Team</option>
+                          <t t-foreach="jobs" t-as="job">
+                            <option t-att-value="job.id"
+                              t-att-selected="'selected' if form_data.get('team_id') == str(job.id) else None"
+                              t-esc="job.name"></option>
+                          </t>
+                        </select>
+                        <t t-if="errors.get('team_id')">
+                          <div class="invalid-feedback d-block">
+                            <span t-esc="errors['team_id']"/>
+                          </div>
+                        </t>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="request_type" class="form-label">Request Type *
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Choose the type of request: Asset Purchase, Service Request, Quotation or Policy Request."></i>
+                        </label>
+                        <select name="request_type" id="request_type" t-attf-class="form-select#{' is-invalid' if errors.get('request_type') else ''}" required="required">
+                          <option value="">Select Request Type</option>
+                          <t t-foreach="request_types" t-as="req_type">
+                            <option t-att-value="req_type[0]"
+                              t-att-selected="'selected' if form_data.get('request_type') == req_type[0] else None"
+                              t-esc="req_type[1]"></option>
+                          </t>
+                        </select>
+                        <t t-if="errors.get('request_type')">
+                          <div class="invalid-feedback d-block">
+                            <span t-esc="errors['request_type']"/>
+                          </div>
+                        </t>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="budget_group_id" class="form-label">Budget Group *
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Select the appropriate budget category for this project."></i>
+                        </label>
+                        <select name="budget_group_id" id="budget_group_id" t-attf-class="form-select#{' is-invalid' if errors.get('budget_group_id') else ''}" required="required">
+                          <option value="">Select Budget Group</option>
+                          <t t-foreach="budget_groups" t-as="budget_group">
+                            <t t-if="request.env['account.analytic.account'].check_access_rights('read', raise_exception=False)">
+                              <option t-att-value="budget_group.id"
+                                t-att-data-analytic="budget_group.analytic_distribution or ''"
+                                t-att-data-analytic-formatted="' | '.join([ (str(int(v)) if (isinstance(v, (int, float)) and float(v).is_integer()) else str(v)) + '% ' + (request.env['account.analytic.account'].browse(int(k)).name if request.env['account.analytic.account'].browse(int(k)).exists() else ('#' + k)) for k, v in (budget_group.analytic_distribution or {}).items() ])"
+                                t-att-selected="'selected' if form_data.get('budget_group_id') == str(budget_group.id) else None"
+                                t-esc="budget_group.name"></option>
+                            </t>
+                            <t t-else="">
+                              <option t-att-value="budget_group.id"
+                                t-att-data-analytic="budget_group.analytic_distribution or ''"
+                                t-att-selected="'selected' if form_data.get('budget_group_id') == str(budget_group.id) else None"
+                                t-esc="budget_group.name"></option>
+                            </t>
+                          </t>
+                        </select>
+                        <!-- Read-only analytic distribution populated from selected budget group -->
+                        <!-- Hidden input holds the value submitted with the form -->
+                        <input type="hidden" name="analytic_distribution" id="analytic_distribution" t-att-value="form_data.get('analytic_distribution','')"/>
+                        <!-- Visible badge-like label for better styling and UX -->
+                        <div id="analytic_distribution_badge" class="mt-2">
+                          <span id="analytic_distribution_label"
+                                class="badge rounded-pill bg-info text-white text-truncate"
+                                style="display: none; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                title="">
+                          </span>
+                        </div>
+                        <t t-if="errors.get('budget_group_id')">
+                          <div class="invalid-feedback d-block">
+                            <span t-esc="errors['budget_group_id']"/>
+                          </div>
+                        </t>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="partner_id" class="form-label">Vendor
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Select the supplier or vendor if already known. This field is optional."></i>
+                        </label>
+                        <select name="partner_id" id="partner_id" class="form-select">
+                          <option value="">Select Vendor</option>
+                          <t t-foreach="partners" t-as="partner">
+                            <option t-att-value="partner.id"
+                              t-att-selected="'selected' if form_data.get('partner_id') == str(partner.id) else None"
+                              t-esc="partner.name"></option>
+                          </t>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col-12">
+                        <h5 class="text-primary border-bottom pb-2">
+                          <i class="fa fa-calendar mr-2"></i>Project Information
+                        </h5>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="project_date_range" class="form-label">Project Date Range *
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Choose the project start and end dates using the date pickers."></i>
+                        </label>
+                        <div class="input-group" t-attf-class="input-group#{' is-invalid' if errors.get('project_start_date') or errors.get('project_end_date') else ''}">
+                          <input type="date" name="project_start_date" id="project_start_date"
+                            t-att-value="form_data.get('project_start_date', '')"
+                            t-attf-class="form-control#{' is-invalid' if errors.get('project_start_date') else ''}"
+                            placeholder="Start Date" required="required"/>
+                          <t t-if="errors.get('project_start_date')">
+                            <div class="invalid-feedback d-block">
+                              <span t-esc="errors['project_start_date']"/>
+                            </div>
+                          </t>
+                          <span class="input-group-text">to</span>
+                          <input type="date" name="project_end_date" id="project_end_date"
+                            t-att-value="form_data.get('project_end_date', '')"
+                            t-attf-class="form-control#{' is-invalid' if errors.get('project_end_date') else ''}"
+                            placeholder="End Date" required="required"/>
+                          <t t-if="errors.get('project_end_date')">
+                            <div class="invalid-feedback d-block">
+                              <span t-esc="errors['project_end_date']"/>
+                            </div>
+                          </t>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="execution_place" class="form-label">Execution Place *
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Specify the location where the work or delivery will take place."></i>
+                        </label>
+                        <input type="text" name="execution_place" id="execution_place"
+                          t-att-value="form_data.get('execution_place', '')"
+                          t-attf-class="form-control#{' is-invalid' if errors.get('execution_place') else ''}"
+                          required="required"/>
+                        <t t-if="errors.get('execution_place')">
+                          <div class="invalid-feedback d-block">
+                            <span t-esc="errors['execution_place']"/>
+                          </div>
+                        </t>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="project_total_value" class="form-label">Project Total Value *
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Enter the estimated total cost for the project and select the currency."></i>
+                        </label>
+                        <div class="input-group">
+                          <input type="number" name="project_total_value" id="project_total_value"
+                          t-att-value="form_data.get('project_total_value', '')"
+                          t-attf-class="form-control#{' is-invalid' if errors.get('project_total_value') else ''}"
+                          step="1" min="0" required="required"/>
+                          <select name="currency_id" id="currency_id" t-attf-class="form-select#{' is-invalid' if errors.get('currency_id') else ''}" required="required" style="max-width: 100px;">
+                          <option value="">Select Currency</option>
+                          <t t-foreach="currencies" t-as="currency">
+                            <option t-att-value="currency.id"
+                            t-att-selected="'selected' if form_data.get('currency_id') == str(currency.id) else None"
+                            t-esc="currency.name"></option>
+                          </t>
+                          </select>
+                        </div>
+                        <t t-if="errors.get('project_total_value')">
+                          <div class="invalid-feedback d-block">
+                          <span t-esc="errors['project_total_value']"/>
+                          </div>
+                        </t>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="payment_agreement" class="form-label">Payment Agreement *
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Describe the payment terms or agreement for this purchase."></i>
+                        </label>
+                        <input type="text" name="payment_agreement" id="payment_agreement"
+                          t-att-value="form_data.get('payment_agreement', '')"
+                          t-attf-class="form-control#{' is-invalid' if errors.get('payment_agreement') else ''}"
+                          required="required"/>
+                        <t t-if="errors.get('payment_agreement')">
+                          <div class="invalid-feedback d-block">
+                            <span t-esc="errors['payment_agreement']"/>
+                          </div>
+                        </t>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="asset_responsible_id" class="form-label">Asset Responsible *
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Select the person responsible for managing the asset. This is required for asset purchases."></i>
+                        </label>
+                        <select name="asset_responsible_id" id="asset_responsible_id" t-attf-class="form-select#{' is-invalid' if errors.get('asset_responsible_id') else ''}" required="required">
+                          <option value="">Select Asset Responsible</option>
+                          <t t-foreach="employees" t-as="employee">
+                            <option t-att-value="employee.id"
+                              t-att-selected="'selected' if form_data.get('asset_responsible_id') == str(employee.id) else None"
+                              t-esc="employee.name"></option>
+                          </t>
+                        </select>
+                        <t t-if="errors.get('asset_responsible_id')">
+                          <div class="invalid-feedback d-block">
+                            <span t-esc="errors['asset_responsible_id']"/>
+                          </div>
+                        </t>
+                      </div>
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col-12">
+                        <h5 class="text-primary border-bottom pb-2">
+                          <i class="fa fa-list mr-2"></i>Product Lines *
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Add one or more product/service lines. Provide a description and quantity for each line."></i>
+                        </h5>
+                      </div>
+                      <div class="col-12">
+                        <t t-if="errors.get('product_lines')">
+                          <div class="alert alert-danger">
+                            <span t-esc="errors['product_lines']"/>
+                          </div>
+                        </t>
+                        <div id="product-lines-container">
+                          <div class="product-line-row row mb-2">
+                            <div class="col-md-8">
+                              <input type="text" name="product_description_0" placeholder="Product Description"
+                                t-att-value="form_data.get('product_description_0', '')"
+                                class="form-control"/>
+                            </div>
+                            <div class="col-md-3">
+                              <input type="number" name="product_quantity_0" placeholder="Quantity"
+                                t-att-value="form_data.get('product_quantity_0', '')"
+                                t-attf-class="form-control#{' is-invalid' if errors.get('product_quantity_0') else ''}"
+                                step="0.01" min="0.01"/>
+                              <t t-if="errors.get('product_quantity_0')">
+                                <div class="invalid-feedback d-block">
+                                  <span t-esc="errors['product_quantity_0']"/>
+                                </div>
+                              </t>
+                            </div>
+                            <div class="col-md-1">
+                              <button type="button" class="btn btn-success btn-sm add-product-line">
+                                <i class="fa fa-plus"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col-12">
+                        <h5 class="text-primary border-bottom pb-2">
+                          <i class="fa fa-users mr-2"></i>Approvers *
+                        </h5>
+                      </div>
+                      <div class="col-12 mb-3">
+                        <label for="approvers" class="form-label">Select Approvers *
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Search and add one or more employees who will approve this request. The collaborator cannot be an approver."></i>
+                        </label>
+                        <div class="approvers-container">
+                          <div class="approvers-tags mb-2">
+                          </div>
+                          <input type="text" id="approvers" class="form-control"
+                            placeholder="Search and select approvers..." autocomplete="off"/>
+                          <div class="approvers-dropdown" style="display: none;">
+                          </div>
+                          <input type="hidden" name="approver_ids" t-att-value="form_data.get('approver_ids', '')"/>
+                        </div>
+                        <small class="form-text text-muted">Search and click to add approvers. Click the × on tags to remove them.</small>
+                        <t t-if="errors.get('approver_ids')">
+                          <div class="invalid-feedback d-block">
+                            <span t-esc="errors['approver_ids']"/>
+                          </div>
+                        </t>
+                      </div>
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col-12">
+                        <h5 class="text-primary border-bottom pb-2">
+                          <i class="fa fa-paperclip mr-2"></i>File Attachments
+                        </h5>
+                      </div>
+                      <div class="col-8 mb-3">
+                        <label for="attachments" class="form-label">Attach Files *
+                          <i class="fa fa-info-circle text-muted ms-1" tabindex="0" role="button"
+                            data-bs-toggle="popover" data-bs-trigger="focus"
+                            data-bs-content="Attach supporting documents (contract, terms, ID, bank certification, etc.). Total file size must not exceed the maximum shown."></i>
+                        </label>
+                        <input type="file" name="attachments" id="attachments"
+                          t-att-data-max-size="max_file_size"
+                          t-attf-class="form-control#{' is-invalid' if errors.get('attachments') else ''}"
+                          multiple="multiple" accept="*/*" required="required"/>
+                        <small class="form-text text-muted">
+                          Maximum total file size: <span t-esc="max_file_size"/> MB
+                        </small>
+                        <div class="mt-2 attachments-preview">
+                          <ul class="list-unstyled attachments-list small mb-1" aria-live="polite"></ul>
+                          <div class="attachments-summary text-muted small">0 MB of <span class="attachments-max" t-esc="max_file_size"/> MB used. <span class="attachments-remaining">0 MB</span> remaining.</div>
+                        </div>
+                        <t t-if="errors.get('attachments')">
+                          <div class="invalid-feedback d-block">
+                            <span t-esc="errors['attachments']"/>
+                          </div>
+                        </t>
+                      </div>
+                      <div class="col-4 mb-3">
+                        <p class="form-text text-muted small mb-1"><strong>Please attach the following documents when applicable:</strong></p>
+                        <ul class="small text-muted mb-2">
+                          <li>Contract or Offer</li>
+                          <li>Contract Terms and Conditions</li>
+                          <li><strong>For Legal Entity:</strong> Tax ID (RUT), Chamber of Commerce registration, and bank certification</li>
+                          <li><strong>For Individual:</strong> Tax ID (RUT), copy of ID card, and bank certification</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col-12">
+                        <h5 class="text-primary border-bottom pb-2">
+                          <i class="fa fa-sticky-note mr-2"></i>Additional Notes
+                        </h5>
+                      </div>
+                      <div class="col-12 mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea name="notes" id="notes" class="form-control" rows="4"
+                          placeholder="Additional notes or comments..."><t t-esc="form_data.get('notes', '')"/></textarea>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-primary btn-lg btn-submit">
+                          <i class="fa fa-paper-plane mr-2"></i>Submit Purchase Request
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script type="application/json" id="approvers-data">
+        <t t-raw="json.dumps([{'id': approver.id, 'name': approver.name, 'email': approver.work_email or approver.private_email or ''} for approver in approvers])"/>
+      </script>
+      <script type="application/json" id="employees-data">
+        <t t-raw="json.dumps([{'id': emp.id, 'name': emp.name, 'email': emp.work_email or emp.private_email or ''} for emp in employees])"/>
+      </script>
+      <script type="application/json" id="analytic-accounts-data">
+        <t t-if="request.env['account.analytic.account'].check_access_rights('read', raise_exception=False)">
+          <t t-raw="json.dumps({acct.id: acct.name for acct in request.env['account.analytic.account'].search([])})"/>
+        </t>
+        <t t-else="">
+          {}
+        </t>
+      </script>
+      <script src="/portal_purchase_request/static/src/js/purchase_request_form.js"></script>
+  <script src="/portal_purchase_request/static/src/js/purchase_request_popovers.js"></script>
+    </t>
+  </template>
+
+  <!-- Success Page -->
+  <template id="public_purchase_request_success" name="Purchase Request Success">
+    <t t-call="website.layout">
+      <div class="container mt-4">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="card border-success">
+              <div class="card-header bg-success text-white">
+                <h3 class="card-title mb-0">
+                  <i class="fa fa-check-circle mr-2"></i>
+                  Purchase Request Submitted Successfully
+                </h3>
+              </div>
+              <div class="card-body">
+                <div class="alert alert-success" role="alert">
+                  <h4 class="alert-heading">Success!</h4>
+                  <p>Your purchase request has been submitted successfully.</p>
+                  <hr/>
+                  <p class="mb-0">
+                    <strong>Reference Number:</strong> <span t-esc="purchase_request.name"/>
+                  </p>
+                  <p class="mb-0">
+                    <strong>Status:</strong>
+                    <t t-set="choices" t-value="purchase_request._fields['state'].selection"/>
+                    <t t-set="state_label" t-value="dict(choices).get(purchase_request.state, purchase_request.state)"/>
+                    <span t-esc="state_label"/>
+                  </p>
+                </div>
+                <div class="text-center mt-4">
+                  <a href="/purchase-request/new" class="btn btn-primary">
+                    <i class="fa fa-plus mr-2"></i>Create Another Request
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </t>
+  </template>
+
+</odoo>

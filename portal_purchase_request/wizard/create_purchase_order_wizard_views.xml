@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_create_purchase_order_wizard_form" model="ir.ui.view">
+        <field name="name">create.purchase.order.wizard.form</field>
+        <field name="model">purchase.order.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Purchase Order">
+                <p class="text-muted">
+                    <span>
+                        This wizard allows you to create a purchase order for the required products listed in the table.
+                    </span><br/>
+                    <span>
+                        You can remove products if needed, but at least one must remain.
+                    </span><br/>
+                    <span>
+                        Default values are loaded from the purchase request, however, you can adjust them according to the purchase needs.
+                    </span>
+                </p>
+                <group name="name">
+                    <group name="purchase_info" string="Purchase Information">
+                        <field name="partner_id"  widget="res_partner_many2one" context="{'res_partner_search_mode': 'supplier', 'show_vat': True}" />
+                        <field name="currency_id" options="{'no_create': True}"/>
+                        <field name="budget_group_id" options="{'no_create': True}"/>
+                        <field name="analytic_distribution" widget="analytic_distribution" groups="analytic.group_analytic_accounting"/>
+                    </group>
+                    <group name="request_info" string="Request Information">
+                        <field name="purchase_request_id" readonly="1"/>
+                        <field name="request_line_ids" nolabel="1" mode="list" force_save="1">
+                            <list create="false" edit="false" delete="true" editable="bottom">
+                                <field name="description"/>
+                                <field name="quantity"/>
+                            </list>
+                        </field>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Products to Purchase">
+                        <field name="line_ids">
+                            <list editable="bottom">
+                                <field name="product_id" options="{'no_create': True}"/>
+                                <field name="name"/>
+                                <field name="product_qty"/>
+                                <field name="price_unit"/>
+                                <field name="taxes_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                <field name="price_subtotal" sum="Subtotal"/>
+                                <field name="price_total" readonly="1" sum="Total"/>
+                                <field name="currency_id" column_invisible="1"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+                <footer>
+                    <button name="action_create_purchase_order" string="Create Purchase Order" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

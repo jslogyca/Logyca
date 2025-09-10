@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_portal_purchase_request_portal" model="res.groups">
+        <field name="name">Portal / Purchase Requests</field>
+    </record>
+
+    <record id="group_back_purchase_request_user" model="res.groups">
+        <field name="name">Backend / Purchase Requests</field>
+    </record>
+
+    <record id="group_purchase_request_admin" model="res.groups">
+        <field name="name">Purchases / Purchase Request Administrator</field>
+        <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+    </record>
+
+    <record id="group_purchase_request_manager" model="res.groups">
+        <field name="name">Purchase Manager (Notifications)</field>
+    </record>
+
+</odoo>

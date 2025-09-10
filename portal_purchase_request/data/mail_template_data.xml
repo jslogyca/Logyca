@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="email_template_purchase_request_state_change" model="mail.template">
+        <field name="name">State Change - Purchase Request</field>
+        <field name="email_from">${(object.company_id.email or 'noreply@example.com')|safe}</field>
+        <field name="subject">[Request] State changed: ${object.name}</field>
+        <field name="model_id" ref="model_portal_purchase_request"/>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html"><![CDATA[
+            <p>The request <t t-esc="object.name"/> has changed its state to <t t-esc="object.state"/>.</p>
+            <br/>
+            <div style="text-align: center; margin: 20px 0;">
+                <a t-attf-href="/purchase_request/view?access_token={{ object.access_token }}&amp;id={{ object.id }}"
+                   style="padding: 10px 20px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px; display: inline-block;">
+                   View Request
+                </a>
+            </div>
+        ]]></field>
+    </record>
+
+    <record id="email_template_purchase_request_manager_notification" model="mail.template">
+        <field name="name">Manager Notification - Purchase Request</field>
+        <field name="email_from">${(object.company_id.email or 'noreply@example.com')|safe}</field>
+        <field name="subject">[Request] Approved Purchase Request: ${object.name}</field>
+        <field name="model_id" ref="model_portal_purchase_request"/>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html"><![CDATA[
+            <p>A purchase request has been approved:</p>
+            <p><strong>Reference:</strong> <t t-esc="object.name"/></p>
+            <p><strong>Requested by:</strong> <t t-esc="object.collaborator_id.name"/></p>
+            <p><strong>Request Date:</strong> <t t-esc="object.request_date"/></p>
+            <br/>
+            <div style="text-align: center; margin: 20px 0;">
+                <a t-attf-href="/purchase_request/view?access_token={{ object.access_token }}&amp;id={{ object.id }}"
+                   style="padding: 10px 20px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px; display: inline-block;">
+                   View Request Details
+                </a>
+            </div>
+
+        ]]></field>
+    </record>
+
+    <record id="seq_portal_purchase_request" model="ir.sequence">
+        <field name="name">Portal Purchase Request</field>
+        <field name="code">portal.purchase.request</field>
+        <field name="prefix">PREQ</field>
+        <field name="padding">4</field>
+    </record>
+
+</odoo>
