@@ -11,7 +11,6 @@
                 <div name="button_box" position="inside">
                     <button name="action_view_sarlaft_tracking" type="object"
                             class="oe_stat_button" icon="fa-shield"
-                            invisible="sarlaft_tracking_count == 0"
                             groups="sarlaft_tracking.group_sarlaft_read">
                         <field name="sarlaft_tracking_count" widget="statinfo" string="SARLAFT"/>
                     </button>
@@ -19,13 +18,12 @@
 
                 <page name="personal_information" position="after">
                     <page string="SARLAFT" name="sarlaft"
-                          invisible="sarlaft_tracking_count == 0"
                           groups="sarlaft_tracking.group_sarlaft_read">
                         <group name="sarlaft_main_group">
                             <group name="sarlaft_left_group">
                                 <field name="last_sarlaft_query_date" readonly="1"/>
                                 <field name="next_sarlaft_query_date" readonly="1"/>
-                                <field name="sarlaft_risk_level" readonly="1"/>
+                                <field name="sarlaft_approved" readonly="1"/>
                             </group>
                             <group name="sarlaft_right_group">
                             </group>
@@ -44,8 +42,23 @@
                 <field name="work_phone" position="after">
                     <field name="last_sarlaft_query_date" optional="hide"/>
                     <field name="next_sarlaft_query_date" optional="hide"/>
-                    <field name="sarlaft_risk_level" optional="hide"/>
+                    <field name="sarlaft_approved" optional="hide"/>
                 </field>
+            </field>
+        </record>
+
+        <!-- Extend Employee search View -->
+        <record id="view_hr_employee_search_sarlaft" model="ir.ui.view">
+            <field name="name">hr.employee.search.sarlaft</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='inactive']" position="after">
+                    <separator/>
+                    <filter name="no_sarlaft" string="Without SARLAFT" domain="[('last_sarlaft_query_date', '=', False)]"/>
+                    <filter name="sarlaft_noapproved" string="SARLAFT Not Approved" domain="[('sarlaft_approved', '=', False)]"/>
+                    <filter name="sarlaft_expiring" string="SARLAFT Expiring" domain="[('next_sarlaft_query_date', '!=', False), ('next_sarlaft_query_date', '&lt;=', (context_today() + relativedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                </xpath>
             </field>
         </record>
 

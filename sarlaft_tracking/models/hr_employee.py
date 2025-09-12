@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from odoo import api, fields, models
 
 
@@ -29,16 +27,11 @@ class HrEmployee(models.Model):
         store=True,
         help="Date of the next SARLAFT query",
     )
-    sarlaft_risk_level = fields.Selection(
-        [
-            ("high", "High"),
-            ("medium", "Medium"),
-            ("low", "Low"),
-        ],
-        string="SARLAFT Risk Level",
+    sarlaft_approved = fields.Boolean(
+        string="SARLAFT Approved",
         compute="_compute_last_sarlaft_data",
         store=True,
-        help="Latest SARLAFT risk level",
+        help="Indicates if the last SARLAFT query was approved",
     )
 
     @api.depends("sarlaft_tracking_ids")
@@ -50,7 +43,7 @@ class HrEmployee(models.Model):
     @api.depends(
         "sarlaft_tracking_ids.query_date",
         "sarlaft_tracking_ids.next_query_date",
-        "sarlaft_tracking_ids.result_risk",
+        "sarlaft_tracking_ids.result_risks",
     )
     def _compute_last_sarlaft_data(self):
         """Compute last SARLAFT query data."""
@@ -61,11 +54,11 @@ class HrEmployee(models.Model):
                 )[0]
                 employee.last_sarlaft_query_date = latest_record.query_date
                 employee.next_sarlaft_query_date = latest_record.next_query_date
-                employee.sarlaft_risk_level = latest_record.result_risk
+                employee.sarlaft_approved = latest_record.approved
             else:
                 employee.last_sarlaft_query_date = False
                 employee.next_sarlaft_query_date = False
-                employee.sarlaft_risk_level = False
+                employee.sarlaft_approved = False
 
     def action_view_sarlaft_tracking(self):
         """Action to view SARLAFT tracking records for this employee."""

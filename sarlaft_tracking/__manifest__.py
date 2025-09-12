@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 {
     "name": "SARLAFT Tracking",
     "version": "18.0.1.0.0",
@@ -30,15 +29,11 @@
         "web",
     ],
     "data": [
-        # Security
         "security/sarlaft_security.xml",
         "security/ir.model.access.csv",
-        # Data
         "data/sarlaft_cron_data.xml",
         "data/system_parameters.xml",
-        # Views
         "views/sarlaft_tracking_views.xml",
-        "views/sarlaft_option_views.xml",
         "views/res_partner_views.xml",
         "views/hr_employee_views.xml",
         "views/sarlaft_menus.xml",
