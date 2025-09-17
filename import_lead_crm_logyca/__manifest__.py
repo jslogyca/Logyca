@@ -13,6 +13,7 @@
     'depends': [
         'crm',
         'sales_team',
+        'purchase',
         ],
     'description': '''
 
@@ -23,6 +24,7 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'wizard/crm_lead_import_file_wizard_view.xml',
+        'wizard/sale_order_import_file_wizard_view.xml',
     ],
     'qweb': [
     ]
