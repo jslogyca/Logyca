@@ -185,18 +185,24 @@ class SaleOrderImportFileWizard(models.TransientModel):
                 msj+='\n\n'
 
             raise ValidationError(msj)
-        view_id = self.env.ref('purchase.purchase_order_kpis_tree').id,
+        view_id = self.env.ref('purchase.purchase_order_form').id,
 
         if not cre:
             raise UserError(_("No se importaron los beneficios"))
+
+        if isinstance(cre, int):
+            res_id = cre
+        elif hasattr(cre, 'ids'):        # recordset
+            res_id = cre.ids[0]          # o cre.ids[-1] si prefieres el último
+        else:
+            res_id = cre[0]
+
         return {
-            'name': 'Registros Importados '+str(datetime.now().date().strftime("%d/%m/%Y")),
+            'name': _('Registros Importados %s') % fields.Date.today().strftime("%d/%m/%Y"),
             'type': 'ir.actions.act_window',
-            'view_type': 'form',
-            'view_mode': 'tree,form',
             'res_model': 'purchase.order',
-            'views': [(view_id, 'tree')],
-            'view_id': view_id,
-            'domain': [('id','in',cre)],
-            'target': 'current'
-        }
+            'view_mode': 'form',
+            'views': [(view_id, 'form')],
+            'res_id': res_id,            # <- clave para abrir el registro
+            'target': 'current',
+        }        
