@@ -101,10 +101,10 @@ class SaleOrderImportFileWizard(models.TransientModel):
                 if consumo and consumo>0.0:
                     if not budget_group_id.by_default_group:
                         product_id = self.env['product.product'].search([('id','=',1238)], order="id asc", limit=1)
-                        product_id = self.env['product.product'].search([('id','=',36)], order="id asc", limit=1)
+                        # product_id = self.env['product.product'].search([('id','=',36)], order="id asc", limit=1)
                     else:
                         product_id = self.env['product.product'].search([('id','=',1185)], order="id asc", limit=1)
-                        product_id = self.env['product.product'].search([('id','=',16)], order="id asc", limit=1)
+                        # product_id = self.env['product.product'].search([('id','=',16)], order="id asc", limit=1)
                     sale_order_line_values.update({
                         'order_id' : sale_order.id,
                         'product_id' : product_id.id,
@@ -117,10 +117,10 @@ class SaleOrderImportFileWizard(models.TransientModel):
                 if total and total>0.0:
                     if not budget_group_id.by_default_group:
                         product_id = self.env['product.product'].search([('id','=',1260)], order="id asc", limit=1)
-                        product_id = self.env['product.product'].search([('id','=',17)], order="id asc", limit=1)
+                        # product_id = self.env['product.product'].search([('id','=',17)], order="id asc", limit=1)
                     else:
                         product_id = self.env['product.product'].search([('id','=',1201)], order="id asc", limit=1)
-                        product_id = self.env['product.product'].search([('id','=',18)], order="id asc", limit=1)
+                        # product_id = self.env['product.product'].search([('id','=',18)], order="id asc", limit=1)
                     taxes = product_id.taxes_id.filtered(lambda t: t.company_id == company_id)
                     if iva and iva > 0.0:
                         sale_order_line_values.update({
@@ -144,7 +144,7 @@ class SaleOrderImportFileWizard(models.TransientModel):
 
                 if descuento and descuento>0.0:
                     product_id = self.env['product.product'].search([('id','=',1355)], order="id asc", limit=1)
-                    product_id = self.env['product.product'].search([('id','=',19)], order="id asc", limit=1)
+                    # product_id = self.env['product.product'].search([('id','=',19)], order="id asc", limit=1)
 
                     sale_order_line_values.update({
                         'order_id': sale_order.id,
