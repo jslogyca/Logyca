@@ -100,65 +100,144 @@ class SaleOrderImportFileWizard(models.TransientModel):
 
                 if consumo and consumo>0.0:
                     if not budget_group_id.by_default_group:
-                        product_id = self.env['product.product'].search([('id','=',1238)], order="id asc", limit=1)
-                        if not product_id:
-                            product_id = self.env['product.product'].search([('id','=',36)], order="id asc", limit=1)
+                        if budget_group_id and (budget_group_id.name or '').strip().upper().startswith('AD'):
+                            product_id = self.env['partner.product.purchase'].search([('partner_id','=',partner_id.id), 
+                                                    ('company_id','=',company_id.id),
+                                                    ('product_type','=','ga'),
+                                                    ('amount_type','=','consumo')], order="id asc", limit=1)
+                            vals ={
+                                'order_id' : sale_order.id,
+                                'product_id' : product_id.product_id.id,
+                                'product_uom_qty' : 1,
+                                'price_unit' : consumo,
+                                'x_budget_group': budget_group_id.id,
+                                'analytic_distribution': budget_group_id.analytic_distribution,
+                                'company_id' : company_id.id,
+                            }
+                            sale_order_line_values.append((0, 0, vals))
+                        else:
+                            product_id = self.env['partner.product.purchase'].search([('partner_id','=',partner_id.id), 
+                                                    ('company_id','=',company_id.id),
+                                                    ('product_type','=','gv'),
+                                                    ('amount_type','=','consumo')], order="id asc", limit=1)
+                            vals ={
+                                'order_id' : sale_order.id,
+                                'product_id' : product_id.product_id.id,
+                                'product_uom_qty' : 1,
+                                'price_unit' : consumo,
+                                'x_budget_group': budget_group_id.id,
+                                'analytic_distribution': budget_group_id.analytic_distribution,
+                                'company_id' : company_id.id,
+                            }
+                            sale_order_line_values.append((0, 0, vals))                            
                     else:
-                        product_id = self.env['product.product'].search([('id','=',1185)], order="id asc", limit=1)
-                        if not product_id:
-                            product_id = self.env['product.product'].search([('id','=',16)], order="id asc", limit=1)
-                    vals ={
-                        'order_id' : sale_order.id,
-                        'product_id' : product_id.id,
-                        'product_uom_qty' : 1,
-                        'price_unit' : consumo,
-                        'x_budget_group': budget_group_id.id,
-                        'analytic_distribution': budget_group_id.analytic_distribution,
-                        'company_id' : company_id.id,
-                    }
-                    sale_order_line_values.append((0, 0, vals))
+                        product_id = self.env['partner.product.purchase'].search([('partner_id','=',partner_id.id), 
+                                                ('company_id','=',company_id.id),
+                                                ('product_type','=','co'),
+                                                ('amount_type','=','consumo')], order="id asc", limit=1)
+                        vals ={
+                            'order_id' : sale_order.id,
+                            'product_id' : product_id.product_id.id,
+                            'product_uom_qty' : 1,
+                            'price_unit' : consumo,
+                            'x_budget_group': budget_group_id.id,
+                            'analytic_distribution': {analytic_id.id: 100.0},
+                            'company_id' : company_id.id,
+                        }
+                        sale_order_line_values.append((0, 0, vals))
 
                 if total and total>0.0:
                     if not budget_group_id.by_default_group:
-                        product_id = self.env['product.product'].search([('id','=',1260)], order="id asc", limit=1)
-                        if not product_id:
-                            product_id = self.env['product.product'].search([('id','=',17)], order="id asc", limit=1)
+                        if budget_group_id and (budget_group_id.name or '').strip().upper().startswith('AD'):
+                            product_id = self.env['partner.product.purchase'].search([('partner_id','=',partner_id.id), 
+                                                    ('company_id','=',company_id.id),
+                                                    ('product_type','=','ga')], order="id asc", limit=1)
+                            taxes = product_id.product_id.supplier_taxes_id.filtered(lambda t: t.company_id == company_id)
+                            if iva and iva > 0.0:
+                                vals = {
+                                    'order_id': sale_order.id,
+                                    'product_id': product_id.product_id.id,
+                                    'product_uom_qty': 1,
+                                    'price_unit': total,
+                                    'x_budget_group': budget_group_id.id,
+                                    'analytic_distribution': budget_group_id.analytic_distribution,
+                                    'company_id' : company_id.id,
+                                    'taxes_id' : [(6, 0, taxes.ids)],
+                                }
+                            else:
+                                vals = {
+                                    'order_id'         : sale_order.id,
+                                    'product_id'       : product_id.product_id.id,
+                                    'product_uom_qty'  : 1,
+                                    'price_unit'       : total,  # Odoo se encarga si el impuesto es price_include
+                                    'x_budget_group'   : budget_group_id.id,
+                                    'analytic_distribution': budget_group_id.analytic_distribution,
+                                    'company_id'       : company_id.id,
+                                }
+                            sale_order_line_values.append((0, 0, vals))
+                        else:
+                            product_id = self.env['partner.product.purchase'].search([('partner_id','=',partner_id.id), 
+                                                    ('company_id','=',company_id.id),
+                                                    ('product_type','=','gv')], order="id asc", limit=1)
+                            taxes = product_id.product_id.supplier_taxes_id.filtered(lambda t: t.company_id == company_id)
+                            if iva and iva > 0.0:
+                                vals = {
+                                    'order_id': sale_order.id,
+                                    'product_id': product_id.product_id.id,
+                                    'product_uom_qty': 1,
+                                    'price_unit': total,
+                                    'x_budget_group': budget_group_id.id,
+                                    'analytic_distribution': budget_group_id.analytic_distribution,
+                                    'company_id' : company_id.id,
+                                    'taxes_id' : [(6, 0, taxes.ids)],
+                                }
+                            else:
+                                vals = {
+                                    'order_id'         : sale_order.id,
+                                    'product_id'       : product_id.product_id.id,
+                                    'product_uom_qty'  : 1,
+                                    'price_unit'       : total,  # Odoo se encarga si el impuesto es price_include
+                                    'x_budget_group'   : budget_group_id.id,
+                                    'analytic_distribution': budget_group_id.analytic_distribution,
+                                    'company_id'       : company_id.id,
+                                }
+                            sale_order_line_values.append((0, 0, vals))                                                        
+
                     else:
-                        product_id = self.env['product.product'].search([('id','=',1201)], order="id asc", limit=1)
-                        if not product_id:
-                            product_id = self.env['product.product'].search([('id','=',18)], order="id asc", limit=1)
-                    taxes = product_id.supplier_taxes_id.filtered(lambda t: t.company_id == company_id)
-                    if iva and iva > 0.0:
-                        vals = {
-                            'order_id': sale_order.id,
-                            'product_id': product_id.id,
-                            'product_uom_qty': 1,
-                            'price_unit': total,
-                            'x_budget_group': budget_group_id.id,
-                            'analytic_distribution': budget_group_id.analytic_distribution,
-                            'company_id' : company_id.id,
-                            'taxes_id' : [(6, 0, taxes.ids)],
-                        }
-                    else:
-                        vals = {
-                            'order_id'         : sale_order.id,
-                            'product_id'       : product_id.id,
-                            'product_uom_qty'  : 1,
-                            'price_unit'       : total,  # Odoo se encarga si el impuesto es price_include
-                            'x_budget_group'   : budget_group_id.id,
-                            'analytic_distribution': budget_group_id.analytic_distribution,
-                            'company_id'       : company_id.id,
-                        }
-                    sale_order_line_values.append((0, 0, vals))
+                        product_id = self.env['partner.product.purchase'].search([('partner_id','=',partner_id.id), 
+                                                ('company_id','=',company_id.id),
+                                                ('product_type','=','co')], order="id asc", limit=1)
+                        taxes = product_id.product_id.supplier_taxes_id.filtered(lambda t: t.company_id == company_id)
+                        if iva and iva > 0.0:
+                            vals = {
+                                'order_id': sale_order.id,
+                                'product_id': product_id.product_id.id,
+                                'product_uom_qty': 1,
+                                'price_unit': total,
+                                'x_budget_group': budget_group_id.id,
+                                'analytic_distribution': {analytic_id.id: 100.0},
+                                'company_id' : company_id.id,
+                                'taxes_id' : [(6, 0, taxes.ids)],
+                            }
+                        else:
+                            vals = {
+                                'order_id'         : sale_order.id,
+                                'product_id'       : product_id.product_id.id,
+                                'product_uom_qty'  : 1,
+                                'price_unit'       : total,  # Odoo se encarga si el impuesto es price_include
+                                'x_budget_group'   : budget_group_id.id,
+                                'analytic_distribution': {analytic_id.id: 100.0},
+                                'company_id'       : company_id.id,
+                            }
+                        sale_order_line_values.append((0, 0, vals))
 
                 if descuento and descuento>0.0:
-                    product_id = self.env['product.product'].search([('id','=',1355)], order="id asc", limit=1)
-                    if not product_id:
-                        product_id = self.env['product.product'].search([('id','=',19)], order="id asc", limit=1)
-
+                    product_id = self.env['partner.product.purchase'].search([('partner_id','=',partner_id.id), 
+                                            ('company_id','=',company_id.id),
+                                            ('product_type','=','na')], order="id asc", limit=1)
                     vals = {
                         'order_id': sale_order.id,
-                        'product_id': product_id.id,
+                        'product_id': product_id.product_id.id,
                         'product_uom_qty': 1,
                         'price_unit': descuento,
                         'x_budget_group': budget_group_id.id,

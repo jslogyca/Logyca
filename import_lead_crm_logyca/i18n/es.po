@@ -6,16 +6,26 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 02:02+0000\n"
-"PO-Revision-Date: 2025-09-16 21:03-0500\n"
+"POT-Creation-Date: 2025-09-17 17:20+0000\n"
+"PO-Revision-Date: 2025-09-17 12:21-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: es_CO\n"
+"Language: co\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.6\n"
+
+#. module: import_lead_crm_logyca
+#: model_terms:ir.ui.view,arch_db:import_lead_crm_logyca.sale_order_import_file_wizard_view
+msgid "<i class=\"fa fa-download\"/> <span>Plantilla Cargue Compras</span>"
+msgstr ""
+
+#. module: import_lead_crm_logyca
+#: model_terms:ir.ui.view,arch_db:import_lead_crm_logyca.sale_order_import_file_wizard_view
+msgid "<strong>Plantillas de muestra:</strong>"
+msgstr ""
 
 #. module: import_lead_crm_logyca
 #: model_terms:ir.ui.view,arch_db:import_lead_crm_logyca.sale_order_import_file_wizard_view
@@ -54,21 +64,54 @@ msgid "Choose a file to import..."
 msgstr ""
 
 #. module: import_lead_crm_logyca
+#: model:ir.model.fields,field_description:import_lead_crm_logyca.field_partner_product_purchase__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: import_lead_crm_logyca
+#: model:ir.model.fields.selection,name:import_lead_crm_logyca.selection__partner_product_purchase__amount_type__consumo
+msgid "Consumo"
+msgstr ""
+
+#. module: import_lead_crm_logyca
+#: model:ir.model.fields.selection,name:import_lead_crm_logyca.selection__partner_product_purchase__amount_type__corretaje
+msgid "Corretaje"
+msgstr ""
+
+#. module: import_lead_crm_logyca
+#: model:ir.model.fields.selection,name:import_lead_crm_logyca.selection__partner_product_purchase__product_type__co
+msgid "Costo"
+msgstr ""
+
+#. module: import_lead_crm_logyca
 #: model:ir.model.fields,field_description:import_lead_crm_logyca.field_crm_lead_import_file_wizard__create_uid
+#: model:ir.model.fields,field_description:import_lead_crm_logyca.field_partner_product_purchase__create_uid
 #: model:ir.model.fields,field_description:import_lead_crm_logyca.field_sale_order_import_file_wizard__create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: import_lead_crm_logyca
 #: model:ir.model.fields,field_description:import_lead_crm_logyca.field_crm_lead_import_file_wizard__create_date
+#: model:ir.model.fields,field_description:import_lead_crm_logyca.field_partner_product_purchase__create_date
 #: model:ir.model.fields,field_description:import_lead_crm_logyca.field_sale_order_import_file_wizard__create_date
 msgid "Created on"
 msgstr ""
 
 #. module: import_lead_crm_logyca
+#: model_terms:ir.ui.view,arch_db:import_lead_crm_logyca.sale_order_import_file_wizard_view
+msgid "Descargar"
+msgstr ""
+
+#. module: import_lead_crm_logyca
 #: model:ir.model.fields,field_description:import_lead_crm_logyca.field_crm_lead_import_file_wizard__display_name
+#: model:ir.model.fields,field_description:import_lead_crm_logyca.field_partner_product_purchase__display_name
 #: model:ir.model.fields,field_description:import_lead_crm_logyca.field_sale_order_import_file_wizard__display_name
 msgid "Display Name"
+msgstr ""
+
+#. module: import_lead_crm_logyca
+#: model_terms:ir.ui.view,arch_db:import_lead_crm_logyca.sale_order_import_file_wizard_view
+msgid "Download"
 msgstr ""
 
 #. module: import_lead_crm_logyca
@@ -78,7 +121,13 @@ msgid "File"
 msgstr "Archivo"
 
 #. module: import_lead_crm_logyca
+#: model:ir.model.fields.selection,name:import_lead_crm_logyca.selection__partner_product_purchase__product_type__ga
+msgid "Gasto"
+msgstr ""
+
+#. module: import_lead_crm_logyca
 #: model:ir.model.fields,field_description:import_lead_crm_logyca.field_crm_lead_import_file_wizard__id
+#: model:ir.model.fields,field_description:import_lead_crm_logyca.field_partner_product_purchase__id
 #: model:ir.model.fields,field_description:import_lead_crm_logyca.field_sale_order_import_file_wizard__id
 msgid "ID"
 msgstr ""
@@ -95,16 +144,18 @@ msgstr "Crear"
 #: code:addons/import_lead_crm_logyca/wizard/sale_order_import_file_wizard.py:0
 #, python-format
 msgid "Invalid file"
-msgstr "Aechivo invalido"
+msgstr "Archivo invalido"
 
 #. module: import_lead_crm_logyca
 #: model:ir.model.fields,field_description:import_lead_crm_logyca.field_crm_lead_import_file_wizard__write_uid
+#: model:ir.model.fields,field_description:import_lead_crm_logyca.field_partner_product_purchase__write_uid
 #: model:ir.model.fields,field_description:import_lead_crm_logyca.field_sale_order_import_file_wizard__write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: import_lead_crm_logyca
 #: model:ir.model.fields,field_description:import_lead_crm_logyca.field_crm_lead_import_file_wizard__write_date
+#: model:ir.model.fields,field_description:import_lead_crm_logyca.field_partner_product_purchase__write_date
 #: model:ir.model.fields,field_description:import_lead_crm_logyca.field_sale_order_import_file_wizard__write_date
 msgid "Last Updated on"
 msgstr ""
@@ -113,6 +164,12 @@ msgstr ""
 #: model:res.groups,name:import_lead_crm_logyca.group_manager_crm_import
 msgid "Manager CRM Import"
 msgstr "Crear Masivamente Oportunidades"
+
+#. module: import_lead_crm_logyca
+#: model:ir.model.fields.selection,name:import_lead_crm_logyca.selection__partner_product_purchase__amount_type__na
+#: model:ir.model.fields.selection,name:import_lead_crm_logyca.selection__partner_product_purchase__product_type__na
+msgid "N/A"
+msgstr ""
 
 #. module: import_lead_crm_logyca
 #: model:ir.model.fields,field_description:import_lead_crm_logyca.field_crm_lead_import_file_wizard__filename
@@ -129,6 +186,25 @@ msgid "No se importaron los beneficios"
 msgstr "Error al importar"
 
 #. module: import_lead_crm_logyca
+#: model:ir.model.fields,field_description:import_lead_crm_logyca.field_partner_product_purchase__partner_id
+msgid "Partner"
+msgstr "Proveedor"
+
+#. module: import_lead_crm_logyca
+#: model:ir.actions.act_window,name:import_lead_crm_logyca.action_partner_product_purchase
+#: model:ir.model,name:import_lead_crm_logyca.model_partner_product_purchase
+#: model:ir.ui.menu,name:import_lead_crm_logyca.account_menu_partner_product_purchase
+#: model_terms:ir.ui.view,arch_db:import_lead_crm_logyca.partner_product_purchase_view_form
+#: model_terms:ir.ui.view,arch_db:import_lead_crm_logyca.partner_product_purchase_view_tree
+msgid "Partner Product Purchase"
+msgstr "Proveedor - Productos"
+
+#. module: import_lead_crm_logyca
+#: model:ir.model.fields,field_description:import_lead_crm_logyca.field_partner_product_purchase__product_id
+msgid "Product"
+msgstr "Productos"
+
+#. module: import_lead_crm_logyca
 #: model_terms:ir.ui.view,arch_db:import_lead_crm_logyca.sale_order_import_file_wizard_view
 msgid "Purchase Import File Wizard"
 msgstr "Importar Compras"
@@ -143,3 +219,30 @@ msgstr "Importar Compras"
 #: model:ir.model,name:import_lead_crm_logyca.model_sale_order_import_file_wizard
 msgid "Purchase Order Import File Wizard"
 msgstr "Importar Compras"
+
+#. module: import_lead_crm_logyca
+#. odoo-python
+#: code:addons/import_lead_crm_logyca/wizard/sale_order_import_file_wizard.py:0
+#, python-format
+msgid "Registros Importados %s"
+msgstr ""
+
+#. module: import_lead_crm_logyca
+#: model:ir.model.fields,field_description:import_lead_crm_logyca.field_partner_product_purchase__product_type
+msgid "Tipo"
+msgstr ""
+
+#. module: import_lead_crm_logyca
+#: model:ir.model.fields,field_description:import_lead_crm_logyca.field_partner_product_purchase__amount_type
+msgid "Tipo Total"
+msgstr ""
+
+#. module: import_lead_crm_logyca
+#: model:ir.model.fields.selection,name:import_lead_crm_logyca.selection__partner_product_purchase__amount_type__total
+msgid "Total"
+msgstr ""
+
+#. module: import_lead_crm_logyca
+#: model:ir.model.fields.selection,name:import_lead_crm_logyca.selection__partner_product_purchase__product_type__gv
+msgid "Venta"
+msgstr ""
