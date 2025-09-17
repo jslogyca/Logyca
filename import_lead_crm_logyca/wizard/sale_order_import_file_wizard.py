@@ -80,7 +80,7 @@ class SaleOrderImportFileWizard(models.TransientModel):
                 sale_order = self.env['purchase.order'].create(sale_order_values)
                 break
 
-        sale_order_line_values = {}
+        sale_order_line_values = []
         for fila in record_list:
             count+=1
 
@@ -97,66 +97,78 @@ class SaleOrderImportFileWizard(models.TransientModel):
                 if analytic_name:
                     analytic_id = self.env['account.analytic.account'].search([('name','=',str(analytic_name)), ('company_id','=',company_id.id)], limit=1)
 
-
                 if consumo and consumo>0.0:
                     if not budget_group_id.by_default_group:
                         product_id = self.env['product.product'].search([('id','=',1238)], order="id asc", limit=1)
-                        # product_id = self.env['product.product'].search([('id','=',36)], order="id asc", limit=1)
+                        if not product_id:
+                            product_id = self.env['product.product'].search([('id','=',36)], order="id asc", limit=1)
                     else:
                         product_id = self.env['product.product'].search([('id','=',1185)], order="id asc", limit=1)
-                        # product_id = self.env['product.product'].search([('id','=',16)], order="id asc", limit=1)
-                    sale_order_line_values.update({
+                        if not product_id:
+                            product_id = self.env['product.product'].search([('id','=',16)], order="id asc", limit=1)
+                    vals ={
                         'order_id' : sale_order.id,
                         'product_id' : product_id.id,
                         'product_uom_qty' : 1,
                         'price_unit' : consumo,
                         'x_budget_group': budget_group_id.id,
+                        'analytic_distribution': budget_group_id.analytic_distribution,
                         'company_id' : company_id.id,
-                    }) 
+                    }
+                    sale_order_line_values.append((0, 0, vals))
 
                 if total and total>0.0:
                     if not budget_group_id.by_default_group:
                         product_id = self.env['product.product'].search([('id','=',1260)], order="id asc", limit=1)
-                        # product_id = self.env['product.product'].search([('id','=',17)], order="id asc", limit=1)
+                        if not product_id:
+                            product_id = self.env['product.product'].search([('id','=',17)], order="id asc", limit=1)
                     else:
                         product_id = self.env['product.product'].search([('id','=',1201)], order="id asc", limit=1)
-                        # product_id = self.env['product.product'].search([('id','=',18)], order="id asc", limit=1)
-                    taxes = product_id.taxes_id.filtered(lambda t: t.company_id == company_id)
+                        if not product_id:
+                            product_id = self.env['product.product'].search([('id','=',18)], order="id asc", limit=1)
+                    taxes = product_id.supplier_taxes_id.filtered(lambda t: t.company_id == company_id)
                     if iva and iva > 0.0:
-                        sale_order_line_values.update({
+                        vals = {
                             'order_id': sale_order.id,
                             'product_id': product_id.id,
                             'product_uom_qty': 1,
                             'price_unit': total,
                             'x_budget_group': budget_group_id.id,
+                            'analytic_distribution': budget_group_id.analytic_distribution,
                             'company_id' : company_id.id,
                             'taxes_id' : [(6, 0, taxes.ids)],
-                        })
+                        }
                     else:
-                        sale_order_line_values.update({
+                        vals = {
                             'order_id'         : sale_order.id,
                             'product_id'       : product_id.id,
                             'product_uom_qty'  : 1,
                             'price_unit'       : total,  # Odoo se encarga si el impuesto es price_include
                             'x_budget_group'   : budget_group_id.id,
+                            'analytic_distribution': budget_group_id.analytic_distribution,
                             'company_id'       : company_id.id,
-                        })                        
+                        }
+                    sale_order_line_values.append((0, 0, vals))
 
                 if descuento and descuento>0.0:
                     product_id = self.env['product.product'].search([('id','=',1355)], order="id asc", limit=1)
-                    # product_id = self.env['product.product'].search([('id','=',19)], order="id asc", limit=1)
+                    if not product_id:
+                        product_id = self.env['product.product'].search([('id','=',19)], order="id asc", limit=1)
 
-                    sale_order_line_values.update({
+                    vals = {
                         'order_id': sale_order.id,
                         'product_id': product_id.id,
                         'product_uom_qty': 1,
                         'price_unit': descuento,
                         'x_budget_group': budget_group_id.id,
-                    })                    
+                        'analytic_distribution': budget_group_id.analytic_distribution,
+                    }
+                    sale_order_line_values.append((0, 0, vals))
 
                 try:
                     with self._cr.savepoint():
-                        sale_order_line = self.env['purchase.order.line'].create(sale_order_line_values)
+                        # sale_order_line = self.env['purchase.order.line'].create(sale_order_line_values)
+                        sale_order.write({'order_line': sale_order_line_values})
                 except Exception as e:
                     validation = "Fila %s: %s no se pudo crear como empresa beneficiaria. %s" % (str(count), partner_id.vat + '-' + str(partner_id.name.strip()),str(e))
                     errors.append(validation)
