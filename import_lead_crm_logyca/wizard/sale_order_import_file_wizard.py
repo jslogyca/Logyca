@@ -152,7 +152,6 @@ class SaleOrderImportFileWizard(models.TransientModel):
                         'product_uom_qty': 1,
                         'price_unit': descuento,
                         'x_budget_group': budget_group_id.id,
-                        'company_id' : company_id.id,
                     })                    
 
                 try:
