@@ -82,6 +82,7 @@ class SaleOrderImportFileWizard(models.TransientModel):
 
         sale_order_line_values = []
         for fila in record_list:
+            sale_order_line_values = []
             count+=1
 
             #validar si están los NIT de las empresas (benef y halonadora)
