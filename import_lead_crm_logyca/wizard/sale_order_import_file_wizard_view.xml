@@ -7,15 +7,13 @@
             <form string="Purchase Import File Wizard">
                 <sheet>
                     <group string="Asistente para importar masivamente Compras">
-                        <!-- <group>
-                            <div>
-                                <p><strong>Condiciones:</strong></p>
-                                <ul>
-                                    <li>Estar registrada en Odoo</li>
-                                    <li>Estar activa</li>
-                                </ul>
-                            </div>
-                        </group> -->
+                        <div>
+                            <p><strong>Plantillas de muestra:</strong></p>
+
+                            <a href="/import_lead_crm_logyca/static/xls/Plantilla_Cargue_Compras.xlsx" aria-label="Download" title="Descargar">
+                                <i class="fa fa-download"/> <span>Plantilla Cargue Compras</span>
+                            </a>
+                        </div>
                     </group>
                     <group string="Cargue su plantilla de Excel">
                         <group>
