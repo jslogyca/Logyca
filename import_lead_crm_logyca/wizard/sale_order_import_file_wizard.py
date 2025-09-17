@@ -96,7 +96,8 @@ class SaleOrderImportFileWizard(models.TransientModel):
                 iva = fila[10]
                 budget_group_id = self.env['logyca.budget_group'].search([('name','=',str(budget_name)), ('company_id','=',company_id.id)], limit=1)
                 if analytic_name:
-                    analytic_id = self.env['account.analytic.account'].search([('name','=',str(analytic_name)), ('company_id','=',company_id.id)], limit=1)
+                    analytic_id = self.env['account.analytic.account'].search([('name', '=', (str(analytic_name)).strip()), '|', 
+                                    ('company_id', '=', company_id.id), ('company_id', '=', False),], limit=1)
 
                 if consumo and consumo>0.0:
                     if not budget_group_id.by_default_group:
