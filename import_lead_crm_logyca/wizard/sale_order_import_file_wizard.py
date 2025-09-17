@@ -151,7 +151,8 @@ class SaleOrderImportFileWizard(models.TransientModel):
                         if budget_group_id and (budget_group_id.name or '').strip().upper().startswith('AD'):
                             product_id = self.env['partner.product.purchase'].search([('partner_id','=',partner_id.id), 
                                                     ('company_id','=',company_id.id),
-                                                    ('product_type','=','ga')], order="id asc", limit=1)
+                                                    ('product_type','=','ga'),
+                                                    ('amount_type','=','total')], order="id asc", limit=1)
                             taxes = product_id.product_id.supplier_taxes_id.filtered(lambda t: t.company_id == company_id)
                             if iva and iva > 0.0:
                                 vals = {
@@ -178,7 +179,8 @@ class SaleOrderImportFileWizard(models.TransientModel):
                         else:
                             product_id = self.env['partner.product.purchase'].search([('partner_id','=',partner_id.id), 
                                                     ('company_id','=',company_id.id),
-                                                    ('product_type','=','gv')], order="id asc", limit=1)
+                                                    ('product_type','=','gv'),
+                                                    ('amount_type','=','total')], order="id asc", limit=1)
                             taxes = product_id.product_id.supplier_taxes_id.filtered(lambda t: t.company_id == company_id)
                             if iva and iva > 0.0:
                                 vals = {
@@ -206,7 +208,8 @@ class SaleOrderImportFileWizard(models.TransientModel):
                     else:
                         product_id = self.env['partner.product.purchase'].search([('partner_id','=',partner_id.id), 
                                                 ('company_id','=',company_id.id),
-                                                ('product_type','=','co')], order="id asc", limit=1)
+                                                ('product_type','=','co'),
+                                                ('amount_type','=','total')], order="id asc", limit=1)
                         taxes = product_id.product_id.supplier_taxes_id.filtered(lambda t: t.company_id == company_id)
                         if iva and iva > 0.0:
                             vals = {
