@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="partner_product_purchase_view_form" model="ir.ui.view">
+        <field name="name">partner.product.purchase.form</field>
+        <field name="model">partner.product.purchase</field>
+        <field name="arch" type="xml">
+            <form string="Partner Product Purchase">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="company_id" required="1"/>
+                            <field name="partner_id" required="1"/>
+                        </group>
+                        <group>
+                            <field name="product_id" required="1"/>
+                            <field name="product_type" required="1"/>
+                            <field name="amount_type" required="1"/>
+                        </group>
+                    </group>               
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="partner_product_purchase_view_tree" model="ir.ui.view">
+        <field name="name">partner.product.purchase.tree</field>
+        <field name="model">partner.product.purchase</field>
+        <field name="arch" type="xml">
+            <tree string="Partner Product Purchase" >
+                <field name="company_id" />
+                <field name="partner_id" />
+                <field name="product_id" />
+                <field name="product_type" />                            
+                <field name="amount_type" />                            
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_partner_product_purchase" model="ir.actions.act_window">
+        <field name="name">Partner Product Purchase</field>
+        <field name="res_model">partner.product.purchase</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="partner_product_purchase_view_tree"/>
+    </record>
+
+    <menuitem
+        id="account_menu_partner_product_purchase"
+        name="Partner Product Purchase"
+        action="action_partner_product_purchase"
+        parent="purchase.menu_product_in_config_purchase"
+        sequence="21"/>
+
+</odoo>
