@@ -15,7 +15,8 @@ class x_MassiveInvoicingTariff(models.Model):
     asset_range = fields.Many2one('logyca.asset_range', string='Rango de activos', ondelete='restrict', required=True)
     product_id = fields.Many2one('product.product', string='Producto', required=True)
     fee_value = fields.Float(string='Valor de la tarifa', required=True)
-    unit_fee_value = fields.Float(string='Tarifa unitaria', help='Cálculo de la tarifa UNITARIA redondeando a la milésima más cercana: ROUND(SMLV * Valor de la tarifa,-3).',compute='_compute_unit_fee_value', store=True)
+    unit_fee_value = fields.Float(string='Tarifa unitaria', help='Cálculo de la tarifa UNITARIA redondeando a la milésima más cercana: ROUND(SMLV * Valor de la tarifa,-3).',
+                                        compute='_compute_unit_fee_value', store=True)
     
     
     def name_get(self):
@@ -28,13 +29,14 @@ class x_MassiveInvoicingTariff(models.Model):
     def _compute_unit_fee_value(self):
         #date = fields.Date.today()
         #year = date.year
-        year = self.year
-        obj_smlv = self.env['massive.invoicing.smlv'].search([('year', '=', year)])
-        smlv = 0
-        for i in obj_smlv:
-            smlv = obj_smlv.smlv        
-        
-        self.unit_fee_value = round(smlv*self.fee_value,-3)
+        for tariff in self:
+            year = tariff.year
+            obj_smlv = self.env['massive.invoicing.smlv'].search([('year', '=', year)])
+            smlv = 0
+            for i in obj_smlv:
+                smlv = obj_smlv.smlv        
+            
+            tariff.unit_fee_value = round(smlv*tariff.fee_value,-3)
 
         
 '''

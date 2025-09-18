@@ -6,6 +6,10 @@ import io
 import requests
 import json
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 #---------------------------------- Ejecucón del proceso - Facturación masiva
 class x_MassiveInvoicingProcess(models.TransientModel):
     _name = 'massive.invoicing.process'
@@ -25,85 +29,105 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         for record in self:            
             result.append((record.id, "Facturación Masiva - {}".format(record.year)))
         return result
-    
+
+    def get_token_sso(self):
+        """ token auth in SSO
+
+        Returns:
+            [str]: token for api access or False
+        """
+        
+        url_get_token = "https://app-loginrocp-prod.azurewebsites.net/api/Login"
+
+        body_get_token = json.dumps({
+            "email": "odoorvc@yopmail.com",
+            "password": "Logyca09062829"
+        })
+
+        headers_get_token = {'Content-Type': 'application/json', 'Connection': 'keep-alive'}
+
+        max_retries = 3
+        retry_delay = 2
+
+        for retry in range(max_retries):
+            try:
+                response_get_token = requests.post(url_get_token, headers=headers_get_token, data=body_get_token, verify=False)
+                if response_get_token.status_code == 200:
+                    result = response_get_token.json()
+                    response_get_token.close()
+                    token = str(result.get('resultToken').get('token'))
+                    return token
+            except requests.exceptions.RequestException:
+                pass
+
+            time.sleep(retry_delay)
+
+        return False
+
     #Consumir endpoint API de asignación de códigos
     def enpoint_code_assignment(self):
-        #Tipo de proceso
-        #process_type = self.invoicing_companies.process_type
-        #if process_type == '1':
-        #    process = False
-        #else:
-        #    process = True
-        #Obtener lista de Nits
         thirdparties = []
         for partner in self.invoicing_companies.thirdparties:            
             if partner.vat:
                 thirdparties.append(partner.vat)
-        #Ejecutar API de asignación de codigos
-        # process = False
-        # process = 'Facturacion masiva'.'utf-8'
-        # process = str(process, 'utf-8')
-        # body_api = json.dumps({'IsRefact': process, 'Nits': thirdparties})
-        body_api = json.dumps({'nit': thirdparties, 'proceso': 'Facturación masiva'})
-        headers_api = {'content-type': 'application/json'}
+        token = self.get_token_sso()
+        body_api = json.dumps({'nit': thirdparties})
+        payload = {"nits": thirdparties}
+        # headers_api = {'content-type': 'application/json'}
         url_api = self.invoicing_companies.url_enpoint_code_assignment
-        # url_api = "https://asctestdocker.azurewebsites.net/codes/fr_masivo/"
-        # response = requests.get(url_api,data=body_api, headers=headers_api)
 
-        payload = {'nit': thirdparties, 'proceso': 'Facturación masiva'}
+        headers_api = {
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/json",
+        }
 
-        response = requests.post(url_api, data=json.dumps(payload))
+        response = requests.post(
+            url_api,
+            headers=headers_api,
+            json=thirdparties,   # 👈 arreglo directo, SIN wrapper {"nits": ...}
+            timeout=10,
+        )
 
-        # print('URL', url_api)
-        # print('BODY APIaaa', body_api)
-        # print('HEADERS', headers_api)
-        # print('RESPONSE', response)
-        # print('STATUS', response.status_code)
-        result = response.json()
-        # print('RESPONSE 2222', result)
+        logging.info("====> response_assignate_credentials RESPONSE 111 => %s", str(response))
+        logging.info("====> response_assignate_credentials RESPONSE 22222 => %s", str(response.status_code))
+        if response.status_code == 200:
+            result = response.json()
+        else:
+            logging.info("====> response_assignate_credentials 2222 ERROR => %s", str(str(response.text)))
 
         #Eliminar llamado si ya existe
         enpointcodeassignment_exists = self.env['massive.invoicing.enpointcodeassignment'].search([('process_id', '=', self.id)])
         enpointcodeassignment_exists.unlink()
 
         result = response.json()
-        # print('RESPONSE 935856565656', result.values())
-        # print('RESPONSE 935856565656', type(result.values()))
-        # print('RESPONSE 141414151515', result.items())
-        # print('RESPONSE 141414151515', type(result.items()))
-        # print('RESPONSE 161616161616', result["data"])
-
         response.close()
-        # print('RESPONSE 656565656565', len(result.values()))
-        # print('RESPONSE 656565656565', len(result.items()))
         enpointcodeassignment_vals2=None
-        for data in result["data"]:
-            print('RESPONSE 656565656565', data)          
-            if data['Info Prefijos']:
-                for prefijo in data['Info Prefijos']: 
-                    partner_vat = data['Nit']
+
+        for data in result["resultObject"]:
+            if data['prefixes']:
+                for prefijo in data['prefixes']: 
+                    partner_vat = data['nit']
                     # enpointcodeassignment_vals2 = data
-                    # enpointcodeassignment_vals2['process_id'] = self.id                       
-                    print('PREFIJO 888888877777', prefijo)
+                    # enpointcodeassignment_vals2['process_id'] = self.id
                     enpointcodeassignment_vals2 = {
                         'process_id': self.id,
-                        'Nit': data['Nit'],
-                        'RazonSocial': data['Razon social'],
-                        'IdEstado': prefijo['Codigo estado'],
-                        'EstadoPrefijo': prefijo['Descripcion estado'],
-                        'IdRango': prefijo['Codigo rango'],
-                        'Rango': prefijo['Rango descripcion'],
-                        'Esquema': prefijo['Esquema'],
-                        'CapacidadPrefijo': prefijo['Capacidad'],
-                        'PrefixId': prefijo['Prefijo'],
+                        'Nit': data['nit'],
+                        'RazonSocial': data['enterprise_name'],
+                        'IdEstado': prefijo['prefix_id'],
+                        'EstadoPrefijo': prefijo['state_code_description'],
+                        'IdRango': prefijo['range_code'],
+                        'Rango': prefijo['range_code_description'],
+                        'Esquema': prefijo['prefix_schema_description'],
+                        'CapacidadPrefijo': prefijo['capacity'],
+                        'PrefixId': prefijo['prefix'],
                         'FechaAsignacion': '2021-12-31',
                     }
 
-                    if prefijo['Esquema']=='Renovación anual a 31 de diciembre':
+                    if prefijo['prefix_schema_description']=='Renovación anual a 31 de diciembre':
                         enpointcodeassignment_vals2['IdEsquema'] = 1
-                    if prefijo['Esquema']=='Renovación anual a 31 de diciembre GS1':
+                    if prefijo['prefix_schema_description']=='Renovación anual a 31 de diciembre GS1':
                         enpointcodeassignment_vals2['IdEsquema'] = 6
-                    if prefijo['Esquema']=='Renovación cliente prefijo':
+                    if prefijo['prefix_schema_description']=='Renovación cliente prefijo':
                         enpointcodeassignment_vals2['IdEsquema'] = 7
                     self._cr.execute(''' select p.id
                                             from massive_invoicing_companies_res_partner_rel r
@@ -119,29 +143,13 @@ class x_MassiveInvoicingProcess(models.TransientModel):
 
                     enpointcodeassignment = self.env['massive.invoicing.enpointcodeassignment'].create(enpointcodeassignment_vals2)
                     self.env.cr.commit()
-                if len(data['Info Prefijos'])>1:
+                if len(data['prefixes'])>1:
                     print('PREFIJO 752525252', enpointcodeassignment_vals2)
-                    print('RESPONSE 656565656565', data['Info Prefijos'])
-                    print('RESPONSE 656565656565', len(data['Info Prefijos']))                          
+                    print('RESPONSE 656565656565', data['prefixes'])
+                    print('RESPONSE 656565656565', len(data['prefixes']))
             else:
                 continue
-                # enpointcodeassignment_vals2 = {
-                #     'process_id': self.id,
-                #     'Nit': data['Nit'],
-                #     'RazonSocial': data['Razon social'],
-                #     'IdEstado': data['Info Prefijos']['Codigo estado'],
-                #     'EstadoPrefijo': data['Info Prefijos']['Descripcion estado'],
-                #     'IdRango': data['Info Prefijos']['Codigo rango'],
-                #     'Rango': data['Info Prefijos']['Rango descripcion'],
-                #     'IdEsquema': 2,
-                #     'Esquema': data['Info Prefijos']['Renovación anual a 31 de diciembre GS1'],
-                #     'CapacidadPrefijo': data['Info Prefijos']['Capacidad'],
-                #     'PrefixId': data['Info Prefijos']['PrefixId'],
-                #     'FechaAsignacion': '2021-12-31',
-                # }          
-    # {'Nit': '79278214', 'Razon social': 'EDUARDO GOMEZ  NEIRA', 'Info Prefijos': [{'Prefijo': 7707900648, 'Codigo estado': 2, 
-    # 'Descripcion estado': 'Asignado', 'Codigo rango': 5, 'Rango descripcion': '7D', 
-    # 'Esquema': 'Renovación anual a 31 de diciembre GS1', 'Capacidad': 100, 'PrefixId': 1587}]}, 
+
             for partner in self.invoicing_companies.thirdparties:
                 if partner.vat == partner_vat:
                     partner_id = partner.id

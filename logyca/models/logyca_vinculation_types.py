@@ -12,6 +12,7 @@ class x_vinculation_types(models.Model):
     name = fields.Char(string='Nombre', size=100, required=True)
     active = fields.Boolean(string='Activo')
     novelty = fields.Selection([('1', 'Vigente'), ('2', 'No esta vigente para nuevos - se mantiene para las empresas que lo adquirieron')], string='Novedad', required=True)
+    type_fm = fields.Boolean('Aplica FM', Default=False)
 
     def name_get(self):
         return [(record.id, '%s - %s' %

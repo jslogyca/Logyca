@@ -44,6 +44,7 @@ class x_MassiveInvoicingCompanies(models.Model):
         obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro por convenio')])
         obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembros Internacionales')])
         obj_type_vinculation_miembros += self.env['logyca.vinculation_types'].search([('name', '=', 'Miembro Filial')])
+        obj_type_vinculation_miembros = self.env['logyca.vinculation_types'].search([('type_fm', '=', True)])
         obj_type_vinculation_cliente = self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente')])
         obj_type_vinculation_prefijo = self.env['logyca.vinculation_types'].search([('name', '=', 'Cliente Prefijo')])
         types_vinculation = []
