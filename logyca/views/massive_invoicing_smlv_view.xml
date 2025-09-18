@@ -5,8 +5,11 @@
         <field name="model">massive.invoicing.smlv</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="purge_same_year" string="Generar Tarifas" class="oe_highlight" type="object"  />
+                </header>            
                 <sheet string="Salario Mínimo">
-                    <group >
+                    <group>
                         <group >
                             <field name="year" />
                         </group>
@@ -14,6 +17,12 @@
                             <field name="smlv" />
                         </group>
                     </group>
+                    <field name="asset_range_ids" nolabel="1" >
+                        <tree editable="bottom">
+                            <field name="asset_range_id" />
+                            <field name="tariff" />
+                        </tree>
+                    </field>
                 </sheet>
             </form>
         </field>

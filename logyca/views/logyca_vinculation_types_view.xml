@@ -11,6 +11,28 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="logyca.list_vinculation_types_form">
+      <field name="name">logyca.list.vinculation.types.form</field>
+      <field name="model">logyca.vinculation_types</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="code"/>
+                <field name="name"/>   
+              </group>
+              <group>
+                <field name="active"/>   
+                <field name="novelty"/>
+                <field name="type_fm"/>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
     <record model="ir.ui.view" id="logyca.list_vinculation_types">
       <field name="name">logyca list vinculation_types</field>
       <field name="model">logyca.vinculation_types</field>
@@ -19,7 +41,8 @@
           <field name="code"/>                 
           <field name="name"/>   
           <field name="active"/>   
-          <field name="novelty"/>                           
+          <field name="novelty"/>
+          <field name="type_fm"/>
         </tree>
       </field>
     </record>
