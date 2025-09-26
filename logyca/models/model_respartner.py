@@ -231,6 +231,151 @@ class ResPartner(models.Model):
             else:
                 self.x_digit_verification = 0
 
+    def _normalize_city_vals(self, vals):
+        """Align city-related fields coming from form or API inputs. (x_city, city, city_id)"""
+        if not vals:
+            return vals
+
+        normalized_vals = dict(vals)
+        original_keys = set(vals.keys())
+        res_city_model = self.env['res.city']
+        logyca_city_model = self.env['logyca.city']
+
+        def _search_logyca_city(city_name):
+            if not city_name:
+                return logyca_city_model.browse()
+            return logyca_city_model.search([('name', 'ilike', city_name)], limit=1)
+
+        def _search_res_city(city_name):
+            if not city_name:
+                return res_city_model.browse()
+            return res_city_model.search([('name', 'ilike', city_name)], limit=1)
+
+        if 'x_city' in original_keys:
+            x_city = normalized_vals.get('x_city')
+            if x_city:
+                logyca_city = logyca_city_model.browse(x_city)
+                city_name = logyca_city.name or False
+                if 'city' not in original_keys:
+                    normalized_vals['city'] = city_name or False
+                if 'city_id' not in original_keys:
+                    res_city = _search_res_city(city_name)
+                    normalized_vals['city_id'] = res_city.id if res_city else False
+            else:
+                if 'city' not in original_keys:
+                    normalized_vals['city'] = False
+                if 'city_id' not in original_keys:
+                    normalized_vals['city_id'] = False
+
+        elif 'city_id' in original_keys:
+            city_id = normalized_vals.get('city_id')
+            if city_id:
+                res_city = res_city_model.browse(city_id)
+                city_name = res_city.name or False
+                if 'city' not in original_keys:
+                    normalized_vals['city'] = city_name or False
+                if 'x_city' not in original_keys:
+                    logyca_city = _search_logyca_city(city_name)
+                    normalized_vals['x_city'] = logyca_city.id if logyca_city else False
+            else:
+                if 'city' not in original_keys:
+                    normalized_vals['city'] = False
+                if 'x_city' not in original_keys:
+                    normalized_vals['x_city'] = False
+
+        elif 'city' in original_keys:
+            city_name = (normalized_vals.get('city') or '').strip()
+            if city_name:
+                if 'x_city' not in original_keys:
+                    logyca_city = _search_logyca_city(city_name)
+                    normalized_vals['x_city'] = logyca_city.id if logyca_city else False
+                if 'city_id' not in original_keys:
+                    res_city = _search_res_city(city_name)
+                    normalized_vals['city_id'] = res_city.id if res_city else False
+            else:
+                if 'x_city' not in original_keys:
+                    normalized_vals['x_city'] = False
+                if 'city_id' not in original_keys:
+                    normalized_vals['city_id'] = False
+
+        return normalized_vals
+
+    def _get_document_type_field_name(self):
+        return (
+            'l10n_latam_document_type_id'
+            if 'l10n_latam_document_type_id' in self._fields
+            else None
+        )
+
+    def _normalize_document_type_vals(self, vals):
+        """Align document-type fields coming from form or API inputs."""
+        if not vals:
+            return vals
+
+        document_field = self._get_document_type_field_name()
+        if not document_field:
+            return vals
+
+        normalized_vals = dict(vals)
+        original_keys = set(vals.keys())
+        document_model = self.env['l10n_latam.identification.type']
+        selection_keys = {
+            key for key, _label in self.env['res.partner']._fields['x_document_type'].selection
+        }
+
+        def _filter_selection(value):
+            return value if value in selection_keys else False
+
+        if document_field in original_keys:
+            document_id = normalized_vals.get(document_field)
+            if document_id:
+                document = document_model.browse(document_id)
+                description = document.description or False
+                if 'x_document_type' not in original_keys:
+                    normalized_vals['x_document_type'] = _filter_selection(description)
+            else:
+                if 'x_document_type' not in original_keys:
+                    normalized_vals['x_document_type'] = False
+
+        if 'x_document_type' in original_keys:
+            x_document = normalized_vals.get('x_document_type')
+            normalized_vals['x_document_type'] = _filter_selection(x_document)
+            x_document = normalized_vals['x_document_type']
+
+            if x_document:
+                if document_field and document_field not in original_keys:
+                    document = document_model.search([('description', '=', x_document)], limit=1)
+                    if not document:
+                        document = document_model.search([('description', 'ilike', x_document)], limit=1)
+                    normalized_vals[document_field] = document.id if document else False
+            elif document_field and document_field not in original_keys:
+                normalized_vals[document_field] = False
+
+        return normalized_vals
+
+    @api.model
+    def create(self, vals):
+        vals = self._normalize_city_vals(vals)
+        vals = self._normalize_document_type_vals(vals)
+        return super().create(vals)
+
+    def write(self, vals):
+        vals = self._normalize_city_vals(vals)
+        vals = self._normalize_document_type_vals(vals)
+        return super().write(vals)
+
+    @api.onchange('l10n_latam_document_type_id')
+    def _onchange_l10n_latam_document_type_id(self):
+        document_field = self._get_document_type_field_name()
+        if not document_field or document_field != 'l10n_latam_document_type_id':
+            return
+        document = self.l10n_latam_document_type_id
+        normalized = self._normalize_document_type_vals({
+            document_field: document.id if document else False,
+        })
+        if 'x_document_type' in normalized:
+            self.x_document_type = normalized['x_document_type']
+
     #---------------Search
     # @api.model
     # def name_search(self, name='', args=None, operator='ilike', limit=100):
@@ -335,10 +480,9 @@ class ResPartner(models.Model):
                     cant_RT = cant_RT + 1
 
             if cant_RT == 0:
-                    raise ValidationError(_('El cliente debe tener una Responsabilidad Tributaria válida para Facturación Electrónica.'))  
-
-    @api.model
-    def _run_vat_test(self, vat_number, default_country, partner_is_company=True):
-        # OVERRIDE account
-        check_result = None
-        return check_result
+                raise ValidationError(
+                    _(
+                        'El cliente debe tener una Responsabilidad Tributaria válida para '
+                        'Facturación Electrónica.'
+                    )
+                )
