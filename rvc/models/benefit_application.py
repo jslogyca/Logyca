@@ -74,16 +74,23 @@ class BenefitApplication(models.Model):
     whatsapp_number_trail = fields.Char('Número WhatsApp', help="Número de WhatsApp que creó la postulación")
     #technical fields
     benefit_name = fields.Selection(string="Nombre Beneficio", related='product_id.benefit_type', store=True, help="Technical field used for easy quering")
-    origin = fields.Selection([('odoo', 'Odoo'),
-                                    ('tienda', 'Tienda Virtual'),
-                                    ('chatbot', 'ChatBot RVC'),
-                                    ('plataforma_rvc', 'Plataforma RVC'),
-                                    ('api_marketplaces', 'API Marketplaces')],
-                                    string="Origen",
-                                    tracking=True,
-                                    default='odoo',
-                                    readonly=True,
-                                    help="Este campo permite diferenciar las postulaciones RVC que provienen de Odoo, Tienda Virtual y ChatBot.")
+    origin = fields.Selection(
+        [
+            ('odoo', 'Odoo'),
+            ('tienda', 'Tienda Virtual'),
+            ('chatbot', 'ChatBot RVC'),
+            ('plataforma_rvc', 'Plataforma RVC'),
+            ('api_marketplaces', 'API Marketplaces')
+        ],
+        string="Origen",
+        tracking=True,
+        default='odoo',
+        readonly=True,
+        help=(
+            "Este campo permite diferenciar las postulaciones RVC que provienen "
+            "de Odoo, Tienda Virtual, ChatBot, Plataforma RVC, API Marketplaces, etc."
+        )
+    )
     is_seller = fields.Boolean('Seller', default=False, tracking=True, help="La empresa vende en el marketplace del éxito?")
     referred_by = fields.Char('Referida por', tracking=True, help="¿Cómo se enteró del beneficio RVC?")
     email_employee = fields.Char('Email Colaborador')
