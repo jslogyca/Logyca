@@ -173,11 +173,9 @@ class ResPartner(models.Model):
     def _depends_active(self):
         for partner in self:
             if partner.x_active_for_logyca:
-                partner.active = True
-                partner.active_logyca = True
+                partner.update({'active': True, 'active_logyca': True})
             else:
-                partner.active = False
-                partner.active_logyca = False
+                partner.update({'active': False, 'active_logyca': False})
 
     @api.depends('vat')
     def _compute_verification_digit(self):
@@ -302,8 +300,8 @@ class ResPartner(models.Model):
 
     def _get_document_type_field_name(self):
         return (
-            'l10n_latam_document_type_id'
-            if 'l10n_latam_document_type_id' in self._fields
+            'l10n_latam_identification_type_id'
+            if 'l10n_latam_identification_type_id' in self._fields
             else None
         )
 
@@ -364,12 +362,12 @@ class ResPartner(models.Model):
         vals = self._normalize_document_type_vals(vals)
         return super().write(vals)
 
-    @api.onchange('l10n_latam_document_type_id')
-    def _onchange_l10n_latam_document_type_id(self):
+    @api.onchange('l10n_latam_identification_type_id')
+    def _onchange_l10n_latam_identification_type_id(self):
         document_field = self._get_document_type_field_name()
-        if not document_field or document_field != 'l10n_latam_document_type_id':
+        if not document_field or document_field != 'l10n_latam_identification_type_id':
             return
-        document = self.l10n_latam_document_type_id
+        document = self.l10n_latam_identification_type_id
         normalized = self._normalize_document_type_vals({
             document_field: document.id if document else False,
         })
