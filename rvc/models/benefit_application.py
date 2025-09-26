@@ -74,10 +74,11 @@ class BenefitApplication(models.Model):
     whatsapp_number_trail = fields.Char('Número WhatsApp', help="Número de WhatsApp que creó la postulación")
     #technical fields
     benefit_name = fields.Selection(string="Nombre Beneficio", related='product_id.benefit_type', store=True, help="Technical field used for easy quering")
-    origin = fields.Selection([('odoo', 'Odoo'), 
+    origin = fields.Selection([('odoo', 'Odoo'),
                                     ('tienda', 'Tienda Virtual'),
                                     ('chatbot', 'ChatBot RVC'),
-                                    ('api_marketplaces', 'API Marketplaces'),],
+                                    ('plataforma_rvc', 'Plataforma RVC'),
+                                    ('api_marketplaces', 'API Marketplaces')],
                                     string="Origen",
                                     tracking=True,
                                     default='odoo',
