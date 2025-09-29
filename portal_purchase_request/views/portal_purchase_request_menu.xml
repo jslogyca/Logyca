@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="menu_purchase_request"
+        name="Portal Requests"
+        sequence="1"
+        parent="purchase.menu_procurement_management"
+        action="action_portal_purchase_request_tree"
+    />
+
+    <!-- Website Menu for Public Purchase Request Form -->
+    <record id="website_menu_purchase_request" model="website.menu">
+        <field name="name">Request</field>
+        <field name="url">/purchase-request/new</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">40</field>
+    </record>
+
+</odoo>

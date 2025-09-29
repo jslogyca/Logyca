@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Extend Partner Form View -->
+        <record id="view_res_partner_form_sarlaft" model="ir.ui.view">
+            <field name="name">res.partner.form.sarlaft</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <div name="button_box" position="inside">
+                    <button name="action_view_sarlaft_tracking" type="object"
+                            class="oe_stat_button" icon="fa-shield"
+                            groups="sarlaft_tracking.group_sarlaft_read">
+                        <field name="sarlaft_tracking_count" widget="statinfo" string="SARLAFT"/>
+                    </button>
+                </div>
+
+                <page name="accounting" position="after">
+                    <page string="SARLAFT" name="sarlaft"
+                        groups="sarlaft_tracking.group_sarlaft_read">
+                        <group name="sarlaft_main_group">
+                            <group name="sarlaft_left_group">
+                                <field name="last_sarlaft_query_date" readonly="1"/>
+                                <field name="next_sarlaft_query_date" readonly="1"/>
+                                <field name="sarlaft_approved" readonly="1"/>
+                            </group>
+                            <group name="sarlaft_rigth_group">
+                            </group>
+                        </group>
+                    </page>
+                </page>
+            </field>
+        </record>
+
+        <!-- Extend Partner Tree View -->
+        <record id="view_res_partner_tree_sarlaft" model="ir.ui.view">
+            <field name="name">res.partner.tree.sarlaft</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <field name="phone" position="after">
+                    <field name="last_sarlaft_query_date" optional="hide"/>
+                    <field name="next_sarlaft_query_date" optional="hide"/>
+                    <field name="sarlaft_approved" optional="hide"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Extend Partner search View -->
+        <record id="view_res_partner_search_sarlaft" model="ir.ui.view">
+            <field name="name">res.partner.search.sarlaft</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='inactive']" position="after">
+                    <separator/>
+                    <filter name="no_sarlaft" string="Without SARLAFT" domain="[('last_sarlaft_query_date', '=', False)]"/>
+                    <filter name="sarlaft_noapproved" string="SARLAFT Not Approved" domain="[('sarlaft_approved', '=', False)]"/>
+                    <filter name="sarlaft_expiring" string="SARLAFT Expiring" domain="[('next_sarlaft_query_date', '!=', False), ('next_sarlaft_query_date', '&lt;=', (context_today() + relativedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

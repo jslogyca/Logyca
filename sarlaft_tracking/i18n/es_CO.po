@@ -1,0 +1,644 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sarlaft_tracking
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-12 19:59+0000\n"
+"PO-Revision-Date: 2025-09-12 15:00-0500\n"
+"Last-Translator: Cristiam Carreño <cristiamcarreno@gmail.com>\n"
+"Language-Team: \n"
+"Language: es_CO\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.7\n"
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+msgid "<p>%s row(s) were skipped because partner was not found by VAT or Name.</p>"
+msgstr "<p>Se omitieron %s filas porque no se encontró al tercero por número de documento o nombre.</p>"
+
+#. module: sarlaft_tracking
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_form
+msgid "<span class=\"oe_read_only\"> - </span>"
+msgstr "<span class=\"oe_read_only\"> - </span>"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__message_needaction
+msgid "Action Needed"
+msgstr "Acción Requerida"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__activity_ids
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "Decoración de Excepción de Actividad"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__activity_state
+msgid "Activity State"
+msgstr "Estado de Actividad"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Icono de Tipo de Actividad"
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__information
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_form
+msgid "Additional Information"
+msgstr "Info"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__comments
+msgid "Additional comments about the query"
+msgstr "Comentarios adicionales sobre la consulta"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__information
+msgid "Additional information about the query"
+msgstr "Información adicional sobre la consulta"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__approved
+msgid "Approved"
+msgstr "Aprobado"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__message_attachment_count
+msgid "Attachment Count"
+msgstr "Cantidad de Adjuntos"
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__comments
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_form
+msgid "Comments"
+msgstr "Comentarios"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__company_id
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_search
+msgid "Company"
+msgstr "Compañía"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__company_id
+msgid "Company that performed the query"
+msgstr "Compañía que realizó la consulta"
+
+#. module: sarlaft_tracking
+#: model:ir.model,name:sarlaft_tracking.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: sarlaft_tracking
+#: model_terms:ir.actions.act_window,help:sarlaft_tracking.action_sarlaft_tracking
+msgid "Create your first SARLAFT tracking record"
+msgstr "Cree su primer registro de seguimiento SARLAFT"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__next_query_date
+msgid "Date for the next SARLAFT query"
+msgstr "Fecha para la siguiente consulta SARLAFT"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_hr_employee__last_sarlaft_query_date
+#: model:ir.model.fields,help:sarlaft_tracking.field_res_partner__last_sarlaft_query_date
+#: model:ir.model.fields,help:sarlaft_tracking.field_res_users__last_sarlaft_query_date
+msgid "Date of the last SARLAFT query"
+msgstr "Fecha de la última consulta SARLAFT"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_hr_employee__next_sarlaft_query_date
+#: model:ir.model.fields,help:sarlaft_tracking.field_res_partner__next_sarlaft_query_date
+#: model:ir.model.fields,help:sarlaft_tracking.field_res_users__next_sarlaft_query_date
+msgid "Date of the next SARLAFT query"
+msgstr "Fecha de la siguiente consulta SARLAFT"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__query_date
+msgid "Date when the SARLAFT query was performed"
+msgstr "Fecha en que se realizó la consulta SARLAFT"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__days_to_next_query
+msgid "Days to Next Query"
+msgstr "Días para la Próxima Consulta"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__display_name
+msgid "Display Name"
+msgstr "Nombre a Mostrar"
+
+#. module: sarlaft_tracking
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_search
+msgid "Due Soon (30 days)"
+msgstr "Vence Pronto (30 días)"
+
+#. module: sarlaft_tracking
+#: model:ir.model,name:sarlaft_tracking.model_hr_employee
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__employee_id
+msgid "Employee"
+msgstr "Empleado"
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__error_sources
+msgid "Error Sources"
+msgstr "Fuentes con error"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__message_follower_ids
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Seguidores (Contactos)"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Icono de Font Awesome, ej. fa-tasks"
+
+#. module: sarlaft_tracking
+#: model:res.groups,comment:sarlaft_tracking.group_sarlaft_admin
+msgid "Full access to SARLAFT tracking records including creation, editing and import"
+msgstr "Acceso completo a los registros de seguimiento SARLAFT incluyendo creación, edición e importación"
+
+#. module: sarlaft_tracking
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_search
+msgid "Group By"
+msgstr "Agrupar Por"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__has_message
+msgid "Has Message"
+msgstr "Tiene Mensaje"
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__high_risk
+msgid "High Risk"
+msgstr "Altos"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__high_risk
+msgid "High risk details"
+msgstr "Detalles de alto riesgo"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__id
+msgid "ID"
+msgstr ""
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__activity_exception_icon
+msgid "Icon"
+msgstr "Icono"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "Icono para indicar una actividad de excepción."
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__ident_number
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_form
+msgid "Identification Number"
+msgstr "Documento"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__ident_type
+msgid "Identification Type"
+msgstr "Tipo"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__ident_number
+msgid "Identification document number"
+msgstr "Número del documento de identificación"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Si está marcado, los nuevos mensajes requieren su atención."
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__message_has_error
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Si está marcado, algunos mensajes tienen errores de entrega."
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__approved
+msgid "Indicates if the SARLAFT query was approved"
+msgstr "Indica si la consulta SARLAFT fue aprobada"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_hr_employee__sarlaft_approved
+#: model:ir.model.fields,help:sarlaft_tracking.field_res_partner__sarlaft_approved
+#: model:ir.model.fields,help:sarlaft_tracking.field_res_users__sarlaft_approved
+msgid "Indicates if the last SARLAFT query was approved"
+msgstr "Indica si la última consulta SARLAFT fue aprobada"
+
+#. module: sarlaft_tracking
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_form
+msgid "Information"
+msgstr "Información"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__message_is_follower
+msgid "Is Follower"
+msgstr "Es Seguidor"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__is_overdue
+msgid "Is Overdue"
+msgstr "Está Vencido"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_hr_employee__last_sarlaft_query_date
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_res_partner__last_sarlaft_query_date
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_res_users__last_sarlaft_query_date
+msgid "Last SARLAFT Query"
+msgstr "Última Consulta SARLAFT"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__write_uid
+msgid "Last Updated by"
+msgstr "Última Actualización por"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__write_date
+msgid "Last Updated on"
+msgstr "Última Actualización el"
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__low_risk
+msgid "Low Risk"
+msgstr "Bajos"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__low_risk
+msgid "Low risk details"
+msgstr "Detalles de bajo riesgo"
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__medium_risk
+msgid "Medium Risk"
+msgstr "Medios"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__medium_risk
+msgid "Medium risk details"
+msgstr "Detalles de medio riesgo"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__message_has_error
+msgid "Message Delivery error"
+msgstr "Error de Entrega de Mensaje"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__message_ids
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "Fecha Límite de Mi Actividad"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__activity_calendar_event_id
+msgid "Next Activity Calendar Event"
+msgstr "Próximo evento del calendario de actividades"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Fecha Límite de Próxima Actividad"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__activity_summary
+msgid "Next Activity Summary"
+msgstr "Resumen de Próxima Actividad"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__activity_type_id
+msgid "Next Activity Type"
+msgstr "Tipo de Próxima Actividad"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__next_query_date
+msgid "Next Query Date"
+msgstr "Fecha de Próxima Consulta"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_hr_employee__next_sarlaft_query_date
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_res_partner__next_sarlaft_query_date
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_res_users__next_sarlaft_query_date
+msgid "Next SARLAFT Query"
+msgstr "Próxima Consulta SARLAFT"
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+msgid "Next query date must be after the current query date"
+msgstr "La fecha de la próxima consulta debe ser posterior a la fecha de consulta actual"
+
+#. module: sarlaft_tracking
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_form
+msgid "Number"
+msgstr "Documento"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Número de Acciones"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__days_to_next_query
+msgid "Number of days until next query"
+msgstr "Número de días hasta la próxima consulta"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__message_has_error_counter
+msgid "Number of errors"
+msgstr "Número de errores"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "Número de mensajes que requieren acción"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Número de mensajes con errores de entrega"
+
+#. module: sarlaft_tracking
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_search
+msgid "Overdue"
+msgstr "Vencido"
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__partner_id
+msgid "Partner"
+msgstr "Nombre"
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__query_date
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_search
+msgid "Query Date"
+msgstr "Fecha de Consulta"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__rating_ids
+msgid "Ratings"
+msgstr ""
+
+#. module: sarlaft_tracking
+#: model:res.groups,comment:sarlaft_tracking.group_sarlaft_read
+msgid "Read access to SARLAFT tracking records"
+msgstr "Acceso de lectura a los registros de seguimiento SARLAFT"
+
+#. module: sarlaft_tracking
+#: model_terms:ir.actions.act_window,help:sarlaft_tracking.action_sarlaft_tracking
+msgid ""
+"Record and track SARLAFT queries performed on customers, suppliers, and employees.\n"
+"                    Use the import feature to bulk load records from Excel or CSV files."
+msgstr ""
+"Registre y realice seguimiento de las consultas SARLAFT realizadas a clientes, proveedores y empleados.\n"
+"                    Use la función de importación para cargar masivamente registros desde archivos Excel o CSV."
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__employee_id
+msgid "Related employee"
+msgstr "Colaborador relacionado"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__partner_id
+msgid "Related partner (customer/supplier)"
+msgstr "Contacto relacionado (cliente/proveedor)"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__activity_user_id
+msgid "Responsible User"
+msgstr "Usuario Responsable"
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__result_link
+msgid "Result Link"
+msgstr "URL Reporte"
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__result_risks
+msgid "Risk Level"
+msgstr "Nivel"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__result_risks
+msgid "Risk level determined from the query"
+msgstr "Nivel de riesgo determinado a partir de la consulta"
+
+#. module: sarlaft_tracking
+#: model:ir.module.category,name:sarlaft_tracking.module_category_sarlaft
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_hr_employee_form_sarlaft
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_res_partner_form_sarlaft
+msgid "SARLAFT"
+msgstr ""
+
+#. module: sarlaft_tracking
+#: model:res.groups,name:sarlaft_tracking.group_sarlaft_admin
+msgid "SARLAFT / Administration"
+msgstr "SARLAFT / Administración"
+
+#. module: sarlaft_tracking
+#: model:res.groups,name:sarlaft_tracking.group_sarlaft_read
+msgid "SARLAFT / Read"
+msgstr "SARLAFT / Lectura"
+
+#. module: sarlaft_tracking
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_graph
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_pivot
+msgid "SARLAFT Analysis"
+msgstr "Análisis SARLAFT"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_hr_employee__sarlaft_approved
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_res_partner__sarlaft_approved
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_res_users__sarlaft_approved
+msgid "SARLAFT Approved"
+msgstr "Aprobado SARLAFT"
+
+#. module: sarlaft_tracking
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_hr_employee_search_sarlaft
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_res_partner_search_sarlaft
+msgid "SARLAFT Expiring"
+msgstr "SARLAFT vencido"
+
+#. module: sarlaft_tracking
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_hr_employee_search_sarlaft
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_res_partner_search_sarlaft
+msgid "SARLAFT Not Approved"
+msgstr "SARLAFT No aprobado"
+
+#. module: sarlaft_tracking
+#: model:ir.module.category,description:sarlaft_tracking.module_category_sarlaft
+msgid "SARLAFT Query Tracking System"
+msgstr "Sistema de Seguimiento de Consultas SARLAFT"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_hr_employee__sarlaft_tracking_ids
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_res_partner__sarlaft_tracking_ids
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_res_users__sarlaft_tracking_ids
+msgid "SARLAFT Records"
+msgstr "Registros SARLAFT"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_hr_employee__sarlaft_tracking_count
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_res_partner__sarlaft_tracking_count
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_res_users__sarlaft_tracking_count
+msgid "SARLAFT Records Count"
+msgstr "Cantidad de Registros SARLAFT"
+
+#. module: sarlaft_tracking
+#: model:ir.actions.act_window,name:sarlaft_tracking.action_sarlaft_tracking
+#: model:ir.model,name:sarlaft_tracking.model_sarlaft_tracking
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_form
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_list
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_search
+msgid "SARLAFT Tracking"
+msgstr "Seguimiento SARLAFT"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_hr_employee__sarlaft_tracking_ids
+msgid "SARLAFT tracking records for this employee"
+msgstr "Registros de seguimiento SARLAFT para este empleado"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_res_partner__sarlaft_tracking_ids
+#: model:ir.model.fields,help:sarlaft_tracking.field_res_users__sarlaft_tracking_ids
+msgid "SARLAFT tracking records for this partner"
+msgstr "Registros de seguimiento SARLAFT para este contacto"
+
+#. module: sarlaft_tracking
+#: model:ir.actions.server,name:sarlaft_tracking.cron_sarlaft_reminder_activities_ir_actions_server
+msgid "SARLAFT: Create Reminder Activities"
+msgstr "SARLAFT: Crear Actividades de Recordatorio"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "Error de Entrega de SMS"
+
+#. module: sarlaft_tracking
+#: model:ir.ui.menu,name:sarlaft_tracking.menu_sarlaft_tracking_root
+msgid "Sarlaft"
+msgstr "SARLAFT"
+
+#. module: sarlaft_tracking
+#. odoo-python
+#: code:addons/sarlaft_tracking/models/sarlaft_tracking.py:0
+msgid "Skipped rows on import for %s"
+msgstr "Filas omitidas en la importación de %s"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__error_sources
+msgid "Sources of errors found during the query"
+msgstr "URL de errores encontradas durante la consulta"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"Estado basado en actividades\n"
+"Vencido: La fecha de vencimiento ya pasó\n"
+"Hoy: La fecha de actividad es hoy\n"
+"Planificado: Actividades futuras."
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__is_overdue
+msgid "True if next query date has passed"
+msgstr "Verdadero si la fecha de la próxima consulta ya pasó"
+
+#. module: sarlaft_tracking
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_sarlaft_tracking_form
+msgid "Type"
+msgstr "Tipo"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__ident_type
+msgid "Type of identification document"
+msgstr "Tipo de documento de identificación"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "Tipo de actividad de excepción en el registro."
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__result_link
+msgid "URL link to the detailed query result"
+msgstr "Enlace URL al resultado detallado de la consulta"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,field_description:sarlaft_tracking.field_sarlaft_tracking__website_message_ids
+msgid "Website Messages"
+msgstr "Mensajes del Sitio Web"
+
+#. module: sarlaft_tracking
+#: model:ir.model.fields,help:sarlaft_tracking.field_sarlaft_tracking__website_message_ids
+msgid "Website communication history"
+msgstr "Historial de comunicación del sitio web"
+
+#. module: sarlaft_tracking
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_hr_employee_search_sarlaft
+#: model_terms:ir.ui.view,arch_db:sarlaft_tracking.view_res_partner_search_sarlaft
+msgid "Without SARLAFT"
+msgstr "Sin SARLAFT"

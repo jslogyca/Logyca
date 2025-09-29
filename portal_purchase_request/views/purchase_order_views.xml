@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View purchase.order views -->
+    <record id="view_purchase_order_form" model="ir.ui.view">
+        <field name="name">view.purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="priority" eval="16"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tax_calculation_rounding_method']" position="after">
+                <field name="portal_request_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_view_search" model="ir.ui.view">
+        <field name="name">view.purchase.order.search</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_search"/>
+        <field name="priority" eval="16"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="portal_request_id"/>
+            </xpath>
+            <xpath expr="//filter[@name='starred']" position="after">
+                <filter string="Portal Request" name="portal_request" domain="[('portal_request_id', '!=', False)]"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
