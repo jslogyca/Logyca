@@ -10,7 +10,7 @@
                     <button name="activate_beneficiary" string="Activar" type="object" class="btn-primary"  groups="rvc.group_rvc_manager"/>
 				</header>
 				<sheet>
-					<widget name="web_ribbon" title="Desactivada" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+					<widget name="web_ribbon" title="Desactivada" bg_color="bg-danger" invisible="active"/>
                     <h1>Registro de Empresa Halonadora</h1>
                     <group>
                         <group string="Buscar Empresa">
