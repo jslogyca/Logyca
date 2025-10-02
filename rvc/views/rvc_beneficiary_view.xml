@@ -13,11 +13,11 @@
 					<widget name="web_ribbon" title="Archivada" bg_color="bg-danger" invisible="active"/>
                     <h1>Registro de Empresa Beneficiaria</h1>
                     <group>
-                        <group string="Buscar Empresa">
-                            <field name="partner_id" nolabel="1" domain="['|', ('parent_id', '=', False),('is_company', '=', True)]"/>
+                        <group>
+                            <field name="partner_id" string="Buscar Empresa" domain="['|', ('parent_id', '=', False),('is_company', '=', True)]"/>
                         </group>
-                        <group string="Buscar Contacto" >
-                            <field name="contact_id" nolabel="1" domain="[('is_company', '=', False), ('parent_id', '=', partner_id)]"/>
+                        <group>
+                            <field name="contact_id" string="Buscar Contacto" domain="[('is_company', '=', False), ('parent_id', '=', partner_id)]"/>
                         </group>
 					</group>
 					<group>
