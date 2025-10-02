@@ -46,8 +46,18 @@ class RVCBeneficiary(models.Model):
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
+        res = {}
         if self.partner_id:
             self.contact_id = False
+            # Actualizar el dominio de contact_id para mostrar solo contactos de esta empresa
+            res['domain'] = {
+                'contact_id': [('is_company', '=', False), ('parent_id', '=', self.partner_id.id)]
+            }
+        else:
+            res['domain'] = {
+                'contact_id': [('id', '=', False)]  # No mostrar nada si no hay empresa seleccionada
+            }
+        return res
 
     @api.onchange('contact_id')
     def onchange_contact_id(self):
