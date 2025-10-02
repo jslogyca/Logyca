@@ -11,7 +11,7 @@ class RVCBeneficiary(models.Model):
     _inherit = 'mail.thread'
     _rec_name = 'partner_id'
 
-    partner_id = fields.Many2one('res.partner', string='Patrocinado')
+    partner_id = fields.Many2one('res.partner', string='Patrocinado', domain=['&', ('is_company', '=', True), ('parent_id', '=', False)], required=True)
     contact_id = fields.Many2one('res.partner', string='Contacto')
     vat = fields.Char('Número de documento', related='partner_id.vat')
     phone = fields.Char('Teléfono', related='partner_id.phone')
@@ -51,17 +51,14 @@ class RVCBeneficiary(models.Model):
 
     @api.onchange('contact_id')
     def onchange_contact_id(self):
-        if self.contact_id:
-            self.clear_contact_fields()
+        self.clear_contact_fields()
 
-            contact = self.contact_id
+        partner = self.partner_id
 
-            self.contact_name = contact.name
-            self.contact_phone = contact.phone if contact.phone else contact.mobile
-            self.contact_email = contact.email
-            self.contact_position = contact.x_contact_job_title.name if contact.x_contact_job_title else ''
-        else:
-            self.clear_contact_fields()
+        self.contact_name = partner.name
+        self.contact_phone = partner.phone if partner.phone else partner.mobile
+        self.contact_email = partner.email
+        self.contact_position = partner.x_contact_job_title.name if partner.x_contact_job_title else ''
 
     def clear_contact_fields(self):
         self.contact_name = ""
