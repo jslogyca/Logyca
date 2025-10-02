@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Breadcrumbs for portal purchase requests -->
+  <template id="portal_purchase_request_breadcrumbs" name="Portal Purchase Request Breadcrumbs" inherit_id="portal.portal_breadcrumbs" priority="25">
+    <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+      <li t-if="page_name == 'purchase_requests' and not purchase_request" class="breadcrumb-item active">
+        <t>Purchase Requests</t>
+      </li>
+      <li t-if="page_name == 'purchase_requests' and purchase_request" class="breadcrumb-item">
+          <a t-attf-href="/my/purchase_requests?{{ keep_query() }}">Purchase Requests</a>
+        </li>
+        <li t-if="page_name == 'purchase_requests' and purchase_request and request.httprequest.path.startswith('/my/purchase_requests/')" class="breadcrumb-item active">
+          <t t-esc="purchase_request.name"/>
+        </li>
+      <li t-if="purchase_request and page_name != 'purchase_requests'" class="breadcrumb-item">
+        <a t-attf-href="/my/purchase_requests?{{ keep_query() }}">Purchase Requests</a>
+      </li>
+      <li t-if="purchase_request and page_name != 'purchase_requests'" class="breadcrumb-item active">
+        <t t-esc="purchase_request.name"/>
+      </li>
+    </xpath>
+  </template>
+
+  <template id="portal_purchase_request_list" name="My Purchase Requests">
+    <t t-call="portal.portal_layout">
+      <t t-set="page_name" t-value="'purchase_requests'"/>
+
+      <div class="container">
+        <div class="o_portal_page_header">
+          <div class="row align-items-center">
+            <div class="col-sm">
+              <h1 class="o_portal_page_header_title">My Purchase Requests</h1>
+            </div>
+            <div class="col-sm-auto text-sm-end">
+              <a href="/purchase-request/new" class="btn btn-primary">
+                <i class="fa fa-plus me-1" aria-hidden="true"></i>
+                Create Request
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="o_portal_page_content">
+          <t t-if="not requests">
+            <div class="alert alert-info" role="alert">
+              <p><strong>No purchase requests found.</strong></p>
+              <p>You don't have any purchase requests yet.</p>
+            </div>
+          </t>
+          <t t-else="">
+            <div class="table-responsive">
+              <table class="table table-hover o_portal_table">
+                <thead class="bg-100">
+                  <tr class="active">
+                    <th>Reference</th>
+                    <th>Request Type</th>
+                    <th>Date</th>
+                    <th class="text-center">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <t t-foreach="requests" t-as="purchase_request">
+                    <tr>
+                      <td>
+                        <a t-att-href="'/my/purchase_requests/%s?access_token=%s' % (purchase_request.id, purchase_request.access_token or '')">
+                          <span t-esc="purchase_request.name"/>
+                        </a>
+                      </td>
+                      <td>
+                        <t t-set="req_choices" t-value="purchase_request._fields['request_type'].selection"/>
+                        <t t-set="req_label" t-value="dict(req_choices).get(purchase_request.request_type, purchase_request.request_type)"/>
+                        <span t-esc="req_label"/>
+                      </td>
+                      <td>
+                        <span t-field="purchase_request.request_date" t-options="{'widget': 'date'}"/>
+                      </td>
+                      <td class="text-center">
+                        <t t-set="state_code" t-value="purchase_request.state"/>
+                        <t t-if="state_code == 'draft'">
+                          <span class="badge bg-warning rounded-pill text-dark">Draft</span>
+                        </t>
+                        <t t-elif="state_code == 'in_process'">
+                          <span class="badge bg-info rounded-pill">In Process</span>
+                        </t>
+                        <t t-elif="state_code == 'to_invoice'">
+                          <span class="badge bg-info rounded-pill">To Invoice</span>
+                        </t>
+                        <t t-elif="state_code == 'rejected'">
+                          <span class="badge bg-danger rounded-pill">Rejected</span>
+                        </t>
+                        <t t-elif="state_code == 'cancelled'">
+                          <span class="badge bg-light rounded-pill text-dark">Cancelled</span>
+                        </t>
+                        <t t-elif="state_code == 'completed'">
+                          <span class="badge bg-success rounded-pill">Completed</span>
+                        </t>
+                        <t t-else="">
+                          <span class="badge bg-secondary rounded-pill"><t t-esc="state_code"/></span>
+                        </t>
+                      </td>
+                    </tr>
+                  </t>
+                </tbody>
+              </table>
+            </div>
+          </t>
+        </div>
+      </div>
+    </t>
+  </template>
+
+  <template id="portal_purchase_request_portal_view" name="Portal Purchase Request View" inherit_id="portal.portal_sidebar" primary="True">
+    <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+      <t t-set="o_portal_fullwidth_alert">
+        <t t-call="portal.portal_back_in_edit_mode">
+          <t t-set="backend_url" t-value="'/web#id=%s&amp;model=portal.purchase.request&amp;view_type=form' % (object.id)"/>
+        </t>
+      </t>
+
+      <div class="row o_portal_purchase_request_sidebar">
+        <!-- Sidebar -->
+        <t t-call="portal.portal_record_sidebar">
+          <t t-set="classes" t-value="'col-lg-4 col-xxl-3 d-print-none'"/>
+
+          <t t-set="title">
+            <h3 class="mb-0 text-break"><t t-esc="object.name"/></h3><br/>
+          </t>
+
+          <t t-set="entries">
+            <div class="mb-2">
+              <br/>
+              <h4 class="mb-0 text-break">
+                <span>Status:</span>
+                <t t-set="state_code" t-value="object.state"/>
+                <t t-if="state_code == 'draft'">
+                  <span class="badge bg-warning rounded-pill text-dark ms-1"><t t-esc="state_display or 'Draft'"/></span>
+                </t>
+                <t t-elif="state_code == 'in_process'">
+                  <span class="badge bg-info rounded-pill ms-1"><t t-esc="state_display or 'In Process'"/></span>
+                </t>
+                <t t-elif="state_code == 'to_invoice'">
+                  <span class="badge bg-info rounded-pill ms-1"><t t-esc="state_display or 'To Invoice'"/></span>
+                </t>
+                <t t-elif="state_code == 'rejected'">
+                  <span class="badge bg-danger rounded-pill ms-1"><t t-esc="state_display or 'Rejected'"/></span>
+                </t>
+                <t t-elif="state_code == 'cancelled'">
+                  <span class="badge bg-light rounded-pill text-dark ms-1"><t t-esc="state_display or 'Cancelled'"/></span>
+                </t>
+                <t t-elif="state_code == 'completed'">
+                  <span class="badge bg-success rounded-pill ms-1"><t t-esc="state_display or 'Completed'"/></span>
+                </t>
+                <t t-else="">
+                  <span class="badge bg-secondary rounded-pill ms-1"><t t-esc="state_display or object.state"/></span>
+                </t>
+              </h4>
+            </div>
+            <div class="mb-2" t-if="object.collaborator_id">
+              <strong>Collaborator:</strong><br/>
+              <span t-esc="object.collaborator_id.name"/>
+            </div>
+            <div class="mb-2" t-if="object.team_id">
+              <strong>Request type:</strong><br/>
+              <t t-set="req_choices" t-value="object._fields['request_type'].selection"/>
+              <t t-set="req_label" t-value="dict(req_choices).get(object.request_type, object.request_type)"/>
+              <span t-esc="req_label"/>
+            </div>
+            <div class="mb-2" t-if="object.budget_group_id">
+              <strong>Budget Group:</strong><br/>
+              <span t-esc="object.budget_group_id.name"/>
+            </div>
+            <div class="mb-2" t-if="object.analytic_distribution">
+              <t t-set="analytic_map" t-value="object.analytic_distribution or {}"/>
+              <t t-set="analytic_formatted" t-value="' | '.join([ (str(int(v)) if (isinstance(v, (int, float)) and float(v).is_integer()) else str(v)) + '% ' + (request.env['account.analytic.account'].browse(int(k)).name if request.env['account.analytic.account'].browse(int(k)).exists() else ('#' + k)) for k, v in (analytic_map).items() ])"/>
+              <strong>Analytic distribution:</strong>
+              <span class="badge rounded-pill bg-info text-white text-truncate ms-1"
+                    t-att-title="analytic_formatted"
+                    t-att-data-analytic="object.analytic_distribution"
+                    style="max-width: 100%; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                <t t-esc="analytic_formatted"/>
+              </span>
+            </div>
+            <div class="mb-2" t-if="object.reviewed_by_id">
+              <strong>Reviewed By:</strong><br/>
+              <span t-esc="object.reviewed_by_id.name"/>
+            </div>
+            <div t-if="object.completion_date">
+              <strong>Completion Date:</strong><br/>
+              <span t-field="object.completion_date" t-options="{'widget': 'date'}"/>
+            </div>
+          </t>
+        </t>
+
+        <div t-attf-class="col-12 col-lg col-xl-8 o_portal_page_size">
+          <div class="o_portal_page_header">
+            <div class="row align-items-center">
+              <div class="col-sm">
+                <h1 class="o_portal_page_header_title">
+                  Purchase Request
+                  <strong class="ms-1" t-esc="object.name"/>
+                  <br></br>
+                </h1>
+              </div>
+            </div>
+          </div>
+
+          <div class="o_portal_page_content">
+            <div id="purchase_request_content">
+              <div class="row mb-4">
+                <div class="col-12 col-lg-6">
+                  <div class="card mb-3">
+                    <div class="card-header"><strong>Basic information</strong></div>
+                    <div class="card-body small">
+                      <div class="mb-1"><strong>Division:</strong> <span t-esc="object.division_id.name or ''"/></div>
+                      <div class="mb-1"><strong>Team:</strong> <span t-esc="object.team_id.name or ''"/></div>
+                      <div class="mb-1"><strong>Collaborator:</strong> <span t-esc="object.collaborator_id.name or ''"/></div>
+                      <div class="mb-1"><strong>Vendor:</strong> <span t-esc="object.partner_id.name or ''"/></div>
+                      <div class="mb-1"><strong>Request Date:</strong> <span t-field="object.request_date" t-options="{'widget': 'date'}"/></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="card mb-3">
+                    <div class="card-header"><strong>Project information</strong></div>
+                    <div class="card-body small">
+                      <div class="mb-1"><strong>Start Date:</strong> <span t-field="object.project_start_date" t-options="{'widget': 'date'}"/></div>
+                      <div class="mb-1"><strong>End Date:</strong> <span t-field="object.project_end_date" t-options="{'widget': 'date'}"/></div>
+                      <div class="mb-1">
+                        <strong>Total Value:</strong>
+                        <span t-field="object.project_total_value" t-options="{'widget': 'monetary', 'display_currency': object.currency_id or object.company_id.currency_id}"/>
+                        <span> (<span t-esc="object.currency_id.name or ''"/>)</span>
+                      </div>
+                      <div class="mb-1"><strong>Payment Agreement:</strong> <span t-esc="object.payment_agreement or ''"/></div>
+                      <div class="mb-1"><strong>Execution Place:</strong> <span t-esc="object.execution_place or ''"/></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Request Lines -->
+              <div class="row" t-if="object.product_line_ids">
+                <div class="col-12">
+                  <h4>Request Lines</h4>
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead class="bg-100">
+                        <tr>
+                          <th>Description</th>
+                          <th class="text-right">Quantity</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <t t-foreach="object.product_line_ids" t-as="line">
+                          <tr>
+                            <td>
+                              <span t-esc="line.description"/>
+                            </td>
+                            <td class="text-right">
+                              <span t-esc="line.quantity"/>
+                            </td>
+                          </tr>
+                        </t>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <!-- Notes Field -->
+              <div class="row mb-4" t-if="object.notes">
+                <div class="col-12">
+                  <div class="card">
+                  <div class="card-header"><strong>Notes</strong></div>
+                  <div class="card-body small">
+                    <span t-esc="object.notes"/>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Communication / Chatter -->
+            <hr/>
+            <div id="purchase_request_communication">
+              <h3>Communication history</h3>
+              <t t-call="portal.message_thread"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </xpath>
+  </template>
+
+  <template id="portal_my_home_purchase_request" name="My Purchase Requests Portal Entry" inherit_id="portal.portal_my_home" priority="25">
+    <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+      <div id="portal_vendor_category">
+        <t t-call="portal.portal_docs_entry">
+          <t t-set="icon" t-value="'/web/static/img/rfq.svg'"/>
+          <t t-set="text">Follow your Purchase Requests</t>
+          <t t-set="title">Purchase Requests</t>
+          <t t-set="url" t-value="'/my/purchase_requests'"/>
+          <t t-set="placeholder_count" t-value="'purchase_request_count'"/>
+        </t>
+      </div>
+    </xpath>
+  </template>
+
+</odoo>
