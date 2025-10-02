@@ -13,6 +13,7 @@ class RVCBeneficiary(models.Model):
 
     partner_id = fields.Many2one('res.partner', string='Patrocinado', domain=['&', ('is_company', '=', True), ('parent_id', '=', False)], required=True)
     contact_id = fields.Many2one('res.partner', string='Contacto')
+
     vat = fields.Char('Número de documento', related='partner_id.vat')
     phone = fields.Char('Teléfono', related='partner_id.phone')
     email = fields.Char('Email', related='partner_id.email')
@@ -46,18 +47,14 @@ class RVCBeneficiary(models.Model):
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
-        res = {}
+        result = {'domain': {}}
         if self.partner_id:
             self.contact_id = False
-            # Actualizar el dominio de contact_id para mostrar solo contactos de esta empresa
-            res['domain'] = {
-                'contact_id': [('is_company', '=', False), ('parent_id', '=', self.partner_id.id)]
-            }
+            result['domain']['contact_id'] = [('is_company', '=', False), ('parent_id', '=', self.partner_id.id)]
         else:
-            res['domain'] = {
-                'contact_id': [('id', '=', False)]  # No mostrar nada si no hay empresa seleccionada
-            }
-        return res
+            self.contact_id = False
+            result['domain']['contact_id'] = [('id', '=', False)]
+        return result
 
     @api.onchange('contact_id')
     def onchange_contact_id(self):

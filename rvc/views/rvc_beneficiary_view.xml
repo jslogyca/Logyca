@@ -17,12 +17,10 @@
                             <field name="partner_id" string="Buscar Empresa" options="{'no_quick_create': True}"/>
                         </group>
                         <group>
-                            <field name="contact_id" string="Buscar Contacto" 
-                                   domain="[('is_company', '=', False), ('parent_id', '=', partner_id)]"
+                            <field name="contact_id" string="Buscar Contacto"
                                    context="{'default_parent_id': partner_id, 'default_is_company': False}"
                                    options="{'no_quick_create': True}"
-                                   invisible="not partner_id"
-                                   required="partner_id"/>
+                                   help="Seleccione primero una empresa para ver los contactos disponibles"/>
                         </group>
 					</group>
 					<group>
