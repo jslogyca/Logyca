@@ -51,14 +51,17 @@ class RVCBeneficiary(models.Model):
 
     @api.onchange('contact_id')
     def onchange_contact_id(self):
-        self.clear_contact_fields()
+        if self.contact_id:
+            self.clear_contact_fields()
 
-        partner = self.partner_id
+            contact = self.contact_id
 
-        self.contact_name = partner.name
-        self.contact_phone = partner.phone if partner.phone else partner.mobile
-        self.contact_email = partner.email
-        self.contact_position = partner.x_contact_job_title.name if partner.x_contact_job_title else ''
+            self.contact_name = contact.name
+            self.contact_phone = contact.phone if contact.phone else contact.mobile
+            self.contact_email = contact.email
+            self.contact_position = contact.x_contact_job_title.name if contact.x_contact_job_title else ''
+        else:
+            self.clear_contact_fields()
 
     def clear_contact_fields(self):
         self.contact_name = ""
