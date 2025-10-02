@@ -10,7 +10,7 @@ class RVCSponsored(models.Model):
     _rec_name = 'partner_id'
 
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company)
-    partner_id = fields.Many2one('res.partner', string='Patrocinador')
+    partner_id = fields.Many2one('res.partner', string='Patrocinador', required=True, domain=[('is_company','=',True)])
     name = fields.Char('Nombre', related='partner_id.name', store=True)
     vat = fields.Char('NIT', related='partner_id.vat', store=True)
     phone = fields.Char('Teléfono', related='partner_id.phone')
