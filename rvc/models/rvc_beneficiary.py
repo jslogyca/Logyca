@@ -48,6 +48,18 @@ class RVCBeneficiary(models.Model):
     def onchange_partner_id(self):
         if self.partner_id:
             self.contact_id = False
+            # Retornar dominio dinámico para contact_id
+            return {
+                'domain': {
+                    'contact_id': [('is_company', '=', False), ('parent_id', '=', self.partner_id.id)]
+                }
+            }
+        else:
+            return {
+                'domain': {
+                    'contact_id': [('id', '=', False)]  # No mostrar nada si no hay partner_id
+                }
+            }
 
     @api.onchange('contact_id')
     def onchange_contact_id(self):
