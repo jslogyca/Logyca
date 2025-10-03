@@ -12,7 +12,7 @@ class RVCBeneficiary(models.Model):
     _rec_name = 'partner_id'
 
     partner_id = fields.Many2one('res.partner', string='Patrocinado', domain=['&', ('is_company', '=', True), ('parent_id', '=', False)], required=True, tracking=True)
-    contact_id = fields.Many2one('res.partner', string='Contacto', tracking=True, domain="[('is_company', '=', False), ('parent_id', '=', partner_id)]")
+    contact_id = fields.Many2one('res.partner', string='Contacto', tracking=True)
 
     vat = fields.Char('Número de documento', related='partner_id.vat')
     phone = fields.Char('Teléfono', related='partner_id.phone')
@@ -47,9 +47,12 @@ class RVCBeneficiary(models.Model):
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
-        """Limpia el contacto cuando cambia la empresa y muestra info de debug"""
+        """Limpia el contacto cuando cambia la empresa y retorna el dominio"""
         _logger = logging.getLogger(__name__)
         _logger.info("=== ONCHANGE PARTNER_ID ===")
+        
+        # Inicializar resultado
+        result = {'domain': {}}
         
         if self.partner_id:
             _logger.info("Empresa seleccionada: %s (ID: %s)", self.partner_id.name, self.partner_id.id)
@@ -70,10 +73,21 @@ class RVCBeneficiary(models.Model):
                 _logger.info("Limpiando contacto anterior: %s", self.contact_id.name)
                 self.contact_id = False
                 self.clear_contact_fields()
+            
+            # CRÍTICO: Retornar el dominio explícitamente para que se aplique en el cliente
+            result['domain']['contact_id'] = [
+                ('is_company', '=', False),
+                ('parent_id', '=', self.partner_id.id)
+            ]
+            _logger.info("Dominio aplicado: [('is_company', '=', False), ('parent_id', '=', %s)]", self.partner_id.id)
         else:
             _logger.info("Sin empresa seleccionada, limpiando contacto")
             self.contact_id = False
             self.clear_contact_fields()
+            # Dominio vacío cuando no hay empresa
+            result['domain']['contact_id'] = [('id', '=', False)]
+        
+        return result
 
     @api.onchange('contact_id')
     def onchange_contact_id(self):
