@@ -16,12 +16,13 @@
                     </div>
                     <group>
                         <group>
-                            <field name="partner_id" string="Buscar Empresa" options="{'no_quick_create': True}"/>
+                            <field name="partner_id" string="Buscar Empresa" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                         </group>
                         <group>
                             <field name="contact_id" string="Buscar Contacto"
-                                   options="{'no_quick_create': True}"
-                                   help="Seleccione primero una empresa para ver los contactos disponibles"/>
+                                   options="{'no_quick_create': True, 'no_create_edit': True}"
+                                   invisible="not partner_id"
+                                   placeholder="Seleccione primero una empresa..."/>
                         </group>
 					</group>
 					<group>

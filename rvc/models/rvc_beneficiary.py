@@ -11,8 +11,8 @@ class RVCBeneficiary(models.Model):
     _inherit = 'mail.thread'
     _rec_name = 'partner_id'
 
-    partner_id = fields.Many2one('res.partner', string='Patrocinado', domain=['&', ('is_company', '=', True), ('parent_id', '=', False)], required=True)
-    contact_id = fields.Many2one('res.partner', string='Contacto')
+    partner_id = fields.Many2one('res.partner', string='Patrocinado', domain=['&', ('is_company', '=', True), ('parent_id', '=', False)], required=True, tracking=True)
+    contact_id = fields.Many2one('res.partner', string='Contacto', domain="[('is_company', '=', False), ('parent_id', '=', partner_id)]", tracking=True)
 
     vat = fields.Char('Número de documento', related='partner_id.vat')
     phone = fields.Char('Teléfono', related='partner_id.phone')
@@ -47,22 +47,21 @@ class RVCBeneficiary(models.Model):
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
-        result = {'domain': {}}
+        # Limpiar el contacto cuando cambia la empresa
         if self.partner_id:
-            self.contact_id = False
-            result['domain']['contact_id'] = [('is_company', '=', False), ('parent_id', '=', self.partner_id.id)]
+            # Si ya había un contacto seleccionado y no pertenece a la nueva empresa, limpiarlo
+            if self.contact_id and self.contact_id.parent_id != self.partner_id:
+                self.contact_id = False
+                self.clear_contact_fields()
         else:
+            # Si no hay empresa seleccionada, limpiar todo
             self.contact_id = False
-            result['domain']['contact_id'] = [('id', '=', False)]
-        return result
+            self.clear_contact_fields()
 
     @api.onchange('contact_id')
     def onchange_contact_id(self):
         if self.contact_id:
-            self.clear_contact_fields()
-
             contact = self.contact_id
-
             self.contact_name = contact.name
             self.contact_phone = contact.phone if contact.phone else contact.mobile
             self.contact_email = contact.email
