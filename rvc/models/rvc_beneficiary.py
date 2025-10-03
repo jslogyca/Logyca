@@ -13,6 +13,8 @@ class RVCBeneficiary(models.Model):
 
     partner_id = fields.Many2one('res.partner', string='Patrocinado', domain=['&', ('is_company', '=', True), ('parent_id', '=', False)], required=True, tracking=True)
     contact_id = fields.Many2one('res.partner', string='Contacto', tracking=True)
+    # Campo computed para IDs de contactos disponibles (usado para dominio dinámico)
+    available_contact_ids = fields.Many2many('res.partner', compute='_compute_available_contact_ids', store=False)
 
     vat = fields.Char('Número de documento', related='partner_id.vat')
     phone = fields.Char('Teléfono', related='partner_id.phone')
@@ -44,6 +46,19 @@ class RVCBeneficiary(models.Model):
             domain = ['|', '|', '|', ['vat', 'like', name], ['partner_id', operator, name], ['email', operator, name], ['contact_email', operator, name]]
         rvc_beneficiary_union_ids = self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
         return self.browse(rvc_beneficiary_union_ids).name_get()
+
+    @api.depends('partner_id')
+    def _compute_available_contact_ids(self):
+        """Calcula los contactos disponibles para la empresa seleccionada"""
+        for record in self:
+            if record.partner_id:
+                contacts = self.env['res.partner'].search([
+                    ('is_company', '=', False),
+                    ('parent_id', '=', record.partner_id.id)
+                ])
+                record.available_contact_ids = contacts
+            else:
+                record.available_contact_ids = False
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):

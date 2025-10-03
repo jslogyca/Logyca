@@ -19,8 +19,9 @@
                             <field name="partner_id" string="Buscar Empresa" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                         </group>
                         <group>
+                            <field name="available_contact_ids" invisible="1"/>
                             <field name="contact_id" string="Buscar Contacto"
-                                   domain="[('is_company', '=', False), ('parent_id', '=', partner_id)]"
+                                   domain="[('id', 'in', available_contact_ids)]"
                                    context="{'default_parent_id': partner_id, 'default_is_company': False}"
                                    options="{'no_quick_create': True, 'no_create_edit': True}"
                                    invisible="not partner_id"
