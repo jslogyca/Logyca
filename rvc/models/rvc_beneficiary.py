@@ -12,7 +12,7 @@ class RVCBeneficiary(models.Model):
     _rec_name = 'partner_id'
 
     partner_id = fields.Many2one('res.partner', string='Patrocinado', domain=['&', ('is_company', '=', True), ('parent_id', '=', False)], required=True, tracking=True)
-    contact_id = fields.Many2one('res.partner', string='Contacto', domain="[('is_company', '=', False), ('parent_id', '=', partner_id)]", tracking=True)
+    contact_id = fields.Many2one('res.partner', string='Contacto', tracking=True)
 
     vat = fields.Char('Número de documento', related='partner_id.vat')
     phone = fields.Char('Teléfono', related='partner_id.phone')
@@ -48,15 +48,38 @@ class RVCBeneficiary(models.Model):
     @api.onchange('partner_id')
     def onchange_partner_id(self):
         # Limpiar el contacto cuando cambia la empresa
+        result = {'domain': {}, 'warning': {}}
         if self.partner_id:
             # Si ya había un contacto seleccionado y no pertenece a la nueva empresa, limpiarlo
             if self.contact_id and self.contact_id.parent_id != self.partner_id:
                 self.contact_id = False
                 self.clear_contact_fields()
+            # Establecer el dominio para mostrar solo los contactos de esta empresa
+            result['domain']['contact_id'] = [
+                ('is_company', '=', False),
+                ('parent_id', '=', self.partner_id.id)
+            ]
+            # Diagnóstico: verificar cuántos contactos existen para esta empresa
+            contacts_count = self.env['res.partner'].search_count([
+                ('is_company', '=', False),
+                ('parent_id', '=', self.partner_id.id)
+            ])
+            _logger = logging.getLogger(__name__)
+            _logger.info(f"=== DIAGNÓSTICO RVC ===")
+            _logger.info(f"Empresa seleccionada: {self.partner_id.name} (ID: {self.partner_id.id})")
+            _logger.info(f"Contactos encontrados: {contacts_count}")
+
+            if contacts_count == 0:
+                result['warning'] = {
+                    'title': 'Sin contactos',
+                    'message': f'La empresa "{self.partner_id.name}" no tiene contactos registrados. Para agregar contactos, vaya al formulario de la empresa en Contactos.'
+                }
         else:
             # Si no hay empresa seleccionada, limpiar todo
             self.contact_id = False
             self.clear_contact_fields()
+            result['domain']['contact_id'] = [('id', '=', False)]
+        return result
 
     @api.onchange('contact_id')
     def onchange_contact_id(self):
