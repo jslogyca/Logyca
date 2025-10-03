@@ -20,7 +20,6 @@
                         </group>
                         <group>
                             <field name="contact_id" string="Buscar Contacto"
-                                   context="{'default_parent_id': partner_id, 'default_is_company': False}"
                                    options="{'no_quick_create': True}"
                                    help="Seleccione primero una empresa para ver los contactos disponibles"/>
                         </group>
