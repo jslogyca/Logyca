@@ -3,7 +3,6 @@
 from odoo import api, fields, models, tools, _
 from odoo.osv import expression
 from odoo.exceptions import ValidationError
-import logging
 
 class RVCBeneficiary(models.Model):
     _name = 'rvc.beneficiary'
@@ -44,36 +43,6 @@ class RVCBeneficiary(models.Model):
             domain = ['|', '|', '|', ['vat', 'like', name], ['partner_id', operator, name], ['email', operator, name], ['contact_email', operator, name]]
         rvc_beneficiary_union_ids = self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
         return self.browse(rvc_beneficiary_union_ids).name_get()
-
-    @api.onchange('partner_id')
-    def onchange_partner_id(self):
-        """Limpia el contacto cuando cambia la empresa y retorna el dominio"""
-        _logger = logging.getLogger(__name__)
-
-        # Iterar sobre los registros (buena práctica)
-        for rec in self:
-            rec.contact_id = False  # Limpiar el campo contact_id antes de calcular el nuevo dominio
-            self.clear_contact_fields()  # Limpiar los campos relacionados al contacto
-
-            domain = [('id', '=', False)]  # Dominio por defecto si no hay empresa
-
-            if rec.partner_id:
-                domain = [
-                    ('is_company', '=', False),
-                    ('parent_id', '=', rec.partner_id.id)
-                ]
-                _logger.info("Dominio aplicado para contact_id: %s", domain)
-            else:
-                _logger.info("Sin empresa seleccionada, limpiando contacto y aplicando dominio vacío.")
-
-            # Devolver el dominio para que la vista lo use
-            return {'domain': {'contact_id': domain}}
-
-    def clear_contact_fields(self):
-        self.contact_name = ""
-        self.contact_phone = ""
-        self.contact_email = ""
-        self.contact_position = ""
 
     @api.model
     def create(self, vals):
