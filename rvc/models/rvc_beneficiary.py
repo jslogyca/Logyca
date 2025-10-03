@@ -49,56 +49,25 @@ class RVCBeneficiary(models.Model):
     def onchange_partner_id(self):
         """Limpia el contacto cuando cambia la empresa y retorna el dominio"""
         _logger = logging.getLogger(__name__)
-        _logger.info("=== ONCHANGE PARTNER_ID ===")
-        
-        # Inicializar resultado
-        result = {'domain': {}}
-        
-        if self.partner_id:
-            _logger.info("Empresa seleccionada: %s (ID: %s)", self.partner_id.name, self.partner_id.id)
-            
-            # Buscar contactos disponibles para diagnóstico
-            contacts = self.env['res.partner'].search([
-                ('is_company', '=', False),
-                ('parent_id', '=', self.partner_id.id)
-            ])
-            _logger.info("Contactos encontrados: %s", len(contacts))
-            if contacts:
-                _logger.info("IDs: %s", contacts.ids)
-                for contact in contacts[:5]:  # Mostrar solo los primeros 5
-                    _logger.info("  - %s (ID: %s)", contact.name, contact.id)
-            
-            # Si ya había un contacto seleccionado y no pertenece a la nueva empresa, limpiarlo
-            if self.contact_id and self.contact_id.parent_id != self.partner_id:
-                _logger.info("Limpiando contacto anterior: %s", self.contact_id.name)
-                self.contact_id = False
-                self.clear_contact_fields()
-            
-            # CRÍTICO: Retornar el dominio explícitamente para que se aplique en el cliente
-            result['domain']['contact_id'] = [
-                ('is_company', '=', False),
-                ('parent_id', '=', self.partner_id.id)
-            ]
-            _logger.info("Dominio aplicado: [('is_company', '=', False), ('parent_id', '=', %s)]", self.partner_id.id)
-        else:
-            _logger.info("Sin empresa seleccionada, limpiando contacto")
-            self.contact_id = False
-            self.clear_contact_fields()
-            # Dominio vacío cuando no hay empresa
-            result['domain']['contact_id'] = [('id', '=', False)]
-        
-        return result
 
-    @api.onchange('contact_id')
-    def onchange_contact_id(self):
-        if self.contact_id:
-            contact = self.contact_id
-            self.contact_name = contact.name
-            self.contact_phone = contact.phone if contact.phone else contact.mobile
-            self.contact_email = contact.email
-            self.contact_position = contact.x_contact_job_title.name if contact.x_contact_job_title else ''
-        else:
-            self.clear_contact_fields()
+        # Iterar sobre los registros (buena práctica)
+        for rec in self:
+            rec.contact_id = False  # Limpiar el campo contact_id antes de calcular el nuevo dominio
+            self.clear_contact_fields()  # Limpiar los campos relacionados al contacto
+
+            domain = [('id', '=', False)]  # Dominio por defecto si no hay empresa
+
+            if rec.partner_id:
+                domain = [
+                    ('is_company', '=', False),
+                    ('parent_id', '=', rec.partner_id.id)
+                ]
+                _logger.info("Dominio aplicado para contact_id: %s", domain)
+            else:
+                _logger.info("Sin empresa seleccionada, limpiando contacto y aplicando dominio vacío.")
+
+            # Devolver el dominio para que la vista lo use
+            return {'domain': {'contact_id': domain}}
 
     def clear_contact_fields(self):
         self.contact_name = ""
