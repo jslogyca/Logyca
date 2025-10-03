@@ -12,9 +12,7 @@ class RVCBeneficiary(models.Model):
     _rec_name = 'partner_id'
 
     partner_id = fields.Many2one('res.partner', string='Patrocinado', domain=['&', ('is_company', '=', True), ('parent_id', '=', False)], required=True, tracking=True)
-    contact_id = fields.Many2one('res.partner', string='Contacto', tracking=True)
-    # Campo computed para IDs de contactos disponibles (usado para dominio dinámico)
-    available_contact_ids = fields.Many2many('res.partner', compute='_compute_available_contact_ids', store=False)
+    contact_id = fields.Many2one('res.partner', string='Contacto', tracking=True, domain="[('is_company', '=', False), ('parent_id', '=', partner_id)]")
 
     vat = fields.Char('Número de documento', related='partner_id.vat')
     phone = fields.Char('Teléfono', related='partner_id.phone')
@@ -47,54 +45,35 @@ class RVCBeneficiary(models.Model):
         rvc_beneficiary_union_ids = self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
         return self.browse(rvc_beneficiary_union_ids).name_get()
 
-    @api.depends('partner_id')
-    def _compute_available_contact_ids(self):
-        """Calcula los contactos disponibles para la empresa seleccionada"""
-        for record in self:
-            if record.partner_id:
-                contacts = self.env['res.partner'].search([
-                    ('is_company', '=', False),
-                    ('parent_id', '=', record.partner_id.id)
-                ])
-                record.available_contact_ids = contacts
-            else:
-                record.available_contact_ids = False
-
     @api.onchange('partner_id')
     def onchange_partner_id(self):
-        # Limpiar el contacto cuando cambia la empresa
-        result = {'domain': {}, 'warning': {}}
+        """Limpia el contacto cuando cambia la empresa y muestra info de debug"""
+        _logger = logging.getLogger(__name__)
+        _logger.info("=== ONCHANGE PARTNER_ID ===")
+        
         if self.partner_id:
-            # Si ya había un contacto seleccionado y no pertenece a la nueva empresa, limpiarlo
-            if self.contact_id and self.contact_id.parent_id != self.partner_id:
-                self.contact_id = False
-                self.clear_contact_fields()
-            # Establecer el dominio para mostrar solo los contactos de esta empresa
-            result['domain']['contact_id'] = [
-                ('is_company', '=', False),
-                ('parent_id', '=', self.partner_id.id)
-            ]
-            # Diagnóstico: verificar cuántos contactos existen para esta empresa
-            contacts_count = self.env['res.partner'].search_count([
+            _logger.info("Empresa seleccionada: %s (ID: %s)", self.partner_id.name, self.partner_id.id)
+            
+            # Buscar contactos disponibles para diagnóstico
+            contacts = self.env['res.partner'].search([
                 ('is_company', '=', False),
                 ('parent_id', '=', self.partner_id.id)
             ])
-            _logger = logging.getLogger(__name__)
-            _logger.info(f"=== DIAGNÓSTICO RVC ===")
-            _logger.info(f"Empresa seleccionada: {self.partner_id.name} (ID: {self.partner_id.id})")
-            _logger.info(f"Contactos encontrados: {contacts_count}")
-
-            if contacts_count == 0:
-                result['warning'] = {
-                    'title': 'Sin contactos',
-                    'message': f'La empresa "{self.partner_id.name}" no tiene contactos registrados. Para agregar contactos, vaya al formulario de la empresa en Contactos.'
-                }
+            _logger.info("Contactos encontrados: %s", len(contacts))
+            if contacts:
+                _logger.info("IDs: %s", contacts.ids)
+                for contact in contacts[:5]:  # Mostrar solo los primeros 5
+                    _logger.info("  - %s (ID: %s)", contact.name, contact.id)
+            
+            # Si ya había un contacto seleccionado y no pertenece a la nueva empresa, limpiarlo
+            if self.contact_id and self.contact_id.parent_id != self.partner_id:
+                _logger.info("Limpiando contacto anterior: %s", self.contact_id.name)
+                self.contact_id = False
+                self.clear_contact_fields()
         else:
-            # Si no hay empresa seleccionada, limpiar todo
+            _logger.info("Sin empresa seleccionada, limpiando contacto")
             self.contact_id = False
             self.clear_contact_fields()
-            result['domain']['contact_id'] = [('id', '=', False)]
-        return result
 
     @api.onchange('contact_id')
     def onchange_contact_id(self):
