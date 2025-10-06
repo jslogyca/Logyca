@@ -3,6 +3,8 @@
 from odoo import api, fields, models, tools, _
 from odoo.osv import expression
 from odoo.exceptions import ValidationError
+import logging
+
 
 class RVCBeneficiary(models.Model):
     _name = 'rvc.beneficiary'
@@ -12,6 +14,11 @@ class RVCBeneficiary(models.Model):
 
     partner_id = fields.Many2one('res.partner', string='Patrocinado', domain=['&', ('is_company', '=', True), ('parent_id', '=', False)], required=True, tracking=True)
     contact_id = fields.Many2one('res.partner', string='Contacto', tracking=True)
+    contact_id_domain = fields.Char(
+        compute="_compute_contact_id_domain",
+        readonly=True,
+        store=False,
+    )
 
     vat = fields.Char('Número de documento', related='partner_id.vat')
     phone = fields.Char('Teléfono', related='partner_id.phone')
@@ -72,3 +79,21 @@ class RVCBeneficiary(models.Model):
     def activate_beneficiary(self):
         for rec in self:
             rec.active = True
+
+    @api.depends('partner_id')
+    def _compute_contact_id_domain(self):
+        _logger = logging.getLogger(__name__)
+        for rec in self:
+            _logger.info("RVC DEBUG: Computing domain for partner: %s", rec.partner_id.name if rec.partner_id else 'None')
+            if rec.partner_id:
+                domain = str([('parent_id', '=', rec.partner_id.id)])
+                rec.contact_id_domain = domain
+                _logger.info("RVC DEBUG: Domain set to: %s", domain)
+            else:
+                rec.contact_id_domain = str([])
+                _logger.info("RVC DEBUG: Domain set to empty list.")
+
+    @api.onchange('partner_id')
+    def _onchange_partner_id(self):
+        # Limpiar el campo dependiente para asegurar que el usuario deba re-seleccionar.
+        self.contact_id = False
