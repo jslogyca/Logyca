@@ -20,9 +20,7 @@
                         </group>
                         <group>
                             <field name="contact_id" string="Buscar Contacto"
-                                   domain="contact_id_domain"
                                    placeholder="Seleccione primero una empresa..."/>
-                            <field name="contact_id_domain" invisible="1"/>
                         </group>
 					</group>
 					<group>
