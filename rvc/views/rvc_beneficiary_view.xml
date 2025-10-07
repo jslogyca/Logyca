@@ -24,6 +24,7 @@
                                placeholder="Seleccione primero una empresa..."
                                domain="[('id', 'in', available_contact_ids)]"
                         	/>
+							<field name="available_contact_ids" invisible="1"/> 
 						</group>
 					</group>
 					<group>
