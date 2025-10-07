@@ -31,6 +31,13 @@ class RVCBeneficiary(models.Model):
         tracking=True
     )
 
+    available_contact_ids = fields.Many2many(
+        'res.partner',
+        string='Contactos Disponibles',
+        compute='_compute_available_contact_ids',
+        store=False, # No se almacena, se calcula en memoria
+    )
+
     vat = fields.Char('Número de documento', related='partner_id.vat')
     phone = fields.Char('Teléfono', related='partner_id.phone')
     email = fields.Char('Email', related='partner_id.email')
@@ -100,3 +107,33 @@ class RVCBeneficiary(models.Model):
     def activate_beneficiary(self):
         for rec in self:
             rec.active = True
+
+    @api.depends('partner_id')
+    def _compute_available_contact_ids(self):
+        for rec in self:
+            _logger.debug(
+                "--- Iniciando _compute_available_contact_ids para el registro %s ---",
+                rec.id if rec.id else 'Nuevo'
+            )
+            # Borra todos los enlaces actuales de contactos disponibles
+            rec.available_contact_ids = [(5, 0, 0)]
+
+            if rec.partner_id:
+                partner_id_val = rec.partner_id.id
+
+                # Búsqueda de contactos: parent_id = Partner ID seleccionado
+                contacts = self.env['res.partner'].search([
+                    ('parent_id', '=', partner_id_val)
+                ])
+
+                rec.available_contact_ids = contacts
+
+                _logger.debug("Partner ID: %s", partner_id_val)
+                _logger.debug("IDs de Contactos encontrados: %s", contacts.ids)
+
+                # Limpieza automática del contact_id si ya no es válido
+                if rec.contact_id and rec.contact_id not in contacts:
+                    rec.contact_id = False
+                    _logger.debug("Contact_id limpiado automáticamente.")
+            else:
+                _logger.debug("No hay partner_id seleccionado. Lista de contactos vacía.")
