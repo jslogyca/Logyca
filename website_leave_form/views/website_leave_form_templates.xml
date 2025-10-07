@@ -1,0 +1,275 @@
+<odoo>
+    <template id="leave_form_template" name="Formulario de Ausencias">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-md-10 offset-md-1">
+                            <h1 class="text-center mb-4">Solicitud de Ausencia</h1>
+                            
+                            <!-- Mensajes de éxito o error -->
+                            <t t-if="success">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>¡Éxito!</strong> <t t-esc="success"/>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            </t>
+                            
+                            <t t-if="error">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error:</strong> <t t-esc="error"/>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            </t>
+
+                            <!-- Formulario -->
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-primary text-white">
+                                    <h4 class="mb-0">Datos de la Solicitud</h4>
+                                </div>
+                                <div class="card-body p-4">
+                                    <form action="/ausencias/submit" method="POST" enctype="multipart/form-data" class="needs-validation" id="leaveForm">
+                                        
+                                        <!-- Información Personal -->
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="name" class="form-label fw-bold">Nombre Completo *</label>
+                                                <input type="text" class="form-control" id="name" name="name" required="required" placeholder="Juan Pérez"/>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="email" class="form-label fw-bold">Email Corporativo *</label>
+                                                <input type="email" class="form-control" id="email" name="email" required="required" placeholder="juan.perez@empresa.com"/>
+                                                <small class="form-text text-muted">Debe coincidir con tu email registrado</small>
+                                            </div>
+                                        </div>
+
+                                        <hr class="my-4"/>
+
+                                        <!-- Detalles de la Ausencia -->
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <label for="request_date" class="form-label fw-bold">Fecha de Solicitud *</label>
+                                                <input type="date" class="form-control" id="request_date" name="request_date" 
+                                                       t-att-value="today" readonly="readonly"/>
+                                                <small class="form-text text-muted">Fecha actual</small>
+                                            </div>
+
+                                            <div class="col-md-4 mb-3">
+                                                <label for="holiday_status_id" class="form-label fw-bold">Tipo de Ausencia *</label>
+                                                <select class="form-select" id="holiday_status_id" name="holiday_status_id" required="required">
+                                                    <option value="">-- Seleccione un tipo --</option>
+                                                    <t t-foreach="leave_types" t-as="leave_type">
+                                                        <option t-att-value="leave_type.id" t-att-data-require-attachment="leave_type.require_attachment">
+                                                            <t t-esc="leave_type.name"/>
+                                                            <t t-if="leave_type.require_attachment"> 📎</t>
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4 mb-3">
+                                                <label for="approver_id" class="form-label fw-bold">Aprobador *</label>
+                                                <select class="form-select" id="approver_id" name="approver_id" required="required">
+                                                    <option value="">-- Seleccione un aprobador --</option>
+                                                    <t t-foreach="approvers" t-as="approver">
+                                                        <option t-att-value="approver.id">
+                                                            <t t-esc="approver.name"/>
+                                                            <t t-if="approver.job_id"> - <t t-esc="approver.job_id.name"/></t>
+                                                            <t t-if="approver.department_id"> (<t t-esc="approver.department_id.name"/>)</t>
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                                <small class="form-text text-muted">Quien debe aprobar tu solicitud</small>
+                                            </div>
+                                        </div>
+
+                                        <hr class="my-4"/>
+
+                                        <!-- Fechas -->
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="date_from" class="form-label fw-bold">Fecha y Hora Inicio *</label>
+                                                <input type="datetime-local" class="form-control" id="date_from" name="date_from" required="required"/>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="date_to" class="form-label fw-bold">Fecha y Hora Fin *</label>
+                                                <input type="datetime-local" class="form-control" id="date_to" name="date_to" required="required"/>
+                                            </div>
+                                        </div>
+
+                                        <!-- Adjuntos (condicional) -->
+                                        <div class="mb-3" id="attachmentSection" style="display: none;">
+                                            <label for="attachments" class="form-label fw-bold">
+                                                Documentos Adjuntos <span class="text-danger" id="attachmentRequired">*</span>
+                                            </label>
+                                            <input type="file" class="form-control" id="attachments" name="attachments" multiple="multiple" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"/>
+                                            <small class="form-text text-muted">
+                                                📎 Este tipo de ausencia requiere adjuntar documentos de soporte (incapacidades, certificados, etc.)
+                                            </small>
+                                            <div id="fileList" class="mt-2"></div>
+                                        </div>
+
+                                        <!-- Notas -->
+                                        <div class="mb-4">
+                                            <label for="notes" class="form-label fw-bold">Motivo/Notas</label>
+                                            <textarea class="form-control" id="notes" name="notes" rows="4" placeholder="Describe el motivo de tu ausencia (opcional)..."></textarea>
+                                        </div>
+
+                                        <!-- Botón de envío -->
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" class="btn btn-primary btn-lg">
+                                                <i class="fa fa-paper-plane me-2"></i>Enviar Solicitud
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Información adicional -->
+                            <div class="alert alert-info mt-4" role="alert">
+                                <strong>Nota:</strong> Una vez enviada tu solicitud, el aprobador seleccionado recibirá una notificación para revisar tu ausencia.
+                            </div>
+
+                            <!-- Enlaces útiles -->
+                            <div class="text-center mt-3">
+                                <a href="/ausencias/consultar" class="btn btn-outline-info">
+                                    🔍 Consultar Mis Ausencias Aprobadas
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Script para manejar adjuntos condicionales -->
+            <script type="text/javascript">
+                document.addEventListener('DOMContentLoaded', function() {
+                    const leaveTypeSelect = document.getElementById('holiday_status_id');
+                    const attachmentSection = document.getElementById('attachmentSection');
+                    const attachmentInput = document.getElementById('attachments');
+                    const attachmentRequired = document.getElementById('attachmentRequired');
+                    const fileList = document.getElementById('fileList');
+
+                    // Mostrar/ocultar sección de adjuntos según el tipo seleccionado
+                    leaveTypeSelect.addEventListener('change', function() {
+                        const selectedOption = this.options[this.selectedIndex];
+                        const requireAttachment = selectedOption.getAttribute('data-require-attachment') === 'True';
+                        
+                        if (requireAttachment) {
+                            attachmentSection.style.display = 'block';
+                            attachmentInput.required = true;
+                            attachmentRequired.style.display = 'inline';
+                        } else {
+                            attachmentSection.style.display = 'none';
+                            attachmentInput.required = false;
+                            attachmentRequired.style.display = 'none';
+                        }
+                    });
+
+                    // Mostrar lista de archivos seleccionados
+                    attachmentInput.addEventListener('change', function() {
+                        fileList.innerHTML = '';
+                        if (this.files.length > 0) {
+                            const ul = document.createElement('ul');
+                            ul.className = 'list-group';
+                            for (let i = 0; i &lt; this.files.length; i++) {
+                                const li = document.createElement('li');
+                                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                                li.innerHTML = `
+                                    <span>📄 ${this.files[i].name}</span>
+                                    <span class="badge bg-primary rounded-pill">${(this.files[i].size / 1024).toFixed(2)} KB</span>
+                                `;
+                                ul.appendChild(li);
+                            }
+                            fileList.appendChild(ul);
+                        }
+                    });
+                });
+            </script>
+        </t>
+    </template>
+
+    <!-- Template para consulta de ausencias -->
+    <template id="leave_query_template" name="Consulta de Ausencias">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-md-8 offset-md-2">
+                            <h1 class="text-center mb-4">Consultar Mis Ausencias</h1>
+                            
+                            <!-- Mensajes de éxito o error -->
+                            <t t-if="success">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>¡Éxito!</strong> <t t-esc="success"/>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            </t>
+                            
+                            <t t-if="error">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error:</strong> <t t-esc="error"/>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            </t>
+
+                            <!-- Formulario de Consulta -->
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-info text-white">
+                                    <h4 class="mb-0">🔍 Consulta de Ausencias Aprobadas</h4>
+                                </div>
+                                <div class="card-body p-4">
+                                    <p class="text-muted mb-4">
+                                        Ingresa tu número de identificación y el rango de fechas para recibir un resumen de tus ausencias aprobadas en tu correo electrónico.
+                                    </p>
+
+                                    <form action="/ausencias/consultar/submit" method="POST">
+                                        
+                                        <div class="mb-4">
+                                            <label for="identification_id" class="form-label fw-bold">Número de Identificación *</label>
+                                            <input type="text" class="form-control form-control-lg" id="identification_id" 
+                                                   name="identification_id" required="required" 
+                                                   placeholder="Ej: 1234567890"/>
+                                            <small class="form-text text-muted">Ingresa tu cédula o documento de identidad</small>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="date_from" class="form-label fw-bold">Fecha Desde *</label>
+                                                <input type="date" class="form-control" id="date_from" name="date_from" required="required"/>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="date_to" class="form-label fw-bold">Fecha Hasta *</label>
+                                                <input type="date" class="form-control" id="date_to" name="date_to" required="required"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="alert alert-info" role="alert">
+                                            <strong>ℹ️ Nota:</strong> El resumen será enviado al correo electrónico corporativo registrado en el sistema.
+                                        </div>
+
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" class="btn btn-info btn-lg text-white">
+                                                <i class="fa fa-search me-2"></i>Consultar y Enviar por Email
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Enlaces útiles -->
+                            <div class="text-center mt-4">
+                                <a href="/ausencias/formulario" class="btn btn-outline-primary">
+                                    ← Volver a Solicitar Ausencia
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
