@@ -5,6 +5,8 @@ from odoo.osv import expression
 from odoo.exceptions import ValidationError
 import logging
 
+_logger = logging.getLogger(__name__)
+
 
 class RVCBeneficiary(models.Model):
     _name = 'rvc.beneficiary'
@@ -106,14 +108,17 @@ class RVCBeneficiary(models.Model):
             self.contact_id = False
 
         domain = []
+        _logger.info("Partner ID cambiado: %s", self.partner_id)
         if self.partner_id:
             # 1. Definir el dominio: Filtrar contactos donde el campo parent_id
             #    sea igual al ID del partner_id seleccionado.
             domain = [('parent_id', '=', self.partner_id.id)]
+            _logger.info("Dominio para contact_id: %s", domain)
 
         # 2. Retornar el dominio dinámico para el campo 'contact_id'
         #    La clave del diccionario debe ser 'domain' y el valor otro diccionario
         #    donde la clave es el nombre del campo a filtrar y el valor el dominio.
+        _logger.info("Retornando dominio: %s", {'domain': {'contact_id': domain}})
         return {
             'domain': {
                 'contact_id': domain
