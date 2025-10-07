@@ -12,8 +12,22 @@ class RVCBeneficiary(models.Model):
     _inherit = 'mail.thread'
     _rec_name = 'partner_id'
 
-    partner_id = fields.Many2one('res.partner', string='Patrocinado', domain=['&', ('is_company', '=', True), ('parent_id', '=', False)], required=True, tracking=True)
-    contact_id = fields.Many2one('res.partner', string='Contacto', tracking=True, domain="[('parent_id', '=', partner_id)]")
+    partner_id = fields.Many2one(
+        'res.partner',
+        string='Patrocinado',
+        domain=[
+            '&',
+            ('is_company', '=', True),
+            ('parent_id', '=', False)
+        ],
+        required=True,
+        tracking=True
+    )
+    contact_id = fields.Many2one(
+        'res.partner',
+        string='Contacto',
+        tracking=True
+    )
 
     vat = fields.Char('Número de documento', related='partner_id.vat')
     phone = fields.Char('Teléfono', related='partner_id.phone')
@@ -42,8 +56,18 @@ class RVCBeneficiary(models.Model):
         args = args or []
         domain = []
         if name:
-            domain = ['|', '|', '|', ['vat', 'like', name], ['partner_id', operator, name], ['email', operator, name], ['contact_email', operator, name]]
-        rvc_beneficiary_union_ids = self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
+            domain = [
+                '|', '|', '|',
+                ['vat', 'like', name],
+                ['partner_id', operator, name],
+                ['email', operator, name],
+                ['contact_email', operator, name]
+            ]
+        rvc_beneficiary_union_ids = self._search(
+            expression.AND([domain, args]),
+            limit=limit,
+            access_rights_uid=name_get_uid
+        )
         return self.browse(rvc_beneficiary_union_ids).name_get()
 
     @api.model
@@ -77,5 +101,21 @@ class RVCBeneficiary(models.Model):
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
-        # Limpiar el campo dependiente para asegurar que el usuario deba re-seleccionar.
-        self.contact_id = False
+        # Limpia el campo contact_id si el partner_id cambia para evitar inconsistencias
+        if self.contact_id and self.contact_id.parent_id != self.partner_id:
+            self.contact_id = False
+
+        domain = []
+        if self.partner_id:
+            # 1. Definir el dominio: Filtrar contactos donde el campo parent_id
+            #    sea igual al ID del partner_id seleccionado.
+            domain = [('parent_id', '=', self.partner_id.id)]
+
+        # 2. Retornar el dominio dinámico para el campo 'contact_id'
+        #    La clave del diccionario debe ser 'domain' y el valor otro diccionario
+        #    donde la clave es el nombre del campo a filtrar y el valor el dominio.
+        return {
+            'domain': {
+                'contact_id': domain
+            }
+        }

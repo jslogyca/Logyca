@@ -16,7 +16,7 @@
                     </div>
                     <group>
                         <group>
-                            <field name="partner_id" string="Buscar Empresa" options="{'no_quick_create': True, 'no_create_edit': True}" can_create="false" can_write="false"/>
+                            <field name="partner_id" string="Buscar Empresa" can_create="false" can_write="false"/>
                         </group>
                         <group>
                             <field name="contact_id" string="Buscar Contacto"
