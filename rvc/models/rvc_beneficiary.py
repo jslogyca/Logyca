@@ -137,3 +137,8 @@ class RVCBeneficiary(models.Model):
                     _logger.debug("Contact_id limpiado automáticamente.")
             else:
                 _logger.debug("No hay partner_id seleccionado. Lista de contactos vacía.")
+
+    @api.onchange('partner_id')
+    def _onchange_partner_id_cleanup(self):
+        if self.contact_id and self.partner_id and self.contact_id.parent_id != self.partner_id:
+            self.contact_id = False
