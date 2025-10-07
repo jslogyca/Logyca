@@ -103,24 +103,37 @@ class RVCBeneficiary(models.Model):
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
-        # Limpia el campo contact_id si el partner_id cambia para evitar inconsistencias
+        # --- 1. Lógica de Dominio y Limpieza (La que creamos) ---
         if self.contact_id and self.contact_id.parent_id != self.partner_id:
             self.contact_id = False
 
         domain = []
-        _logger.info("Partner ID cambiado: %s", self.partner_id)
         if self.partner_id:
-            # 1. Definir el dominio: Filtrar contactos donde el campo parent_id
-            #    sea igual al ID del partner_id seleccionado.
             domain = [('parent_id', '=', self.partner_id.id)]
-            _logger.info("Dominio para contact_id: %s", domain)
 
-        # 2. Retornar el dominio dinámico para el campo 'contact_id'
-        #    La clave del diccionario debe ser 'domain' y el valor otro diccionario
-        #    donde la clave es el nombre del campo a filtrar y el valor el dominio.
-        _logger.info("Retornando dominio: %s", {'domain': {'contact_id': domain}})
+        # --- 2. Lógica de Copia de Campos (La que Odoo está ejecutando) ---
+        if self.partner_id:
+            self.vat = self.partner_id.vat
+            self.phone = self.partner_id.phone
+            self.email = self.partner_id.email
+            self.x_sector_id = self.partner_id.x_sector_id
+            self.macro_sector = self.partner_id.macro_sector
+            self.x_company_size = self.partner_id.x_company_size
+        else:
+            # Limpiar si no hay partner
+            self.vat = False
+            self.phone = False
+            self.email = False
+            self.x_sector_id = False
+            self.macro_sector = False
+            self.x_company_size = False
+
+        # --- 3. Retorno Unificado (Ambos resultados) ---
+        # El diccionario de retorno debe contener la actualización de campos y el dominio.
         return {
             'domain': {
                 'contact_id': domain
-            }
+            },
+            # Opcional: También podrías incluir la actualización de campos aquí, 
+            # pero si la hiciste con 'self.field = value', no es estrictamente necesario.
         }
