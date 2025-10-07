@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Email template para notificar al aprobador -->
+        <record id="email_template_leave_approval" model="mail.template">
+            <field name="name">Notificación de Ausencia Pendiente</field>
+            <field name="model_id" ref="model_website_leave_form"/>
+            <field name="subject">Nueva Solicitud de Ausencia - ${object.name}</field>
+            <field name="email_from">${(object.employee_id.company_id.email or '')|safe}</field>
+            <field name="email_to">${object.approver_id.work_email|safe}</field>
+            <field name="body_html" type="html">
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
+    <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px;">
+            📋 Nueva Solicitud de Ausencia
+        </h2>
+        
+        <p style="font-size: 16px; color: #34495e;">
+            Hola <strong>${object.approver_id.name}</strong>,
+        </p>
+        
+        <p style="font-size: 14px; color: #7f8c8d;">
+            Has sido seleccionado como aprobador de una nueva solicitud de ausencia. Por favor revisa los detalles:
+        </p>
+        
+        <div style="background-color: #ecf0f1; padding: 20px; border-radius: 5px; margin: 20px 0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">Solicitante:</td>
+                    <td style="padding: 8px 0; color: #2c3e50;">${object.name}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">Email:</td>
+                    <td style="padding: 8px 0; color: #2c3e50;">${object.email}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">Tipo de Ausencia:</td>
+                    <td style="padding: 8px 0; color: #2c3e50;">${object.holiday_status_id.name}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">Fecha Solicitud:</td>
+                    <td style="padding: 8px 0; color: #2c3e50;">${format_date(object.request_date)}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">Desde:</td>
+                    <td style="padding: 8px 0; color: #2c3e50;">${format_datetime(object.date_from, tz='America/Bogota', dt_format='dd/MM/yyyy HH:mm')}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">Hasta:</td>
+                    <td style="padding: 8px 0; color: #2c3e50;">${format_datetime(object.date_to, tz='America/Bogota', dt_format='dd/MM/yyyy HH:mm')}</td>
+                </tr>
+                % if object.notes:
+                <tr>
+                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold; vertical-align: top;">Motivo:</td>
+                    <td style="padding: 8px 0; color: #2c3e50;">${object.notes}</td>
+                </tr>
+                % endif
+                % if object.attachment_ids:
+                <tr>
+                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold; vertical-align: top;">Adjuntos:</td>
+                    <td style="padding: 8px 0; color: #2c3e50;">
+                        📎 ${len(object.attachment_ids)} documento(s) adjunto(s)
+                    </td>
+                </tr>
+                % endif
+            </table>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="${object.leave_id.get_mail_url()}" 
+               style="background-color: #3498db; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+                Ver y Aprobar Solicitud
+            </a>
+        </div>
+        
+        <p style="font-size: 12px; color: #95a5a6; text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ecf0f1;">
+            Este es un mensaje automático generado desde el sistema de gestión de ausencias.
+        </p>
+    </div>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>
