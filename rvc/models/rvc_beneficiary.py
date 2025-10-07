@@ -31,11 +31,10 @@ class RVCBeneficiary(models.Model):
         tracking=True
     )
 
-    available_contact_ids = fields.Many2many(
-        'res.partner',
-        string='Contactos Disponibles',
-        compute='_compute_available_contact_ids',
-        store=False, # No se almacena, se calcula en memoria
+    contact_id_domain = fields.Char(
+        string='Dominio Contactos',
+        compute='_compute_contact_id_domain',
+        store=False
     )
 
     vat = fields.Char('Número de documento', related='partner_id.vat')
@@ -109,36 +108,37 @@ class RVCBeneficiary(models.Model):
             rec.active = True
 
     @api.depends('partner_id')
-    def _compute_available_contact_ids(self):
+    def _compute_contact_id_domain(self):
         for rec in self:
-            _logger.debug(
-                "--- Iniciando _compute_available_contact_ids para el registro %s ---",
-                rec.id if rec.id else 'Nuevo'
-            )
-            # Borra todos los enlaces actuales de contactos disponibles
-            rec.available_contact_ids = [(5, 0, 0)]
-
             if rec.partner_id:
-                partner_id_val = rec.partner_id.id
-
-                # Búsqueda de contactos: parent_id = Partner ID seleccionado
-                contacts = self.env['res.partner'].search([
-                    ('parent_id', '=', partner_id_val)
-                ])
-
-                rec.available_contact_ids = contacts
-
-                _logger.debug("Partner ID: %s", partner_id_val)
-                _logger.debug("IDs de Contactos encontrados: %s", contacts.ids)
-
-                # Limpieza automática del contact_id si ya no es válido
-                if rec.contact_id and rec.contact_id not in contacts:
-                    rec.contact_id = False
-                    _logger.debug("Contact_id limpiado automáticamente.")
+                domain = [('parent_id', '=', rec.partner_id.id)]
+                rec.contact_id_domain = str(domain)
+                _logger.debug(
+                    "Dominio computado para partner %s (ID: %s): %s",
+                    rec.partner_id.name, rec.partner_id.id, domain
+                )
             else:
-                _logger.debug("No hay partner_id seleccionado. Lista de contactos vacía.")
+                rec.contact_id_domain = "[]"
+                _logger.debug("Sin partner_id seleccionado, dominio vacío")
 
     @api.onchange('partner_id')
     def _onchange_partner_id_cleanup(self):
-        if self.contact_id and self.partner_id and self.contact_id.parent_id != self.partner_id:
-            self.contact_id = False
+        # Limpiar contacto anterior cuando cambie el partner
+        self.contact_id = False
+        
+        # Forzar actualización del dominio inmediatamente 
+        if self.partner_id:
+            domain = [('parent_id', '=', self.partner_id.id)]
+            self.contact_id_domain = str(domain)
+            _logger.debug(
+                "OnChange: Dominio actualizado para partner %s: %s",
+                self.partner_id.name, domain
+            )
+            # Retornar el dominio también para mayor compatibilidad
+            return {
+                'domain': {
+                    'contact_id': domain
+                }
+            }
+        else:
+            self.contact_id_domain = "[]"

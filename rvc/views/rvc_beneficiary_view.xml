@@ -19,11 +19,11 @@
                             <field name="partner_id" string="Buscar Empresa" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                         </group>
                         <group>
-							<field name="available_contact_ids" invisible="1"/>
+							<field name="contact_id_domain" invisible="1"/>
                             <field name="contact_id" 
                                string="Buscar Contacto"
                                placeholder="Seleccione primero una empresa..."
-                               domain="[('id', 'in', available_contact_ids)]"
+                               domain="contact_id_domain"
                         	/>
 						</group>
 					</group>
