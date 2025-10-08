@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="leave_form_template" name="Formulario de Ausencias">
         <t t-call="website.layout">
@@ -5,7 +6,7 @@
                 <div class="container mt-5 mb-5">
                     <div class="row">
                         <div class="col-md-10 offset-md-1">
-                            <h1 class="text-center mb-4">Solicitud de Ausencia</h1>
+                            <h1 class="text-center mb-4">Registro de Vacaciones y Permisos</h1>
                             
                             <!-- Mensajes de éxito o error -->
                             <t t-if="success">
@@ -75,12 +76,10 @@
                                                     <t t-foreach="approvers" t-as="approver">
                                                         <option t-att-value="approver.id">
                                                             <t t-esc="approver.name"/>
-                                                            <t t-if="approver.job_id"> - <t t-esc="approver.job_id.name"/></t>
-                                                            <t t-if="approver.department_id"> (<t t-esc="approver.department_id.name"/>)</t>
                                                         </option>
                                                     </t>
                                                 </select>
-                                                <small class="form-text text-muted">Quien debe aprobar tu solicitud</small>
+                                                <small class="form-text text-muted">Usuario que debe aprobar tu solicitud</small>
                                             </div>
                                         </div>
 
@@ -135,7 +134,7 @@
                             <!-- Enlaces útiles -->
                             <div class="text-center mt-3">
                                 <a href="/ausencias/consultar" class="btn btn-outline-info">
-                                    🔍 Consultar Mis Ausencias Aprobadas
+                                    🔍 Consulta de Vacaciones o Permisos Aprobados
                                 </a>
                             </div>
                         </div>

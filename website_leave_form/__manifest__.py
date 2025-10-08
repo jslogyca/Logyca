@@ -17,6 +17,8 @@
         'views/hr_leave_type_views.xml',
         'data/mail_template.xml',
         'data/leave_summary_mail_template.xml',
+        'data/leave_reminder_mail_template.xml',
+        'data/ir_cron.xml',
     ],
     'installable': True,
     'application': False,

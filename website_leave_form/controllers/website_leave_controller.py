@@ -10,9 +10,10 @@ class WebsiteLeaveController(http.Controller):
     def leave_form(self, **kwargs):
         """Muestra el formulario de ausencias"""
         leave_types = request.env['hr.leave.type'].sudo().search([])
-        # Obtener empleados que pueden ser aprobadores (puedes filtrar por departamento, manager, etc.)
-        approvers = request.env['hr.employee'].sudo().search([
-            '|', ('parent_id', '!=', False), ('job_id.name', 'ilike', 'manager')
+        # Obtener usuarios que pueden ser aprobadores
+        approvers = request.env['res.users'].sudo().search([
+            ('share', '=', False),  # Solo usuarios internos, no portales
+            ('active', '=', True)
         ])
         
         # Fecha actual para el campo fecha de solicitud
@@ -57,19 +58,28 @@ class WebsiteLeaveController(http.Controller):
             date_to = datetime.strptime(post.get('date_to'), '%Y-%m-%dT%H:%M')
             request_date = datetime.strptime(post.get('request_date'), '%Y-%m-%d').date() if post.get('request_date') else fields.Date.context_today(request.env['hr.leave'])
 
+            # Validar que el aprobador existe
+            approver_id = int(post.get('approver_id'))
+            approver = request.env['res.users'].sudo().browse(approver_id)
+            
+            if not approver.exists():
+                return request.redirect('/ausencias/formulario?error=El aprobador seleccionado no es válido')
+
             # Procesar archivos adjuntos
             attachment_ids = []
-            for file in attachments:
-                if file and file.filename:
-                    file_content = file.read()
-                    attachment = request.env['ir.attachment'].sudo().create({
-                        'name': file.filename,
-                        'datas': base64.b64encode(file_content),
-                        'res_model': 'website.leave.form',
-                        'res_id': 0,  # Se actualizará después
-                        'public': False,
-                    })
-                    attachment_ids.append(attachment.id)
+            if attachments:
+                for file in attachments:
+                    if file and hasattr(file, 'filename') and file.filename:
+                        file_content = file.read()
+                        attachment = request.env['ir.attachment'].sudo().create({
+                            'name': file.filename,
+                            'datas': base64.b64encode(file_content),
+                            'res_model': 'hr.leave',
+                            'res_id': 0,  # Se actualizará después
+                            'public': False,
+                            'mimetype': file.content_type if hasattr(file, 'content_type') else 'application/octet-stream',
+                        })
+                        attachment_ids.append(attachment.id)
 
             # Crear la ausencia con aprobador
             leave_vals = {
@@ -84,22 +94,31 @@ class WebsiteLeaveController(http.Controller):
 
             leave = request.env['hr.leave'].sudo().create(leave_vals)
             
-            # Adjuntar archivos a la ausencia
+            # Adjuntar archivos a la ausencia creada
             if attachment_ids:
-                for att_id in attachment_ids:
-                    request.env['ir.attachment'].sudo().browse(att_id).write({
-                        'res_model': 'hr.leave',
-                        'res_id': leave.id,
-                    })
+                request.env['ir.attachment'].sudo().browse(attachment_ids).write({
+                    'res_model': 'hr.leave',
+                    'res_id': leave.id,
+                })
             
-            # Asignar el aprobador a la ausencia
-            approver_id = int(post.get('approver_id'))
-            approver = request.env['hr.employee'].sudo().browse(approver_id)
-            
-            if approver and approver.user_id:
-                leave.sudo().write({'approver_id': approver.user_id.id})
+            # Crear actividad para el aprobador
+            if approver:
+                try:
+                    activity_type = request.env.ref('mail.mail_activity_data_todo', raise_if_not_found=False)
+                    if activity_type:
+                        request.env['mail.activity'].sudo().create({
+                            'activity_type_id': activity_type.id,
+                            'res_id': leave.id,
+                            'res_model_id': request.env['ir.model'].sudo().search([('model', '=', 'hr.leave')], limit=1).id,
+                            'user_id': approver.id,
+                            'summary': 'Aprobar solicitud de ausencia',
+                            'note': f'Nueva solicitud de ausencia de {employee.name} para aprobación.',
+                        })
+                except Exception as e:
+                    # Si falla la creación de actividad, continuar (no es crítico)
+                    pass
 
-            # Guardar registro en el modelo temporal
+            # Guardar registro en el modelo temporal con una copia de los adjuntos
             leave_form = request.env['website.leave.form'].sudo().create({
                 'name': post.get('name'),
                 'email': post.get('email'),
@@ -112,23 +131,27 @@ class WebsiteLeaveController(http.Controller):
                 'notes': post.get('notes', ''),
                 'state': 'submitted',
                 'leave_id': leave.id,
-                'attachment_ids': [(6, 0, attachment_ids)] if attachment_ids else False,
             })
-
-            # Actualizar res_id de los adjuntos en website.leave.form
+            
+            # Crear copias de los adjuntos para website.leave.form (para auditoría)
             if attachment_ids:
                 for att_id in attachment_ids:
-                    request.env['ir.attachment'].sudo().browse(att_id).write({
+                    original_att = request.env['ir.attachment'].sudo().browse(att_id)
+                    request.env['ir.attachment'].sudo().create({
+                        'name': original_att.name,
+                        'datas': original_att.datas,
                         'res_model': 'website.leave.form',
                         'res_id': leave_form.id,
+                        'public': False,
+                        'mimetype': original_att.mimetype,
                     })
 
             # Enviar email al aprobador
-            if approver and approver.work_email:
+            if approver and approver.email:
                 template = request.env.ref('website_leave_form.email_template_leave_approval', raise_if_not_found=False)
                 if template:
                     template.sudo().send_mail(leave_form.id, force_send=True, email_values={
-                        'email_to': approver.work_email,
+                        'email_to': approver.email,
                     })
 
             return request.redirect('/ausencias/formulario?success=Solicitud de ausencia creada exitosamente. El aprobador ha sido notificado por correo electrónico.')
