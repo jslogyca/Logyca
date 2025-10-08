@@ -113,7 +113,7 @@ class PayslipVoucherSending(models.Model):
             record.mail_mail_pdf_count = len(record.mail_line_ids)
             record.mail_mail_sent_count = len(record.mail_mail_ids.filtered(lambda m: m.state == 'sent'))
             record.mail_mail_failed_count = len(record.mail_mail_ids.filtered(lambda m: m.state == 'exception'))
-            record.mail_mail_pend_count = len(record.mail_mail_ids.filtered(lambda m: m.state in ('exception', 'outgoing')))
+            record.mail_mail_pend_count = len(record.mail_mail_ids.filtered(lambda m: m.state in ('exception', 'outgoing', 'received')))
 
     def _create_pdf_attachment(self, env, payslip, pdf_content: bytes) -> int:
         """Create an attachment for the payslip PDF."""
@@ -154,6 +154,7 @@ class PayslipVoucherSending(models.Model):
             'recipient_ids': [(6, 0, [partner_id])] if partner_id else [],
             'model': 'hr.payslip',
             'res_id': payslip.id,
+            'state': 'received'
         }
 
     def _prepare_line_email_values(self, mail_id, payslip, attachment_id: int) -> dict:        
@@ -264,9 +265,11 @@ class PayslipVoucherSending(models.Model):
 
         try:
             for record in self:
-                mail_mail_outgoing = record.mail_mail_ids.filtered(lambda m: m.state in ('outgoing', 'exception'))
+                mail_mail_outgoing = record.mail_mail_ids.filtered(lambda m: m.state in ('outgoing', 'exception', 'received'))
                 if mail_mail_outgoing:
                     for mail in mail_mail_outgoing:
+                        if mail.state=='received':
+                            mail.write({'state': 'outgoing'})
                         mail.send()
         except Exception as e:
             _logger.error(f"Error in voucher generation: {str(e)}")

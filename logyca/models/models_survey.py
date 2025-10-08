@@ -243,19 +243,19 @@ class SurveyUserInputLine(models.Model):
     answer_type = fields.Selection(selection_add = [('little_faces', 'little_faces')], string='Answer Type')
     value_little_faces = fields.Integer('Nivel de Satisfacción (Emojis)')
     
-    @api.constrains('answer_type')
-    def _check_answer_type(self):
-        for uil in self:
-            fields_type = {
-                'text': bool(uil.value_text),
-                'number': (bool(uil.value_number) or uil.value_number == 0),
-                'date': bool(uil.value_date),
-                'free_text': bool(uil.value_free_text),
-                'suggestion': bool(uil.value_suggested),
-                'little_faces': bool(uil.value_little_faces)
-            }
-            if not fields_type.get(uil.answer_type, True):
-                raise ValidationError(_('The answer must be in the right type'))
+    # @api.constrains('answer_type')
+    # def _check_answer_type(self):
+    #     for uil in self:
+    #         fields_type = {
+    #             'text': bool(uil.value_text),
+    #             'number': (bool(uil.value_number) or uil.value_number == 0),
+    #             'date': bool(uil.value_date),
+    #             'free_text': bool(uil.value_free_text),
+    #             'suggestion': bool(uil.value_suggested),
+    #             'little_faces': bool(uil.value_little_faces)
+    #         }
+    #         if not fields_type.get(uil.answer_type, True):
+    #             raise ValidationError(_('The answer must be in the right type'))
     
     @api.model
     def save_line_little_faces(self, user_input_id, question, post, answer_tag):

@@ -298,7 +298,7 @@
                                 <field name="attachment_pdf"
                                         filename="attachment_pdf_name"
                                         widget="pdf_viewer"
-                                        style="height:70vh;"/>
+                                        style="height:100vh;"/>
                             </group>
                         </group>
                     </sheet>
