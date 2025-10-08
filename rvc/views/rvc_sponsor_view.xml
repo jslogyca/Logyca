@@ -13,8 +13,8 @@
 					<widget name="web_ribbon" title="Desactivada" bg_color="bg-danger" invisible="active"/>
                     <h1>Registro de Empresa Halonadora</h1>
                     <group>
-                        <group string="Buscar Empresa">
-							<field name="partner_id" domain="[('x_type_thirdparty', '=', 1)]" nolabel="1"/>
+                        <group>
+							<field string="Buscar Empresa" name="partner_id" domain="[('x_type_thirdparty', '=', 1)]"/>
                         </group>
                         <group>
                         </group>
