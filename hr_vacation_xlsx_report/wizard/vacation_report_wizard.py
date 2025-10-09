@@ -18,7 +18,10 @@ def _day_count_30_360(d1, d2):
         day1 = 30
     if day2 == 31:
         day2 = 30
-    return (y2 - y1) * 360 + (m2 - m1) * 30 + (day2 - day1)
+    if day2 == 28:
+        day2 = 30
+
+    return (y2 - y1) * 360 + (m2 - m1) * 30 + (day2 - day1 + 1)
 
 
 MONTHS = [
