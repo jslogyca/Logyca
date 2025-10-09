@@ -230,7 +230,6 @@ class VacationReportWizard(models.TransientModel):
             col_Z = 25  # TOTAL VACACIONES CORTE {mes}
             col_AA = 26 # SALDO TOTAL
             col_G = 6   # SALARIO
-
             # Letras de columna según índice
             def col_letter(idx):
                 # idx 0->A, 1->B ...
@@ -244,6 +243,7 @@ class VacationReportWizard(models.TransientModel):
                     x -= 1
                 return letters
 
+            col_T = 19  # índice base 0: "TOTAL DÍAS TOMADOS {year}" está en posición 20
             T_ref = f"{col_letter(col_T)}{excel_row}"
             X_ref = f"{col_letter(col_X)}{excel_row}"
             Y_ref = f"{col_letter(col_Y)}{excel_row}"
