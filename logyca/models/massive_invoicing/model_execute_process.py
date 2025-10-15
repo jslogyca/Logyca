@@ -1619,6 +1619,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                                     ('type_vinculation','=',vinculation.id),
                                                     ('revenue_range','=',partner_company.x_income_range.id),
                                                     ('product_id','=',productgtin.id)])
+            fee_value = 0.0                                                    
             for tariff in obj_tariff:
                 fee_value = tariff.unit_fee_value                                                    
             sale_order_line_values_gtin = {
