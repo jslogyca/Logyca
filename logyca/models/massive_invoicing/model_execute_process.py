@@ -1235,12 +1235,12 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                     # obj_tariff = self.env['massive.invoicing.tariff'].search([('year', '=', self.year),('type_vinculation','=',type_vinculation),('asset_range','=',partner.partner_id.x_asset_range.id),('product_id','=',product_id)])
                     if partner_company.fact_annual == 'activos':
                         obj_tariff = self.env['massive.invoicing.tariff'].search([('year', '=', self.year),
-                                                            ('type_vinculation','=',partner_company.x_type_vinculation.id),
+                                                            ('type_vinculation','=',partner_company.x_type_vinculation.filtered(lambda pref: pref.id == 23).id),
                                                             ('asset_range','=',partner_company.x_asset_range.id),('product_id','=',obj_massive_products_reno.id)])
                     else:
                         if partner_company.fact_annual == 'ingresos':
                             obj_tariff = self.env['massive.income.tariff'].search([('year', '=', self.year),
-                                                            ('type_vinculation','=',partner_company.x_type_vinculation.id),
+                                                            ('type_vinculation','=',partner_company.x_type_vinculation.filtered(lambda pref: pref.id == 23).id),
                                                             ('revenue_range','=',partner_company.x_income_range.id),
                                                             ('product_id','=',obj_massive_products_reno.id)])
                     for tariff in obj_tariff:
