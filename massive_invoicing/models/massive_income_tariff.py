@@ -17,7 +17,7 @@ class x_MassiveInvoicingTariff(models.Model):
     product_id = fields.Many2one('product.product', string='Producto', required=True)
     old_value = fields.Float(string='Tarifa Anterior', required=True, default=0.0)
     fee_value = fields.Float(string='Valor de la tarifa', required=True, digits='Tarifa Massive Income', default=0.0000)
-    unit_fee_value = fields.Float(string='Tarifa unitaria', help='Cálculo de la tarifa UNITARIA redondeando a la milésima más cercana: ROUND(SMLV * Valor de la tarifa,-3).',compute='_compute_unit_fee_value', store=True)
+    unit_fee_value = fields.Float(string='Tarifa unitaria', help='Cálculo de la tarifa UNITARIA redondeando a la milésima más cercana: ROUND(SMLV * Valor de la tarifa,-3).')
     
     
     def name_get(self):
@@ -25,10 +25,17 @@ class x_MassiveInvoicingTariff(models.Model):
         for record in self:
             result.append((record.id, "Año: {} | Tipo vinculación: {} | Rango de ingresos: {} | Producto: {}".format(record.year,record.type_vinculation.name, record.revenue_range.amount,record.product_id.name)))
         return result
-    
-    @api.depends('fee_value', 'old_value')
-    def _compute_unit_fee_value(self):
-        self.write({'unit_fee_value': round((self.old_value*self.fee_value)+self.old_value,-3)})
+
+class x_MassiveInvoicingSMLVIGactive(models.Model):
+    _name = 'massive.invoicing.smlv.ig.active'
+    _description = 'Massive Invoicing Rango Ingresos - SMLV'
+
+    tariff = fields.Float(string="Tarifa",  digits=(16, 3), required=True, 
+                default=0.0, copy=True, help="Se muestra con 3 decimales.")
+    old_value = fields.Float(string="Tarifa Anterior",  digits=(16, 3), required=True, 
+                default=0.0, copy=True, help="Se muestra con 3 decimales.")
+    revenue_rang_id = fields.Many2one('revenue.macro.sector', string='Rango de Ingresos', required=True, copy=True)
+    smlv_id = fields.Many2one('massive.invoicing.smlv', string='SMLV')
 
 class MassiveIncomeTariffDiscounts(models.Model):
     _name = 'massive.income.tariff.discounts'
@@ -40,3 +47,9 @@ class MassiveIncomeTariffDiscounts(models.Model):
     discount_percentage = fields.Float(string='Descuento antes de IVA (%)', required=True)
     discounts_one = fields.Float(string='Valor descuento')
     date_discounts_one = fields.Date(string='Fecha descuento', help='Fecha hasta la cual aplica el descuento 1')
+
+
+class x_MassiveInvoicingSMLV(models.Model):
+    _inherit = 'massive.invoicing.smlv'
+
+    revenue_range_ids = fields.One2many('massive.invoicing.smlv.ig.active', 'smlv_id', string='Tarifa Ingresos')
