@@ -1224,7 +1224,8 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                 if vinculation.name in ('Cliente Prefijo'):
                     if is_member:
                         continue
-                    print('EMPRESA CLIENTE PREFIJO', partner_company.x_type_vinculation.name, partner_company.name)
+                    print('EMPRESA CLIENTE PREFIJO', partner_company.x_type_vinculation, partner_company.name)
+                    print('EMPRESA CLIENTE PREFIJO', partner_company.x_type_vinculation.filtered(lambda pref: pref.id == 23), partner_company.name)
                     fee_value = 0
                     unit_fee_value = 0
                     discount = 0                       
