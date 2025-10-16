@@ -1022,7 +1022,23 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             obj_massive_invoicing_products = self.env['massive.invoicing.products'].search([('product_id', '!=', False),('type_process', '=', '5')])
         obj_company = self.env['massive.invoicing.partnercalculationprefixes'].search([('process_id', '=', self.id),('have_prefixes','=','1')])
         discount_pref = 0
-        for partner_company in self.invoicing_companies.thirdparties:
+
+        SaleOrder = self.env['sale.order']
+        thirdparties = self.invoicing_companies.thirdparties
+
+        # 1) Encuentra los partners que SÍ tienen órdenes con ese origen en el set dado
+        domain_orders = [
+            ('x_origen', '=', f'FM {self.year}'),
+            ('partner_id', 'in', thirdparties.ids),
+        ]
+        groups = SaleOrder.read_group(domain_orders, ['partner_id'], ['partner_id'])
+        partner_ids_con_orden = {g['partner_id'][0] for g in groups if g.get('partner_id')}
+
+        # 2) Quédate con los que NO tienen órdenes
+        target_partners = thirdparties.filtered_domain([('id', 'not in', list(partner_ids_con_orden))])
+
+        for partner_company in target_partners:
+        # for partner_company in self.invoicing_companies.thirdparties:
             saleorder_exists = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id','=',partner_company.id)])
             if saleorder_exists:
                 continue
