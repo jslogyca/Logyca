@@ -1069,7 +1069,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         target_partners = thirdparties.filtered_domain([('id', 'not in', list(partner_ids_con_orden))])
 
         # for partner_company in target_partners:
-        for partner_company in self._partners_sin_fm_orders()::
+        for partner_company in self._partners_sin_fm_orders():
         # for partner_company in self.invoicing_companies.thirdparties:
             # saleorder_exists = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id','=',partner_company.id)])
             # if saleorder_exists:
