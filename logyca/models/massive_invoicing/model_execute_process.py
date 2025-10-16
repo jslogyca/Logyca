@@ -1519,7 +1519,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             sale_order = self.env['sale.order'].create(sale_order_values)
 
                             sale_order_line_values = {
-                                'name' : product_id.product_tmpl_id.name,
+                                'name' : obj_massive_products_padicl.product_id.product_tmpl_id.name,
                                 'order_id' : sale_order.id,
                                 'product_id' : obj_massive_products_padicl.product_id.id,
                                 'product_uom_qty' : cant_prefixes, #Cantidad
@@ -1574,7 +1574,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                         sale_order = self.env['sale.order'].create(sale_order_values)
 
                         sale_order_line_values = {
-                            'name' : product_id.product_tmpl_id.name,
+                            'name' : obj_massive_products_gtin.product_id.product_tmpl_id.name,
                             'order_id' : sale_order.id,
                             'product_id' : obj_massive_products_gtin.product_id.id,
                             'product_uom_qty' : cant_prefixes, #Cantidad
@@ -1593,6 +1593,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                         }
 
                         process_partnersaleorder.update(values_update_process)
+                    self.env.cr.commit()
 
     def _create_sale_order_fm(self, vinculation, partner_company, id_contactP, conditional_discount, 
                             conditional_discount_deadline, product_id, product_uom_qty, unit_fee_value, discount, 
@@ -1636,7 +1637,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             for tariff in obj_tariff:
                 fee_value = tariff.unit_fee_value                                                    
             sale_order_line_values_gtin = {
-                'name' : product_id.product_tmpl_id.name,
+                'name' : productgtin.product_tmpl_id.name,
                 'order_id' : sale_order.id,
                 'product_id' : productgtin.id,
                 'product_uom_qty' : cant_prefixes_gtin, #Cantidad
@@ -1652,7 +1653,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             'vat' : partner_company.vat,
             'invoice_one' : sale_order.id                                              
         }
-        process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)        
+        process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
         return sale_order
 
     def _create_sale_order_fm_pm(self, partner_company, id_contactP, conditional_discount, 
