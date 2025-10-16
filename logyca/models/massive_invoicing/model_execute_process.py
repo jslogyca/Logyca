@@ -1039,9 +1039,9 @@ class x_MassiveInvoicingProcess(models.TransientModel):
 
         for partner_company in target_partners:
         # for partner_company in self.invoicing_companies.thirdparties:
-            saleorder_exists = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id','=',partner_company.id)])
-            if saleorder_exists:
-                continue
+            # saleorder_exists = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id','=',partner_company.id)])
+            # if saleorder_exists:
+            #     continue
             if self.invoicing_companies.process_type == '2':
                 invoice_ids = self.env['account.move'].search([('partner_id', '=', partner_company.id),
                                                                 ('x_is_mass_billing', '=', True),
