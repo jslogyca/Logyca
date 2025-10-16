@@ -971,7 +971,38 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             'invoice_one' : sale_order.id                                              
         }
         process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)        
-        return True                        
+        return True
+
+    def _partners_sin_fm_orders(self):
+        # 1) Trabaja solo con IDs; evita prefetch
+        third_ids = self.invoicing_companies.thirdparties.ids
+        if not third_ids:
+            return self.env['res.partner']
+
+        origen = f'FM {self.year}'
+        cr = self.env.cr
+
+        # 2) Procesa en lotes para no enviar IN enormes
+        CHUNK = 1000
+        sin_orden_ids = []
+
+        for i in range(0, len(third_ids), CHUNK):
+            chunk = third_ids[i:i+CHUNK]
+
+            # 3) SQL súper eficiente: devuelve los partner_id que SÍ tienen orden
+            cr.execute("""
+                SELECT DISTINCT so.partner_id
+                FROM sale_order so
+                WHERE so.x_origen = %s
+                AND so.partner_id = ANY(%s)
+            """, (origen, chunk))
+            con_orden = {row[0] for row in cr.fetchall()}
+
+            # 4) del lote, quédate con los que NO tienen orden
+            sin_orden_ids.extend([pid for pid in chunk if pid not in con_orden])
+
+        # 5) Navega sin prefetch para no cargar campos innecesarios
+        return self.env['res.partner'].with_context(prefetch_fields=False).browse(sin_orden_ids)        
 
     #Ejecución proceso
     def execute_process(self): 
@@ -1037,7 +1068,8 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         # 2) Quédate con los que NO tienen órdenes
         target_partners = thirdparties.filtered_domain([('id', 'not in', list(partner_ids_con_orden))])
 
-        for partner_company in target_partners:
+        # for partner_company in target_partners:
+        for partner_company in self._partners_sin_fm_orders()::
         # for partner_company in self.invoicing_companies.thirdparties:
             # saleorder_exists = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id','=',partner_company.id)])
             # if saleorder_exists:
