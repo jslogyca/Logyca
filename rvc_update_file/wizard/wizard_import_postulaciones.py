@@ -165,12 +165,15 @@ class WizardImportPostulaciones(models.TransientModel):
         
         return beneficiario
 
-    def _crear_sponsor(self, halonador_id):
-        halonador = self.env['rvc.sponsor']  # Ajustar según tu modelo
-        
+    def _crear_sponsor(self, halonador_id, halonador_vat):
+        halonador = self.env['rvc.sponsor']  # Ajustar según tu modelo        
         halonador_rvc = halonador.search([
-            ('partner_id', '=', halonador_id.id)
+            ('vat', '=', halonador_vat)
         ], limit=1)
+        if not halonador_rvc:
+            halonador_rvc = halonador.search([
+                ('partner_id', '=', halonador_id.id)
+            ], limit=1)
 
         if not halonador_rvc:
             halonador_rvc = halonador.create({
@@ -258,7 +261,7 @@ class WizardImportPostulaciones(models.TransientModel):
                     correo = sheet.cell_value(row_idx, indices['CORREO DE ACTIVACIÓN'])
                     phone = sheet.cell_value(row_idx, indices['TELEFONO DE CONTACTO'])
                     macro_sector = sheet.cell_value(row_idx, indices['SECTOR'])
-                    halonador = sheet.cell_value(row_idx, indices['NIT EMPRESA HALONADORA'])
+                    halonador = str(sheet.cell_value(row_idx, indices['NIT EMPRESA HALONADORA']))
 
                     # Validaciones básicas
                     if not nit or not razon_social:
@@ -270,6 +273,8 @@ class WizardImportPostulaciones(models.TransientModel):
                         nit = nit[:-len(suffix)]
                     if nivel.endswith(suffix):
                         nivel = nivel[:-len(suffix)]
+                    if halonador.endswith(suffix):
+                        halonador = halonador[:-len(suffix)]
 
                     # 1. Crear/actualizar partner
                     partner = self._crear_o_actualizar_partner(
@@ -283,7 +288,7 @@ class WizardImportPostulaciones(models.TransientModel):
                     ], limit=1)
 
                     # 2. Crear Halonador
-                    sponsor = self._crear_sponsor(halonador_id)
+                    sponsor = self._crear_sponsor(halonador_id, halonador)
                     # 2. Crear beneficiario
                     beneficiario = self._crear_beneficiario(partner, nivel)
                     # 3. Crear postulación
