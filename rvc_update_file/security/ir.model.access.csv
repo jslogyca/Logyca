@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wizard_import_postulaciones_user,access.wizard.import.postulaciones.user,model_wizard_import_postulaciones,base.group_user,1,1,1,1
+access_wizard_import_postulaciones_manager,access.wizard.import.postulaciones.manager,model_wizard_import_postulaciones,base.group_system,1,1,1,1
