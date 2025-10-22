@@ -250,21 +250,27 @@ class WizardImportPostulaciones(models.TransientModel):
             for row_idx in range(1, sheet.nrows):
                 try:
                     # Leer datos de la fila
-                    nit = sheet.cell_value(row_idx, indices['NIT'])
+                    nit = str(sheet.cell_value(row_idx, indices['NIT']))
                     razon_social = sheet.cell_value(row_idx, indices['RAZÓN SOCIAL DE LA EMPRESA'])
-                    nivel = sheet.cell_value(row_idx, indices['NIVEL'])
+                    nivel = str(sheet.cell_value(row_idx, indices['NIVEL']))
                     fecha_activacion = sheet.cell_value(row_idx, indices['FECHA DE ACTIVACIÓN'])
                     nombre_contacto = sheet.cell_value(row_idx, indices['NOMBRE DEL CONTACTO'])
                     correo = sheet.cell_value(row_idx, indices['CORREO DE ACTIVACIÓN'])
                     phone = sheet.cell_value(row_idx, indices['TELEFONO DE CONTACTO'])
                     macro_sector = sheet.cell_value(row_idx, indices['SECTOR'])
                     halonador = sheet.cell_value(row_idx, indices['NIT EMPRESA HALONADORA'])
-                    
+
                     # Validaciones básicas
                     if not nit or not razon_social:
                         errores.append(f"Fila {row_idx + 1}: NIT o Razón Social vacíos")
                         continue
-                    
+
+                    suffix = ".0"
+                    if nit.endswith(suffix):
+                        nit = nit[:-len(suffix)]
+                    if nivel.endswith(suffix):
+                        nivel = nivel[:-len(suffix)]
+
                     # 1. Crear/actualizar partner
                     partner = self._crear_o_actualizar_partner(
                         nit, razon_social, nombre_contacto, correo, phone, macro_sector
