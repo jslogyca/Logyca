@@ -78,7 +78,8 @@ class WizardImportPostulaciones(models.TransientModel):
         nit_limpio = self._limpiar_nit(nit)
         
         # Buscar si ya existe el partner por NIT
-        partner = Partner.search([('vat', '=', nit_limpio)], limit=1)
+        partner = Partner.search([('vat', '=', nit_limpio), ('parent_id', '=', None)], limit=1)
+
         city_id = self.env['res.city'].search([('zipcode', '=', '11001')], limit=1)
         # Buscar el tipo de tercero donde types = '1'
         tipo_tercero = self.env['logyca.type_thirdparty'].search([('types', '=', '1')], limit=1)
@@ -110,30 +111,29 @@ class WizardImportPostulaciones(models.TransientModel):
             'macro_sector': macro_sector,
         }
         if partner:
-            partner.write(vals)
             _logger.info(f"Partner actualizado: {razon_social} (NIT: {nit_limpio})")
         else:
             partner = Partner.create(vals)
             _logger.info(f"Partner creado: {razon_social} (NIT: {nit_limpio})")
-        # Crear o actualizar contacto
-        if nombre_contacto and correo:
-            contacto = Partner.search([
-                ('parent_id', '=', partner.id),
-                ('email', '=', correo)
-            ], limit=1)
-            
-            contacto_vals = {
-                'name': nombre_contacto,
-                'email': correo,
-                'parent_id': partner.id,
-                'type': 'contact',
-                'company_type': 'person',
-            }
-            
-            if contacto:
-                contacto.write(contacto_vals)
-            else:
-                Partner.create(contacto_vals)
+            # Crear o actualizar contacto
+            if nombre_contacto and correo:
+                contacto = Partner.search([
+                    ('parent_id', '=', partner.id),
+                    ('email', '=', correo)
+                ], limit=1)
+                
+                contacto_vals = {
+                    'name': nombre_contacto,
+                    'email': correo,
+                    'parent_id': partner.id,
+                    'type': 'contact',
+                    'company_type': 'person',
+                }
+                
+                if contacto:
+                    contacto.write(contacto_vals)
+                else:
+                    Partner.create(contacto_vals)
         
         return partner
 
