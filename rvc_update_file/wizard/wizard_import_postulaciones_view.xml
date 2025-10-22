@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista del formulario del wizard -->
+        <record id="view_wizard_import_postulaciones_form" model="ir.ui.view">
+            <field name="name">wizard.import.postulaciones.form</field>
+            <field name="model">wizard.import.postulaciones</field>
+            <field name="arch" type="xml">
+                <form string="Importar Postulaciones desde Excel">
+                    <sheet>
+                        <div class="oe_title" invisible="context.get('show_result', False)">
+                            <h1>
+                                <field name="nombre_archivo" invisible="1"/>
+                                Importar Postulaciones LOGYCA / COLABORA
+                            </h1>
+                        </div>
+                        
+                        <group invisible="context.get('show_result', False)">
+                            <group>
+                                <field name="programa_id" options="{'no_create': True}"/>
+                                <field name="archivo_excel" filename="nombre_archivo" required="1"/>
+                                <field name="nombre_archivo" invisible="1"/>
+                            </group>
+                        </group>
+                        
+                        <notebook invisible="not context.get('show_result', False)">
+                            <page string="Resultado de Importación">
+                                <group>
+                                    <field name="resultado_importacion" nolabel="1" 
+                                           widget="text" 
+                                           readonly="1"
+                                           style="white-space: pre-wrap; font-family: monospace;"/>
+                                </group>
+                            </page>
+                        </notebook>
+                        
+                        <div class="alert alert-info" role="alert" 
+                             invisible="context.get('show_result', False)">
+                            <h4>Formato del archivo Excel:</h4>
+                            <p>El archivo debe contener las siguientes columnas (en cualquier orden):</p>
+                            <ul>
+                                <li><strong>NIT:</strong> Número de identificación tributaria</li>
+                                <li><strong>RAZÓN SOCIAL DE LA EMPRESA:</strong> Nombre completo de la empresa</li>
+                                <li><strong>NIVEL:</strong> Nivel del beneficio</li>
+                                <li><strong>FECHA DE ACTIVACIÓN:</strong> Fecha en formato DD/MM/YYYY o YYYY-MM-DD</li>
+                                <li><strong>NOMBRE DEL CONTACTO:</strong> Nombre del contacto principal</li>
+                                <li><strong>CORREO DE ACTIVACIÓN:</strong> Correo electrónico de contacto</li>
+                                <li><strong>TELEFONO DE CONTACTO:</strong> Teléfono de contacto</li>
+                                <li><strong>SECTOR:</strong> Sector</li>
+                                <li><strong>NIT EMPRESA HALONADORA:</strong>  Número de identificación tributaria de la empresa Halonadora</li>
+                            </ul>
+                            <p><em>Nota: Los nombres de las columnas deben coincidir exactamente.</em></p>
+                        </div>
+                    </sheet>
+                    
+                    <footer invisible="context.get('show_result', False)">
+                        <button name="action_importar" 
+                                string="Importar" 
+                                type="object" 
+                                class="btn-primary"/>
+                        <button string="Cancelar" 
+                                class="btn-secondary" 
+                                special="cancel"/>
+                    </footer>
+                    
+                    <footer invisible="not context.get('show_result', False)">
+                        <button name="action_cerrar" 
+                                string="Cerrar" 
+                                type="object" 
+                                class="btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Acción para abrir el wizard -->
+        <record id="action_wizard_import_postulaciones" model="ir.actions.act_window">
+            <field name="name">Importar Postulaciones</field>
+            <field name="res_model">wizard.import.postulaciones</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_wizard_import_postulaciones"
+                  name="Importar Postulaciones"
+                  action="action_wizard_import_postulaciones"
+                  parent="rvc.hr_menu_benefit_application_parent"
+                  sequence="100"/>
+    </data>
+</odoo>
