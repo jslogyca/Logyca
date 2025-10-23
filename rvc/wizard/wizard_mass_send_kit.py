@@ -174,7 +174,7 @@ class WizardMassSendKit(models.TransientModel):
                 postulacion.action_done()
                 exitosos.append(postulacion)
                 _logger.info(
-                    f"Kit enviado exitosamente para: {postulacion.partner_id.name}"
+                    f"Kit enviado exitosamente para: {postulacion.partner_id.partner_id.name}"
                 )
             except Exception as e:
                 error_msg = str(e)
@@ -183,7 +183,7 @@ class WizardMassSendKit(models.TransientModel):
                     'error': error_msg
                 })
                 _logger.error(
-                    f"Error al enviar kit para {postulacion.partner_id.name}: {error_msg}"
+                    f"Error al enviar kit para {postulacion.partner_id.partner_id.name}: {error_msg}"
                 )
         
         # Preparar resultado HTML
@@ -264,7 +264,7 @@ class WizardMassSendKit(models.TransientModel):
                     <ul style="margin-top: 10px; max-height: 200px; overflow-y: auto;">
             """
             for post in exitosos[:20]:  # Limitar a 20 para no sobrecargar
-                html += f"<li>{post.partner_id.name} - {post.name or 'N/A'}</li>"
+                html += f"<li>{post.partner_id.partner_id.name} - {post.name or 'N/A'}</li>"
             
             if len(exitosos) > 20:
                 html += f"<li><em>... y {len(exitosos) - 20} más</em></li>"
@@ -281,7 +281,7 @@ class WizardMassSendKit(models.TransientModel):
             for error in errores[:10]:  # Limitar a 10
                 post = error['postulacion']
                 msg = error['error']
-                html += f"<li><strong>{post.partner_id.name}:</strong> {msg}</li>"
+                html += f"<li><strong>{post.partner_id.partner_id.name}:</strong> {msg}</li>"
             
             if len(errores) > 10:
                 html += f"<li><em>... y {len(errores) - 10} errores más</em></li>"
