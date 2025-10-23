@@ -151,6 +151,45 @@ class WizardMassSendKit(models.TransientModel):
             'target': 'new',
         }
 
+    def action_done(self, benefit_application):
+        if benefit_application:
+            if benefit_application.send_kit_with_no_benefit:
+                benefit_application.message_post(body=_(\
+                    '✅ Se entregó el beneficio RVC correctamente.'))
+                return benefit_application.write({'state': 'done', 'delivery_date': datetime.now()})
+            contact_email = benefit_application.partner_id.contact_email
+            if contact_email:
+                if benefit_application.product_id.benefit_type == 'codigos':
+                    activated = self.env['rvc.activations'].activate_gs1_codes(benefit_application)
+                    if activated:
+                        benefit_application.message_post(body=_(\
+                            '✅ Se solicitó la activación de Códigos GS1.'))
+                elif benefit_application.product_id.benefit_type == 'colabora':
+                    activated = self.env['rvc.activations'].activate_logyca_colabora(benefit_application)
+                    if activated:
+                        benefit_application.message_post(body=_(\
+                            '✅ Se solicitó la activación de la plataforma LOGYCA / COLABORA.'))
+                    else:
+                        benefit_application.message_post(body=_(\
+                            '🚫 No se pudo <strong>solicitar la activación</strong></u> de la plataforma LOGYCA / COLABORA.'))
+                elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
+                    if benefit_application.digital_card_ids:
+                        activated = self.env['rvc.activations'].activate_digital_cards(benefit_application)
+                        if activated:
+                            benefit_application.message_post(body=_(\
+                            '✅ Se solicitó la activación de Tarjetas Digitales.'))
+                    else:
+                        raise ValidationError(
+                            _('¡Error! No hay tarjetas digitales para generar 😔.\n\nPara solicitarlas: \n'
+                              '1. Active el modo edición yendo al botón EDITAR del lado superior izquierdo.\n'
+                              '2. Vaya a la sección de Tarjetas Digitales.\n'
+                              '3. Pulse la opción "Agregar línea."')
+                        )
+            else:
+                raise ValidationError(_('La empresa seleccionada no tiene email.'))
+
+        return {'type': 'ir.actions.act_window_close'}
+
     def action_confirmar_envio(self):
         """Ejecuta el envío masivo del kit de bienvenida"""
         self.ensure_one()
@@ -171,7 +210,7 @@ class WizardMassSendKit(models.TransientModel):
         
         for postulacion in postulaciones_validas:
             try:
-                postulacion.action_done()
+                self.action_done(postulacion)
                 exitosos.append(postulacion)
                 _logger.info(
                     f"Kit enviado exitosamente para: {postulacion.partner_id.partner_id.name}"
