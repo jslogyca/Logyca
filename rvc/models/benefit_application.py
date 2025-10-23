@@ -103,6 +103,7 @@ class BenefitApplication(models.Model):
     date_done_cons = fields.Date(string='Date Solución', default=fields.Date.context_today)
     renewal = fields.Boolean('Renewal', default=False)
     email_colabora = fields.Char('Email Colabora', tracking=True)
+    send_activated = fields.Boolean('Enviado a Activar', default=False)
 
     def name_get(self):
         return [(product.id, '%s - %s' % (product.partner_id.partner_id.name, product.product_id.name)) for product in self]

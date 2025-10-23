@@ -162,20 +162,24 @@ class WizardMassSendKit(models.TransientModel):
                 if benefit_application.product_id.benefit_type == 'codigos':
                     activated = self.env['rvc.activations'].activate_gs1_codes(benefit_application)
                     if activated:
+                        benefit_application.send_activated = True
                         benefit_application.message_post(body=_(\
                             '✅ Se solicitó la activación de Códigos GS1.'))
                 elif benefit_application.product_id.benefit_type == 'colabora':
                     activated = self.env['rvc.activations'].activate_logyca_colabora(benefit_application)
                     if activated:
+                        benefit_application.send_activated = True
                         benefit_application.message_post(body=_(\
                             '✅ Se solicitó la activación de la plataforma LOGYCA / COLABORA.'))
                     else:
+                        benefit_application.send_activated = True
                         benefit_application.message_post(body=_(\
                             '🚫 No se pudo <strong>solicitar la activación</strong></u> de la plataforma LOGYCA / COLABORA.'))
                 elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
                     if benefit_application.digital_card_ids:
                         activated = self.env['rvc.activations'].activate_digital_cards(benefit_application)
                         if activated:
+                            benefit_application.send_activated = True
                             benefit_application.message_post(body=_(\
                             '✅ Se solicitó la activación de Tarjetas Digitales.'))
                     else:
