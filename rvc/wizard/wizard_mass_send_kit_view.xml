@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista del Wizard -->
+        <record id="view_wizard_mass_send_kit_form" model="ir.ui.view">
+            <field name="name">wizard.mass.send.kit.form</field>
+            <field name="model">wizard.mass.send.kit</field>
+            <field name="arch" type="xml">
+                <form string="Envío Masivo de Kit de Bienvenida">
+                    <sheet>
+                        <!-- Título -->
+                        <div class="oe_title" invisible="mostrar_resultado">
+                            <h1>📦 Envío Masivo de Kit de Bienvenida</h1>
+                            <p>Confirme el envío del kit a las postulaciones seleccionadas</p>
+                        </div>
+                        
+                        <div class="oe_title" invisible="not mostrar_resultado">
+                            <h1>📋 Resultado del Envío</h1>
+                        </div>
+                        
+                        <!-- Campos ocultos -->
+                        <field name="postulacion_ids" invisible="1"/>
+                        <field name="mostrar_resultado" invisible="1"/>
+                        <field name="total_seleccionadas" invisible="1"/>
+                        <field name="postulaciones_validas" invisible="1"/>
+                        <field name="postulaciones_invalidas" invisible="1"/>
+                        
+                        <!-- Mensaje de validación (antes de enviar) -->
+                        <div invisible="mostrar_resultado">
+                            <field name="mensaje_validacion" nolabel="1" widget="html" class="oe_form_field_html"/>
+                        </div>
+                        
+                        <!-- Resultado del envío (después de enviar) -->
+                        <div invisible="not mostrar_resultado">
+                            <field name="resultado_envio" nolabel="1" widget="html" class="oe_form_field_html"/>
+                        </div>
+                    </sheet>
+                    
+                    <!-- Botones - Vista de confirmación -->
+                    <footer invisible="mostrar_resultado">
+                        <button name="action_confirmar_envio" 
+                                string="Confirmar y Enviar" 
+                                type="object" 
+                                class="btn-primary"
+                                invisible="postulaciones_validas == 0"/>
+                        <button string="Cancelar" 
+                                class="btn-secondary" 
+                                special="cancel"/>
+                    </footer>
+                    
+                    <!-- Botones - Vista de resultado -->
+                    <footer invisible="not mostrar_resultado">
+                        <button name="action_cerrar" 
+                                string="Cerrar" 
+                                type="object" 
+                                class="btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Server Action para abrir el Wizard -->
+        <record id="action_mass_send_welcome_kit" model="ir.actions.server">
+            <field name="name">Enviar Kit de Bienvenida (Masivo)</field>
+            <field name="model_id" ref="rvc.model_benefit_application"/>
+            <field name="binding_model_id" ref="rvc.model_benefit_application"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="groups_id" eval="[(4, ref('rvc.group_rvc_manager'))]"/>
+            <field name="code">action = env['wizard.mass.send.kit'].with_context(active_ids=records.ids, active_model='benefit.application').create({}).action_open_wizard()</field>
+        </record>
+    </data>
+</odoo>

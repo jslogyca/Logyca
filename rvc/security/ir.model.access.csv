@@ -23,3 +23,4 @@ access_sup_log_import_rvc,log.import.rvc,model_log_import_rvc,rvc.group_rvc_supp
 access_sup_product_rvc,product.rvc,model_product_rvc,rvc.group_rvc_support,1,0,0,0
 access_sup_rvc_crecemype_theme,access_rvc_crecemype_theme,model_rvc_crecemype_theme,rvc.group_rvc_support,1,0,0,0
 access_sup_benefit_application,benefit.application,model_benefit_application,rvc.group_rvc_support,1,0,0,0
+access_wizard_mass_send_kit_manager,access.wizard.mass.send.kit.manager,model_wizard_mass_send_kit,rvc.group_rvc_manager,1,1,1,1
