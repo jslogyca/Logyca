@@ -171,12 +171,10 @@ class WizardMassSendKit(models.TransientModel):
                         benefit_application.send_activated = True
                         benefit_application.message_post(body=_(\
                             '✅ Se solicitó la activación de la plataforma LOGYCA / COLABORA.'))
-                        self.env.cr.commit()
                     else:
                         benefit_application.send_activated = True
                         benefit_application.message_post(body=_(\
                             '🚫 No se pudo <strong>solicitar la activación</strong></u> de la plataforma LOGYCA / COLABORA.'))
-                        self.env.cr.commit()
                 elif benefit_application.product_id.benefit_type == 'tarjeta_digital':
                     if benefit_application.digital_card_ids:
                         activated = self.env['rvc.activations'].activate_digital_cards(benefit_application)
@@ -184,7 +182,6 @@ class WizardMassSendKit(models.TransientModel):
                             benefit_application.send_activated = True
                             benefit_application.message_post(body=_(\
                             '✅ Se solicitó la activación de Tarjetas Digitales.'))
-                            self.env.cr.commit()
                     else:
                         raise ValidationError(
                             _('¡Error! No hay tarjetas digitales para generar 😔.\n\nPara solicitarlas: \n'
@@ -231,6 +228,7 @@ class WizardMassSendKit(models.TransientModel):
                 _logger.error(
                     f"Error al enviar kit para {postulacion.partner_id.partner_id.name}: {error_msg}"
                 )
+            self.env.cr.commit()
         
         # Preparar resultado HTML
         resultado_html = self._generar_resultado_html(
