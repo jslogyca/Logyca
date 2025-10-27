@@ -15,6 +15,7 @@
         'contacts',
         'sale',
         'website_sale',
+        'l10n_latam_base',
         ],
     'description': '''
 
