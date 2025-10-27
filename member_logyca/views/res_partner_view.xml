@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Vista para agregar Tipo de Documento antes del campo VAT -->
+    <record model="ir.ui.view" id="view_partner_form_identification_type">
+        <field name="name">res.partner.form.identification.type</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"></field>
+        <field name="arch" type="xml">
+            <field name="vat" position="before">
+                <field name="l10n_latam_identification_type_id" 
+                       string="Tipo de Documento"
+                       options="{'no_create': True, 'no_open': True}"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Vista para agregar campos de membresía -->
     <record model="ir.ui.view" id="view_partner_form_membertyb">
         <field name="name">res.partner.form.membertyb</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="logyca.view_partner_not_contacted_again_inherit"></field>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='x_reason_desvinculation_text']" position="after">
+                <field name="how_findout"/>
+                <field name="rango_type"/>
                 <field name="free_member_association" force_save="1" readonly="1" invisible="not free_member_association"/>
                 <field name="date_init_member_test" force_save="1" readonly="1" invisible="not free_member_association"/>
                 <field name="date_end_member_test" force_save="1" readonly="1" invisible="not free_member_association"/>

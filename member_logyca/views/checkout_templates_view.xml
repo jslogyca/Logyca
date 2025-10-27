@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-  <!-- Herencia para agregar campo rango_type en checkout -->
   <data>
+      <!-- Template para agregar Tipo de Documento ANTES del campo VAT -->
+      <template id="logyca_website_sale_identification_type" inherit_id="website_sale.address">
+        <xpath expr="//input[@name='vat']/.." position="before">
+          <t t-set="identification_types" t-value="request.env['l10n_latam.identification.type'].sudo().search([])"/>
+          <!-- Campo Tipo de Documento -->
+          <div class="col-lg-6 mb-2">
+            <div t-attf-class="#{error.get('l10n_latam_identification_type_id') and 'o_has_error'} form-group">
+              <label class="col-form-label" for="l10n_latam_identification_type_id">Tipo de Documento</label>
+              <select name="l10n_latam_identification_type_id" id="l10n_latam_identification_type_id"
+                      class="form-control #{error.get('l10n_latam_identification_type_id') and 'is-invalid' or ''}"
+                      t-att-readonly="'readonly' if mode[1] == 1 else None">
+                <option value="">— Seleccione —</option>
+                <t t-foreach="identification_types" t-as="id_type">
+                  <option t-att-value="id_type.id"
+                          t-att-selected="checkout.get('l10n_latam_identification_type_id') and int(checkout.get('l10n_latam_identification_type_id'))==id_type.id">
+                    <t t-esc="id_type.name"/>
+                  </option>
+                </t>
+              </select>
+            </div>
+          </div>
+        </xpath>
+      </template>
+
+      <!-- Herencia para agregar campo rango_type en checkout -->
       <template id="logyca_website_sale_rango_type_lg" inherit_id="website_sale.address">
         <xpath expr="//form[@action='/shop/address']/div[contains(@class, 'row')]" position="inside">
           <div class="col-lg-6 mb-2">
@@ -39,6 +63,10 @@
                 <option t-att-value="'asesor2'"
                         t-att-selected="checkout.get('how_findout')=='asesor2'">
                   Asesor Cristian Andres Vargas
+                </option>
+                <option t-att-value="'asesor3'"
+                        t-att-selected="checkout.get('how_findout')=='asesor3'">
+                  Asesor Angie Duque
                 </option>
                 <option t-att-value="'web'"
                         t-att-selected="checkout.get('how_findout')=='web'">
