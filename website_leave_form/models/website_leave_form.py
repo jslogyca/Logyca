@@ -35,7 +35,7 @@ class WebsiteLeaveForm(models.Model):
     def _compute_available_approvers(self):
         """
         Calcula los aprobadores disponibles basándose en el parent_id del empleado
-        Obtiene todos los terceros (res.partner) relacionados al parent_id
+        Solo trae el work_contact_id como aprobador (no sus contactos relacionados)
         """
         for record in self:
             approver_ids = []
@@ -43,26 +43,14 @@ class WebsiteLeaveForm(models.Model):
                 # Obtener el partner relacionado al parent_id del empleado
                 parent_partner = record.employee_id.parent_id
                 
-                # Si el parent_id tiene work_contact_id, buscar todos los contactos relacionados
+                # Solo usar work_contact_id como aprobador
                 if parent_partner.work_contact_id:
-                    # Obtener el contacto principal
                     main_contact = parent_partner.work_contact_id
-                    
-                    # Buscar todos los contactos relacionados a este partner
-                    # Incluye el contacto principal y todos sus contactos/hijos
                     related_partners = self.env['res.partner'].search([
                         ('id', '=', main_contact.id)
                     ])
                     approver_ids = related_partners.ids
-                else:
-                    # Si no tiene work_contact_id, usar el parent_id directamente
-                    related_partners = self.env['res.partner'].search([
-                        '|',
-                        ('id', '=', parent_partner.id),
-                        ('parent_id', '=', parent_partner.id),
-                        ('active', '=', True)
-                    ])
-                    approver_ids = related_partners.ids
+                # Si no tiene work_contact_id, no hay aprobadores
             
             record.available_approver_ids = [(6, 0, approver_ids)]
     
