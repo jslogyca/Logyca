@@ -51,10 +51,7 @@ class WebsiteLeaveForm(models.Model):
                     # Buscar todos los contactos relacionados a este partner
                     # Incluye el contacto principal y todos sus contactos/hijos
                     related_partners = self.env['res.partner'].search([
-                        '|',
-                        ('id', '=', main_contact.id),
-                        ('parent_id', '=', main_contact.id),
-                        ('active', '=', True)
+                        ('id', '=', main_contact.id)
                     ])
                     approver_ids = related_partners.ids
                 else:
