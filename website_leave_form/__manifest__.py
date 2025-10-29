@@ -13,6 +13,7 @@
     'depends': ['base', 'website', 'hr_holidays', 'mail'],
     'data': [
         'security/ir.model.access.csv',
+        'views/website_leave_form_views.xml',
         'views/website_leave_form_templates.xml',
         'views/hr_leave_type_views.xml',
         'data/mail_template.xml',
