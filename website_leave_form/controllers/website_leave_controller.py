@@ -26,26 +26,13 @@ class WebsiteLeaveController(http.Controller):
                 # Obtener el partner relacionado al parent_id del empleado
                 parent_partner = employee.parent_id
                 
-                # Si el parent_id tiene work_contact_id, buscar todos los contactos relacionados
+                # Solo usar work_contact_id como aprobador (no sus contactos relacionados)
                 if parent_partner.work_contact_id:
-                    # Obtener el contacto principal
                     main_contact = parent_partner.work_contact_id
-                    
-                    # Buscar todos los contactos relacionados a este partner
                     approvers = request.env['res.partner'].sudo().search([
-                        '|',
-                        ('id', '=', main_contact.id),
-                        ('parent_id', '=', main_contact.id),
-                        ('active', '=', True)
+                        ('id', '=', main_contact.id)
                     ])
-                else:
-                    # Si no tiene work_contact_id, usar el parent_id directamente
-                    approvers = request.env['res.partner'].sudo().search([
-                        '|',
-                        ('id', '=', parent_partner.id),
-                        ('parent_id', '=', parent_partner.id),
-                        ('active', '=', True)
-                    ])
+                # Si no tiene work_contact_id, no hay aprobadores (approvers queda vacío)
         
         # Fecha actual para el campo fecha de solicitud
         today = fields.Date.context_today(request.env['hr.leave'])
@@ -76,28 +63,14 @@ class WebsiteLeaveController(http.Controller):
                 # Obtener el partner relacionado al parent_id del empleado
                 parent_partner = employee.parent_id
                 
-                # Si el parent_id tiene work_contact_id, buscar todos los contactos relacionados
+                # Solo usar work_contact_id como aprobador (no sus contactos relacionados)
                 if parent_partner.work_contact_id:
-                    # Obtener el contacto principal
                     main_contact = parent_partner.work_contact_id
-                    
-                    # Buscar todos los contactos relacionados a este partner
                     approvers = request.env['res.partner'].sudo().search([
-                        '|',
-                        ('id', '=', main_contact.id),
-                        ('parent_id', '=', main_contact.id),
-                        ('active', '=', True)
+                        ('id', '=', main_contact.id)
                     ])
-                else:
-                    # Si no tiene work_contact_id, usar el parent_id directamente
-                    approvers = request.env['res.partner'].sudo().search([
-                        '|',
-                        ('id', '=', parent_partner.id),
-                        ('parent_id', '=', parent_partner.id),
-                        ('active', '=', True)
-                    ])
-                
-                approvers_data = [{'id': a.id, 'name': a.name} for a in approvers]
+                    approvers_data = [{'id': a.id, 'name': a.name} for a in approvers]
+                # Si no tiene work_contact_id, no hay aprobadores (approvers_data queda vacío)
         
         return approvers_data
 
