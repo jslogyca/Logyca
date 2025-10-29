@@ -10,11 +10,41 @@ class WebsiteLeaveController(http.Controller):
     def leave_form(self, **kwargs):
         """Muestra el formulario de ausencias"""
         leave_types = request.env['hr.leave.type'].sudo().search([])
-        # Obtener usuarios que pueden ser aprobadores
-        approvers = request.env['res.users'].sudo().search([
-            ('share', '=', False),  # Solo usuarios internos, no portales
-            ('active', '=', True)
-        ])
+        
+        # Obtener el email del parámetro si existe (para pre-cargar aprobadores)
+        email = kwargs.get('email', '')
+        approvers = request.env['res.partner'].sudo()
+        
+        if email:
+            # Buscar empleado por email para cargar sus aprobadores disponibles
+            employee = request.env['hr.employee'].sudo().search([
+                ('work_email', '=', email)
+            ], limit=1)
+            
+            if employee and employee.parent_id:
+                # Obtener el partner relacionado al parent_id del empleado
+                parent_partner = employee.parent_id
+                
+                # Si el parent_id tiene work_contact_id, buscar todos los contactos relacionados
+                if parent_partner.work_contact_id:
+                    # Obtener el contacto principal
+                    main_contact = parent_partner.work_contact_id
+                    
+                    # Buscar todos los contactos relacionados a este partner
+                    approvers = request.env['res.partner'].sudo().search([
+                        '|',
+                        ('id', '=', main_contact.id),
+                        ('parent_id', '=', main_contact.id),
+                        ('active', '=', True)
+                    ])
+                else:
+                    # Si no tiene work_contact_id, usar el parent_id directamente
+                    approvers = request.env['res.partner'].sudo().search([
+                        '|',
+                        ('id', '=', parent_partner.id),
+                        ('parent_id', '=', parent_partner.id),
+                        ('active', '=', True)
+                    ])
         
         # Fecha actual para el campo fecha de solicitud
         today = fields.Date.context_today(request.env['hr.leave'])
@@ -25,8 +55,49 @@ class WebsiteLeaveController(http.Controller):
             'today': today,
             'error': kwargs.get('error', ''),
             'success': kwargs.get('success', ''),
+            'email': email,
         }
         return request.render('website_leave_form.leave_form_template', values)
+
+    @http.route('/ausencias/get_approvers', type='json', auth='public', website=True, csrf=False)
+    def get_approvers(self, email):
+        """Obtiene los aprobadores disponibles para un email dado"""
+        approvers_data = []
+        
+        if email:
+            # Buscar empleado por email
+            employee = request.env['hr.employee'].sudo().search([
+                ('work_email', '=', email)
+            ], limit=1)
+            
+            if employee and employee.parent_id:
+                # Obtener el partner relacionado al parent_id del empleado
+                parent_partner = employee.parent_id
+                
+                # Si el parent_id tiene work_contact_id, buscar todos los contactos relacionados
+                if parent_partner.work_contact_id:
+                    # Obtener el contacto principal
+                    main_contact = parent_partner.work_contact_id
+                    
+                    # Buscar todos los contactos relacionados a este partner
+                    approvers = request.env['res.partner'].sudo().search([
+                        '|',
+                        ('id', '=', main_contact.id),
+                        ('parent_id', '=', main_contact.id),
+                        ('active', '=', True)
+                    ])
+                else:
+                    # Si no tiene work_contact_id, usar el parent_id directamente
+                    approvers = request.env['res.partner'].sudo().search([
+                        '|',
+                        ('id', '=', parent_partner.id),
+                        ('parent_id', '=', parent_partner.id),
+                        ('active', '=', True)
+                    ])
+                
+                approvers_data = [{'id': a.id, 'name': a.name} for a in approvers]
+        
+        return approvers_data
 
     @http.route('/ausencias/submit', type='http', auth='public', website=True, csrf=False, methods=['POST'])
     def submit_leave(self, **post):
@@ -60,7 +131,7 @@ class WebsiteLeaveController(http.Controller):
 
             # Validar que el aprobador existe
             approver_id = int(post.get('approver_id'))
-            approver = request.env['res.users'].sudo().browse(approver_id)
+            approver = request.env['res.partner'].sudo().browse(approver_id)
             
             if not approver.exists():
                 return request.redirect('/ausencias/formulario?error=El aprobador seleccionado no es válido')
@@ -101,19 +172,25 @@ class WebsiteLeaveController(http.Controller):
                     'res_id': leave.id,
                 })
             
-            # Crear actividad para el aprobador
+            # Crear actividad para el aprobador (buscar usuario relacionado al partner)
             if approver:
                 try:
-                    activity_type = request.env.ref('mail.mail_activity_data_todo', raise_if_not_found=False)
-                    if activity_type:
-                        request.env['mail.activity'].sudo().create({
-                            'activity_type_id': activity_type.id,
-                            'res_id': leave.id,
-                            'res_model_id': request.env['ir.model'].sudo().search([('model', '=', 'hr.leave')], limit=1).id,
-                            'user_id': approver.id,
-                            'summary': 'Aprobar solicitud de ausencia',
-                            'note': f'Nueva solicitud de ausencia de {employee.name} para aprobación.',
-                        })
+                    # Buscar el usuario relacionado al partner aprobador
+                    approver_user = request.env['res.users'].sudo().search([
+                        ('partner_id', '=', approver.id)
+                    ], limit=1)
+                    
+                    if approver_user:
+                        activity_type = request.env.ref('mail.mail_activity_data_todo', raise_if_not_found=False)
+                        if activity_type:
+                            request.env['mail.activity'].sudo().create({
+                                'activity_type_id': activity_type.id,
+                                'res_id': leave.id,
+                                'res_model_id': request.env['ir.model'].sudo().search([('model', '=', 'hr.leave')], limit=1).id,
+                                'user_id': approver_user.id,
+                                'summary': 'Aprobar solicitud de ausencia',
+                                'note': f'Nueva solicitud de ausencia de {employee.name} para aprobación.',
+                            })
                 except Exception as e:
                     # Si falla la creación de actividad, continuar (no es crítico)
                     pass
@@ -148,11 +225,62 @@ class WebsiteLeaveController(http.Controller):
 
             # Enviar email al aprobador
             if approver and approver.email:
-                template = request.env.ref('website_leave_form.email_template_leave_approval', raise_if_not_found=False)
-                if template:
-                    template.sudo().send_mail(leave_form.id, force_send=True, email_values={
-                        'email_to': approver.email,
+                try:
+                    template = request.env.ref('website_leave_form.email_template_leave_approval', raise_if_not_found=False)
+                    if template:
+                        # Enviar el email
+                        mail_id = template.sudo().send_mail(
+                            leave_form.id, 
+                            force_send=True, 
+                            email_values={
+                                'email_to': approver.email,
+                                'subject': f'Nueva Solicitud de Ausencia - {employee.name}',
+                            }
+                        )
+                        
+                        # Log de éxito
+                        request.env['ir.logging'].sudo().create({
+                            'name': 'Leave Approval Email Sent',
+                            'type': 'server',
+                            'level': 'info',
+                            'message': f'Email de notificación enviado exitosamente a {approver.email} para la ausencia {leave.id}',
+                            'path': 'website_leave_form',
+                            'func': 'submit_leave',
+                            'line': '0',
+                        })
+                    else:
+                        # Log si no se encuentra el template
+                        request.env['ir.logging'].sudo().create({
+                            'name': 'Leave Approval Email Template Not Found',
+                            'type': 'server',
+                            'level': 'warning',
+                            'message': 'No se encontró el template de email email_template_leave_approval',
+                            'path': 'website_leave_form',
+                            'func': 'submit_leave',
+                            'line': '0',
+                        })
+                except Exception as e:
+                    # Log de error pero no fallar la solicitud
+                    request.env['ir.logging'].sudo().create({
+                        'name': 'Leave Approval Email Error',
+                        'type': 'server',
+                        'level': 'error',
+                        'message': f'Error enviando email a {approver.email}: {str(e)}',
+                        'path': 'website_leave_form',
+                        'func': 'submit_leave',
+                        'line': '0',
                     })
+            elif approver and not approver.email:
+                # Log si el aprobador no tiene email
+                request.env['ir.logging'].sudo().create({
+                    'name': 'Leave Approval No Email',
+                    'type': 'server',
+                    'level': 'warning',
+                    'message': f'El aprobador {approver.name} no tiene email configurado',
+                    'path': 'website_leave_form',
+                    'func': 'submit_leave',
+                    'line': '0',
+                })
 
             return request.redirect('/ausencias/formulario?success=Solicitud de ausencia creada exitosamente. El aprobador ha sido notificado por correo electrónico.')
 
