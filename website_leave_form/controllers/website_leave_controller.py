@@ -17,6 +17,7 @@ class WebsiteLeaveController(http.Controller):
         
         if email:
             # Buscar empleado por email para cargar sus aprobadores disponibles
+            # NOTA: Búsqueda sin restricción de compañía para soportar multi-compañía
             employee = request.env['hr.employee'].sudo().search([
                 ('work_email', '=', email)
             ], limit=1)
@@ -66,6 +67,7 @@ class WebsiteLeaveController(http.Controller):
         
         if email:
             # Buscar empleado por email
+            # NOTA: Búsqueda sin restricción de compañía para soportar multi-compañía
             employee = request.env['hr.employee'].sudo().search([
                 ('work_email', '=', email)
             ], limit=1)
@@ -110,6 +112,7 @@ class WebsiteLeaveController(http.Controller):
                     return request.redirect('/ausencias/formulario?error=Todos los campos obligatorios deben ser completados')
 
             # Buscar empleado por email
+            # NOTA: Búsqueda sin restricción de compañía para soportar multi-compañía
             employee = request.env['hr.employee'].sudo().search([
                 ('work_email', '=', post.get('email'))
             ], limit=1)
@@ -309,6 +312,7 @@ class WebsiteLeaveController(http.Controller):
                 return request.redirect('/ausencias/consultar?error=Todos los campos son obligatorios')
 
             # Buscar empleado por número de identificación
+            # NOTA: Búsqueda sin restricción de compañía para soportar multi-compañía
             employee = request.env['hr.employee'].sudo().search([
                 ('identification_id', '=', identification_id)
             ], limit=1)
