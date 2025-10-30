@@ -334,4 +334,119 @@
             </div>
         </t>
     </template>
+
+    <!-- Template para confirmación exitosa de aprobación -->
+    <template id="approval_success" name="Aprobación Exitosa">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <div class="container mt-5 mb-5">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="card shadow-lg border-0">
+                                <div class="card-body p-5 text-center">
+                                    <!-- Icono de éxito -->
+                                    <div class="mb-4">
+                                        <t t-if="action == 'approve'">
+                                            <div class="text-success" style="font-size: 80px;">
+                                                <i class="fa fa-check-circle"></i>
+                                            </div>
+                                            <h2 class="text-success mt-3">¡Ausencia Aprobada!</h2>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="text-danger" style="font-size: 80px;">
+                                                <i class="fa fa-times-circle"></i>
+                                            </div>
+                                            <h2 class="text-danger mt-3">Ausencia Rechazada</h2>
+                                        </t>
+                                    </div>
+
+                                    <!-- Información de la solicitud -->
+                                    <div class="alert alert-info text-left">
+                                        <h5>Detalles de la Solicitud:</h5>
+                                        <ul class="list-unstyled mb-0">
+                                            <li><strong>Solicitante:</strong> <t t-esc="leave_form.name"/></li>
+                                            <li><strong>Email:</strong> <t t-esc="leave_form.email"/></li>
+                                            <li><strong>Tipo de Ausencia:</strong> <t t-esc="leave_form.holiday_status_id.name"/></li>
+                                            <li><strong>Desde:</strong> <t t-esc="leave_form.date_from.strftime('%d/%m/%Y %H:%M') if leave_form.date_from else ''"/></li>
+                                            <li><strong>Hasta:</strong> <t t-esc="leave_form.date_to.strftime('%d/%m/%Y %H:%M') if leave_form.date_to else ''"/></li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Mensaje de confirmación -->
+                                    <div class="alert alert-success">
+                                        <i class="fa fa-envelope-o"></i>
+                                        <strong>Notificación enviada</strong>
+                                        <p class="mb-0">Se ha enviado un email de confirmación al empleado 
+                                        <strong><t t-esc="leave_form.email"/></strong> 
+                                        informándole que su solicitud ha sido <strong><t t-esc="action_text"/></strong>.</p>
+                                    </div>
+
+                                    <!-- Información adicional -->
+                                    <div class="mt-4">
+                                        <p class="text-muted">
+                                            <i class="fa fa-info-circle"></i>
+                                            Esta página puede cerrarse. La acción ha sido registrada en el sistema.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Template para errores en la aprobación -->
+    <template id="approval_error" name="Error en Aprobación">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <div class="container mt-5 mb-5">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="card shadow-lg border-0">
+                                <div class="card-body p-5 text-center">
+                                    <!-- Icono de error -->
+                                    <div class="mb-4">
+                                        <div class="text-warning" style="font-size: 80px;">
+                                            <i class="fa fa-exclamation-triangle"></i>
+                                        </div>
+                                        <h2 class="text-warning mt-3"><t t-esc="error_title or 'Error'"/></h2>
+                                    </div>
+
+                                    <!-- Mensaje de error -->
+                                    <div class="alert alert-warning">
+                                        <p class="mb-0"><t t-esc="error_message or 'Ocurrió un error al procesar la solicitud.'"/></p>
+                                    </div>
+
+                                    <!-- Información adicional si existe -->
+                                    <t t-if="leave_form">
+                                        <div class="alert alert-info text-left mt-4">
+                                            <h6>Estado actual de la solicitud:</h6>
+                                            <ul class="list-unstyled mb-0">
+                                                <li><strong>Solicitante:</strong> <t t-esc="leave_form.name"/></li>
+                                                <li><strong>Estado:</strong> 
+                                                    <span t-if="leave_form.state == 'approved'" class="badge badge-success">Aprobada</span>
+                                                    <span t-elif="leave_form.state == 'rejected'" class="badge badge-danger">Rechazada</span>
+                                                    <span t-else="" class="badge badge-warning">Pendiente</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </t>
+
+                                    <!-- Información de ayuda -->
+                                    <div class="mt-4">
+                                        <p class="text-muted">
+                                            <i class="fa fa-info-circle"></i>
+                                            Si crees que esto es un error, por favor contacta al administrador del sistema.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
 </odoo>

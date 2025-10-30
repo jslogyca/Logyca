@@ -186,6 +186,9 @@ class WebsiteLeaveController(http.Controller):
                 'leave_id': leave.id,
             })
             
+            # Generar token de aprobación
+            leave_form.generate_approval_token()
+            
             # Crear copias de los adjuntos para website.leave.form (para auditoría)
             if attachment_ids:
                 for att_id in attachment_ids:
@@ -335,3 +338,52 @@ class WebsiteLeaveController(http.Controller):
 
         except Exception as e:
             return request.redirect(f'/ausencias/consultar?error=Error al procesar la consulta: {str(e)}')
+    
+    @http.route('/ausencias/approve/<int:leave_form_id>/<string:token>/<string:action>', type='http', auth='public', website=True, csrf=False)
+    def approve_leave_by_token(self, leave_form_id, token, action, **kwargs):
+        """
+        Procesa la aprobación o rechazo de una ausencia mediante token desde el email
+        """
+        try:
+            # Buscar la solicitud
+            leave_form = request.env['website.leave.form'].sudo().browse(leave_form_id)
+            
+            if not leave_form.exists():
+                return request.render('website_leave_form.approval_error', {
+                    'error_title': 'Solicitud no encontrada',
+                    'error_message': 'La solicitud de ausencia no existe o ha sido eliminada.',
+                })
+            
+            # Procesar según la acción
+            if action == 'approve':
+                result = leave_form.approve_by_token(token)
+            elif action == 'reject':
+                result = leave_form.reject_by_token(token)
+            else:
+                return request.render('website_leave_form.approval_error', {
+                    'error_title': 'Acción inválida',
+                    'error_message': 'La acción solicitada no es válida.',
+                })
+            
+            # Verificar resultado
+            if result.get('success'):
+                # Renderizar página de éxito
+                return request.render('website_leave_form.approval_success', {
+                    'leave_form': leave_form,
+                    'action': action,
+                    'action_text': 'aprobada' if action == 'approve' else 'rechazada',
+                })
+            else:
+                # Renderizar página de error
+                return request.render('website_leave_form.approval_error', {
+                    'error_title': 'No se pudo procesar la solicitud',
+                    'error_message': result.get('message', 'Error desconocido'),
+                    'leave_form': leave_form,
+                })
+        
+        except Exception as e:
+            return request.render('website_leave_form.approval_error', {
+                'error_title': 'Error del sistema',
+                'error_message': f'Ocurrió un error al procesar la solicitud: {str(e)}',
+            })
+
