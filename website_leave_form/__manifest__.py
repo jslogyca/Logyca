@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Formulario Web de Ausencias',
-    'version': '17.0.1.0.0',
+    'version': '17.0.1.1.3',
     'category': 'Human Resources',
     'summary': 'Permite crear ausencias desde un formulario web público',
     'description': """

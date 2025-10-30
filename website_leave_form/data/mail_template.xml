@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <data noupdate="1">
-        <!-- Email template para notificar al aprobador -->
-        <record id="email_template_leave_approval" model="mail.template">
+<odoo noupdate="1">
+    <!-- Email template para notificar al aprobador -->
+    <record id="email_template_leave_approval" model="mail.template">
             <field name="name">Notificación de Ausencia Pendiente</field>
             <field name="model_id" ref="model_website_leave_form"/>
             <field name="subject">Nueva Solicitud de Ausencia - ${object.name}</field>
@@ -34,10 +33,10 @@
                     <td style="padding: 8px 0; color: #2c3e50;">${object.email}</td>
                 </tr>
                 % if object.employee_id:
-                <tr>
-                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">🏢 Empleado:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;">${object.employee_id.name}</td>
-                </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">🏢 Empleado:</td>
+                        <td style="padding: 8px 0; color: #2c3e50;">${object.employee_id.name}</td>
+                    </tr>
                 % endif
                 <tr>
                     <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">📋 Tipo de Ausencia:</td>
@@ -56,74 +55,67 @@
                     <td style="padding: 8px 0; color: #2c3e50;">${format_datetime(object.date_to, tz='America/Bogota', dt_format='dd/MM/yyyy HH:mm')}</td>
                 </tr>
                 % if object.notes:
-                <tr>
-                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold; vertical-align: top;">💬 Motivo:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;">${object.notes}</td>
-                </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold; vertical-align: top;">💬 Motivo:</td>
+                        <td style="padding: 8px 0; color: #2c3e50;">${object.notes}</td>
+                    </tr>
                 % endif
                 % if object.attachment_ids:
-                <tr>
-                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold; vertical-align: top;">📎 Adjuntos:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;">
-                        ${len(object.attachment_ids)} documento(s) adjunto(s)
-                    </td>
-                </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold; vertical-align: top;">📎 Adjuntos:</td>
+                        <td style="padding: 8px 0; color: #2c3e50;">
+                            ${len(object.attachment_ids)} documento(s) adjunto(s)
+                        </td>
+                    </tr>
                 % endif
             </table>
         </div>
         
         % if object.leave_id:
-        <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 5px;">
-            <p style="margin: 0; color: #856404; font-size: 14px;">
-                ⚠️ <strong>Acción requerida:</strong> Esta solicitud necesita tu aprobación.
-            </p>
-        </div>
-        
-        <div style="text-align: center; margin: 30px 0;">
-            <table style="margin: 0 auto;">
-                <tr>
-                    <td style="padding: 0 10px;">
-                        <a href="${object.get_approval_url('approve')}" 
-                           style="background-color: #28a745; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
-                            ✅ Aprobar Ausencia
-                        </a>
-                    </td>
-                    <td style="padding: 0 10px;">
-                        <a href="${object.get_approval_url('reject')}" 
-                           style="background-color: #dc3545; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
-                            ❌ Rechazar Ausencia
-                        </a>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        
-        <div style="background-color: #d1ecf1; border-left: 4px solid #17a2b8; padding: 15px; margin: 20px 0; border-radius: 5px;">
-            <p style="margin: 0; color: #0c5460; font-size: 13px;">
-                💡 <strong>Aprobación en un clic:</strong> Usa los botones de arriba para aprobar o rechazar directamente desde este email, sin necesidad de iniciar sesión en el sistema.
-            </p>
-        </div>
-        
-        <div style="text-align: center; margin: 20px 0;">
-            <p style="color: #7f8c8d; font-size: 13px; margin: 5px 0;">También puedes ver los detalles completos en Odoo:</p>
-            <a href="${object.get_base_url()}/web#id=${object.leave_id.id}&amp;view_type=form&amp;model=hr.leave" 
-               style="color: #3498db; text-decoration: underline; font-size: 14px;">
-                👁️ Ver en Odoo
-            </a>
-        </div>
-        
-        <div style="text-align: center; margin: 20px 0;">
-            <p style="background-color: #f8f9fa; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 11px; color: #495057; word-break: break-all;">
-                <strong>Aprobar:</strong> ${object.get_approval_url('approve')}<br/>
-                <strong>Rechazar:</strong> ${object.get_approval_url('reject')}
-            </p>
-        </div>
+            <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 5px;">
+                <p style="margin: 0; color: #856404; font-size: 14px;">
+                    ⚠️ <strong>Acción requerida:</strong> Esta solicitud necesita tu aprobación.
+                </p>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <table style="margin: 0 auto;">
+                    <tr>
+                        <td style="padding: 0 10px;">
+                            <a href="${object.get_approval_url('approve')}" 
+                               style="background-color: #28a745; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
+                                ✅ Aprobar Ausencia
+                            </a>
+                        </td>
+                        <td style="padding: 0 10px;">
+                            <a href="${object.get_approval_url('reject')}" 
+                               style="background-color: #dc3545; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
+                                ❌ Rechazar Ausencia
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div style="background-color: #d1ecf1; border-left: 4px solid #17a2b8; padding: 15px; margin: 20px 0; border-radius: 5px;">
+                <p style="margin: 0; color: #0c5460; font-size: 13px;">
+                    💡 <strong>Aprobación en un clic:</strong> Usa los botones de arriba para aprobar o rechazar directamente desde este email, sin necesidad de iniciar sesión en el sistema.
+                </p>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <p style="color: #7f8c8d; font-size: 13px; margin: 5px 0;">También puedes ver los detalles completos en Odoo:</p>
+                <a href="${object.get_base_url()}/web#id=${object.leave_id.id}&amp;view_type=form&amp;model=hr.leave" 
+                   style="color: #3498db; text-decoration: underline; font-size: 14px;">
+                    👁️ Ver en Odoo
+                </a>
+            </div>
         % else:
-        <div style="background-color: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; margin: 20px 0; border-radius: 5px;">
-            <p style="margin: 0; color: #721c24; font-size: 14px;">
-                ⚠️ <strong>Advertencia:</strong> La ausencia aún no ha sido creada en el sistema. Por favor contacta al administrador.
-            </p>
-        </div>
+            <div style="background-color: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; margin: 20px 0; border-radius: 5px;">
+                <p style="margin: 0; color: #721c24; font-size: 14px;">
+                    ⚠️ <strong>Advertencia:</strong> La ausencia aún no ha sido creada en el sistema. Por favor contacta al administrador.
+                </p>
+            </div>
         % endif
         
         <div style="background-color: #d1ecf1; border-left: 4px solid #17a2b8; padding: 15px; margin: 20px 0; border-radius: 5px;">
@@ -281,5 +273,4 @@
             </field>
             <field name="auto_delete" eval="True"/>
         </record>
-    </data>
 </odoo>

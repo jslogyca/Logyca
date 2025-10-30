@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <data noupdate="1">
+<odoo noupdate="1">
         <!-- Cron Job para enviar recordatorios de ausencias -->
         <record id="ir_cron_send_leave_reminders" model="ir.cron">
             <field name="name">Enviar Recordatorios de Ausencias (8 días antes)</field>
@@ -14,5 +13,4 @@
             <field name="doall" eval="False"/>
             <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).replace(hour=8, minute=0, second=0)"/>
         </record>
-    </data>
 </odoo>
