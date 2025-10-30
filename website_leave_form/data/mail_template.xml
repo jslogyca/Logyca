@@ -15,7 +15,7 @@
         </h2>
         
         <p style="font-size: 16px; color: #34495e;">
-            Hola <strong>${object.approver_id.name}</strong>,
+            Hola <strong><t t-out="object.approver_id.name"/></strong>,
         </p>
         
         <p style="font-size: 14px; color: #7f8c8d;">
@@ -26,52 +26,52 @@
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                     <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold; width: 40%;">👤 Solicitante:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;"><strong>${object.name}</strong></td>
+                    <td style="padding: 8px 0; color: #2c3e50;"><strong><t t-out="object.name"/></strong></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">📧 Email:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;">${object.email}</td>
+                    <td style="padding: 8px 0; color: #2c3e50;"><t t-out="object.email"/></td>
                 </tr>
-                % if object.employee_id:
+                <t t-if="object.employee_id">
                     <tr>
                         <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">🏢 Empleado:</td>
-                        <td style="padding: 8px 0; color: #2c3e50;">${object.employee_id.name}</td>
+                        <td style="padding: 8px 0; color: #2c3e50;"><t t-out="object.employee_id.name"/></td>
                     </tr>
-                % endif
+                </t>
                 <tr>
                     <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">📋 Tipo de Ausencia:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;"><strong style="color: #e74c3c;">${object.holiday_status_id.name}</strong></td>
+                    <td style="padding: 8px 0; color: #2c3e50;"><strong style="color: #e74c3c;"><t t-out="object.holiday_status_id.name"/></strong></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">📅 Fecha Solicitud:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;">${format_date(object.request_date)}</td>
+                    <td style="padding: 8px 0; color: #2c3e50;"><t t-out="object.request_date" t-options="{'widget': 'date'}"/></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">🕐 Desde:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;">${format_datetime(object.date_from, tz='America/Bogota', dt_format='dd/MM/yyyy HH:mm')}</td>
+                    <td style="padding: 8px 0; color: #2c3e50;"><t t-out="object.date_from" t-options="{'widget': 'datetime', 'tz_name': 'America/Bogota', 'format': 'dd/MM/yyyy HH:mm'}"/></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">🕐 Hasta:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;">${format_datetime(object.date_to, tz='America/Bogota', dt_format='dd/MM/yyyy HH:mm')}</td>
+                    <td style="padding: 8px 0; color: #2c3e50;"><t t-out="object.date_to" t-options="{'widget': 'datetime', 'tz_name': 'America/Bogota', 'format': 'dd/MM/yyyy HH:mm'}"/></td>
                 </tr>
-                % if object.notes:
+                <t t-if="object.notes">
                     <tr>
                         <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold; vertical-align: top;">💬 Motivo:</td>
-                        <td style="padding: 8px 0; color: #2c3e50;">${object.notes}</td>
+                        <td style="padding: 8px 0; color: #2c3e50;"><t t-out="object.notes"/></td>
                     </tr>
-                % endif
-                % if object.attachment_ids:
+                </t>
+                <t t-if="object.attachment_ids">
                     <tr>
                         <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold; vertical-align: top;">📎 Adjuntos:</td>
                         <td style="padding: 8px 0; color: #2c3e50;">
-                            ${len(object.attachment_ids)} documento(s) adjunto(s)
+                            <t t-out="len(object.attachment_ids)"/> documento(s) adjunto(s)
                         </td>
                     </tr>
-                % endif
+                </t>
             </table>
         </div>
         
-        % if object.leave_id:
+        <t t-if="object.leave_id">
             <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 5px;">
                 <p style="margin: 0; color: #856404; font-size: 14px;">
                     ⚠️ <strong>Acción requerida:</strong> Esta solicitud necesita tu aprobación.
@@ -82,13 +82,13 @@
                 <table style="margin: 0 auto;">
                     <tr>
                         <td style="padding: 0 10px;">
-                            <a href="${object.get_approval_url('approve')}" 
+                            <a t-attf-href="{{object.get_approval_url('approve')}}" 
                                style="background-color: #28a745; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                                 ✅ Aprobar Ausencia
                             </a>
                         </td>
                         <td style="padding: 0 10px;">
-                            <a href="${object.get_approval_url('reject')}" 
+                            <a t-attf-href="{{object.get_approval_url('reject')}}" 
                                style="background-color: #dc3545; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                                 ❌ Rechazar Ausencia
                             </a>
@@ -105,18 +105,19 @@
             
             <div style="text-align: center; margin: 20px 0;">
                 <p style="color: #7f8c8d; font-size: 13px; margin: 5px 0;">También puedes ver los detalles completos en Odoo:</p>
-                <a href="${object.get_base_url()}/web#id=${object.leave_id.id}&amp;view_type=form&amp;model=hr.leave" 
+                <a t-attf-href="{{object.get_base_url()}}/web#id={{object.leave_id.id}}&amp;view_type=form&amp;model=hr.leave" 
                    style="color: #3498db; text-decoration: underline; font-size: 14px;">
                     👁️ Ver en Odoo
                 </a>
             </div>
-        % else:
+        </t>
+        <t t-else="">
             <div style="background-color: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; margin: 20px 0; border-radius: 5px;">
                 <p style="margin: 0; color: #721c24; font-size: 14px;">
                     ⚠️ <strong>Advertencia:</strong> La ausencia aún no ha sido creada en el sistema. Por favor contacta al administrador.
                 </p>
             </div>
-        % endif
+        </t>
         
         <div style="background-color: #d1ecf1; border-left: 4px solid #17a2b8; padding: 15px; margin: 20px 0; border-radius: 5px;">
             <p style="margin: 0; color: #0c5460; font-size: 13px;">
@@ -152,38 +153,38 @@
         </div>
         
         <p style="font-size: 16px; color: #34495e;">
-            Hola <strong>${object.name}</strong>,
+            Hola <strong><t t-out="object.name"/></strong>,
         </p>
         
         <p style="font-size: 14px; color: #7f8c8d;">
-            Te informamos que tu solicitud de ausencia ha sido <strong style="color: #28a745;">APROBADA</strong> por ${object.approver_id.name}.
+            Te informamos que tu solicitud de ausencia ha sido <strong style="color: #28a745;">APROBADA</strong> por <t t-out="object.approver_id.name"/>.
         </p>
         
         <div style="background-color: #d4edda; border-left: 4px solid #28a745; padding: 20px; border-radius: 5px; margin: 20px 0;">
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                     <td style="padding: 8px 0; color: #155724; font-weight: bold; width: 40%;">📋 Tipo de Ausencia:</td>
-                    <td style="padding: 8px 0; color: #155724;"><strong>${object.holiday_status_id.name}</strong></td>
+                    <td style="padding: 8px 0; color: #155724;"><strong><t t-out="object.holiday_status_id.name"/></strong></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #155724; font-weight: bold;">📅 Fecha Solicitud:</td>
-                    <td style="padding: 8px 0; color: #155724;">${format_date(object.request_date)}</td>
+                    <td style="padding: 8px 0; color: #155724;"><t t-out="object.request_date" t-options="{'widget': 'date'}"/></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #155724; font-weight: bold;">🕐 Desde:</td>
-                    <td style="padding: 8px 0; color: #155724;">${format_datetime(object.date_from, tz='America/Bogota', dt_format='dd/MM/yyyy HH:mm')}</td>
+                    <td style="padding: 8px 0; color: #155724;"><t t-out="object.date_from" t-options="{'widget': 'datetime', 'tz_name': 'America/Bogota', 'format': 'dd/MM/yyyy HH:mm'}"/></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #155724; font-weight: bold;">🕐 Hasta:</td>
-                    <td style="padding: 8px 0; color: #155724;">${format_datetime(object.date_to, tz='America/Bogota', dt_format='dd/MM/yyyy HH:mm')}</td>
+                    <td style="padding: 8px 0; color: #155724;"><t t-out="object.date_to" t-options="{'widget': 'datetime', 'tz_name': 'America/Bogota', 'format': 'dd/MM/yyyy HH:mm'}"/></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #155724; font-weight: bold;">✅ Aprobado por:</td>
-                    <td style="padding: 8px 0; color: #155724;">${object.approver_id.name}</td>
+                    <td style="padding: 8px 0; color: #155724;"><t t-out="object.approver_id.name"/></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #155724; font-weight: bold;">📆 Fecha Aprobación:</td>
-                    <td style="padding: 8px 0; color: #155724;">${format_datetime(object.approval_date, tz='America/Bogota', dt_format='dd/MM/yyyy HH:mm')}</td>
+                    <td style="padding: 8px 0; color: #155724;"><t t-out="object.approval_date" t-options="{'widget': 'datetime', 'tz_name': 'America/Bogota', 'format': 'dd/MM/yyyy HH:mm'}"/></td>
                 </tr>
             </table>
         </div>
@@ -196,7 +197,7 @@
         
         <p style="font-size: 12px; color: #95a5a6; text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ecf0f1;">
             Este es un mensaje automático generado desde el sistema de gestión de ausencias.<br/>
-            Copia enviada a: ${object.approver_id.name}
+            Copia enviada a: <t t-out="object.approver_id.name"/>
         </p>
     </div>
 </div>
@@ -222,51 +223,51 @@
         </div>
         
         <p style="font-size: 16px; color: #34495e;">
-            Hola <strong>${object.name}</strong>,
+            Hola <strong><t t-out="object.name"/></strong>,
         </p>
         
         <p style="font-size: 14px; color: #7f8c8d;">
-            Te informamos que tu solicitud de ausencia ha sido <strong style="color: #dc3545;">RECHAZADA</strong> por ${object.approver_id.name}.
+            Te informamos que tu solicitud de ausencia ha sido <strong style="color: #dc3545;">RECHAZADA</strong> por <t t-out="object.approver_id.name"/>.
         </p>
         
         <div style="background-color: #f8d7da; border-left: 4px solid #dc3545; padding: 20px; border-radius: 5px; margin: 20px 0;">
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                     <td style="padding: 8px 0; color: #721c24; font-weight: bold; width: 40%;">📋 Tipo de Ausencia:</td>
-                    <td style="padding: 8px 0; color: #721c24;"><strong>${object.holiday_status_id.name}</strong></td>
+                    <td style="padding: 8px 0; color: #721c24;"><strong><t t-out="object.holiday_status_id.name"/></strong></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #721c24; font-weight: bold;">📅 Fecha Solicitud:</td>
-                    <td style="padding: 8px 0; color: #721c24;">${format_date(object.request_date)}</td>
+                    <td style="padding: 8px 0; color: #721c24;"><t t-out="object.request_date" t-options="{'widget': 'date'}"/></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #721c24; font-weight: bold;">🕐 Desde:</td>
-                    <td style="padding: 8px 0; color: #721c24;">${format_datetime(object.date_from, tz='America/Bogota', dt_format='dd/MM/yyyy HH:mm')}</td>
+                    <td style="padding: 8px 0; color: #721c24;"><t t-out="object.date_from" t-options="{'widget': 'datetime', 'tz_name': 'America/Bogota', 'format': 'dd/MM/yyyy HH:mm'}"/></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #721c24; font-weight: bold;">🕐 Hasta:</td>
-                    <td style="padding: 8px 0; color: #721c24;">${format_datetime(object.date_to, tz='America/Bogota', dt_format='dd/MM/yyyy HH:mm')}</td>
+                    <td style="padding: 8px 0; color: #721c24;"><t t-out="object.date_to" t-options="{'widget': 'datetime', 'tz_name': 'America/Bogota', 'format': 'dd/MM/yyyy HH:mm'}"/></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #721c24; font-weight: bold;">❌ Rechazado por:</td>
-                    <td style="padding: 8px 0; color: #721c24;">${object.approver_id.name}</td>
+                    <td style="padding: 8px 0; color: #721c24;"><t t-out="object.approver_id.name"/></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #721c24; font-weight: bold;">📆 Fecha Rechazo:</td>
-                    <td style="padding: 8px 0; color: #721c24;">${format_datetime(object.approval_date, tz='America/Bogota', dt_format='dd/MM/yyyy HH:mm')}</td>
+                    <td style="padding: 8px 0; color: #721c24;"><t t-out="object.approval_date" t-options="{'widget': 'datetime', 'tz_name': 'America/Bogota', 'format': 'dd/MM/yyyy HH:mm'}"/></td>
                 </tr>
             </table>
         </div>
         
         <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 5px;">
             <p style="margin: 0; color: #856404; font-size: 13px;">
-                💡 <strong>Recomendación:</strong> Si tienes dudas sobre el rechazo, te sugerimos contactar directamente con ${object.approver_id.name}.
+                💡 <strong>Recomendación:</strong> Si tienes dudas sobre el rechazo, te sugerimos contactar directamente con <t t-out="object.approver_id.name"/>.
             </p>
         </div>
         
         <p style="font-size: 12px; color: #95a5a6; text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ecf0f1;">
             Este es un mensaje automático generado desde el sistema de gestión de ausencias.<br/>
-            Copia enviada a: ${object.approver_id.name}
+            Copia enviada a: <t t-out="object.approver_id.name"/>
         </p>
     </div>
 </div>
