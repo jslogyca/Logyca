@@ -5,16 +5,16 @@
             <field name="name">Notificación de Ausencia Pendiente</field>
             <field name="model_id" ref="model_website_leave_form"/>
             <field name="subject">Nueva Solicitud de Ausencia - ${object.name}</field>
-            <field name="email_from">${(object.employee_id.company_id.email or '')|safe}</field>
+            <field name="email_from">${(object.email or '')|safe}</field>
             <field name="email_to">${object.approver_id.email|safe}</field>
             <field name="body_html" type="html">
 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
     <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        <h2 style="color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px;">
+        <h2 style="color: #51534A; border-bottom: 3px solid #3498db; padding-bottom: 10px;">
             🔔 Nueva Solicitud de Ausencia Pendiente
         </h2>
         
-        <p style="font-size: 16px; color: #34495e;">
+        <p style="font-size: 16px; color: #51534A;">
             Hola <strong><t t-out="object.approver_id.name"/></strong>,
         </p>
         
@@ -26,44 +26,44 @@
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                     <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold; width: 40%;">👤 Solicitante:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;"><strong><t t-out="object.name"/></strong></td>
+                    <td style="padding: 8px 0; color: #51534A;"><strong><t t-out="object.name"/></strong></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">📧 Email:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;"><t t-out="object.email"/></td>
+                    <td style="padding: 8px 0; color: #51534A;"><t t-out="object.email"/></td>
                 </tr>
                 <t t-if="object.employee_id">
                     <tr>
                         <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">🏢 Empleado:</td>
-                        <td style="padding: 8px 0; color: #2c3e50;"><t t-out="object.employee_id.name"/></td>
+                        <td style="padding: 8px 0; color: #51534A;"><t t-out="object.employee_id.name"/></td>
                     </tr>
                 </t>
                 <tr>
                     <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">📋 Tipo de Ausencia:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;"><strong style="color: #e74c3c;"><t t-out="object.holiday_status_id.name"/></strong></td>
+                    <td style="padding: 8px 0; color: #51534A;"><strong style="color: #FC4C02;"><t t-out="object.holiday_status_id.name"/></strong></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">📅 Fecha Solicitud:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;"><t t-out="object.request_date" t-options="{'widget': 'date'}"/></td>
+                    <td style="padding: 8px 0; color: #51534A;"><t t-out="object.request_date" t-options="{'widget': 'date'}"/></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">🕐 Desde:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;"><t t-out="object.date_from" t-options="{'widget': 'datetime', 'tz_name': 'America/Bogota', 'format': 'dd/MM/yyyy HH:mm'}"/></td>
+                    <td style="padding: 8px 0; color: #51534A;"><t t-out="object.date_from" t-options="{'widget': 'datetime', 'tz_name': 'America/Bogota', 'format': 'dd/MM/yyyy HH:mm'}"/></td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">🕐 Hasta:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;"><t t-out="object.date_to" t-options="{'widget': 'datetime', 'tz_name': 'America/Bogota', 'format': 'dd/MM/yyyy HH:mm'}"/></td>
+                    <td style="padding: 8px 0; color: #51534A;"><t t-out="object.date_to" t-options="{'widget': 'datetime', 'tz_name': 'America/Bogota', 'format': 'dd/MM/yyyy HH:mm'}"/></td>
                 </tr>
                 <t t-if="object.notes">
                     <tr>
                         <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold; vertical-align: top;">💬 Motivo:</td>
-                        <td style="padding: 8px 0; color: #2c3e50;"><t t-out="object.notes"/></td>
+                        <td style="padding: 8px 0; color: #51534A;"><t t-out="object.notes"/></td>
                     </tr>
                 </t>
                 <t t-if="object.attachment_ids">
                     <tr>
                         <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold; vertical-align: top;">📎 Adjuntos:</td>
-                        <td style="padding: 8px 0; color: #2c3e50;">
+                        <td style="padding: 8px 0; color: #51534A;">
                             <t t-out="len(object.attachment_ids)"/> documento(s) adjunto(s)
                         </td>
                     </tr>
@@ -72,8 +72,8 @@
         </div>
         
         <t t-if="object.leave_id">
-            <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 5px;">
-                <p style="margin: 0; color: #856404; font-size: 14px;">
+            <div style="background-color: #00B398; border-left: 4px solid #f5f5f5; padding: 15px; margin: 20px 0; border-radius: 5px;">
+                <p style="margin: 0; color: #f5f5f5; font-size: 14px;">
                     ⚠️ <strong>Acción requerida:</strong> Esta solicitud necesita tu aprobación.
                 </p>
             </div>
@@ -83,7 +83,7 @@
                     <tr>
                         <td style="padding: 0 10px;">
                             <a t-attf-href="{{object.get_approval_url('approve')}}" 
-                               style="background-color: #28a745; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
+                               style="background-color: #00B398; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                                 ✅ Aprobar Ausencia
                             </a>
                         </td>
@@ -97,8 +97,8 @@
                 </table>
             </div>
             
-            <div style="background-color: #d1ecf1; border-left: 4px solid #17a2b8; padding: 15px; margin: 20px 0; border-radius: 5px;">
-                <p style="margin: 0; color: #0c5460; font-size: 13px;">
+            <div style="background-color: #B9B9B5; border-left: 4px solid #51534A; padding: 15px; margin: 20px 0; border-radius: 5px;">
+                <p style="margin: 0; color: #51534A; font-size: 13px;">
                     💡 <strong>Aprobación en un clic:</strong> Usa los botones de arriba para aprobar o rechazar directamente desde este email, sin necesidad de iniciar sesión en el sistema.
                 </p>
             </div>
@@ -119,8 +119,8 @@
             </div>
         </t>
         
-        <div style="background-color: #d1ecf1; border-left: 4px solid #17a2b8; padding: 15px; margin: 20px 0; border-radius: 5px;">
-            <p style="margin: 0; color: #0c5460; font-size: 13px;">
+        <div style="background-color: #B9B9B5; border-left: 4px solid #51534A; padding: 15px; margin: 20px 0; border-radius: 5px;">
+            <p style="margin: 0; color: #51534A; font-size: 13px;">
                 💡 <strong>Nota:</strong> Recuerda aprobar o rechazar esta solicitud lo antes posible para que el empleado pueda planificar adecuadamente.
             </p>
         </div>
