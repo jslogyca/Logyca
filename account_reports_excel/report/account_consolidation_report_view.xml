@@ -9,23 +9,13 @@
             <tree string="Consolidación por Cuenta Contable" 
                   create="false" 
                   delete="false" 
-                  edit="false"
-                  decoration-info="total_amount_currency != 0">
-                <field name="account_code" string="Código"/>
-                <field name="account_name" string="Cuenta Contable"/>
-                <field name="total_amount_currency" 
-                       string="Total Moneda Extranjera"
-                       sum="Total Moneda Extranjera"
-                       widget="monetary"/>
-                <field name="foreign_currency_id" string="Divisa"/>
-                <field name="total_balance" 
-                       string="Balance Total"
-                       sum="Balance Total"
-                       widget="monetary"/>
-                <field name="currency_id" invisible="1"/>
-                <field name="count_lines" string="# Apuntes"/>
-                <field name="date_to" string="Fecha de Corte"/>
-                <field name="company_id" groups="base.group_multi_company"/>
+                  edit="false">
+                <field name="account_code"/>
+                <field name="account_name"/>
+                <field name="total_amount_currency"/>
+                <field name="total_balance"/>
+                <field name="count_lines"/>
+                <field name="date_to"/>
             </tree>
         </field>
     </record>
@@ -37,9 +27,8 @@
         <field name="arch" type="xml">
             <pivot string="Análisis de Consolidación">
                 <field name="account_code" type="row"/>
-                <field name="total_amount_currency" type="measure"/>
                 <field name="total_balance" type="measure"/>
-                <field name="count_lines" type="measure"/>
+                <field name="total_amount_currency" type="measure"/>
             </pivot>
         </field>
     </record>
@@ -63,37 +52,8 @@
         <field name="model">account.consolidation.report</field>
         <field name="arch" type="xml">
             <search string="Buscar Consolidación">
-                <field name="account_code" string="Código Cuenta"/>
-                <field name="account_name" string="Nombre Cuenta"/>
-                <field name="account_id" string="Cuenta"/>
-                
-                <filter name="with_foreign_currency" 
-                        string="Con Moneda Extranjera"
-                        domain="[('total_amount_currency', '!=', 0)]"/>
-                
-                <filter name="today" 
-                        string="Hoy"
-                        domain="[('date_to', '=', context_today().strftime('%Y-%m-%d'))]"/>
-                
-                <filter name="this_month" 
-                        string="Este Mes"
-                        domain="[('date_to', '&gt;=', context_today().strftime('%Y-%m-01')),
-                                ('date_to', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
-                
-                <separator/>
-                
-                <group expand="0" string="Agrupar Por">
-                    <filter name="group_by_account" 
-                            string="Cuenta Contable"
-                            context="{'group_by': 'account_id'}"/>
-                    <filter name="group_by_currency" 
-                            string="Moneda Extranjera"
-                            context="{'group_by': 'foreign_currency_id'}"/>
-                    <filter name="group_by_company" 
-                            string="Compañía"
-                            context="{'group_by': 'company_id'}"
-                            groups="base.group_multi_company"/>
-                </group>
+                <field name="account_code"/>
+                <field name="account_name"/>
             </search>
         </field>
     </record>
@@ -103,18 +63,9 @@
         <field name="name">Consolidación por Cuenta Contable</field>
         <field name="res_model">account.consolidation.report</field>
         <field name="view_mode">tree,pivot,graph</field>
-        <field name="search_view_id" ref="view_account_consolidation_report_search"/>
-        <field name="context">{
-            'search_default_with_foreign_currency': 0,
-            'search_default_today': 1,
-        }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 No hay datos de consolidación disponibles
-            </p>
-            <p>
-                Este reporte muestra la consolidación de valores por cuenta contable,
-                incluyendo el total en moneda extranjera y el balance total.
             </p>
         </field>
     </record>
@@ -122,7 +73,7 @@
     <!-- Elemento de menú -->
     <menuitem id="menu_account_consolidation_report"
               name="Consolidación por Cuenta"
-              parent="account.menu_finance_reports"
+              parent="account.menu_finance_entries_accounting_miscellaneous" 
               action="action_account_consolidation_report"
               sequence="50"/>
 
