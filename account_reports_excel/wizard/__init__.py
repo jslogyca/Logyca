@@ -3,3 +3,4 @@
 from . import report_excel_sale_product_wizard
 from . import account_income_report_wizard
 from . import account_expense_report_wizard
+from . import account_consolidation_wizard
