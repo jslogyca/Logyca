@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista formulario extendida de survey.user_input -->
+    <record id="survey_user_input_form_view_inherit" model="ir.ui.view">
+        <field name="name">survey.user_input.form.inherit</field>
+        <field name="model">survey.user_input</field>
+        <field name="inherit_id" ref="survey.survey_user_input_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Agregar el botón en el header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_associate_partner_by_nit" 
+                        string="Asociar Tercero por NIT" 
+                        type="object" 
+                        class="oe_highlight" 
+                        invisible="partner_id"/>
+            </xpath>
+            
+            <!-- Agregar el campo partner_id después del campo nickname -->
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="nickname" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista tree extendida de survey.user_input -->
+    <record id="survey_user_input_tree_view_inherit" model="ir.ui.view">
+        <field name="name">survey.user_input.tree.inherit</field>
+        <field name="model">survey.user_input</field>
+        <field name="inherit_id" ref="survey.survey_user_input_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="nickname" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

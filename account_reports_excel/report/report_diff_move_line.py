@@ -17,6 +17,8 @@ class ReportDiffMoveLine(models.Model):
     account_id = fields.Many2one('account.account', 'Cuenta', readonly=True)
     company_id = fields.Many2one('res.company', 'Compañía', readonly=True)
     partner_id = fields.Many2one('res.partner', 'Asociado', readonly=True)
+    partner_id = fields.Many2one('res.partner', 'Asociado', readonly=True)
+    currency_id = fields.Many2one('res.currency', 'Moneda', readonly=True)    
     amount_currency = fields.Float(string='Importe en divisa')
     balance = fields.Float(string='Balance')
     date = fields.Date('Fecha')
@@ -32,7 +34,8 @@ class ReportDiffMoveLine(models.Model):
             l.balance as balance,
             l.date as date,
             l.company_id as company_id,
-            l.partner_id as partner_id
+            l.partner_id as partner_id,
+            l.currency_id as currency_id
 		"""
         return select_str
 
