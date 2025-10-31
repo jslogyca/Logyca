@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista formulario extendida de survey.user_input -->
+    <record id="survey_survey_view_form_partner" model="ir.ui.view">
+        <field name="name">survey.survey.view.form.partner</field>
+        <field name="model">survey.survey</field>
+        <field name="inherit_id" ref="survey.survey_survey_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='has_conditional_questions']" position="after">
+                <field name="form_partner" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

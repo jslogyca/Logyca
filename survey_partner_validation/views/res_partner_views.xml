@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Herencia de la vista del formulario de res.partner -->
+    <record id="view_partner_form_inherit_survey_button" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.survey.button</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="partner_survey.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Localizamos el botón original y modificamos su invisible -->
+            <xpath expr="//button[@name='action_view_surveys' and contains(@class, 'oe_stat_button')][1]" position="attributes">
+                <attribute name="invisible">surveys_count == 0</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Vista tree extendida de res.partner -->
+    <record id="view_partner_tree_inherit_survey" model="ir.ui.view">
+        <field name="name">res.partner.tree.inherit.survey</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='display_name']" position="after">
+                <field name="requires_survey" optional="hide"/>
+                <field name="survey_completed" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
