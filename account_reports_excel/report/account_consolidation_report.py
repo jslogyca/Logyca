@@ -47,20 +47,23 @@ class AccountConsolidationReport(models.Model):
         readonly=True,
         help='Número de apuntes contables de esta cuenta'
     )
-    foreign_currency_id = fields.Many2one(
-        'res.currency',
-        'Moneda Extranjera',
-        readonly=True,
-        help='Moneda extranjera predominante en los apuntes'
-    )
 
     def _select(self):
         select_str = """
             SELECT 
-                ROW_NUMBER() OVER (ORDER BY a.code) as id,
+                MIN(l.id) as id,
                 l.account_id as account_id,
                 a.code as account_code,
-                a.name as account_name,
+                CASE 
+                    WHEN jsonb_typeof(a.name) = 'object' THEN 
+                        COALESCE(
+                            a.name::jsonb->>'es_CO',
+                            a.name::jsonb->>'en_US',
+                            a.name::text
+                        )
+                    ELSE 
+                        a.name::text
+                END as account_name,
                 l.company_id as company_id,
                 c.currency_id as currency_id,
                 
@@ -79,15 +82,7 @@ class AccountConsolidationReport(models.Model):
                 MAX(l.date) as date_to,
                 
                 -- Cantidad de líneas
-                COUNT(l.id) as count_lines,
-                
-                -- Moneda extranjera más común
-                MODE() WITHIN GROUP (ORDER BY 
-                    CASE 
-                        WHEN l.currency_id != c.currency_id 
-                        THEN l.currency_id 
-                    END
-                ) as foreign_currency_id
+                COUNT(l.id) as count_lines
         """
         return select_str
 
@@ -152,10 +147,19 @@ class AccountConsolidationReport(models.Model):
         # Consulta SQL dinámica con fecha de corte
         query = """
             SELECT 
-                ROW_NUMBER() OVER (ORDER BY a.code) as id,
+                MIN(l.id) as id,
                 l.account_id,
                 a.code as account_code,
-                a.name as account_name,
+                CASE 
+                    WHEN jsonb_typeof(a.name) = 'object' THEN 
+                        COALESCE(
+                            a.name::jsonb->>'es_CO',
+                            a.name::jsonb->>'en_US',
+                            a.name::text
+                        )
+                    ELSE 
+                        a.name::text
+                END as account_name,
                 l.company_id,
                 c.currency_id,
                 SUM(CASE 
@@ -166,13 +170,7 @@ class AccountConsolidationReport(models.Model):
                 END) as total_amount_currency,
                 SUM(l.balance) as total_balance,
                 %s::date as date_to,
-                COUNT(l.id) as count_lines,
-                MODE() WITHIN GROUP (ORDER BY 
-                    CASE 
-                        WHEN l.currency_id != c.currency_id 
-                        THEN l.currency_id 
-                    END
-                ) as foreign_currency_id
+                COUNT(l.id) as count_lines
             FROM account_move_line l
             INNER JOIN account_account a ON l.account_id = a.id
             INNER JOIN res_company c ON l.company_id = c.id
