@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Vista Form del Wizard -->
+    <record id="view_account_consolidation_wizard_form" model="ir.ui.view">
+        <field name="name">account.consolidation.wizard.form</field>
+        <field name="model">account.consolidation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Consolidación por Cuenta Contable">
+                <group>
+                    <group>
+                        <field name="date_to" 
+                               widget="date"
+                               options="{'datepicker': {'maxDate': 'today'}}"/>
+                        <field name="company_id" 
+                               groups="base.group_multi_company"
+                               options="{'no_create': True, 'no_open': True}"/>
+                    </group>
+                    <group>
+                        <field name="account_ids" 
+                               widget="many2many_tags"
+                               options="{'no_create': True}"/>
+                        <field name="show_only_with_foreign_currency"/>
+                    </group>
+                </group>
+                
+                <footer>
+                    <button name="action_generate_report" 
+                            string="Generar Reporte" 
+                            type="object" 
+                            class="btn-primary"
+                            data-hotkey="q"/>
+                    <button name="action_export_to_excel" 
+                            string="Exportar a Excel" 
+                            type="object" 
+                            class="btn-secondary"
+                            data-hotkey="e"/>
+                    <button string="Cancelar" 
+                            class="btn-secondary" 
+                            special="cancel"
+                            data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción del Wizard -->
+    <record id="action_account_consolidation_wizard" model="ir.actions.act_window">
+        <field name="name">Consolidación por Cuenta Contable</field>
+        <field name="res_model">account.consolidation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="account.model_account_account"/>
+    </record>
+
+    <!-- Elemento de menú para el wizard -->
+    <menuitem id="menu_account_consolidation_wizard"
+              name="Generar Consolidación"
+              parent="account.menu_finance_reports"
+              action="action_account_consolidation_wizard"
+              sequence="49"/>
+
+</odoo>
