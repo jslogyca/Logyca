@@ -9,6 +9,7 @@
             <xpath expr="//group[@name='leave_validation']" position="after">
                 <group string="Configuración Web">
                     <field name="require_attachment"/>
+                    <field name="one_day_per_semester"/>
                 </group>
             </xpath>
         </field>

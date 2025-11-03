@@ -8,6 +8,27 @@
                         <div class="col-md-10 offset-md-1">
                             <h1 class="text-center mb-4">Registro de Vacaciones y Permisos</h1>
                             
+                            <!-- Imagen Guía para Incapacidades Médicas -->
+                            <div class="card mb-4 shadow-sm">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fa fa-info-circle"></i> Guía para Incapacidades Médicas
+                                    </h5>
+                                </div>
+                                <div class="card-body p-0">
+                                    <img src="/website_leave_form/static/src/img/guia_incapacidades.png" 
+                                         class="img-fluid w-100" 
+                                         alt="Guía para llenar el formulario de incapacidades médicas"
+                                         style="cursor: pointer;"
+                                         onclick="window.open(this.src, '_blank')"/>
+                                    <div class="p-3 bg-light">
+                                        <small class="text-muted">
+                                            <i class="fa fa-hand-pointer-o"></i> Haz clic en la imagen para verla en tamaño completo
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <!-- Mensajes de éxito o error -->
                             <t t-if="success">
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -61,9 +82,12 @@
                                                 <select class="form-select" id="holiday_status_id" name="holiday_status_id" required="required">
                                                     <option value="">-- Seleccione un tipo --</option>
                                                     <t t-foreach="leave_types" t-as="leave_type">
-                                                        <option t-att-value="leave_type.id" t-att-data-require-attachment="leave_type.require_attachment">
+                                                        <option t-att-value="leave_type.id" 
+                                                                t-att-data-require-attachment="leave_type.require_attachment"
+                                                                t-att-data-one-day-per-semester="leave_type.one_day_per_semester">
                                                             <t t-esc="leave_type.name"/>
                                                             <t t-if="leave_type.require_attachment"> 📎</t>
+                                                            <t t-if="leave_type.one_day_per_semester"> ⏱️</t>
                                                         </option>
                                                     </t>
                                                 </select>
@@ -112,6 +136,17 @@
                                             <div id="fileList" class="mt-2"></div>
                                         </div>
 
+                                        <!-- Alerta para tipos con límite de un día por semestre -->
+                                        <div class="alert alert-warning" id="semesterLimitAlert" style="display: none;" role="alert">
+                                            <i class="fa fa-exclamation-triangle"></i>
+                                            <strong>⏱️ Restricción de Tiempo:</strong> Este tipo de ausencia tiene las siguientes restricciones:
+                                            <ul class="mb-0 mt-2">
+                                                <li><strong>Duración máxima:</strong> Solo puedes solicitar <strong>1 día</strong> (24 horas o menos)</li>
+                                                <li><strong>Frecuencia:</strong> Solo se permite <strong>un día por semestre</strong></li>
+                                            </ul>
+                                            <small class="text-muted">Si ya tienes una solicitud aprobada o pendiente de este tipo en el semestre actual, no podrás crear una nueva.</small>
+                                        </div>
+
                                         <!-- Notas -->
                                         <div class="mb-4">
                                             <label for="notes" class="form-label fw-bold">Motivo/Notas</label>
@@ -156,6 +191,7 @@
                     const emailInput = document.getElementById('email');
                     const approverSelect = document.getElementById('approver_id');
                     const approverHelp = document.getElementById('approverHelp');
+                    const semesterLimitAlert = document.getElementById('semesterLimitAlert');
 
                     // Cargar aprobadores cuando se ingresa/cambia el email
                     let emailTimeout = null;
@@ -218,6 +254,7 @@
                     leaveTypeSelect.addEventListener('change', function() {
                         const selectedOption = this.options[this.selectedIndex];
                         const requireAttachment = selectedOption.getAttribute('data-require-attachment') === 'True';
+                        const oneDayPerSemester = selectedOption.getAttribute('data-one-day-per-semester') === 'True';
                         
                         if (requireAttachment) {
                             attachmentSection.style.display = 'block';
@@ -227,6 +264,13 @@
                             attachmentSection.style.display = 'none';
                             attachmentInput.required = false;
                             attachmentRequired.style.display = 'none';
+                        }
+                        
+                        // Mostrar/ocultar alerta de límite de semestre
+                        if (oneDayPerSemester) {
+                            semesterLimitAlert.style.display = 'block';
+                        } else {
+                            semesterLimitAlert.style.display = 'none';
                         }
                     });
 
@@ -246,6 +290,46 @@
                                 ul.appendChild(li);
                             }
                             fileList.appendChild(ul);
+                        }
+                    });
+
+                    // Validar duración para tipos con restricción de un día por semestre
+                    const dateFromInput = document.getElementById('date_from');
+                    const dateToInput = document.getElementById('date_to');
+                    const leaveForm = document.getElementById('leaveForm');
+
+                    function validateOneDayDuration() {
+                        const selectedOption = leaveTypeSelect.options[leaveTypeSelect.selectedIndex];
+                        const oneDayPerSemester = selectedOption.getAttribute('data-one-day-per-semester') === 'True';
+                        
+                        if (!oneDayPerSemester || !dateFromInput.value || !dateToInput.value) {
+                            return true;
+                        }
+
+                        const dateFrom = new Date(dateFromInput.value);
+                        const dateTo = new Date(dateToInput.value);
+                        const diffInMs = dateTo - dateFrom;
+                        const diffInHours = diffInMs / (1000 * 60 * 60);
+                        const diffInDays = diffInHours / 24;
+
+                        // Permitir hasta 1 día (24 horas)
+                        if (diffInDays > 1) {
+                            alert('⏱️ Este tipo de ausencia solo permite una duración máxima de 1 día (24 horas).\n\nDuración seleccionada: ' + diffInDays.toFixed(2) + ' días\n\nPor favor, ajusta las fechas.');
+                            return false;
+                        }
+                        
+                        return true;
+                    }
+
+                    // Validar al cambiar las fechas
+                    dateFromInput.addEventListener('change', validateOneDayDuration);
+                    dateToInput.addEventListener('change', validateOneDayDuration);
+
+                    // Validar al enviar el formulario
+                    leaveForm.addEventListener('submit', function(event) {
+                        if (!validateOneDayDuration()) {
+                            event.preventDefault();
+                            return false;
                         }
                     });
                 });
