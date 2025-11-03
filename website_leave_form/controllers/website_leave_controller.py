@@ -100,9 +100,45 @@ class WebsiteLeaveController(http.Controller):
             if leave_type.require_attachment and not attachments:
                 return request.redirect('/ausencias/formulario?error=Este tipo de ausencia requiere adjuntar documentos de soporte')
 
-            # Convertir fechas
-            date_from = datetime.strptime(post.get('date_from'), '%Y-%m-%dT%H:%M')
-            date_to = datetime.strptime(post.get('date_to'), '%Y-%m-%dT%H:%M')
+            # Validar si el tipo de ausencia tiene límite de un día por semestre
+            date_from_temp = datetime.strptime(post.get('date_from'), '%Y-%m-%dT%H:%M')
+            date_to_temp = datetime.strptime(post.get('date_to'), '%Y-%m-%dT%H:%M')
+            
+            if leave_type.one_day_per_semester:
+                # Validar que la duración no sea mayor a 1 día
+                duration = date_to_temp - date_from_temp
+                duration_in_days = duration.total_seconds() / (24 * 3600)
+                
+                if duration_in_days > 1:
+                    return request.redirect(f'/ausencias/formulario?error=Este tipo de ausencia solo permite una duración máxima de 1 día (24 horas). La duración seleccionada es de {duration_in_days:.2f} días.')
+                
+                # Determinar el semestre actual
+                year = date_from_temp.year
+                
+                # Semestre 1: Enero - Junio, Semestre 2: Julio - Diciembre
+                if date_from_temp.month <= 6:
+                    semester_start = datetime(year, 1, 1)
+                    semester_end = datetime(year, 6, 30, 23, 59, 59)
+                else:
+                    semester_start = datetime(year, 7, 1)
+                    semester_end = datetime(year, 12, 31, 23, 59, 59)
+                
+                # Buscar ausencias existentes de este tipo en el semestre para este empleado
+                existing_leaves = request.env['hr.leave'].sudo().search([
+                    ('employee_id', '=', employee.id),
+                    ('holiday_status_id', '=', leave_type.id),
+                    ('state', 'in', ['confirm', 'validate', 'validate1']),  # Estados aprobados o pendientes
+                    ('date_from', '>=', semester_start),
+                    ('date_from', '<=', semester_end),
+                ])
+                
+                if existing_leaves:
+                    semester_name = "primer" if date_from_temp.month <= 6 else "segundo"
+                    return request.redirect(f'/ausencias/formulario?error=Ya tienes una solicitud de {leave_type.name} en el {semester_name} semestre de {year}. Solo se permite un día por semestre.')
+
+            # Usar las fechas ya convertidas
+            date_from = date_from_temp
+            date_to = date_to_temp
             request_date = datetime.strptime(post.get('request_date'), '%Y-%m-%d').date() if post.get('request_date') else fields.Date.context_today(request.env['hr.leave'])
 
             # Validar que el aprobador existe

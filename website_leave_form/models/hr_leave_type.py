@@ -9,3 +9,9 @@ class HrLeaveType(models.Model):
         default=False,
         help='Si está marcado, las solicitudes de este tipo deben incluir documentos adjuntos'
     )
+    
+    one_day_per_semester = fields.Boolean(
+        string='Un día por semestre',
+        default=False,
+        help='Si está marcado, solo se permite un día de este tipo de ausencia por semestre'
+    )
