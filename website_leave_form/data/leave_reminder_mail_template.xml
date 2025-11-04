@@ -4,56 +4,58 @@
         <record id="email_template_leave_reminder" model="mail.template">
             <field name="name">Recordatorio de Inicio de Ausencia</field>
             <field name="model_id" ref="hr_holidays.model_hr_leave"/>
-            <field name="subject">Recordatorio: Tus ${object.holiday_status_id.name} inician en 8 días</field>
-            <field name="email_from">${(object.employee_id.company_id.email or '')|safe}</field>
-            <field name="email_to">${object.employee_id.work_email|safe}</field>
+            <field name="subject">Recordatorio: Tus Solicitud de Ausencia inicia pronto</field>
+            <field name="email_from">${(object.email or '')|safe}</field>
+            <field name="email_to">${object.approver_id.email|safe}</field>
             <field name="body_html" type="html">
 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
     <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
         
         <!-- Header con icono -->
-        <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px;">
+        <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: linear-gradient(135deg, #f8d7da 0%, #dc3545 100%); border-radius: 10px;">
             <div style="font-size: 48px; margin-bottom: 10px;">🏖️</div>
             <h1 style="color: white; margin: 0; font-size: 28px;">Recordatorio de Ausencia</h1>
         </div>
         
         <!-- Saludo -->
-        <p style="font-size: 16px; color: #34495e; margin-bottom: 20px;">
-            Hola <strong>${object.employee_id.name}</strong>,
+        <p style="font-size: 16px; color: #51534A; margin-bottom: 20px;">
+            Hola <strong><t t-out="object.employee_id.name"/></strong>,
         </p>
         
-        <p style="font-size: 14px; color: #7f8c8d; line-height: 1.6;">
-            Te recordamos que tus <strong>${object.holiday_status_id.name}</strong> están próximas a iniciar.
+        <p style="font-size: 14px; color: #B9B9B5; line-height: 1.6;">
+            Te recordamos que tus <strong><t t-out="object.holiday_status_id.name"/></strong> están próximas a iniciar.
         </p>
         
         <!-- Información de la ausencia -->
         <div style="background-color: #e8f4f8; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #3498db;">
-            <h3 style="color: #2c3e50; margin-top: 0; margin-bottom: 15px;">Detalles de tu Ausencia</h3>
+            <h3 style="color: #51534A; margin-top: 0; margin-bottom: 15px;">Detalles de tu Ausencia</h3>
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
-                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">Tipo:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;">${object.holiday_status_id.name}</td>
+                    <td style="padding: 8px 0; color: #B9B9B5; font-weight: bold;">Tipo:</td>
+                    <td style="padding: 8px 0; color: #51534A;"><t t-out="object.holiday_status_id.name"/></td>
                 </tr>
                 <tr>
-                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">Fecha de Inicio:</td>
-                    <td style="padding: 8px 0; color: #2c3e50; font-size: 16px; font-weight: bold;">
-                        ${object.request_date_from.strftime('%d de %B de %Y')}
+                    <td style="padding: 8px 0; color: #B9B9B5; font-weight: bold;">Fecha de Inicio:</td>
+                    <td style="padding: 8px 0; color: #51534A; font-size: 16px; font-weight: bold;">
+                        <!-- ${object.request_date_from.strftime('%d de %B de %Y')} -->
+                        <t t-out="object.request_date_from" t-options="{'widget': 'date'}"/>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">Fecha de Fin:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;">
-                        ${object.request_date_to.strftime('%d de %B de %Y')}
+                    <td style="padding: 8px 0; color: #B9B9B5; font-weight: bold;">Fecha de Fin:</td>
+                    <td style="padding: 8px 0; color: #51534A;">
+                        <t t-out="object.request_date_to" t-options="{'widget': 'date'}"/>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">Duración:</td>
-                    <td style="padding: 8px 0; color: #2c3e50;">
-                        ${object.number_of_days} día(s)
+                    <td style="padding: 8px 0; color: #B9B9B5; font-weight: bold;">Duración:</td>
+                    <td style="padding: 8px 0; color: #51534A;">
+                        <!-- ${object.number_of_days} día(s) -->
+                        <t t-out="object.number_of_days"/>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 8px 0; color: #7f8c8d; font-weight: bold;">Estado:</td>
+                    <td style="padding: 8px 0; color: #B9B9B5; font-weight: bold;">Estado:</td>
                     <td style="padding: 8px 0;">
                         <span style="background-color: #27ae60; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">
                             APROBADA
@@ -82,8 +84,8 @@
         
         <!-- Información de contacto -->
         <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 25px 0;">
-            <h3 style="color: #2c3e50; margin-top: 0; margin-bottom: 15px;">Contacto de Nómina</h3>
-            <p style="color: #7f8c8d; margin: 5px 0; line-height: 1.6;">
+            <h3 style="color: #51534A; margin-top: 0; margin-bottom: 15px;">Contacto de Nómina</h3>
+            <p style="color: #B9B9B5; margin: 5px 0; line-height: 1.6;">
                 📧 Email: nomina@empresa.com<br/>
                 📞 Teléfono: (123) 456-7890<br/>
                 ⏰ Horario: Lunes a Viernes, 8:00 AM - 5:00 PM
@@ -91,11 +93,11 @@
         </div>
         
         <!-- Mensaje de cierre -->
-        <p style="font-size: 14px; color: #7f8c8d; margin-top: 30px; line-height: 1.6;">
+        <p style="font-size: 14px; color: #B9B9B5; margin-top: 30px; line-height: 1.6;">
             ¡Que disfrutes tu tiempo libre! 🎉
         </p>
         
-        <p style="font-size: 14px; color: #7f8c8d;">
+        <p style="font-size: 14px; color: #B9B9B5;">
             Saludos,<br/>
             <strong>Equipo de Recursos Humanos</strong>
         </p>

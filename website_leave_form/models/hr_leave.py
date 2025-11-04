@@ -26,11 +26,11 @@ class HrLeave(models.Model):
         # - Son de tipo vacaciones o similares
         leaves = self.search([
             ('state', '=', 'validate'),
-            ('request_date_from', '=', reminder_date),
-            ('reminder_sent', '=', False),
+            ('request_date_from', '>=', today),
+            ('request_date_from', '<=', reminder_date),
             ('employee_id.work_email', '!=', False),
         ])
-        
+
         template = self.env.ref('website_leave_form.email_template_leave_reminder', raise_if_not_found=False)
         
         if not template:
