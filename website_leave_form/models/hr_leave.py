@@ -10,6 +10,7 @@ class HrLeave(models.Model):
         default=False,
         help='Indica si ya se envió el recordatorio 8 días antes'
     )
+    day_init_leave = fields.Float('Días de Inicio', default=0.0)
 
     @api.model
     def _send_leave_reminders(self):
@@ -19,6 +20,11 @@ class HrLeave(models.Model):
         """
         today = fields.Date.context_today(self)
         reminder_date = today + timedelta(days=8)
+        diferencia = today - self.request_date_from
+
+        # Obtener los días
+        dias = diferencia.days
+        self.day_init_leave = dias
         
         # Buscar ausencias aprobadas que:
         # - Inician en 8 días
