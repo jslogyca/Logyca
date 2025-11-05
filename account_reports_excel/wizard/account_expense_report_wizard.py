@@ -90,7 +90,7 @@ class AccountExpenseReportWizard(models.TransientModel):
                                     3906,
                                     1463)
                                     order by p.id, m.id ''', 
-                                    (date_from, date_to))
+                                    (date_from, date_to, date_from, date_to))
         
         lineas = self._cr.fetchall()
         return lineas
