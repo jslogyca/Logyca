@@ -60,18 +60,35 @@ class AccountExpenseReportWizard(models.TransientModel):
                                     ma.state,
                                     red.name->>'es_CO' AS analytic_account_name,
                                     pla.name->>'es_CO' as plan
-                                    from account_move m
-                                    inner join account_move_deferred_rel aml on aml.original_move_id=m.id
-                                    inner join account_move ma on ma.id=aml.deferred_move_id
-                                    inner join res_company c on c.id=m.company_id
-                                    inner join res_partner p on p.id=m.partner_id
-                                    inner join res_users u on u.id=m.invoice_user_id
-                                    inner join res_partner up on up.id=u.partner_id
-                                    inner join crm_team team on team.id=m.team_id
+                                    from account_move ma
+                                    inner join account_move_line l on l.move_id=ma.id
+                                    left join account_move_deferred_rel aml on ma.id=aml.deferred_move_id
+                                    left join account_move m on aml.original_move_id=m.id
+                                    inner join res_company c on c.id=ma.company_id
+                                    inner join res_partner p on p.id=l.partner_id
+                                    left join res_users u on u.id=m.invoice_user_id
+                                    left join res_partner up on up.id=u.partner_id
+                                    left join crm_team team on team.id=m.team_id
                                     left join account_analytic_account red on red.id = m.analytic_account_id
-                                    left JOIN account_analytic_plan pla on pla.id=red.plan_id                                   
-                                    where m.date between %s and %s and m.state='posted'
+                                    left JOIN account_analytic_plan pla on pla.id=red.plan_id
+                                    where (m.date between %s and %s OR ma.date between %s and %s)
                                     and m.move_type in ('in_invoice', 'entry')
+                                    and l.account_id in (5066,
+                                    3903,
+                                    1460,
+                                    5067,
+                                    3904,
+                                    1461,
+                                    5068,
+                                    3905,
+                                    1462,
+                                    5233,
+                                    5290,
+                                    5228,
+                                    5377,
+                                    5069,
+                                    3906,
+                                    1463)
                                     order by p.id, m.id ''', 
                                     (date_from, date_to))
         
