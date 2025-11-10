@@ -45,7 +45,11 @@ class AccountExpenseReportWizard(models.TransientModel):
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
                                     where l.move_id=m.id limit 1),
                                     red.name->>'es_CO',
-                                    m.amount_untaxed, 
+                                    CASE 
+                                        WHEN (l.debit > l.credit) THEN ABS(m.amount_untaxed)
+                                        WHEN (l.credit > l.debit) THEN -ABS(m.amount_untaxed)
+                                        ELSE 0
+                                    END AS amount_untaxed,
                                     to_char(m.date,'DD/MM/YYYY'),
                                     date_part('month',m.date)as mes_fact,
                                     date_part('year',m.date)as year_fact,
@@ -53,7 +57,11 @@ class AccountExpenseReportWizard(models.TransientModel):
                                     up.name,
                                     team.name->>'es_CO',
                                     ma.name,
-                                    ma.amount_total, 
+                                    CASE 
+                                        WHEN (l.debit > l.credit) THEN ABS(ma.amount_total)
+                                        WHEN (l.credit > l.debit) THEN -ABS(ma.amount_total)
+                                        ELSE 0
+                                    END AS amount_total,                                    
                                     to_char(ma.date,'DD/MM/YYYY'),
                                     date_part('month',ma.date)as mes,
                                     date_part('year',ma.date)as year,
