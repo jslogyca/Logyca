@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Formulario Web de Ausencias',
-    'version': '17.0.1.3.1',
+    'version': '17.0.1.4.0',
     'category': 'Human Resources',
     'summary': 'Permite crear ausencias desde un formulario web público',
     'description': """
         Módulo que permite a los usuarios crear solicitudes de ausencia
         a través de un formulario web sin necesidad de autenticación.
+        
+        Versión 1.4.0:
+        - Agregada notificación a Talento y Cultura para tipos específicos de ausencia
+        - Agregado sistema de aprobación automática con fecha de corte
+        - Nuevo cron para aprobación automática mensual
         
         Versión 1.3.1:
         - Agregada validación de duración máxima de 1 día para tipos con restricción de semestre
