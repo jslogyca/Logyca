@@ -72,7 +72,7 @@ class AccountExpenseReportWizard(models.TransientModel):
                                     left join account_analytic_account red on red.id = m.analytic_account_id
                                     left JOIN account_analytic_plan pla on pla.id=red.plan_id
                                     where (m.date between %s and %s OR ma.date between %s and %s)
-                                    and m.move_type in ('in_invoice', 'entry')
+                                    and ma.move_type in ('in_invoice', 'entry')
                                     and l.account_id in (5066,
                                     3903,
                                     1460,
