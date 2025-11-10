@@ -10,6 +10,7 @@
                 <group string="Configuración Web">
                     <field name="require_attachment"/>
                     <field name="one_day_per_semester"/>
+                    <field name="notify_talent_culture"/>
                 </group>
             </xpath>
         </field>

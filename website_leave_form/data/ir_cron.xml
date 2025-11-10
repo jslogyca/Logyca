@@ -13,4 +13,18 @@
             <field name="doall" eval="False"/>
             <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).replace(hour=8, minute=0, second=0)"/>
         </record>
+        
+        <!-- Cron Job para aprobación automática de ausencias pendientes -->
+        <record id="ir_cron_auto_approve_pending_leaves" model="ir.cron">
+            <field name="name">Aprobación Automática de Ausencias Pendientes</field>
+            <field name="model_id" ref="model_website_leave_form"/>
+            <field name="state">code</field>
+            <field name="code">model.auto_approve_pending_leaves()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="False"/>
+            <field name="doall" eval="False"/>
+            <field name="nextcall" eval="(DateTime.now().replace(day=1) + timedelta(days=32)).replace(day=1, hour=1, minute=0, second=0)"/>
+        </record>
 </odoo>
