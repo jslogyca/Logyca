@@ -274,50 +274,50 @@ class SaleOrderImportFileWizard(models.TransientModel):
                                                     ('company_id','=',company_id.id),
                                                     ('product_type','=','ga'),
                                                     ('amount_type','=','consumo')], order="id asc", limit=1)
-                            vals = {
-                                'order_id': sale_order.id,
-                                'product_id': product_id.product_id.id,
-                                'name': line_description or product_id.product_id.display_name,
-                                'product_qty': 1,
-                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id,
-                                'price_unit': consumo,
+                            vals ={
+                                'order_id' : sale_order.id,
+                                'product_id' : product_id.product_id.id,
+                                'name': line_description or product_id.product_id.display_name,  # DESCRIPCIÓN AÑADIDA
+                                'product_qty' : 1,
+                                'price_unit' : consumo,
                                 'x_budget_group': budget_group_id.id,
-                                'analytic_distribution': budget_group_id.analytic_distribution if budget_group_id.analytic_distribution else {},
-                                'company_id': company_id.id,
-                            }
+                                'analytic_distribution': budget_group_id.analytic_distribution,
+                                'company_id' : company_id.id,
+                            ,
+                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id}
                             sale_order_line_values.append((0, 0, vals))
                         else:
                             product_id = self.env['partner.product.purchase'].search([('partner_id','=',partner_id.id), 
                                                     ('company_id','=',company_id.id),
                                                     ('product_type','=','gv'),
                                                     ('amount_type','=','consumo')], order="id asc", limit=1)
-                            vals = {
-                                'order_id': sale_order.id,
-                                'product_id': product_id.product_id.id,
-                                'name': line_description or product_id.product_id.display_name,
-                                'product_qty': 1,
-                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id,
-                                'price_unit': consumo,
+                            vals ={
+                                'order_id' : sale_order.id,
+                                'product_id' : product_id.product_id.id,
+                                'name': line_description or product_id.product_id.display_name,  # DESCRIPCIÓN AÑADIDA
+                                'product_qty' : 1,
+                                'price_unit' : consumo,
                                 'x_budget_group': budget_group_id.id,
-                                'analytic_distribution': budget_group_id.analytic_distribution if budget_group_id.analytic_distribution else {},
-                                'company_id': company_id.id,
-                            }
+                                'analytic_distribution': budget_group_id.analytic_distribution,
+                                'company_id' : company_id.id,
+                            ,
+                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id}
                             sale_order_line_values.append((0, 0, vals))                            
                     else:
                         product_id = self.env['partner.product.purchase'].search([('partner_id','=',partner_id.id), 
                                                 ('company_id','=',company_id.id),
                                                 ('product_type','=','co'),
                                                 ('amount_type','=','consumo')], order="id asc", limit=1)
-                        vals = {
-                            'order_id': sale_order.id,
-                            'product_id': product_id.product_id.id,
-                            'name': line_description or product_id.product_id.display_name,
-                            'product_qty': 1,
-                            'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id,
-                            'price_unit': consumo,
+                        vals ={
+                            'order_id' : sale_order.id,
+                            'product_id' : product_id.product_id.id,
+                            'name': line_description or product_id.product_id.display_name,  # DESCRIPCIÓN AÑADIDA
+                            'product_qty' : 1,
+                            'price_unit' : consumo,
                             'x_budget_group': budget_group_id.id,
-                            'analytic_distribution': {analytic_id.id: 100.0} if analytic_id else {},
-                            'company_id': company_id.id,
+                            'analytic_distribution': {analytic_id.id: 100.0,
+                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id},
+                            'company_id' : company_id.id,
                         }
                         sale_order_line_values.append((0, 0, vals))
 
@@ -333,27 +333,27 @@ class SaleOrderImportFileWizard(models.TransientModel):
                                 vals = {
                                     'order_id': sale_order.id,
                                     'product_id': product_id.product_id.id,
-                                    'name': line_description or product_id.product_id.display_name,
+                                    'name': line_description or product_id.product_id.display_name,  # DESCRIPCIÓN AÑADIDA
                                     'product_qty': 1,
-                                    'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id,
                                     'price_unit': total,
                                     'x_budget_group': budget_group_id.id,
-                                    'analytic_distribution': budget_group_id.analytic_distribution if budget_group_id.analytic_distribution else {},
-                                    'company_id': company_id.id,
-                                    'taxes_id': [(6, 0, taxes.ids)],
-                                }
+                                    'analytic_distribution': budget_group_id.analytic_distribution,
+                                    'company_id' : company_id.id,
+                                    'taxes_id' : [(6, 0, taxes.ids)],
+                                ,
+                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id}
                             else:
                                 vals = {
-                                    'order_id': sale_order.id,
-                                    'product_id': product_id.product_id.id,
-                                    'name': line_description or product_id.product_id.display_name,
-                                    'product_qty': 1,
-                                    'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id,
-                                    'price_unit': total,
-                                    'x_budget_group': budget_group_id.id,
-                                    'analytic_distribution': budget_group_id.analytic_distribution if budget_group_id.analytic_distribution else {},
-                                    'company_id': company_id.id,
-                                }
+                                    'order_id'         : sale_order.id,
+                                    'product_id'       : product_id.product_id.id,
+                                    'name': line_description or product_id.product_id.display_name,  # DESCRIPCIÓN AÑADIDA
+                                    'product_qty'  : 1,
+                                    'price_unit'       : total,
+                                    'x_budget_group'   : budget_group_id.id,
+                                    'analytic_distribution': budget_group_id.analytic_distribution,
+                                    'company_id'       : company_id.id,
+                                ,
+                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id}
                             sale_order_line_values.append((0, 0, vals))
                         else:
                             product_id = self.env['partner.product.purchase'].search([('partner_id','=',partner_id.id), 
@@ -365,27 +365,27 @@ class SaleOrderImportFileWizard(models.TransientModel):
                                 vals = {
                                     'order_id': sale_order.id,
                                     'product_id': product_id.product_id.id,
-                                    'name': line_description or product_id.product_id.display_name,
+                                    'name': line_description or product_id.product_id.display_name,  # DESCRIPCIÓN AÑADIDA
                                     'product_qty': 1,
-                                    'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id,
                                     'price_unit': total,
                                     'x_budget_group': budget_group_id.id,
-                                    'analytic_distribution': budget_group_id.analytic_distribution if budget_group_id.analytic_distribution else {},
-                                    'company_id': company_id.id,
-                                    'taxes_id': [(6, 0, taxes.ids)],
-                                }
+                                    'analytic_distribution': budget_group_id.analytic_distribution,
+                                    'company_id' : company_id.id,
+                                    'taxes_id' : [(6, 0, taxes.ids)],
+                                ,
+                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id}
                             else:
                                 vals = {
-                                    'order_id': sale_order.id,
-                                    'product_id': product_id.product_id.id,
-                                    'name': line_description or product_id.product_id.display_name,
-                                    'product_qty': 1,
-                                    'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id,
-                                    'price_unit': total,
-                                    'x_budget_group': budget_group_id.id,
-                                    'analytic_distribution': budget_group_id.analytic_distribution if budget_group_id.analytic_distribution else {},
-                                    'company_id': company_id.id,
-                                }
+                                    'order_id'         : sale_order.id,
+                                    'product_id'       : product_id.product_id.id,
+                                    'name': line_description or product_id.product_id.display_name,  # DESCRIPCIÓN AÑADIDA
+                                    'product_qty'  : 1,
+                                    'price_unit'       : total,
+                                    'x_budget_group'   : budget_group_id.id,
+                                    'analytic_distribution': budget_group_id.analytic_distribution,
+                                    'company_id'       : company_id.id,
+                                ,
+                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id}
                             sale_order_line_values.append((0, 0, vals))                                                        
 
                     else:
@@ -398,26 +398,26 @@ class SaleOrderImportFileWizard(models.TransientModel):
                             vals = {
                                 'order_id': sale_order.id,
                                 'product_id': product_id.product_id.id,
-                                'name': line_description or product_id.product_id.display_name,
+                                'name': line_description or product_id.product_id.display_name,  # DESCRIPCIÓN AÑADIDA
                                 'product_qty': 1,
-                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id,
                                 'price_unit': total,
                                 'x_budget_group': budget_group_id.id,
-                                'analytic_distribution': {analytic_id.id: 100.0} if analytic_id else {},
-                                'company_id': company_id.id,
-                                'taxes_id': [(6, 0, taxes.ids)],
+                                'analytic_distribution': {analytic_id.id: 100.0,
+                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id},
+                                'company_id' : company_id.id,
+                                'taxes_id' : [(6, 0, taxes.ids)],
                             }
                         else:
                             vals = {
-                                'order_id': sale_order.id,
-                                'product_id': product_id.product_id.id,
-                                'name': line_description or product_id.product_id.display_name,
-                                'product_qty': 1,
-                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id,
-                                'price_unit': total,
-                                'x_budget_group': budget_group_id.id,
-                                'analytic_distribution': {analytic_id.id: 100.0} if analytic_id else {},
-                                'company_id': company_id.id,
+                                'order_id'         : sale_order.id,
+                                'product_id'       : product_id.product_id.id,
+                                'name': line_description or product_id.product_id.display_name,  # DESCRIPCIÓN AÑADIDA
+                                'product_qty'  : 1,
+                                'price_unit'       : total,
+                                'x_budget_group'   : budget_group_id.id,
+                                'analytic_distribution': {analytic_id.id: 100.0,
+                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id},
+                                'company_id'       : company_id.id,
                             }
                         sale_order_line_values.append((0, 0, vals))
 
@@ -428,13 +428,13 @@ class SaleOrderImportFileWizard(models.TransientModel):
                     vals = {
                         'order_id': sale_order.id,
                         'product_id': product_id.product_id.id,
-                        'name': line_description or product_id.product_id.display_name,
+                        'name': line_description or product_id.product_id.display_name,  # DESCRIPCIÓN AÑADIDA
                         'product_qty': 1,
-                        'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id,
                         'price_unit': descuento,
                         'x_budget_group': budget_group_id.id,
-                        'analytic_distribution': budget_group_id.analytic_distribution if budget_group_id.analytic_distribution else {},
-                    }
+                        'analytic_distribution': budget_group_id.analytic_distribution,
+                    ,
+                                'product_uom': product_id.product_id.uom_po_id.id or product_id.product_id.uom_id.id}
                     sale_order_line_values.append((0, 0, vals))
 
                 try:
@@ -476,4 +476,4 @@ class SaleOrderImportFileWizard(models.TransientModel):
             'views': [(view_id, 'form')],
             'res_id': res_id,
             'target': 'current',
-        }
+        }        
