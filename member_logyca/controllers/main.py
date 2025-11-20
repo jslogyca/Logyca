@@ -11,7 +11,7 @@ class WebsiteSaleExtended(WebsiteSale):
         # Validación para rango_type 'other'
         if values.get('rango_type') == 'other':
             errors['rango_type'] = 'blocked'
-            error_msg.append('Este tipo de Membresía es para Micro Empresas')
+            error_msg.append(' Aviso Importante: Este modelo está diseñado exclusivamente para microempresas, y tu compañía supera ese tamaño.  Te invitamos a agendar una sesión con nuestros asesores para conocer planes, tarifas y beneficios diseñados especialmente para las necesidades de tu empresa.')
 
         # Agrega tus campos personalizados aquí
         new_values.update({
