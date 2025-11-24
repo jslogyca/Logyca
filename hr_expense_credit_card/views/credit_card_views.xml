@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista Tree de Tarjetas de Crédito -->
+    <record id="credit_card_view_tree" model="ir.ui.view">
+        <field name="name">credit.card.tree</field>
+        <field name="model">credit.card</field>
+        <field name="arch" type="xml">
+            <tree string="Tarjetas de Crédito">
+                <field name="name"/>
+                <field name="card_type" optional="show"/>
+                <field name="card_number" optional="show"/>
+                <field name="partner_id"/>
+                <field name="account_id"/>
+                <field name="credit_limit" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form de Tarjetas de Crédito -->
+    <record id="credit_card_view_form" model="ir.ui.view">
+        <field name="name">credit.card.form</field>
+        <field name="model">credit.card</field>
+        <field name="arch" type="xml">
+            <form string="Tarjeta de Crédito">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Nombre de la Tarjeta"/>
+                        <h1>
+                            <field name="name" placeholder="ej. Tarjeta Corporativa Principal"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="main_info" string="Información Principal">
+                            <field name="partner_id" 
+                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="account_id" 
+                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="company_id" 
+                                   groups="base.group_multi_company" 
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group name="card_details" string="Detalles de la Tarjeta">
+                            <field name="card_type"/>
+                            <field name="card_number" placeholder="1234"/>
+                            <field name="credit_limit" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group name="notes" string="Notas">
+                        <field name="notes" nolabel="1" placeholder="Observaciones adicionales sobre la tarjeta..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista Search de Tarjetas de Crédito -->
+    <record id="credit_card_view_search" model="ir.ui.view">
+        <field name="name">credit.card.search</field>
+        <field name="model">credit.card</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Tarjetas de Crédito">
+                <field name="name" string="Tarjeta" 
+                       filter_domain="['|', ('name', 'ilike', self), ('card_number', 'ilike', self)]"/>
+                <field name="partner_id"/>
+                <field name="account_id"/>
+                <field name="card_type"/>
+                <separator/>
+                <filter string="Activas" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Archivadas" name="inactive" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter string="Visa" name="visa" domain="[('card_type', '=', 'visa')]"/>
+                <filter string="Mastercard" name="mastercard" domain="[('card_type', '=', 'mastercard')]"/>
+                <filter string="American Express" name="amex" domain="[('card_type', '=', 'amex')]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Tipo de Tarjeta" name="group_card_type" context="{'group_by': 'card_type'}"/>
+                    <filter string="Proveedor" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Compañía" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Acción para Tarjetas de Crédito -->
+    <record id="credit_card_action" model="ir.actions.act_window">
+        <field name="name">Tarjetas de Crédito</field>
+        <field name="res_model">credit.card</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear una Tarjeta de Crédito Corporativa
+            </p>
+            <p>
+                Configure las tarjetas de crédito corporativas con sus cuentas contables
+                y proveedores asociados para la legalización de gastos.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menú principal -->
+    <menuitem id="menu_credit_card_root"
+              name="Tarjetas de Crédito"
+              parent="hr_expense.menu_hr_expense_configuration"
+              action="credit_card_action"
+              sequence="10"/>
+</odoo>
