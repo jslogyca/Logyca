@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_expense_user,hr.expense.user,hr_expense.model_hr_expense,hr_expense.group_hr_expense_user,1,1,1,1
+access_hr_expense_sheet_user,hr.expense.sheet.user,hr_expense.model_hr_expense_sheet,hr_expense.group_hr_expense_user,1,1,1,1
+access_credit_card_user,credit.card.user,model_credit_card,hr_expense.group_hr_expense_user,1,0,0,0
+access_credit_card_manager,credit.card.manager,model_credit_card,hr_expense.group_hr_expense_team_approver,1,1,1,0
+access_credit_card_admin,credit.card.admin,model_credit_card,account.group_account_manager,1,1,1,1
