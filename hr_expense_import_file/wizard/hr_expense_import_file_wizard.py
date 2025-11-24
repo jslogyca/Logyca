@@ -51,7 +51,7 @@ class HrExpenseImportFileWizard(models.TransientModel):
 
         sheet = book.sheet_by_index(0)
         # Saltar fila 0 (título PLANTILLA) y fila 1 (encabezados)
-        record_list = [sheet.row_values(i) for i in range(2, sheet.nrows)]
+        record_list = [sheet.row_values(i) for i in range(1, sheet.nrows)]
         return book, record_list
 
     def _as_str(self, value):
@@ -162,6 +162,8 @@ class HrExpenseImportFileWizard(models.TransientModel):
                 supplier_vat = supplier_vat[:-len(suffix)]            
             if employee_name.endswith(suffix):
                 employee_name = employee_name[:-len(suffix)]            
+            if reference.endswith(suffix):
+                reference = reference[:-len(suffix)]            
 
             # -----------------------------------------------------------------
             # Compañía
@@ -348,14 +350,14 @@ class HrExpenseImportFileWizard(models.TransientModel):
                 pair = (company.id if company else False, employee.id if employee else False)
                 if key not in ref_map:
                     ref_map[key] = pair
-                else:
-                    if ref_map[key] != pair:
-                        errors.append(
-                            _("Fila %(row)s: La referencia '%(ref)s' ya fue usada con otra combinación de compañía/empleado.") % {
-                                "row": row_num,
-                                "ref": reference,
-                            }
-                        )
+                # else:
+                #     if ref_map[key] != pair:
+                #         errors.append(
+                #             _("Fila %(row)s: La referencia '%(ref)s' ya fue usada con otra combinación de compañía/empleado.") % {
+                #                 "row": row_num,
+                #                 "ref": reference,
+                #             }
+                #         )
 
         # ---------------------------------------------------------------------
         # Construcción del resultado
@@ -443,7 +445,9 @@ class HrExpenseImportFileWizard(models.TransientModel):
             if supplier_vat.endswith(suffix):
                 supplier_vat = supplier_vat[:-len(suffix)]            
             if employee_name.endswith(suffix):
-                employee_name = employee_name[:-len(suffix)]              
+                employee_name = employee_name[:-len(suffix)]
+            if reference.endswith(suffix):
+                reference = reference[:-len(suffix)]                 
 
             # -----------------------------------------------------------------
             # Compañía
@@ -551,7 +555,8 @@ class HrExpenseImportFileWizard(models.TransientModel):
             # -----------------------------------------------------------------
             # Crear/obtener hoja de gastos (sheet) por referencia + compañía + empleado
             # -----------------------------------------------------------------
-            ref_key = (company.id, employee.id, reference or "SIN-REFERENCIA")
+            # ref_key = (company.id, employee.id, reference or "SIN-REFERENCIA")
+            ref_key = (company.id, reference or "SIN-REFERENCIA")
             sheet = sheet_map.get(ref_key)
             if not sheet:
                 sheet_vals = {
@@ -589,7 +594,6 @@ class HrExpenseImportFileWizard(models.TransientModel):
                 expense_vals["amount_tax_excluded"] = excluded_amount
             if excluded_desc:
                 expense_vals["amount_tax_excluded_description"] = excluded_desc
-
             expense = Expense.create(expense_vals)
             expenses_created |= expense
 
