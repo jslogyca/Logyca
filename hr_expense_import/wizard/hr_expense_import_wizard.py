@@ -397,7 +397,6 @@ class HrExpenseImportWizard(models.TransientModel):
                     analytic_distribution = budget_group_id.analytic_distribution
 
                 # Preparar valores del gasto
-                print('EXCLUIDO', tax_excluded)
                 expense_vals = {
                     'date': expense_date,
                     'employee_id': employee_id.id,
@@ -433,6 +432,12 @@ class HrExpenseImportWizard(models.TransientModel):
                 errors.append(f"Fila {row_num}: Error al procesar - {str(e)}")
                 continue
 
+        # Obtener aprobador por defecto de la configuración
+        default_approver_id = int(self.env['ir.config_parameter'].sudo().get_param(
+            'hr_expense_import.default_expense_approver_id', 0
+        ))
+        if not default_approver_id:
+            default_approver_id=201
         # Crear reportes de gastos con sus gastos
         for reference, data in expenses_by_reference.items():
             try:
@@ -442,6 +447,10 @@ class HrExpenseImportWizard(models.TransientModel):
                     'employee_id': data['employee_id'].id,
                     'company_id': data['company_id'].id,
                 }
+
+                # Asignar aprobador por defecto si está configurado
+                if default_approver_id:
+                    sheet_vals['user_id'] = default_approver_id
 
                 # Agregar campos específicos del módulo hr_expense_credit_card
                 if self.payment_mode == 'credit_card' and self.credit_card_id:

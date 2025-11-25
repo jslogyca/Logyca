@@ -27,6 +27,8 @@
     ],
     'data': [
         'security/ir.model.access.csv',
+        'views/hr_expense_sheet_views.xml',
+        # 'views/res_config_settings_views.xml',
         'wizard/hr_expense_import_wizard_views.xml',
     ],
     'installable': True,
