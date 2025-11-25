@@ -83,6 +83,7 @@ class HrExpenseSheet(models.Model):
                 'product_id': expense.product_id.id if expense.product_id else False,
                 'product_uom_id': expense.product_uom_id.id if expense.product_uom_id else False,
                 'analytic_distribution': expense.analytic_distribution,
+                'x_budget_group': expense.budget_group_id.id,
             }
             move_lines.append(Command.create(debit_line_vals))
             
@@ -118,6 +119,7 @@ class HrExpenseSheet(models.Model):
                             'debit': tax_amount if tax_amount > 0 else 0.0,
                             'credit': abs(tax_amount) if tax_amount < 0 else 0.0,
                             'tax_line_id': tax_record.id,
+                            'tax_base_amount': expense.total_amount,
                         }
                         move_lines.append(Command.create(tax_line_vals))
                         expense_amount += tax_amount
