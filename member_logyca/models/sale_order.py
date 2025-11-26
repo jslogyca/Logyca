@@ -31,8 +31,10 @@ class SalesOrder(models.Model):
             else:
                 user_id = self.env['crm.team.member'].search([('free_member_shop', '=', True)])
 
-            self._cr.execute(''' UPDATE sale_order SET company_id=2, free_member=%s, date_end_member_test=%s WHERE id=%s ''', (True, date_end_member_test, order.id))
-            self._cr.execute(''' UPDATE sale_order_line SET company_id=2 WHERE order_id=%s ''', (order.id,))
+            self._cr.execute(''' UPDATE sale_order SET note='Estoy de acuerdo con la Autorización del Sistema de administración de riesgo de lavado de activos y de la financiación del terrorismo - SARLAFT',
+                                payment_term_id=31, company_id=2, free_member=%s, date_end_member_test=%s WHERE id=%s ''', (True, date_end_member_test, order.id))
+            # self._cr.execute(''' UPDATE sale_order SET payment_term_id=10, company_id=2, free_member=%s, date_end_member_test=%s WHERE id=%s ''', (True, date_end_member_test, order.id))
+            self._cr.execute(''' UPDATE sale_order_line SET analytic_distribution = '{"618": 100.0}', company_id=2 WHERE order_id=%s ''', (order.id,))
             if team_id:
                 self._cr.execute(''' UPDATE sale_order SET team_id=%s WHERE id=%s ''', (team_id.id, order.id,))
             if user_id:
