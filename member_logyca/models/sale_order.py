@@ -57,3 +57,23 @@ class SalesOrder(models.Model):
     
     def action_create_partner(self, partner):
         partner.create_company()
+
+    def _send_payment_succeeded_for_order_mail(self):
+        """ Send a mail to the SO customer to inform them that a payment has been initiated.
+
+        :return: None
+        """
+        if self.website_id:
+            self.action_order_member()
+            print('ENVIO CORREO', self)
+            mail_template = self.env.ref(
+                'member_logyca.mail_template_sale_payment_executed_website', raise_if_not_found=False
+            )
+            for order in self:
+                order._send_order_notification_mail(mail_template)            
+        else:
+            mail_template = self.env.ref(
+                'sale.mail_template_sale_payment_executed', raise_if_not_found=False
+            )
+            for order in self:
+                order._send_order_notification_mail(mail_template)
