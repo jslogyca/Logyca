@@ -53,8 +53,8 @@ class SalesOrder(models.Model):
                 self._cr.execute(''' UPDATE sale_order SET partner_id=%s WHERE id=%s ''', (order.partner_id.parent_id.id, order.id,))
             template = self.env.ref('member_logyca.mail_template_member_welcome')
             template.send_mail(order.id, force_send=True)            
-            template = self.env.ref('member_logyca.email_template_sale_order_loyalty')
-            template.send_mail(order.id, force_send=True)            
+            # template = self.env.ref('member_logyca.email_template_sale_order_loyalty')
+            # template.send_mail(order.id, force_send=True)            
 
     
     def action_create_partner(self, partner):
@@ -67,12 +67,15 @@ class SalesOrder(models.Model):
         """
         if self.website_id:
             self.action_order_member()
-            print('ENVIO CORREO', self)
             mail_template = self.env.ref(
                 'member_logyca.mail_template_sale_payment_executed_website', raise_if_not_found=False
             )
+            mail_template_loyalty = self.env.ref(
+                'member_logyca.email_template_sale_order_loyalty', raise_if_not_found=False
+            )
             for order in self:
-                order._send_order_notification_mail(mail_template)            
+                order._send_order_notification_mail(mail_template)
+                order._send_order_notification_mail(mail_template_loyalty)
         else:
             mail_template = self.env.ref(
                 'sale.mail_template_sale_payment_executed', raise_if_not_found=False
