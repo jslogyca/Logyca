@@ -16,6 +16,9 @@
                             <field name="credit_card_id" 
                                    invisible="payment_mode != 'credit_card'"
                                    required="payment_mode == 'credit_card'"/>
+                            <field name="agrupar_por_factura"
+                                   invisible="payment_mode != 'credit_card'"/>
+                            <field name="documento_soporte"/>
                         </group>
                     </group>
                     
@@ -31,13 +34,14 @@
                                 <li>Columna F: Descripción de monto exento de IVA</li>
                                 <li>Columna G: Nombre del proveedor</li>
                                 <li>Columna H: Nombre del empleado</li>
-                                <li>Columna I: Grupo Presupuestal</li>
-                                <li>Columna J: Cuenta Analítica</li>
-                                <li>Columna K: Total del gasto</li>
-                                <li>Columna L: Monto exento de IVA</li>
-                                <li>Columna M: IVA</li>
+                                <li>Columna I: Grupo Presupuestal o Cuenta Analítica</li>
+                                <li>Columna J: Total del gasto</li>
+                                <li>Columna K: Monto exento de IVA</li>
+                                <li>Columna L: IVA</li>
                             </ul>
                             <p><strong>Nota:</strong> Los gastos se agruparán por la columna C (Referencia) para crear los reportes de gastos.</p>
+                            <p><strong>Columna I:</strong> El sistema detectará automáticamente si el valor corresponde a un Grupo Presupuestal o una Cuenta Analítica.</p>
+                            <p><strong>Agrupar por Factura:</strong> Si está activado, al contabilizar se generará una sola CXP al tercero de la tarjeta de crédito. Si está desactivado, se generará una CXP por cada gasto (comportamiento estándar).</p>
                         </div>
                     </group>
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'HR Expense Import',
-    'version': '17.0.1.0.0',
+    'version': '17.0.2.0.0',
     'category': 'Human Resources/Expenses',
-    'summary': 'Import expense reports from Excel files',
+    'summary': 'Import expense reports from Excel files with automatic detection and grouping options',
     'description': """
         Import HR Expense Reports from Excel
         =====================================
@@ -13,9 +13,15 @@
         Features:
         * Bulk import of expenses grouped by report
         * Validation of data before import
-        * Support for budget groups and analytic accounts
+        * Automatic detection of budget groups or analytic accounts (Column I)
         * Automatic partner product matching
         * Payment mode and credit card assignment
+        * Optional CXP grouping when posting with credit cards
+        
+        Version 2.0.0 Changes:
+        * Removed Column J (Analytic Account) - now integrated with Column I
+        * Smart detection: Column I auto-detects budget groups or analytic accounts
+        * New field: 'Agrupar por Factura' for grouped payables when posting
     """,
     'author': 'LOGYCA',
     'website': 'https://www.logyca.com',

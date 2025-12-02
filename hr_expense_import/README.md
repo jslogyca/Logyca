@@ -6,9 +6,10 @@ Módulo para importar reportes de gastos (hr.expense.sheet) con sus respectivos 
 
 - ✅ Importación masiva de gastos agrupados por reporte
 - ✅ Validación de datos antes de la importación
-- ✅ Soporte para grupos presupuestales y cuentas analíticas
+- ✅ Soporte para grupos presupuestales y cuentas analíticas (detección automática)
 - ✅ Asignación automática de productos según configuración del proveedor
 - ✅ Soporte para modo de pago y tarjetas de crédito
+- ✅ Agrupación opcional de CXP por factura
 - ✅ Mensajes de error detallados
 
 ## Dependencias
@@ -32,17 +33,20 @@ El archivo Excel debe tener las siguientes columnas (en orden):
 | F | Descripción exento de IVA | Descripción del monto exento (hr.expense - amount_tax_excluded_description) |
 | G | Proveedor | Nombre del proveedor (hr.expense - partner_id.name) |
 | H | Empleado | Nombre del empleado (hr.expense - employee_id) |
-| I | Grupo Presupuestal | Nombre del grupo presupuestal (hr.expense - budget_group_id) |
-| J | Cuenta Analítica | Nombre de la cuenta analítica (hr.expense - analytic_distribution) |
-| K | Total | Monto total del gasto (hr.expense - total_amount) |
-| L | Exento de IVA | Monto exento de IVA (hr.expense - total_amount_with_excluded) |
-| M | IVA | Monto del IVA (hr.expense - tax_amount) |
+| I | Grupo Presupuestal / Cuenta Analítica | Detecta automáticamente si es logyca.budget_group o account.analytic.account |
+| J | Total | Monto total del gasto (hr.expense - total_amount) |
+| K | Exento de IVA | Monto exento de IVA (hr.expense - amount_tax_excluded) |
+| L | IVA | Monto del IVA (hr.expense - tax_amount) |
 
 ### Notas Importantes
 
 1. **Columna C (Referencia)**: Los gastos se agruparán por este campo para crear los reportes de gastos.
 2. **Columna D (NIT Proveedor)**: Se busca el proveedor por su NIT con `parent_id = null`.
-3. **Asignación de Productos**: Se utiliza la lógica del modelo `partner.product.purchase` similar al wizard `sale.order.import.file.wizard`:
+3. **Columna I (Grupo Presupuestal / Cuenta Analítica)**: 
+   - El sistema primero intenta buscar como `logyca.budget_group`
+   - Si no encuentra, busca como `account.analytic.account`
+   - Si no encuentra ninguno, genera un error de validación
+4. **Asignación de Productos**: Se utiliza la lógica del modelo `partner.product.purchase` similar al wizard `sale.order.import.file.wizard`:
    - Si el grupo presupuestal empieza con "AD": tipo 'ga' (Gasto Administrativo)
    - Si no es por defecto y no empieza con "AD": tipo 'gv' (Gasto de Venta)
    - Si es por defecto: tipo 'co' (Costo)
@@ -54,10 +58,13 @@ El archivo Excel debe tener las siguientes columnas (en orden):
    - Cuenta Propia del Empleado
    - Cuenta de la Compañía
    - Tarjeta de Crédito (requiere seleccionar la tarjeta)
-3. Cargar el archivo Excel
-4. Click en **Validar Datos** para verificar que todo esté correcto
-5. Revisar el resultado de la validación
-6. Si todo está correcto, click en **Importar**
+3. **[NUEVO]** Si selecciona Tarjeta de Crédito, puede activar **Agrupar por Factura**:
+   - ✅ **Activado**: Al contabilizar, se generará una sola CXP al tercero de la tarjeta de crédito
+   - ❌ **Desactivado**: Se generará una CXP por cada gasto (comportamiento estándar)
+4. Cargar el archivo Excel
+5. Click en **Validar Datos** para verificar que todo esté correcto
+6. Revisar el resultado de la validación
+7. Si todo está correcto, click en **Importar**
 
 ## Validaciones
 
@@ -67,10 +74,31 @@ El módulo valida lo siguiente antes de importar:
 2. ✅ Existencia del proveedor por NIT
 3. ✅ Configuración de productos para el proveedor
 4. ✅ Existencia del empleado
-5. ✅ Existencia del grupo presupuestal
-6. ✅ Existencia de la cuenta analítica
-7. ✅ No duplicación de referencias de reportes
-8. ✅ Tarjeta de crédito seleccionada (si aplica)
+5. ✅ Existencia del grupo presupuestal o cuenta analítica (Columna I)
+6. ✅ No duplicación de referencias de reportes
+7. ✅ Tarjeta de crédito seleccionada (si aplica)
+
+## Funcionalidad de Agrupación por Factura
+
+### Comportamiento Normal (Agrupar por Factura = False)
+```
+Reporte de Gastos: RPT-2024-001
+  - Gasto 1: Proveedor A, $100 → CXP a Proveedor A: $100
+  - Gasto 2: Proveedor B, $200 → CXP a Proveedor B: $200
+  - Gasto 3: Proveedor C, $150 → CXP a Proveedor C: $150
+  
+Total: 3 CXP creadas (una por cada proveedor)
+```
+
+### Con Agrupación por Factura (Agrupar por Factura = True + Tarjeta de Crédito)
+```
+Reporte de Gastos: RPT-2024-001
+  - Gasto 1: Proveedor A, $100 ┐
+  - Gasto 2: Proveedor B, $200 ├→ CXP a Banco XYZ (tarjeta): $450
+  - Gasto 3: Proveedor C, $150 ┘
+  
+Total: 1 CXP creada (agrupada al tercero de la tarjeta de crédito)
+```
 
 ## Ejemplo de Flujo
 
@@ -100,6 +128,9 @@ Referencia: "RPT-2024-002"
   - Cuenta de la Compañía
   - Tarjeta de Crédito
 - **Tarjeta de Crédito**: Tarjeta asociada (requerido si modo = Tarjeta de Crédito)
+- **[NUEVO] Agrupar por Factura**: Checkbox visible solo cuando modo = Tarjeta de Crédito
+  - Default: False
+  - Controla el comportamiento de la contabilización de CXP
 
 ## Campos del Reporte de Gastos (hr.expense.sheet)
 
@@ -109,6 +140,7 @@ Los siguientes campos se asignan del wizard al reporte:
 - `company_id`: Compañía del reporte (Columna A)
 - `payment_mode`: Modo de pago (desde el wizard)
 - `credit_card_id`: Tarjeta de crédito (desde el wizard)
+- **[NUEVO]** `agrupar_por_factura`: Indica si se agrupan las CXP (desde el wizard)
 
 ## Campos del Gasto (hr.expense)
 
@@ -118,14 +150,14 @@ Cada fila del Excel crea un gasto con los siguientes campos:
 - `product_id`: Producto (asignado automáticamente según proveedor)
 - `partner_id`: Proveedor (Columna D por NIT)
 - `name`: Descripción (Columna E)
-- `total_amount`: Total (Columna K)
-- `total_amount_with_excluded`: Exento de IVA (Columna L)
-- `tax_amount`: IVA (Columna M)
+- `total_amount`: Total (Columna J)
+- `amount_tax_excluded`: Exento de IVA (Columna K)
+- `tax_amount`: IVA (Columna L)
 - `amount_tax_excluded_description`: Descripción exento (Columna F)
 - `company_id`: Compañía (Columna A)
 - `payment_mode`: Modo de pago (desde el wizard)
-- `budget_group_id`: Grupo presupuestal (Columna I)
-- `analytic_distribution`: Distribución analítica (Columna J)
+- `budget_group_id`: Grupo presupuestal (Columna I, si aplica)
+- `analytic_distribution`: Distribución analítica (Columna I, si aplica)
 
 ## Mensajes de Error
 
@@ -135,7 +167,21 @@ El módulo proporciona mensajes detallados indicando la fila y el tipo de error:
 ❌ Fila 3: Proveedor con NIT '900123456' no existe en el sistema
 ❌ Fila 5: Empleado 'Juan Pérez' no existe en el sistema
 ⚠️ Fila 7: No existe configuración de productos para el proveedor 'ABC S.A.'
+❌ Fila 9: El valor 'INVALID' no corresponde ni a un Grupo Presupuestal ni a una Cuenta Analítica válida
 ```
+
+## Cambios en la Versión Actual
+
+### Cambios Principales
+1. **Eliminada Columna J**: Se eliminó la columna de Cuenta Analítica separada
+2. **Columna I Mejorada**: Ahora detecta automáticamente si es Grupo Presupuestal o Cuenta Analítica
+3. **Campo Agrupar por Factura**: Nueva funcionalidad para agrupar CXP en contabilización
+4. **Lógica de Contabilización**: Override del método `action_sheet_move_create` para soportar agrupación
+
+### Detalles Técnicos
+- El campo `agrupar_por_factura` solo es visible cuando `payment_mode == 'credit_card'`
+- La agrupación de CXP solo funciona si hay una tarjeta de crédito configurada con un partner asociado
+- Las líneas de CXP se agrupan buscando líneas con `account_type == 'liability_payable'` y `credit > 0`
 
 ## Autor
 
