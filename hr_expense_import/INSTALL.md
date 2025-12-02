@@ -97,11 +97,16 @@ Descarga la plantilla `template_import_expenses.xlsx` que se incluye con el mód
 | F | Desc. Exento IVA | Texto | N/A |
 | G | Nombre Proveedor | Texto | Proveedor A S.A.S |
 | H | Empleado | Texto | Juan Pérez |
-| I | Grupo Presupuestal | Texto | ADMINISTRACION |
-| J | Cuenta Analítica | Texto | Oficina Principal |
-| K | Total | Número | 100000 |
-| L | Exento de IVA | Número | 0 |
-| M | IVA | Número | 19000 |
+| I | Grupo Presupuestal / Cuenta Analítica | Texto | ADMINISTRACION |
+| J | Total | Número | 100000 |
+| K | Exento de IVA | Número | 0 |
+| L | IVA | Número | 19000 |
+
+**⚠️ CAMBIO IMPORTANTE en v2.0.0:**
+- **Columna I** ahora acepta tanto Grupos Presupuestales como Cuentas Analíticas
+- El sistema detecta automáticamente qué tipo de registro es
+- Busca primero como `logyca.budget_group`, luego como `account.analytic.account`
+- **Ya NO existe la Columna J** (Cuenta Analítica separada)
 
 **Importante:**
 - La columna C (Referencia) agrupa los gastos en un mismo reporte
@@ -127,7 +132,24 @@ Resultado: 1 reporte con 3 gastos = Total $300,000
 2. **Seleccionar Tarjeta** (solo si modo = Tarjeta de Crédito)
    - Elegir la tarjeta de crédito de la lista
 
-3. **Cargar el Archivo Excel**
+3. **[NUEVO v2.0.0] Agrupar por Factura** (solo visible si modo = Tarjeta de Crédito)
+   - ✅ **Activado**: Al contabilizar, se generará una sola CXP al tercero de la tarjeta de crédito
+   - ❌ **Desactivado** (default): Se generará una CXP por cada gasto (comportamiento estándar)
+   
+   **Ejemplo de Agrupación:**
+   ```
+   Con Agrupar por Factura = True:
+   ├── Gasto 1: Proveedor A - $100 ┐
+   ├── Gasto 2: Proveedor B - $200 ├→ CXP única a Banco XYZ: $450
+   └── Gasto 3: Proveedor C - $150 ┘
+   
+   Con Agrupar por Factura = False:
+   ├── Gasto 1: Proveedor A - $100 → CXP a Proveedor A: $100
+   ├── Gasto 2: Proveedor B - $200 → CXP a Proveedor B: $200
+   └── Gasto 3: Proveedor C - $150 → CXP a Proveedor C: $150
+   ```
+
+4. **Cargar el Archivo Excel**
    - Click en el campo "Archivo Excel"
    - Seleccionar el archivo preparado
 
@@ -139,8 +161,7 @@ Resultado: 1 reporte con 3 gastos = Total $300,000
    - ✅ Existencia de proveedores
    - ✅ Configuración de productos
    - ✅ Existencia de empleados
-   - ✅ Existencia de grupos presupuestales
-   - ✅ Existencia de cuentas analíticas
+   - ✅ Existencia de grupos presupuestales o cuentas analíticas (Columna I)
    - ✅ No duplicación de referencias
    - ✅ Configuración de tarjeta (si aplica)
 
@@ -257,5 +278,21 @@ LGPL-3
 
 ---
 
-**Versión:** 17.0.1.0.0  
-**Última actualización:** Noviembre 2024
+**Versión:** 17.0.2.0.0  
+**Última actualización:** Diciembre 2024
+
+## 🆕 Novedades v2.0.0
+
+### Cambios Principales
+
+1. **Columna I Inteligente**: Ahora detecta automáticamente si el valor es un grupo presupuestal o cuenta analítica
+2. **Columna J Eliminada**: Ya no existe columna separada para cuentas analíticas
+3. **Agrupar por Factura**: Nueva opción para generar CXP única al contabilizar con tarjeta de crédito
+4. **Formato Simplificado**: 12 columnas en lugar de 13
+
+### Migración desde v1.0.0
+
+Si tiene archivos Excel del formato anterior:
+1. Eliminar la Columna J (Cuenta Analítica)
+2. Los valores de Columna J ahora van en Columna I junto con grupos presupuestales
+3. Actualizar referencias: K→J, L→K, M→L

@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Heredar vista form de hr.expense.sheet para agregar campo agrupar_por_factura -->
+    <record id="view_hr_expense_sheet_form_inherit" model="ir.ui.view">
+        <field name="name">hr.expense.sheet.form.inherit</field>
+        <field name="model">hr.expense.sheet</field>
+        <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_mode']" position="after">
+                <field name="agrupar_por_factura" 
+                       invisible="payment_mode != 'credit_card'"/>
+                <field name="documento_soporte"/>
+            </xpath>
+        </field>
+    </record>
+
     <!-- Heredar vista tree de hr.expense.sheet para agregar filtros -->
     <record id="view_hr_expense_sheet_tree_inherit" model="ir.ui.view">
         <field name="name">hr.expense.sheet.tree.inherit</field>

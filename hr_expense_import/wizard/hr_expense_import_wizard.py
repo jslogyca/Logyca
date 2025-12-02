@@ -25,6 +25,18 @@ class HrExpenseImportWizard(models.TransientModel):
         string='Tarjeta de Crédito',
         help='Tarjeta de crédito asociada al reporte de gastos'
     )
+    agrupar_por_factura = fields.Boolean(
+        string='Agrupar por Factura',
+        default=False,
+        help='Si está activado, al contabilizar el gasto se generará una sola CXP al tercero '
+             'de la tarjeta de crédito. Si está desactivado, se generará una CXP por cada gasto.'
+    )
+    documento_soporte = fields.Boolean(
+        string='Documento Soporte',
+        default=False,
+        help='Si está activado, al contabilizar se generará la CXP a cada proveedor de las líneas de gasto '
+             'en lugar de al banco o tarjeta de crédito. Se utilizará el diario configurado como documento soporte.'
+    )
 
     @api.onchange('payment_mode')
     def _onchange_payment_mode(self):
@@ -37,10 +49,9 @@ class HrExpenseImportWizard(models.TransientModel):
         Validar los datos del archivo Excel antes de importar:
         1. Validar que el proveedor existe
         2. Validar que el empleado existe
-        3. Validar que el grupo presupuestal existe
-        4. Validar que la cuenta analítica existe
-        5. Validar que existe configuración de producto para el proveedor
-        6. Validar que no exista ya un reporte con la misma referencia
+        3. Validar que el grupo presupuestal o cuenta analítica existe (Columna I)
+        4. Validar que existe configuración de producto para el proveedor
+        5. Validar que no exista ya un reporte con la misma referencia
         """
         if not self.file_data:
             raise ValidationError('No se encuentra un archivo, por favor cargue uno.')
@@ -78,11 +89,10 @@ class HrExpenseImportWizard(models.TransientModel):
             tax_excluded_desc = str(fila[5]) if len(fila) > 5 and fila[5] else ''
             partner_name = str(fila[6]) if len(fila) > 6 and fila[6] else ''
             employee_name = str(fila[7]) if len(fila) > 7 and fila[7] else ''
-            budget_group_name = str(fila[8]) if len(fila) > 8 and fila[8] else ''
-            analytic_name = str(fila[9]) if len(fila) > 9 and fila[9] else ''
-            total_amount = float(fila[10]) if len(fila) > 10 and fila[10] else 0.0
-            tax_excluded = float(fila[11]) if len(fila) > 11 and fila[11] else 0.0
-            tax_amount = float(fila[12]) if len(fila) > 12 and fila[12] else 0.0
+            budget_or_analytic_name = str(fila[8]) if len(fila) > 8 and fila[8] else ''
+            total_amount = float(fila[9]) if len(fila) > 9 and fila[9] else 0.0
+            tax_excluded = float(fila[10]) if len(fila) > 10 and fila[10] else 0.0
+            tax_amount = float(fila[11]) if len(fila) > 11 and fila[11] else 0.0
 
             # Limpiar NIT (remover .0 si existe)
             suffix = ".0"
@@ -128,7 +138,9 @@ class HrExpenseImportWizard(models.TransientModel):
                             ('partner_id', '=', partner_id.id),
                             ('company_id', '=', company_id.id)
                         ], limit=1)
+                        print('//////', product_config, partner_id.name)
                         if not product_config:
+                            print('////// 2222', product_config, partner_id.name)
                             warnings.append(
                                 f"Fila {row_num}: No existe configuración de productos para el proveedor "
                                 f"'{partner_id.name}' en la compañía '{company_id.name}'"
@@ -143,30 +155,33 @@ class HrExpenseImportWizard(models.TransientModel):
                 if not employee_id:
                     errors.append(f"Fila {row_num}: Empleado '{employee_name}' no existe en el sistema")
 
-            # VALIDACIÓN 5: Verificar que el grupo presupuestal existe
-            if budget_group_name and company_id:
+            # VALIDACIÓN 5: Verificar que el grupo presupuestal o cuenta analítica existe (Columna I)
+            budget_group = None
+            analytic_account = None
+            if budget_or_analytic_name and company_id:
+                # Primero intentar buscar como grupo presupuestal
                 budget_group = self.env['logyca.budget_group'].search([
-                    ('name', '=', budget_group_name),
+                    ('name', '=', budget_or_analytic_name),
                     ('company_id', '=', company_id.id)
                 ], limit=1)
+                
+                # Si no es grupo presupuestal, buscar como cuenta analítica
                 if not budget_group:
-                    errors.append(
-                        f"Fila {row_num}: Grupo Presupuestal '{budget_group_name}' "
-                        f"no existe para la compañía '{company_id.name}'"
-                    )
+                    analytic_account = self.env['account.analytic.account'].search([
+                        ('name', '=', budget_or_analytic_name.strip()),
+                        '|',
+                        ('company_id', '=', company_id.id),
+                        ('company_id', '=', False)
+                    ], limit=1)
+                    
+                    if not analytic_account:
+                        errors.append(
+                            f"Fila {row_num}: El valor '{budget_or_analytic_name}' no corresponde "
+                            f"ni a un Grupo Presupuestal ni a una Cuenta Analítica válida"
+                        )
 
-            # VALIDACIÓN 6: Verificar que la cuenta analítica existe
-            if analytic_name and company_id:
-                analytic_account = self.env['account.analytic.account'].search([
-                    ('name', '=', analytic_name.strip()),
-                    '|',
-                    ('company_id', '=', company_id.id),
-                    ('company_id', '=', False)
-                ], limit=1)
-                if not analytic_account:
-                    errors.append(f"Fila {row_num}: Cuenta Analítica '{analytic_name}' no existe")
 
-        # VALIDACIÓN 7: Verificar si ya existen reportes con las mismas referencias
+        # VALIDACIÓN 6: Verificar si ya existen reportes con las mismas referencias
         for reference, ref_data in references_dict.items():
             if reference:
                 company_name = ref_data['company_name']
@@ -281,11 +296,10 @@ class HrExpenseImportWizard(models.TransientModel):
                 tax_excluded_desc = str(fila[5]) if len(fila) > 5 and fila[5] else ''
                 partner_name = str(fila[6]) if len(fila) > 6 and fila[6] else ''
                 employee_name = str(fila[7]) if len(fila) > 7 and fila[7] else ''
-                budget_group_name = str(fila[8]) if len(fila) > 8 and fila[8] else ''
-                analytic_name = str(fila[9]) if len(fila) > 9 and fila[9] else ''
-                total_amount = float(fila[10]) if len(fila) > 10 and fila[10] else 0.0
-                tax_excluded = float(fila[11]) if len(fila) > 11 and fila[11] else 0.0
-                tax_amount = float(fila[12]) if len(fila) > 12 and fila[12] else 0.0
+                budget_or_analytic_name = str(fila[8]) if len(fila) > 8 and fila[8] else ''
+                total_amount = float(fila[9]) if len(fila) > 9 and fila[9] else 0.0
+                tax_excluded = float(fila[10]) if len(fila) > 10 and fila[10] else 0.0
+                tax_amount = float(fila[11]) if len(fila) > 11 and fila[11] else 0.0
 
                 # Limpiar NIT
                 suffix = ".0"
@@ -322,25 +336,37 @@ class HrExpenseImportWizard(models.TransientModel):
                     errors.append(f"Fila {row_num}: No se encontró el empleado '{employee_name}'")
                     continue
 
-                # Buscar grupo presupuestal
-                budget_group_id = self.env['logyca.budget_group'].search([
-                    ('name', '=', budget_group_name),
-                    ('company_id', '=', company_id.id)
-                ], limit=1) if budget_group_name else False
-
-                # Buscar cuenta analítica
-                analytic_id = self.env['account.analytic.account'].search([
-                    ('name', '=', analytic_name.strip()),
-                    '|',
-                    ('company_id', '=', company_id.id),
-                    ('company_id', '=', False)
-                ], limit=1) if analytic_name else False
+                # Buscar grupo presupuestal o cuenta analítica (Columna I)
+                budget_group_id = None
+                analytic_id = None
+                
+                if budget_or_analytic_name:
+                    print('BUSCA ANALITICA')
+                    # Primero intentar como grupo presupuestal
+                    budget_group_id = self.env['logyca.budget_group'].search([
+                        ('name', '=', budget_or_analytic_name),
+                        ('company_id', '=', company_id.id)
+                    ], limit=1)
+                    
+                    # Si no es grupo presupuestal, buscar como cuenta analítica
+                    if not budget_group_id:
+                        print('BUSCA ANALITICA 22222')
+                        analytic_id = self.env['account.analytic.account'].search([
+                            ('name', '=', budget_or_analytic_name.strip()),
+                            '|',
+                            ('company_id', '=', company_id.id),
+                            ('company_id', '=', False)
+                        ], limit=1)
+                        print('BUSCA ANALITICA 22222', analytic_id, budget_or_analytic_name.strip(), company_id)
 
                 # Buscar producto usando la lógica de partner.product.purchase
                 # Similar a la lógica del wizard de sale.order.import
                 product_id = None
+                print('////// ANALITICA', analytic_id, budget_or_analytic_name, budget_group_id)
                 if budget_group_id:
+                    print('////// ANALITICA 111', analytic_id, budget_or_analytic_name)
                     if not budget_group_id.by_default_group:
+                        print('////// ANALITICA 5555', analytic_id, budget_or_analytic_name)
                         # Determinar tipo de producto según el grupo presupuestal
                         if (budget_group_id.name or '').strip().upper().startswith('AD'):
                             # Tipo GA (Gasto Administrativo)
@@ -359,6 +385,7 @@ class HrExpenseImportWizard(models.TransientModel):
                                 ('amount_type', '=', 'total')
                             ], order="id asc", limit=1)
                     else:
+                        print('////// ANALITICA 222', analytic_id, budget_or_analytic_name)
                         # Tipo CO (Costo)
                         product_config = self.env['partner.product.purchase'].search([
                             ('partner_id', '=', partner_id.id),
@@ -368,9 +395,25 @@ class HrExpenseImportWizard(models.TransientModel):
                         ], order="id asc", limit=1)
                     
                     if product_config:
+                        print('PRODUCTO 44444', product_config)
                         product_id = product_config.product_id
-                
+                        print('PRODUCTO 44444', product_id)
+                else:
+                    print('////// ANALITICA 222', analytic_id, budget_or_analytic_name)
+                    # Tipo CO (Costo)
+                    product_config = self.env['partner.product.purchase'].search([
+                        ('partner_id', '=', partner_id.id),
+                        ('company_id', '=', company_id.id),
+                        ('product_type', '=', 'co'),
+                        ('amount_type', '=', 'total')
+                    ], order="id asc", limit=1)
+                    if product_config:
+                        print('PRODUCTO 44444', product_config)
+                        product_id = product_config.product_id
+                        print('PRODUCTO 44444', product_id)                    
+                print('////// PRODUCTO', product_config, partner_id.name, product_id)                
                 if not product_id:
+                    print('////// PRODUCTO3333', product_config, partner_id.name)                
                     errors.append(
                         f"Fila {row_num}: No se encontró configuración de producto para el proveedor "
                         f"'{partner_id.name}' en la compañía '{company_id.name}'"
@@ -455,6 +498,12 @@ class HrExpenseImportWizard(models.TransientModel):
                 # Agregar campos específicos del módulo hr_expense_credit_card
                 if self.payment_mode == 'credit_card' and self.credit_card_id:
                     sheet_vals['credit_card_id'] = self.credit_card_id.id
+                
+                # Agregar campo agrupar_por_factura
+                sheet_vals['agrupar_por_factura'] = self.agrupar_por_factura
+
+                # Agregar campo documento_soporte
+                sheet_vals['documento_soporte'] = self.documento_soporte
 
                 # Crear gastos primero
                 expense_ids = []
