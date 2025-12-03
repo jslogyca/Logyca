@@ -21,6 +21,12 @@ class HrExpenseSheet(models.Model):
         tracking=True,
         help='Tarjeta de crédito corporativa utilizada para los gastos'
     )
+    documento_soporte = fields.Boolean(
+        string='Documento Soporte',
+        default=False,
+        help='Si está activado, al contabilizar se generará la CXP a cada proveedor de las líneas de gasto '
+             'en lugar de al banco o tarjeta de crédito. Se utilizará el diario configurado como documento soporte.'
+    )
 
     @api.depends('expense_line_ids.payment_mode')
     def _compute_payment_mode(self):
@@ -36,9 +42,11 @@ class HrExpenseSheet(models.Model):
     def _prepare_expense_credit_card_move_vals(self):
         """
         Prepara los valores para el asiento contable cuando el pago es con tarjeta de crédito.
-        Crea un asiento con:
-        - Una línea al débito por cada gasto con su cuenta y proveedor
-        - Una línea al crédito CXP por cada gasto con la cuenta de la tarjeta y el tercero de la tarjeta
+        
+        Funcionalidad nueva:
+        - Si documento_soporte=True: Usa diario con is_support_document=True y genera 1 sola CXP
+          al tercero credit_card_partner_id por todos los gastos
+        - Si documento_soporte=False: Comportamiento anterior (CXP por cada gasto)
         """
         self.ensure_one()
 
@@ -50,10 +58,34 @@ class HrExpenseSheet(models.Model):
         if not self.credit_card_id:
             raise UserError(_('Debe seleccionar la tarjeta de crédito.'))
 
-        if not self.journal_id:
-            raise UserError(_('Debe seleccionar un diario contable.'))
+        # NUEVA FUNCIONALIDAD 2: Si documento_soporte está marcado, usar diario con documento soporte
+        if self.documento_soporte:
+            # Buscar el diario configurado como documento soporte
+            support_journal = self.env['account.journal'].search([
+                ('is_support_document', '=', True),
+                ('company_id', '=', self.company_id.id)
+            ], limit=1)
+            
+            if not support_journal:
+                raise UserError(_(
+                    'No se encontró un diario configurado como documento soporte. '
+                    'Por favor configure un diario con la opción "Diario de Documento Soporte" marcada.'
+                ))
+            
+            journal_to_use = support_journal
+            
+            # Validar que credit_card_partner_id esté establecido
+            if not self.credit_card_partner_id:
+                raise UserError(_(
+                    'Debe seleccionar el proveedor de la tarjeta de crédito cuando use documento soporte.'
+                ))
+        else:
+            if not self.journal_id:
+                raise UserError(_('Debe seleccionar un diario contable.'))
+            journal_to_use = self.journal_id
 
         move_lines = []
+        total_amount_all_expenses = 0.0  # Para acumular el total cuando documento_soporte=True
 
         # Procesar cada gasto
         for expense in self.expense_line_ids:
@@ -138,20 +170,36 @@ class HrExpenseSheet(models.Model):
                 move_lines.append(Command.create(excluded_line_vals))
                 expense_amount += expense.amount_tax_excluded
 
-            # Línea de crédito CXP para cada gasto con la cuenta y tercero de la tarjeta
-            # Usar el total que incluye el valor excluido
-            credit_line_vals = {
-                'name': _('CXP Tarjeta - %s') % expense.name,
+            # NUEVA FUNCIONALIDAD 2: Si documento_soporte=True, acumular el total
+            # Si documento_soporte=False, crear CXP por cada gasto (comportamiento anterior)
+            if self.documento_soporte:
+                # Acumular el total para crear 1 sola CXP al final
+                total_amount_all_expenses += expense_amount
+            else:
+                # Crear CXP individual por cada gasto (comportamiento anterior)
+                credit_line_vals = {
+                    'name': _('CXP Tarjeta - %s') % expense.name,
+                    'account_id': self.credit_card_id.account_id.id,
+                    'partner_id': self.credit_card_id.partner_id.id,
+                    'debit': abs(expense_amount) if expense_amount < 0 else 0.0,
+                    'credit': expense_amount if expense_amount > 0 else 0.0,
+                }
+                move_lines.append(Command.create(credit_line_vals))
+
+        # NUEVA FUNCIONALIDAD 2: Si documento_soporte=True, crear 1 sola CXP por todos los gastos
+        if self.documento_soporte:
+            single_cxp_line_vals = {
+                'name': _('CXP Tarjeta - %s') % self.name,
                 'account_id': self.credit_card_id.account_id.id,
-                'partner_id': self.credit_card_id.partner_id.id,
-                'debit': abs(expense_amount) if expense_amount < 0 else 0.0,
-                'credit': expense_amount if expense_amount > 0 else 0.0,
+                'partner_id': self.credit_card_partner_id.id,  # Usar credit_card_partner_id
+                'debit': abs(total_amount_all_expenses) if total_amount_all_expenses < 0 else 0.0,
+                'credit': total_amount_all_expenses if total_amount_all_expenses > 0 else 0.0,
             }
-            move_lines.append(Command.create(credit_line_vals))
+            move_lines.append(Command.create(single_cxp_line_vals))
 
         # Preparar valores del asiento contable
         move_vals = {
-            'journal_id': self.journal_id.id,
+            'journal_id': journal_to_use.id,
             'date': self.accounting_date or fields.Date.context_today(self),
             'ref': self.name,
             'line_ids': move_lines,
@@ -164,6 +212,8 @@ class HrExpenseSheet(models.Model):
         """
         Override del método que crea el asiento contable.
         Si el pago es con tarjeta de crédito, usa nuestra lógica personalizada.
+        
+        NUEVA FUNCIONALIDAD 1: Los asientos se crean en borrador (no se publican automáticamente)
         """
         # Filtrar los sheets que son de tarjeta de crédito
         # (todos los gastos deben ser credit_card)
@@ -181,7 +231,8 @@ class HrExpenseSheet(models.Model):
             if move_vals:
                 move = self.env['account.move'].create(move_vals)
                 sheet.write({'account_move_ids': [Command.link(move.id)]})
-                move.action_post()
+                # NUEVA FUNCIONALIDAD 1: NO publicar el asiento, dejarlo en borrador
+                # move.action_post()  # <- Esta línea se comenta/elimina
 
         # Procesar el resto con la lógica estándar
         if other_sheets:

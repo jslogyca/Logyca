@@ -38,7 +38,8 @@
                        options="{'no_create': True, 'no_create_edit': True}"
                        context="{'default_company_id': company_id}"/>
                 <field name="credit_card_partner_id" 
-                       invisible="1"/>
+                       invisible="not documento_soporte"/>
+                <field name="documento_soporte"/>                       
             </xpath>
         </field>
     </record>
