@@ -21,6 +21,7 @@
         'views/credit_card_views.xml',
         'views/hr_expense_views.xml',
         'views/hr_expense_sheet_views.xml',
+        'views/account_journal_views.xml',
     ],
     'demo': [
         'data/credit_card_demo.xml',

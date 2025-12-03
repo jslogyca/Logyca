@@ -52,6 +52,8 @@ class HrExpenseImportWizard(models.TransientModel):
         3. Validar que el grupo presupuestal o cuenta analítica existe (Columna I)
         4. Validar que existe configuración de producto para el proveedor
         5. Validar que no exista ya un reporte con la misma referencia
+        
+        NUEVA FUNCIONALIDAD 3: Incluir fecha de contabilización (columna adicional)
         """
         if not self.file_data:
             raise ValidationError('No se encuentra un archivo, por favor cargue uno.')
@@ -93,6 +95,8 @@ class HrExpenseImportWizard(models.TransientModel):
             total_amount = float(fila[9]) if len(fila) > 9 and fila[9] else 0.0
             tax_excluded = float(fila[10]) if len(fila) > 10 and fila[10] else 0.0
             tax_amount = float(fila[11]) if len(fila) > 11 and fila[11] else 0.0
+            # NUEVA FUNCIONALIDAD 3: Leer fecha de contabilización (columna 12 - índice 12)
+            accounting_date_value = fila[12] if len(fila) > 12 else ''
 
             # Limpiar NIT (remover .0 si existe)
             suffix = ".0"
@@ -107,7 +111,8 @@ class HrExpenseImportWizard(models.TransientModel):
                     references_dict[reference] = {
                         'company_name': company_name,
                         'employee_name': employee_name,
-                        'count': 0
+                        'count': 0,
+                        'accounting_date': accounting_date_value  # Guardar fecha de contabilización
                     }
                 references_dict[reference]['count'] += 1
 
@@ -169,95 +174,66 @@ class HrExpenseImportWizard(models.TransientModel):
                 if not budget_group:
                     analytic_account = self.env['account.analytic.account'].search([
                         ('name', '=', budget_or_analytic_name.strip()),
-                        '|',
-                        ('company_id', '=', company_id.id),
-                        ('company_id', '=', False)
+                        ('company_id', '=', company_id.id)
                     ], limit=1)
                     
                     if not analytic_account:
                         errors.append(
-                            f"Fila {row_num}: El valor '{budget_or_analytic_name}' no corresponde "
-                            f"ni a un Grupo Presupuestal ni a una Cuenta Analítica válida"
+                            f"Fila {row_num}: No se encontró grupo presupuestal ni cuenta analítica "
+                            f"con el nombre '{budget_or_analytic_name}' en la compañía '{company_id.name}'"
                         )
 
+        # VALIDACIÓN 6: Verificar que no existan reportes con las mismas referencias
+        existing_references = []
+        for reference in references_dict.keys():
+            existing_sheet = self.env['hr.expense.sheet'].search([
+                ('name', '=', reference)
+            ], limit=1)
+            if existing_sheet:
+                existing_references.append(reference)
 
-        # VALIDACIÓN 6: Verificar si ya existen reportes con las mismas referencias
-        for reference, ref_data in references_dict.items():
-            if reference:
-                company_name = ref_data['company_name']
-                employee_name = ref_data['employee_name']
-                
-                company_id = self.env['res.company'].search([
-                    ('name', '=', company_name)
-                ], limit=1)
-                
-                employee_id = self.env['hr.employee'].search([
-                    ('name', '=', employee_name)
-                ], limit=1)
+        if existing_references:
+            errors.append(
+                f"Las siguientes referencias ya existen en el sistema: {', '.join(existing_references)}"
+            )
 
-                if company_id and employee_id:
-                    existing_sheet = self.env['hr.expense.sheet'].search([
-                        ('name', '=', reference),
-                        ('employee_id', '=', employee_id.id),
-                        ('company_id', '=', company_id.id)
-                    ], limit=1)
-                    
-                    if existing_sheet:
-                        errors.append(
-                            f"CRÍTICO: Ya existe un Reporte de Gastos con la referencia '{reference}' "
-                            f"para el empleado {employee_id.name} (ID: {existing_sheet.id})"
-                        )
-
-        # VALIDACIÓN 8: Validar modo de pago y tarjeta de crédito
-        if self.payment_mode == 'credit_card' and not self.credit_card_id:
-            errors.append("Debe seleccionar una tarjeta de crédito cuando el modo de pago es 'Tarjeta de Crédito'")
-
-        # Construir mensaje de resultado
-        result_msg = []
-        
+        # Mostrar resultado de validación
+        result_text = ""
         if errors:
-            result_msg.append("=" * 80)
-            result_msg.append("ERRORES ENCONTRADOS:")
-            result_msg.append("=" * 80)
-            for error in errors:
-                result_msg.append(f"❌ {error}")
-            result_msg.append("")
-
+            result_text += "=== ERRORES ===\n\n"
+            result_text += '\n'.join(errors)
+            result_text += "\n\n"
+        
         if warnings:
-            result_msg.append("=" * 80)
-            result_msg.append("ADVERTENCIAS:")
-            result_msg.append("=" * 80)
-            for warning in warnings:
-                result_msg.append(f"⚠️ {warning}")
-            result_msg.append("")
+            result_text += "=== ADVERTENCIAS ===\n\n"
+            result_text += '\n'.join(warnings)
+            result_text += "\n\n"
+        
+        if not errors:
+            result_text += f"=== RESUMEN ===\n\n"
+            result_text += f"Total de reportes a importar: {len(references_dict)}\n"
+            for ref, data in references_dict.items():
+                result_text += f"  - {ref}: {data['count']} gastos\n"
+            result_text += "\n✓ Validación exitosa. Puede proceder con la importación."
+        else:
+            result_text += "✗ Se encontraron errores. Por favor corrija el archivo antes de importar."
 
-        if not errors and not warnings:
-            result_msg.append("=" * 80)
-            result_msg.append("✅ VALIDACIÓN EXITOSA")
-            result_msg.append("=" * 80)
-            result_msg.append(f"Total de referencias encontradas: {len(references_dict)}")
-            result_msg.append(f"Total de gastos a importar: {row_num - 1}")
-            result_msg.append("")
-            result_msg.append("El archivo está listo para ser importado.")
-        elif not errors:
-            result_msg.append("=" * 80)
-            result_msg.append("⚠️ VALIDACIÓN COMPLETADA CON ADVERTENCIAS")
-            result_msg.append("=" * 80)
-            result_msg.append("Se puede proceder con la importación, pero revise las advertencias.")
-
-        self.validation_result = "\n".join(result_msg)
+        self.validation_result = result_text
         
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'hr.expense.import.wizard',
-            'res_id': self.id,
             'view_mode': 'form',
+            'res_id': self.id,
             'target': 'new',
         }
 
     def action_import_expenses(self):
         """
-        Importar los reportes de gastos con sus gastos asociados
+        Importar los gastos desde el archivo Excel
+        
+        NUEVA FUNCIONALIDAD 3: Guardar accounting_date de la columna 12
+        NUEVA FUNCIONALIDAD 4: Dejar los gastos en estado aprobado
         """
         if not self.file_data:
             raise ValidationError('No se encuentra un archivo, por favor cargue uno.')
@@ -275,19 +251,17 @@ class HrExpenseImportWizard(models.TransientModel):
         record_list = record_list[1:]  # Saltar encabezados
 
         errors = []
-        created_sheets = []
-        
-        # Diccionario para agrupar gastos por referencia (reporte)
-        expenses_by_reference = {}
-
         row_num = 1
+        expenses_by_reference = {}
+        created_sheets = []
+
         for fila in record_list:
             row_num += 1
-            if not fila or not any(fila):  # Si la fila está vacía
+            if not fila or not any(fila):
                 continue
 
             try:
-                # Extraer datos de la fila
+                # Extraer datos
                 company_name = str(fila[0]) if fila[0] else ''
                 date_value = fila[1] if len(fila) > 1 else ''
                 reference = str(fila[2]) if len(fila) > 2 and fila[2] else ''
@@ -300,76 +274,69 @@ class HrExpenseImportWizard(models.TransientModel):
                 total_amount = float(fila[9]) if len(fila) > 9 and fila[9] else 0.0
                 tax_excluded = float(fila[10]) if len(fila) > 10 and fila[10] else 0.0
                 tax_amount = float(fila[11]) if len(fila) > 11 and fila[11] else 0.0
+                # NUEVA FUNCIONALIDAD 3: Leer fecha de contabilización
+                accounting_date_value = fila[12] if len(fila) > 12 else ''
 
                 # Limpiar NIT
                 suffix = ".0"
                 if partner_vat.endswith(suffix):
                     partner_vat = partner_vat[:-len(suffix)]
                 if employee_name.endswith(suffix):
-                    employee_name = employee_name[:-len(suffix)]                    
-                if reference.endswith(suffix):
-                    reference = reference[:-len(suffix)]                    
-                if description.endswith(suffix):
-                    description = description[:-len(suffix)]                    
+                    employee_name = employee_name[:-len(suffix)]
 
                 # Buscar compañía
-                company_id = self.env['res.company'].search([
-                    ('name', '=', company_name)
-                ], limit=1) if company_name else self.env.company
+                company_id = self.env.company
+                if company_name:
+                    company_id = self.env['res.company'].search([
+                        ('name', '=', company_name)
+                    ], limit=1)
+                    if not company_id:
+                        errors.append(f"Fila {row_num}: Compañía '{company_name}' no encontrada")
+                        continue
 
                 # Buscar proveedor
                 partner_id = self.env['res.partner'].search([
                     ('vat', '=', partner_vat),
                     ('parent_id', '=', False)
                 ], limit=1)
-
                 if not partner_id:
-                    errors.append(f"Fila {row_num}: No se encontró el proveedor con NIT '{partner_vat}'")
+                    errors.append(f"Fila {row_num}: Proveedor con NIT '{partner_vat}' no encontrado")
                     continue
 
                 # Buscar empleado
                 employee_id = self.env['hr.employee'].search([
                     ('identification_id', '=', employee_name)
                 ], limit=1)
-
                 if not employee_id:
-                    errors.append(f"Fila {row_num}: No se encontró el empleado '{employee_name}'")
+                    errors.append(f"Fila {row_num}: Empleado '{employee_name}' no encontrado")
                     continue
 
-                # Buscar grupo presupuestal o cuenta analítica (Columna I)
-                budget_group_id = None
-                analytic_id = None
+                # Buscar grupo presupuestal o cuenta analítica
+                budget_group_id = self.env['logyca.budget_group'].search([
+                    ('name', '=', budget_or_analytic_name),
+                    ('company_id', '=', company_id.id)
+                ], limit=1)
                 
-                if budget_or_analytic_name:
-                    print('BUSCA ANALITICA')
-                    # Primero intentar como grupo presupuestal
-                    budget_group_id = self.env['logyca.budget_group'].search([
-                        ('name', '=', budget_or_analytic_name),
+                analytic_id = None
+                if not budget_group_id:
+                    analytic_id = self.env['account.analytic.account'].search([
+                        ('name', '=', budget_or_analytic_name.strip()),
                         ('company_id', '=', company_id.id)
                     ], limit=1)
                     
-                    # Si no es grupo presupuestal, buscar como cuenta analítica
-                    if not budget_group_id:
-                        print('BUSCA ANALITICA 22222')
-                        analytic_id = self.env['account.analytic.account'].search([
-                            ('name', '=', budget_or_analytic_name.strip()),
-                            '|',
-                            ('company_id', '=', company_id.id),
-                            ('company_id', '=', False)
-                        ], limit=1)
-                        print('BUSCA ANALITICA 22222', analytic_id, budget_or_analytic_name.strip(), company_id)
+                    if not analytic_id:
+                        errors.append(
+                            f"Fila {row_num}: No se encontró grupo presupuestal ni cuenta analítica "
+                            f"'{budget_or_analytic_name}'"
+                        )
+                        continue
 
-                # Buscar producto usando la lógica de partner.product.purchase
-                # Similar a la lógica del wizard de sale.order.import
+                # Buscar producto
                 product_id = None
-                print('////// ANALITICA', analytic_id, budget_or_analytic_name, budget_group_id)
                 if budget_group_id:
-                    print('////// ANALITICA 111', analytic_id, budget_or_analytic_name)
-                    if not budget_group_id.by_default_group:
-                        print('////// ANALITICA 5555', analytic_id, budget_or_analytic_name)
-                        # Determinar tipo de producto según el grupo presupuestal
-                        if (budget_group_id.name or '').strip().upper().startswith('AD'):
-                            # Tipo GA (Gasto Administrativo)
+                    # Lógica para grupo presupuestal
+                    if budget_group_id.budget_group_type in ['ga', 'gv']:
+                        if budget_group_id.budget_group_type == 'ga':
                             product_config = self.env['partner.product.purchase'].search([
                                 ('partner_id', '=', partner_id.id),
                                 ('company_id', '=', company_id.id),
@@ -377,7 +344,6 @@ class HrExpenseImportWizard(models.TransientModel):
                                 ('amount_type', '=', 'total')
                             ], order="id asc", limit=1)
                         else:
-                            # Tipo GV (Gasto de Venta)
                             product_config = self.env['partner.product.purchase'].search([
                                 ('partner_id', '=', partner_id.id),
                                 ('company_id', '=', company_id.id),
@@ -385,8 +351,6 @@ class HrExpenseImportWizard(models.TransientModel):
                                 ('amount_type', '=', 'total')
                             ], order="id asc", limit=1)
                     else:
-                        print('////// ANALITICA 222', analytic_id, budget_or_analytic_name)
-                        # Tipo CO (Costo)
                         product_config = self.env['partner.product.purchase'].search([
                             ('partner_id', '=', partner_id.id),
                             ('company_id', '=', company_id.id),
@@ -395,12 +359,8 @@ class HrExpenseImportWizard(models.TransientModel):
                         ], order="id asc", limit=1)
                     
                     if product_config:
-                        print('PRODUCTO 44444', product_config)
                         product_id = product_config.product_id
-                        print('PRODUCTO 44444', product_id)
                 else:
-                    print('////// ANALITICA 222', analytic_id, budget_or_analytic_name)
-                    # Tipo CO (Costo)
                     product_config = self.env['partner.product.purchase'].search([
                         ('partner_id', '=', partner_id.id),
                         ('company_id', '=', company_id.id),
@@ -408,29 +368,36 @@ class HrExpenseImportWizard(models.TransientModel):
                         ('amount_type', '=', 'total')
                     ], order="id asc", limit=1)
                     if product_config:
-                        print('PRODUCTO 44444', product_config)
                         product_id = product_config.product_id
-                        print('PRODUCTO 44444', product_id)                    
-                print('////// PRODUCTO', product_config, partner_id.name, product_id)                
+                        
                 if not product_id:
-                    print('////// PRODUCTO3333', product_config, partner_id.name)                
                     errors.append(
                         f"Fila {row_num}: No se encontró configuración de producto para el proveedor "
                         f"'{partner_id.name}' en la compañía '{company_id.name}'"
                     )
                     continue
 
-                # Convertir fecha
+                # Convertir fecha de gasto
                 expense_date = datetime.today().date()
                 if date_value:
                     try:
                         if isinstance(date_value, float):
-                            # Excel guarda fechas como números
                             expense_date = xlrd.xldate_as_datetime(date_value, xls_tmp_file.datemode).date()
                         else:
                             expense_date = datetime.strptime(str(date_value), '%Y-%m-%d').date()
                     except:
-                        pass  # Usar fecha actual si hay error
+                        pass
+
+                # NUEVA FUNCIONALIDAD 3: Convertir fecha de contabilización
+                accounting_date = None
+                if accounting_date_value:
+                    try:
+                        if isinstance(accounting_date_value, float):
+                            accounting_date = xlrd.xldate_as_datetime(accounting_date_value, xls_tmp_file.datemode).date()
+                        else:
+                            accounting_date = datetime.strptime(str(accounting_date_value), '%Y-%m-%d').date()
+                    except:
+                        pass  # Si no se puede convertir, dejar como None
 
                 # Preparar distribución analítica
                 analytic_distribution = {}
@@ -466,7 +433,8 @@ class HrExpenseImportWizard(models.TransientModel):
                     expenses_by_reference[reference] = {
                         'employee_id': employee_id,
                         'company_id': company_id,
-                        'expenses': []
+                        'expenses': [],
+                        'accounting_date': accounting_date  # Guardar fecha de contabilización
                     }
                 
                 expenses_by_reference[reference]['expenses'].append(expense_vals)
@@ -475,12 +443,13 @@ class HrExpenseImportWizard(models.TransientModel):
                 errors.append(f"Fila {row_num}: Error al procesar - {str(e)}")
                 continue
 
-        # Obtener aprobador por defecto de la configuración
+        # Obtener aprobador por defecto
         default_approver_id = int(self.env['ir.config_parameter'].sudo().get_param(
             'hr_expense_import.default_expense_approver_id', 0
         ))
         if not default_approver_id:
-            default_approver_id=201
+            default_approver_id = 201
+
         # Crear reportes de gastos con sus gastos
         for reference, data in expenses_by_reference.items():
             try:
@@ -491,7 +460,7 @@ class HrExpenseImportWizard(models.TransientModel):
                     'company_id': data['company_id'].id,
                 }
 
-                # Asignar aprobador por defecto si está configurado
+                # Asignar aprobador por defecto
                 if default_approver_id:
                     sheet_vals['user_id'] = default_approver_id
 
@@ -505,6 +474,10 @@ class HrExpenseImportWizard(models.TransientModel):
                 # Agregar campo documento_soporte
                 sheet_vals['documento_soporte'] = self.documento_soporte
 
+                # NUEVA FUNCIONALIDAD 3: Agregar accounting_date si existe
+                if data.get('accounting_date'):
+                    sheet_vals['accounting_date'] = data['accounting_date']
+
                 # Crear gastos primero
                 expense_ids = []
                 for expense_vals in data['expenses']:
@@ -516,6 +489,10 @@ class HrExpenseImportWizard(models.TransientModel):
 
                 # Crear el reporte
                 expense_sheet = self.env['hr.expense.sheet'].create(sheet_vals)
+                
+                # NUEVA FUNCIONALIDAD 4: Aprobar el reporte automáticamente
+                expense_sheet.approve_expense_sheets()
+                
                 created_sheets.append(expense_sheet.id)
 
                 self.env.cr.commit()

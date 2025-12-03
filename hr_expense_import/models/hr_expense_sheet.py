@@ -11,12 +11,6 @@ class HrExpenseSheet(models.Model):
         help='Si está activado, al contabilizar el gasto se generará una sola CXP al tercero '
              'de la tarjeta de crédito. Si está desactivado, se generará una CXP por cada gasto.'
     )
-    documento_soporte = fields.Boolean(
-        string='Documento Soporte',
-        default=False,
-        help='Si está activado, al contabilizar se generará la CXP a cada proveedor de las líneas de gasto '
-             'en lugar de al banco o tarjeta de crédito. Se utilizará el diario configurado como documento soporte.'
-    )
 
     def action_submit_sheet(self):
         """Acción para enviar a aprobar el reporte de gastos"""

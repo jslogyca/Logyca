@@ -9,7 +9,6 @@
             <xpath expr="//field[@name='payment_mode']" position="after">
                 <field name="agrupar_por_factura" 
                        invisible="payment_mode != 'credit_card'"/>
-                <field name="documento_soporte"/>
             </xpath>
         </field>
     </record>
