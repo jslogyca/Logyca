@@ -334,9 +334,10 @@ class HrExpenseImportWizard(models.TransientModel):
                 # Buscar producto
                 product_id = None
                 if budget_group_id:
-                    # Lógica para grupo presupuestal
-                    if budget_group_id.budget_group_type in ['ga', 'gv']:
-                        if budget_group_id.budget_group_type == 'ga':
+                    if not budget_group_id.by_default_group:
+                        # Determinar tipo de producto según el grupo presupuestal
+                        if (budget_group_id.name or '').strip().upper().startswith('AD'):
+                            # Tipo GA (Gasto Administrativo)
                             product_config = self.env['partner.product.purchase'].search([
                                 ('partner_id', '=', partner_id.id),
                                 ('company_id', '=', company_id.id),
@@ -344,6 +345,7 @@ class HrExpenseImportWizard(models.TransientModel):
                                 ('amount_type', '=', 'total')
                             ], order="id asc", limit=1)
                         else:
+                            # Tipo GV (Gasto de Venta)
                             product_config = self.env['partner.product.purchase'].search([
                                 ('partner_id', '=', partner_id.id),
                                 ('company_id', '=', company_id.id),
@@ -351,6 +353,7 @@ class HrExpenseImportWizard(models.TransientModel):
                                 ('amount_type', '=', 'total')
                             ], order="id asc", limit=1)
                     else:
+                        # Tipo CO (Costo)
                         product_config = self.env['partner.product.purchase'].search([
                             ('partner_id', '=', partner_id.id),
                             ('company_id', '=', company_id.id),
@@ -491,7 +494,7 @@ class HrExpenseImportWizard(models.TransientModel):
                 expense_sheet = self.env['hr.expense.sheet'].create(sheet_vals)
                 
                 # NUEVA FUNCIONALIDAD 4: Aprobar el reporte automáticamente
-                expense_sheet.approve_expense_sheets()
+                expense_sheet.action_approve_expense_sheets()
                 
                 created_sheets.append(expense_sheet.id)
 
