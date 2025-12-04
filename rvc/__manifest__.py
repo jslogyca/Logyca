@@ -65,6 +65,7 @@
         'views/reject_benefit_template.xml',
         'views/rvc_digital_card_views.xml',
         'views/res_partner_view.xml',
+        'views/hr_employee_view.xml'
     ],
     'qweb': [
     ]

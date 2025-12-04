@@ -12,3 +12,4 @@ from . import rvc_crecemype_theme
 from . import rvc_activations
 from . import rvc_activations_services
 from . import dto
+from . import hr_employee
