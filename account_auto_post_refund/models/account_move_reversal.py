@@ -4,7 +4,7 @@ from odoo import api, fields, models, _
 class AccountMoveReversal(models.TransientModel):
     _inherit = "account.move.reversal"
 
-    def reverse_moves(self):
+    def reverse_moves(self, is_modify=False):
         """
         Extiende el asistente para crear NC, publicarlas y conciliarlas automáticamente
         con la factura origen. Devuelve una acción mostrando las NC creadas.
@@ -17,9 +17,9 @@ class AccountMoveReversal(models.TransientModel):
                 'date': self.date or fields.Date.context_today(self),
                 'invoice_date': move.invoice_date or fields.Date.context_today(self),
                 'journal_id': self.journal_id.id or move.journal_id.id,
+                'invoice_payment_term_id': move.invoice_payment_term_id.id,
             }
             default_values_list.append(default_values)
-
         refunds = self.move_ids._reverse_moves(default_values_list=default_values_list, cancel=False)
         refunds = refunds.filtered(lambda m: m.move_type in ('out_refund', 'in_refund'))
 
