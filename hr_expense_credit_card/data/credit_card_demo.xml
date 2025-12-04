@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Tarjeta de Crédito Demo 1 -->
+        <record id="credit_card_demo_1" model="credit.card">
+            <field name="name">Tarjeta Corporativa Principal</field>
+            <field name="card_type">visa</field>
+            <field name="card_number">1234</field>
+            <field name="credit_limit">50000000</field>
+            <field name="notes">Tarjeta principal para gastos administrativos</field>
+        </record>
+
+        <!-- Tarjeta de Crédito Demo 2 -->
+        <record id="credit_card_demo_2" model="credit.card">
+            <field name="name">Tarjeta Comercial</field>
+            <field name="card_type">mastercard</field>
+            <field name="card_number">5678</field>
+            <field name="credit_limit">30000000</field>
+            <field name="notes">Tarjeta para gastos del área comercial</field>
+        </record>
+    </data>
+</odoo>

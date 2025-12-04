@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_expense_import_file_wizard" model="ir.ui.view">
+        <field name="name">hr.expense.import.file.wizard.form</field>
+        <field name="model">hr.expense.import.file.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Importar Reportes de Gastos desde Excel">
+                <sheet>
+                    <group string="Archivo de importación">
+                        <group>
+                            <field name="file_data" filename="filename"/>
+                            <field name="filename" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="payment_mode"/>
+                            <field name="credit_card_id" />
+                        </group>
+                        <group>
+                            <p>
+                                <strong>Formato esperado:</strong>
+                            </p>
+                            <p>
+                                Fila 1: título de la plantilla (PLANTILLA).<br/>
+                                Fila 2: encabezados con los nombres de campos (como en tu plantilla).<br/>
+                                Desde la fila 3 en adelante: un gasto por fila.
+                            </p>
+                        </group>
+                    </group>
+
+                    <group string="Resultado de validación">
+                        <field name="validation_result" nolabel="1" readonly="1"
+                               widget="text"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Validar datos"
+                            type="object"
+                            name="action_validate_data"
+                            class="btn-secondary"/>
+                    <button string="Importar gastos"
+                            type="object"
+                            name="action_import_expenses"
+                            class="btn-primary"/>
+                    <button string="Cancelar"
+                            special="cancel"
+                            class="btn-link"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_expense_import_file_wizard" model="ir.actions.act_window">
+        <field name="name">Importar Reportes de Gastos</field>
+        <field name="res_model">hr.expense.import.file.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_hr_expense_import_file_wizard"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_hr_expense_import_file_wizard"
+              name="Importar Gastos"
+              parent="hr_expense.menu_hr_expense_root"
+              sequence="90"
+              action="action_hr_expense_import_file_wizard"/>
+</odoo>

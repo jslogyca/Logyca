@@ -23,6 +23,7 @@ class ResPartner(models.Model):
     how_findout = fields.Selection([
         ('asesor1', 'Asesor Naomis Murgas'),
         ('asesor2', 'Asesor Cristian Andres Vargas'),
+        ('asesor3', 'Asesor Angie Duque'),
         ('web', 'Sitio Web'),
         ('aliado', 'Aliado'),
     ], string="Cómo te enteraste?")

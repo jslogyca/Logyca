@@ -15,6 +15,7 @@
         'contacts',
         'sale',
         'website_sale',
+        'l10n_latam_base',
         ],
     'description': '''
 
@@ -24,6 +25,7 @@
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
+        'data/mail_template_data.xml',
         'views/sale_order_template.xml',
         'views/res_partner_view.xml',
         'views/sale_order_view.xml',

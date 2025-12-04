@@ -104,6 +104,7 @@
 							<field name="referred_by" />
 							<field name="origin"/>
 							<field name="send_kit_with_no_benefit" group="base.group_system"/>
+							<field name="send_activated" group="base.group_system"/>
 						</group>
 						<group>
 						</group>

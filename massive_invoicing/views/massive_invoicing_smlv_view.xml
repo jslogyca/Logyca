@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<record id="massive_invoicing_smlv_view_form_revenue" model="ir.ui.view">
+		<field name="name">massive.invoicing.smlv.view.form.revenue</field>
+		<field name="model">massive.invoicing.smlv</field>
+		<field name="inherit_id" ref="logyca.massive_invoicing_smlv_view_form"/>
+		<field name="arch" type="xml">
+            <xpath expr="//page[@name='main_page']" position="after">
+				<page string="Revenue" name="main_page_revenue">                    
+					<field name="revenue_range_ids" nolabel="1" >
+						<tree editable="bottom">
+							<field name="revenue_rang_id" />
+							<field name="old_value" />							
+							<field name="tariff" />
+						</tree>
+					</field>
+				</page>
+			</xpath>
+		</field>
+	</record>
+</odoo>

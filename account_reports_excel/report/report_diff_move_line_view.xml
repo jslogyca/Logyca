@@ -46,7 +46,9 @@
                 <field name="move_id"/>
                 <field name="account_id"/>
                 <field name="partner_id"/>
-                <field name="amount_currency"/>
+                <field name="currency_id"/>
+                <field name="amount_currency" invisible="1"/>
+                <field name="amount_currency_currency"/>
                 <field name="balance"/>
                 <field name="company_id"/>
             </tree>
@@ -58,8 +60,7 @@
         <field name="arch" type="xml">
             <pivot string="Diferencia en Cambio" disable_linking="True">
                 <field name="account_id" type="row"/>
-                <field name="date" type="col"/>
-                <field name="amount_currency" type="measure" />
+                <field name="amount_currency_currency" type="measure" />
                 <field name="balance" type="measure" />
             </pivot>            
         </field>

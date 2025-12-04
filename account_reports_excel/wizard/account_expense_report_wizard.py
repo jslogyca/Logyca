@@ -45,7 +45,11 @@ class AccountExpenseReportWizard(models.TransientModel):
                                     inner join product_template pt on pp.product_tmpl_id = pt.id
                                     where l.move_id=m.id limit 1),
                                     red.name->>'es_CO',
-                                    m.amount_untaxed, 
+                                    CASE 
+                                        WHEN (l.debit > l.credit) THEN ABS(m.amount_untaxed)
+                                        WHEN (l.credit > l.debit) THEN -ABS(m.amount_untaxed)
+                                        ELSE 0
+                                    END AS amount_untaxed,
                                     to_char(m.date,'DD/MM/YYYY'),
                                     date_part('month',m.date)as mes_fact,
                                     date_part('year',m.date)as year_fact,
@@ -53,27 +57,48 @@ class AccountExpenseReportWizard(models.TransientModel):
                                     up.name,
                                     team.name->>'es_CO',
                                     ma.name,
-                                    ma.amount_total, 
+                                    CASE 
+                                        WHEN (l.debit > l.credit) THEN ABS(ma.amount_total)
+                                        WHEN (l.credit > l.debit) THEN -ABS(ma.amount_total)
+                                        ELSE 0
+                                    END AS amount_total,                                    
                                     to_char(ma.date,'DD/MM/YYYY'),
                                     date_part('month',ma.date)as mes,
                                     date_part('year',ma.date)as year,
                                     ma.state,
                                     red.name->>'es_CO' AS analytic_account_name,
                                     pla.name->>'es_CO' as plan
-                                    from account_move m
-                                    inner join account_move_deferred_rel aml on aml.original_move_id=m.id
-                                    inner join account_move ma on ma.id=aml.deferred_move_id
-                                    inner join res_company c on c.id=m.company_id
-                                    inner join res_partner p on p.id=m.partner_id
-                                    inner join res_users u on u.id=m.invoice_user_id
-                                    inner join res_partner up on up.id=u.partner_id
-                                    inner join crm_team team on team.id=m.team_id
+                                    from account_move ma
+                                    inner join account_move_line l on l.move_id=ma.id
+                                    left join account_move_deferred_rel aml on ma.id=aml.deferred_move_id
+                                    left join account_move m on aml.original_move_id=m.id
+                                    inner join res_company c on c.id=ma.company_id
+                                    inner join res_partner p on p.id=l.partner_id
+                                    left join res_users u on u.id=m.invoice_user_id
+                                    left join res_partner up on up.id=u.partner_id
+                                    left join crm_team team on team.id=m.team_id
                                     left join account_analytic_account red on red.id = m.analytic_account_id
-                                    left JOIN account_analytic_plan pla on pla.id=red.plan_id                                   
-                                    where m.date between %s and %s and m.state='posted'
-                                    and m.move_type in ('in_invoice')
+                                    left JOIN account_analytic_plan pla on pla.id=red.plan_id
+                                    where (m.date between %s and %s OR ma.date between %s and %s)
+                                    and ma.move_type in ('in_invoice', 'entry')
+                                    and l.account_id in (5066,
+                                    3903,
+                                    1460,
+                                    5067,
+                                    3904,
+                                    1461,
+                                    5068,
+                                    3905,
+                                    1462,
+                                    5233,
+                                    5290,
+                                    5228,
+                                    5377,
+                                    5069,
+                                    3906,
+                                    1463)
                                     order by p.id, m.id ''', 
-                                    (date_from, date_to))
+                                    (date_from, date_to, date_from, date_to))
         
         lineas = self._cr.fetchall()
         return lineas
@@ -183,87 +208,95 @@ class AccountExpenseReportWizard(models.TransientModel):
         invoice = None
         reg_initial = True
         for x in value:
+            # Convertir None a string vacío para evitar problemas de comparación
+            current_invoice = x[2] if x[2] is not None else ''
+            
             if reg_initial:
-                ws.write(fila,0,x[0],title_head)
-                ws.write(fila,1,x[1],title_head)
-                ws.write(fila,2,x[2],title_head)
-                ws.write(fila,3,x[3],title_head)
-                ws.write(fila,4,x[4],title_head)
-                ws.write(fila,5,x[5],title_head)
-                ws.write(fila,6,x[6],title_head)
-                ws.write(fila,7,x[7],title_head)
-                ws.write(fila,8,x[8],title_head)
-                ws.write(fila,9,x[9],title_head)
-                ws.write(fila,10,x[10],title_head)
+                ws.write(fila,0,x[0] or '',title_head)
+                ws.write(fila,1,x[1] or '',title_head)
+                ws.write(fila,2,x[2] or '',title_head)
+                ws.write(fila,3,x[3] or '',title_head)
+                ws.write(fila,4,x[4] or '',title_head)
+                ws.write(fila,5,x[5] or 0,title_head)
+                ws.write(fila,6,x[6] or '',title_head)
+                ws.write(fila,7,x[7] or 0,title_head)
+                ws.write(fila,8,x[8] or 0,title_head)
+                ws.write(fila,9,x[9] or '',title_head)
+                ws.write(fila,10,x[10] or '',title_head)
                 ws.write(fila,11,'No Aplica',title_head)
                 ws.write(fila,12,'No Aplica',title_head)
                 ws.write(fila,13,'No Aplica',title_head)
                 ws.write(fila,14,'No Aplica',title_head)
                 ws.write(fila,15,'No Aplica',title_head)
                 ws.write(fila,16,'No Aplica',title_head)
-                ws.write(fila,17,x[17],title_head)
+                ws.write(fila,17,x[17] or '',title_head)
+                ws.write(fila,18,x[18] or '',title_head)
                 reg_initial = False
-                invoice = x[1]
+                invoice = current_invoice
                 fila+=1
-            if invoice == x[1]:
-                ws.write(fila,0,x[0])
-                ws.write(fila,1,x[1])
-                ws.write(fila,2,x[2])
-                ws.write(fila,3,x[3])
-                ws.write(fila,4,x[4])
-                ws.write(fila,5,x[5])
-                ws.write(fila,6,x[6])
-                ws.write(fila,7,x[7])
-                ws.write(fila,8,x[8])
-                ws.write(fila,9,x[9])
-                ws.write(fila,10,x[10])
-                ws.write(fila,11,x[11])
-                ws.write(fila,12,x[12])
-                ws.write(fila,13,x[13])
-                ws.write(fila,14,x[14])
-                ws.write(fila,15,x[15])
-                ws.write(fila,16,x[16])
-                ws.write(fila,17,x[17])
+            elif invoice == current_invoice:
+                ws.write(fila,0,x[0] or '')
+                ws.write(fila,1,x[1] or '')
+                ws.write(fila,2,x[2] or '')
+                ws.write(fila,3,x[3] or '')
+                ws.write(fila,4,x[4] or '')
+                ws.write(fila,5,x[5] or 0)
+                ws.write(fila,6,x[6] or '')
+                ws.write(fila,7,x[7] or 0)
+                ws.write(fila,8,x[8] or 0)
+                ws.write(fila,9,x[9] or '')
+                ws.write(fila,10,x[10] or '')
+                ws.write(fila,11,x[11] or '')
+                ws.write(fila,12,x[12] or '')
+                ws.write(fila,13,x[13] or 0)
+                ws.write(fila,14,x[14] or '')
+                ws.write(fila,15,x[15] or 0)
+                ws.write(fila,16,x[16] or 0)
+                ws.write(fila,17,x[17] or '')
+                ws.write(fila,18,x[18] or '')
+                fila+=1
             else:
-                ws.write(fila,0,x[0],title_head)
-                ws.write(fila,1,x[1],title_head)
-                ws.write(fila,2,x[2],title_head)
-                ws.write(fila,3,x[3],title_head)
-                ws.write(fila,4,x[4],title_head)
-                ws.write(fila,5,x[5],title_head)
-                ws.write(fila,6,x[6],title_head)
-                ws.write(fila,7,x[7],title_head)
-                ws.write(fila,8,x[8],title_head)
-                ws.write(fila,9,x[9],title_head)
-                ws.write(fila,10,x[10],title_head)
+                ws.write(fila,0,x[0] or '',title_head)
+                ws.write(fila,1,x[1] or '',title_head)
+                ws.write(fila,2,x[2] or '',title_head)
+                ws.write(fila,3,x[3] or '',title_head)
+                ws.write(fila,4,x[4] or '',title_head)
+                ws.write(fila,5,x[5] or 0,title_head)
+                ws.write(fila,6,x[6] or '',title_head)
+                ws.write(fila,7,x[7] or 0,title_head)
+                ws.write(fila,8,x[8] or 0,title_head)
+                ws.write(fila,9,x[9] or '',title_head)
+                ws.write(fila,10,x[10] or '',title_head)
                 ws.write(fila,11,'No Aplica',title_head)
                 ws.write(fila,12,'No Aplica',title_head)
                 ws.write(fila,13,'No Aplica',title_head)
                 ws.write(fila,14,'No Aplica',title_head)
                 ws.write(fila,15,'No Aplica',title_head)
                 ws.write(fila,16,'No Aplica',title_head)
-                ws.write(fila,17,x[17],title_head)
+                ws.write(fila,17,x[17] or '',title_head)
+                ws.write(fila,18,x[18] or '',title_head)
                 fila+=1
-                ws.write(fila,0,x[0])
-                ws.write(fila,1,x[1])
-                ws.write(fila,2,x[2])
-                ws.write(fila,3,x[3])
-                ws.write(fila,4,x[4])
-                ws.write(fila,5,x[5])
-                ws.write(fila,6,x[6])
-                ws.write(fila,7,x[7])
-                ws.write(fila,8,x[8])
-                ws.write(fila,9,x[9])
-                ws.write(fila,10,x[10])
-                ws.write(fila,11,x[11])
-                ws.write(fila,12,x[12])
-                ws.write(fila,13,x[13])
-                ws.write(fila,14,x[14])
-                ws.write(fila,15,x[15])
-                ws.write(fila,16,x[16])
-                ws.write(fila,17,x[17])
-            fila+=1
-            invoice = x[1]
+                ws.write(fila,0,x[0] or '')
+                ws.write(fila,1,x[1] or '')
+                ws.write(fila,2,x[2] or '')
+                ws.write(fila,3,x[3] or '')
+                ws.write(fila,4,x[4] or '')
+                ws.write(fila,5,x[5] or 0)
+                ws.write(fila,6,x[6] or '')
+                ws.write(fila,7,x[7] or 0)
+                ws.write(fila,8,x[8] or 0)
+                ws.write(fila,9,x[9] or '')
+                ws.write(fila,10,x[10] or '')
+                ws.write(fila,11,x[11] or '')
+                ws.write(fila,12,x[12] or '')
+                ws.write(fila,13,x[13] or 0)
+                ws.write(fila,14,x[14] or '')
+                ws.write(fila,15,x[15] or 0)
+                ws.write(fila,16,x[16] or 0)
+                ws.write(fila,17,x[17] or '')
+                ws.write(fila,18,x[18] or '')
+                fila+=1
+            invoice = current_invoice
 
         # inv
         invoice = None

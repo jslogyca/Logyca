@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <data noupdate="1">
+<odoo noupdate="1">
         <!-- Email template para resumen de ausencias -->
         <record id="email_template_leave_summary" model="mail.template">
             <field name="name">Resumen de Ausencias Aprobadas</field>
             <field name="model_id" ref="hr.model_hr_employee"/>
-            <field name="subject">Resumen de tus Ausencias Aprobadas (${ctx.get('date_from')} - ${ctx.get('date_to')})</field>
+            <field name="subject">Resumen de tus Ausencias Aprobadas</field>
             <field name="email_from">${(object.company_id.email or '')|safe}</field>
             <field name="email_to">${object.work_email|safe}</field>
             <field name="body_html" type="html">
@@ -15,7 +14,7 @@
         <!-- Header -->
         <div style="text-align: center; margin-bottom: 30px;">
             <h1 style="color: #2c3e50; margin-bottom: 10px;">📊 Resumen de Ausencias</h1>
-            <p style="color: #7f8c8d; font-size: 14px;">Periodo: ${ctx.get('date_from')} - ${ctx.get('date_to')}</p>
+            <p style="color: #7f8c8d; font-size: 14px;">Periodo: <t t-out="ctx.get('date_from', '')"/> - <t t-out="ctx.get('date_to', '')"/></p>
         </div>
         
         <!-- Información del Empleado -->
@@ -24,80 +23,82 @@
             <table style="width: 100%;">
                 <tr>
                     <td style="padding: 5px 0; color: #7f8c8d; font-weight: bold;">Nombre:</td>
-                    <td style="padding: 5px 0; color: #2c3e50;">${object.name}</td>
+                    <td style="padding: 5px 0; color: #2c3e50;"><t t-out="object.name"/></td>
                 </tr>
                 <tr>
                     <td style="padding: 5px 0; color: #7f8c8d; font-weight: bold;">Identificación:</td>
-                    <td style="padding: 5px 0; color: #2c3e50;">${object.identification_id or 'N/A'}</td>
+                    <td style="padding: 5px 0; color: #2c3e50;"><t t-out="object.identification_id or 'N/A'"/></td>
                 </tr>
-                % if object.department_id:
-                <tr>
-                    <td style="padding: 5px 0; color: #7f8c8d; font-weight: bold;">Departamento:</td>
-                    <td style="padding: 5px 0; color: #2c3e50;">${object.department_id.name}</td>
-                </tr>
-                % endif
-                % if object.job_id:
-                <tr>
-                    <td style="padding: 5px 0; color: #7f8c8d; font-weight: bold;">Puesto:</td>
-                    <td style="padding: 5px 0; color: #2c3e50;">${object.job_id.name}</td>
-                </tr>
-                % endif
+                <t t-if="object.department_id">
+                    <tr>
+                        <td style="padding: 5px 0; color: #7f8c8d; font-weight: bold;">Departamento:</td>
+                        <td style="padding: 5px 0; color: #2c3e50;"><t t-out="object.department_id.name"/></td>
+                    </tr>
+                </t>
+                <t t-if="object.job_id">
+                    <tr>
+                        <td style="padding: 5px 0; color: #7f8c8d; font-weight: bold;">Puesto:</td>
+                        <td style="padding: 5px 0; color: #2c3e50;"><t t-out="object.job_id.name"/></td>
+                    </tr>
+                </t>
             </table>
         </div>
 
         <!-- Resumen Total -->
         <div style="background-color: #3498db; color: white; padding: 15px; border-radius: 5px; text-align: center; margin-bottom: 25px;">
             <h2 style="margin: 0; font-size: 24px;">Total de Ausencias Aprobadas</h2>
-            <p style="font-size: 36px; font-weight: bold; margin: 10px 0;">${len(ctx.get('leaves'))}</p>
+            <p style="font-size: 36px; font-weight: bold; margin: 10px 0;"><t t-out="len(ctx.get('leaves', []))"/></p>
         </div>
 
         <!-- Lista de Ausencias -->
         <h3 style="color: #34495e; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Detalle de Ausencias</h3>
         
-        % for leave in ctx.get('leaves'):
-        <div style="border: 1px solid #dfe6e9; border-radius: 5px; padding: 15px; margin-bottom: 15px; background-color: #f8f9fa;">
-            <div style="display: flex; justify-content: space-between; align-items: start;">
-                <div style="flex: 1;">
-                    <h4 style="color: #2980b9; margin-top: 0; margin-bottom: 10px;">
-                        ${leave.holiday_status_id.name}
-                    </h4>
-                    <table style="width: 100%; font-size: 14px;">
-                        <tr>
-                            <td style="padding: 3px 0; color: #7f8c8d; width: 120px;">📅 Desde:</td>
-                            <td style="padding: 3px 0; color: #2c3e50; font-weight: bold;">
-                                ${leave.request_date_from.strftime('%d/%m/%Y')}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 3px 0; color: #7f8c8d;">📅 Hasta:</td>
-                            <td style="padding: 3px 0; color: #2c3e50; font-weight: bold;">
-                                ${leave.request_date_to.strftime('%d/%m/%Y')}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 3px 0; color: #7f8c8d;">⏱️ Duración:</td>
-                            <td style="padding: 3px 0; color: #2c3e50;">
-                                ${leave.number_of_days} día(s)
-                            </td>
-                        </tr>
-                        % if leave.name and leave.name != leave.holiday_status_id.name:
-                        <tr>
-                            <td style="padding: 3px 0; color: #7f8c8d; vertical-align: top;">📝 Motivo:</td>
-                            <td style="padding: 3px 0; color: #2c3e50;">
-                                ${leave.name}
-                            </td>
-                        </tr>
-                        % endif
-                    </table>
-                </div>
-                <div style="margin-left: 15px;">
-                    <span style="background-color: #27ae60; color: white; padding: 5px 10px; border-radius: 3px; font-size: 12px; font-weight: bold;">
-                        ✓ APROBADA
-                    </span>
-                </div>
+        <t t-foreach="ctx.get('leaves', [])" t-as="leave">
+            <div style="border: 1px solid #dfe6e9; border-radius: 5px; padding: 15px; margin-bottom: 15px; background-color: #f8f9fa;">
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="width: 80%;">
+                            <h4 style="color: #2980b9; margin-top: 0; margin-bottom: 10px;">
+                                <t t-out="leave.holiday_status_id.name"/>
+                            </h4>
+                            <table style="width: 100%; font-size: 14px;">
+                                <tr>
+                                    <td style="padding: 3px 0; color: #7f8c8d; width: 120px;">📅 Desde:</td>
+                                    <td style="padding: 3px 0; color: #2c3e50; font-weight: bold;">
+                                        <t t-out="leave.request_date_from" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 3px 0; color: #7f8c8d;">📅 Hasta:</td>
+                                    <td style="padding: 3px 0; color: #2c3e50; font-weight: bold;">
+                                        <t t-out="leave.request_date_to" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 3px 0; color: #7f8c8d;">⏱️ Duración:</td>
+                                    <td style="padding: 3px 0; color: #2c3e50;">
+                                        <t t-out="leave.number_of_days"/> día(s)
+                                    </td>
+                                </tr>
+                                <t t-if="leave.name and leave.name != leave.holiday_status_id.name">
+                                    <tr>
+                                        <td style="padding: 3px 0; color: #7f8c8d; vertical-align: top;">📝 Motivo:</td>
+                                        <td style="padding: 3px 0; color: #2c3e50;">
+                                            <t t-out="leave.name"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                        </td>
+                        <td style="width: 20%; text-align: right; vertical-align: top;">
+                            <span style="background-color: #27ae60; color: white; padding: 5px 10px; border-radius: 3px; font-size: 12px; font-weight: bold; display: inline-block;">
+                                ✓ APROBADA
+                            </span>
+                        </td>
+                    </tr>
+                </table>
             </div>
-        </div>
-        % endfor
+        </t>
 
         <!-- Footer -->
         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ecf0f1; text-align: center;">
@@ -113,5 +114,4 @@
             </field>
             <field name="auto_delete" eval="True"/>
         </record>
-    </data>
 </odoo>

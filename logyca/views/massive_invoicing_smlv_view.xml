@@ -7,6 +7,8 @@
             <form>
                 <header>
                     <button name="purge_same_year" string="Generar Tarifas" class="oe_highlight" type="object"  />
+                    <button name="tariff_revenue_year" string="Tarifas por Ingresos" class="oe_highlight" type="object"  />
+                    <button name="purge_same_year_revenue" string="Generar Tarifas por Ingresos" class="oe_highlight" type="object"  />
                 </header>            
                 <sheet string="Salario Mínimo">
                     <group>
@@ -17,12 +19,16 @@
                             <field name="smlv" />
                         </group>
                     </group>
-                    <field name="asset_range_ids" nolabel="1" >
-                        <tree editable="bottom">
-                            <field name="asset_range_id" />
-                            <field name="tariff" />
-                        </tree>
-                    </field>
+                    <notebook >
+                        <page string="Asset" name="main_page">                    
+                            <field name="asset_range_ids" nolabel="1" >
+                                <tree editable="bottom">
+                                    <field name="asset_range_id" />
+                                    <field name="tariff" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>                            
                 </sheet>
             </form>
         </field>

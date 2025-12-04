@@ -417,6 +417,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                         sale_order = self.env['sale.order'].create(sale_order_values)
                         
                         sale_order_line_values = {
+                            'name' : product_id.product_tmpl_id.name,
                             'order_id' : sale_order.id,
                             'product_id' : product_id,
                             'product_uom_qty' : 1, #Cantidad
@@ -438,7 +439,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                         if type_vinculation == type_vinculation_cliente:
                             saler_orders_partner.append({'PartnerId':id_contactP,'IdFac2':sale_order.id})
                         
-                    #Renovación Prefijos Adicionales
+                    #Renovación Prefijos Adicionales 
                     if type_process == '2':
                         #Si es textilero validar capacidad de prefijos
                         if partner.partner_id.x_sector_id.id == sector_id_textil:
@@ -479,6 +480,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                 sale_order = self.env['sale.order'].create(sale_order_values)
 
                                 sale_order_line_values = {
+                                    'name' : product_id.product_tmpl_id.name,
                                     'order_id' : sale_order.id,
                                     'product_id' : product_id,
                                     'product_uom_qty' : cant_prefixes, #Cantidad
@@ -507,6 +509,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                         sale_order_id = sale['IdFac2'] 
                                 if sale_order_id != 0:
                                     sale_order_line_values = {
+                                        'name' : product_id.product_tmpl_id.name,
                                         'order_id' : sale_order_id,
                                         'product_id' : product_id,
                                         'product_uom_qty' : cant_prefixes, #Cantidad
@@ -530,6 +533,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             #Factura 2: Renovación Prefijos GTIN8 (GTIN8)
                             if sale_order_id != 0:
                                 sale_order_line_values = {
+                                    'name' : product_id.product_tmpl_id.name,
                                     'order_id' : sale_order_id,
                                     'product_id' : product_id,
                                     'product_uom_qty' : cant_prefixes, #Cantidad
@@ -549,6 +553,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                 sale_order = self.env['sale.order'].create(sale_order_values)
 
                                 sale_order_line_values = {
+                                    'name' : product_id.product_tmpl_id.name,
                                     'order_id' : sale_order.id,
                                     'product_id' : product_id,
                                     'product_uom_qty' : cant_prefixes, #Cantidad
@@ -590,6 +595,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             sale_order = self.env['sale.order'].create(sale_order_values)                            
                             
                             sale_order_line_values = {
+                                'name' : product_id.product_tmpl_id.name,
                                 'order_id' : sale_order.id,
                                 'product_id' : product_id,
                                 'product_uom_qty' : cant_prefixes, #Cantidad
@@ -948,6 +954,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         sale_order = self.env['sale.order'].create(sale_order_values)
         
         sale_order_line_values = {
+            'name' : product_id.product_tmpl_id.name,
             'order_id' : sale_order.id,
             'product_id' : product_id.id,
             'product_uom_qty' : product_uom_qty, #Cantidad
@@ -964,14 +971,45 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             'invoice_one' : sale_order.id                                              
         }
         process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)        
-        return True                        
+        return True
+
+    def _partners_sin_fm_orders(self):
+        # 1) Trabaja solo con IDs; evita prefetch
+        third_ids = self.invoicing_companies.thirdparties.ids
+        if not third_ids:
+            return self.env['res.partner']
+
+        origen = f'FM {self.year}'
+        cr = self.env.cr
+
+        # 2) Procesa en lotes para no enviar IN enormes
+        CHUNK = 1000
+        sin_orden_ids = []
+
+        for i in range(0, len(third_ids), CHUNK):
+            chunk = third_ids[i:i+CHUNK]
+
+            # 3) SQL súper eficiente: devuelve los partner_id que SÍ tienen orden
+            cr.execute("""
+                SELECT DISTINCT so.partner_id
+                FROM sale_order so
+                WHERE so.x_origen = %s
+                AND so.partner_id = ANY(%s)
+            """, (origen, chunk))
+            con_orden = {row[0] for row in cr.fetchall()}
+
+            # 4) del lote, quédate con los que NO tienen orden
+            sin_orden_ids.extend([pid for pid in chunk if pid not in con_orden])
+
+        # 5) Navega sin prefetch para no cargar campos innecesarios
+        return self.env['res.partner'].with_context(prefetch_fields=False).browse(sin_orden_ids)        
 
     #Ejecución proceso
     def execute_process(self): 
         #Eliminar ordenes de venta si ya existen solamente cuando se ejecute facturación masiva general y no adicional
-        if self.invoicing_companies.process_type == '1':
-            saleorder_exists = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year))])
-            saleorder_exists.unlink()
+        # if self.invoicing_companies.process_type == '1':
+        #     saleorder_exists = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year))])
+        #     saleorder_exists.unlink()
 
         process_partnersaleorder_exists = self.env['massive.invoicing.partner.saleorder'].search([('process_id', '=', self.id)])
         process_partnersaleorder_exists.unlink()
@@ -1015,7 +1053,27 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             obj_massive_invoicing_products = self.env['massive.invoicing.products'].search([('product_id', '!=', False),('type_process', '=', '5')])
         obj_company = self.env['massive.invoicing.partnercalculationprefixes'].search([('process_id', '=', self.id),('have_prefixes','=','1')])
         discount_pref = 0
-        for partner_company in self.invoicing_companies.thirdparties:
+
+        SaleOrder = self.env['sale.order']
+        thirdparties = self.invoicing_companies.thirdparties
+
+        # 1) Encuentra los partners que SÍ tienen órdenes con ese origen en el set dado
+        domain_orders = [
+            ('x_origen', '=', f'FM {self.year}'),
+            ('partner_id', 'in', thirdparties.ids),
+        ]
+        groups = SaleOrder.read_group(domain_orders, ['partner_id'], ['partner_id'])
+        partner_ids_con_orden = {g['partner_id'][0] for g in groups if g.get('partner_id')}
+
+        # 2) Quédate con los que NO tienen órdenes
+        target_partners = thirdparties.filtered_domain([('id', 'not in', list(partner_ids_con_orden))])
+
+        # for partner_company in target_partners:
+        for partner_company in self._partners_sin_fm_orders():
+        # for partner_company in self.invoicing_companies.thirdparties:
+            # saleorder_exists = self.env['sale.order'].search([('x_origen', '=', 'FM {}'.format(self.year)),('partner_id','=',partner_company.id)])
+            # if saleorder_exists:
+            #     continue
             if self.invoicing_companies.process_type == '2':
                 invoice_ids = self.env['account.move'].search([('partner_id', '=', partner_company.id),
                                                                 ('x_is_mass_billing', '=', True),
@@ -1224,7 +1282,8 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                 if vinculation.name in ('Cliente Prefijo'):
                     if is_member:
                         continue
-                    print('EMPRESA CLIENTE PREFIJO', partner_company.x_type_vinculation.name, partner_company.name)
+                    print('EMPRESA CLIENTE PREFIJO', partner_company.x_type_vinculation, partner_company.name)
+                    print('EMPRESA CLIENTE PREFIJO', partner_company.x_type_vinculation.filtered(lambda pref: pref.id == 23), partner_company.name)
                     fee_value = 0
                     unit_fee_value = 0
                     discount = 0                       
@@ -1234,12 +1293,12 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                     # obj_tariff = self.env['massive.invoicing.tariff'].search([('year', '=', self.year),('type_vinculation','=',type_vinculation),('asset_range','=',partner.partner_id.x_asset_range.id),('product_id','=',product_id)])
                     if partner_company.fact_annual == 'activos':
                         obj_tariff = self.env['massive.invoicing.tariff'].search([('year', '=', self.year),
-                                                            ('type_vinculation','=',partner_company.x_type_vinculation.id),
+                                                            ('type_vinculation','=',partner_company.x_type_vinculation.filtered(lambda pref: pref.id == 23).id),
                                                             ('asset_range','=',partner_company.x_asset_range.id),('product_id','=',obj_massive_products_reno.id)])
                     else:
                         if partner_company.fact_annual == 'ingresos':
                             obj_tariff = self.env['massive.income.tariff'].search([('year', '=', self.year),
-                                                            ('type_vinculation','=',partner_company.x_type_vinculation.id),
+                                                            ('type_vinculation','=',partner_company.x_type_vinculation.filtered(lambda pref: pref.id == 23).id),
                                                             ('revenue_range','=',partner_company.x_income_range.id),
                                                             ('product_id','=',obj_massive_products_reno.id)])
                     for tariff in obj_tariff:
@@ -1508,6 +1567,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                             sale_order = self.env['sale.order'].create(sale_order_values)
 
                             sale_order_line_values = {
+                                'name' : obj_massive_products_padicl.product_id.product_tmpl_id.name,
                                 'order_id' : sale_order.id,
                                 'product_id' : obj_massive_products_padicl.product_id.id,
                                 'product_uom_qty' : cant_prefixes, #Cantidad
@@ -1562,6 +1622,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                         sale_order = self.env['sale.order'].create(sale_order_values)
 
                         sale_order_line_values = {
+                            'name' : obj_massive_products_gtin.product_id.product_tmpl_id.name,
                             'order_id' : sale_order.id,
                             'product_id' : obj_massive_products_gtin.product_id.id,
                             'product_uom_qty' : cant_prefixes, #Cantidad
@@ -1580,6 +1641,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                         }
 
                         process_partnersaleorder.update(values_update_process)
+                    self.env.cr.commit()
 
     def _create_sale_order_fm(self, vinculation, partner_company, id_contactP, conditional_discount, 
                             conditional_discount_deadline, product_id, product_uom_qty, unit_fee_value, discount, 
@@ -1599,6 +1661,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         sale_order = self.env['sale.order'].create(sale_order_values)
         if product_uom_qty > 0:
             sale_order_line_values = {
+                'name' : product_id.product_tmpl_id.name,
                 'order_id' : sale_order.id,
                 'product_id' : product_id.id,
                 'product_uom_qty' : product_uom_qty, #Cantidad
@@ -1618,9 +1681,11 @@ class x_MassiveInvoicingProcess(models.TransientModel):
                                                     ('type_vinculation','=',vinculation.id),
                                                     ('revenue_range','=',partner_company.x_income_range.id),
                                                     ('product_id','=',productgtin.id)])
+            fee_value = 0.0                                                    
             for tariff in obj_tariff:
                 fee_value = tariff.unit_fee_value                                                    
             sale_order_line_values_gtin = {
+                'name' : productgtin.product_tmpl_id.name,
                 'order_id' : sale_order.id,
                 'product_id' : productgtin.id,
                 'product_uom_qty' : cant_prefixes_gtin, #Cantidad
@@ -1636,7 +1701,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
             'vat' : partner_company.vat,
             'invoice_one' : sale_order.id                                              
         }
-        process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)        
+        process_partnersaleorder = self.env['massive.invoicing.partner.saleorder'].create(values_save_process)
         return sale_order
 
     def _create_sale_order_fm_pm(self, partner_company, id_contactP, conditional_discount, 
@@ -1715,6 +1780,7 @@ class x_MassiveInvoicingProcess(models.TransientModel):
         sale_order = self.env['sale.order'].create(sale_order_values)
         
         sale_order_line_values = {
+            'name' : product_id.product_tmpl_id.name,
             'order_id' : sale_order.id,
             'product_id' : product_id.id,
             'product_uom_qty' : product_uom_qty, #Cantidad

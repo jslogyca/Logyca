@@ -31,8 +31,10 @@ class SalesOrder(models.Model):
             else:
                 user_id = self.env['crm.team.member'].search([('free_member_shop', '=', True)])
 
-            self._cr.execute(''' UPDATE sale_order SET company_id=2, free_member=%s, date_end_member_test=%s WHERE id=%s ''', (True, date_end_member_test, order.id))
-            self._cr.execute(''' UPDATE sale_order_line SET company_id=2 WHERE order_id=%s ''', (order.id,))
+            self._cr.execute(''' UPDATE sale_order SET note='Estoy de acuerdo con la Autorización del Sistema de administración de riesgo de lavado de activos y de la financiación del terrorismo - SARLAFT',
+                                payment_term_id=31, company_id=2, free_member=%s, date_end_member_test=%s WHERE id=%s ''', (True, date_end_member_test, order.id))
+            # self._cr.execute(''' UPDATE sale_order SET payment_term_id=10, company_id=2, free_member=%s, date_end_member_test=%s WHERE id=%s ''', (True, date_end_member_test, order.id))
+            self._cr.execute(''' UPDATE sale_order_line SET analytic_distribution = '{"618": 100.0}', company_id=2 WHERE order_id=%s ''', (order.id,))
             if team_id:
                 self._cr.execute(''' UPDATE sale_order SET team_id=%s WHERE id=%s ''', (team_id.id, order.id,))
             if user_id:
@@ -50,10 +52,29 @@ class SalesOrder(models.Model):
                                                     'date_end_member_test': date_end_member_test})
                 self._cr.execute(''' UPDATE sale_order SET partner_id=%s WHERE id=%s ''', (order.partner_id.parent_id.id, order.id,))
             template = self.env.ref('member_logyca.mail_template_member_welcome')
-            template.send_mail(order.id, force_send=True)            
+            template.send_mail(order.id, force_send=True)
             template = self.env.ref('member_logyca.email_template_sale_order_loyalty')
-            template.send_mail(order.id, force_send=True)            
+            template.send_mail(order.id, force_send=True)
 
     
     def action_create_partner(self, partner):
         partner.create_company()
+
+    def _send_payment_succeeded_for_order_mail(self):
+        """ Send a mail to the SO customer to inform them that a payment has been initiated.
+
+        :return: None
+        """
+        if self.website_id:
+            self.action_order_member()
+            mail_template = self.env.ref(
+                'member_logyca.mail_template_sale_payment_executed_website', raise_if_not_found=False
+            )
+            for order in self:
+                order._send_order_notification_mail(mail_template)
+        else:
+            mail_template = self.env.ref(
+                'sale.mail_template_sale_payment_executed', raise_if_not_found=False
+            )
+            for order in self:
+                order._send_order_notification_mail(mail_template)

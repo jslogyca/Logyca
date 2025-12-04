@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista formulario de hr.expense -->
+    <record id="hr_expense_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.expense.form.credit.card</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Agregar el campo de proveedor después del producto -->
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="partner_id" 
+                       placeholder="Seleccione el proveedor que generó el gasto"
+                       options="{'no_create': True, 'no_create_edit': True}"/>
+            </xpath>
+            
+            <!-- Asegurar que el payment_mode sea visible y editable -->
+            <xpath expr="//field[@name='payment_mode']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+            
+            <!-- Agregar budget_group_id -->
+            <xpath expr="//field[@name='analytic_distribution']" position="before">
+                <field name="budget_group_id" />
+            </xpath>
+            
+            <!-- Agregar campos de valor excluido del IVA después de tax_ids -->
+            <xpath expr="//field[@name='tax_ids']" position="after">
+                <field name="amount_tax_excluded" 
+                       widget="monetary"
+                       options="{'currency_field': 'currency_id'}"
+                       placeholder="0.00"/>
+                <field name="amount_tax_excluded_description" 
+                       placeholder="Ej: Propina, servicio adicional, etc."
+                       invisible="amount_tax_excluded == 0"/>
+            </xpath>
+            
+            <!-- Reemplazar el total_amount por total_amount_with_excluded en la vista -->
+            <xpath expr="//field[@name='total_amount']" position="after">
+                <field name="total_amount_with_excluded" 
+                       invisible="amount_tax_excluded == 0"
+                       widget="monetary"
+                       string="Total con Valor Excluido"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista tree de hr.expense -->
+    <record id="hr_expense_view_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.expense.tree.credit.card</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.view_expenses_tree"/>
+        <field name="arch" type="xml">
+            <!-- Agregar el campo de proveedor en el árbol -->
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="partner_id" optional="show"/>
+            </xpath>
+            
+            <!-- Agregar campo de valor excluido en el árbol -->
+            <xpath expr="//field[@name='total_amount']" position="before">
+                <field name="amount_tax_excluded" 
+                       optional="hide"
+                       widget="monetary"
+                       sum="Total Excluido"/>
+            </xpath>
+            
+            <!-- Agregar total con valor excluido -->
+            <xpath expr="//field[@name='total_amount']" position="after">
+                <field name="total_amount_with_excluded" 
+                       optional="hide"
+                       widget="monetary"
+                       sum="Total Final"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista kanban comentada en tu módulo original -->
+    <!-- <record id="hr_expense_view_kanban_inherit" model="ir.ui.view">
+        <field name="name">hr.expense.kanban.credit.card</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.hr_expense_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_kanban_details']" position="inside">
+                <div class="o_kanban_record_subtitle">
+                    <field name="partner_id"/>
+                </div>
+            </xpath>
+        </field>
+    </record> -->
+</odoo>
