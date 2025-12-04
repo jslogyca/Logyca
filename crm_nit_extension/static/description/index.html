@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CRM NIT Extension</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #875A7B;
+            border-bottom: 2px solid #875A7B;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #875A7B;
+            margin-top: 30px;
+        }
+        .highlight {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-left: 4px solid #875A7B;
+            margin: 20px 0;
+        }
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .feature-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .feature-list li:before {
+            content: "✓ ";
+            color: #875A7B;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>CRM NIT Extension</h1>
+    
+    <div class="highlight">
+        <strong>Módulo de extensión para Odoo 17 CRM</strong> que agrega el campo NIT 
+        (Número de Identificación Tributaria) para registros de empresas en leads.
+    </div>
+
+    <h2>Características Principales</h2>
+    <ul class="feature-list">
+        <li>Campo NIT para identificación tributaria de empresas</li>
+        <li>Visible únicamente en registros de tipo Lead</li>
+        <li>Tracking automático de cambios</li>
+        <li>Integración nativa con CRM de Odoo</li>
+        <li>Compatible con Odoo 17</li>
+    </ul>
+
+    <h2>Funcionalidad</h2>
+    <p>
+        El campo <code>NIT</code> aparece automáticamente en el formulario de Lead, 
+        ubicado después del campo "Nombre de la empresa" (<code>partner_name</code>).
+    </p>
+    
+    <div class="highlight">
+        <strong>Visibilidad Condicional:</strong><br>
+        El campo solo se muestra cuando:
+        <ul>
+            <li><code>type = 'lead'</code> (es un Lead)</li>
+            <li><code>type = False</code> (registro nuevo sin tipo definido)</li>
+        </ul>
+    </div>
+
+    <h2>Caso de Uso</h2>
+    <p>
+        Este módulo es especialmente útil para empresas colombianas que necesitan 
+        registrar el NIT de sus clientes potenciales durante la etapa de Lead, 
+        facilitando la identificación tributaria antes de convertir el Lead en 
+        Oportunidad.
+    </p>
+
+    <h2>Instalación</h2>
+    <ol>
+        <li>Copiar el módulo a la carpeta de addons de Odoo</li>
+        <li>Actualizar la lista de aplicaciones en Odoo</li>
+        <li>Buscar e instalar "CRM NIT Extension"</li>
+    </ol>
+
+    <h2>Soporte</h2>
+    <p>
+        Para soporte técnico o consultas sobre el módulo, contactar a:<br>
+        <strong>LOGYCA</strong> - <a href="https://www.logyca.com">www.logyca.com</a>
+    </p>
+
+    <h2>Información Técnica</h2>
+    <ul>
+        <li><strong>Versión:</strong> 17.0.1.0.0</li>
+        <li><strong>Autor:</strong> LOGYCA</li>
+        <li><strong>Categoría:</strong> Sales/CRM</li>
+        <li><strong>Licencia:</strong> LGPL-3</li>
+        <li><strong>Dependencias:</strong> crm</li>
+    </ul>
+</body>
+</html>

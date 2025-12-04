@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="crm_lead_view_form_inherit_nit" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.nit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Agregar el campo NIT después del campo partner_name en el grupo lead_partner -->
+            <xpath expr="//group[@name='lead_partner']/field[@name='partner_name']" position="after">
+                <field name="nit" 
+                       invisible="not (type == 'lead' or type == False)"
+                       placeholder="e.g. 900123456-7"/>
+                <field name="agent_call" 
+                       invisible="not (type == 'lead' or type == False)"/>
+                <field name="sent_agent" 
+                       invisible="not (type == 'lead' or type == False)"/>
+                <field name="date_sent_agent" 
+                       invisible="not (type == 'lead' or type == False)"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
