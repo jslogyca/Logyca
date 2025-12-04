@@ -344,7 +344,7 @@ class AccountMove(models.Model):
                             f"La distribución analítica en la línea con producto '{invoice_line.product_id.display_name}' supera el 100% (actual: {total:.2f}%)."
                         )
                 if not invoice_line.analytic_distribution:
-                    raise ValidationError(_("No1 se digito información analítica (Cuenta o Etiqueta) para el registro "+invoice_line.name+", por favor verificar."))
+                    raise ValidationError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+invoice_line.name+", por favor verificar."))
                 
         for line in self.line_ids:
             # payslip_id = self.env['hr.payslip'].search([('move_id', '=', line.move_id.id)], limit=1)
@@ -354,7 +354,7 @@ class AccountMove(models.Model):
                 raise ValidationError(_("No se digito el tercero en la linea "+line.name+", por favor verificar."))
             if str(line.account_id.code).find("4", 0, 1) != -1 or str(line.account_id.code).find("5", 0, 1) != -1 or str(line.account_id.code).find("6", 0, 1) != -1:
                 if not line.analytic_distribution:
-                    raise ValidationError(_("No2 se digito información analítica (Cuenta o Etiqueta) para el registro "+line.name+", por favor verificar."))
+                    raise ValidationError(_("No se digito información analítica (Cuenta o Etiqueta) para el registro "+line.name+", por favor verificar."))
         
         
         cant_contactsFE = 0
@@ -481,12 +481,12 @@ class AccountMoveReversal(models.TransientModel):
     description = fields.Text(string='Descripción')
 
     def refund_moves(self):
-        return self.reverse_moves()
+        return self.reverse_moves(is_modify=False)
 
     def modify_moves(self):
-        return self.reverse_moves()
+        return self.reverse_moves(is_modify)
 
-    def reverse_moves(self):
+    def reverse_moves(self, is_modify=False):
         #Validar que no deje crear NC a facturas ya pagadas
         # moves = self.env['account.move'].browse(self.env.context['active_ids']) if self.env.context.get('active_model') == 'account.move' else self.move_id
         moves = self.move_ids
@@ -532,7 +532,7 @@ class AccountMoveReversal(models.TransientModel):
                 #move_unlink.unlink()                   
         
             #Ejecutar metodo original
-            method_original = super(AccountMoveReversal, self).reverse_moves()
+            method_original = super(AccountMoveReversal, self).reverse_moves(is_modify)
             
             #Eliminar ingresos diferidos en borrador
             if result_query_assets:
