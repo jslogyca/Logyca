@@ -5,7 +5,7 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//sheet/notebook/page[@string='Work Information']" position="after">
+            <xpath expr="//sheet/notebook/page[@name='work_information']" position="after">
                 <page string="LOGYCA / CRECEMYPE">
                     <group>
                         <field name="x_is_crecemype_consultant"/>
