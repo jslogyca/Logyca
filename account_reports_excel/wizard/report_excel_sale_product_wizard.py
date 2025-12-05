@@ -8,7 +8,6 @@ import io
 import xlsxwriter
 import requests
 
-
 class ReportExcelSaleProductWizard(models.TransientModel):
     _name = 'report.excel.sale.product.wizard'
     _description = 'Report Excel Sale Product Wizard'
@@ -149,91 +148,109 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     (date_from, date_to, self.product_id.id))
         else:
             self._cr.execute(''' SELECT 
-                                        p.vat,
-                                        CASE 
-                                            WHEN p.parent_id IS NULL THEN p.name 
-                                            ELSE pp.name
-                                        END AS asociado,                                    
-                                        m.name AS factura,
-                                        to_char(m.invoice_date,'YYYY/MM/DD') AS fecha_factura,
-                                        to_char(m.invoice_date_due,'YYYY/MM/DD') AS fecha_vencimiento,
-                                        date_part('month', m.invoice_date) AS mes_fact,
-                                        date_part('year', m.invoice_date) AS year_fact,
-                                        m.invoice_origin,
-                                        CASE 
-                                            WHEN pt.name->>'es_CO' IS NOT NULL THEN pt.name->>'es_CO'
-                                            ELSE pt.name->>'en_US'
-                                        END AS nombre_producto,
-                                        c.name AS company,
-                                        cta.name AS cuenta_analitica_mov,
-                                        aaa.name->>'es_CO' AS analytic_account_name,
-                                        pla.name->>'es_CO' AS plan,
-                                        mc.name AS moneda,
-                                        -- Precio unitario por producto con manejo de NC y multi-moneda
-                                        CASE 
-                                            WHEN m.move_type = 'out_refund' AND l.amount_currency = 0.0 THEN (l.price_unit * -1)
-                                            WHEN m.move_type = 'out_refund' AND l.amount_currency <> 0.0 THEN l.debit * -1
-                                            WHEN l.amount_currency <> 0.0 THEN l.credit
-                                            ELSE l.price_unit
-                                        END AS price_unit_by_product,
-                                        l.quantity,
-                                        -- Base sin impuestos (subtotal de Odoo)
-                                        l.price_subtotal AS base_sin_impuesto,
-                                        -- Valor de descuento en dinero (opcional, lo conservo)
-                                        CASE 
-                                            WHEN l.discount > 0 THEN 
-                                                ROUND((l.price_unit * l.quantity) * (l.discount / 100.0), 2)
-                                            ELSE 0.0
-                                        END AS discount,
-                                        -- Porcentaje de descuento
-                                        l.discount AS discount_percent,
-                                        -- Neto que debe sumar impuesto (total de la línea)
-                                        l.price_total AS neto,
-                                        -- Impuesto de la línea = total - subtotal
-                                        (l.price_total - l.price_subtotal) AS tax,    
-                                        -- Por compatibilidad, dejamos también el total explícito
-                                        l.price_total AS price_total,
-                                        CASE 
-                                            WHEN m.state = 'posted' THEN 'Publicada'
-                                            ELSE 'Borrador'
-                                        END AS estado,                                    
-                                        pu.name AS vendedor,
-                                        t.name->>'es_CO' AS equipodeventa,
-                                        m.x_send_dian,
-                                        to_char(m.x_date_send_dian,'YYYY/MM/DD') AS fecha_envio_dian,
-                                        m.x_cufe_dian                              
-                                    FROM account_move m
-                                    INNER JOIN account_move_line l 
-                                        ON m.id = l.move_id
-                                    INNER JOIN res_partner p 
-                                        ON p.id = m.partner_id
-                                    INNER JOIN product_product ppt 
-                                        ON ppt.id = l.product_id
-                                    INNER JOIN product_template pt 
-                                        ON pt.id = ppt.product_tmpl_id
-                                    LEFT JOIN res_partner pp 
-                                        ON p.parent_id = pp.id
-                                    INNER JOIN res_company c 
-                                        ON c.id = m.company_id
-                                    INNER JOIN res_users u 
-                                        ON u.id = m.invoice_user_id
-                                    INNER JOIN res_partner pu 
-                                        ON pu.id = u.partner_id
-                                    INNER JOIN crm_team t 
-                                        ON t.id = m.team_id
-                                    LEFT JOIN account_analytic_account cta 
-                                        ON cta.id = m.analytic_account_id
-                                    INNER JOIN res_currency mc 
-                                        ON mc.id = m.currency_id
-                                    JOIN LATERAL jsonb_each(l.analytic_distribution) AS dist(key, value) 
-                                        ON TRUE
-                                    LEFT JOIN account_analytic_account aaa 
-                                        ON aaa.id::text = key
-                                    INNER JOIN account_analytic_plan pla 
-                                        ON pla.id = aaa.plan_id                                    
-                                    WHERE m.date BETWEEN %s AND %s
-                                    AND m.move_type IN ('out_invoice', 'out_refund') 
-                                    AND m.state = 'posted'
+                                    p.vat,
+                                    CASE 
+                                        WHEN p.parent_id IS NULL THEN p.name 
+                                        ELSE pp.name
+                                    END AS asociado,                                    
+                                    m.name AS factura,
+                                    to_char(m.invoice_date,'YYYY/MM/DD') AS fecha_factura,
+                                    to_char(m.invoice_date_due,'YYYY/MM/DD') AS fecha_vencimiento,
+                                    date_part('month', m.invoice_date) AS mes_fact,
+                                    date_part('year', m.invoice_date) AS year_fact,
+                                    m.invoice_origin,
+                                    CASE 
+                                        WHEN pt.name->>'es_CO' IS NOT NULL THEN pt.name->>'es_CO'
+                                        ELSE pt.name->>'en_US'
+                                    END AS nombre_producto,
+                                    c.name AS company,
+                                    cta.name AS cuenta_analitica_mov,
+                                    aaa.name->>'es_CO' AS analytic_account_name,
+                                    pla.name->>'es_CO' AS plan,
+                                    mc.name AS moneda,
+
+                                    -- Precio unitario por producto con manejo de NC y multi-moneda
+                                    CASE 
+                                        WHEN m.move_type = 'out_refund' AND l.amount_currency = 0.0 THEN (l.price_unit * -1)
+                                        WHEN m.move_type = 'out_refund' AND l.amount_currency <> 0.0 THEN l.debit * -1
+                                        WHEN l.amount_currency <> 0.0 THEN l.credit
+                                        ELSE l.price_unit
+                                    END AS price_unit_by_product,
+
+                                    l.quantity,
+
+                                    -- Base sin impuestos (subtotal de Odoo)
+                                    l.price_subtotal AS base_sin_impuesto,
+
+                                    -- Valor de descuento en dinero
+                                    CASE 
+                                        WHEN l.discount > 0 THEN 
+                                            ROUND((l.price_unit * l.quantity) * (l.discount / 100.0), 2)
+                                        ELSE 0.0
+                                    END AS discount,
+
+                                    -- Porcentaje de descuento
+                                    l.discount AS discount_percent,
+
+                                    -- Neto: (total - subtotal) - descuento
+                                    (l.price_unit * l.quantity)
+                                    - CASE 
+                                        WHEN l.discount > 0 THEN 
+                                            ROUND((l.price_unit * l.quantity) * (l.discount / 100.0), 2)
+                                        ELSE 0.0
+                                    END AS neto,
+
+                                    -- Impuesto de la línea = total - subtotal
+                                    (l.price_total - l.price_subtotal) AS tax,    
+
+                                    -- Total de la línea
+                                    l.price_total AS price_total,
+
+                                    CASE 
+                                        WHEN m.state = 'posted' THEN 'Publicada'
+                                        ELSE 'Borrador'
+                                    END AS estado,                                    
+
+                                    pu.name AS vendedor,
+                                    t.name->>'es_CO' AS equipodeventa,
+                                    m.x_send_dian,
+                                    to_char(m.x_date_send_dian,'YYYY/MM/DD') AS fecha_envio_dian,
+                                    m.x_cufe_dian                              
+
+                                FROM account_move m
+                                INNER JOIN account_move_line l 
+                                    ON m.id = l.move_id
+                                INNER JOIN res_partner p 
+                                    ON p.id = m.partner_id
+                                INNER JOIN product_product ppt 
+                                    ON ppt.id = l.product_id
+                                INNER JOIN product_template pt 
+                                    ON pt.id = ppt.product_tmpl_id
+                                LEFT JOIN res_partner pp 
+                                    ON p.parent_id = pp.id
+                                INNER JOIN res_company c 
+                                    ON c.id = m.company_id
+                                INNER JOIN res_users u 
+                                    ON u.id = m.invoice_user_id
+                                INNER JOIN res_partner pu 
+                                    ON pu.id = u.partner_id
+                                INNER JOIN crm_team t 
+                                    ON t.id = m.team_id
+                                LEFT JOIN account_analytic_account cta 
+                                    ON cta.id = m.analytic_account_id
+                                INNER JOIN res_currency mc 
+                                    ON mc.id = m.currency_id
+                                JOIN LATERAL jsonb_each(l.analytic_distribution) AS dist(key, value) 
+                                    ON TRUE
+                                LEFT JOIN account_analytic_account aaa 
+                                    ON aaa.id::text = key
+                                INNER JOIN account_analytic_plan pla 
+                                    ON pla.id = aaa.plan_id                                    
+
+                                WHERE m.date BETWEEN %s AND %s
+                                AND m.move_type IN ('out_invoice', 'out_refund') 
+                                AND m.state = 'posted'
+
                                      ''', 
                                     (date_from, date_to))
         
