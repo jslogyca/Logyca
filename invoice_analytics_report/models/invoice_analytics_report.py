@@ -191,7 +191,7 @@ class InvoiceAnalyticsReport(models.Model):
             AND m.state = 'posted'
             AND m.move_type IN ('out_invoice', 'out_refund')
             AND l.product_id IS NOT NULL
-            AND pt.id IN (9, 1605, 3, 23, 12)
+            AND pt.id IN (9, 1605, 3)
         """
         return where_str
 
