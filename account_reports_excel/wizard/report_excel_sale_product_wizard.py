@@ -219,7 +219,7 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     -- (m.amount_tax_signed) AS tax,
 
                                     CASE 
-                                        WHEN m.amount_tax_signed <> 0 THEN 
+                                        WHEN m.amount_tax_signed <> 0 AND pt.id not in (1605, 1606) THEN 
                                             ROUND(
                                                 CASE 
                                                     WHEN m.move_type = 'out_refund' AND l.amount_currency = 0.0 THEN (l.price_unit * -1) * l.quantity
@@ -235,7 +235,7 @@ class ReportExcelSaleProductWizard(models.TransientModel):
                                     -- l.price_total AS price_total,
                                     -- m.amount_total_signed AS price_total,
                                     CASE 
-                                        WHEN m.amount_tax_signed <> 0 THEN 
+                                        WHEN m.amount_tax_signed <> 0 AND pt.id not in (1605, 1606) THEN
                                             ROUND(
                                                 CASE 
                                                     WHEN m.move_type = 'out_refund' AND l.amount_currency = 0.0 THEN (l.price_unit * -1) * l.quantity
