@@ -216,11 +216,28 @@ class ReportExcelSaleProductWizard(models.TransientModel):
 
                                     -- Impuesto de la línea = total - subtotal
                                     -- (l.price_total - l.price_subtotal) AS tax,    
-                                    (m.amount_tax_signed) AS tax,    
+                                    -- (m.amount_tax_signed) AS tax,
+
+                                    ROUND(
+                                        CASE 
+                                            WHEN m.move_type = 'out_refund' AND l.amount_currency = 0.0 THEN (l.price_unit * -1) * l.quantity
+                                            WHEN m.move_type = 'out_refund' AND l.amount_currency <> 0.0 THEN (l.debit * -1) * l.quantity
+                                            WHEN l.amount_currency <> 0.0 THEN (l.credit * l.quantity)
+                                            ELSE (l.price_unit * l.quantity)
+                                        END * 0.19
+                                    , 2) AS tax,
 
                                     -- Total de la línea
                                     -- l.price_total AS price_total,
-                                    m.amount_total_signed AS price_total,
+                                    -- m.amount_total_signed AS price_total,
+                                    ROUND(
+                                        CASE 
+                                            WHEN m.move_type = 'out_refund' AND l.amount_currency = 0.0 THEN (l.price_unit * -1) * l.quantity
+                                            WHEN m.move_type = 'out_refund' AND l.amount_currency <> 0.0 THEN (l.debit * -1) * l.quantity
+                                            WHEN l.amount_currency <> 0.0 THEN (l.credit * l.quantity)
+                                            ELSE (l.price_unit * l.quantity)
+                                        END * 1.19
+                                    , 2) AS price_total,                                    
 
                                     CASE 
                                     WHEN m.state = 'posted' THEN 'Publicada'
