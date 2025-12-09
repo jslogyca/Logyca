@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Vista Tree -->
+    <record id="view_invoice_analytics_report_tree" model="ir.ui.view">
+        <field name="name">invoice.analytics.report.tree</field>
+        <field name="model">invoice.analytics.report</field>
+        <field name="arch" type="xml">
+            <tree string="Reporte Analítico de Facturas" 
+                  create="false" 
+                  edit="false" 
+                  delete="false"
+                  default_order="invoice_date desc">
+                
+                <!-- Información del cliente -->
+                <field name="partner_vat" string="NIT"/>
+                <field name="partner_name" string="Cliente"/>
+                
+                <!-- Información de la factura -->
+                <field name="invoice_name" string="Factura"/>
+                <field name="invoice_date" string="Fecha Factura"/>
+                <field name="invoice_date_due" string="Fecha Venc."/>
+                <field name="invoice_month" string="Mes"/>
+                <field name="invoice_year" string="Año"/>
+                
+                <!-- Información de pago -->
+                <field name="payment_term" string="Plazo"/>
+                <field name="amount_untaxed" string="Subtotal" sum="Total"/>
+                
+                <!-- Producto y tipo -->
+                <field name="product_name" string="Producto"/>
+                <field name="invoice_type" string="Tipo Fact."/>
+                
+                <!-- Equipo y vendedor -->
+                <field name="team_name" string="Equipo"/>
+                <field name="salesperson_name" string="Vendedor"/>
+                
+                <!-- Clasificación -->
+                <field name="vinculation_type" string="Vinculación"/>
+                <field name="vinculation_date" string="Fecha Vinc."/>
+                <field name="sector_name" string="Sector"/>
+                <field name="company_size" string="Tamaño"/>
+                <field name="red_value" string="Red"/>
+                <field name="member_type" string="Tipo Miembro"/>
+                <field name="payment_state" string="Estado Pago"/>
+                
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Pivot -->
+    <record id="view_invoice_analytics_report_pivot" model="ir.ui.view">
+        <field name="name">invoice.analytics.report.pivot</field>
+        <field name="model">invoice.analytics.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Análisis de Facturas" 
+                   display_quantity="true"
+                   sample="1">
+                
+                <!-- Filas por defecto -->
+                <field name="invoice_year" type="row"/>
+                <field name="invoice_month" type="row"/>
+                
+                <!-- Columnas por defecto -->
+                <field name="team_name" type="col"/>
+                
+                <!-- Medidas -->
+                <field name="amount_untaxed" type="measure"/>
+                
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Vista Graph (opcional) -->
+    <record id="view_invoice_analytics_report_graph" model="ir.ui.view">
+        <field name="name">invoice.analytics.report.graph</field>
+        <field name="model">invoice.analytics.report</field>
+        <field name="arch" type="xml">
+            <graph string="Gráfico de Facturas" 
+                   type="bar" 
+                   sample="1">
+                <field name="invoice_month"/>
+                <field name="amount_untaxed" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Vista Search con filtros -->
+    <record id="view_invoice_analytics_report_search" model="ir.ui.view">
+        <field name="name">invoice.analytics.report.search</field>
+        <field name="model">invoice.analytics.report</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Facturas">
+                
+                <!-- Campos de búsqueda -->
+                <field name="partner_vat" string="NIT" 
+                       filter_domain="[('partner_vat', 'ilike', self)]"/>
+                <field name="partner_name" string="Cliente" 
+                       filter_domain="[('partner_name', 'ilike', self)]"/>
+                <field name="invoice_name" string="Factura" 
+                       filter_domain="[('invoice_name', 'ilike', self)]"/>
+                <field name="team_name" string="Equipo"/>
+                <field name="salesperson_name" string="Vendedor"/>
+                <field name="product_name" string="Producto"/>
+                
+                <!-- Separador -->
+                <separator/>
+                
+                <!-- Filtros rápidos -->
+                <filter string="Año Actual" name="current_year" 
+                        domain="[('invoice_year', '=', context_today().year)]"/>
+                <filter string="Mes Actual" name="current_month" 
+                        domain="[('invoice_year', '=', context_today().year), 
+                                 ('invoice_month', '=', context_today().month)]"/>
+                
+                <separator/>
+                
+                <filter string="Nueva" name="filter_nueva" 
+                        domain="[('invoice_type', '=', 'Nueva')]"/>
+                <filter string="Renovación" name="filter_renovacion" 
+                        domain="[('invoice_type', '=', 'Renovación Aportes')]"/>
+                <filter string="Reactivación" name="filter_reactivacion" 
+                        domain="[('invoice_type', '=', 'Reactivación')]"/>
+                
+                <separator/>
+                
+                <filter string="Pagado" name="filter_paid" 
+                        domain="[('payment_state', '=', 'paid')]"/>
+                <filter string="Pendiente" name="filter_not_paid" 
+                        domain="[('payment_state', '!=', 'paid')]"/>
+                
+                <!-- Agrupaciones -->
+                <separator/>
+                <group expand="0" string="Agrupar Por">
+                    <filter string="Equipo" name="group_team" 
+                            context="{'group_by': 'team_name'}"/>
+                    <filter string="Vendedor" name="group_salesperson" 
+                            context="{'group_by': 'salesperson_name'}"/>
+                    <filter string="Sector" name="group_sector" 
+                            context="{'group_by': 'sector_name'}"/>
+                    <filter string="Tamaño Empresa" name="group_size" 
+                            context="{'group_by': 'company_size'}"/>
+                    <filter string="Tipo Facturación" name="group_invoice_type" 
+                            context="{'group_by': 'invoice_type'}"/>
+                    <filter string="Año" name="group_year" 
+                            context="{'group_by': 'invoice_year'}"/>
+                    <filter string="Mes" name="group_month" 
+                            context="{'group_by': 'invoice_month'}"/>
+                    <filter string="Estado Pago" name="group_payment_state" 
+                            context="{'group_by': 'payment_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Acción de ventana -->
+    <record id="action_invoice_analytics_report" model="ir.actions.act_window">
+        <field name="name">Reporte Analítico de Facturas</field>
+        <field name="res_model">invoice.analytics.report</field>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="search_view_id" ref="view_invoice_analytics_report_search"/>
+        <field name="context">{
+            'search_default_current_year': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Análisis detallado de facturas
+            </p>
+            <p>
+                Este reporte muestra información consolidada de las facturas
+                incluyendo datos del cliente, vendedor, equipo, productos y 
+                clasificaciones empresariales.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menú principal -->
+    <menuitem id="menu_invoice_analytics_root"
+              name="Gestión Fidelización"
+              sequence="100"
+              web_icon="invoice_analytics_report,static/description/icon.png"/>
+
+    <menuitem id="menu_invoice_analytics_report"
+              name="Análisis Gestión Fidelización"
+              parent="menu_invoice_analytics_root"
+              action="action_invoice_analytics_report"
+              sequence="10"/>
+
+</odoo>
