@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista Tree -->
+    <record id="view_credit_card_request_tree" model="ir.ui.view">
+        <field name="name">credit.card.request.tree</field>
+        <field name="model">credit.card.request</field>
+        <field name="arch" type="xml">
+            <tree string="Solicitudes de Tarjetas de Crédito"
+                  decoration-info="state == 'draft'"
+                  decoration-warning="state == 'requested'"
+                  decoration-success="state == 'done'"
+                  decoration-danger="state == 'cancelled'">
+                <field name="name"/>
+                <field name="request_date"/>
+                <field name="requester_partner_id"/>
+                <field name="cardholder_partner_id"/>
+                <field name="company_id"/>
+                <field name="department_id"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'requested'"
+                       decoration-primary="state == 'approved'"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'cancelled'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form -->
+    <record id="view_credit_card_request_form" model="ir.ui.view">
+        <field name="name">credit.card.request.form</field>
+        <field name="model">credit.card.request</field>
+        <field name="arch" type="xml">
+            <form string="Solicitud de Tarjeta de Crédito">
+                <header>
+                    <button name="action_approve" string="Aprobar" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'requested'"
+                            groups="analytic_account_request.group_credit_card_approver"/>
+                    <button name="action_cancel" string="Cancelar" type="object"
+                            invisible="state not in ['requested', 'approved']"
+                            groups="analytic_account_request.group_credit_card_approver"/>
+                    <button name="action_done" string="Marcar como Terminado" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'approved'"
+                            groups="analytic_account_request.group_credit_card_approver"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,requested,approved,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group string="Información del Solicitante">
+                            <field name="request_date"/>
+                            <field name="available_partner_ids" invisible="1"/>
+                            <field name="requester_partner_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="requester_employee_id" readonly="1"/>
+                            <field name="requester_email" readonly="1" widget="email"/>
+                        </group>
+                        <group string="Información del Tarjetahabiente">
+                            <field name="cardholder_partner_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="cardholder_employee_id" readonly="1"/>
+                            <field name="cardholder_identification"/>
+                            <field name="job_id" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group string="Información Organizacional">
+                            <field name="company_id" options="{'no_create': True}"/>
+                            <field name="department_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Razón de Cancelación" invisible="state != 'cancelled'">
+                        <field name="cancel_reason" nolabel="1" readonly="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista Search -->
+    <record id="view_credit_card_request_search" model="ir.ui.view">
+        <field name="name">credit.card.request.search</field>
+        <field name="model">credit.card.request</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Solicitudes">
+                <field name="name" string="Número de Solicitud"/>
+                <field name="requester_partner_id" string="Solicitante"/>
+                <field name="cardholder_partner_id" string="Tarjetahabiente"/>
+                <field name="company_id"/>
+                <field name="department_id"/>
+                <filter string="Borradores" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Solicitadas" name="requested" domain="[('state', '=', 'requested')]"/>
+                <filter string="Aprobadas" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Terminadas" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Canceladas" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <separator/>
+                <filter string="Mis Solicitudes" name="my_requests" 
+                        domain="[('requester_employee_id.user_id', '=', uid)]"/>
+                <group expand="0" string="Agrupar Por">
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Solicitante" name="group_requester" context="{'group_by': 'requester_partner_id'}"/>
+                    <filter string="Tarjetahabiente" name="group_cardholder" context="{'group_by': 'cardholder_partner_id'}"/>
+                    <filter string="Compañía" name="group_company" context="{'group_by': 'company_id'}"/>
+                    <filter string="Departamento" name="group_department" context="{'group_by': 'department_id'}"/>
+                    <filter string="Fecha de Solicitud" name="group_date" context="{'group_by': 'request_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Wizard de Cancelación -->
+    <record id="view_credit_card_request_cancel_wizard" model="ir.ui.view">
+        <field name="name">credit.card.request.cancel.wizard.form</field>
+        <field name="model">credit.card.request.cancel.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cancelar Solicitud">
+                <group>
+                    <field name="request_id" invisible="1"/>
+                    <field name="cancel_reason" placeholder="Ingrese la razón de la cancelación..."/>
+                </group>
+                <footer>
+                    <button string="Confirmar Cancelación" name="action_confirm_cancel" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción de ventana -->
+    <record id="action_credit_card_request" model="ir.actions.act_window">
+        <field name="name">Solicitudes de Tarjetas de Crédito</field>
+        <field name="res_model">credit.card.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay solicitudes de tarjetas de crédito
+            </p>
+            <p>
+                Las solicitudes se crean desde el formulario web público.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menú -->
+    <menuitem id="menu_credit_card_request_root"
+              name="Solicitudes Tarjetas Crédito"
+              parent="menu_analytic_request_root"
+              sequence="11"/>
+
+    <menuitem id="menu_credit_card_request"
+              name="Solicitudes"
+              parent="menu_credit_card_request_root"
+              action="action_credit_card_request"
+              sequence="1"/>
+
+</odoo>

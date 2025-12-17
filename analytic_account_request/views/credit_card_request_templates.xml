@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template del formulario web -->
+    <template id="credit_card_form_template" name="Solicitud de Tarjeta de Crédito">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="s_cover pt96 pb96 o_colored_level">
+                    <div class="o_we_bg_filter bg-black-50"></div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 offset-lg-2">
+                                <div class="card shadow-lg">
+                                    <div class="card-header bg-primary text-white">
+                                        <h2 class="mb-0">
+                                            <i class="fa fa-credit-card mr-2"></i>
+                                            Solicitud de Tarjeta de Crédito Corporativa
+                                        </h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Mensajes -->
+                                        <t t-if="success">
+                                            <div class="alert alert-success alert-dismissible fade show">
+                                                <strong><i class="fa fa-check-circle"></i> ¡Éxito!</strong>
+                                                <p class="mb-0" t-esc="success"/>
+                                                <t t-if="request_number">
+                                                    <p class="mb-0 mt-2">
+                                                        <strong>Número de Solicitud:</strong>
+                                                        <span class="badge badge-success" t-esc="request_number"/>
+                                                    </p>
+                                                </t>
+                                                <button type="button" class="close" data-dismiss="alert">
+                                                    <span>×</span>
+                                                </button>
+                                            </div>
+                                        </t>
+
+                                        <t t-if="error">
+                                            <div class="alert alert-danger alert-dismissible fade show">
+                                                <strong><i class="fa fa-exclamation-triangle"></i> Error:</strong>
+                                                <span t-esc="error"/>
+                                                <button type="button" class="close" data-dismiss="alert">
+                                                    <span>×</span>
+                                                </button>
+                                            </div>
+                                        </t>
+
+                                        <!-- Formulario -->
+                                        <form id="credit_card_form" action="/tarjeta_credito/submit" method="post">
+                                            
+                                            <div class="row">
+                                                <div class="col-md-6 form-group">
+                                                    <label for="requester_partner_id">
+                                                        <strong>Nombre del Colaborador (Solicitante)</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="requester_partner_id" id="requester_partner_id" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <t t-foreach="partners" t-as="partner">
+                                                            <t t-set="employee" t-value="request.env['hr.employee'].sudo().search([('work_contact_id', '=', partner.id)], limit=1)"/>
+                                                            <option t-att-value="partner.id" 
+                                                                    t-att-data-email="employee.work_email if employee else ''"
+                                                                    t-esc="partner.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-6 form-group">
+                                                    <label for="requester_email">
+                                                        <strong>Email del Solicitante</strong>
+                                                    </label>
+                                                    <input type="email" name="requester_email" id="requester_email" class="form-control" 
+                                                           readonly="readonly" placeholder="Se completará automáticamente"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6 form-group">
+                                                    <label for="cardholder_partner_id">
+                                                        <strong>Nombre del Tarjetahabiente</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="cardholder_partner_id" id="cardholder_partner_id" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <t t-foreach="partners" t-as="partner">
+                                                            <t t-set="employee" t-value="request.env['hr.employee'].sudo().search([('work_contact_id', '=', partner.id)], limit=1)"/>
+                                                            <option t-att-value="partner.id" 
+                                                                    t-att-data-identification="employee.identification_id if employee else ''"
+                                                                    t-att-data-job="employee.job_id.name if employee and employee.job_id else ''"
+                                                                    t-esc="partner.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-6 form-group">
+                                                    <label for="cardholder_identification">
+                                                        <strong>Número de Cédula</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="cardholder_identification" id="cardholder_identification" 
+                                                           class="form-control" required="required" 
+                                                           placeholder="Número de identificación"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6 form-group">
+                                                    <label for="company_id">
+                                                        <strong>Organización del Tarjetahabiente</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="company_id" id="company_id" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <t t-foreach="companies" t-as="company">
+                                                            <option t-att-value="company.id" 
+                                                                    t-att-selected="'selected' if company.id == request.env.company.id else None"
+                                                                    t-esc="company.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-6 form-group">
+                                                    <label for="department_id">
+                                                        <strong>Equipo</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="department_id" id="department_id" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <t t-foreach="departments" t-as="dept">
+                                                            <option t-att-value="dept.id" 
+                                                                    t-att-data-company="dept.company_id.id if dept.company_id else ''"
+                                                                    t-esc="dept.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6 form-group">
+                                                    <label for="job_title">
+                                                        <strong>Cargo del Tarjetahabiente</strong>
+                                                    </label>
+                                                    <input type="text" name="job_title" id="job_title" class="form-control" 
+                                                           readonly="readonly" placeholder="Se completará automáticamente"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group text-center mt-4">
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                    <i class="fa fa-paper-plane"></i> Enviar Solicitud
+                                                </button>
+                                                <button type="reset" class="btn btn-secondary btn-lg ml-2">
+                                                    <i class="fa fa-undo"></i> Limpiar
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+
+        <!-- JavaScript -->
+        <script type="text/javascript">
+            $(document).ready(function() {
+                // Guardar todos los departamentos al cargar
+                var allDepartments = [];
+                $('#department_id option').each(function() {
+                    if ($(this).val()) {
+                        allDepartments.push({
+                            id: $(this).val(),
+                            name: $(this).text(),
+                            company_id: $(this).attr('data-company')
+                        });
+                    }
+                });
+                console.log('Departamentos cargados:', allDepartments.length);
+                
+                // Autocompletar email del solicitante
+                $('#requester_partner_id').on('change', function() {
+                    var selectedOption = $(this).find('option:selected');
+                    var email = selectedOption.attr('data-email');
+                    $('#requester_email').val(email || '');
+                    console.log('Email solicitante:', email);
+                });
+                
+                // Autocompletar datos del tarjetahabiente
+                $('#cardholder_partner_id').on('change', function() {
+                    var selectedOption = $(this).find('option:selected');
+                    var identification = selectedOption.attr('data-identification');
+                    var job = selectedOption.attr('data-job');
+                    $('#cardholder_identification').val(identification || '');
+                    $('#job_title').val(job || '');
+                    console.log('Datos tarjetahabiente:', identification, job);
+                });
+                
+                // Filtrar departamentos al cambiar compañía
+                $('#company_id').on('change', function() {
+                    var company_id = $(this).val();
+                    console.log('Compañía seleccionada:', company_id);
+                    
+                    var select = $('#department_id');
+                    select.empty();
+                    select.append('<option value="">-- Seleccione --</option>');
+                    
+                    if (company_id) {
+                        // Filtrar departamentos por compañía
+                        var filtered = allDepartments.filter(function(dept) {
+                            // Incluir departamentos de la compañía seleccionada o sin compañía
+                            return dept.company_id === company_id || dept.company_id === '' || !dept.company_id;
+                        });
+                        
+                        console.log('Departamentos filtrados:', filtered.length);
+                        
+                        if (filtered.length > 0) {
+                            filtered.forEach(function(dept) {
+                                select.append('<option value="' + dept.id + '" data-company="' + dept.company_id + '">' + dept.name + '</option>');
+                            });
+                        } else {
+                            select.append('<option value="">No hay departamentos para esta compañía</option>');
+                        }
+                    } else {
+                        // Si no hay compañía, mostrar todos
+                        allDepartments.forEach(function(dept) {
+                            select.append('<option value="' + dept.id + '" data-company="' + dept.company_id + '">' + dept.name + '</option>');
+                        });
+                    }
+                });
+                
+                // Filtrar departamentos de la compañía por defecto al cargar
+                var defaultCompanyId = $('#company_id').val();
+                if (defaultCompanyId) {
+                    console.log('Filtrando departamentos de compañía por defecto:', defaultCompanyId);
+                    $('#company_id').trigger('change');
+                }
+            });
+        </script>
+    </template>
+
+</odoo>

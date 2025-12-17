@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Grupo de Aprobadores de Cuentas Analíticas -->
+        <record id="group_analytic_account_approver" model="res.groups">
+            <field name="name">Aprobador de Cuentas Analíticas</field>
+            <field name="category_id" ref="base.module_category_accounting"/>
+            <field name="comment">Los usuarios de este grupo recibirán notificaciones de nuevas solicitudes de cuentas analíticas y podrán aprobarlas/cancelarlas.</field>
+        </record>
+        
+        <!-- Grupo de Aprobadores de Tarjetas de Crédito -->
+        <record id="group_credit_card_approver" model="res.groups">
+            <field name="name">Aprobador de Tarjetas de Crédito</field>
+            <field name="category_id" ref="base.module_category_accounting"/>
+            <field name="comment">Los usuarios de este grupo recibirán notificaciones de nuevas solicitudes de tarjetas de crédito y podrán aprobarlas/cancelarlas.</field>
+        </record>
+        
+        <!-- Grupo de Aprobadores de Productos -->
+        <record id="group_product_request_approver" model="res.groups">
+            <field name="name">Aprobador de Productos</field>
+            <field name="category_id" ref="base.module_category_accounting"/>
+            <field name="comment">Los usuarios de este grupo recibirán notificaciones de nuevas solicitudes de creación de productos y podrán aprobarlas/cancelarlas.</field>
+        </record>
+    </data>
+</odoo>

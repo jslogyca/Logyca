@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista Tree -->
+    <record id="view_product_request_tree" model="ir.ui.view">
+        <field name="name">product.request.tree</field>
+        <field name="model">product.request</field>
+        <field name="arch" type="xml">
+            <tree string="Solicitudes de Creación de Producto"
+                  decoration-info="state == 'draft'"
+                  decoration-warning="state == 'requested'"
+                  decoration-success="state == 'done'"
+                  decoration-danger="state == 'cancelled'">
+                <field name="name"/>
+                <field name="request_date"/>
+                <field name="requester_partner_id"/>
+                <field name="product_name"/>
+                <field name="product_type"/>
+                <field name="company_id"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'requested'"
+                       decoration-primary="state == 'approved'"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'cancelled'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form -->
+    <record id="view_product_request_form" model="ir.ui.view">
+        <field name="name">product.request.form</field>
+        <field name="model">product.request</field>
+        <field name="arch" type="xml">
+            <form string="Solicitud de Creación de Producto">
+                <header>
+                    <button name="action_approve" string="Aprobar" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'requested'"
+                            groups="analytic_account_request.group_product_request_approver"/>
+                    <button name="action_cancel" string="Cancelar" type="object"
+                            invisible="state not in ['requested', 'approved']"
+                            groups="analytic_account_request.group_product_request_approver"/>
+                    <button name="action_done" string="Marcar como Terminado" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'approved'"
+                            groups="analytic_account_request.group_product_request_approver"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,requested,approved,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group string="Información del Solicitante">
+                            <field name="request_date"/>
+                            <field name="available_partner_ids" invisible="1"/>
+                            <field name="requester_partner_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="requester_employee_id" readonly="1"/>
+                            <field name="requester_email" readonly="1" widget="email"/>
+                        </group>
+                        <group string="Información de la Organización">
+                            <field name="company_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Información del Producto">
+                            <group>
+                                <group string="Datos Generales">
+                                    <field name="product_type"/>
+                                    <field name="product_name"/>
+                                    <field name="disclosure_medium"/>
+                                    <field name="has_variants"/>
+                                </group>
+                                <group string="Configuración Financiera">
+                                    <field name="analytic_account_id" options="{'no_create': True}"/>
+                                    <field name="payment_method"/>
+                                    <field name="is_deferred"/>
+                                    <field name="deferred_time" invisible="not is_deferred"/>
+                                    <field name="policy_responsible"/>
+                                </group>
+                            </group>
+                            
+                            <group string="Justificación del Producto">
+                                <field name="product_justification" nolabel="1" placeholder="Describa la justificación del producto..."/>
+                            </group>
+                            
+                            <group string="Archivo de Variantes" invisible="has_variants != 'yes'">
+                                <field name="variants_filename" invisible="1"/>
+                                <field name="variants_file" filename="variants_filename" widget="binary"/>
+                            </group>
+                        </page>
+                        
+                        <page string="Aspectos Legales">
+                            <group string="Objeto y Objetivos">
+                                <field name="legal_purpose" placeholder="El propósito del contrato descrito de forma precisa..."/>
+                                <field name="specific_objectives" placeholder="Relación detallada de los diversos propósitos que se pretenden con el contrato..."/>
+                            </group>
+                            
+                            <group>
+                                <group string="Alcance y Duración">
+                                    <field name="scope" placeholder="Describa el alcance..."/>
+                                    <field name="duration" placeholder="Tiempo que las partes determinan para su ejecución..."/>
+                                </group>
+                                <group string="Lugar y Precio">
+                                    <field name="place" placeholder="Lugar donde se ejecutará el contrato..."/>
+                                    <field name="price" placeholder="Determinación del monto del contrato..."/>
+                                </group>
+                            </group>
+                            
+                            <group string="Obligaciones">
+                                <field name="logyca_obligations" placeholder="Relación de todas las obligaciones que surgen para LOGYCA..."/>
+                                <field name="acceptor_obligations" placeholder="Especificar a qué se compromete el aceptante..."/>
+                            </group>
+                            
+                            <group>
+                                <group string="Terminación y Liquidación">
+                                    <field name="termination_causes" placeholder="Condiciones o circunstancias especiales para la terminación anticipada..."/>
+                                    <field name="liquidation_method" placeholder="Forma de liquidación en caso de terminación anticipada..."/>
+                                </group>
+                                <group string="Cesión y Cláusula Penal">
+                                    <field name="contract_assignment" placeholder="Indicar si hay posibilidad de cesión del contrato..."/>
+                                    <field name="penalty_clause" placeholder="Especificar las condiciones de cláusula penal..."/>
+                                </group>
+                            </group>
+                            
+                            <group string="Observaciones">
+                                <field name="observations" nolabel="1" placeholder="Observaciones adicionales..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                    
+                    <group string="Razón de Cancelación" invisible="state != 'cancelled'">
+                        <field name="cancel_reason" nolabel="1" readonly="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista Search -->
+    <record id="view_product_request_search" model="ir.ui.view">
+        <field name="name">product.request.search</field>
+        <field name="model">product.request</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Solicitudes de Producto">
+                <field name="name" string="Número de Solicitud"/>
+                <field name="requester_partner_id" string="Solicitante"/>
+                <field name="product_name" string="Nombre del Producto"/>
+                <field name="company_id"/>
+                <field name="analytic_account_id"/>
+                <filter string="Borradores" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Solicitadas" name="requested" domain="[('state', '=', 'requested')]"/>
+                <filter string="Aprobadas" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Terminadas" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Canceladas" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <separator/>
+                <filter string="Mis Solicitudes" name="my_requests" 
+                        domain="[('requester_employee_id.user_id', '=', uid)]"/>
+                <separator/>
+                <filter string="Productos Nuevos" name="new_products" domain="[('product_type', '=', 'new')]"/>
+                <filter string="Productos Existentes" name="existing_products" domain="[('product_type', '=', 'existing')]"/>
+                <filter string="Variantes" name="variants" domain="[('product_type', '=', 'variants')]"/>
+                <group expand="0" string="Agrupar Por">
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Solicitante" name="group_requester" context="{'group_by': 'requester_partner_id'}"/>
+                    <filter string="Tipo de Producto" name="group_product_type" context="{'group_by': 'product_type'}"/>
+                    <filter string="Compañía" name="group_company" context="{'group_by': 'company_id'}"/>
+                    <filter string="Cuenta Analítica" name="group_analytic" context="{'group_by': 'analytic_account_id'}"/>
+                    <filter string="Fecha de Solicitud" name="group_date" context="{'group_by': 'request_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Wizard de Cancelación -->
+    <record id="view_product_request_cancel_wizard" model="ir.ui.view">
+        <field name="name">product.request.cancel.wizard.form</field>
+        <field name="model">product.request.cancel.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cancelar Solicitud de Producto">
+                <group>
+                    <field name="request_id" invisible="1"/>
+                    <field name="cancel_reason" placeholder="Ingrese la razón de la cancelación..."/>
+                </group>
+                <footer>
+                    <button string="Confirmar Cancelación" name="action_confirm_cancel" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción de ventana -->
+    <record id="action_product_request" model="ir.actions.act_window">
+        <field name="name">Solicitudes de Creación de Producto</field>
+        <field name="res_model">product.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay solicitudes de creación de producto
+            </p>
+            <p>
+                Las solicitudes se crean desde el formulario web público.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menú -->
+    <menuitem id="menu_product_request_root"
+              name="Solicitudes de Producto"
+              parent="menu_analytic_request_root"
+              sequence="12"/>
+
+    <menuitem id="menu_product_request"
+              name="Solicitudes"
+              parent="menu_product_request_root"
+              action="action_product_request"
+              sequence="1"/>
+
+</odoo>
