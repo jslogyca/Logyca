@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        
+        <!-- Template: Notificación a Aprobadores -->
+        <record id="email_template_product_approval" model="mail.template">
+            <field name="name">Solicitud de Producto - Notificación a Aprobadores</field>
+            <field name="model_id" ref="model_product_request"/>
+            <field name="subject">Nueva Solicitud de Creación de Producto: ${object.name}</field>
+            <field name="email_from">${(object.company_id.email or user.email or 'noreply@localhost')}</field>
+            <field name="email_to">${object.requester_email}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; width: 100%;">
+                        <tr>
+                            <td align="center">
+                                <table border="0" cellpadding="0" cellspacing="0" width="600" style="padding: 16px; background-color: white; border: 1px solid #E0E0E0; border-radius: 8px;">
+                                    <tr>
+                                        <td style="padding: 20px; background-color: #28a745; border-radius: 8px 8px 0 0;">
+                                            <h1 style="color: white; margin: 0; font-size: 24px;">📦 Nueva Solicitud de Creación de Producto</h1>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 20px; font-size: 14px;">
+                                            <p>Estimado/a aprobador/a,</p>
+                                            <p>Se ha recibido una nueva solicitud de creación de producto que requiere su aprobación.</p>
+                                            <div style="background-color: #F8F9FA; padding: 15px; border-left: 4px solid #28a745; margin: 20px 0;">
+                                                <h3 style="margin: 0 0 10px; color: #28a745;">Información General</h3>
+                                                <table style="width: 100%;">
+                                                    <tr><td style="padding: 5px; font-weight: bold; width: 40%;">Número de Solicitud:</td><td><t t-out="object.name"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Fecha:</td><td><t t-out="format_date(object.request_date)"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Solicitante:</td><td><t t-out="object.requester_partner_id.name"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Organización:</td><td><t t-out="object.company_id.name"/></td></tr>
+                                                </table>
+                                            </div>
+                                            <div style="background-color: #e7f3ff; padding: 15px; border-left: 4px solid #0c5460; margin: 20px 0;">
+                                                <h3 style="margin: 0 0 10px; color: #0c5460;">Información del Producto</h3>
+                                                <table style="width: 100%;">
+                                                    <tr><td style="padding: 5px; font-weight: bold; width: 40%;">Nombre del Producto:</td><td><t t-out="object.product_name"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Tipo en Odoo:</td><td><t t-out="dict(object._fields['product_type'].selection).get(object.product_type)"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Medio de Divulgación:</td><td><t t-out="dict(object._fields['disclosure_medium'].selection).get(object.disclosure_medium)"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Cuenta Analítica:</td><td><t t-out="object.analytic_account_id.name"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Forma de Pago:</td><td><t t-out="dict(object._fields['payment_method'].selection).get(object.payment_method)"/></td></tr>
+                                                </table>
+                                            </div>
+                                            <div style="text-align: center; margin: 30px 0;">
+                                                <a t-attf-href="{{object.get_request_url()}}" 
+                                                   style="background-color: #28a745; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+                                                    Ver Solicitud Completa
+                                                </a>
+                                            </div>
+                                            <p style="color: #666; font-size: 12px; margin-top: 20px;">
+                                                Por favor revise la solicitud y proceda con la aprobación o cancelación según corresponda.
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <!-- Template: Confirmación al Solicitante -->
+        <record id="email_template_product_submission" model="mail.template">
+            <field name="name">Solicitud de Producto - Confirmación</field>
+            <field name="model_id" ref="model_product_request"/>
+            <field name="subject">Solicitud de Producto Recibida: ${object.name}</field>
+            <field name="email_from">${(object.company_id.email or user.email or 'noreply@localhost')}</field>
+            <field name="email_to">${object.requester_email}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; width: 100%;">
+                        <tr>
+                            <td align="center">
+                                <table border="0" cellpadding="0" cellspacing="0" width="600" style="padding: 16px; background-color: white; border: 1px solid #E0E0E0; border-radius: 8px;">
+                                    <tr>
+                                        <td style="padding: 20px; background-color: #28a745; border-radius: 8px 8px 0 0; text-align: center;">
+                                            <h1 style="color: white; margin: 0; font-size: 24px;"><span style="font-size: 48px;">✓</span><br/>¡Solicitud Recibida!</h1>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 20px; font-size: 14px;">
+                                            <p>Hola <strong><t t-out="object.requester_partner_id.name"/></strong>,</p>
+                                            <p>Tu solicitud de creación de producto ha sido recibida y procesada exitosamente.</p>
+                                            <div style="background-color: #d4edda; padding: 20px; text-align: center; margin: 20px 0; border-radius: 5px;">
+                                                <p style="margin: 0 0 10px; font-size: 14px; color: #155724;">Número de Solicitud:</p>
+                                                <p style="margin: 0; font-size: 28px; font-weight: bold; color: #155724;"><t t-out="object.name"/></p>
+                                            </div>
+                                            <div style="background-color: #F8F9FA; padding: 15px; margin: 20px 0;">
+                                                <h3 style="margin: 0 0 10px;">Resumen de tu Solicitud:</h3>
+                                                <table style="width: 100%;">
+                                                    <tr><td style="padding: 5px; font-weight: bold; width: 40%;">Producto:</td><td><t t-out="object.product_name"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Tipo:</td><td><t t-out="dict(object._fields['product_type'].selection).get(object.product_type)"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Fecha de Solicitud:</td><td><t t-out="format_date(object.request_date)"/></td></tr>
+                                                </table>
+                                            </div>
+                                            <p>Tu solicitud se encuentra actualmente en estado <strong>Solicitado</strong> y está siendo revisada por el equipo correspondiente.</p>
+                                            <p>Recibirás una notificación cuando tu solicitud sea aprobada y procesada.</p>
+                                            <p style="color: #666; font-size: 12px; margin-top: 30px;">
+                                                Si tienes alguna pregunta sobre tu solicitud, por favor contacta al área correspondiente.
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <!-- Template: Solicitud Terminada -->
+        <record id="email_template_product_completion" model="mail.template">
+            <field name="name">Solicitud de Producto - Completada</field>
+            <field name="model_id" ref="model_product_request"/>
+            <field name="subject">Solicitud de Producto Procesada: ${object.name}</field>
+            <field name="email_from">${(object.company_id.email or user.email or 'noreply@localhost')}</field>
+            <field name="email_to">${object.requester_email}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; width: 100%;">
+                        <tr>
+                            <td align="center">
+                                <table border="0" cellpadding="0" cellspacing="0" width="600" style="padding: 16px; background-color: white; border: 1px solid #E0E0E0; border-radius: 8px;">
+                                    <tr>
+                                        <td style="padding: 20px; background-color: #007bff; border-radius: 8px 8px 0 0; text-align: center;">
+                                            <h1 style="color: white; margin: 0; font-size: 24px;"><span style="font-size: 48px;">🎉</span><br/>¡Solicitud Procesada!</h1>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 20px; font-size: 14px;">
+                                            <p>Hola <strong><t t-out="object.requester_partner_id.name"/></strong>,</p>
+                                            <p>Nos complace informarte que tu solicitud de creación de producto ha sido completamente procesada.</p>
+                                            <div style="background-color: #cce5ff; padding: 20px; text-align: center; margin: 20px 0; border-radius: 5px;">
+                                                <p style="margin: 0 0 10px; font-size: 14px; color: #004085;">Número de Solicitud:</p>
+                                                <p style="margin: 0; font-size: 28px; font-weight: bold; color: #004085;"><t t-out="object.name"/></p>
+                                            </div>
+                                            <div style="background-color: #F8F9FA; padding: 15px; margin: 20px 0;">
+                                                <h3 style="margin: 0 0 10px;">Detalles del Producto:</h3>
+                                                <table style="width: 100%;">
+                                                    <tr><td style="padding: 5px; font-weight: bold; width: 40%;">Producto:</td><td><t t-out="object.product_name"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Tipo:</td><td><t t-out="dict(object._fields['product_type'].selection).get(object.product_type)"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Cuenta Analítica:</td><td><t t-out="object.analytic_account_id.name"/></td></tr>
+                                                </table>
+                                            </div>
+                                            <p>El producto ya está disponible en el sistema y puede ser utilizado según lo solicitado.</p>
+                                            <p style="color: #666; font-size: 12px; margin-top: 30px;">
+                                                Gracias por utilizar nuestro sistema de solicitudes.
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <!-- Template: Solicitud Cancelada -->
+        <record id="email_template_product_cancellation" model="mail.template">
+            <field name="name">Solicitud de Producto - Cancelada</field>
+            <field name="model_id" ref="model_product_request"/>
+            <field name="subject">Solicitud de Producto Cancelada: ${object.name}</field>
+            <field name="email_from">${(object.company_id.email or user.email or 'noreply@localhost')}</field>
+            <field name="email_to">${object.requester_email}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; width: 100%;">
+                        <tr>
+                            <td align="center">
+                                <table border="0" cellpadding="0" cellspacing="0" width="600" style="padding: 16px; background-color: white; border: 1px solid #E0E0E0; border-radius: 8px;">
+                                    <tr>
+                                        <td style="padding: 20px; background-color: #dc3545; border-radius: 8px 8px 0 0; text-align: center;">
+                                            <h1 style="color: white; margin: 0; font-size: 24px;"><span style="font-size: 48px;">✕</span><br/>Solicitud Cancelada</h1>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 20px; font-size: 14px;">
+                                            <p>Hola <strong><t t-out="object.requester_partner_id.name"/></strong>,</p>
+                                            <p>Te informamos que tu solicitud de creación de producto ha sido cancelada.</p>
+                                            <div style="background-color: #f8d7da; padding: 20px; text-align: center; margin: 20px 0; border-radius: 5px;">
+                                                <p style="margin: 0 0 10px; font-size: 14px; color: #721c24;">Número de Solicitud:</p>
+                                                <p style="margin: 0; font-size: 28px; font-weight: bold; color: #721c24;"><t t-out="object.name"/></p>
+                                            </div>
+                                            <div style="background-color: #F8F9FA; padding: 15px; margin: 20px 0;">
+                                                <h3 style="margin: 0 0 10px;">Detalles de la Solicitud:</h3>
+                                                <table style="width: 100%;">
+                                                    <tr><td style="padding: 5px; font-weight: bold; width: 40%;">Producto:</td><td><t t-out="object.product_name"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Fecha de Solicitud:</td><td><t t-out="format_date(object.request_date)"/></td></tr>
+                                                </table>
+                                            </div>
+                                            <div style="background-color: #fff3cd; padding: 15px; margin: 20px 0; border-left: 4px solid #ffc107;">
+                                                <h3 style="margin: 0 0 10px; color: #856404;">Razón de la Cancelación:</h3>
+                                                <p style="margin: 0;"><t t-out="object.cancel_reason or 'No especificada'"/></p>
+                                            </div>
+                                            <p>Si tienes alguna duda o deseas presentar una nueva solicitud, por favor contacta al área correspondiente.</p>
+                                            <p style="color: #666; font-size: 12px; margin-top: 30px;">
+                                                Gracias por tu comprensión.
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

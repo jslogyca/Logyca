@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        
+        <!-- Template de Email: Notificación a Aprobadores -->
+        <record id="email_template_request_approval" model="mail.template">
+            <field name="name">Solicitud de Cuenta Analítica - Notificación a Aprobadores</field>
+            <field name="model_id" ref="model_analytic_account_request"/>
+            <field name="subject">Nueva Solicitud de Cuenta Analítica: ${object.name}</field>
+            <field name="email_from">${(object.company_id.email or user.email or 'noreply@localhost')}</field>
+            <field name="email_to">${object.email}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family: Arial, sans-serif; color: #454748; width: 100%; border-collapse: separate;">
+                        <tbody>
+                            <tr>
+                                <td align="center">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="600" style="padding: 16px; background-color: white; border: 1px solid #E0E0E0; border-radius: 8px;">
+                                        <tbody>
+                                            <!-- Header -->
+                                            <tr>
+                                                <td style="padding: 20px; background-color: #875A7B; border-radius: 8px 8px 0 0;">
+                                                    <h1 style="color: white; margin: 0; font-size: 24px;">
+                                                        <span style="font-size: 28px;">📊</span> Nueva Solicitud de Cuenta Analítica
+                                                    </h1>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Body -->
+                                            <tr>
+                                                <td style="padding: 20px; font-size: 14px; line-height: 1.6;">
+                                                    <p style="margin: 0 0 10px;">Estimado/a aprobador/a,</p>
+                                                    
+                                                    <p style="margin: 10px 0;">
+                                                        Se ha recibido una nueva solicitud de cuenta analítica que requiere su atención.
+                                                    </p>
+                                                    
+                                                    <div style="background-color: #F8F9FA; padding: 15px; border-left: 4px solid #875A7B; margin: 20px 0;">
+                                                        <h3 style="margin: 0 0 10px; color: #875A7B;">Detalles de la Solicitud</h3>
+                                                        <table style="width: 100%; border-collapse: collapse;">
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold; width: 40%;">Número de Solicitud:</td>
+                                                                <td style="padding: 5px 0;"><t t-out="object.name"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold;">Fecha de Solicitud:</td>
+                                                                <td style="padding: 5px 0;"><t t-out="format_date(object.request_date)"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold;">Solicitado Por:</td>
+                                                                <td style="padding: 5px 0;"><t t-out="object.partner_id.name"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold;">Email:</td>
+                                                                <td style="padding: 5px 0;"><t t-out="object.email"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold;">Compañía:</td>
+                                                                <td style="padding: 5px 0;"><t t-out="object.company_id.name"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold;">Línea de Negocio:</td>
+                                                                <td style="padding: 5px 0;"><t t-out="object.plan_id.name"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold;">Nombre de Cuenta:</td>
+                                                                <td style="padding: 5px 0;"><strong><t t-out="object.analytic_account_name"/></strong></td>
+                                                            </tr>
+                                                            <t t-if="object.observations">
+                                                                <tr>
+                                                                    <td style="padding: 5px 10px 5px 0; font-weight: bold; vertical-align: top;">Observaciones:</td>
+                                                                    <td style="padding: 5px 0;"><t t-out="object.observations"/></td>
+                                                                </tr>
+                                                            </t>
+                                                        </table>
+                                                    </div>
+                                                    
+                                                    <p style="margin: 20px 0 10px;">
+                                                        Por favor, revise la solicitud en el sistema para aprobarla o rechazarla.
+                                                    </p>
+                                                    
+                                                    <div style="text-align: center; margin: 30px 0;">
+                                                        <a t-attf-href="{{object.get_request_url()}}" 
+                                                           style="background-color: #875A7B; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+                                                            Ver Solicitud en Odoo
+                                                        </a>
+                                                    </div>
+                                                    
+                                                    <p style="margin: 20px 0 0; font-size: 12px; color: #666;">
+                                                        Este es un correo automático. Por favor, no responda a este mensaje.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Footer -->
+                                            <tr>
+                                                <td style="padding: 16px; text-align: center; font-size: 12px; color: #888; border-top: 1px solid #E0E0E0;">
+                                                    <p style="margin: 0;">
+                                                        <t t-out="object.company_id.name"/>
+                                                        <t t-if="object.company_id.website">
+                                                            <br/>
+                                                            <a t-attf-href="{{object.company_id.website}}" style="color: #875A7B; text-decoration: none;"><t t-out="object.company_id.website"/></a>
+                                                        </t>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <!-- Template de Email: Confirmación al Solicitante -->
+        <record id="email_template_submission_confirmation" model="mail.template">
+            <field name="name">Solicitud de Cuenta Analítica - Confirmación al Solicitante</field>
+            <field name="model_id" ref="model_analytic_account_request"/>
+            <field name="subject">Solicitud Recibida: ${object.name}</field>
+            <field name="email_from">${(object.email or '')|safe}</field>
+            <field name="email_to">${object.email}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family: Arial, sans-serif; color: #454748; width: 100%; border-collapse: separate;">
+                        <tbody>
+                            <tr>
+                                <td align="center">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="600" style="padding: 16px; background-color: white; border: 1px solid #E0E0E0; border-radius: 8px;">
+                                        <tbody>
+                                            <!-- Header -->
+                                            <tr>
+                                                <td style="padding: 20px; background-color: #28a745; border-radius: 8px 8px 0 0; text-align: center;">
+                                                    <h1 style="color: white; margin: 0; font-size: 24px;">
+                                                        <span style="font-size: 48px;">✓</span>
+                                                        <br/>
+                                                        Solicitud Recibida
+                                                    </h1>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Body -->
+                                            <tr>
+                                                <td style="padding: 20px; font-size: 14px; line-height: 1.6;">
+                                                    <p style="margin: 0 0 10px;">Hola <strong><t t-out="object.partner_id.name"/></strong>,</p>
+                                                    
+                                                    <p style="margin: 10px 0;">
+                                                        Tu solicitud de cuenta analítica ha sido recibida y procesada exitosamente.
+                                                    </p>
+                                                    
+                                                    <div style="background-color: #d4edda; padding: 20px; border-left: 4px solid #28a745; margin: 20px 0; text-align: center;">
+                                                        <p style="margin: 0 0 10px; font-size: 14px;">Número de Solicitud:</p>
+                                                        <p style="margin: 0; font-size: 28px; font-weight: bold; color: #155724;"><t t-out="object.name"/></p>
+                                                    </div>
+                                                    
+                                                    <div style="background-color: #F8F9FA; padding: 15px; border-left: 4px solid #28a745; margin: 20px 0;">
+                                                        <h3 style="margin: 0 0 10px; color: #28a745;">Detalles de tu Solicitud</h3>
+                                                        <table style="width: 100%; border-collapse: collapse;">
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold; width: 40%;">Compañía:</td>
+                                                                <td style="padding: 5px 0;"><t t-out="object.company_id.name"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold;">Línea de Negocio:</td>
+                                                                <td style="padding: 5px 0;"><t t-out="object.plan_id.name"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold;">Nombre de Cuenta:</td>
+                                                                <td style="padding: 5px 0;"><strong><t t-out="object.analytic_account_name"/></strong></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    
+                                                    <p style="margin: 20px 0;">
+                                                        <strong>¿Qué sigue?</strong>
+                                                    </p>
+                                                    <ul style="margin: 10px 0; padding-left: 20px;">
+                                                        <li style="margin: 5px 0;">Tu solicitud será revisada por el equipo correspondiente</li>
+                                                        <li style="margin: 5px 0;">Recibirás una notificación cuando sea aprobada</li>
+                                                        <li style="margin: 5px 0;">Una vez aprobada, se creará la cuenta analítica y recibirás confirmación</li>
+                                                    </ul>
+                                                    
+                                                    <p style="margin: 20px 0 0; font-size: 12px; color: #666;">
+                                                        Este es un correo automático. Por favor, no responda a este mensaje.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Footer -->
+                                            <tr>
+                                                <td style="padding: 16px; text-align: center; font-size: 12px; color: #888; border-top: 1px solid #E0E0E0;">
+                                                    <p style="margin: 0;">
+                                                        <t t-out="object.company_id.name"/>
+                                                        <t t-if="object.company_id.website">
+                                                            <br/>
+                                                            <a t-attf-href="{{object.company_id.website}}" style="color: #28a745; text-decoration: none;"><t t-out="object.company_id.website"/></a>
+                                                        </t>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <!-- Template de Email: Cuenta Analítica Creada -->
+        <record id="email_template_completion" model="mail.template">
+            <field name="name">Solicitud de Cuenta Analítica - Completada</field>
+            <field name="model_id" ref="model_analytic_account_request"/>
+            <field name="subject">Cuenta Analítica Creada: ${object.analytic_account_name}</field>
+            <field name="email_from">${(object.company_id.email or user.email or 'noreply@localhost')}</field>
+            <field name="email_to">${object.email}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family: Arial, sans-serif; color: #454748; width: 100%; border-collapse: separate;">
+                        <tbody>
+                            <tr>
+                                <td align="center">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="600" style="padding: 16px; background-color: white; border: 1px solid #E0E0E0; border-radius: 8px;">
+                                        <tbody>
+                                            <!-- Header -->
+                                            <tr>
+                                                <td style="padding: 20px; background-color: #17a2b8; border-radius: 8px 8px 0 0; text-align: center;">
+                                                    <h1 style="color: white; margin: 0; font-size: 24px;">
+                                                        <span style="font-size: 48px;">🎉</span>
+                                                        <br/>
+                                                        ¡Cuenta Analítica Creada!
+                                                    </h1>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Body -->
+                                            <tr>
+                                                <td style="padding: 20px; font-size: 14px; line-height: 1.6;">
+                                                    <p style="margin: 0 0 10px;">Hola <strong><t t-out="object.partner_id.name"/></strong>,</p>
+                                                    
+                                                    <p style="margin: 10px 0;">
+                                                        ¡Excelentes noticias! Tu solicitud de cuenta analítica ha sido procesada y la cuenta ya ha sido creada.
+                                                    </p>
+                                                    
+                                                    <div style="background-color: #d1ecf1; padding: 20px; border-left: 4px solid #17a2b8; margin: 20px 0;">
+                                                        <h3 style="margin: 0 0 10px; color: #0c5460;">Información de la Cuenta Creada</h3>
+                                                        <table style="width: 100%; border-collapse: collapse;">
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold; width: 40%;">Número de Solicitud:</td>
+                                                                <td style="padding: 5px 0;"><t t-out="object.name"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold;">Nombre de Cuenta:</td>
+                                                                <td style="padding: 5px 0;"><strong><t t-out="object.analytic_account_name"/></strong></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold;">Línea de Negocio:</td>
+                                                                <td style="padding: 5px 0;"><t t-out="object.plan_id.name"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding: 5px 10px 5px 0; font-weight: bold;">Compañía:</td>
+                                                                <td style="padding: 5px 0;"><t t-out="object.company_id.name"/></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    
+                                                    <p style="margin: 20px 0;">
+                                                        Ya puedes comenzar a utilizar esta cuenta analítica en el sistema.
+                                                    </p>
+                                                    
+                                                    <div style="text-align: center; margin: 30px 0;">
+                                                        <a t-attf-href="{{object.get_analytic_account_url()}}" 
+                                                           style="background-color: #17a2b8; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; margin: 5px;">
+                                                            Ver Cuenta Analítica
+                                                        </a>
+                                                    </div>
+                                                    
+                                                    <p style="margin: 20px 0 0; font-size: 12px; color: #666;">
+                                                        Este es un correo automático. Por favor, no responda a este mensaje.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Footer -->
+                                            <tr>
+                                                <td style="padding: 16px; text-align: center; font-size: 12px; color: #888; border-top: 1px solid #E0E0E0;">
+                                                    <p style="margin: 0;">
+                                                        <t t-out="object.company_id.name"/>
+                                                        <t t-if="object.company_id.website">
+                                                            <br/>
+                                                            <a t-attf-href="{{object.company_id.website}}" style="color: #17a2b8; text-decoration: none;"><t t-out="object.company_id.website"/></a>
+                                                        </t>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <!-- Template de Email: Solicitud Cancelada -->
+        <record id="email_template_cancellation" model="mail.template">
+            <field name="name">Solicitud de Cuenta Analítica - Cancelada</field>
+            <field name="model_id" ref="model_analytic_account_request"/>
+            <field name="subject">Solicitud Cancelada: ${object.name}</field>
+            <field name="email_from">${(object.company_id.email or user.email or 'noreply@localhost')}</field>
+            <field name="email_to">${object.email}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family: Arial, sans-serif; color: #454748; width: 100%; border-collapse: separate;">
+                        <tbody>
+                            <tr>
+                                <td align="center">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="600" style="padding: 16px; background-color: white; border: 1px solid #E0E0E0; border-radius: 8px;">
+                                        <tbody>
+                                            <!-- Header -->
+                                            <tr>
+                                                <td style="padding: 20px; background-color: #dc3545; border-radius: 8px 8px 0 0; text-align: center;">
+                                                    <h1 style="color: white; margin: 0; font-size: 24px;">
+                                                        <span style="font-size: 48px;">✕</span>
+                                                        <br/>
+                                                        Solicitud Cancelada
+                                                    </h1>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Body -->
+                                            <tr>
+                                                <td style="padding: 20px; font-size: 14px; line-height: 1.6;">
+                                                    <p style="margin: 0 0 10px;">Hola <strong><t t-out="object.partner_id.name"/></strong>,</p>
+                                                    
+                                                    <p style="margin: 10px 0;">
+                                                        Te informamos que tu solicitud de cuenta analítica <strong><t t-out="object.name"/></strong> ha sido cancelada.
+                                                    </p>
+                                                    
+                                                    <div style="background-color: #f8d7da; padding: 15px; border-left: 4px solid #dc3545; margin: 20px 0;">
+                                                        <h3 style="margin: 0 0 10px; color: #721c24;">Razón de la Cancelación</h3>
+                                                        <p style="margin: 0; color: #721c24;">
+                                                            <t t-out="object.cancel_reason or 'No se especificó una razón.'"/>
+                                                        </p>
+                                                    </div>
+                                                    
+                                                    <p style="margin: 20px 0;">
+                                                        Si tienes alguna duda o consideras que esto es un error, por favor comunícate con el área correspondiente.
+                                                    </p>
+                                                    
+                                                    <p style="margin: 20px 0 0; font-size: 12px; color: #666;">
+                                                        Este es un correo automático. Por favor, no responda a este mensaje.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Footer -->
+                                            <tr>
+                                                <td style="padding: 16px; text-align: center; font-size: 12px; color: #888; border-top: 1px solid #E0E0E0;">
+                                                    <p style="margin: 0;">
+                                                        <t t-out="object.company_id.name"/>
+                                                        <t t-if="object.company_id.website">
+                                                            <br/>
+                                                            <a t-attf-href="{{object.company_id.website}}" style="color: #dc3545; text-decoration: none;"><t t-out="object.company_id.website"/></a>
+                                                        </t>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template del formulario web -->
+    <template id="request_form_template" name="Solicitud de Cuenta Analítica">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="s_cover pt96 pb96 o_colored_level" data-snippet="s_cover" data-name="Cover">
+                    <span class="s_cover_bg_video_container"></span>
+                    <div class="o_we_bg_filter bg-black-50"></div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 offset-lg-2">
+                                <div class="card shadow-lg">
+                                    <div class="card-header bg-primary text-white">
+                                        <h2 class="mb-0">
+                                            <i class="fa fa-bar-chart mr-2"></i>
+                                            Solicitud de Cuenta Analítica
+                                        </h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Mensajes de éxito y error -->
+                                        <t t-if="success">
+                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                <strong><i class="fa fa-check-circle"></i> ¡Éxito!</strong>
+                                                <p class="mb-0" t-esc="success"/>
+                                                <t t-if="request_number">
+                                                    <p class="mb-0 mt-2">
+                                                        <strong>Número de Solicitud:</strong>
+                                                        <span class="badge badge-success badge-lg" t-esc="request_number"/>
+                                                    </p>
+                                                </t>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                        </t>
+
+                                        <t t-if="error">
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                <strong><i class="fa fa-exclamation-triangle"></i> Error:</strong>
+                                                <span t-esc="error"/>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                        </t>
+
+                                        <!-- Descripción -->
+                                        <div class="alert alert-info">
+                                            <i class="fa fa-info-circle"></i>
+                                            Complete el siguiente formulario para solicitar la creación de una cuenta analítica. 
+                                            Recibirá una confirmación por correo electrónico una vez procesada su solicitud.
+                                        </div>
+
+                                        <!-- Formulario -->
+                                        <form id="analytic_request_form" action="/cuentas_analiticas/submit" method="post">
+                                            
+                                            <div class="row">
+                                                <!-- Solicitado Por -->
+                                                <div class="col-md-6 form-group">
+                                                    <label for="partner_id" class="col-form-label">
+                                                        <strong>Solicitado Por</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="partner_id" id="partner_id" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <t t-foreach="partners" t-as="partner">
+                                                            <t t-set="employee" t-value="request.env['hr.employee'].sudo().search([('work_contact_id', '=', partner.id)], limit=1)"/>
+                                                            <option t-att-value="partner.id" 
+                                                                    t-att-data-email="employee.work_email if employee else ''"
+                                                                    t-esc="partner.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Correo Electrónico (Auto-completado) -->
+                                                <div class="col-md-6 form-group">
+                                                    <label for="email" class="col-form-label">
+                                                        <strong>Correo Electrónico</strong>
+                                                    </label>
+                                                    <input type="email" name="email" id="email" class="form-control" 
+                                                           readonly="readonly" placeholder="Se completará automáticamente"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <!-- Compañía -->
+                                                <div class="col-md-6 form-group">
+                                                    <label for="company_id" class="col-form-label">
+                                                        <strong>Compañía</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="company_id" id="company_id" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <t t-foreach="companies" t-as="company">
+                                                            <option t-att-value="company.id" 
+                                                                    t-att-selected="'selected' if company.id == request.env.company.id else None"
+                                                                    t-esc="company.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Línea de Negocio -->
+                                                <div class="col-md-6 form-group">
+                                                    <label for="plan_id" class="col-form-label">
+                                                        <strong>Línea de Negocio</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="plan_id" id="plan_id" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <t t-foreach="plans" t-as="plan">
+                                                            <option t-att-value="plan.id" t-esc="plan.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <!-- Nombre de Cuenta Analítica -->
+                                                <div class="col-md-12 form-group">
+                                                    <label for="analytic_account_name" class="col-form-label">
+                                                        <strong>Nombre de la Cuenta Analítica</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="analytic_account_name" id="analytic_account_name" 
+                                                           class="form-control" required="required" 
+                                                           placeholder="Ej: Proyecto ABC 2024"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <!-- Observaciones -->
+                                                <div class="col-md-12 form-group">
+                                                    <label for="observations" class="col-form-label">
+                                                        <strong>Observaciones</strong>
+                                                    </label>
+                                                    <textarea name="observations" id="observations" class="form-control" 
+                                                              rows="4" placeholder="Ingrese cualquier observación o detalle adicional..."></textarea>
+                                                </div>
+                                            </div>
+
+                                            <!-- Botones -->
+                                            <div class="form-group text-center mt-4">
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                    <i class="fa fa-paper-plane"></i> Enviar Solicitud
+                                                </button>
+                                                <button type="reset" class="btn btn-secondary btn-lg ml-2">
+                                                    <i class="fa fa-undo"></i> Limpiar
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+
+        <!-- JavaScript para autocompletar email -->
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#partner_id').on('change', function() {
+                    var partner_id = $(this).val();
+                    var selectedOption = $(this).find('option:selected');
+                    var email = selectedOption.attr('data-email');
+                    
+                    console.log('Partner seleccionado:', partner_id);
+                    console.log('Email desde data-email:', email);
+                    
+                    if (partner_id) {
+                        // Estrategia 1: Usar el data-email si está disponible
+                        if (email &amp;&amp; email.trim() !== '') {
+                            $('#email').val(email);
+                            console.log('Email establecido desde data-email:', email);
+                        } else {
+                            // Estrategia 2: Hacer llamada AJAX como backup
+                            console.log('Data-email vacío, intentando AJAX...');
+                            $.ajax({
+                                url: '/cuentas_analiticas/get_employee_email',
+                                type: 'POST',
+                                dataType: 'json',
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    jsonrpc: '2.0',
+                                    method: 'call',
+                                    params: {
+                                        partner_id: parseInt(partner_id)
+                                    },
+                                    id: Math.floor(Math.random() * 1000)
+                                }),
+                                success: function(response) {
+                                    console.log('Respuesta AJAX:', response);
+                                    if (response.result &amp;&amp; response.result.email) {
+                                        $('#email').val(response.result.email);
+                                        console.log('Email establecido desde AJAX:', response.result.email);
+                                    } else {
+                                        $('#email').val('');
+                                        console.warn('No se encontró email en la respuesta AJAX');
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error('Error en AJAX:', error);
+                                    console.error('Status:', status);
+                                    console.error('Response:', xhr.responseText);
+                                    $('#email').val('');
+                                    alert('Error al obtener el email. Por favor, verifique que el empleado tenga un email configurado.');
+                                }
+                            });
+                        }
+                    } else {
+                        $('#email').val('');
+                    }
+                });
+            });
+        </script>
+    </template>
+
+    <!-- Página de agradecimiento (opcional) -->
+    <template id="request_thank_you" name="Gracias por tu solicitud">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <section class="s_cover pt96 pb96 o_colored_level">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 offset-lg-3">
+                                <div class="card shadow-lg text-center">
+                                    <div class="card-body p-5">
+                                        <i class="fa fa-check-circle fa-5x text-success mb-4"></i>
+                                        <h2>¡Solicitud Enviada Exitosamente!</h2>
+                                        <p class="lead mt-3">
+                                            Tu solicitud ha sido procesada. Recibirás un correo de confirmación en breve.
+                                        </p>
+                                        <a href="/cuentas_analiticas/formulario" class="btn btn-primary mt-3">
+                                            <i class="fa fa-arrow-left"></i> Volver al Formulario
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+</odoo>
