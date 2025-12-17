@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sarlaft_tracking_read,sarlaft.tracking read,model_sarlaft_tracking,group_sarlaft_read,1,0,0,0
+access_sarlaft_tracking_admin,sarlaft.tracking admin,model_sarlaft_tracking,group_sarlaft_admin,1,1,1,1

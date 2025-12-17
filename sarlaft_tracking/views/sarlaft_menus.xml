@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- SARLAFT Tracking Menu -->
+        <menuitem id="menu_sarlaft_tracking_root"
+                  name="Sarlaft"
+                  parent="contacts.menu_contacts"
+                  action="action_sarlaft_tracking"
+                  sequence="10"
+                  groups="group_sarlaft_read"/>
+
+    </data>
+</odoo>
