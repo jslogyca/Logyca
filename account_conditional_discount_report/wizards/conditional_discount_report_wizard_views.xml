@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista del formulario del wizard -->
+        <record id="view_conditional_discount_report_wizard_form" model="ir.ui.view">
+            <field name="name">conditional.discount.report.wizard.form</field>
+            <field name="model">conditional.discount.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Reporte de Descuentos Condicionados">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="year" invisible="state == 'done'"/>
+                                <field name="date_from" invisible="1"/>
+                                <field name="date_to" invisible="1"/>
+                                <field name="state" invisible="1"/>
+                            </group>
+                        </group>
+                        
+                        <group invisible="state != 'done'">
+                            <field name="excel_filename" invisible="1"/>
+                            <field name="records_found" invisible="1"/>
+                            <field name="records_excluded" invisible="1"/>
+                            <div class="alert alert-success" role="alert" style="margin-top: 20px;">
+                                <p style="margin: 0;">
+                                    <i class="fa fa-check-circle"/> 
+                                    <strong>¡Reporte generado exitosamente!</strong>
+                                </p>
+                                <p style="margin: 10px 0 0 0;">
+                                    Registros encontrados: <strong><field name="records_found" readonly="1" nolabel="1" style="display: inline;"/></strong><br/>
+                                    Registros excluidos (sin conciliación): <strong><field name="records_excluded" readonly="1" nolabel="1" style="display: inline;"/></strong>
+                                </p>
+                                <p style="margin: 10px 0 0 0;">
+                                    Haga clic en el botón "Descargar Excel" para obtener el archivo.
+                                </p>
+                            </div>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_generate_report" 
+                                string="Generar Reporte Excel" 
+                                type="object" 
+                                class="btn-primary"
+                                invisible="state == 'done'"/>
+                        <button name="action_download_excel" 
+                                string="Descargar Excel" 
+                                type="object" 
+                                class="btn-primary"
+                                invisible="state != 'done'"/>
+                        <button name="action_back" 
+                                string="Generar Otro Reporte" 
+                                type="object" 
+                                class="btn-secondary"
+                                invisible="state != 'done'"/>
+                        <button string="Cancelar" 
+                                class="btn-secondary" 
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Acción del wizard -->
+        <record id="action_conditional_discount_report_wizard" model="ir.actions.act_window">
+            <field name="name">Descuentos Condicionados para NC</field>
+            <field name="res_model">conditional.discount.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+        </record>
+
+        <!-- Menú principal -->
+        <menuitem id="menu_conditional_discount_report"
+                  name="Descuentos Condicionados para NC"
+                  parent="account.account_reports_legal_statements_menu"
+                  action="action_conditional_discount_report_wizard"
+                  sequence="100"/>
+
+    </data>
+</odoo>
