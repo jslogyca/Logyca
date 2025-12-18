@@ -153,32 +153,6 @@ class AnalyticAccountRequestController(http.Controller):
             return request.redirect(f'/cuentas_analiticas/formulario?error=Error al procesar la solicitud: {str(e)}')
 
 
-class CreditCardRequestController(http.Controller):
-
-    @http.route('/tarjeta_credito/formulario', type='http', auth='public', website=True, csrf=False)
-    def credit_card_form(self, **kwargs):
-        """Muestra el formulario de solicitud de tarjeta de crédito"""
-        
-        # Obtener partners disponibles (asociados a empleados)
-        employees = request.env['hr.employee'].sudo().search([('active', '=', True)])
-        partners = employees.mapped('work_contact_id')
-        
-        # Obtener compañías
-        companies = request.env['res.company'].sudo().search([])
-        
-        # Fecha actual
-        today = fields.Date.context_today(request.env['credit.card.request'])
-        
-        values = {
-            'partners': partners,
-            'companies': companies,
-            'today': today,
-            'error': kwargs.get('error', ''),
-            'success': kwargs.get('success', ''),
-            'request_number': kwargs.get('request_number', ''),
-        }
-        return request.render('analytic_account_request.credit_card_request_form_template', values)
-
 
 class ProductRequestController(http.Controller):
 
@@ -207,14 +181,15 @@ class ProductRequestController(http.Controller):
         return request.render('analytic_account_request.product_request_form_template', values)
     
     @http.route('/producto/get_analytic_accounts', type='json', auth='public', website=True, csrf=False)
-    def get_analytic_accounts(self, company_id):
+    def get_analytic_accounts(self, company_id, **kwargs):
         """Obtiene las cuentas analíticas de una compañía"""
         try:
             analytic_accounts = []
             
             if company_id:
                 # Convertir a entero si viene como string
-                company_id = int(company_id)
+                if isinstance(company_id, str):
+                    company_id = int(company_id)
                 
                 # Buscar cuentas analíticas de la compañía
                 accounts = request.env['account.analytic.account'].sudo().search([
@@ -233,16 +208,29 @@ class ProductRequestController(http.Controller):
                     'func': 'get_analytic_accounts',
                     'line': '0',
                 })
+            else:
+                # Log cuando no hay company_id
+                request.env['ir.logging'].sudo().create({
+                    'name': 'Get Analytic Accounts - No Company ID',
+                    'type': 'server',
+                    'level': 'warning',
+                    'message': 'No se proporcionó company_id',
+                    'path': 'product.request',
+                    'func': 'get_analytic_accounts',
+                    'line': '0',
+                })
             
             return {'accounts': analytic_accounts}
         
         except Exception as e:
-            # Log del error
+            # Log del error con más detalles
+            import traceback
+            error_traceback = traceback.format_exc()
             request.env['ir.logging'].sudo().create({
                 'name': 'Get Analytic Accounts Error',
                 'type': 'server',
                 'level': 'error',
-                'message': f'Error al obtener cuentas analíticas para company_id {company_id}: {str(e)}',
+                'message': f'Error al obtener cuentas analíticas para company_id {company_id}: {str(e)}\n{error_traceback}',
                 'path': 'product.request',
                 'func': 'get_analytic_accounts',
                 'line': '0',

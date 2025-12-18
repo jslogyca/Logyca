@@ -425,6 +425,96 @@
             </div>
             
             <!-- JavaScript -->
+            <script type="text/javascript">
+            <![CDATA[
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Cargar cuentas analíticas cuando cambia la compañía
+                    var companySelect = document.getElementById('company_id');
+                    var analyticAccountSelect = document.getElementById('analytic_account_id');
+                    
+                    companySelect.addEventListener('change', function() {
+                        var companyId = this.value;
+                        
+                        // Limpiar opciones actuales
+                        analyticAccountSelect.innerHTML = '<option value="">-- Cargando... --</option>';
+                        
+                        if (companyId) {
+                            // Llamar al endpoint usando XMLHttpRequest
+                            var xhr = new XMLHttpRequest();
+                            xhr.open('POST', '/producto/get_analytic_accounts', true);
+                            xhr.setRequestHeader('Content-Type', 'application/json');
+                            
+                            xhr.onload = function() {
+                                if (xhr.status === 200) {
+                                    try {
+                                        var data = JSON.parse(xhr.responseText);
+                                        analyticAccountSelect.innerHTML = '<option value="">-- Seleccione --</option>';
+                                        
+                                        if (data.result && data.result.accounts && data.result.accounts.length > 0) {
+                                            data.result.accounts.forEach(function(account) {
+                                                var option = document.createElement('option');
+                                                option.value = account.id;
+                                                option.textContent = account.name;
+                                                analyticAccountSelect.appendChild(option);
+                                            });
+                                        } else {
+                                            analyticAccountSelect.innerHTML = '<option value="">-- No hay cuentas analíticas --</option>';
+                                        }
+                                    } catch (e) {
+                                        console.error('Error parsing JSON:', e);
+                                        analyticAccountSelect.innerHTML = '<option value="">-- Error al cargar --</option>';
+                                    }
+                                } else {
+                                    console.error('Error HTTP:', xhr.status);
+                                    analyticAccountSelect.innerHTML = '<option value="">-- Error al cargar --</option>';
+                                }
+                            };
+                            
+                            xhr.onerror = function() {
+                                console.error('Error de conexión');
+                                analyticAccountSelect.innerHTML = '<option value="">-- Error al cargar --</option>';
+                            };
+                            
+                            xhr.send(JSON.stringify({
+                                jsonrpc: '2.0',
+                                method: 'call',
+                                params: {
+                                    company_id: parseInt(companyId)
+                                },
+                                id: new Date().getTime()
+                            }));
+                        } else {
+                            analyticAccountSelect.innerHTML = '<option value="">-- Primero seleccione Organización --</option>';
+                        }
+                    });
+                    
+                    // Mostrar/ocultar campo de archivo de variantes
+                    var hasVariantsSelect = document.getElementById('has_variants');
+                    var variantsFileRow = document.getElementById('variants_file_row');
+                    
+                    hasVariantsSelect.addEventListener('change', function() {
+                        if (this.value === 'yes') {
+                            variantsFileRow.style.display = 'block';
+                        } else {
+                            variantsFileRow.style.display = 'none';
+                        }
+                    });
+                    
+                    // Mostrar/ocultar campo de tiempo diferido
+                    var isDeferredCheckbox = document.getElementById('is_deferred');
+                    var deferredTimeGroup = document.getElementById('deferred_time_group');
+                    
+                    isDeferredCheckbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            deferredTimeGroup.style.display = 'block';
+                        } else {
+                            deferredTimeGroup.style.display = 'none';
+                            document.getElementById('deferred_time').value = '';
+                        }
+                    });
+                });
+            ]]>
+            </script>
         </t>
     </template>
 </odoo>
