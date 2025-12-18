@@ -232,6 +232,14 @@ class ProductRequest(models.Model):
         default=True
     )
 
+    product_id = fields.Many2one(
+        'product.template',
+        string='Producto',
+        readonly=True,
+        tracking=True
+    )
+
+
     @api.depends()
     def _compute_available_partners(self):
         """
@@ -311,22 +319,6 @@ class ProductRequest(models.Model):
             raise UserError(_('Solo se pueden aprobar solicitudes en estado Solicitado.'))
         
         self.write({'state': 'approved'})
-        
-        return True
-    
-    def action_done(self):
-        """
-        Marca la solicitud como terminada
-        """
-        self.ensure_one()
-        
-        if self.state != 'approved':
-            raise UserError(_('Solo se pueden terminar solicitudes en estado Aprobado.'))
-        
-        self.write({'state': 'done'})
-        
-        # Enviar notificación al solicitante
-        self.send_completion_notification()
         
         return True
     
@@ -509,6 +501,42 @@ class ProductRequest(models.Model):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         return f"{base_url}/web#id={self.id}&view_type=form&model=product.request"
 
+    def action_done(self):
+        """
+        Crea la cuenta analítica basada en la solicitud
+        """
+        self.ensure_one()
+        
+        if self.state != 'approved':
+            raise UserError(_('Solo se pueden crear cuentas analíticas de solicitudes aprobadas.'))
+        
+        if self.product_id:
+            raise UserError(_('Esta solicitud ya tiene un producto creada.'))
+        
+        # Crear la cuenta analítica
+        product_account = self.env['product.template'].create({
+            'name': self.product_name,
+            'x_is_deferred': self.is_deferred,
+            'sale_ok': True,
+            'company_id': self.company_id.id,
+        })
+        
+        self.write({
+            'product_id': product_account.id,
+            'state': 'done'
+        })
+        
+        # Enviar notificación al solicitante
+        self.send_completion_notification()
+        
+        return {
+            'name': _('Producto Creado'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'product.template',
+            'res_id': product_account.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }        
 
 class ProductRequestCancelWizard(models.TransientModel):
     _name = 'product.request.cancel.wizard'

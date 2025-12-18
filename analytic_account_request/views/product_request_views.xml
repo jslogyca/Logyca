@@ -72,6 +72,7 @@
                                 <group string="Datos Generales">
                                     <field name="product_type"/>
                                     <field name="product_name"/>
+                                    <field name="product_id" readonly="1" invisible="not product_id"/>
                                     <field name="disclosure_medium"/>
                                     <field name="has_variants"/>
                                 </group>
