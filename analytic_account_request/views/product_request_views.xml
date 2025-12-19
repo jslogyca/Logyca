@@ -33,9 +33,17 @@
         <field name="arch" type="xml">
             <form string="Solicitud de Creación de Producto">
                 <header>
-                    <button name="action_approve" string="Aprobar" type="object"
-                            class="oe_highlight"
-                            invisible="state != 'requested'"
+                    <button name="action_approve_financial" string="Aprobar Financiero" type="object"
+                            class="btn-success"
+                            invisible="state != 'requested' or financial_approved"
+                            groups="analytic_account_request.group_product_request_approver"/>
+                    <button name="action_approve_legal" string="Aprobar Legal" type="object"
+                            class="btn-success"
+                            invisible="state != 'requested' or legal_approved"
+                            groups="analytic_account_request.group_product_request_approver"/>
+                    <button name="action_approve_accounting" string="Aprobar Contable" type="object"
+                            class="btn-success"
+                            invisible="state != 'requested' or accounting_approved"
                             groups="analytic_account_request.group_product_request_approver"/>
                     <button name="action_cancel" string="Cancelar" type="object"
                             invisible="state not in ['requested', 'approved']"
@@ -53,6 +61,18 @@
                         </h1>
                     </div>
                     
+                    <!-- Indicadores de Aprobación -->
+                    <div class="alert alert-info" role="alert" invisible="state != 'requested'">
+                        <strong>Estado de Aprobaciones:</strong><br/>
+                        <field name="all_approved" invisible="1"/>
+                        <span invisible="financial_approved">⏳ Pendiente Aprobación Financiera</span>
+                        <span invisible="not financial_approved">✅ Aprobado Financieramente</span><br/>
+                        <span invisible="legal_approved">⏳ Pendiente Aprobación Legal</span>
+                        <span invisible="not legal_approved">✅ Aprobado Legalmente</span><br/>
+                        <span invisible="accounting_approved">⏳ Pendiente Aprobación Contable</span>
+                        <span invisible="not accounting_approved">✅ Aprobado Contablemente</span>
+                    </div>
+                    
                     <group>
                         <group string="Información del Solicitante">
                             <field name="request_date"/>
@@ -63,6 +83,28 @@
                         </group>
                         <group string="Información de la Organización">
                             <field name="company_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Aprobadores -->
+                    <group string="Aprobadores">
+                        <group>
+                            <field name="financial_approver_id" options="{'no_create': True}" 
+                                   readonly="state not in ['draft', 'requested']"/>
+                            <field name="financial_approved" widget="boolean_toggle" readonly="1"/>
+                            <field name="financial_approval_date" readonly="1" invisible="not financial_approval_date"/>
+                        </group>
+                        <group>
+                            <field name="legal_approver_id" options="{'no_create': True}" 
+                                   readonly="state not in ['draft', 'requested']"/>
+                            <field name="legal_approved" widget="boolean_toggle" readonly="1"/>
+                            <field name="legal_approval_date" readonly="1" invisible="not legal_approval_date"/>
+                        </group>
+                        <group>
+                            <field name="accounting_approver_id" options="{'no_create': True}" 
+                                   readonly="state not in ['draft', 'requested']"/>
+                            <field name="accounting_approved" widget="boolean_toggle" readonly="1"/>
+                            <field name="accounting_approval_date" readonly="1" invisible="not accounting_approval_date"/>
                         </group>
                     </group>
                     

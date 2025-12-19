@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template: Confirmación al solicitante -->
+    <record id="email_template_advance_request_confirmation" model="mail.template">
+        <field name="name">Solicitud de Anticipo - Confirmación</field>
+        <field name="model_id" ref="model_advance_request"/>
+        <field name="subject">Solicitud de Anticipo Recibida: ${object.name}</field>
+        <field name="email_from">${object.company_id.email or ''}</field>
+        <field name="email_to">${object.partner_id.email or ''}</field>
+        <field name="body_html" type="html">
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background-color: #28a745; color: white; padding: 20px; text-align: center;">
+                    <h1 style="margin: 0;">🎉 Solicitud Recibida</h1>
+                </div>
+                
+                <div style="background-color: #f8f9fa; padding: 20px; border: 1px solid #dee2e6;">
+                    <p>Hola <strong>${object.partner_id.name}</strong>,</p>
+                    
+                    <p>Tu solicitud de anticipo ha sido recibida exitosamente y se encuentra en proceso de revisión.</p>
+                    
+                    <div style="background-color: white; padding: 15px; margin: 20px 0; border-left: 4px solid #28a745;">
+                        <h3 style="margin-top: 0; color: #28a745;">Detalles de la Solicitud</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><strong>Número:</strong> ${object.name}</li>
+                            <li><strong>Tipo de Anticipo:</strong> ${dict(object._fields['advance_type'].selection).get(object.advance_type)}</li>
+                            <li><strong>Monto:</strong> $${object.amount}</li>
+                            <li><strong>Aprobador:</strong> ${object.approver_id.name}</li>
+                            <li><strong>Estado:</strong> Solicitado</li>
+                        </ul>
+                    </div>
+                    
+                    <p><strong>Recuerda:</strong> Debes legalizar este anticipo dentro de los 3 días posteriores a su recibo, según la política organizacional.</p>
+                    
+                    <p>Recibirás una notificación por correo cuando tu solicitud sea revisada.</p>
+                    
+                    <p style="margin-top: 30px;">Saludos,<br/>
+                    <strong>${object.company_id.name}</strong></p>
+                </div>
+                
+                <div style="background-color: #e9ecef; padding: 10px; text-align: center; font-size: 12px; color: #6c757d;">
+                    <p style="margin: 0;">Este es un correo automático, por favor no responder.</p>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <!-- Template: Notificación a aprobadores -->
+    <record id="email_template_advance_request_approval" model="mail.template">
+        <field name="name">Solicitud de Anticipo - Pendiente Aprobación</field>
+        <field name="model_id" ref="model_advance_request"/>
+        <field name="subject">Nueva Solicitud de Anticipo Pendiente: ${object.name}</field>
+        <field name="email_from">${object.company_id.email or ''}</field>
+        <field name="email_to">${object.approver_id.email or ''}</field>
+        <field name="body_html" type="html">
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background-color: #ffc107; color: white; padding: 20px; text-align: center;">
+                    <h1 style="margin: 0;">⏳ Solicitud Pendiente de Aprobación</h1>
+                </div>
+                
+                <div style="background-color: #f8f9fa; padding: 20px; border: 1px solid #dee2e6;">
+                    <p>Hola <strong>${object.approver_id.name}</strong>,</p>
+                    
+                    <p>Tienes una nueva solicitud de anticipo pendiente de revisión.</p>
+                    
+                    <div style="background-color: white; padding: 15px; margin: 20px 0; border-left: 4px solid #ffc107;">
+                        <h3 style="margin-top: 0; color: #ffc107;">Información de la Solicitud</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><strong>Número:</strong> ${object.name}</li>
+                            <li><strong>Solicitante:</strong> ${object.partner_id.name}</li>
+                            <li><strong>Compañía:</strong> ${object.company_id.name}</li>
+                            <li><strong>Tipo:</strong> ${dict(object._fields['advance_type'].selection).get(object.advance_type)}</li>
+                            <li><strong>Monto:</strong> $${object.amount}</li>
+                            <li><strong>Internacional:</strong> ${dict(object._fields['is_international'].selection).get(object.is_international)}</li>
+                        </ul>
+                        % if object.observations:
+                        <p><strong>Observaciones:</strong><br/>${object.observations}</p>
+                        % endif
+                    </div>
+                    
+                    <p>Por favor, revisa y procesa esta solicitud a la brevedad posible.</p>
+                    
+                    <p style="margin-top: 30px;">Saludos,<br/>
+                    <strong>Sistema de Solicitudes</strong></p>
+                </div>
+                
+                <div style="background-color: #e9ecef; padding: 10px; text-align: center; font-size: 12px; color: #6c757d;">
+                    <p style="margin: 0;">Este es un correo automático, por favor no responder.</p>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <!-- Template: Notificación de pago -->
+    <record id="email_template_advance_request_payment" model="mail.template">
+        <field name="name">Solicitud de Anticipo - Pago Realizado</field>
+        <field name="model_id" ref="model_advance_request"/>
+        <field name="subject">Anticipo Pagado: ${object.name}</field>
+        <field name="email_from">${object.company_id.email or ''}</field>
+        <field name="email_to">${object.partner_id.email or ''}</field>
+        <field name="body_html" type="html">
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background-color: #17a2b8; color: white; padding: 20px; text-align: center;">
+                    <h1 style="margin: 0;">💰 Anticipo Pagado</h1>
+                </div>
+                
+                <div style="background-color: #f8f9fa; padding: 20px; border: 1px solid #dee2e6;">
+                    <p>Hola <strong>${object.partner_id.name}</strong>,</p>
+                    
+                    <p>Te informamos que tu anticipo ha sido <strong>pagado</strong>.</p>
+                    
+                    <div style="background-color: white; padding: 15px; margin: 20px 0; border-left: 4px solid #17a2b8;">
+                        <h3 style="margin-top: 0; color: #17a2b8;">Detalles del Pago</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><strong>Número:</strong> ${object.name}</li>
+                            <li><strong>Monto:</strong> $${object.amount}</li>
+                            <li><strong>Beneficiario:</strong> ${object.pay_to_name}</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background-color: #fff3cd; border: 1px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 5px;">
+                        <p style="margin: 0;"><strong>⚠️ Recordatorio Importante:</strong></p>
+                        <p style="margin: 10px 0 0 0;">
+                            Recuerda que debes legalizar este anticipo dentro de los <strong>3 días</strong> 
+                            posteriores a su recibo, según la política organizacional.
+                        </p>
+                        % if object.legalization_date:
+                        <p style="margin: 10px 0 0 0;">
+                            <strong>Fecha límite de legalización:</strong> ${object.legalization_date}
+                        </p>
+                        % endif
+                    </div>
+                    
+                    <p style="margin-top: 30px;">Saludos,<br/>
+                    <strong>${object.company_id.name}</strong></p>
+                </div>
+                
+                <div style="background-color: #e9ecef; padding: 10px; text-align: center; font-size: 12px; color: #6c757d;">
+                    <p style="margin: 0;">Este es un correo automático, por favor no responder.</p>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <!-- Template: Solicitud finalizada -->
+    <record id="email_template_advance_request_done" model="mail.template">
+        <field name="name">Solicitud de Anticipo - Finalizada</field>
+        <field name="model_id" ref="model_advance_request"/>
+        <field name="subject">Solicitud de Anticipo Finalizada: ${object.name}</field>
+        <field name="email_from">${object.company_id.email or ''}</field>
+        <field name="email_to">${object.partner_id.email or ''}</field>
+        <field name="body_html" type="html">
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background-color: #28a745; color: white; padding: 20px; text-align: center;">
+                    <h1 style="margin: 0;">✅ Solicitud Finalizada</h1>
+                </div>
+                
+                <div style="background-color: #f8f9fa; padding: 20px; border: 1px solid #dee2e6;">
+                    <p>Hola <strong>${object.partner_id.name}</strong>,</p>
+                    
+                    <p>Tu solicitud de anticipo ha sido <strong>procesada completamente</strong> y se encuentra finalizada.</p>
+                    
+                    <div style="background-color: white; padding: 15px; margin: 20px 0; border-left: 4px solid #28a745;">
+                        <h3 style="margin-top: 0; color: #28a745;">Resumen de la Solicitud</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><strong>Número:</strong> ${object.name}</li>
+                            <li><strong>Tipo:</strong> ${dict(object._fields['advance_type'].selection).get(object.advance_type)}</li>
+                            <li><strong>Monto:</strong> $${object.amount}</li>
+                            <li><strong>Estado:</strong> Finalizado</li>
+                        </ul>
+                    </div>
+                    
+                    <p>Gracias por utilizar nuestro sistema de solicitudes.</p>
+                    
+                    <p style="margin-top: 30px;">Saludos,<br/>
+                    <strong>${object.company_id.name}</strong></p>
+                </div>
+                
+                <div style="background-color: #e9ecef; padding: 10px; text-align: center; font-size: 12px; color: #6c757d;">
+                    <p style="margin: 0;">Este es un correo automático, por favor no responder.</p>
+                </div>
+            </div>
+        </field>
+    </record>
+
+</odoo>

@@ -73,6 +73,12 @@ class AnalyticAccountRequest(models.Model):
         tracking=True
     )
     
+    available_plan_ids = fields.Many2many(
+        'account.analytic.plan',
+        compute='_compute_available_plans',
+        string='Planes Disponibles'
+    )
+    
     analytic_account_name = fields.Char(
         string='Nombre de Cuenta Analítica',
         required=True,
@@ -111,6 +117,25 @@ class AnalyticAccountRequest(models.Model):
         default=True
     )
 
+    @api.depends('company_id')
+    def _compute_available_plans(self):
+        """
+        Calcula los planes analíticos que tienen cuentas analíticas de la compañía seleccionada
+        """
+        for record in self:
+            if record.company_id:
+                # Buscar cuentas analíticas de la compañía
+                analytic_accounts = self.env['account.analytic.account'].search([
+                    ('company_id', '=', record.company_id.id)
+                ])
+                
+                # Obtener los planes de esas cuentas analíticas
+                plan_ids = analytic_accounts.mapped('plan_id').ids
+                
+                record.available_plan_ids = [(6, 0, plan_ids)]
+            else:
+                record.available_plan_ids = [(6, 0, [])]
+    
     @api.depends()
     def _compute_available_partners(self):
         """

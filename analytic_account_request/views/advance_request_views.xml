@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista Tree -->
+    <record id="view_advance_request_tree" model="ir.ui.view">
+        <field name="name">advance.request.tree</field>
+        <field name="model">advance.request</field>
+        <field name="arch" type="xml">
+            <tree string="Solicitudes de Anticipos"
+                  decoration-info="state == 'draft'"
+                  decoration-warning="state == 'requested'"
+                  decoration-primary="state == 'approved'"
+                  decoration-success="state in ['paid', 'done']"
+                  decoration-danger="state == 'cancelled'">
+                <field name="name"/>
+                <field name="request_date"/>
+                <field name="partner_id"/>
+                <field name="company_id"/>
+                <field name="advance_type"/>
+                <field name="amount" sum="Total"/>
+                <field name="approver_id"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form -->
+    <record id="view_advance_request_form" model="ir.ui.view">
+        <field name="name">advance.request.form</field>
+        <field name="model">advance.request</field>
+        <field name="arch" type="xml">
+            <form string="Solicitud de Anticipo">
+                <header>
+                    <field name="financial_approved" invisible="1"/>
+                    <field name="move_id" invisible="1"/>
+                    <button name="action_submit" string="Enviar Solicitud" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Aprobar" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'requested'"
+                            groups="analytic_account_request.group_advance_request_approver"/>
+                    <button name="action_financial_approval" string="Visto Bueno Financiero" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'approved' or financial_approved"/>
+                    <button name="action_account" string="Causar" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'approved' or not financial_approved"
+                            groups="analytic_account_request.group_advance_request_approver"/>
+                    <button name="action_view_move" string="Ver Asiento" type="object"
+                            invisible="not move_id"
+                            groups="analytic_account_request.group_advance_request_approver"/>
+                    <button name="action_mark_as_paid" string="Marcar como Pagado" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'accounted'"
+                            groups="analytic_account_request.group_advance_request_approver"/>
+                    <button name="action_done" string="Terminar" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'paid'"
+                            groups="analytic_account_request.group_advance_request_approver"/>
+                    <button name="action_cancel" string="Cancelar" type="object"
+                            invisible="state not in ['requested']"
+                            groups="analytic_account_request.group_advance_request_approver"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,requested,approved,accounted,paid,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_move" type="object"
+                                class="oe_stat_button" icon="fa-book"
+                                invisible="not move_id">
+                            <field name="move_id" widget="statinfo" string="Asiento"/>
+                        </button>
+                    </div>
+                    
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    
+                    <!-- Alerta de Visto Bueno Financiero -->
+                    <div class="alert alert-success" role="alert" invisible="not financial_approved">
+                        <strong>✅ Visto Bueno Financiero Otorgado</strong>
+                        <p class="mb-0">
+                            Aprobado por: <field name="financial_approver_id" readonly="1"/>
+                            el <field name="financial_approval_date" readonly="1"/>
+                        </p>
+                    </div>
+                    
+                    <group>
+                        <group string="Autorización">
+                            <field name="payroll_discount_auth" widget="radio"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group string="Información del Colaborador">
+                            <field name="partner_id" options="{'no_create': True}"/>
+                            <field name="identification_number"/>
+                            <field name="email" widget="email"/>
+                            <field name="company_id" options="{'no_create': True}"/>
+                            <field name="type"/>
+                            <field name="department_id" options="{'no_create': True}"/>
+                        </group>
+                        
+                        <group string="Información del Anticipo">
+                            <field name="advance_type"/>
+                            <field name="is_international" widget="radio"/>
+                            <field name="amount"/>
+                            <field name="expense_company_id" options="{'no_create': True}"/>
+                            <field name="approver_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Información de Viaje" invisible="advance_type != 'travel'">
+                        <group>
+                            <field name="origin_city"/>
+                            <field name="departure_date"/>
+                        </group>
+                        <group>
+                            <field name="destination_city"/>
+                            <field name="return_date"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group string="Información del Pago">
+                            <field name="pay_to_name"/>
+                            <field name="beneficiary_identification"/>
+                            <field name="deliver_to"/>
+                        </group>
+                        
+                        <group string="Fechas">
+                            <field name="delivery_date"/>
+                            <field name="legalization_date"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Documentación">
+                        <field name="attachment_id"/>
+                    </group>
+                    
+                    <group string="Observaciones">
+                        <field name="observations" nolabel="1" placeholder="Ingrese cualquier observación o detalle adicional..."/>
+                    </group>
+                    
+                    <group string="Información Contable" invisible="state not in ['approved', 'accounted', 'paid', 'done']">
+                        <field name="supplier_employee_id" options="{'no_create': True}"/>
+                    </group>
+                    
+                    <group string="Razón de Cancelación" invisible="state != 'cancelled'">
+                        <field name="cancel_reason" nolabel="1" readonly="1"/>
+                    </group>
+                    
+                    <group string="Información de Auditoría">
+                        <group>
+                            <field name="request_date"/>
+                            <field name="approval_date"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista Search -->
+    <record id="view_advance_request_search" model="ir.ui.view">
+        <field name="name">advance.request.search</field>
+        <field name="model">advance.request</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Solicitudes">
+                <field name="name" string="Número de Solicitud"/>
+                <field name="partner_id" string="Colaborador"/>
+                <field name="company_id"/>
+                <field name="advance_type"/>
+                <field name="approver_id"/>
+                <filter string="Borradores" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Solicitadas" name="requested" domain="[('state', '=', 'requested')]"/>
+                <filter string="Aprobadas" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Causadas" name="accounted" domain="[('state', '=', 'accounted')]"/>
+                <filter string="Pagadas" name="paid" domain="[('state', '=', 'paid')]"/>
+                <filter string="Terminadas" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Canceladas" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <separator/>
+                <filter string="Viaje" name="travel" domain="[('advance_type', '=', 'travel')]"/>
+                <filter string="Compra" name="purchase" domain="[('advance_type', '=', 'purchase')]"/>
+                <group expand="0" string="Agrupar Por">
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Colaborador" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Compañía" name="group_company" context="{'group_by': 'company_id'}"/>
+                    <filter string="Tipo de Anticipo" name="group_type" context="{'group_by': 'advance_type'}"/>
+                    <filter string="Aprobador" name="group_approver" context="{'group_by': 'approver_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Wizard de Cancelación -->
+    <record id="view_advance_request_cancel_wizard" model="ir.ui.view">
+        <field name="name">advance.request.cancel.wizard.form</field>
+        <field name="model">advance.request.cancel.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cancelar Solicitud">
+                <group>
+                    <field name="request_id" invisible="1"/>
+                    <field name="cancel_reason" placeholder="Ingrese la razón de la cancelación..."/>
+                </group>
+                <footer>
+                    <button string="Confirmar Cancelación" name="action_confirm_cancel" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción de ventana -->
+    <record id="action_advance_request" model="ir.actions.act_window">
+        <field name="name">Solicitudes de Anticipos</field>
+        <field name="res_model">advance.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay solicitudes de anticipos
+            </p>
+            <p>
+                Las solicitudes se crean desde el formulario web público.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menú -->
+    <menuitem id="menu_advance_request_root"
+              name="Solicitudes Anticipos"
+              parent="menu_analytic_request_root"
+              sequence="3"/>
+
+    <menuitem id="menu_advance_request"
+              name="Solicitudes"
+              parent="menu_advance_request_root"
+              action="action_advance_request"
+              sequence="1"/>
+
+</odoo>

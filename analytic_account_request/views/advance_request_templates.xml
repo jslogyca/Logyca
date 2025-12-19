@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template del formulario web -->
+    <template id="advance_request_form_template" name="Solicitud de Anticipo">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="s_cover pt96 pb96 o_colored_level">
+                    <div class="o_we_bg_filter bg-black-50"></div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-10 offset-lg-1">
+                                <div class="card shadow-lg">
+                                    <div class="card-header bg-success text-white">
+                                        <h2 class="mb-0">
+                                            <i class="fa fa-money mr-2"></i>
+                                            Solicitud de Anticipo
+                                        </h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Mensajes -->
+                                        <t t-if="success">
+                                            <div class="alert alert-success alert-dismissible fade show">
+                                                <strong><i class="fa fa-check-circle"></i> ¡Éxito!</strong>
+                                                <p class="mb-0" t-esc="success"/>
+                                                <t t-if="request_number">
+                                                    <p class="mb-0 mt-2">
+                                                        <strong>Número de Solicitud:</strong>
+                                                        <span class="badge badge-success" t-esc="request_number"/>
+                                                    </p>
+                                                </t>
+                                                <button type="button" class="close" data-dismiss="alert">
+                                                    <span>×</span>
+                                                </button>
+                                            </div>
+                                        </t>
+
+                                        <t t-if="error">
+                                            <div class="alert alert-danger alert-dismissible fade show">
+                                                <strong><i class="fa fa-exclamation-triangle"></i> Error:</strong>
+                                                <span t-esc="error"/>
+                                                <button type="button" class="close" data-dismiss="alert">
+                                                    <span>×</span>
+                                                </button>
+                                            </div>
+                                        </t>
+
+                                        <!-- Formulario -->
+                                        <form id="advance_request_form" action="/anticipo/submit" method="post" enctype="multipart/form-data">
+                                            
+                                            <!-- Autorización -->
+                                            <div class="alert alert-info">
+                                                <h5><strong>Autorización de Descuento por Nómina</strong></h5>
+                                                <p class="mb-2">
+                                                    Declaro que conozco la política organizacional de manejo y legalización de anticipos de dinero 
+                                                    por medio de la cual debo legalizar el presente anticipo a mi cargo a más tardar dentro de los 
+                                                    tres (3) días posteriores al recibo del mismo. En caso de incumplir dichos términos, autorizo 
+                                                    sea descontado de mi nómina el valor del presente anticipo.
+                                                </p>
+                                                <div class="form-check">
+                                                    <input type="radio" name="payroll_discount_auth" id="auth_yes" value="yes" 
+                                                           class="form-check-input" required="required"/>
+                                                    <label class="form-check-label" for="auth_yes">
+                                                        <strong>SI, Acepto</strong>
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input type="radio" name="payroll_discount_auth" id="auth_no" value="no" 
+                                                           class="form-check-input"/>
+                                                    <label class="form-check-label" for="auth_no">
+                                                        NO, No Acepto
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <h4 class="mt-4 mb-3">Información del Colaborador</h4>
+                                            <div class="row">
+                                                <div class="col-md-6 form-group">
+                                                    <label for="partner_id">
+                                                        <strong>Nombre del Colaborador</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="partner_id" id="partner_id" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <t t-foreach="partners" t-as="partner">
+                                                            <t t-set="employee" t-value="request.env['hr.employee'].sudo().search([('work_contact_id', '=', partner.id)], limit=1)"/>
+                                                            <option t-att-value="partner.id" 
+                                                                    t-att-data-identification="employee.identification_id if employee else ''"
+                                                                    t-esc="partner.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-6 form-group">
+                                                    <label for="identification_number">
+                                                        <strong>Número de Cédula</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="identification_number" id="identification_number" 
+                                                           class="form-control" required="required" 
+                                                           placeholder="Ingrese el número de cédula"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4 form-group">
+                                                    <label for="company_id">
+                                                        <strong>Organización</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="company_id" id="company_id" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <t t-foreach="companies" t-as="company">
+                                                            <option t-att-value="company.id" 
+                                                                    t-att-selected="'selected' if company.id == request.env.company.id else None"
+                                                                    t-esc="company.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-4 form-group">
+                                                    <label for="type">
+                                                        <strong>Tipo</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="type" id="type" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <option value="direct">Directo</option>
+                                                        <option value="service">Prestación de Servicios</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-4 form-group">
+                                                    <label for="department_id">
+                                                        <strong>Equipo</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="department_id" id="department_id" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <t t-foreach="departments" t-as="dept">
+                                                            <option t-att-value="dept.id" 
+                                                                    t-att-data-company="dept.company_id.id if dept.company_id else ''"
+                                                                    t-esc="dept.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <h4 class="mt-4 mb-3">Información del Anticipo</h4>
+                                            <div class="row">
+                                                <div class="col-md-4 form-group">
+                                                    <label for="advance_type">
+                                                        <strong>Tipo de Anticipo</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="advance_type" id="advance_type" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <option value="travel">Viaje</option>
+                                                        <option value="purchase">Compra</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-4 form-group">
+                                                    <label for="is_international">
+                                                        <strong>Internacional</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="is_international" id="is_international" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <option value="yes">SI</option>
+                                                        <option value="no">NO</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-4 form-group">
+                                                    <label for="amount">
+                                                        <strong>Monto</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="number" name="amount" id="amount" 
+                                                           class="form-control" required="required" step="0.01" min="0"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6 form-group">
+                                                    <label for="expense_company_id">
+                                                        <strong>Compañía que debe legalizar el gasto</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="expense_company_id" id="expense_company_id" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <t t-foreach="companies" t-as="company">
+                                                            <option t-att-value="company.id" t-esc="company.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-6 form-group">
+                                                    <label for="approver_id">
+                                                        <strong>Aprobador</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="approver_id" id="approver_id" class="form-control" required="required">
+                                                        <option value="">-- Seleccione --</option>
+                                                        <t t-foreach="approvers" t-as="approver">
+                                                            <option t-att-value="approver.id" t-esc="approver.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- Información de Viaje - SIEMPRE VISIBLE -->
+                                            <h4 class="mt-4 mb-3" style="color: #17a2b8;">Información de Viaje (Opcional)</h4>
+                                            <div class="row">
+                                                <div class="col-md-3 form-group">
+                                                    <label for="origin_city">
+                                                        <strong>Ciudad de Origen</strong>
+                                                    </label>
+                                                    <input type="text" name="origin_city" id="origin_city" class="form-control" placeholder="Ej: Bogotá"/>
+                                                </div>
+
+                                                <div class="col-md-3 form-group">
+                                                    <label for="destination_city">
+                                                        <strong>Ciudad Destino</strong>
+                                                    </label>
+                                                    <input type="text" name="destination_city" id="destination_city" class="form-control" placeholder="Ej: Medellín"/>
+                                                </div>
+
+                                                <div class="col-md-3 form-group">
+                                                    <label for="departure_date">
+                                                        <strong>Fecha de Salida</strong>
+                                                    </label>
+                                                    <input type="date" name="departure_date" id="departure_date" class="form-control"/>
+                                                </div>
+
+                                                <div class="col-md-3 form-group">
+                                                    <label for="return_date">
+                                                        <strong>Fecha de Regreso</strong>
+                                                    </label>
+                                                    <input type="date" name="return_date" id="return_date" class="form-control"/>
+                                                </div>
+                                            </div>
+
+                                            <h4 class="mt-4 mb-3">Información del Pago</h4>
+                                            <div class="row">
+                                                <div class="col-md-4 form-group">
+                                                    <label for="pay_to_name">
+                                                        <strong>Girar a nombre de</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="pay_to_name" id="pay_to_name" 
+                                                           class="form-control" required="required"/>
+                                                </div>
+
+                                                <div class="col-md-4 form-group">
+                                                    <label for="beneficiary_identification">
+                                                        <strong>Número de Cédula (Beneficiario)</strong>
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="beneficiary_identification" id="beneficiary_identification" 
+                                                           class="form-control" required="required"/>
+                                                </div>
+
+                                                <div class="col-md-4 form-group">
+                                                    <label for="deliver_to">
+                                                        <strong>Entregar a</strong>
+                                                    </label>
+                                                    <input type="text" name="deliver_to" id="deliver_to" class="form-control"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6 form-group">
+                                                    <label for="delivery_date">
+                                                        <strong>Fecha de entrega de anticipo</strong>
+                                                    </label>
+                                                    <input type="date" name="delivery_date" id="delivery_date" class="form-control"/>
+                                                </div>
+
+                                                <div class="col-md-6 form-group">
+                                                    <label for="legalization_date_display">
+                                                        <strong>Fecha de presunta legalización anticipo (recuerde la política)</strong>
+                                                    </label>
+                                                    <input type="date" name="legalization_date_display" id="legalization_date_display" 
+                                                           class="form-control" readonly="readonly" 
+                                                           placeholder="Se calculará automáticamente: entrega + 3 días"/>
+                                                    <small class="form-text text-muted">Se calcula automáticamente: 3 días después de la fecha de entrega</small>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6 form-group">
+                                                    <label for="attachment">
+                                                        <strong>Adjuntar soporte factura proforma / cuenta de cobro</strong>
+                                                    </label>
+                                                    <input type="file" name="attachment" id="attachment" class="form-control-file"/>
+                                                    <small class="form-text text-muted">Formatos permitidos: PDF, JPG, PNG</small>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="observations">
+                                                    <strong>Observaciones</strong>
+                                                </label>
+                                                <textarea name="observations" id="observations" class="form-control" 
+                                                          rows="3" placeholder="Ingrese cualquier observación o detalle adicional..."></textarea>
+                                            </div>
+
+                                            <div class="form-group text-center mt-4">
+                                                <button type="submit" class="btn btn-success btn-lg">
+                                                    <i class="fa fa-paper-plane"></i> Enviar Solicitud
+                                                </button>
+                                                <button type="reset" class="btn btn-secondary btn-lg ml-2">
+                                                    <i class="fa fa-undo"></i> Limpiar
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+
+        <!-- JavaScript -->
+        <script type="text/javascript">
+            console.log('=== Advance Request Form Script Loading ===');
+            
+            // Asegurar que jQuery esté disponible
+            (function($) {
+                'use strict';
+                
+                $(document).ready(function() {
+                    console.log('Document ready - Initializing form...');
+                    
+                    // Guardar todos los departamentos al cargar
+                    var allDepartments = [];
+                    $('#department_id option').each(function() {
+                        if ($(this).val()) {
+                            allDepartments.push({
+                                id: $(this).val(),
+                                name: $(this).text(),
+                                company_id: $(this).attr('data-company')
+                            });
+                        }
+                    });
+                    console.log('Departments loaded:', allDepartments.length);
+                    
+                    // Autocompletar cédula del colaborador
+                    $('#partner_id').on('change', function() {
+                        var selectedOption = $(this).find('option:selected');
+                        var identification = selectedOption.attr('data-identification');
+                        $('#identification_number').val(identification || '');
+                        console.log('Partner changed, identification:', identification);
+                    });
+                    
+                    // Filtrar departamentos al cambiar compañía
+                    $('#company_id').on('change', function() {
+                        var company_id = $(this).val();
+                        var select = $('#department_id');
+                        select.empty();
+                        select.append('<option value="">-- Seleccione --</option>');
+                        
+                        if (company_id) {
+                            var filtered = allDepartments.filter(function(dept) {
+                                return dept.company_id === company_id || dept.company_id === '' || !dept.company_id;
+                            });
+                            
+                            if (filtered.length > 0) {
+                                filtered.forEach(function(dept) {
+                                    select.append('<option value="' + dept.id + '" data-company="' + dept.company_id + '">' + dept.name + '</option>');
+                                });
+                            }
+                        } else {
+                            allDepartments.forEach(function(dept) {
+                                select.append('<option value="' + dept.id + '" data-company="' + dept.company_id + '">' + dept.name + '</option>');
+                            });
+                        }
+                        console.log('Company changed:', company_id, 'Filtered departments:', select.find('option').length - 1);
+                    });
+                    
+                    // Calcular fecha de legalización (3 días después de entrega)
+                    $('#delivery_date').on('change', function() {
+                        var deliveryDate = new Date($(this).val());
+                        if (!isNaN(deliveryDate.getTime())) {
+                            // Agregar 3 días
+                            deliveryDate.setDate(deliveryDate.getDate() + 3);
+                            // Formatear como YYYY-MM-DD
+                            var year = deliveryDate.getFullYear();
+                            var month = String(deliveryDate.getMonth() + 1).padStart(2, '0');
+                            var day = String(deliveryDate.getDate()).padStart(2, '0');
+                            var formattedDate = year + '-' + month + '-' + day;
+                            $('#legalization_date_display').val(formattedDate);
+                            console.log('Legalization date calculated:', formattedDate);
+                        } else {
+                            $('#legalization_date_display').val('');
+                        }
+                    });
+                    
+                    // Filtrar departamentos de la compañía por defecto
+                    var defaultCompanyId = $('#company_id').val();
+                    if (defaultCompanyId) {
+                        $('#company_id').trigger('change');
+                    }
+                    
+                    console.log('=== Form initialization complete ===');
+                });
+            })(jQuery);
+        </script>
+    </template>
+
+</odoo>

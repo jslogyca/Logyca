@@ -3,12 +3,12 @@
     <data noupdate="0">
         
         <!-- Template: Notificación a Aprobadores -->
-        <record id="email_template_credit_card_approval" model="mail.template">
-            <field name="name">Solicitud de Tarjeta de Crédito - Notificación a Aprobadores</field>
-            <field name="model_id" ref="model_credit_card_request"/>
-            <field name="subject">Nueva Solicitud de Tarjeta de Crédito: ${object.name}</field>
+        <record id="email_template_advance_approval" model="mail.template">
+            <field name="name">Solicitud de Anticipo - Notificación a Aprobadores</field>
+            <field name="model_id" ref="model_advance_request"/>
+            <field name="subject">Nueva Solicitud de Anticipo: ${object.name}</field>
             <field name="email_from">${(object.company_id.email or user.email or 'noreply@localhost')}</field>
-            <field name="email_to">${object.requester_email}</field>
+            <field name="email_to">${object.responsible_email}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
                     <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; width: 100%;">
@@ -16,30 +16,28 @@
                             <td align="center">
                                 <table border="0" cellpadding="0" cellspacing="0" width="600" style="padding: 16px; background-color: white; border: 1px solid #E0E0E0; border-radius: 8px;">
                                     <tr>
-                                        <td style="padding: 20px; background-color: #6f42c1; border-radius: 8px 8px 0 0;">
-                                            <h1 style="color: white; margin: 0; font-size: 24px;">💳 Nueva Solicitud de Tarjeta de Crédito</h1>
+                                        <td style="padding: 20px; background-color: #28a745; border-radius: 8px 8px 0 0;">
+                                            <h1 style="color: white; margin: 0; font-size: 24px;">💰 Nueva Solicitud de Anticipo</h1>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="padding: 20px; font-size: 14px;">
                                             <p>Estimado/a aprobador/a,</p>
-                                            <p>Se ha recibido una nueva solicitud de tarjeta de crédito.</p>
-                                            <div style="background-color: #F8F9FA; padding: 15px; border-left: 4px solid #6f42c1; margin: 20px 0;">
-                                                <h3 style="margin: 0 0 10px; color: #6f42c1;">Detalles</h3>
+                                            <p>Se ha recibido una nueva solicitud de anticipo.</p>
+                                            <div style="background-color: #F8F9FA; padding: 15px; border-left: 4px solid #28a745; margin: 20px 0;">
+                                                <h3 style="margin: 0 0 10px; color: #28a745;">Detalles</h3>
                                                 <table style="width: 100%;">
                                                     <tr><td style="padding: 5px; font-weight: bold; width: 40%;">Número:</td><td><t t-out="object.name"/></td></tr>
                                                     <tr><td style="padding: 5px; font-weight: bold;">Fecha:</td><td><t t-out="format_date(object.request_date)"/></td></tr>
-                                                    <tr><td style="padding: 5px; font-weight: bold;">Solicitante:</td><td><t t-out="object.requester_partner_id.name"/></td></tr>
-                                                    <tr><td style="padding: 5px; font-weight: bold;">Tarjetahabiente:</td><td><t t-out="object.cardholder_partner_id.name"/></td></tr>
-                                                    <tr><td style="padding: 5px; font-weight: bold;">Cédula:</td><td><t t-out="object.cardholder_identification"/></td></tr>
-                                                    <tr><td style="padding: 5px; font-weight: bold;">Organización:</td><td><t t-out="object.company_id.name"/></td></tr>
-                                                    <tr><td style="padding: 5px; font-weight: bold;">Equipo:</td><td><t t-out="object.department_id.name"/></td></tr>
-                                                    <tr><td style="padding: 5px; font-weight: bold;">Cargo:</td><td><t t-out="object.job_id.name or 'N/A'"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Responsable:</td><td><t t-out="object.responsible_partner_id.name"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Tipo:</td><td><t t-if="object.advance_type == 'travel'">Viaje</t><t t-else="">Compra</t></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Monto:</td><td>$ <t t-out="'{:,.2f}'.format(object.amount)"/></td></tr>
+                                                    <tr><td style="padding: 5px; font-weight: bold;">Compañía:</td><td><t t-out="object.company_id.name"/></td></tr>
                                                 </table>
                                             </div>
                                             <div style="text-align: center; margin: 30px 0;">
                                                 <a t-attf-href="{{object.get_request_url()}}" 
-                                                   style="background-color: #6f42c1; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+                                                   style="background-color: #28a745; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
                                                     Ver Solicitud
                                                 </a>
                                             </div>
@@ -55,12 +53,12 @@
         </record>
 
         <!-- Template: Confirmación al Solicitante -->
-        <record id="email_template_credit_card_submission" model="mail.template">
-            <field name="name">Tarjeta de Crédito - Confirmación</field>
-            <field name="model_id" ref="model_credit_card_request"/>
+        <record id="email_template_advance_submission" model="mail.template">
+            <field name="name">Anticipo - Confirmación</field>
+            <field name="model_id" ref="model_advance_request"/>
             <field name="subject">Solicitud Recibida: ${object.name}</field>
-            <field name="email_from">${(object.requester_email or '')|safe}</field>
-            <field name="email_to">${object.requester_email}</field>
+            <field name="email_from">${(object.responsible_email or '')|safe}</field>
+            <field name="email_to">${object.responsible_email}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
                     <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; width: 100%;">
@@ -74,14 +72,18 @@
                                     </tr>
                                     <tr>
                                         <td style="padding: 20px; font-size: 14px;">
-                                            <p>Hola <strong><t t-out="object.requester_partner_id.name"/></strong>,</p>
-                                            <p>Tu solicitud de tarjeta de crédito ha sido recibida exitosamente.</p>
+                                            <p>Hola <strong><t t-out="object.responsible_partner_id.name"/></strong>,</p>
+                                            <p>Tu solicitud de anticipo ha sido recibida exitosamente.</p>
                                             <div style="background-color: #d4edda; padding: 20px; text-align: center; margin: 20px 0;">
                                                 <p style="margin: 0 0 10px; font-size: 14px;">Número de Solicitud:</p>
                                                 <p style="margin: 0; font-size: 28px; font-weight: bold; color: #155724;"><t t-out="object.name"/></p>
                                             </div>
-                                            <p><strong>Tarjetahabiente:</strong> <t t-out="object.cardholder_partner_id.name"/></p>
+                                            <p><strong>Tipo:</strong> <t t-if="object.advance_type == 'travel'">Viaje</t><t t-else="">Compra</t></p>
+                                            <p><strong>Monto:</strong> $ <t t-out="'{:,.2f}'.format(object.amount)"/></p>
                                             <p>Recibirás una notificación cuando sea procesada.</p>
+                                            <div style="background-color: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 20px 0;">
+                                                <p style="margin: 0; color: #856404;"><strong>Recuerda:</strong> Debes legalizar este anticipo a más tardar dentro de los 3 días posteriores al recibo del mismo.</p>
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>
@@ -94,12 +96,12 @@
         </record>
 
         <!-- Template: Solicitud Terminada -->
-        <record id="email_template_credit_card_completion" model="mail.template">
-            <field name="name">Tarjeta de Crédito - Completada</field>
-            <field name="model_id" ref="model_credit_card_request"/>
+        <record id="email_template_advance_completion" model="mail.template">
+            <field name="name">Anticipo - Completada</field>
+            <field name="model_id" ref="model_advance_request"/>
             <field name="subject">Solicitud Procesada: ${object.name}</field>
             <field name="email_from">${(object.company_id.email or user.email or 'noreply@localhost')}</field>
-            <field name="email_to">${object.requester_email}</field>
+            <field name="email_to">${object.responsible_email}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
                     <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; width: 100%;">
@@ -113,10 +115,13 @@
                                     </tr>
                                     <tr>
                                         <td style="padding: 20px; font-size: 14px;">
-                                            <p>Hola <strong><t t-out="object.requester_partner_id.name"/></strong>,</p>
-                                            <p>Tu solicitud de tarjeta de crédito <strong><t t-out="object.name"/></strong> ha sido procesada.</p>
-                                            <p><strong>Tarjetahabiente:</strong> <t t-out="object.cardholder_partner_id.name"/></p>
-                                            <p>En breve recibirás más información sobre los siguientes pasos.</p>
+                                            <p>Hola <strong><t t-out="object.responsible_partner_id.name"/></strong>,</p>
+                                            <p>Tu solicitud de anticipo <strong><t t-out="object.name"/></strong> ha sido procesada y completada.</p>
+                                            <p><strong>Monto:</strong> $ <t t-out="'{:,.2f}'.format(object.amount)"/></p>
+                                            <div style="background-color: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 20px 0;">
+                                                <h3 style="margin: 0 0 10px; color: #856404;">Importante - Legalización</h3>
+                                                <p style="margin: 0; color: #856404;">Recuerda que debes legalizar este anticipo a más tardar dentro de los 3 días posteriores al recibo del mismo, según la política organizacional.</p>
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>
@@ -129,12 +134,12 @@
         </record>
 
         <!-- Template: Solicitud Cancelada -->
-        <record id="email_template_credit_card_cancellation" model="mail.template">
-            <field name="name">Tarjeta de Crédito - Cancelada</field>
-            <field name="model_id" ref="model_credit_card_request"/>
+        <record id="email_template_advance_cancellation" model="mail.template">
+            <field name="name">Anticipo - Cancelada</field>
+            <field name="model_id" ref="model_advance_request"/>
             <field name="subject">Solicitud Cancelada: ${object.name}</field>
             <field name="email_from">${(object.company_id.email or user.email or 'noreply@localhost')}</field>
-            <field name="email_to">${object.requester_email}</field>
+            <field name="email_to">${object.responsible_email}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
                     <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; width: 100%;">
@@ -148,51 +153,12 @@
                                     </tr>
                                     <tr>
                                         <td style="padding: 20px; font-size: 14px;">
-                                            <p>Hola <strong><t t-out="object.requester_partner_id.name"/></strong>,</p>
+                                            <p>Hola <strong><t t-out="object.responsible_partner_id.name"/></strong>,</p>
                                             <p>Tu solicitud <strong><t t-out="object.name"/></strong> ha sido cancelada.</p>
                                             <div style="background-color: #f8d7da; padding: 15px; border-left: 4px solid #dc3545; margin: 20px 0;">
                                                 <h3 style="margin: 0 0 10px; color: #721c24;">Razón:</h3>
                                                 <p style="margin: 0; color: #721c24;"><t t-out="object.cancel_reason or 'No especificada'"/></p>
                                             </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </field>
-            <field name="auto_delete" eval="False"/>
-        </record>
-
-        <!-- Template: Solicitud En Trámite -->
-        <record id="email_template_credit_card_in_process" model="mail.template">
-            <field name="name">Tarjeta de Crédito - En Trámite</field>
-            <field name="model_id" ref="model_credit_card_request"/>
-            <field name="subject">Solicitud en Trámite: ${object.name}</field>
-            <field name="email_from">${(object.company_id.email or user.email or 'noreply@localhost')}</field>
-            <field name="email_to">${object.requester_email}</field>
-            <field name="body_html" type="html">
-                <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
-                    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; width: 100%;">
-                        <tr>
-                            <td align="center">
-                                <table border="0" cellpadding="0" cellspacing="0" width="600" style="padding: 16px; background-color: white; border: 1px solid #E0E0E0; border-radius: 8px;">
-                                    <tr>
-                                        <td style="padding: 20px; background-color: #ffc107; border-radius: 8px 8px 0 0; text-align: center;">
-                                            <h1 style="color: white; margin: 0; font-size: 24px;"><span style="font-size: 48px;">🔄</span><br/>Solicitud en Trámite</h1>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 20px; font-size: 14px;">
-                                            <p>Hola <strong><t t-out="object.requester_partner_id.name"/></strong>,</p>
-                                            <p>Tu solicitud de tarjeta de crédito <strong><t t-out="object.name"/></strong> está ahora en trámite.</p>
-                                            <div style="background-color: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 20px 0;">
-                                                <h3 style="margin: 0 0 10px; color: #856404;">Estado Actual:</h3>
-                                                <p style="margin: 0; color: #856404;">La solicitud ha sido aprobada y se encuentra en proceso de gestión administrativa.</p>
-                                            </div>
-                                            <p><strong>Tarjetahabiente:</strong> <t t-out="object.cardholder_partner_id.name"/></p>
-                                            <p>Te notificaremos cuando el proceso esté completo.</p>
                                         </td>
                                     </tr>
                                 </table>

@@ -108,9 +108,24 @@ class CreditCardRequest(models.Model):
         ('draft', 'Borrador'),
         ('requested', 'Solicitado'),
         ('approved', 'Aprobado'),
+        ('in_process', 'En Trámite'),
         ('done', 'Terminado'),
         ('cancelled', 'Cancelado'),
     ], string='Estado', default='draft', required=True, tracking=True)
+    
+    approver_id = fields.Many2one(
+        'res.users',
+        string='Aprobador',
+        domain=lambda self: [('groups_id', 'in', [self.env.ref('analytic_account_request.group_credit_card_approver').id])],
+        tracking=True,
+        help='Usuario que aprobará esta solicitud'
+    )
+    
+    approval_date = fields.Datetime(
+        string='Fecha de Aprobación',
+        readonly=True,
+        tracking=True
+    )
     
     cancel_reason = fields.Text(
         string='Razón de Cancelación',
@@ -204,14 +219,38 @@ class CreditCardRequest(models.Model):
     
     def action_approve(self):
         """
-        Aprueba la solicitud
+        Aprueba la solicitud - Solo puede aprobar el usuario seleccionado como aprobador
         """
         self.ensure_one()
         
         if self.state != 'requested':
             raise UserError(_('Solo se pueden aprobar solicitudes en estado Solicitado.'))
         
-        self.write({'state': 'approved'})
+        # Verificar que el usuario actual es el aprobador seleccionado
+        if self.approver_id and self.approver_id.id != self.env.user.id:
+            raise UserError(_('Solo el usuario %s puede aprobar esta solicitud.') % self.approver_id.name)
+        
+        self.write({
+            'state': 'approved',
+            'approval_date': fields.Datetime.now(),
+            'approver_id': self.env.user.id,  # Asegurar que se guarde el aprobador actual
+        })
+        
+        return True
+    
+    def action_in_process(self):
+        """
+        Cambia el estado a En Trámite
+        """
+        self.ensure_one()
+        
+        if self.state != 'approved':
+            raise UserError(_('Solo se pueden poner en trámite solicitudes en estado Aprobado.'))
+        
+        self.write({'state': 'in_process'})
+        
+        # Enviar notificación al solicitante
+        self.send_in_process_notification()
         
         return True
     
@@ -221,8 +260,8 @@ class CreditCardRequest(models.Model):
         """
         self.ensure_one()
         
-        if self.state != 'approved':
-            raise UserError(_('Solo se pueden terminar solicitudes en estado Aprobado.'))
+        if self.state != 'in_process':
+            raise UserError(_('Solo se pueden terminar solicitudes en estado En Trámite.'))
         
         self.write({'state': 'done'})
         
@@ -365,6 +404,38 @@ class CreditCardRequest(models.Model):
                         'message': f'Error enviando notificación de completación: {str(e)}',
                         'path': 'credit.card.request',
                         'func': 'send_completion_notification',
+                        'line': '0',
+                    })
+        
+        return False
+    
+    def send_in_process_notification(self):
+        """
+        Envía notificación al solicitante cuando la solicitud está en trámite
+        """
+        self.ensure_one()
+        
+        if self.requester_email:
+            template = self.env.ref('analytic_account_request.email_template_credit_card_in_process', raise_if_not_found=False)
+            if template:
+                try:
+                    template.send_mail(
+                        self.id,
+                        force_send=True,
+                        email_values={
+                            'email_to': self.requester_email,
+                        }
+                    )
+                    return True
+                except Exception as e:
+                    # Log del error
+                    self.env['ir.logging'].sudo().create({
+                        'name': 'Credit Card In Process Notification Error',
+                        'type': 'server',
+                        'level': 'error',
+                        'message': f'Error enviando notificación en trámite: {str(e)}',
+                        'path': 'credit.card.request',
+                        'func': 'send_in_process_notification',
                         'line': '0',
                     })
         

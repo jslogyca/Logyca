@@ -33,5 +33,16 @@
             <field name="number_next">1</field>
             <field name="implementation">standard</field>
         </record>
+        
+        <!-- Secuencia para solicitud de anticipo -->
+        <record id="seq_advance_request" model="ir.sequence">
+            <field name="name">Solicitud de Anticipo</field>
+            <field name="code">advance.request</field>
+            <field name="prefix">ANT-</field>
+            <field name="padding">5</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">1</field>
+            <field name="implementation">standard</field>
+        </record>
     </data>
 </odoo>

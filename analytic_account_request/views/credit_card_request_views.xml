@@ -37,14 +37,18 @@
                             class="oe_highlight"
                             invisible="state != 'requested'"
                             groups="analytic_account_request.group_credit_card_approver"/>
-                    <button name="action_cancel" string="Cancelar" type="object"
-                            invisible="state not in ['requested', 'approved']"
-                            groups="analytic_account_request.group_credit_card_approver"/>
-                    <button name="action_done" string="Marcar como Terminado" type="object"
+                    <button name="action_in_process" string="Pasar a Trámite" type="object"
                             class="oe_highlight"
                             invisible="state != 'approved'"
                             groups="analytic_account_request.group_credit_card_approver"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,requested,approved,done"/>
+                    <button name="action_cancel" string="Cancelar" type="object"
+                            invisible="state not in ['requested', 'approved', 'in_process']"
+                            groups="analytic_account_request.group_credit_card_approver"/>
+                    <button name="action_done" string="Marcar como Terminado" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'in_process'"
+                            groups="analytic_account_request.group_credit_card_approver"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,requested,approved,in_process,done"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -73,6 +77,11 @@
                         <group string="Información Organizacional">
                             <field name="company_id" options="{'no_create': True}"/>
                             <field name="department_id" options="{'no_create': True}"/>
+                        </group>
+                        <group string="Aprobación">
+                            <field name="approver_id" options="{'no_create': True}" 
+                                   readonly="state not in ['draft', 'requested']"/>
+                            <field name="approval_date" readonly="1" invisible="not approval_date"/>
                         </group>
                     </group>
                     
@@ -103,6 +112,7 @@
                 <filter string="Borradores" name="draft" domain="[('state', '=', 'draft')]"/>
                 <filter string="Solicitadas" name="requested" domain="[('state', '=', 'requested')]"/>
                 <filter string="Aprobadas" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="En Trámite" name="in_process" domain="[('state', '=', 'in_process')]"/>
                 <filter string="Terminadas" name="done" domain="[('state', '=', 'done')]"/>
                 <filter string="Canceladas" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
                 <separator/>
