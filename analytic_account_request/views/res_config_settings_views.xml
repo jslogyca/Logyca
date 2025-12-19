@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista de configuración para Aprobadores por Defecto -->
+    <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.analytic.account.request</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Solicitudes de Cuentas Analíticas" name="analytic_account_request">
+                    <block title="Aprobadores por Defecto - Solicitudes de Productos">
+                        <setting>
+                            <label for="financial_approver_id" string="Aprobador Financiero por Defecto"/>
+                            <div class="text-muted">
+                                Usuario que aprobará por defecto las solicitudes de productos desde Estructura Financiera
+                            </div>
+                            <field name="financial_approver_id" class="oe_inline"/>
+                        </setting>
+                        
+                        <setting>
+                            <label for="legal_approver_id" string="Aprobador Legal por Defecto"/>
+                            <div class="text-muted">
+                                Usuario que aprobará por defecto las solicitudes de productos desde Temas Legales
+                            </div>
+                            <field name="legal_approver_id" class="oe_inline"/>
+                        </setting>
+                        
+                        <setting>
+                            <label for="accounting_approver_id" string="Aprobador Contable por Defecto"/>
+                            <div class="text-muted">
+                                Usuario que aprobará por defecto las solicitudes de productos desde Estructura Contable
+                            </div>
+                            <field name="accounting_approver_id" class="oe_inline"/>
+                        </setting>
+                    </block>
+                </app>
+                
+                <app string="Solicitudes de Anticipos" name="advance_requests">
+                    <block title="Configuración de Anticipos">
+                        <setting>
+                            <label for="financial_advance_approver_id" string="Aprobador Financiero de Anticipos"/>
+                            <div class="text-muted">
+                                Usuario que dará el visto bueno financiero a las solicitudes de anticipos
+                            </div>
+                            <field name="financial_advance_approver_id" class="oe_inline"/>
+                        </setting>
+                        
+                        <setting>
+                            <label for="advance_journal_id" string="Diario de Anticipos"/>
+                            <div class="text-muted">
+                                Diario contable que se usará para causar los anticipos
+                            </div>
+                            <field name="advance_journal_id" class="oe_inline"/>
+                        </setting>
+                        
+                        <setting>
+                            <label for="advance_cxp_account_id" string="Cuenta CXP para Anticipos"/>
+                            <div class="text-muted">
+                                Cuenta contable de Cuentas por Pagar (crédito)
+                            </div>
+                            <field name="advance_cxp_account_id" class="oe_inline"/>
+                        </setting>
+                        
+                        <setting>
+                            <label for="advance_cxc_account_id" string="Cuenta CXC para Anticipos"/>
+                            <div class="text-muted">
+                                Cuenta contable de Cuentas por Cobrar (débito) - Para terceros
+                            </div>
+                            <field name="advance_cxc_account_id" class="oe_inline"/>
+                        </setting>
+                        
+                        <setting>
+                            <label for="advance_cxc_employee_account_id" string="Cuenta CXC para Anticipos de Empleados"/>
+                            <div class="text-muted">
+                                Cuenta contable de Cuentas por Cobrar (débito) - Para empleados
+                            </div>
+                            <field name="advance_cxc_employee_account_id" class="oe_inline"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -341,6 +341,10 @@ class CreditCardRequestController(http.Controller):
         # Obtener todos los departamentos (para tenerlos como fallback)
         departments = request.env['hr.department'].sudo().search([])
         
+        # Obtener usuarios del grupo de aprobadores de tarjetas de crédito
+        approver_group = request.env.ref('analytic_account_request.group_credit_card_approver', raise_if_not_found=False)
+        approvers = approver_group.users if approver_group else request.env['res.users'].sudo().browse([])
+        
         # Fecha actual
         today = fields.Date.context_today(request.env['credit.card.request'])
         
@@ -348,6 +352,7 @@ class CreditCardRequestController(http.Controller):
             'partners': partners,
             'companies': companies,
             'departments': departments,
+            'approvers': approvers,
             'today': today,
             'error': kwargs.get('error', ''),
             'success': kwargs.get('success', ''),
@@ -464,7 +469,7 @@ class CreditCardRequestController(http.Controller):
         try:
             # Validar datos requeridos
             required_fields = ['requester_partner_id', 'cardholder_partner_id', 
-                             'cardholder_identification', 'company_id', 'department_id']
+                             'cardholder_identification', 'company_id', 'department_id', 'approver_id']
             for field in required_fields:
                 if not post.get(field):
                     return request.redirect('/tarjeta_credito/formulario?error=Todos los campos obligatorios deben ser completados')
@@ -494,6 +499,13 @@ class CreditCardRequestController(http.Controller):
             if not cardholder_partner.exists():
                 return request.redirect('/tarjeta_credito/formulario?error=El tarjetahabiente seleccionado no es válido')
 
+            # Validar aprobador
+            approver_id = int(post.get('approver_id'))
+            approver = request.env['res.users'].sudo().browse(approver_id)
+            
+            if not approver.exists():
+                return request.redirect('/tarjeta_credito/formulario?error=El aprobador seleccionado no es válido')
+
             # Crear la solicitud
             request_vals = {
                 'requester_partner_id': requester_partner_id,
@@ -501,6 +513,7 @@ class CreditCardRequestController(http.Controller):
                 'cardholder_identification': post.get('cardholder_identification'),
                 'company_id': int(post.get('company_id')),
                 'department_id': int(post.get('department_id')),
+                'approver_id': approver_id,
                 'state': 'draft',
             }
             
@@ -529,3 +542,174 @@ class CreditCardRequestController(http.Controller):
                 'line': '0',
             })
             return request.redirect(f'/tarjeta_credito/formulario?error=Error al procesar la solicitud: {str(e)}')
+
+
+class AdvanceRequestController(http.Controller):
+
+    @http.route('/anticipo/formulario', type='http', auth='public', website=True, csrf=False)
+    def advance_form(self, **kwargs):
+        """Muestra el formulario de solicitud de anticipo"""
+        
+        # Obtener partners disponibles (asociados a empleados)
+        employees = request.env['hr.employee'].sudo().search([('active', '=', True)])
+        partners = employees.mapped('work_contact_id')
+        
+        # Obtener compañías
+        companies = request.env['res.company'].sudo().search([])
+        
+        # Obtener departamentos
+        departments = request.env['hr.department'].sudo().search([])
+        
+        # Obtener usuarios del grupo de aprobadores de anticipos
+        approver_group = request.env.ref('analytic_account_request.group_advance_request_approver', raise_if_not_found=False)
+        approvers = approver_group.users if approver_group else request.env['res.users'].sudo().browse([])
+        
+        # Fecha actual
+        today = fields.Date.context_today(request.env['advance.request'])
+        
+        values = {
+            'partners': partners,
+            'companies': companies,
+            'departments': departments,
+            'approvers': approvers,
+            'today': today,
+            'error': kwargs.get('error', ''),
+            'success': kwargs.get('success', ''),
+            'request_number': kwargs.get('request_number', ''),
+        }
+        return request.render('analytic_account_request.advance_request_form_template', values)
+
+    @http.route('/anticipo/submit', type='http', auth='public', website=True, csrf=False, methods=['POST'])
+    def submit_advance_request(self, **post):
+        """Procesa el envío del formulario de anticipo"""
+        try:
+            # Log de todos los datos recibidos para debug
+            import logging
+            _logger = logging.getLogger(__name__)
+            _logger.info("=" * 80)
+            _logger.info("ANTICIPO FORM SUBMISSION - Datos recibidos:")
+            for key, value in post.items():
+                if key != 'attachment':  # No loggear archivos
+                    _logger.info(f"  {key}: {value}")
+            _logger.info("=" * 80)
+            
+            # Validar datos requeridos
+            required_fields = [
+                'payroll_discount_auth', 'partner_id', 'identification_number',
+                'company_id', 'type', 'department_id', 'advance_type',
+                'is_international', 'amount', 'expense_company_id', 'approver_id',
+                'pay_to_name', 'beneficiary_identification'
+            ]
+            
+            # Verificar campos faltantes con mejor debug
+            missing_fields = []
+            for field in required_fields:
+                value = post.get(field)
+                # Considerar campo faltante si es None, cadena vacía, o solo espacios
+                if not value or (isinstance(value, str) and not value.strip()):
+                    missing_fields.append(field)
+                    _logger.warning(f"Campo faltante: {field} = '{value}'")
+            
+            if missing_fields:
+                error_msg = f'CAMPOS_FALTANTES: {", ".join(missing_fields)}'
+                _logger.error(f"VALIDACION FALLIDA: {error_msg}")
+                # URL encode para que se vea bien
+                from werkzeug.urls import url_encode
+                return request.redirect(f'/anticipo/formulario?error={error_msg}')
+
+            # Validar autorización
+            if post.get('payroll_discount_auth') != 'yes':
+                return request.redirect('/anticipo/formulario?error=Debe aceptar la autorización de descuento por nómina')
+
+            # Obtener partner
+            partner_id = int(post.get('partner_id'))
+            partner = request.env['res.partner'].sudo().browse(partner_id)
+            
+            if not partner.exists():
+                return request.redirect('/anticipo/formulario?error=El colaborador seleccionado no es válido')
+
+            # Manejar archivo adjunto si se subió
+            attachment_id = False
+            if post.get('attachment'):
+                import base64
+                attachment_file = post.get('attachment')
+                attachment_data = base64.b64encode(attachment_file.read())
+                attachment_name = attachment_file.filename
+                
+                # Crear el attachment
+                attachment = request.env['ir.attachment'].sudo().create({
+                    'name': attachment_name,
+                    'datas': attachment_data,
+                    'res_model': 'advance.request',
+                    'res_id': 0,  # Se actualizará después
+                    'type': 'binary',
+                })
+                attachment_id = attachment.id
+
+            # Crear la solicitud
+            request_vals = {
+                'payroll_discount_auth': post.get('payroll_discount_auth'),
+                'partner_id': partner_id,
+                'identification_number': post.get('identification_number'),
+                'company_id': int(post.get('company_id')),
+                'type': post.get('type'),
+                'department_id': int(post.get('department_id')),
+                'advance_type': post.get('advance_type'),
+                'is_international': post.get('is_international'),
+                'amount': float(post.get('amount')),
+                'expense_company_id': int(post.get('expense_company_id')),
+                'approver_id': int(post.get('approver_id')),
+                'pay_to_name': post.get('pay_to_name'),
+                'beneficiary_identification': post.get('beneficiary_identification'),
+                'observations': post.get('observations', ''),
+                'state': 'draft',
+            }
+            
+            # Campos opcionales
+            if post.get('origin_city'):
+                request_vals['origin_city'] = post.get('origin_city')
+            if post.get('destination_city'):
+                request_vals['destination_city'] = post.get('destination_city')
+            if post.get('departure_date'):
+                request_vals['departure_date'] = post.get('departure_date')
+            if post.get('return_date'):
+                request_vals['return_date'] = post.get('return_date')
+            if post.get('deliver_to'):
+                request_vals['deliver_to'] = post.get('deliver_to')
+            if post.get('delivery_date'):
+                request_vals['delivery_date'] = post.get('delivery_date')
+            if attachment_id:
+                request_vals['attachment_id'] = attachment_id
+            
+            # Crear el registro
+            advance_request = request.env['advance.request'].sudo().create(request_vals)
+            
+            # Si hay attachment, actualizar res_id
+            if attachment_id:
+                request.env['ir.attachment'].sudo().browse(attachment_id).write({
+                    'res_id': advance_request.id
+                })
+            
+            # Enviar la solicitud (cambiar a estado 'requested' y enviar emails)
+            advance_request.action_submit()
+            
+            # Redireccionar con mensaje de éxito
+            return request.redirect(
+                f'/anticipo/formulario?success=Su solicitud fue procesada con el número {advance_request.name}. '
+                f'Recibirá un correo electrónico de confirmación.'
+                f'&request_number={advance_request.name}'
+            )
+
+        except Exception as e:
+            # Log del error
+            import traceback
+            request.env['ir.logging'].sudo().create({
+                'name': 'Advance Request Submission Error',
+                'type': 'server',
+                'level': 'error',
+                'message': f'Error al procesar solicitud: {str(e)}\n{traceback.format_exc()}',
+                'path': 'advance_request',
+                'func': 'submit_advance_request',
+                'line': '0',
+            })
+            return request.redirect(f'/anticipo/formulario?error=Ocurrió un error al procesar la solicitud: {str(e)}')

@@ -65,7 +65,8 @@
                         </group>
                         <group string="Información de la Cuenta Analítica">
                             <field name="company_id" options="{'no_create': True}"/>
-                            <field name="plan_id" options="{'no_create': True}"/>
+                            <field name="available_plan_ids" invisible="1"/>
+                            <field name="plan_id" options="{'no_create': True}" domain="[('id', 'in', available_plan_ids)]"/>
                             <field name="analytic_account_name"/>
                             <field name="analytic_account_id" readonly="1" invisible="not analytic_account_id"/>
                         </group>

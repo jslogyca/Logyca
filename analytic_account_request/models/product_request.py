@@ -226,6 +226,70 @@ class ProductRequest(models.Model):
         tracking=True
     )
     
+    # Aprobaciones múltiples
+    financial_approver_id = fields.Many2one(
+        'res.users',
+        string='Autoriza Estructura Financiera',
+        tracking=True,
+        help='Usuario que autoriza desde el punto de vista financiero'
+    )
+    
+    financial_approved = fields.Boolean(
+        string='Aprobado Estructura Financiera',
+        default=False,
+        tracking=True
+    )
+    
+    financial_approval_date = fields.Datetime(
+        string='Fecha Aprobación Financiera',
+        readonly=True,
+        tracking=True
+    )
+    
+    legal_approver_id = fields.Many2one(
+        'res.users',
+        string='Autoriza Temas Legales',
+        tracking=True,
+        help='Usuario que autoriza desde el punto de vista legal'
+    )
+    
+    legal_approved = fields.Boolean(
+        string='Aprobado Temas Legales',
+        default=False,
+        tracking=True
+    )
+    
+    legal_approval_date = fields.Datetime(
+        string='Fecha Aprobación Legal',
+        readonly=True,
+        tracking=True
+    )
+    
+    accounting_approver_id = fields.Many2one(
+        'res.users',
+        string='Autoriza Estructura Contable',
+        tracking=True,
+        help='Usuario que autoriza desde el punto de vista contable'
+    )
+    
+    accounting_approved = fields.Boolean(
+        string='Aprobado Estructura Contable',
+        default=False,
+        tracking=True
+    )
+    
+    accounting_approval_date = fields.Datetime(
+        string='Fecha Aprobación Contable',
+        readonly=True,
+        tracking=True
+    )
+    
+    all_approved = fields.Boolean(
+        string='Todas las Aprobaciones Completas',
+        compute='_compute_all_approved',
+        store=True
+    )
+    
     # Campo activo
     active = fields.Boolean(
         string='Activo',
@@ -240,6 +304,18 @@ class ProductRequest(models.Model):
     )
 
 
+    @api.depends('financial_approved', 'legal_approved', 'accounting_approved')
+    def _compute_all_approved(self):
+        """
+        Verifica si todas las aprobaciones están completas
+        """
+        for record in self:
+            record.all_approved = (
+                record.financial_approved and 
+                record.legal_approved and 
+                record.accounting_approved
+            )
+    
     @api.depends()
     def _compute_available_partners(self):
         """
@@ -283,10 +359,33 @@ class ProductRequest(models.Model):
     @api.model
     def create(self, vals):
         """
-        Override create para generar la secuencia del nombre
+        Override create para generar la secuencia del nombre y establecer aprobadores por defecto
         """
         if vals.get('name', 'Nuevo') == 'Nuevo':
             vals['name'] = self.env['ir.sequence'].next_by_code('product.request') or 'Nuevo'
+        
+        # Establecer aprobadores por defecto desde parámetros del sistema
+        if not vals.get('financial_approver_id'):
+            financial_approver = self.env['ir.config_parameter'].sudo().get_param(
+                'analytic_account_request.default_financial_approver_id'
+            )
+            if financial_approver:
+                vals['financial_approver_id'] = int(financial_approver)
+        
+        if not vals.get('legal_approver_id'):
+            legal_approver = self.env['ir.config_parameter'].sudo().get_param(
+                'analytic_account_request.default_legal_approver_id'
+            )
+            if legal_approver:
+                vals['legal_approver_id'] = int(legal_approver)
+        
+        if not vals.get('accounting_approver_id'):
+            accounting_approver = self.env['ir.config_parameter'].sudo().get_param(
+                'analytic_account_request.default_accounting_approver_id'
+            )
+            if accounting_approver:
+                vals['accounting_approver_id'] = int(accounting_approver)
+        
         return super(ProductRequest, self).create(vals)
     
     def action_submit(self):
@@ -311,14 +410,98 @@ class ProductRequest(models.Model):
     
     def action_approve(self):
         """
-        Aprueba la solicitud
+        Aprueba la solicitud - Solo cuando todas las aprobaciones estén completas
         """
         self.ensure_one()
         
         if self.state != 'requested':
             raise UserError(_('Solo se pueden aprobar solicitudes en estado Solicitado.'))
         
+        # Verificar que todas las aprobaciones estén completas
+        if not self.all_approved:
+            pending = []
+            if not self.financial_approved:
+                pending.append('Estructura Financiera')
+            if not self.legal_approved:
+                pending.append('Temas Legales')
+            if not self.accounting_approved:
+                pending.append('Estructura Contable')
+            
+            raise UserError(_('No se puede aprobar la solicitud. Faltan las siguientes aprobaciones:\n- %s') % '\n- '.join(pending))
+        
         self.write({'state': 'approved'})
+        
+        return True
+    
+    def action_approve_financial(self):
+        """
+        Aprobación de Estructura Financiera
+        """
+        self.ensure_one()
+        
+        if self.state != 'requested':
+            raise UserError(_('Solo se pueden aprobar solicitudes en estado Solicitado.'))
+        
+        # Verificar que el usuario actual es el aprobador financiero
+        if self.financial_approver_id and self.financial_approver_id.id != self.env.user.id:
+            raise UserError(_('Solo el usuario %s puede aprobar desde Estructura Financiera.') % self.financial_approver_id.name)
+        
+        self.write({
+            'financial_approved': True,
+            'financial_approval_date': fields.Datetime.now(),
+        })
+        
+        # Si todas las aprobaciones están completas, cambiar a aprobado automáticamente
+        if self.all_approved:
+            self.write({'state': 'approved'})
+        
+        return True
+    
+    def action_approve_legal(self):
+        """
+        Aprobación de Temas Legales
+        """
+        self.ensure_one()
+        
+        if self.state != 'requested':
+            raise UserError(_('Solo se pueden aprobar solicitudes en estado Solicitado.'))
+        
+        # Verificar que el usuario actual es el aprobador legal
+        if self.legal_approver_id and self.legal_approver_id.id != self.env.user.id:
+            raise UserError(_('Solo el usuario %s puede aprobar desde Temas Legales.') % self.legal_approver_id.name)
+        
+        self.write({
+            'legal_approved': True,
+            'legal_approval_date': fields.Datetime.now(),
+        })
+        
+        # Si todas las aprobaciones están completas, cambiar a aprobado automáticamente
+        if self.all_approved:
+            self.write({'state': 'approved'})
+        
+        return True
+    
+    def action_approve_accounting(self):
+        """
+        Aprobación de Estructura Contable
+        """
+        self.ensure_one()
+        
+        if self.state != 'requested':
+            raise UserError(_('Solo se pueden aprobar solicitudes en estado Solicitado.'))
+        
+        # Verificar que el usuario actual es el aprobador contable
+        if self.accounting_approver_id and self.accounting_approver_id.id != self.env.user.id:
+            raise UserError(_('Solo el usuario %s puede aprobar desde Estructura Contable.') % self.accounting_approver_id.name)
+        
+        self.write({
+            'accounting_approved': True,
+            'accounting_approval_date': fields.Datetime.now(),
+        })
+        
+        # Si todas las aprobaciones están completas, cambiar a aprobado automáticamente
+        if self.all_approved:
+            self.write({'state': 'approved'})
         
         return True
     

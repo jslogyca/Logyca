@@ -21,5 +21,12 @@
             <field name="category_id" ref="base.module_category_accounting"/>
             <field name="comment">Los usuarios de este grupo recibirán notificaciones de nuevas solicitudes de creación de productos y podrán aprobarlas/cancelarlas.</field>
         </record>
+        
+        <!-- Grupo de Aprobadores de Anticipos -->
+        <record id="group_advance_request_approver" model="res.groups">
+            <field name="name">Aprobador de Anticipos</field>
+            <field name="category_id" ref="base.module_category_accounting"/>
+            <field name="comment">Los usuarios de este grupo recibirán notificaciones de nuevas solicitudes de anticipos y podrán aprobarlas/cancelarlas.</field>
+        </record>
     </data>
 </odoo>
