@@ -8,50 +8,145 @@
             <field name="arch" type="xml">
                 <form string="Reporte de Descuentos Condicionados">
                     <sheet>
-                        <group>
+                        <!-- Estado Draft: Configuración inicial -->
+                        <group invisible="state != 'draft'">
+                            <div class="alert alert-info" role="alert" style="margin-bottom: 15px;">
+                                <p style="margin: 0;">
+                                    <i class="fa fa-info-circle"/> 
+                                    <strong>Seleccione el tipo de proceso:</strong>
+                                </p>
+                                <ul style="margin: 10px 0 0 20px;">
+                                    <li><strong>Generar Solo Reporte Excel:</strong> Obtiene un reporte de descuentos sin crear documentos</li>
+                                    <li><strong>Cargar Facturas para Procesar NC:</strong> Crea automáticamente notas crédito y comprobantes</li>
+                                </ul>
+                            </div>
                             <group>
-                                <field name="year" invisible="state == 'done'"/>
+                                <field name="year"/>
                                 <field name="date_from" invisible="1"/>
                                 <field name="date_to" invisible="1"/>
-                                <field name="state" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="reversal_journal_id"/>
+                                <field name="discount_account_id"/>
                             </group>
                         </group>
                         
+                        <!-- Estado Loaded: Facturas cargadas -->
+                        <group invisible="state != 'loaded'">
+                            <div class="alert alert-info" role="alert" style="margin-bottom: 10px;">
+                                <p style="margin: 0;">
+                                    <i class="fa fa-info-circle"/> 
+                                    <strong>Facturas identificadas para procesar</strong>
+                                </p>
+                                <p style="margin: 5px 0 0 0;">
+                                    Total encontrado: <strong><field name="records_found" readonly="1" nolabel="1" style="display: inline;"/></strong><br/>
+                                    Excluidos (ya procesados o sin conciliación): <strong><field name="records_excluded" readonly="1" nolabel="1" style="display: inline;"/></strong>
+                                </p>
+                                <p style="margin: 5px 0 0 0; font-size: 12px;">
+                                    Seleccione las facturas que desea procesar. Puede deseleccionar todas y elegir solo una o las que necesite.
+                                </p>
+                            </div>
+                            
+                            <field name="invoice_line_ids">
+                                <tree editable="bottom" create="false" delete="false">
+                                    <field name="selected" widget="boolean_toggle"/>
+                                    <field name="invoice_name"/>
+                                    <field name="invoice_date"/>
+                                    <field name="partner_id"/>
+                                    <field name="discount_amount" sum="Total Descuento"/>
+                                    <field name="payment_move_name"/>
+                                    <field name="state" readonly="1" optional="hide"/>
+                                    <field name="credit_note_id" optional="hide"/>
+                                    <field name="reversal_move_id" optional="hide"/>
+                                </tree>
+                            </field>
+                        </group>
+                        
+                        <!-- Estado Done: Proceso completado -->
                         <group invisible="state != 'done'">
                             <field name="excel_filename" invisible="1"/>
-                            <field name="records_found" invisible="1"/>
-                            <field name="records_excluded" invisible="1"/>
                             <div class="alert alert-success" role="alert" style="margin-top: 20px;">
                                 <p style="margin: 0;">
                                     <i class="fa fa-check-circle"/> 
-                                    <strong>¡Reporte generado exitosamente!</strong>
+                                    <strong>¡Proceso completado exitosamente!</strong>
                                 </p>
                                 <p style="margin: 10px 0 0 0;">
-                                    Registros encontrados: <strong><field name="records_found" readonly="1" nolabel="1" style="display: inline;"/></strong><br/>
-                                    Registros excluidos (sin conciliación): <strong><field name="records_excluded" readonly="1" nolabel="1" style="display: inline;"/></strong>
+                                    Se generaron las notas crédito y comprobantes de reversión para las facturas seleccionadas.
                                 </p>
                                 <p style="margin: 10px 0 0 0;">
-                                    Haga clic en el botón "Descargar Excel" para obtener el archivo.
+                                    Haga clic en el botón "Descargar Excel" para obtener el reporte completo.
                                 </p>
                             </div>
+                            
+                            <field name="invoice_line_ids">
+                                <tree create="false" delete="false">
+                                    <field name="invoice_name"/>
+                                    <field name="partner_id"/>
+                                    <field name="discount_amount"/>
+                                    <field name="credit_note_id" widget="many2one_link"/>
+                                    <field name="reversal_move_id" widget="many2one_link"/>
+                                    <field name="state" 
+                                           decoration-success="state == 'processed'"
+                                           decoration-danger="state == 'error'"
+                                           decoration-muted="state == 'pending'"/>
+                                    <field name="error_message" optional="show"/>
+                                </tree>
+                            </field>
                         </group>
+                        
+                        <field name="state" invisible="1"/>
                     </sheet>
                     <footer>
-                        <button name="action_generate_report" 
-                                string="Generar Reporte Excel" 
+                        <!-- Botones estado Draft -->
+                        <button name="action_generate_excel_only" 
+                                string="Generar Solo Reporte Excel" 
+                                type="object" 
+                                class="btn-secondary"
+                                invisible="state != 'draft'"
+                                help="Genera el reporte Excel sin crear notas crédito ni comprobantes"/>
+                        <button name="action_load_invoices" 
+                                string="Cargar Facturas para Procesar NC" 
                                 type="object" 
                                 class="btn-primary"
-                                invisible="state == 'done'"/>
+                                invisible="state != 'draft'"
+                                help="Carga facturas para crear notas crédito y comprobantes automáticamente"/>
+                        
+                        <!-- Botones estado Loaded -->
+                        <button name="action_process_credit_notes" 
+                                string="Procesar Notas Crédito" 
+                                type="object" 
+                                class="btn-primary"
+                                confirm="¿Está seguro de que desea procesar las facturas seleccionadas? Se crearán notas crédito y comprobantes de reversión."
+                                invisible="state != 'loaded'"/>
+                        <button name="action_unselect_all" 
+                                string="Deseleccionar Todas" 
+                                type="object" 
+                                class="btn-secondary"
+                                invisible="state != 'loaded'"/>
+                        <button name="action_select_all" 
+                                string="Seleccionar Todas" 
+                                type="object" 
+                                class="btn-secondary"
+                                invisible="state != 'loaded'"/>
+                        <button name="action_back" 
+                                string="Volver" 
+                                type="object" 
+                                class="btn-secondary"
+                                invisible="state != 'loaded'"/>
+                        
+                        <!-- Botones estado Done -->
                         <button name="action_download_excel" 
                                 string="Descargar Excel" 
                                 type="object" 
                                 class="btn-primary"
                                 invisible="state != 'done'"/>
                         <button name="action_back" 
-                                string="Generar Otro Reporte" 
+                                string="Generar Otro Proceso" 
                                 type="object" 
                                 class="btn-secondary"
                                 invisible="state != 'done'"/>
+                        
+                        <!-- Botón Cancelar (siempre visible) -->
                         <button string="Cancelar" 
                                 class="btn-secondary" 
                                 special="cancel"/>
