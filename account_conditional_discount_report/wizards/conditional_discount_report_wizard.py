@@ -502,9 +502,9 @@ class ConditionalDiscountReportWizard(models.TransientModel):
             'invoice_payment_term_id': invoice.invoice_payment_term_id.id,
             'invoice_date': fields.Date.today(),
             'date': fields.Date.today(),
-            'ref': invoice.name,
+            'ref': 'Reversión de: ' + invoice.name,
             'x_num_order_purchase': 'Reversión de: ' + invoice.name,
-            'reversed_entry_id': 'Reversión de: ' + invoice.id,
+            'reversed_entry_id': invoice.id,
             'is_conditional_discount_credit_note': True,
             'invoice_line_ids': [(0, 0, {
                 'name': f'Descuento Condicionado - {invoice.name}',
