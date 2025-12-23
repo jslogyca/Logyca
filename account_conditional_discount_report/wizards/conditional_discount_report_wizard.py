@@ -213,6 +213,32 @@ class ConditionalDiscountReportWizard(models.TransientModel):
                 excluded_count += 1
                 continue
             
+            # Buscar si ya existe nota crédito creada por este proceso
+            existing_credit_note = self.env['account.move'].search([
+                ('reversed_entry_id', '=', invoice.id),
+                ('move_type', '=', 'out_refund'),
+                ('is_conditional_discount_credit_note', '=', True),
+                ('state', '=', 'posted')
+            ], limit=1)
+            
+            # Buscar comprobante de reversión si existe NC
+            reversal_move = False
+            if existing_credit_note:
+                # Buscar comprobante con referencia a la factura en el diario de reversión
+                reversal_move = self.env['account.move'].search([
+                    ('move_type', '=', 'entry'),
+                    ('ref', '=', invoice.name),
+                    ('state', '=', 'posted'),
+                    ('line_ids.account_id.code', '=', '530535'),
+                    ('line_ids.credit', '>', 0),
+                ], limit=1)
+            
+            # Determinar estado
+            if existing_credit_note:
+                state = 'Ya Procesada'
+            else:
+                state = 'Pendiente de Procesar'
+            
             # Consolidar información
             report_data.append({
                 'invoice_number': invoice.name or '',
@@ -226,11 +252,11 @@ class ConditionalDiscountReportWizard(models.TransientModel):
                 'pay_move_name': line.move_id.name or '',
                 'pay_move_date': line.move_id.date,
                 'valor_530535_debito': line.debit or 0,
-                'credit_note_number': '',
-                'credit_note_amount': 0,
-                'reversal_move_number': '',
-                'reversal_move_amount': 0,
-                'state': 'Reporte Simple',
+                'credit_note_number': existing_credit_note.name if existing_credit_note else '',
+                'credit_note_amount': existing_credit_note.amount_total if existing_credit_note else 0,
+                'reversal_move_number': reversal_move.name if reversal_move else '',
+                'reversal_move_amount': line.debit if reversal_move else 0,
+                'state': state,
                 'error_message': '',
             })
         
@@ -476,8 +502,6 @@ class ConditionalDiscountReportWizard(models.TransientModel):
             'invoice_date': fields.Date.today(),
             'date': fields.Date.today(),
             'ref': invoice.name,
-            'x_num_order_purchase': invoice.name,
-            'invoice_payment_term_id': invoice.invoice_payment_term_id.id,
             'reversed_entry_id': invoice.id,
             'is_conditional_discount_credit_note': True,
             'invoice_line_ids': [(0, 0, {
