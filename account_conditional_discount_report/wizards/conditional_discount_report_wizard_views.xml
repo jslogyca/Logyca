@@ -17,8 +17,9 @@
                                 </p>
                                 <ul style="margin: 10px 0 0 20px;">
                                     <li><strong>Generar Solo Reporte Excel:</strong> Obtiene un reporte de descuentos sin crear documentos</li>
-                                    <li><strong>Cargar Facturas para Procesar NC (Desde Pagos):</strong> Identifica facturas desde pagos conciliados</li>
-                                    <li><strong>Cargar Facturas para Procesar NC (Desde Asiento):</strong> Identifica facturas desde un asiento contable específico</li>
+                                    <li><strong>Cargar Facturas desde Pagos:</strong> Identifica facturas desde pagos conciliados</li>
+                                    <li><strong>Cargar Facturas desde Asiento:</strong> Identifica facturas desde un asiento contable específico</li>
+                                    <li><strong>Entrada Manual:</strong> Especifica manualmente las facturas y montos de descuento</li>
                                 </ul>
                             </div>
                             <group>
@@ -33,6 +34,23 @@
                             <group colspan="2">
                                 <field name="source_move_id" placeholder="Seleccione el asiento contable que contiene las líneas de descuento..."/>
                             </group>
+                            <notebook>
+                                <page string="Entrada Manual de Facturas">
+                                    <field name="manual_invoice_ids">
+                                        <tree editable="bottom">
+                                            <field name="invoice_id" 
+                                                   placeholder="Seleccione una factura..."
+                                                   options="{'no_create': True, 'no_open': True}"/>
+                                            <field name="invoice_name"/>
+                                            <field name="invoice_date"/>
+                                            <field name="partner_id"/>
+                                            <field name="amount_total" sum="Total Facturas"/>
+                                            <field name="discount_amount" sum="Total Descuentos"/>
+                                            <field name="currency_id" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                            </notebook>
                         </group>
                         
                         <!-- Estado Loaded: Facturas cargadas -->
@@ -120,6 +138,12 @@
                                 class="btn-primary"
                                 invisible="state != 'draft'"
                                 help="Carga facturas desde el asiento contable seleccionado"/>
+                        <button name="action_load_from_manual_entry" 
+                                string="Cargar Facturas Manuales" 
+                                type="object" 
+                                class="btn-primary"
+                                invisible="state != 'draft'"
+                                help="Procesa las facturas ingresadas manualmente con sus montos de descuento"/>
                         
                         <!-- Botones estado Loaded -->
                         <button name="action_process_credit_notes" 
