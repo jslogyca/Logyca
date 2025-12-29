@@ -17,3 +17,8 @@
 	path = SNVA-PROYECTOS-MASTER/Nomina_plus
 	url = git@github.com:SNVA-PROYECTOS-MASTER/Nomina_plus.git
 	branch = V17
+
+[submodule "SNVA-PROYECTOS-MASTER/Nomina_Extras"]
+	path = SNVA-PROYECTOS-MASTER/Nomina_Extras
+	url = git@github.com:SNVA-PROYECTOS-MASTER/Nomina_Extras.git
+	branch = V17
