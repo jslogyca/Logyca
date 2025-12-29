@@ -7,3 +7,8 @@
 	path = OCA/web
 	url = git@github.com:OCA/web.git
 	branch = 13.0
+
+[submodule "SNVA-PROYECTOS-MASTER/Nomina_base"]
+	path = SNVA-PROYECTOS-MASTER/Nomina_base
+	url = git@github.com:SNVA-PROYECTOS-MASTER/Nomina_base.git
+	branch = V17
