@@ -17,7 +17,8 @@
                                 </p>
                                 <ul style="margin: 10px 0 0 20px;">
                                     <li><strong>Generar Solo Reporte Excel:</strong> Obtiene un reporte de descuentos sin crear documentos</li>
-                                    <li><strong>Cargar Facturas para Procesar NC:</strong> Crea automáticamente notas crédito y comprobantes</li>
+                                    <li><strong>Cargar Facturas para Procesar NC (Desde Pagos):</strong> Identifica facturas desde pagos conciliados</li>
+                                    <li><strong>Cargar Facturas para Procesar NC (Desde Asiento):</strong> Identifica facturas desde un asiento contable específico</li>
                                 </ul>
                             </div>
                             <group>
@@ -28,6 +29,9 @@
                             <group>
                                 <field name="reversal_journal_id"/>
                                 <field name="discount_account_id"/>
+                            </group>
+                            <group colspan="2">
+                                <field name="source_move_id" placeholder="Seleccione el asiento contable que contiene las líneas de descuento..."/>
                             </group>
                         </group>
                         
@@ -105,11 +109,17 @@
                                 invisible="state != 'draft'"
                                 help="Genera el reporte Excel sin crear notas crédito ni comprobantes"/>
                         <button name="action_load_invoices" 
-                                string="Cargar Facturas para Procesar NC" 
+                                string="Cargar Facturas desde Pagos" 
                                 type="object" 
                                 class="btn-primary"
                                 invisible="state != 'draft'"
-                                help="Carga facturas para crear notas crédito y comprobantes automáticamente"/>
+                                help="Carga facturas identificadas desde pagos conciliados"/>
+                        <button name="action_load_invoices_from_move" 
+                                string="Cargar Facturas desde Asiento" 
+                                type="object" 
+                                class="btn-primary"
+                                invisible="state != 'draft'"
+                                help="Carga facturas desde el asiento contable seleccionado"/>
                         
                         <!-- Botones estado Loaded -->
                         <button name="action_process_credit_notes" 

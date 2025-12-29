@@ -135,6 +135,18 @@ class ConditionalDiscountReportWizard(models.TransientModel):
         help='Cuenta 530535 - Descuentos Comerciales Condicionados'
     )
     
+    source_move_id = fields.Many2one(
+        'account.move',
+        string='Asiento Contable Fuente',
+        domain="[('state', '=', 'posted')]",
+        help='Asiento contable que contiene en sus líneas el número de factura en el campo name (ej: DTO POR PRONTO PAGO DEL 1-16 ENERO _ MERCADO PAGO FEC/2025/251629)'
+    )
+    
+    source_type = fields.Selection([
+        ('payment_reconciliation', 'Desde Pagos Conciliados'),
+        ('accounting_entry', 'Desde Asiento Contable')
+    ], string='Origen de Datos', default='payment_reconciliation')
+    
     invoice_line_ids = fields.One2many(
         'conditional.discount.invoice.line',
         'wizard_id',
@@ -393,6 +405,154 @@ class ConditionalDiscountReportWizard(models.TransientModel):
             'target': 'new',
         }
     
+    def action_load_invoices_from_move(self):
+        """Cargar facturas para procesar desde un asiento contable"""
+        self.ensure_one()
+        
+        # Validar configuración
+        if not self.reversal_journal_id:
+            raise UserError(_('Debe seleccionar el Diario para Comprobantes de Reversión'))
+        
+        if not self.discount_account_id:
+            raise UserError(_('Debe seleccionar la cuenta de descuentos condicionados (530535)'))
+        
+        if not self.source_move_id:
+            raise UserError(_('Debe seleccionar el Asiento Contable Fuente'))
+        
+        # Limpiar líneas anteriores
+        self.invoice_line_ids.unlink()
+        
+        # Obtener líneas del asiento que contengan número de factura
+        move_lines = self.source_move_id.line_ids.filtered(
+            lambda l: l.account_id == self.discount_account_id and l.name and 'FEC/' in l.name
+        )
+        
+        if not move_lines:
+            raise UserError(
+                _('No se encontraron líneas con número de factura en el asiento seleccionado.\n\n'
+                  'Verifique que:\n'
+                  '- Las líneas usen la cuenta de descuentos (530535)\n'
+                  '- El campo "Etiqueta" contenga el número de factura\n'
+                  '- El formato sea: "DTO POR PRONTO PAGO DEL 1-16 ENERO _ MERCADO PAGO FEC/2025/251629"')
+            )
+        
+        # Procesar cada línea y crear líneas de wizard
+        invoice_lines = []
+        excluded_count = 0
+        processed_invoices = set()
+        errors = []
+        
+        for line in move_lines:
+            # Extraer número de factura del campo name
+            invoice_number = self._extract_invoice_number_from_line(line.name)
+            
+            if not invoice_number:
+                excluded_count += 1
+                errors.append(f"Línea '{line.name}': No se pudo extraer número de factura")
+                continue
+            
+            # Buscar la factura por número
+            invoice = self.env['account.move'].search([
+                ('name', '=', invoice_number),
+                ('move_type', '=', 'out_invoice'),
+                ('state', '=', 'posted')
+            ], limit=1)
+            
+            if not invoice:
+                excluded_count += 1
+                errors.append(f"Factura {invoice_number}: No encontrada o no está contabilizada")
+                continue
+            
+            # Evitar duplicados
+            if invoice.id in processed_invoices:
+                excluded_count += 1
+                errors.append(f"Factura {invoice_number}: Duplicada en el asiento")
+                continue
+            
+            processed_invoices.add(invoice.id)
+            
+            # Buscar si ya existe nota crédito creada por este proceso
+            existing_credit_note = self.env['account.move'].search([
+                ('reversed_entry_id', '=', invoice.id),
+                ('move_type', '=', 'out_refund'),
+                ('is_conditional_discount_credit_note', '=', True),
+                ('state', '=', 'posted')
+            ], limit=1)
+            
+            # Buscar si ya existe comprobante de reversión
+            existing_reversal = self.env['account.move'].search([
+                ('ref', 'like', f'Reversión DTO Condicionado - {invoice.name}'),
+                ('journal_id', '=', self.reversal_journal_id.id),
+                ('state', '=', 'posted')
+            ], limit=1)
+            
+            # Si ya existe NC o comprobante, excluir
+            if existing_credit_note or existing_reversal:
+                excluded_count += 1
+                errors.append(f"Factura {invoice_number}: Ya tiene NC o comprobante de reversión")
+                continue
+            
+            # Obtener monto del descuento (puede estar en débito o crédito)
+            discount_amount = abs(line.debit - line.credit)
+            
+            # Crear línea de wizard
+            invoice_lines.append((0, 0, {
+                'invoice_id': invoice.id,
+                'discount_amount': discount_amount,
+                'payment_move_id': self.source_move_id.id,
+                'discount_line_id': line.id,
+                'selected': True,
+                'state': 'pending'
+            }))
+        
+        if not invoice_lines:
+            error_msg = 'No se encontraron facturas elegibles para procesar.\n\n'
+            if errors:
+                error_msg += 'Razones de exclusión:\n' + '\n'.join(errors[:10])
+                if len(errors) > 10:
+                    error_msg += f'\n... y {len(errors) - 10} más'
+            raise UserError(_(error_msg))
+        
+        # Crear líneas
+        self.write({
+            'invoice_line_ids': invoice_lines,
+            'records_found': len(move_lines),
+            'records_excluded': excluded_count,
+            'state': 'loaded',
+            'source_type': 'accounting_entry'
+        })
+        
+        # Retornar vista con facturas cargadas
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'conditional.discount.report.wizard',
+            'res_id': self.id,
+            'view_mode': 'form',
+            'target': 'new',
+        }
+    
+    def _extract_invoice_number_from_line(self, line_name):
+        """
+        Extrae el número de factura del campo name de una línea contable
+        Formato esperado: "DTO POR PRONTO PAGO DEL 1-16 ENERO _ MERCADO PAGO FEC/2025/251629"
+        Retorna: "FEC/2025/251629"
+        """
+        import re
+        if not line_name:
+            return None
+        
+        # Buscar patrón FEC/YYYY/NNNNNN o FEC-YYYY-NNNNNN
+        pattern = r'FEC[/-]\d{4}[/-]\d+'
+        match = re.search(pattern, line_name)
+        
+        if match:
+            invoice_number = match.group()
+            # Normalizar separadores a /
+            invoice_number = invoice_number.replace('-', '/')
+            return invoice_number
+        
+        return None
+    
     def action_select_all(self):
         """Seleccionar todas las facturas"""
         self.ensure_one()
@@ -419,13 +579,43 @@ class ConditionalDiscountReportWizard(models.TransientModel):
         
         for line in selected_lines:
             try:
+                # Validación previa: verificar que la factura no tenga ya NC o comprobante
+                invoice = line.invoice_id
+                
+                # Buscar NC existente
+                existing_credit_note = self.env['account.move'].search([
+                    ('reversed_entry_id', '=', invoice.id),
+                    ('move_type', '=', 'out_refund'),
+                    ('is_conditional_discount_credit_note', '=', True),
+                    ('state', '=', 'posted')
+                ], limit=1)
+                
+                if existing_credit_note:
+                    raise UserError(_(
+                        f'La factura {invoice.name} ya tiene una Nota Crédito generada '
+                        f'por este proceso: {existing_credit_note.name}'
+                    ))
+                
+                # Buscar comprobante de reversión existente
+                existing_reversal = self.env['account.move'].search([
+                    ('ref', '=', invoice.name),
+                    ('journal_id', '=', self.reversal_journal_id.id),
+                    ('state', '=', 'posted')
+                ], limit=1)
+                
+                if existing_reversal:
+                    raise UserError(_(
+                        f'La factura {invoice.name} ya tiene un Comprobante de Reversión '
+                        f'generado: {existing_reversal.name}'
+                    ))
+                
                 # Crear nota crédito
                 credit_note = self._create_credit_note(line)
                 
                 # Crear comprobante de reversión
                 reversal_move = self._create_reversal_entry(line, credit_note)
                 
-                # Conciliar CXC de NC con CXC del comprobante
+                # Conciliar CXC de NC con CXC del comprobante (NO con la factura)
                 self._reconcile_entries(credit_note, reversal_move)
                 
                 # Actualizar línea
@@ -438,6 +628,17 @@ class ConditionalDiscountReportWizard(models.TransientModel):
                 processed_count += 1
                 
             except Exception as e:
+                # Si hay error, intentar eliminar documentos creados
+                try:
+                    if 'credit_note' in locals() and credit_note and credit_note.state == 'posted':
+                        credit_note.button_draft()
+                        credit_note.button_cancel()
+                    if 'reversal_move' in locals() and reversal_move and reversal_move.state == 'posted':
+                        reversal_move.button_draft()
+                        reversal_move.button_cancel()
+                except:
+                    pass
+                
                 line.write({
                     'state': 'error',
                     'error_message': str(e)
@@ -675,10 +876,20 @@ class ConditionalDiscountReportWizard(models.TransientModel):
     def _generate_excel(self, data):
         """
         Genera el archivo Excel con los datos del reporte
+        Crea dos hojas si el origen es desde asiento contable
         """
         output = BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-        worksheet = workbook.add_worksheet('Descuentos Condicionados')
+        
+        # Determinar nombre de la primera hoja según el origen
+        if self.source_type == 'accounting_entry':
+            worksheet1_name = 'Pagos Conciliados'
+            worksheet2_name = 'Desde Asiento Contable'
+        else:
+            worksheet1_name = 'Descuentos Condicionados'
+            worksheet2_name = None
+        
+        worksheet = workbook.add_worksheet(worksheet1_name)
         
         # Formatos
         header_format = workbook.add_format({
@@ -729,7 +940,11 @@ class ConditionalDiscountReportWizard(models.TransientModel):
             'Error'
         ]
         
-        # Escribir encabezados
+        # Si el origen es desde asiento contable, agregar columna de origen
+        if self.source_type == 'accounting_entry':
+            headers.insert(8, 'Origen')
+        
+        # Escribir encabezados en la primera hoja
         for col, header in enumerate(headers):
             worksheet.write(0, col, header, header_format)
         
@@ -742,60 +957,178 @@ class ConditionalDiscountReportWizard(models.TransientModel):
         worksheet.set_column(5, 5, 16)   # Subtotal Factura
         worksheet.set_column(6, 6, 16)   # Total Factura
         worksheet.set_column(7, 7, 20)   # Total Factura (Moneda Cía)
-        worksheet.set_column(8, 8, 18)   # Comprobante Pago
-        worksheet.set_column(9, 9, 14)   # Fecha Pago
-        worksheet.set_column(10, 10, 16) # Valor Descuento
-        worksheet.set_column(11, 11, 18) # Nota Crédito
-        worksheet.set_column(12, 12, 14) # Valor NC
-        worksheet.set_column(13, 13, 22) # Comprobante Reversión
-        worksheet.set_column(14, 14, 16) # Valor Reversión
-        worksheet.set_column(15, 15, 12) # Estado
-        worksheet.set_column(16, 16, 30) # Error
+        if self.source_type == 'accounting_entry':
+            worksheet.set_column(8, 8, 25)   # Origen
+            worksheet.set_column(9, 9, 18)   # Comprobante Pago
+            worksheet.set_column(10, 10, 14) # Fecha Pago
+            worksheet.set_column(11, 11, 16) # Valor Descuento
+            worksheet.set_column(12, 12, 18) # Nota Crédito
+            worksheet.set_column(13, 13, 14) # Valor NC
+            worksheet.set_column(14, 14, 22) # Comprobante Reversión
+            worksheet.set_column(15, 15, 16) # Valor Reversión
+            worksheet.set_column(16, 16, 12) # Estado
+            worksheet.set_column(17, 17, 30) # Error
+        else:
+            worksheet.set_column(8, 8, 18)   # Comprobante Pago
+            worksheet.set_column(9, 9, 14)   # Fecha Pago
+            worksheet.set_column(10, 10, 16) # Valor Descuento
+            worksheet.set_column(11, 11, 18) # Nota Crédito
+            worksheet.set_column(12, 12, 14) # Valor NC
+            worksheet.set_column(13, 13, 22) # Comprobante Reversión
+            worksheet.set_column(14, 14, 16) # Valor Reversión
+            worksheet.set_column(15, 15, 12) # Estado
+            worksheet.set_column(16, 16, 30) # Error
         
-        # Escribir datos
+        # Escribir datos en la primera hoja
+        self._write_excel_data(worksheet, data, text_format, date_format, number_format, 
+                               include_origin=(self.source_type == 'accounting_entry'))
+        
+        # Si el origen es desde asiento contable, crear segunda hoja con información del asiento
+        if self.source_type == 'accounting_entry' and self.source_move_id:
+            worksheet2 = workbook.add_worksheet(worksheet2_name)
+            self._write_source_move_sheet(worksheet2, workbook, header_format, text_format, 
+                                         date_format, number_format)
+        
+        workbook.close()
+        output.seek(0)
+        return output.read()
+    
+    def _write_excel_data(self, worksheet, data, text_format, date_format, number_format, include_origin=False):
+        """Escribe los datos en una hoja de Excel"""
         row = 1
         for record in data:
-            worksheet.write(row, 0, record['invoice_number'], text_format)
+            col = 0
+            worksheet.write(row, col, record['invoice_number'], text_format)
+            col += 1
             
             if record['invoice_date']:
                 if isinstance(record['invoice_date'], str):
                     invoice_date = datetime.strptime(record['invoice_date'], '%Y-%m-%d')
                 else:
                     invoice_date = record['invoice_date']
-                worksheet.write_datetime(row, 1, invoice_date, date_format)
+                worksheet.write_datetime(row, col, invoice_date, date_format)
             else:
-                worksheet.write(row, 1, '', text_format)
+                worksheet.write(row, col, '', text_format)
+            col += 1
             
-            worksheet.write(row, 2, record['partner_name'], text_format)
-            worksheet.write(row, 3, record['partner_vat'], text_format)
-            worksheet.write(row, 4, record['currency'], text_format)
-            worksheet.write(row, 5, record['factura_total_moneda'], number_format)
-            worksheet.write(row, 6, record['factura_total'], number_format)
-            worksheet.write(row, 7, record['factura_total_compania'], number_format)
-            worksheet.write(row, 8, record['pay_move_name'], text_format)
+            worksheet.write(row, col, record['partner_name'], text_format)
+            col += 1
+            worksheet.write(row, col, record['partner_vat'], text_format)
+            col += 1
+            worksheet.write(row, col, record['currency'], text_format)
+            col += 1
+            worksheet.write(row, col, record['factura_total_moneda'], number_format)
+            col += 1
+            worksheet.write(row, col, record['factura_total'], number_format)
+            col += 1
+            worksheet.write(row, col, record['factura_total_compania'], number_format)
+            col += 1
+            
+            # Si incluye origen, agregar columna
+            if include_origin:
+                origen = 'Asiento Contable' if self.source_type == 'accounting_entry' else 'Pago Conciliado'
+                worksheet.write(row, col, origen, text_format)
+                col += 1
+            
+            worksheet.write(row, col, record['pay_move_name'], text_format)
+            col += 1
             
             if record['pay_move_date']:
                 if isinstance(record['pay_move_date'], str):
                     pay_date = datetime.strptime(record['pay_move_date'], '%Y-%m-%d')
                 else:
                     pay_date = record['pay_move_date']
-                worksheet.write_datetime(row, 9, pay_date, date_format)
+                worksheet.write_datetime(row, col, pay_date, date_format)
             else:
-                worksheet.write(row, 9, '', text_format)
+                worksheet.write(row, col, '', text_format)
+            col += 1
             
-            worksheet.write(row, 10, record['valor_530535_debito'], number_format)
-            worksheet.write(row, 11, record.get('credit_note_number', ''), text_format)
-            worksheet.write(row, 12, record.get('credit_note_amount', 0), number_format)
-            worksheet.write(row, 13, record.get('reversal_move_number', ''), text_format)
-            worksheet.write(row, 14, record.get('reversal_move_amount', 0), number_format)
-            worksheet.write(row, 15, record.get('state', ''), text_format)
-            worksheet.write(row, 16, record.get('error_message', ''), text_format)
+            worksheet.write(row, col, record['valor_530535_debito'], number_format)
+            col += 1
+            worksheet.write(row, col, record.get('credit_note_number', ''), text_format)
+            col += 1
+            worksheet.write(row, col, record.get('credit_note_amount', 0), number_format)
+            col += 1
+            worksheet.write(row, col, record.get('reversal_move_number', ''), text_format)
+            col += 1
+            worksheet.write(row, col, record.get('reversal_move_amount', 0), number_format)
+            col += 1
+            worksheet.write(row, col, record.get('state', ''), text_format)
+            col += 1
+            worksheet.write(row, col, record.get('error_message', ''), text_format)
             
             row += 1
+    
+    def _write_source_move_sheet(self, worksheet, workbook, header_format, text_format, 
+                                  date_format, number_format):
+        """Escribe información del asiento contable fuente en una segunda hoja"""
+        # Título
+        title_format = workbook.add_format({
+            'bold': True,
+            'font_size': 14,
+            'bg_color': '#4472C4',
+            'font_color': 'white',
+            'align': 'center',
+            'valign': 'vcenter'
+        })
         
-        workbook.close()
-        output.seek(0)
-        return output.read()
+        worksheet.merge_range('A1:E1', 'INFORMACIÓN DEL ASIENTO CONTABLE FUENTE', title_format)
+        
+        # Información del asiento
+        info_label_format = workbook.add_format({
+            'bold': True,
+            'bg_color': '#E7E6E6',
+            'border': 1
+        })
+        
+        info_value_format = workbook.add_format({
+            'border': 1
+        })
+        
+        row = 2
+        worksheet.write(row, 0, 'Número de Asiento:', info_label_format)
+        worksheet.write(row, 1, self.source_move_id.name, info_value_format)
+        row += 1
+        
+        worksheet.write(row, 0, 'Fecha:', info_label_format)
+        worksheet.write_datetime(row, 1, self.source_move_id.date, date_format)
+        row += 1
+        
+        worksheet.write(row, 0, 'Referencia:', info_label_format)
+        worksheet.write(row, 1, self.source_move_id.ref or '', info_value_format)
+        row += 1
+        
+        worksheet.write(row, 0, 'Diario:', info_label_format)
+        worksheet.write(row, 1, self.source_move_id.journal_id.name, info_value_format)
+        row += 2
+        
+        # Tabla de líneas del asiento
+        worksheet.write(row, 0, 'Etiqueta', header_format)
+        worksheet.write(row, 1, 'Cuenta', header_format)
+        worksheet.write(row, 2, 'Débito', header_format)
+        worksheet.write(row, 3, 'Crédito', header_format)
+        worksheet.write(row, 4, 'Factura Identificada', header_format)
+        row += 1
+        
+        # Ajustar ancho de columnas
+        worksheet.set_column(0, 0, 50)  # Etiqueta
+        worksheet.set_column(1, 1, 25)  # Cuenta
+        worksheet.set_column(2, 2, 15)  # Débito
+        worksheet.set_column(3, 3, 15)  # Crédito
+        worksheet.set_column(4, 4, 20)  # Factura Identificada
+        
+        # Escribir líneas del asiento
+        for line in self.source_move_id.line_ids:
+            if line.account_id == self.discount_account_id:
+                worksheet.write(row, 0, line.name or '', text_format)
+                worksheet.write(row, 1, f"{line.account_id.code} - {line.account_id.name}", text_format)
+                worksheet.write(row, 2, line.debit, number_format)
+                worksheet.write(row, 3, line.credit, number_format)
+                
+                # Identificar factura
+                invoice_number = self._extract_invoice_number_from_line(line.name)
+                worksheet.write(row, 4, invoice_number or 'No identificada', text_format)
+                row += 1
 
     def action_download_excel(self):
         self.ensure_one()
