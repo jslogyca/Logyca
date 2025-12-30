@@ -374,7 +374,8 @@ class AccountMove(models.Model):
             #Fecha de factura
             if (self.date != fields.Date.context_today(self)) and (self.invoice_date != fields.Date.context_today(self)):
                 #https://poncesoft.blogspot.com/2017/07/consulta-de-fecha-actual-traves-de-la.html - LINK DE APOYO
-                # raise ValidationError(_('La fecha de la factura no puede ser diferente a la fecha actual, por favor verificar.'))     
+                # raise ValidationError(_('La fecha de la factura no puede ser diferente a la fecha actual, por favor verificar.'))
+                print('La fecha de la factura no puede ser diferente a la fecha actual, por favor verificar.')
             
             for line in self.invoice_line_ids:
                 # if not line.analytic_account_id:
