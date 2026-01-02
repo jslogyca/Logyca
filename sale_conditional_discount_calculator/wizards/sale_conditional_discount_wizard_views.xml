@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista del formulario del wizard -->
+    <record id="view_sale_conditional_discount_wizard_form" model="ir.ui.view">
+        <field name="name">sale.conditional.discount.wizard.form</field>
+        <field name="model">sale.conditional.discount.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Calculadora de Descuentos Condicionados">
+                <header>
+                    <button name="action_load_orders" 
+                            string="Buscar Órdenes" 
+                            type="object" 
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    
+                    <button name="action_select_all" 
+                            string="Seleccionar Todas" 
+                            type="object"
+                            invisible="state != 'orders_loaded'"/>
+                    
+                    <button name="action_deselect_all" 
+                            string="Deseleccionar Todas" 
+                            type="object"
+                            invisible="state != 'orders_loaded'"/>
+                    
+                    <button name="action_calculate_discounts" 
+                            string="Calcular Descuentos" 
+                            type="object" 
+                            class="oe_highlight"
+                            invisible="state != 'orders_loaded'"/>
+                    
+                    <button name="action_back" 
+                            string="Volver" 
+                            type="object"
+                            invisible="state == 'draft'"/>
+                    
+                    <field name="state" widget="statusbar" statusbar_visible="draft,orders_loaded,processed"/>
+                </header>
+                
+                <sheet>
+                    <!-- Sección de criterios de búsqueda -->
+                    <group string="Criterios de Búsqueda" invisible="state != 'draft'">
+                        <group>
+                            <field name="x_origen_filter" placeholder="Ej: ECOMMERCE"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Sección de parámetros de descuento -->
+                    <group string="Parámetros de Descuento" invisible="state != 'draft'">
+                        <group string="Primer Descuento">
+                            <field name="percentage_increase_1" 
+                                   widget="percentage"
+                                   help="Porcentaje de aumento (ejemplo: 19%)"/>
+                            <field name="percentage_discount_1" 
+                                   widget="percentage"
+                                   help="Porcentaje de descuento (ejemplo: 3%)"/>
+                            <field name="discount_deadline_1"/>
+                        </group>
+                        <group string="Segundo Descuento">
+                            <field name="percentage_increase_2" 
+                                   widget="percentage"
+                                   help="Porcentaje de aumento (ejemplo: 19%)"/>
+                            <field name="percentage_discount_2" 
+                                   widget="percentage"
+                                   help="Porcentaje de descuento (ejemplo: 2%)"/>
+                            <field name="discount_deadline_2"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Información de resultados -->
+                    <group invisible="state == 'draft'">
+                        <group>
+                            <field name="orders_found" readonly="1"/>
+                            <field name="orders_processed" readonly="1" invisible="state != 'processed'"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Lista de órdenes encontradas -->
+                    <notebook invisible="state == 'draft'">
+                        <page string="Órdenes de Venta" name="orders">
+                            <field name="order_line_ids" nolabel="1">
+                                <tree editable="bottom" create="false" delete="false">
+                                    <field name="selected" widget="boolean_toggle"/>
+                                    <field name="order_name"/>
+                                    <field name="partner_id"/>
+                                    <field name="x_origen"/>
+                                    <field name="date_order"/>
+                                    <field name="amount_total" sum="Total"/>
+                                    <field name="invoice_name"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    
+                    <!-- Mensaje de éxito -->
+                    <div class="alert alert-success" role="alert" invisible="state != 'processed'">
+                        <i class="fa fa-check-circle"/> 
+                        <strong>¡Proceso completado exitosamente!</strong>
+                        <p>Se han calculado los descuentos condicionados para las órdenes seleccionadas.</p>
+                        <p>Los campos han sido actualizados tanto en las órdenes de venta como en sus facturas correspondientes.</p>
+                    </div>
+                    
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Acción para abrir el wizard -->
+    <record id="action_sale_conditional_discount_wizard" model="ir.actions.act_window">
+        <field name="name">Calcular Descuentos Condicionados</field>
+        <field name="res_model">sale.conditional.discount.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_view_types">form,list</field>
+    </record>
+    
+    <!-- Menú -->
+    <menuitem id="menu_sale_conditional_discount_wizard"
+              name="Calcular Descuentos Condicionados"
+              parent="sale.sale_order_menu"
+              action="action_sale_conditional_discount_wizard"
+              sequence="20"/>
+    
+</odoo>

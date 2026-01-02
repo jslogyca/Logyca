@@ -54,6 +54,11 @@ class AccountMove(models.Model):
     x_discounts_deadline = fields.Date(string='Fecha límite descuento condicionado')    
     x_amount_total_discounts = fields.Monetary(string='Total con descuentos', default=0.0, currency_field='company_currency_id', compute='_compute_amount_total_discounts')
     x_discount_payment = fields.Boolean(string='Pago con descuento', copy=False)
+    #Valor total descuentos second date
+    x_value_discounts_second_date = fields.Monetary(string='Valor descuentos Second Date', default=0.0, currency_field='company_currency_id')
+    x_discounts_deadline_second_date = fields.Date(string='Fecha límite descuento condicionado Second Date')    
+    x_amount_total_discounts_second_date = fields.Monetary(string='Total con descuentos Second Date', default=0.0, currency_field='company_currency_id', compute='_compute_amount_total_discounts')
+    x_discount_payment_second_date = fields.Boolean(string='Pago con descuento', copy=False)
     #Recibo de pago - Campo temporal
     x_receipt_payment = fields.Char(string='N° Recibo de pago', copy=False)
     x_journal_resolution_num = fields.Char(string='Number', related='journal_id.x_resolution_number')
@@ -141,7 +146,7 @@ class AccountMove(models.Model):
     def _update_status_dian(self, invoice, status_dian):
         invoice.x_status_dian = status_dian
 
-    @api.depends('x_value_discounts')
+    @api.depends('x_value_discounts', 'x_value_discounts_second_date')
     def _compute_amount_total_discounts(self):
         amount_total_discounts = 0
         for record in self:
@@ -149,6 +154,10 @@ class AccountMove(models.Model):
             conditional_discount = record.x_value_discounts
             amount_total_discounts = amount_total-conditional_discount
             record.x_amount_total_discounts = amount_total_discounts
+
+            conditional_discount_second_date = record.x_value_discounts_second_date
+            amount_total_discounts_second_date = amount_total-conditional_discount_second_date
+            record.x_amount_total_discounts_second_date = amount_total_discounts_second_date
     
     def create_approval_request(self):
         ctx = self.env.context.copy()

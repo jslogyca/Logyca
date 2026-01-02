@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Agregar página con detalles de descuentos condicionados -->
+    <record id="view_move_form_conditional_discount_page" model="ir.ui.view">
+        <field name="name">account.move.form.conditional.discount.page</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Descuentos Condicionados" 
+                      name="conditional_discounts"
+                      invisible="move_type not in ('out_invoice', 'out_refund')">
+                    <group>
+                        <group string="Primer Descuento Condicionado">
+                            <field name="x_value_discounts" readonly="1"/>
+                            <field name="x_discounts_deadline" readonly="1"/>
+                            <field name="x_amount_total_discounts" readonly="1"/>
+                        </group>
+                        <group string="Segundo Descuento Condicionado">
+                            <field name="x_value_discounts_second_date" readonly="1"/>
+                            <field name="x_discounts_deadline_second_date" readonly="1"/>
+                            <field name="x_amount_total_discounts_second_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <separator string="Información"/>
+                    <div class="alert alert-info" role="alert">
+                        <p><i class="fa fa-info-circle"/> Los descuentos condicionados son heredados automáticamente desde la orden de venta.</p>
+                        <p>Estos valores son calculados mediante el wizard de cálculo de descuentos condicionados.</p>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>
