@@ -201,7 +201,7 @@ class SaleConditionalDiscountWizard(models.TransientModel):
             ('x_origen', '=', self.x_origen_filter),
             ('date_order', '>=', fields.Datetime.to_datetime(self.date_from)),
             ('date_order', '<=', fields.Datetime.to_datetime(self.date_to)),
-            ('state', 'in', ['sale', 'done'])  # Solo órdenes confirmadas
+            ('state', 'in', ['sale', 'done', 'draft'])  # Solo órdenes confirmadas
         ]
         
         # Buscar órdenes
