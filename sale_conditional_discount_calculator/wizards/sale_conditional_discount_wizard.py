@@ -284,13 +284,12 @@ class SaleConditionalDiscountWizard(models.TransientModel):
         total_discount = 0.0
         
         # Convertir porcentajes a decimales
-        inc_decimal = percentage_increase / 100.0
-        disc_decimal = percentage_discount / 100.0
+        inc_decimal = percentage_increase
+        disc_decimal = percentage_discount
         
         for line in order.order_line:
             # Calcular subtotal de la línea
             subtotal = line.price_unit * line.product_uom_qty
-            
             # Aplicar fórmula: ((((subtotal) / (inc + 1)) * inc) * disc)
             base_amount = subtotal / (inc_decimal + 1)
             increase_amount = base_amount * inc_decimal
