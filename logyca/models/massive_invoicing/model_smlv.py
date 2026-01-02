@@ -76,7 +76,7 @@ class x_MassiveInvoicingSMLV(models.Model):
         if dupes_now:
             for dupe_now in dupes_now:
                 massive_tariff = {
-                    'tariff': ((dupe_now.tariff*tariff)/100)+dupe_now.tariff,
+                    'tariff': round(((dupe_now.tariff*tariff)/100)+dupe_now.tariff, -3),
                     'old_value': dupe_now.tariff,
                     'revenue_rang_id': dupe_now.revenue_rang_id.id,
                     'smlv_id': self.id,
