@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Agregar página con detalles de descuentos condicionados -->
+    <record id="view_order_form_conditional_discount_page" model="ir.ui.view">
+        <field name="name">sale.order.form.conditional.discount.page</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Descuentos Condicionados" name="conditional_discounts">
+                    <group>
+                        <group string="Primer Descuento Condicionado">
+                            <field name="x_conditional_discount" readonly="1"/>
+                            <field name="x_conditional_discount_deadline" readonly="1"/>
+                            <field name="x_amount_total_conditional_discount" readonly="1"/>
+                        </group>
+                        <group string="Segundo Descuento Condicionado">
+                            <field name="x_conditional_discount_second_date" readonly="1"/>
+                            <field name="x_conditional_discount_deadline_second_date" readonly="1"/>
+                            <field name="x_amount_total_conditional_discount_second_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <separator string="Información"/>
+                    <div class="alert alert-info" role="alert">
+                        <p><i class="fa fa-info-circle"/> Los descuentos condicionados son calculados automáticamente mediante el wizard de cálculo.</p>
+                        <p>Para calcular o recalcular los descuentos, utilice la opción "Calcular Descuentos Condicionados" desde el menú de Ventas.</p>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    
+
+</odoo>

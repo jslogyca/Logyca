@@ -30,15 +30,21 @@ class SaleOrder(models.Model):
     x_conditional_discount = fields.Float(string='Descuento condicionado')
     x_conditional_discount_deadline = fields.Date(string='Fecha límite descuento condicionado')    
     x_amount_total_conditional_discount = fields.Float(string='Total con descuento condicionado',compute='_compute_amount_total_conditional_discount')
+    x_conditional_discount_second_date = fields.Float(string='Descuento condicionado')
+    x_conditional_discount_deadline_second_date = fields.Date(string='Fecha límite descuento condicionado')    
+    x_amount_total_conditional_discount_second_date = fields.Float(string='Total con descuento condicionado',compute='_compute_amount_total_conditional_discount')
     
-    @api.depends('amount_total','x_conditional_discount')
+    @api.depends('amount_untaxed','x_conditional_discount','x_conditional_discount_second_date')
     def _compute_amount_total_conditional_discount(self):
         amount_total_conditional_discount = 0
         for record in self:
-            amount_total = record.amount_total
+            amount_total = record.amount_untaxed
             conditional_discount = record.x_conditional_discount
             amount_total_conditional_discount = amount_total-conditional_discount
             record.x_amount_total_conditional_discount = amount_total_conditional_discount
+            conditional_discount_second_date = record.x_conditional_discount_second_date
+            amount_total_conditional_discount_sd = amount_total-conditional_discount_second_date
+            record.x_amount_total_conditional_discount_second_date = amount_total_conditional_discount_sd
     
     def _prepare_invoice(self):        
         invoice_vals = super(SaleOrder, self)._prepare_invoice()        
